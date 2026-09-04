@@ -1,0 +1,3612 @@
+{
+  "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_populated_places.geojson (Natural Earth populated places), fitted to 1000x750",
+  "updatedAt": "2026-09-04T09:40:56.773Z",
+  "country": "CN",
+  "countryName": "China",
+  "viewBox": "0 0 1000 750",
+  "width": 1000,
+  "height": 750,
+  "totalCities": 400,
+  "cities": [
+    {
+      "name": "Shanghai",
+      "region": "SH",
+      "x": 822.91,
+      "y": 460.7,
+      "rank": 0,
+      "capital": "region",
+      "population": 14987000
+    },
+    {
+      "name": "Beijing",
+      "region": "BJ",
+      "x": 715.52,
+      "y": 292.3,
+      "rank": 0,
+      "capital": "country",
+      "population": 11106000
+    },
+    {
+      "name": "Chengdu",
+      "region": "SC",
+      "x": 522.81,
+      "y": 495.56,
+      "rank": 1,
+      "capital": "region",
+      "population": 4123000
+    },
+    {
+      "name": "Ürümqi",
+      "region": "XJ",
+      "x": 284.25,
+      "y": 198.52,
+      "rank": 1,
+      "capital": "region",
+      "population": 3575000
+    },
+    {
+      "name": "Guangzhou",
+      "region": "GD",
+      "x": 696.17,
+      "y": 645.13,
+      "rank": 2,
+      "capital": "region",
+      "population": 8829000
+    },
+    {
+      "name": "Shenzhen",
+      "region": "GD",
+      "x": 712.4,
+      "y": 655.54,
+      "rank": 2,
+      "capital": null,
+      "population": 7581000
+    },
+    {
+      "name": "Wuhan",
+      "region": "HB",
+      "x": 700.88,
+      "y": 489.96,
+      "rank": 2,
+      "capital": "region",
+      "population": 7243000
+    },
+    {
+      "name": "Tianjin",
+      "region": "TJ",
+      "x": 729.98,
+      "y": 307.84,
+      "rank": 2,
+      "capital": "region",
+      "population": 7180000
+    },
+    {
+      "name": "Chongqing",
+      "region": "CQ",
+      "x": 567.27,
+      "y": 518.43,
+      "rank": 2,
+      "capital": "region",
+      "population": 6461000
+    },
+    {
+      "name": "Shenyang",
+      "region": "LN",
+      "x": 816.37,
+      "y": 236.78,
+      "rank": 2,
+      "capital": "region",
+      "population": 4787000
+    },
+    {
+      "name": "Dongguan",
+      "region": "GD",
+      "x": 705.62,
+      "y": 646.43,
+      "rank": 2,
+      "capital": null,
+      "population": 4528000
+    },
+    {
+      "name": "Xi'an",
+      "region": "SN",
+      "x": 604.1,
+      "y": 419.01,
+      "rank": 2,
+      "capital": "region",
+      "population": 4009000
+    },
+    {
+      "name": "Nanjing",
+      "region": "JS",
+      "x": 774.95,
+      "y": 450.44,
+      "rank": 2,
+      "capital": "region",
+      "population": 3679000
+    },
+    {
+      "name": "Guiyang",
+      "region": "GZ",
+      "x": 570.55,
+      "y": 580.3,
+      "rank": 2,
+      "capital": "region",
+      "population": 3662000
+    },
+    {
+      "name": "Harbin",
+      "region": "HL",
+      "x": 846.03,
+      "y": 147.03,
+      "rank": 2,
+      "capital": "region",
+      "population": 3621000
+    },
+    {
+      "name": "Changchun",
+      "region": "JL",
+      "x": 835.67,
+      "y": 189.21,
+      "rank": 2,
+      "capital": "region",
+      "population": 3183000
+    },
+    {
+      "name": "Zibo",
+      "region": "SD",
+      "x": 748.62,
+      "y": 353.24,
+      "rank": 2,
+      "capital": null,
+      "population": 3061000
+    },
+    {
+      "name": "Hangzhou",
+      "region": "ZJ",
+      "x": 804.28,
+      "y": 484.1,
+      "rank": 2,
+      "capital": "region",
+      "population": 3007000
+    },
+    {
+      "name": "Kunming",
+      "region": "YN",
+      "x": 496.17,
+      "y": 611.81,
+      "rank": 2,
+      "capital": "region",
+      "population": 2931000
+    },
+    {
+      "name": "Taiyuan",
+      "region": "SX",
+      "x": 659.25,
+      "y": 340.28,
+      "rank": 2,
+      "capital": "region",
+      "population": 2913000
+    },
+    {
+      "name": "Jinan",
+      "region": "SD",
+      "x": 732.89,
+      "y": 358.28,
+      "rank": 2,
+      "capital": "region",
+      "population": 2798000
+    },
+    {
+      "name": "Zhengzhou",
+      "region": "HA",
+      "x": 682.74,
+      "y": 403.96,
+      "rank": 2,
+      "capital": "region",
+      "population": 2636000
+    },
+    {
+      "name": "Fuzhou",
+      "region": "FJ",
+      "x": 801.59,
+      "y": 571.96,
+      "rank": 2,
+      "capital": "region",
+      "population": 2606000
+    },
+    {
+      "name": "Changsha",
+      "region": "HN",
+      "x": 682.21,
+      "y": 541.28,
+      "rank": 2,
+      "capital": "region",
+      "population": 2604000
+    },
+    {
+      "name": "Lanzhou",
+      "region": "GS",
+      "x": 519.32,
+      "y": 382.85,
+      "rank": 2,
+      "capital": "region",
+      "population": 2561000
+    },
+    {
+      "name": "Nanchang",
+      "region": "JX",
+      "x": 733.21,
+      "y": 526.41,
+      "rank": 2,
+      "capital": "region",
+      "population": 2350000
+    },
+    {
+      "name": "Nanning",
+      "region": "GX",
+      "x": 602.44,
+      "y": 656.8,
+      "rank": 2,
+      "capital": "region",
+      "population": 2167000
+    },
+    {
+      "name": "Baotou",
+      "region": "NM",
+      "x": 613.09,
+      "y": 284.9,
+      "rank": 2,
+      "capital": null,
+      "population": 2036000
+    },
+    {
+      "name": "Qiqihar",
+      "region": "HL",
+      "x": 802.56,
+      "y": 122.48,
+      "rank": 3,
+      "capital": null,
+      "population": 1641000
+    },
+    {
+      "name": "Shantou",
+      "region": "GD",
+      "x": 760.09,
+      "y": 633.61,
+      "rank": 3,
+      "capital": null,
+      "population": 1601000
+    },
+    {
+      "name": "Huainan",
+      "region": "AH",
+      "x": 742.84,
+      "y": 442.41,
+      "rank": 3,
+      "capital": null,
+      "population": 1451000
+    },
+    {
+      "name": "Xining",
+      "region": "QH",
+      "x": 486.7,
+      "y": 370.3,
+      "rank": 3,
+      "capital": "region",
+      "population": 1048000
+    },
+    {
+      "name": "Yinchuan",
+      "region": "NX",
+      "x": 559.19,
+      "y": 332.29,
+      "rank": 3,
+      "capital": "region",
+      "population": 991000
+    },
+    {
+      "name": "Guilin",
+      "region": "GX",
+      "x": 637.15,
+      "y": 604.78,
+      "rank": 3,
+      "capital": null,
+      "population": 987000
+    },
+    {
+      "name": "Pingxiang",
+      "region": "JX",
+      "x": 699.05,
+      "y": 551.92,
+      "rank": 3,
+      "capital": null,
+      "population": 961000
+    },
+    {
+      "name": "Yizhou",
+      "region": "XJ",
+      "x": 368.3,
+      "y": 231.45,
+      "rank": 3,
+      "capital": null,
+      "population": 580000
+    },
+    {
+      "name": "Kashgar City",
+      "region": "XJ",
+      "x": 92.4,
+      "y": 245.58,
+      "rank": 3,
+      "capital": null,
+      "population": 506640
+    },
+    {
+      "name": "Hotan",
+      "region": "XJ",
+      "x": 139.44,
+      "y": 310.41,
+      "rank": 3,
+      "capital": null,
+      "population": 408894
+    },
+    {
+      "name": "Lhasa",
+      "region": "XZ",
+      "x": 294.13,
+      "y": 499.86,
+      "rank": 3,
+      "capital": "region",
+      "population": 219599
+    },
+    {
+      "name": "Jiayuguan City",
+      "region": "GS",
+      "x": 435.07,
+      "y": 300.63,
+      "rank": 3,
+      "capital": null,
+      "population": 148279
+    },
+    {
+      "name": "Dalian",
+      "region": "LN",
+      "x": 799.33,
+      "y": 301.05,
+      "rank": 4,
+      "capital": null,
+      "population": 3167000
+    },
+    {
+      "name": "Qingdao",
+      "region": "SD",
+      "x": 788.28,
+      "y": 362.99,
+      "rank": 4,
+      "capital": null,
+      "population": 2866000
+    },
+    {
+      "name": "Xiamen",
+      "region": "FJ",
+      "x": 783.74,
+      "y": 608.33,
+      "rank": 4,
+      "capital": null,
+      "population": 2519000
+    },
+    {
+      "name": "Lianshan",
+      "region": "LN",
+      "x": 780.85,
+      "y": 265.33,
+      "rank": 4,
+      "capital": null,
+      "population": 2426000
+    },
+    {
+      "name": "Shijiazhuang",
+      "region": "HE",
+      "x": 689.64,
+      "y": 333.99,
+      "rank": 4,
+      "capital": "region",
+      "population": 2417000
+    },
+    {
+      "name": "Jilin City",
+      "region": "JL",
+      "x": 853.11,
+      "y": 185.8,
+      "rank": 4,
+      "capital": null,
+      "population": 2396000
+    },
+    {
+      "name": "Wenzhou",
+      "region": "ZJ",
+      "x": 819.89,
+      "y": 528.58,
+      "rank": 4,
+      "capital": null,
+      "population": 2350000
+    },
+    {
+      "name": "Nanchong",
+      "region": "SC",
+      "x": 558.76,
+      "y": 493.22,
+      "rank": 4,
+      "capital": null,
+      "population": 2174000
+    },
+    {
+      "name": "Zaozhuang",
+      "region": "SD",
+      "x": 746.88,
+      "y": 394.45,
+      "rank": 4,
+      "capital": null,
+      "population": 2145000
+    },
+    {
+      "name": "Yantai",
+      "region": "SD",
+      "x": 800.56,
+      "y": 330.43,
+      "rank": 4,
+      "capital": null,
+      "population": 2116000
+    },
+    {
+      "name": "Xuzhou",
+      "region": "JS",
+      "x": 742,
+      "y": 407.72,
+      "rank": 4,
+      "capital": null,
+      "population": 2091000
+    },
+    {
+      "name": "Linyi",
+      "region": "SD",
+      "x": 758.81,
+      "y": 388.66,
+      "rank": 4,
+      "capital": null,
+      "population": 2082000
+    },
+    {
+      "name": "Hefei",
+      "region": "AH",
+      "x": 749.93,
+      "y": 457.96,
+      "rank": 4,
+      "capital": "region",
+      "population": 2035000
+    },
+    {
+      "name": "Suzhou",
+      "region": "AH",
+      "x": 740.29,
+      "y": 421.51,
+      "rank": 4,
+      "capital": null,
+      "population": 1964000
+    },
+    {
+      "name": "Nanyang",
+      "region": "HA",
+      "x": 666.74,
+      "y": 442.12,
+      "rank": 4,
+      "capital": null,
+      "population": 1944000
+    },
+    {
+      "name": "Ningbo",
+      "region": "ZJ",
+      "x": 829.48,
+      "y": 487.85,
+      "rank": 4,
+      "capital": null,
+      "population": 1923000
+    },
+    {
+      "name": "Wuxi",
+      "region": "JS",
+      "x": 802.28,
+      "y": 456.34,
+      "rank": 4,
+      "capital": null,
+      "population": 1749000
+    },
+    {
+      "name": "Hohhot",
+      "region": "NM",
+      "x": 641.04,
+      "y": 279.77,
+      "rank": 4,
+      "capital": "region",
+      "population": 1726000
+    },
+    {
+      "name": "Daqing",
+      "region": "HL",
+      "x": 819.54,
+      "y": 135.15,
+      "rank": 4,
+      "capital": null,
+      "population": 1693000
+    },
+    {
+      "name": "Suzhou",
+      "region": "JS",
+      "x": 808.66,
+      "y": 461.24,
+      "rank": 4,
+      "capital": null,
+      "population": 1650000
+    },
+    {
+      "name": "Anshan",
+      "region": "LN",
+      "x": 811.38,
+      "y": 252.36,
+      "rank": 4,
+      "capital": null,
+      "population": 1639000
+    },
+    {
+      "name": "Handan",
+      "region": "HE",
+      "x": 692.57,
+      "y": 364.66,
+      "rank": 4,
+      "capital": null,
+      "population": 1631000
+    },
+    {
+      "name": "Zhanjiang",
+      "region": "GD",
+      "x": 643.53,
+      "y": 688.03,
+      "rank": 4,
+      "capital": null,
+      "population": 1590000
+    },
+    {
+      "name": "Neijiang",
+      "region": "SC",
+      "x": 539.93,
+      "y": 518.34,
+      "rank": 4,
+      "capital": null,
+      "population": 1466000
+    },
+    {
+      "name": "Quanzhou",
+      "region": "FJ",
+      "x": 791.77,
+      "y": 597.91,
+      "rank": 4,
+      "capital": null,
+      "population": 1463000
+    },
+    {
+      "name": "Mianyang",
+      "region": "SC",
+      "x": 533.72,
+      "y": 479.09,
+      "rank": 4,
+      "capital": null,
+      "population": 1396000
+    },
+    {
+      "name": "Chifeng",
+      "region": "NM",
+      "x": 747.89,
+      "y": 238.22,
+      "rank": 4,
+      "capital": null,
+      "population": 1277000
+    },
+    {
+      "name": "Huai'an",
+      "region": "JS",
+      "x": 775.32,
+      "y": 418.01,
+      "rank": 4,
+      "capital": null,
+      "population": 1264000
+    },
+    {
+      "name": "Tianshui",
+      "region": "GS",
+      "x": 554.35,
+      "y": 413.41,
+      "rank": 4,
+      "capital": null,
+      "population": 1225000
+    },
+    {
+      "name": "Liupanshui",
+      "region": "GZ",
+      "x": 535.99,
+      "y": 580.27,
+      "rank": 4,
+      "capital": null,
+      "population": 1221000
+    },
+    {
+      "name": "Yulin",
+      "region": "GX",
+      "x": 637.56,
+      "y": 659.18,
+      "rank": 4,
+      "capital": null,
+      "population": 1127000
+    },
+    {
+      "name": "Ankang",
+      "region": "SN",
+      "x": 607.57,
+      "y": 452.32,
+      "rank": 4,
+      "capital": null,
+      "population": 1100000
+    },
+    {
+      "name": "Jiamusi",
+      "region": "HL",
+      "x": 891.81,
+      "y": 113.07,
+      "rank": 4,
+      "capital": null,
+      "population": 1020000
+    },
+    {
+      "name": "Hengyang",
+      "region": "HN",
+      "x": 677.48,
+      "y": 569.08,
+      "rank": 4,
+      "capital": null,
+      "population": 1016000
+    },
+    {
+      "name": "Baoshan",
+      "region": "YN",
+      "x": 430.2,
+      "y": 607.52,
+      "rank": 4,
+      "capital": null,
+      "population": 1000000
+    },
+    {
+      "name": "Jixi",
+      "region": "HL",
+      "x": 908.41,
+      "y": 141.36,
+      "rank": 4,
+      "capital": null,
+      "population": 965000
+    },
+    {
+      "name": "Tongliao",
+      "region": "NM",
+      "x": 792.28,
+      "y": 202.72,
+      "rank": 4,
+      "capital": null,
+      "population": 884000
+    },
+    {
+      "name": "Yarkant County",
+      "region": "XJ",
+      "x": 105.5,
+      "y": 272.36,
+      "rank": 4,
+      "capital": null,
+      "population": 851374
+    },
+    {
+      "name": "Yueyang",
+      "region": "HN",
+      "x": 682.54,
+      "y": 516.65,
+      "rank": 4,
+      "capital": null,
+      "population": 826000
+    },
+    {
+      "name": "Shaoguan",
+      "region": "GD",
+      "x": 699.24,
+      "y": 610.38,
+      "rank": 4,
+      "capital": null,
+      "population": 720266
+    },
+    {
+      "name": "Yining City",
+      "region": "XJ",
+      "x": 195.21,
+      "y": 177.86,
+      "rank": 4,
+      "capital": null,
+      "population": 542507
+    },
+    {
+      "name": "Wuwei",
+      "region": "GS",
+      "x": 501.49,
+      "y": 343.33,
+      "rank": 4,
+      "capital": null,
+      "population": 493092
+    },
+    {
+      "name": "Wuzhou",
+      "region": "GX",
+      "x": 658.84,
+      "y": 640.58,
+      "rank": 4,
+      "capital": null,
+      "population": 442315
+    },
+    {
+      "name": "Xichang",
+      "region": "SC",
+      "x": 490.36,
+      "y": 553.04,
+      "rank": 4,
+      "capital": null,
+      "population": 379993
+    },
+    {
+      "name": "Ulan Hot",
+      "region": "NM",
+      "x": 780.83,
+      "y": 153,
+      "rank": 4,
+      "capital": null,
+      "population": 241894
+    },
+    {
+      "name": "Hailar",
+      "region": "NM",
+      "x": 737.97,
+      "y": 95.08,
+      "rank": 4,
+      "capital": null,
+      "population": 231171
+    },
+    {
+      "name": "Zhangye",
+      "region": "GS",
+      "x": 467.56,
+      "y": 321.14,
+      "rank": 4,
+      "capital": null,
+      "population": 230728
+    },
+    {
+      "name": "Baicheng",
+      "region": "GX",
+      "x": 569.53,
+      "y": 635.55,
+      "rank": 4,
+      "capital": null,
+      "population": 175282
+    },
+    {
+      "name": "Yulin",
+      "region": "SN",
+      "x": 614.12,
+      "y": 334.54,
+      "rank": 4,
+      "capital": null,
+      "population": 155960
+    },
+    {
+      "name": "Bei'an",
+      "region": "HL",
+      "x": 833.32,
+      "y": 97.28,
+      "rank": 4,
+      "capital": null,
+      "population": 154936
+    },
+    {
+      "name": "Gejiu",
+      "region": "YN",
+      "x": 503.97,
+      "y": 646.12,
+      "rank": 4,
+      "capital": null,
+      "population": 149105
+    },
+    {
+      "name": "Altay City",
+      "region": "XJ",
+      "x": 306.31,
+      "y": 117.24,
+      "rank": 4,
+      "capital": null,
+      "population": 142000
+    },
+    {
+      "name": "Dunhuang",
+      "region": "GS",
+      "x": 379.46,
+      "y": 289.08,
+      "rank": 4,
+      "capital": null,
+      "population": 140094
+    },
+    {
+      "name": "Shizuishan",
+      "region": "NX",
+      "x": 566.78,
+      "y": 316.18,
+      "rank": 4,
+      "capital": null,
+      "population": 136570
+    },
+    {
+      "name": "Golmud",
+      "region": "QH",
+      "x": 374.93,
+      "y": 367.08,
+      "rank": 4,
+      "capital": null,
+      "population": 107092
+    },
+    {
+      "name": "Houma",
+      "region": "SX",
+      "x": 641,
+      "y": 388.96,
+      "rank": 4,
+      "capital": null,
+      "population": 102400
+    },
+    {
+      "name": "Xigazê",
+      "region": "XZ",
+      "x": 254.06,
+      "y": 502.07,
+      "rank": 4,
+      "capital": null,
+      "population": 80000
+    },
+    {
+      "name": "Dulan",
+      "region": "QH",
+      "x": 429.37,
+      "y": 376.97,
+      "rank": 4,
+      "capital": null,
+      "population": 100
+    },
+    {
+      "name": "Haikou",
+      "region": "HI",
+      "x": 643.65,
+      "y": 711.41,
+      "rank": 6,
+      "capital": "region",
+      "population": 2046189
+    },
+    {
+      "name": "Tangshan",
+      "region": "HE",
+      "x": 743.97,
+      "y": 294.57,
+      "rank": 6,
+      "capital": null,
+      "population": 1879000
+    },
+    {
+      "name": "Datong",
+      "region": "SX",
+      "x": 667.39,
+      "y": 293.3,
+      "rank": 6,
+      "capital": null,
+      "population": 1873000
+    },
+    {
+      "name": "Shangqiu",
+      "region": "HA",
+      "x": 716.34,
+      "y": 407.92,
+      "rank": 6,
+      "capital": null,
+      "population": 1753000
+    },
+    {
+      "name": "Luoyang",
+      "region": "HA",
+      "x": 662.75,
+      "y": 407.97,
+      "rank": 6,
+      "capital": null,
+      "population": 1715000
+    },
+    {
+      "name": "Jingmen City",
+      "region": "HB",
+      "x": 681.43,
+      "y": 490.2,
+      "rank": 6,
+      "capital": null,
+      "population": 1708000
+    },
+    {
+      "name": "Lu'an",
+      "region": "AH",
+      "x": 736.49,
+      "y": 461.67,
+      "rank": 6,
+      "capital": null,
+      "population": 1690000
+    },
+    {
+      "name": "Wanzhou",
+      "region": "CQ",
+      "x": 598.34,
+      "y": 491.54,
+      "rank": 6,
+      "capital": null,
+      "population": 1680000
+    },
+    {
+      "name": "Tai'an",
+      "region": "SD",
+      "x": 736.11,
+      "y": 367.92,
+      "rank": 6,
+      "capital": null,
+      "population": 1629000
+    },
+    {
+      "name": "Xiantao City",
+      "region": "HB",
+      "x": 686.8,
+      "y": 495.6,
+      "rank": 6,
+      "capital": null,
+      "population": 1556000
+    },
+    {
+      "name": "Weifang",
+      "region": "SD",
+      "x": 767.54,
+      "y": 353.15,
+      "rank": 6,
+      "capital": null,
+      "population": 1553000
+    },
+    {
+      "name": "Xinyang",
+      "region": "HA",
+      "x": 694.45,
+      "y": 458.06,
+      "rank": 6,
+      "capital": null,
+      "population": 1541000
+    },
+    {
+      "name": "Luzhou",
+      "region": "SC",
+      "x": 545.83,
+      "y": 532.89,
+      "rank": 6,
+      "capital": null,
+      "population": 1537000
+    },
+    {
+      "name": "Ganzhou",
+      "region": "JX",
+      "x": 722.42,
+      "y": 585.05,
+      "rank": 6,
+      "capital": null,
+      "population": 1500000
+    },
+    {
+      "name": "Liuzhou",
+      "region": "GX",
+      "x": 621.98,
+      "y": 625.31,
+      "rank": 6,
+      "capital": null,
+      "population": 1497000
+    },
+    {
+      "name": "Fushun",
+      "region": "LN",
+      "x": 822.37,
+      "y": 234.35,
+      "rank": 6,
+      "capital": "region",
+      "population": 1470000
+    },
+    {
+      "name": "Changde",
+      "region": "HN",
+      "x": 657.92,
+      "y": 525.79,
+      "rank": 6,
+      "capital": null,
+      "population": 1469000
+    },
+    {
+      "name": "Suining",
+      "region": "SC",
+      "x": 548.38,
+      "y": 498.46,
+      "rank": 6,
+      "capital": null,
+      "population": 1425000
+    },
+    {
+      "name": "Yiyang",
+      "region": "HN",
+      "x": 670.12,
+      "y": 533.87,
+      "rank": 6,
+      "capital": null,
+      "population": 1352000
+    },
+    {
+      "name": "Heze",
+      "region": "SD",
+      "x": 711.2,
+      "y": 391.22,
+      "rank": 6,
+      "capital": null,
+      "population": 1338000
+    },
+    {
+      "name": "Changzhou",
+      "region": "JS",
+      "x": 796.02,
+      "y": 453.07,
+      "rank": 6,
+      "capital": null,
+      "population": 1327000
+    },
+    {
+      "name": "Mudanjiang",
+      "region": "HL",
+      "x": 892.88,
+      "y": 160.92,
+      "rank": 6,
+      "capital": null,
+      "population": 1244000
+    },
+    {
+      "name": "Huzhou",
+      "region": "ZJ",
+      "x": 801.11,
+      "y": 471.5,
+      "rank": 6,
+      "capital": null,
+      "population": 1231000
+    },
+    {
+      "name": "Jining",
+      "region": "SD",
+      "x": 728.83,
+      "y": 385.66,
+      "rank": 6,
+      "capital": null,
+      "population": 1186000
+    },
+    {
+      "name": "Leshan",
+      "region": "SC",
+      "x": 516.63,
+      "y": 518.47,
+      "rank": 6,
+      "capital": null,
+      "population": 1157000
+    },
+    {
+      "name": "Xianyang",
+      "region": "SN",
+      "x": 601.04,
+      "y": 417.65,
+      "rank": 6,
+      "capital": null,
+      "population": 1126000
+    },
+    {
+      "name": "Jinhua",
+      "region": "ZJ",
+      "x": 798.76,
+      "y": 508.76,
+      "rank": 6,
+      "capital": null,
+      "population": 1092852
+    },
+    {
+      "name": "Zhuzhou",
+      "region": "HN",
+      "x": 686.06,
+      "y": 548.66,
+      "rank": 6,
+      "capital": null,
+      "population": 1080000
+    },
+    {
+      "name": "Xiangyang",
+      "region": "HB",
+      "x": 661.44,
+      "y": 463.07,
+      "rank": 6,
+      "capital": null,
+      "population": 1069000
+    },
+    {
+      "name": "Zhangjiakou",
+      "region": "HE",
+      "x": 689.85,
+      "y": 276.05,
+      "rank": 6,
+      "capital": null,
+      "population": 1046000
+    },
+    {
+      "name": "Zhuhai",
+      "region": "GD",
+      "x": 703.42,
+      "y": 661.85,
+      "rank": 6,
+      "capital": null,
+      "population": 1023000
+    },
+    {
+      "name": "Benxi",
+      "region": "LN",
+      "x": 822.69,
+      "y": 245.67,
+      "rank": 6,
+      "capital": null,
+      "population": 1012000
+    },
+    {
+      "name": "Qinhuangdao",
+      "region": "HE",
+      "x": 765.02,
+      "y": 285.13,
+      "rank": 6,
+      "capital": null,
+      "population": 1003000
+    },
+    {
+      "name": "Yongzhou",
+      "region": "HN",
+      "x": 660.29,
+      "y": 579.92,
+      "rank": 6,
+      "capital": null,
+      "population": 1000000
+    },
+    {
+      "name": "Jiaxing",
+      "region": "ZJ",
+      "x": 812.63,
+      "y": 471.81,
+      "rank": 6,
+      "capital": null,
+      "population": 988000
+    },
+    {
+      "name": "Yichun",
+      "region": "JX",
+      "x": 708.54,
+      "y": 546.6,
+      "rank": 6,
+      "capital": null,
+      "population": 982000
+    },
+    {
+      "name": "Jinzhou",
+      "region": "LN",
+      "x": 783.69,
+      "y": 257.04,
+      "rank": 6,
+      "capital": null,
+      "population": 956000
+    },
+    {
+      "name": "Nantong",
+      "region": "JS",
+      "x": 811.64,
+      "y": 446.39,
+      "rank": 6,
+      "capital": null,
+      "population": 947000
+    },
+    {
+      "name": "Foshan",
+      "region": "GD",
+      "x": 693.55,
+      "y": 647.69,
+      "rank": 6,
+      "capital": null,
+      "population": 943000
+    },
+    {
+      "name": "Huaibei",
+      "region": "AH",
+      "x": 735.68,
+      "y": 415.44,
+      "rank": 6,
+      "capital": null,
+      "population": 913000
+    },
+    {
+      "name": "Xinyu",
+      "region": "JX",
+      "x": 718.14,
+      "y": 546.36,
+      "rank": 6,
+      "capital": null,
+      "population": 913000
+    },
+    {
+      "name": "Xinxiang",
+      "region": "HA",
+      "x": 685.79,
+      "y": 392.24,
+      "rank": 6,
+      "capital": null,
+      "population": 903000
+    },
+    {
+      "name": "Yibin",
+      "region": "SC",
+      "x": 531.37,
+      "y": 535.17,
+      "rank": 6,
+      "capital": null,
+      "population": 902000
+    },
+    {
+      "name": "Bengbu",
+      "region": "AH",
+      "x": 747.93,
+      "y": 435.04,
+      "rank": 6,
+      "capital": null,
+      "population": 894000
+    },
+    {
+      "name": "Anyang",
+      "region": "HA",
+      "x": 691.46,
+      "y": 375.29,
+      "rank": 6,
+      "capital": null,
+      "population": 887000
+    },
+    {
+      "name": "Yichang",
+      "region": "HB",
+      "x": 648.61,
+      "y": 491.55,
+      "rank": 6,
+      "capital": null,
+      "population": 875000
+    },
+    {
+      "name": "Kaifeng",
+      "region": "HA",
+      "x": 694.11,
+      "y": 402.15,
+      "rank": 6,
+      "capital": null,
+      "population": 872000
+    },
+    {
+      "name": "Dandong",
+      "region": "LN",
+      "x": 837.12,
+      "y": 268.14,
+      "rank": 6,
+      "capital": null,
+      "population": 870000
+    },
+    {
+      "name": "Xuancheng",
+      "region": "AH",
+      "x": 777.69,
+      "y": 473.2,
+      "rank": 6,
+      "capital": null,
+      "population": 866000
+    },
+    {
+      "name": "Jiaozuo",
+      "region": "HA",
+      "x": 675.29,
+      "y": 395.27,
+      "rank": 6,
+      "capital": null,
+      "population": 857000
+    },
+    {
+      "name": "Zhenjiang",
+      "region": "JS",
+      "x": 785.67,
+      "y": 446.3,
+      "rank": 6,
+      "capital": null,
+      "population": 854000
+    },
+    {
+      "name": "Anshun",
+      "region": "GZ",
+      "x": 556.15,
+      "y": 587.3,
+      "rank": 6,
+      "capital": null,
+      "population": 849000
+    },
+    {
+      "name": "Pingdingshan",
+      "region": "HA",
+      "x": 678.49,
+      "y": 425.86,
+      "rank": 6,
+      "capital": null,
+      "population": 849000
+    },
+    {
+      "name": "Zunyi",
+      "region": "GZ",
+      "x": 573.77,
+      "y": 557.05,
+      "rank": 6,
+      "capital": null,
+      "population": 849000
+    },
+    {
+      "name": "Yuci",
+      "region": "SX",
+      "x": 662.5,
+      "y": 344.12,
+      "rank": 6,
+      "capital": null,
+      "population": 840000
+    },
+    {
+      "name": "Yancheng",
+      "region": "JS",
+      "x": 794.47,
+      "y": 420.4,
+      "rank": 6,
+      "capital": null,
+      "population": 839000
+    },
+    {
+      "name": "Linfen",
+      "region": "SX",
+      "x": 645.41,
+      "y": 378.97,
+      "rank": 6,
+      "capital": null,
+      "population": 834000
+    },
+    {
+      "name": "Xingyi",
+      "region": "GZ",
+      "x": 537,
+      "y": 611.29,
+      "rank": 6,
+      "capital": null,
+      "population": 816000
+    },
+    {
+      "name": "Langfang",
+      "region": "HE",
+      "x": 720.82,
+      "y": 299.68,
+      "rank": 6,
+      "capital": null,
+      "population": 810000
+    },
+    {
+      "name": "Wuhu",
+      "region": "AH",
+      "x": 769.94,
+      "y": 465.88,
+      "rank": 6,
+      "capital": null,
+      "population": 810000
+    },
+    {
+      "name": "Zhaotong",
+      "region": "YN",
+      "x": 515.8,
+      "y": 565.1,
+      "rank": 6,
+      "capital": "region",
+      "population": 809000
+    },
+    {
+      "name": "Lingyuan",
+      "region": "LN",
+      "x": 757.71,
+      "y": 258.53,
+      "rank": 6,
+      "capital": null,
+      "population": 806000
+    },
+    {
+      "name": "Baoji",
+      "region": "SN",
+      "x": 574.95,
+      "y": 417.74,
+      "rank": 6,
+      "capital": null,
+      "population": 800000
+    },
+    {
+      "name": "Yingkou",
+      "region": "LN",
+      "x": 803.07,
+      "y": 263.29,
+      "rank": 6,
+      "capital": null,
+      "population": 795000
+    },
+    {
+      "name": "Liaoyang",
+      "region": "LN",
+      "x": 814.35,
+      "y": 248.31,
+      "rank": 6,
+      "capital": null,
+      "population": 794000
+    },
+    {
+      "name": "Shaoxing",
+      "region": "ZJ",
+      "x": 812.03,
+      "y": 488.15,
+      "rank": 6,
+      "capital": null,
+      "population": 777000
+    },
+    {
+      "name": "Yichun",
+      "region": "HL",
+      "x": 867.77,
+      "y": 100.71,
+      "rank": 6,
+      "capital": null,
+      "population": 777000
+    },
+    {
+      "name": "Fuyang",
+      "region": "ZJ",
+      "x": 801.12,
+      "y": 488.73,
+      "rank": 6,
+      "capital": null,
+      "population": 771000
+    },
+    {
+      "name": "Fuxin",
+      "region": "LN",
+      "x": 789.02,
+      "y": 237.31,
+      "rank": 6,
+      "capital": null,
+      "population": 770000
+    },
+    {
+      "name": "Hegang",
+      "region": "HL",
+      "x": 888.44,
+      "y": 103.01,
+      "rank": 6,
+      "capital": null,
+      "population": 743307
+    },
+    {
+      "name": "Aksu",
+      "region": "XJ",
+      "x": 165.4,
+      "y": 229.52,
+      "rank": 6,
+      "capital": null,
+      "population": 695000
+    },
+    {
+      "name": "Huangshi",
+      "region": "HB",
+      "x": 716.12,
+      "y": 496.05,
+      "rank": 6,
+      "capital": null,
+      "population": 688090
+    },
+    {
+      "name": "Shihezi",
+      "region": "XJ",
+      "x": 263.9,
+      "y": 184.33,
+      "rank": 6,
+      "capital": null,
+      "population": 640000
+    },
+    {
+      "name": "Korla",
+      "region": "XJ",
+      "x": 255.52,
+      "y": 237.22,
+      "rank": 6,
+      "capital": null,
+      "population": 613000
+    },
+    {
+      "name": "Anqing",
+      "region": "AH",
+      "x": 749.44,
+      "y": 486.44,
+      "rank": 6,
+      "capital": null,
+      "population": 580497
+    },
+    {
+      "name": "Weihai",
+      "region": "SD",
+      "x": 811.76,
+      "y": 329.21,
+      "rank": 6,
+      "capital": null,
+      "population": 560255
+    },
+    {
+      "name": "Siping",
+      "region": "JL",
+      "x": 823.97,
+      "y": 206.38,
+      "rank": 6,
+      "capital": null,
+      "population": 555609
+    },
+    {
+      "name": "Jiujiang",
+      "region": "JX",
+      "x": 732.62,
+      "y": 504.55,
+      "rank": 6,
+      "capital": null,
+      "population": 545616
+    },
+    {
+      "name": "Liaoyuan",
+      "region": "JL",
+      "x": 836.73,
+      "y": 209.54,
+      "rank": 6,
+      "capital": null,
+      "population": 506548
+    },
+    {
+      "name": "Kuqa County",
+      "region": "XJ",
+      "x": 207.91,
+      "y": 227.32,
+      "rank": 6,
+      "capital": null,
+      "population": 470600
+    },
+    {
+      "name": "Panzhihua",
+      "region": "SC",
+      "x": 479.17,
+      "y": 580.24,
+      "rank": 6,
+      "capital": null,
+      "population": 461513
+    },
+    {
+      "name": "Qitaihe",
+      "region": "HL",
+      "x": 906.48,
+      "y": 131.9,
+      "rank": 6,
+      "capital": null,
+      "population": 450617
+    },
+    {
+      "name": "Guangyuan",
+      "region": "SC",
+      "x": 553.95,
+      "y": 458.87,
+      "rank": 6,
+      "capital": null,
+      "population": 437435
+    },
+    {
+      "name": "Yuxi",
+      "region": "YN",
+      "x": 493.46,
+      "y": 625.38,
+      "rank": 6,
+      "capital": null,
+      "population": 396325
+    },
+    {
+      "name": "Baicheng",
+      "region": "JL",
+      "x": 792.89,
+      "y": 160.51,
+      "rank": 6,
+      "capital": null,
+      "population": 386861
+    },
+    {
+      "name": "Sanya",
+      "region": "HI",
+      "x": 629.26,
+      "y": 748.25,
+      "rank": 6,
+      "capital": null,
+      "population": 362689
+    },
+    {
+      "name": "Tongchuan",
+      "region": "SN",
+      "x": 605.7,
+      "y": 402.11,
+      "rank": 6,
+      "capital": null,
+      "population": 282258
+    },
+    {
+      "name": "Jining",
+      "region": "NM",
+      "x": 662.42,
+      "y": 273.82,
+      "rank": 6,
+      "capital": null,
+      "population": 281716
+    },
+    {
+      "name": "Karamay",
+      "region": "XJ",
+      "x": 252.53,
+      "y": 154.81,
+      "rank": 6,
+      "capital": null,
+      "population": 261445
+    },
+    {
+      "name": "Laiyang",
+      "region": "SD",
+      "x": 791.52,
+      "y": 343.88,
+      "rank": 6,
+      "capital": null,
+      "population": 250000
+    },
+    {
+      "name": "Wuhai",
+      "region": "NM",
+      "x": 567.29,
+      "y": 307.14,
+      "rank": 6,
+      "capital": null,
+      "population": 218427
+    },
+    {
+      "name": "Dali",
+      "region": "YN",
+      "x": 451.13,
+      "y": 598.86,
+      "rank": 6,
+      "capital": null,
+      "population": 156685
+    },
+    {
+      "name": "Hanzhong",
+      "region": "SN",
+      "x": 573.48,
+      "y": 443.94,
+      "rank": 6,
+      "capital": null,
+      "population": 145986
+    },
+    {
+      "name": "Macheng",
+      "region": "HB",
+      "x": 712.88,
+      "y": 476.26,
+      "rank": 6,
+      "capital": null,
+      "population": 126366
+    },
+    {
+      "name": "Xilinhot",
+      "region": "NM",
+      "x": 700.76,
+      "y": 209.08,
+      "rank": 6,
+      "capital": null,
+      "population": 120965
+    },
+    {
+      "name": "Heihe",
+      "region": "HL",
+      "x": 836.51,
+      "y": 54.73,
+      "rank": 6,
+      "capital": null,
+      "population": 109427
+    },
+    {
+      "name": "Nehe",
+      "region": "HL",
+      "x": 810.12,
+      "y": 97.09,
+      "rank": 6,
+      "capital": null,
+      "population": 108253
+    },
+    {
+      "name": "Changdu",
+      "region": "XZ",
+      "x": 403.44,
+      "y": 480.51,
+      "rank": 6,
+      "capital": null,
+      "population": 100000
+    },
+    {
+      "name": "Tumen",
+      "region": "JL",
+      "x": 904.41,
+      "y": 192.46,
+      "rank": 6,
+      "capital": null,
+      "population": 99721
+    },
+    {
+      "name": "Manchouli",
+      "region": "NM",
+      "x": 706.41,
+      "y": 91.2,
+      "rank": 6,
+      "capital": null,
+      "population": 93620
+    },
+    {
+      "name": "Nenjiang",
+      "region": "HL",
+      "x": 811.97,
+      "y": 82.34,
+      "rank": 6,
+      "capital": null,
+      "population": 87236
+    },
+    {
+      "name": "Tacheng",
+      "region": "XJ",
+      "x": 231.06,
+      "y": 125.68,
+      "rank": 6,
+      "capital": null,
+      "population": 49796
+    },
+    {
+      "name": "Shaoyang",
+      "region": "HN",
+      "x": 652.05,
+      "y": 568.4,
+      "rank": 6,
+      "capital": null,
+      "population": 45617
+    },
+    {
+      "name": "Arxan",
+      "region": "NM",
+      "x": 747.74,
+      "y": 135.35,
+      "rank": 6,
+      "capital": null,
+      "population": 32023
+    },
+    {
+      "name": "Gyêgu",
+      "region": "QH",
+      "x": 403.54,
+      "y": 441.6,
+      "rank": 6,
+      "capital": null,
+      "population": 23000
+    },
+    {
+      "name": "Erenhot",
+      "region": "NM",
+      "x": 641.59,
+      "y": 220.37,
+      "rank": 6,
+      "capital": null,
+      "population": 22287
+    },
+    {
+      "name": "Lijiang",
+      "region": "YN",
+      "x": 452.61,
+      "y": 574,
+      "rank": 6,
+      "capital": null,
+      "population": 18445
+    },
+    {
+      "name": "Nagchu Town",
+      "region": "XZ",
+      "x": 315.75,
+      "y": 464.2,
+      "rank": 6,
+      "capital": null,
+      "population": 2500
+    },
+    {
+      "name": "Fulin",
+      "region": "SC",
+      "x": 498.58,
+      "y": 522.7,
+      "rank": 6,
+      "capital": null,
+      "population": 1049
+    },
+    {
+      "name": "Nyingchi",
+      "region": "XZ",
+      "x": 351.46,
+      "y": 506.86,
+      "rank": 6,
+      "capital": null,
+      "population": 100
+    },
+    {
+      "name": "Hechi",
+      "region": "GX",
+      "x": 596.76,
+      "y": 618.57,
+      "rank": 7,
+      "capital": null,
+      "population": 3830000
+    },
+    {
+      "name": "Zhangzhou",
+      "region": "FJ",
+      "x": 775.97,
+      "y": 607.92,
+      "rank": 7,
+      "capital": null,
+      "population": 3531147
+    },
+    {
+      "name": "Xiangtan",
+      "region": "HN",
+      "x": 681.57,
+      "y": 548.64,
+      "rank": 7,
+      "capital": null,
+      "population": 2586948
+    },
+    {
+      "name": "Shuyang",
+      "region": "JS",
+      "x": 768.86,
+      "y": 407.41,
+      "rank": 7,
+      "capital": null,
+      "population": 1770000
+    },
+    {
+      "name": "Ma'anshan",
+      "region": "AH",
+      "x": 771.04,
+      "y": 458.98,
+      "rank": 7,
+      "capital": null,
+      "population": 1366302
+    },
+    {
+      "name": "Maoming",
+      "region": "GD",
+      "x": 652.21,
+      "y": 672.9,
+      "rank": 7,
+      "capital": null,
+      "population": 1217715
+    },
+    {
+      "name": "Shangrao",
+      "region": "JX",
+      "x": 770.92,
+      "y": 526.29,
+      "rank": 7,
+      "capital": null,
+      "population": 1144577
+    },
+    {
+      "name": "Baoding",
+      "region": "HE",
+      "x": 703.54,
+      "y": 315.6,
+      "rank": 7,
+      "capital": null,
+      "population": 1107000
+    },
+    {
+      "name": "Zigong",
+      "region": "SC",
+      "x": 535.15,
+      "y": 522.08,
+      "rank": 7,
+      "capital": null,
+      "population": 1105000
+    },
+    {
+      "name": "Yangjiang",
+      "region": "GD",
+      "x": 673.47,
+      "y": 672.96,
+      "rank": 7,
+      "capital": null,
+      "population": 872363
+    },
+    {
+      "name": "Rizhao",
+      "region": "SD",
+      "x": 776.12,
+      "y": 378.85,
+      "rank": 7,
+      "capital": null,
+      "population": 865000
+    },
+    {
+      "name": "Jincheng",
+      "region": "SX",
+      "x": 667.73,
+      "y": 389.58,
+      "rank": 7,
+      "capital": null,
+      "population": 760000
+    },
+    {
+      "name": "Beihai",
+      "region": "GX",
+      "x": 618.49,
+      "y": 683.56,
+      "rank": 7,
+      "capital": null,
+      "population": 728978
+    },
+    {
+      "name": "Lianyungang",
+      "region": "JS",
+      "x": 775,
+      "y": 396.86,
+      "rank": 7,
+      "capital": null,
+      "population": 715600
+    },
+    {
+      "name": "Qingyuan",
+      "region": "GD",
+      "x": 690.82,
+      "y": 633.74,
+      "rank": 7,
+      "capital": null,
+      "population": 706717
+    },
+    {
+      "name": "Changzhi",
+      "region": "SX",
+      "x": 671.08,
+      "y": 374.94,
+      "rank": 7,
+      "capital": null,
+      "population": 706000
+    },
+    {
+      "name": "Puyang",
+      "region": "HA",
+      "x": 702.53,
+      "y": 382.24,
+      "rank": 7,
+      "capital": null,
+      "population": 666322
+    },
+    {
+      "name": "Zhanyi",
+      "region": "YN",
+      "x": 517.16,
+      "y": 600.7,
+      "rank": 7,
+      "capital": null,
+      "population": 652604
+    },
+    {
+      "name": "Turpan",
+      "region": "XJ",
+      "x": 304.44,
+      "y": 220.33,
+      "rank": 7,
+      "capital": null,
+      "population": 651853
+    },
+    {
+      "name": "Changping",
+      "region": "BJ",
+      "x": 711.68,
+      "y": 285.94,
+      "rank": 7,
+      "capital": null,
+      "population": 614821
+    },
+    {
+      "name": "Taizhou",
+      "region": "JS",
+      "x": 792.65,
+      "y": 438.61,
+      "rank": 7,
+      "capital": null,
+      "population": 612356
+    },
+    {
+      "name": "Xingtai",
+      "region": "HE",
+      "x": 691.99,
+      "y": 354.86,
+      "rank": 7,
+      "capital": null,
+      "population": 611739
+    },
+    {
+      "name": "Shuozhou",
+      "region": "SX",
+      "x": 655.06,
+      "y": 310.69,
+      "rank": 7,
+      "capital": null,
+      "population": 570000
+    },
+    {
+      "name": "Tongling",
+      "region": "AH",
+      "x": 760.91,
+      "y": 475.54,
+      "rank": 7,
+      "capital": null,
+      "population": 562832
+    },
+    {
+      "name": "Jiangmen",
+      "region": "GD",
+      "x": 693.62,
+      "y": 656.5,
+      "rank": 7,
+      "capital": null,
+      "population": 532419
+    },
+    {
+      "name": "Cangzhou",
+      "region": "HE",
+      "x": 726.8,
+      "y": 324.32,
+      "rank": 7,
+      "capital": null,
+      "population": 527681
+    },
+    {
+      "name": "Ji'an",
+      "region": "JX",
+      "x": 720.83,
+      "y": 560.07,
+      "rank": 7,
+      "capital": null,
+      "population": 520248
+    },
+    {
+      "name": "Shuangyashan",
+      "region": "HL",
+      "x": 906.3,
+      "y": 112.65,
+      "rank": 7,
+      "capital": null,
+      "population": 500000
+    },
+    {
+      "name": "Songyuan",
+      "region": "JL",
+      "x": 822.82,
+      "y": 164.03,
+      "rank": 7,
+      "capital": null,
+      "population": 495900
+    },
+    {
+      "name": "Zhaoqing",
+      "region": "GD",
+      "x": 680.88,
+      "y": 647.86,
+      "rank": 7,
+      "capital": null,
+      "population": 480000
+    },
+    {
+      "name": "Jiaojiang",
+      "region": "ZJ",
+      "x": 831.89,
+      "y": 512.78,
+      "rank": 7,
+      "capital": null,
+      "population": 471500
+    },
+    {
+      "name": "Chaoyang",
+      "region": "LN",
+      "x": 772.09,
+      "y": 249.84,
+      "rank": 7,
+      "capital": null,
+      "population": 470296
+    },
+    {
+      "name": "Jingdezhen",
+      "region": "JX",
+      "x": 754.83,
+      "y": 511.58,
+      "rank": 7,
+      "capital": null,
+      "population": 457298
+    },
+    {
+      "name": "Chengde",
+      "region": "HE",
+      "x": 736.3,
+      "y": 267.43,
+      "rank": 7,
+      "capital": null,
+      "population": 449325
+    },
+    {
+      "name": "Xuchang",
+      "region": "HA",
+      "x": 686.71,
+      "y": 419.1,
+      "rank": 7,
+      "capital": null,
+      "population": 449258
+    },
+    {
+      "name": "Meizhou",
+      "region": "GD",
+      "x": 747.62,
+      "y": 615.88,
+      "rank": 7,
+      "capital": null,
+      "population": 414930
+    },
+    {
+      "name": "Jingmen City",
+      "region": "HB",
+      "x": 664.19,
+      "y": 483.6,
+      "rank": 7,
+      "capital": null,
+      "population": 400000
+    },
+    {
+      "name": "Dezhou",
+      "region": "SD",
+      "x": 719.9,
+      "y": 343.49,
+      "rank": 7,
+      "capital": null,
+      "population": 379555
+    },
+    {
+      "name": "Zhoukou",
+      "region": "HA",
+      "x": 701.01,
+      "y": 425.96,
+      "rank": 7,
+      "capital": null,
+      "population": 377061
+    },
+    {
+      "name": "Putian",
+      "region": "FJ",
+      "x": 798.41,
+      "y": 586,
+      "rank": 7,
+      "capital": null,
+      "population": 376558
+    },
+    {
+      "name": "Quzhou",
+      "region": "ZJ",
+      "x": 785.46,
+      "y": 513.83,
+      "rank": 7,
+      "capital": null,
+      "population": 370000
+    },
+    {
+      "name": "Longyan",
+      "region": "FJ",
+      "x": 762.04,
+      "y": 598.2,
+      "rank": 7,
+      "capital": null,
+      "population": 367896
+    },
+    {
+      "name": "Longxi",
+      "region": "GS",
+      "x": 533.64,
+      "y": 405.07,
+      "rank": 7,
+      "capital": null,
+      "population": 355037
+    },
+    {
+      "name": "Tieling",
+      "region": "LN",
+      "x": 819.95,
+      "y": 225.62,
+      "rank": 7,
+      "capital": null,
+      "population": 340000
+    },
+    {
+      "name": "Ya'an",
+      "region": "SC",
+      "x": 505.27,
+      "y": 509.72,
+      "rank": 7,
+      "capital": null,
+      "population": 340000
+    },
+    {
+      "name": "Heyuan",
+      "region": "GD",
+      "x": 721.85,
+      "y": 630.35,
+      "rank": 7,
+      "capital": null,
+      "population": 330961
+    },
+    {
+      "name": "Chenzhou",
+      "region": "HN",
+      "x": 687.33,
+      "y": 590.71,
+      "rank": 7,
+      "capital": null,
+      "population": 322997
+    },
+    {
+      "name": "Jiaocheng",
+      "region": "FJ",
+      "x": 804.02,
+      "y": 559.12,
+      "rank": 7,
+      "capital": null,
+      "population": 314077
+    },
+    {
+      "name": "Xinzhou",
+      "region": "SX",
+      "x": 661.19,
+      "y": 328.92,
+      "rank": 7,
+      "capital": null,
+      "population": 279607
+    },
+    {
+      "name": "Jinshi",
+      "region": "HN",
+      "x": 660.14,
+      "y": 513.12,
+      "rank": 7,
+      "capital": null,
+      "population": 274000
+    },
+    {
+      "name": "Zhuanghe",
+      "region": "LN",
+      "x": 817.14,
+      "y": 281.81,
+      "rank": 7,
+      "capital": null,
+      "population": 261510
+    },
+    {
+      "name": "Suihua",
+      "region": "HL",
+      "x": 846.68,
+      "y": 128.31,
+      "rank": 7,
+      "capital": null,
+      "population": 252245
+    },
+    {
+      "name": "Qinzhou",
+      "region": "GX",
+      "x": 608.85,
+      "y": 674.36,
+      "rank": 7,
+      "capital": null,
+      "population": 245376
+    },
+    {
+      "name": "Hebi",
+      "region": "HA",
+      "x": 689.63,
+      "y": 378.23,
+      "rank": 7,
+      "capital": null,
+      "population": 244662
+    },
+    {
+      "name": "Linchuan",
+      "region": "JX",
+      "x": 743.46,
+      "y": 540.12,
+      "rank": 7,
+      "capital": null,
+      "population": 241104
+    },
+    {
+      "name": "Zhicheng",
+      "region": "HB",
+      "x": 653.02,
+      "y": 499.65,
+      "rank": 7,
+      "capital": null,
+      "population": 237042
+    },
+    {
+      "name": "Shishou",
+      "region": "HB",
+      "x": 669.7,
+      "y": 511.01,
+      "rank": 7,
+      "capital": null,
+      "population": 231787
+    },
+    {
+      "name": "Liaocheng",
+      "region": "SD",
+      "x": 716.99,
+      "y": 365.33,
+      "rank": 7,
+      "capital": null,
+      "population": 226930
+    },
+    {
+      "name": "Hancheng",
+      "region": "SN",
+      "x": 628.38,
+      "y": 392.84,
+      "rank": 7,
+      "capital": null,
+      "population": 222135
+    },
+    {
+      "name": "Nanping",
+      "region": "FJ",
+      "x": 779.51,
+      "y": 563.6,
+      "rank": 7,
+      "capital": null,
+      "population": 213054
+    },
+    {
+      "name": "Pingliang",
+      "region": "GS",
+      "x": 566.7,
+      "y": 393.79,
+      "rank": 7,
+      "capital": null,
+      "population": 207256
+    },
+    {
+      "name": "Jiutai",
+      "region": "JL",
+      "x": 841.74,
+      "y": 182.04,
+      "rank": 7,
+      "capital": null,
+      "population": 205399
+    },
+    {
+      "name": "Puqi",
+      "region": "HB",
+      "x": 695.73,
+      "y": 508.45,
+      "rank": 7,
+      "capital": null,
+      "population": 205164
+    },
+    {
+      "name": "Lianzhou",
+      "region": "GD",
+      "x": 676.96,
+      "y": 612.56,
+      "rank": 7,
+      "capital": null,
+      "population": 203639
+    },
+    {
+      "name": "Dunhua",
+      "region": "JL",
+      "x": 879.47,
+      "y": 190.46,
+      "rank": 7,
+      "capital": null,
+      "population": 191870
+    },
+    {
+      "name": "Zhaodong",
+      "region": "HL",
+      "x": 835.28,
+      "y": 142.43,
+      "rank": 7,
+      "capital": null,
+      "population": 179980
+    },
+    {
+      "name": "Lishui",
+      "region": "ZJ",
+      "x": 805.23,
+      "y": 521.86,
+      "rank": 7,
+      "capital": null,
+      "population": 172777
+    },
+    {
+      "name": "Weinan",
+      "region": "SN",
+      "x": 614.02,
+      "y": 413.91,
+      "rank": 7,
+      "capital": null,
+      "population": 172321
+    },
+    {
+      "name": "Fuyang",
+      "region": "AH",
+      "x": 722.61,
+      "y": 439.09,
+      "rank": 7,
+      "capital": null,
+      "population": 170023
+    },
+    {
+      "name": "Simao",
+      "region": "YN",
+      "x": 462.26,
+      "y": 657.14,
+      "rank": 7,
+      "capital": null,
+      "population": 162725
+    },
+    {
+      "name": "Xiaogan",
+      "region": "HB",
+      "x": 693.84,
+      "y": 483.52,
+      "rank": 7,
+      "capital": null,
+      "population": 160437
+    },
+    {
+      "name": "Guangshui",
+      "region": "HB",
+      "x": 694.25,
+      "y": 468.81,
+      "rank": 7,
+      "capital": null,
+      "population": 154771
+    },
+    {
+      "name": "Dingzhou",
+      "region": "HE",
+      "x": 696.96,
+      "y": 323.82,
+      "rank": 7,
+      "capital": null,
+      "population": 152934
+    },
+    {
+      "name": "Wenshan City",
+      "region": "YN",
+      "x": 524.84,
+      "y": 646.55,
+      "rank": 7,
+      "capital": null,
+      "population": 152388
+    },
+    {
+      "name": "Jinchang",
+      "region": "GS",
+      "x": 494.39,
+      "y": 331.24,
+      "rank": 7,
+      "capital": null,
+      "population": 144363
+    },
+    {
+      "name": "Jieshou",
+      "region": "AH",
+      "x": 713.91,
+      "y": 432.66,
+      "rank": 7,
+      "capital": null,
+      "population": 141993
+    },
+    {
+      "name": "Nong'an",
+      "region": "JL",
+      "x": 830.89,
+      "y": 178.25,
+      "rank": 7,
+      "capital": null,
+      "population": 141482
+    },
+    {
+      "name": "Yun County",
+      "region": "HB",
+      "x": 637.94,
+      "y": 448.13,
+      "rank": 7,
+      "capital": null,
+      "population": 133558
+    },
+    {
+      "name": "Shuangcheng",
+      "region": "HL",
+      "x": 842.66,
+      "y": 156.27,
+      "rank": 7,
+      "capital": null,
+      "population": 130710
+    },
+    {
+      "name": "Laiwu",
+      "region": "SD",
+      "x": 744.88,
+      "y": 366.85,
+      "rank": 7,
+      "capital": null,
+      "population": 124108
+    },
+    {
+      "name": "Jiaohe",
+      "region": "JL",
+      "x": 865.18,
+      "y": 185.98,
+      "rank": 7,
+      "capital": null,
+      "population": 123018
+    },
+    {
+      "name": "Nancha",
+      "region": "HL",
+      "x": 875.81,
+      "y": 110.69,
+      "rank": 7,
+      "capital": null,
+      "population": 121367
+    },
+    {
+      "name": "Huanghua",
+      "region": "HE",
+      "x": 733.91,
+      "y": 322.39,
+      "rank": 7,
+      "capital": null,
+      "population": 120000
+    },
+    {
+      "name": "Tongren",
+      "region": "GZ",
+      "x": 613.77,
+      "y": 556.28,
+      "rank": 7,
+      "capital": null,
+      "population": 118290
+    },
+    {
+      "name": "Huanren",
+      "region": "LN",
+      "x": 846.86,
+      "y": 242.47,
+      "rank": 7,
+      "capital": null,
+      "population": 116621
+    },
+    {
+      "name": "Taonan",
+      "region": "JL",
+      "x": 793.39,
+      "y": 166.51,
+      "rank": 7,
+      "capital": null,
+      "population": 116611
+    },
+    {
+      "name": "Yakeshi",
+      "region": "NM",
+      "x": 751.53,
+      "y": 91.33,
+      "rank": 7,
+      "capital": null,
+      "population": 116284
+    },
+    {
+      "name": "Binzhou",
+      "region": "SD",
+      "x": 746.9,
+      "y": 341.64,
+      "rank": 7,
+      "capital": null,
+      "population": 115893
+    },
+    {
+      "name": "Zhijiang Town",
+      "region": "HN",
+      "x": 623.91,
+      "y": 560.8,
+      "rank": 7,
+      "capital": null,
+      "population": 113907
+    },
+    {
+      "name": "Shaowu",
+      "region": "FJ",
+      "x": 765.61,
+      "y": 551.43,
+      "rank": 7,
+      "capital": null,
+      "population": 112585
+    },
+    {
+      "name": "Linqing",
+      "region": "HE",
+      "x": 711.36,
+      "y": 357.09,
+      "rank": 7,
+      "capital": null,
+      "population": 110046
+    },
+    {
+      "name": "Hailun",
+      "region": "HL",
+      "x": 842.3,
+      "y": 112,
+      "rank": 7,
+      "capital": null,
+      "population": 109881
+    },
+    {
+      "name": "Tieli",
+      "region": "HL",
+      "x": 859.87,
+      "y": 118.5,
+      "rank": 7,
+      "capital": null,
+      "population": 109636
+    },
+    {
+      "name": "Longjiang",
+      "region": "HL",
+      "x": 791.5,
+      "y": 124.71,
+      "rank": 7,
+      "capital": null,
+      "population": 106384
+    },
+    {
+      "name": "Fengzhen",
+      "region": "NM",
+      "x": 664.38,
+      "y": 285.72,
+      "rank": 7,
+      "capital": null,
+      "population": 99174
+    },
+    {
+      "name": "Shangzhi",
+      "region": "HL",
+      "x": 866.97,
+      "y": 153.52,
+      "rank": 7,
+      "capital": null,
+      "population": 96980
+    },
+    {
+      "name": "Boli",
+      "region": "HL",
+      "x": 900.56,
+      "y": 133.72,
+      "rank": 7,
+      "capital": null,
+      "population": 95260
+    },
+    {
+      "name": "Yishui County",
+      "region": "SD",
+      "x": 761.56,
+      "y": 373.3,
+      "rank": 7,
+      "capital": null,
+      "population": 94115
+    },
+    {
+      "name": "Fu'an",
+      "region": "FJ",
+      "x": 804.47,
+      "y": 550.9,
+      "rank": 7,
+      "capital": null,
+      "population": 92470
+    },
+    {
+      "name": "Pingdu",
+      "region": "SD",
+      "x": 779.83,
+      "y": 349.47,
+      "rank": 7,
+      "capital": null,
+      "population": 91077
+    },
+    {
+      "name": "Fujin",
+      "region": "HL",
+      "x": 912.09,
+      "y": 98.25,
+      "rank": 7,
+      "capital": null,
+      "population": 89442
+    },
+    {
+      "name": "Wangqing",
+      "region": "JL",
+      "x": 901.35,
+      "y": 185.62,
+      "rank": 7,
+      "capital": null,
+      "population": 88732
+    },
+    {
+      "name": "Changting",
+      "region": "FJ",
+      "x": 747.63,
+      "y": 583.44,
+      "rank": 7,
+      "capital": null,
+      "population": 87458
+    },
+    {
+      "name": "Mishan",
+      "region": "HL",
+      "x": 919.69,
+      "y": 132.96,
+      "rank": 7,
+      "capital": null,
+      "population": 87257
+    },
+    {
+      "name": "Panshi",
+      "region": "JL",
+      "x": 850.04,
+      "y": 205.83,
+      "rank": 7,
+      "capital": null,
+      "population": 86216
+    },
+    {
+      "name": "Helong",
+      "region": "JL",
+      "x": 894.81,
+      "y": 204.22,
+      "rank": 7,
+      "capital": null,
+      "population": 85756
+    },
+    {
+      "name": "Linjiang",
+      "region": "JL",
+      "x": 867.88,
+      "y": 225.53,
+      "rank": 7,
+      "capital": null,
+      "population": 84315
+    },
+    {
+      "name": "Nangong",
+      "region": "HE",
+      "x": 705.25,
+      "y": 346.78,
+      "rank": 7,
+      "capital": null,
+      "population": 82386
+    },
+    {
+      "name": "Koktokay",
+      "region": "XJ",
+      "x": 322.85,
+      "y": 138.18,
+      "rank": 7,
+      "capital": null,
+      "population": 80000
+    },
+    {
+      "name": "Shulan",
+      "region": "JL",
+      "x": 856.32,
+      "y": 173.23,
+      "rank": 7,
+      "capital": null,
+      "population": 78764
+    },
+    {
+      "name": "Pingyi",
+      "region": "SD",
+      "x": 746.06,
+      "y": 381.28,
+      "rank": 7,
+      "capital": null,
+      "population": 78254
+    },
+    {
+      "name": "Jiexiu",
+      "region": "SX",
+      "x": 650.24,
+      "y": 358.52,
+      "rank": 7,
+      "capital": null,
+      "population": 77178
+    },
+    {
+      "name": "Tailai",
+      "region": "HL",
+      "x": 798.26,
+      "y": 143.34,
+      "rank": 7,
+      "capital": null,
+      "population": 75992
+    },
+    {
+      "name": "Shan County",
+      "region": "SD",
+      "x": 722.6,
+      "y": 399.28,
+      "rank": 7,
+      "capital": null,
+      "population": 74459
+    },
+    {
+      "name": "Lanxi",
+      "region": "HL",
+      "x": 838.58,
+      "y": 137.79,
+      "rank": 7,
+      "capital": null,
+      "population": 72528
+    },
+    {
+      "name": "Keshan",
+      "region": "HL",
+      "x": 825.34,
+      "y": 103.62,
+      "rank": 7,
+      "capital": null,
+      "population": 72403
+    },
+    {
+      "name": "Danba",
+      "region": "SC",
+      "x": 485.42,
+      "y": 489,
+      "rank": 7,
+      "capital": null,
+      "population": 70000
+    },
+    {
+      "name": "Liuhe",
+      "region": "JL",
+      "x": 847.97,
+      "y": 220.42,
+      "rank": 7,
+      "capital": null,
+      "population": 68938
+    },
+    {
+      "name": "Min County",
+      "region": "GS",
+      "x": 522.92,
+      "y": 416.87,
+      "rank": 7,
+      "capital": null,
+      "population": 67826
+    },
+    {
+      "name": "Huinan County",
+      "region": "JL",
+      "x": 854.44,
+      "y": 211.7,
+      "rank": 7,
+      "capital": null,
+      "population": 66315
+    },
+    {
+      "name": "Qiemo Town",
+      "region": "XJ",
+      "x": 231.7,
+      "y": 309.24,
+      "rank": 7,
+      "capital": null,
+      "population": 65572
+    },
+    {
+      "name": "Fengcheng",
+      "region": "JX",
+      "x": 732.37,
+      "y": 536.56,
+      "rank": 7,
+      "capital": null,
+      "population": 61469
+    },
+    {
+      "name": "Langzhong",
+      "region": "SC",
+      "x": 555.76,
+      "y": 476.69,
+      "rank": 7,
+      "capital": null,
+      "population": 60542
+    },
+    {
+      "name": "Dengzhou",
+      "region": "HA",
+      "x": 659.64,
+      "y": 449.4,
+      "rank": 7,
+      "capital": null,
+      "population": 59338
+    },
+    {
+      "name": "Gannan",
+      "region": "HL",
+      "x": 793.82,
+      "y": 112.16,
+      "rank": 7,
+      "capital": null,
+      "population": 59239
+    },
+    {
+      "name": "Alxa Left Banner",
+      "region": "NM",
+      "x": 549.61,
+      "y": 324.65,
+      "rank": 7,
+      "capital": null,
+      "population": 56387
+    },
+    {
+      "name": "Xinqing",
+      "region": "HL",
+      "x": 873.29,
+      "y": 88.06,
+      "rank": 7,
+      "capital": null,
+      "population": 55415
+    },
+    {
+      "name": "Ning'an",
+      "region": "HL",
+      "x": 892.4,
+      "y": 166.3,
+      "rank": 7,
+      "capital": null,
+      "population": 54636
+    },
+    {
+      "name": "Baarin Left Banner",
+      "region": "NM",
+      "x": 746.32,
+      "y": 202.44,
+      "rank": 7,
+      "capital": null,
+      "population": 50000
+    },
+    {
+      "name": "Fengjie",
+      "region": "CQ",
+      "x": 617.58,
+      "y": 485.96,
+      "rank": 7,
+      "capital": null,
+      "population": 49168
+    },
+    {
+      "name": "Yishan",
+      "region": "GX",
+      "x": 607.82,
+      "y": 622.2,
+      "rank": 7,
+      "capital": null,
+      "population": 47062
+    },
+    {
+      "name": "Hulin",
+      "region": "HL",
+      "x": 933.77,
+      "y": 124.26,
+      "rank": 7,
+      "capital": null,
+      "population": 42559
+    },
+    {
+      "name": "Yi'an",
+      "region": "HL",
+      "x": 818.3,
+      "y": 108.16,
+      "rank": 7,
+      "capital": null,
+      "population": 39924
+    },
+    {
+      "name": "Pingxiang",
+      "region": "GX",
+      "x": 572.89,
+      "y": 672.34,
+      "rank": 7,
+      "capital": null,
+      "population": 31109
+    },
+    {
+      "name": "Wuyuan",
+      "region": "NM",
+      "x": 589.03,
+      "y": 276.77,
+      "rank": 7,
+      "capital": null,
+      "population": 30057
+    },
+    {
+      "name": "Bayan Obo",
+      "region": "NM",
+      "x": 614.24,
+      "y": 261.55,
+      "rank": 7,
+      "capital": null,
+      "population": 27476
+    },
+    {
+      "name": "Yitulihe",
+      "region": "NM",
+      "x": 757.45,
+      "y": 62.17,
+      "rank": 7,
+      "capital": null,
+      "population": 19645
+    },
+    {
+      "name": "Anxi",
+      "region": "GS",
+      "x": 397.67,
+      "y": 283.35,
+      "rank": 7,
+      "capital": null,
+      "population": 17886
+    },
+    {
+      "name": "Bugt",
+      "region": "NM",
+      "x": 769.35,
+      "y": 98.63,
+      "rank": 7,
+      "capital": null,
+      "population": 17457
+    },
+    {
+      "name": "Gar",
+      "region": "XZ",
+      "x": 114.74,
+      "y": 410,
+      "rank": 7,
+      "capital": null,
+      "population": 10000
+    },
+    {
+      "name": "Guide",
+      "region": "QH",
+      "x": 480.69,
+      "y": 382.19,
+      "rank": 7,
+      "capital": null,
+      "population": 7642
+    },
+    {
+      "name": "Huize",
+      "region": "YN",
+      "x": 510,
+      "y": 585.12,
+      "rank": 7,
+      "capital": null,
+      "population": 5170
+    },
+    {
+      "name": "Kailu",
+      "region": "NM",
+      "x": 776.89,
+      "y": 206.14,
+      "rank": 7,
+      "capital": null,
+      "population": 2809
+    },
+    {
+      "name": "Linxi Town",
+      "region": "NM",
+      "x": 730.88,
+      "y": 214.36,
+      "rank": 7,
+      "capital": null,
+      "population": 679
+    },
+    {
+      "name": "Zhucheng",
+      "region": "SD",
+      "x": 773.29,
+      "y": 367.41,
+      "rank": 8,
+      "capital": null,
+      "population": 1060000
+    },
+    {
+      "name": "Yangquan",
+      "region": "SX",
+      "x": 675.58,
+      "y": 339.1,
+      "rank": 8,
+      "capital": null,
+      "population": 981448
+    },
+    {
+      "name": "Xinyi",
+      "region": "JS",
+      "x": 761.14,
+      "y": 403.18,
+      "rank": 8,
+      "capital": null,
+      "population": 962656
+    },
+    {
+      "name": "Shiyan",
+      "region": "HB",
+      "x": 637.66,
+      "y": 453.14,
+      "rank": 8,
+      "capital": null,
+      "population": 770000
+    },
+    {
+      "name": "Zhuozhou",
+      "region": "BJ",
+      "x": 707.02,
+      "y": 300.87,
+      "rank": 8,
+      "capital": null,
+      "population": 628000
+    },
+    {
+      "name": "Yangzhou",
+      "region": "JS",
+      "x": 784.98,
+      "y": 441.66,
+      "rank": 8,
+      "capital": null,
+      "population": 539715
+    },
+    {
+      "name": "Linxia City",
+      "region": "GS",
+      "x": 509.52,
+      "y": 392.3,
+      "rank": 8,
+      "capital": null,
+      "population": 534555
+    },
+    {
+      "name": "Jingzhou",
+      "region": "HB",
+      "x": 665.77,
+      "y": 498.36,
+      "rank": 8,
+      "capital": null,
+      "population": 520000
+    },
+    {
+      "name": "Yanji",
+      "region": "JL",
+      "x": 900.42,
+      "y": 195.36,
+      "rank": 8,
+      "capital": null,
+      "population": 488740
+    },
+    {
+      "name": "Hengshui",
+      "region": "HE",
+      "x": 709.73,
+      "y": 338.93,
+      "rank": 8,
+      "capital": null,
+      "population": 456356
+    },
+    {
+      "name": "Chaozhou",
+      "region": "GD",
+      "x": 758.63,
+      "y": 627.43,
+      "rank": 8,
+      "capital": null,
+      "population": 424787
+    },
+    {
+      "name": "Luohe",
+      "region": "HA",
+      "x": 691.07,
+      "y": 428.17,
+      "rank": 8,
+      "capital": null,
+      "population": 417356
+    },
+    {
+      "name": "Xuanhua",
+      "region": "HE",
+      "x": 692.92,
+      "y": 280.17,
+      "rank": 8,
+      "capital": null,
+      "population": 409745
+    },
+    {
+      "name": "Wafangdian",
+      "region": "LN",
+      "x": 802.53,
+      "y": 285.61,
+      "rank": 8,
+      "capital": null,
+      "population": 355844
+    },
+    {
+      "name": "Yumen City",
+      "region": "GS",
+      "x": 426.25,
+      "y": 299.8,
+      "rank": 8,
+      "capital": null,
+      "population": 350000
+    },
+    {
+      "name": "Lunan",
+      "region": "TJ",
+      "x": 738.62,
+      "y": 303.6,
+      "rank": 8,
+      "capital": null,
+      "population": 332793
+    },
+    {
+      "name": "Baishan",
+      "region": "JL",
+      "x": 860.13,
+      "y": 225.89,
+      "rank": 8,
+      "capital": null,
+      "population": 330000
+    },
+    {
+      "name": "Mengzi City",
+      "region": "YN",
+      "x": 508.82,
+      "y": 646.57,
+      "rank": 8,
+      "capital": null,
+      "population": 303341
+    },
+    {
+      "name": "Fularji",
+      "region": "HL",
+      "x": 797.9,
+      "y": 126.24,
+      "rank": 8,
+      "capital": null,
+      "population": 289999
+    },
+    {
+      "name": "Huizhou",
+      "region": "GD",
+      "x": 717.83,
+      "y": 644.11,
+      "rank": 8,
+      "capital": null,
+      "population": 289201
+    },
+    {
+      "name": "Chuxiong City",
+      "region": "YN",
+      "x": 474.7,
+      "y": 611.32,
+      "rank": 8,
+      "capital": null,
+      "population": 254370
+    },
+    {
+      "name": "Linhai",
+      "region": "ZJ",
+      "x": 825.5,
+      "y": 510.26,
+      "rank": 8,
+      "capital": null,
+      "population": 251759
+    },
+    {
+      "name": "Beipiao",
+      "region": "LN",
+      "x": 776.33,
+      "y": 243.68,
+      "rank": 8,
+      "capital": null,
+      "population": 228515
+    },
+    {
+      "name": "Sanming",
+      "region": "FJ",
+      "x": 769.85,
+      "y": 573.2,
+      "rank": 8,
+      "capital": null,
+      "population": 209444
+    },
+    {
+      "name": "Huangyan",
+      "region": "ZJ",
+      "x": 828.47,
+      "y": 513.99,
+      "rank": 8,
+      "capital": null,
+      "population": 198713
+    },
+    {
+      "name": "Anda",
+      "region": "HL",
+      "x": 824.75,
+      "y": 137.91,
+      "rank": 8,
+      "capital": null,
+      "population": 181533
+    },
+    {
+      "name": "Deyang",
+      "region": "SC",
+      "x": 528.66,
+      "y": 485.98,
+      "rank": 8,
+      "capital": null,
+      "population": 152194
+    },
+    {
+      "name": "Zalantun",
+      "region": "NM",
+      "x": 782.78,
+      "y": 112.54,
+      "rank": 8,
+      "capital": null,
+      "population": 138032
+    },
+    {
+      "name": "Tengyue",
+      "region": "YN",
+      "x": 417.38,
+      "y": 608.5,
+      "rank": 8,
+      "capital": null,
+      "population": 126058
+    },
+    {
+      "name": "Dali",
+      "region": "SN",
+      "x": 621,
+      "y": 407.39,
+      "rank": 8,
+      "capital": null,
+      "population": 109696
+    },
+    {
+      "name": "Da'an",
+      "region": "JL",
+      "x": 814.19,
+      "y": 159.01,
+      "rank": 8,
+      "capital": null,
+      "population": 93297
+    },
+    {
+      "name": "Danjiangkou",
+      "region": "HB",
+      "x": 649.99,
+      "y": 453.42,
+      "rank": 8,
+      "capital": null,
+      "population": 92008
+    },
+    {
+      "name": "Linkou",
+      "region": "HL",
+      "x": 898.55,
+      "y": 144.39,
+      "rank": 8,
+      "capital": null,
+      "population": 77754
+    },
+    {
+      "name": "Anlu",
+      "region": "HB",
+      "x": 689.22,
+      "y": 476.6,
+      "rank": 8,
+      "capital": null,
+      "population": 71198
+    },
+    {
+      "name": "Baiquan County",
+      "region": "HL",
+      "x": 830.09,
+      "y": 111.5,
+      "rank": 8,
+      "capital": null,
+      "population": 70472
+    },
+    {
+      "name": "Qinggang",
+      "region": "HL",
+      "x": 834.3,
+      "y": 129.78,
+      "rank": 8,
+      "capital": null,
+      "population": 64182
+    },
+    {
+      "name": "Suiling Town",
+      "region": "HL",
+      "x": 845.62,
+      "y": 115.56,
+      "rank": 8,
+      "capital": null,
+      "population": 57789
+    },
+    {
+      "name": "Changling County",
+      "region": "JL",
+      "x": 814.67,
+      "y": 184.89,
+      "rank": 8,
+      "capital": null,
+      "population": 55841
+    },
+    {
+      "name": "Qing’an",
+      "region": "HL",
+      "x": 852.88,
+      "y": 121.79,
+      "rank": 8,
+      "capital": null,
+      "population": 53206
+    },
+    {
+      "name": "Genhe",
+      "region": "NM",
+      "x": 757.01,
+      "y": 59.54,
+      "rank": 8,
+      "capital": null,
+      "population": 42849
+    },
+    {
+      "name": "Orongen Zizhiqi",
+      "region": "NM",
+      "x": 786.54,
+      "y": 58.7,
+      "rank": 8,
+      "capital": null,
+      "population": 40128
+    },
+    {
+      "name": "Hanggin Rear Banner",
+      "region": "NM",
+      "x": 571.85,
+      "y": 281.52,
+      "rank": 8,
+      "capital": null,
+      "population": 39954
+    },
+    {
+      "name": "Tonghua",
+      "region": "JL",
+      "x": 851.04,
+      "y": 232.55,
+      "rank": 8,
+      "capital": null,
+      "population": 27227
+    },
+    {
+      "name": "Ang’angxi",
+      "region": "HL",
+      "x": 800.7,
+      "y": 126.75,
+      "rank": 8,
+      "capital": null,
+      "population": 24317
+    },
+    {
+      "name": "Wuchuan",
+      "region": "NM",
+      "x": 637.35,
+      "y": 274.28,
+      "rank": 8,
+      "capital": null,
+      "population": 23776
+    },
+    {
+      "name": "Shangdu",
+      "region": "NM",
+      "x": 668.4,
+      "y": 262.42,
+      "rank": 8,
+      "capital": null,
+      "population": 18831
+    },
+    {
+      "name": "Gyantse",
+      "region": "XZ",
+      "x": 266.26,
+      "y": 510.33,
+      "rank": 8,
+      "capital": null,
+      "population": 10000
+    },
+    {
+      "name": "Zixing",
+      "region": "HN",
+      "x": 693.85,
+      "y": 586.66,
+      "rank": 8,
+      "capital": null,
+      "population": 6618
+    }
+  ]
+}

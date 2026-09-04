@@ -1,0 +1,264 @@
+{
+  "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_populated_places.geojson (Natural Earth populated places), fitted to 1000x1200",
+  "updatedAt": "2026-09-04T09:40:56.789Z",
+  "country": "KR",
+  "countryName": "South Korea",
+  "viewBox": "0 0 1000 1200",
+  "width": 1000,
+  "height": 1200,
+  "totalCities": 28,
+  "cities": [
+    {
+      "name": "Seoul",
+      "region": "11",
+      "x": 376.48,
+      "y": 268.54,
+      "rank": 1,
+      "capital": "country",
+      "population": 9796000
+    },
+    {
+      "name": "Busan",
+      "region": "26",
+      "x": 703.57,
+      "y": 762.19,
+      "rank": 4,
+      "capital": "region",
+      "population": 3480000
+    },
+    {
+      "name": "Incheon",
+      "region": "28",
+      "x": 319.52,
+      "y": 286.2,
+      "rank": 4,
+      "capital": "region",
+      "population": 2550000
+    },
+    {
+      "name": "Daejeon",
+      "region": "30",
+      "x": 443.84,
+      "y": 515.43,
+      "rank": 4,
+      "capital": "region",
+      "population": 1468000
+    },
+    {
+      "name": "Gwangju",
+      "region": "29",
+      "x": 359.35,
+      "y": 748.56,
+      "rank": 4,
+      "capital": "region",
+      "population": 1440000
+    },
+    {
+      "name": "Daegu",
+      "region": "27",
+      "x": 635.74,
+      "y": 608.37,
+      "rank": 6,
+      "capital": "region",
+      "population": 2460000
+    },
+    {
+      "name": "Suwon",
+      "region": "41",
+      "x": 377.93,
+      "y": 330.39,
+      "rank": 6,
+      "capital": "region",
+      "population": 1078000
+    },
+    {
+      "name": "Ulsan",
+      "region": "31",
+      "x": 752.25,
+      "y": 670.81,
+      "rank": 6,
+      "capital": "region",
+      "population": 1061000
+    },
+    {
+      "name": "Pohang",
+      "region": "47",
+      "x": 759.66,
+      "y": 575.98,
+      "rank": 6,
+      "capital": null,
+      "population": 435266
+    },
+    {
+      "name": "Seongnam",
+      "region": "41",
+      "x": 398.31,
+      "y": 294.24,
+      "rank": 7,
+      "capital": null,
+      "population": 942000
+    },
+    {
+      "name": "Goyang",
+      "region": "41",
+      "x": 350.78,
+      "y": 251.06,
+      "rank": 7,
+      "capital": null,
+      "population": 903000
+    },
+    {
+      "name": "Bucheon",
+      "region": "41",
+      "x": 341.95,
+      "y": 281.83,
+      "rank": 7,
+      "capital": null,
+      "population": 866000
+    },
+    {
+      "name": "Jeonju",
+      "region": "45",
+      "x": 397.82,
+      "y": 616.76,
+      "rank": 7,
+      "capital": "region",
+      "population": 711424
+    },
+    {
+      "name": "Jeju",
+      "region": "49",
+      "x": 292.81,
+      "y": 1081.34,
+      "rank": 7,
+      "capital": "region",
+      "population": 408364
+    },
+    {
+      "name": "Yeosu",
+      "region": "46",
+      "x": 496.75,
+      "y": 836.21,
+      "rank": 7,
+      "capital": null,
+      "population": 341994
+    },
+    {
+      "name": "Mokpo",
+      "region": "46",
+      "x": 274.55,
+      "y": 821.23,
+      "rank": 7,
+      "capital": null,
+      "population": 268402
+    },
+    {
+      "name": "Gunsan",
+      "region": "45",
+      "x": 329.11,
+      "y": 586.22,
+      "rank": 7,
+      "capital": null,
+      "population": 244080
+    },
+    {
+      "name": "Gangneung",
+      "region": "42",
+      "x": 677.5,
+      "y": 229.5,
+      "rank": 7,
+      "capital": null,
+      "population": 180611
+    },
+    {
+      "name": "Andong",
+      "region": "47",
+      "x": 653.46,
+      "y": 468.4,
+      "rank": 7,
+      "capital": null,
+      "population": 129319
+    },
+    {
+      "name": "Sokcho",
+      "region": "42",
+      "x": 628.11,
+      "y": 139.38,
+      "rank": 7,
+      "capital": null,
+      "population": 85430
+    },
+    {
+      "name": "Changwon",
+      "region": "48",
+      "x": 633.68,
+      "y": 738.62,
+      "rank": 8,
+      "capital": null,
+      "population": 1081499
+    },
+    {
+      "name": "Cheongju",
+      "region": "43",
+      "x": 456.45,
+      "y": 454.02,
+      "rank": 8,
+      "capital": "region",
+      "population": 775096
+    },
+    {
+      "name": "Ansan",
+      "region": "41",
+      "x": 354.21,
+      "y": 312.54,
+      "rank": 8,
+      "capital": null,
+      "population": 739493
+    },
+    {
+      "name": "Iksan",
+      "region": "45",
+      "x": 366.27,
+      "y": 594.65,
+      "rank": 8,
+      "capital": null,
+      "population": 283501
+    },
+    {
+      "name": "Wonju",
+      "region": "42",
+      "x": 526.3,
+      "y": 311.31,
+      "rank": 8,
+      "capital": null,
+      "population": 243387
+    },
+    {
+      "name": "Chuncheon",
+      "region": "42",
+      "x": 493.3,
+      "y": 207.29,
+      "rank": 8,
+      "capital": "region",
+      "population": 226509
+    },
+    {
+      "name": "Gyeongju",
+      "region": "47",
+      "x": 734.37,
+      "y": 612.16,
+      "rank": 8,
+      "capital": null,
+      "population": 155237
+    },
+    {
+      "name": "Eumseong",
+      "region": "43",
+      "x": 486.65,
+      "y": 395.6,
+      "rank": 8,
+      "capital": null,
+      "population": 10077
+    }
+  ]
+}

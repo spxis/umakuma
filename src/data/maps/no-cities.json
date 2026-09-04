@@ -1,0 +1,318 @@
+{
+  "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_populated_places.geojson (Natural Earth populated places), fitted to 1000x1400",
+  "updatedAt": "2026-09-04T09:41:01.188Z",
+  "country": "NO",
+  "countryName": "Norway",
+  "viewBox": "0 0 1000 1400",
+  "width": 1000,
+  "height": 1400,
+  "totalCities": 34,
+  "cities": [
+    {
+      "name": "Oslo",
+      "region": "03",
+      "x": 489.52,
+      "y": 214.65,
+      "rank": 2,
+      "capital": "country",
+      "population": 835000
+    },
+    {
+      "name": "Bergen",
+      "region": "12",
+      "x": 462.33,
+      "y": 206.87,
+      "rank": 3,
+      "capital": "region",
+      "population": 213585
+    },
+    {
+      "name": "Trondheim",
+      "region": "16",
+      "x": 490.35,
+      "y": 178.55,
+      "rank": 3,
+      "capital": "region",
+      "population": 147139
+    },
+    {
+      "name": "Tromsø",
+      "region": "19",
+      "x": 525.78,
+      "y": 114.74,
+      "rank": 3,
+      "capital": "region",
+      "population": 52436
+    },
+    {
+      "name": "Kristiansand",
+      "region": "10",
+      "x": 473.31,
+      "y": 231.64,
+      "rank": 4,
+      "capital": "region",
+      "population": 63814
+    },
+    {
+      "name": "Hammerfest",
+      "region": "20",
+      "x": 541.04,
+      "y": 102.52,
+      "rank": 4,
+      "capital": null,
+      "population": 10000
+    },
+    {
+      "name": "Stavanger",
+      "region": "11",
+      "x": 462.06,
+      "y": 221.68,
+      "rank": 6,
+      "capital": "region",
+      "population": 173132
+    },
+    {
+      "name": "Skien",
+      "region": "08",
+      "x": 483,
+      "y": 221.61,
+      "rank": 6,
+      "capital": "region",
+      "population": 73330
+    },
+    {
+      "name": "Haugesund",
+      "region": "11",
+      "x": 460.6,
+      "y": 216.85,
+      "rank": 6,
+      "capital": null,
+      "population": 40321
+    },
+    {
+      "name": "Bodø",
+      "region": "18",
+      "x": 509.2,
+      "y": 139.51,
+      "rank": 6,
+      "capital": "region",
+      "population": 34073
+    },
+    {
+      "name": "Mo i Rana",
+      "region": "18",
+      "x": 508.03,
+      "y": 149.39,
+      "rank": 6,
+      "capital": null,
+      "population": 20409
+    },
+    {
+      "name": "Narvik",
+      "region": "18",
+      "x": 520.17,
+      "y": 127.95,
+      "rank": 6,
+      "capital": null,
+      "population": 20000
+    },
+    {
+      "name": "Lillehammer",
+      "region": "05",
+      "x": 489.1,
+      "y": 202.07,
+      "rank": 6,
+      "capital": "region",
+      "population": 19542
+    },
+    {
+      "name": "Molde",
+      "region": "15",
+      "x": 474.65,
+      "y": 183.95,
+      "rank": 6,
+      "capital": "region",
+      "population": 18594
+    },
+    {
+      "name": "Alta",
+      "region": "20",
+      "x": 540.5,
+      "y": 109.83,
+      "rank": 6,
+      "capital": null,
+      "population": 12077
+    },
+    {
+      "name": "Namsos",
+      "region": "17",
+      "x": 495.94,
+      "y": 167.88,
+      "rank": 6,
+      "capital": null,
+      "population": 9035
+    },
+    {
+      "name": "Vadsø",
+      "region": "20",
+      "x": 562.84,
+      "y": 104.19,
+      "rank": 6,
+      "capital": "region",
+      "population": 5139
+    },
+    {
+      "name": "Svolvær",
+      "region": "18",
+      "x": 509.82,
+      "y": 129.65,
+      "rank": 6,
+      "capital": null,
+      "population": 4197
+    },
+    {
+      "name": "Kirkenes",
+      "region": "20",
+      "x": 564.76,
+      "y": 107.67,
+      "rank": 6,
+      "capital": null,
+      "population": 3282
+    },
+    {
+      "name": "Drammen",
+      "region": "06",
+      "x": 486.55,
+      "y": 216.31,
+      "rank": 7,
+      "capital": "region",
+      "population": 90722
+    },
+    {
+      "name": "Ålesund",
+      "region": "15",
+      "x": 469.93,
+      "y": 186.35,
+      "rank": 7,
+      "capital": null,
+      "population": 47772
+    },
+    {
+      "name": "Sandnes",
+      "region": "11",
+      "x": 461.94,
+      "y": 222.96,
+      "rank": 7,
+      "capital": null,
+      "population": 46911
+    },
+    {
+      "name": "Moss",
+      "region": "01",
+      "x": 488.79,
+      "y": 219.58,
+      "rank": 7,
+      "capital": "region",
+      "population": 36901
+    },
+    {
+      "name": "Harstad",
+      "region": "19",
+      "x": 517.13,
+      "y": 123.87,
+      "rank": 7,
+      "capital": null,
+      "population": 19433
+    },
+    {
+      "name": "Steinkjer",
+      "region": "17",
+      "x": 495.68,
+      "y": 172.68,
+      "rank": 7,
+      "capital": "region",
+      "population": 11274
+    },
+    {
+      "name": "Gjøvik",
+      "region": "05",
+      "x": 489.87,
+      "y": 205.56,
+      "rank": 8,
+      "capital": null,
+      "population": 22719
+    },
+    {
+      "name": "Finnsnes",
+      "region": "19",
+      "x": 522.46,
+      "y": 119.01,
+      "rank": 8,
+      "capital": null,
+      "population": 3907
+    },
+    {
+      "name": "Rørvik",
+      "region": "17",
+      "x": 494.87,
+      "y": 163.85,
+      "rank": 8,
+      "capital": null,
+      "population": 2615
+    },
+    {
+      "name": "Bærum",
+      "region": "02",
+      "x": 492.61,
+      "y": 214.89,
+      "rank": 10,
+      "capital": "region",
+      "population": 113659
+    },
+    {
+      "name": "Tønsberg",
+      "region": "07",
+      "x": 487.37,
+      "y": 221.27,
+      "rank": 10,
+      "capital": "region",
+      "population": 38914
+    },
+    {
+      "name": "Arendal",
+      "region": "09",
+      "x": 477.9,
+      "y": 228.78,
+      "rank": 10,
+      "capital": "region",
+      "population": 30916
+    },
+    {
+      "name": "Hamar",
+      "region": "04",
+      "x": 491.73,
+      "y": 205.47,
+      "rank": 10,
+      "capital": "region",
+      "population": 29479
+    },
+    {
+      "name": "Vossevangen",
+      "region": "12",
+      "x": 468.3,
+      "y": 205.2,
+      "rank": 10,
+      "capital": "region",
+      "population": 5571
+    },
+    {
+      "name": "Leikanger",
+      "region": "14",
+      "x": 471.06,
+      "y": 199.8,
+      "rank": 10,
+      "capital": "region",
+      "population": 1965
+    }
+  ]
+}

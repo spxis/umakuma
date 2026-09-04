@@ -159,11 +159,11 @@ export const SOURCE_DESCRIPTIONS: Record<
   },
   [SOURCE_KEYS.worldmap]: {
     tab: "World maps",
-    lede: "Natural Earth's public-domain cultural vector dataset, which is where our Canada and world regional maps come from. While the United States uses Census TopoJSON and Japan uses GSI Global Map data, Natural Earth provides the administrative division boundaries (states, provinces, prefectures, and territories) for Canada, our admin pilot countries (Thailand, China, Australia, and Taiwan), and 25 additional global countries in our world map library. Their Populated Places dataset supplies the cities Canada's map can draw over those boundaries. Neighbours are worked out from shared boundary points rather than predefined topology.",
+    lede: "Natural Earth's public-domain cultural vector dataset, which is where our Canada and world regional maps come from. While the United States uses Census TopoJSON and Japan uses GSI Global Map data, Natural Earth provides the administrative division boundaries (states, provinces, prefectures, and territories) for Canada, our admin pilot countries (Thailand, China, Australia, and Taiwan), and 25 additional global countries in our world map library. Their Populated Places dataset supplies the cities every one of our maps can draw, Japan's and the United States' included - those two keep their own outlines and take only the city points. Neighbours are worked out from shared boundary points rather than predefined topology.",
     takes: [
       "The boundary outlines and regional shapes for Canada, Thailand, China, Australia, Taiwan, and 25 additional world countries",
       "Neighbouring divisions calculated from shared vertex boundaries, determining which regions border each other for quiz questions and plausible distractors",
-      "From their Populated Places dataset, the position, name, importance rank and capital status of Canada's cities, projected onto our own canvas so a city sits on the province it belongs to",
+      "From their Populated Places dataset, the position, name, importance rank and capital status of the cities on every map we draw, each set projected onto that country's own canvas so a city sits in the division it belongs to",
       "Nothing else: native names, readings, flags, and demographic facts are compiled from national statistical agencies, geographic authorities, and reference encyclopedias",
     ],
     terms:

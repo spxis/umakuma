@@ -1,0 +1,651 @@
+{
+  "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_populated_places.geojson (Natural Earth populated places), fitted to 1000x1200",
+  "updatedAt": "2026-09-04T09:41:00.993Z",
+  "country": "CO",
+  "countryName": "Colombia",
+  "viewBox": "0 0 1000 1200",
+  "width": 1000,
+  "height": 1200,
+  "totalCities": 71,
+  "cities": [
+    {
+      "name": "Bogotá",
+      "region": "CUN",
+      "x": 418.55,
+      "y": 565.21,
+      "rank": 0,
+      "capital": "country",
+      "population": 7772000
+    },
+    {
+      "name": "Medellin",
+      "region": "ANT",
+      "x": 312.26,
+      "y": 444.3,
+      "rank": 2,
+      "capital": "region",
+      "population": 3297000
+    },
+    {
+      "name": "Cali",
+      "region": "VAC",
+      "x": 245.09,
+      "y": 650.71,
+      "rank": 2,
+      "capital": "region",
+      "population": 2254000
+    },
+    {
+      "name": "Cartagena",
+      "region": "BOL",
+      "x": 318.48,
+      "y": 147.9,
+      "rank": 3,
+      "capital": "region",
+      "population": 887000
+    },
+    {
+      "name": "Leticia",
+      "region": "AMA",
+      "x": 714.34,
+      "y": 1197.47,
+      "rank": 3,
+      "capital": "region",
+      "population": 59575
+    },
+    {
+      "name": "Mitú",
+      "region": "VAU",
+      "x": 699.19,
+      "y": 809.27,
+      "rank": 3,
+      "capital": "region",
+      "population": 5917
+    },
+    {
+      "name": "Barranquilla",
+      "region": "ATL",
+      "x": 369.2,
+      "y": 108.01,
+      "rank": 4,
+      "capital": "region",
+      "population": 1798000
+    },
+    {
+      "name": "San Juan de Pasto",
+      "region": "NAR",
+      "x": 188.64,
+      "y": 808.03,
+      "rank": 4,
+      "capital": "region",
+      "population": 382236
+    },
+    {
+      "name": "Manizales",
+      "region": "CAL",
+      "x": 315.95,
+      "y": 531.77,
+      "rank": 4,
+      "capital": "region",
+      "population": 375848
+    },
+    {
+      "name": "Bucaramanga",
+      "region": "SAN",
+      "x": 487.12,
+      "y": 383.36,
+      "rank": 6,
+      "capital": "region",
+      "population": 1009000
+    },
+    {
+      "name": "Cúcuta",
+      "region": "NSA",
+      "x": 530.36,
+      "y": 326.76,
+      "rank": 6,
+      "capital": "region",
+      "population": 722146
+    },
+    {
+      "name": "Bello",
+      "region": "ANT",
+      "x": 312.78,
+      "y": 440.49,
+      "rank": 6,
+      "capital": null,
+      "population": 519670
+    },
+    {
+      "name": "Santa Marta",
+      "region": "MAG",
+      "x": 411.6,
+      "y": 87.73,
+      "rank": 6,
+      "capital": "region",
+      "population": 431781
+    },
+    {
+      "name": "Ibagué",
+      "region": "TOL",
+      "x": 336.4,
+      "y": 576.47,
+      "rank": 6,
+      "capital": "region",
+      "population": 421685
+    },
+    {
+      "name": "Villavicencio",
+      "region": "MET",
+      "x": 450.76,
+      "y": 597.2,
+      "rank": 6,
+      "capital": "region",
+      "population": 374763
+    },
+    {
+      "name": "Montería",
+      "region": "COR",
+      "x": 291.07,
+      "y": 265.86,
+      "rank": 6,
+      "capital": "region",
+      "population": 275198
+    },
+    {
+      "name": "Popayán",
+      "region": "CAU",
+      "x": 237.1,
+      "y": 721.32,
+      "rank": 6,
+      "capital": "region",
+      "population": 258750
+    },
+    {
+      "name": "Tumaco-Nariño",
+      "region": "NAR",
+      "x": 78.59,
+      "y": 764.79,
+      "rank": 6,
+      "capital": null,
+      "population": 86713
+    },
+    {
+      "name": "Pereira",
+      "region": "RIS",
+      "x": 304.42,
+      "y": 549.67,
+      "rank": 7,
+      "capital": "region",
+      "population": 568750
+    },
+    {
+      "name": "Neiva",
+      "region": "HUI",
+      "x": 329.1,
+      "y": 684.8,
+      "rank": 7,
+      "capital": "region",
+      "population": 352855
+    },
+    {
+      "name": "Armenia",
+      "region": "QUI",
+      "x": 304.27,
+      "y": 569.51,
+      "rank": 7,
+      "capital": "region",
+      "population": 315328
+    },
+    {
+      "name": "Sincelejo",
+      "region": "SUC",
+      "x": 327.55,
+      "y": 227.83,
+      "rank": 7,
+      "capital": "region",
+      "population": 261187
+    },
+    {
+      "name": "Buenaventura",
+      "region": "VAC",
+      "x": 205.84,
+      "y": 616.69,
+      "rank": 7,
+      "capital": null,
+      "population": 252805
+    },
+    {
+      "name": "Tuluá",
+      "region": "VAC",
+      "x": 266.23,
+      "y": 601.28,
+      "rank": 7,
+      "capital": null,
+      "population": 165501
+    },
+    {
+      "name": "Tunja",
+      "region": "BOY",
+      "x": 469.79,
+      "y": 496.9,
+      "rank": 7,
+      "capital": "region",
+      "population": 161412
+    },
+    {
+      "name": "Riohacha",
+      "region": "LAG",
+      "x": 502.56,
+      "y": 66.86,
+      "rank": 7,
+      "capital": "region",
+      "population": 133186
+    },
+    {
+      "name": "Ciénaga",
+      "region": "MAG",
+      "x": 408.13,
+      "y": 104.72,
+      "rank": 7,
+      "capital": null,
+      "population": 131171
+    },
+    {
+      "name": "Florencia",
+      "region": "CAQ",
+      "x": 308.13,
+      "y": 779.67,
+      "rank": 7,
+      "capital": "region",
+      "population": 130337
+    },
+    {
+      "name": "Ipiales",
+      "region": "NAR",
+      "x": 162.04,
+      "y": 835.6,
+      "rank": 7,
+      "capital": null,
+      "population": 109618
+    },
+    {
+      "name": "Duitama",
+      "region": "BOY",
+      "x": 494.8,
+      "y": 476.81,
+      "rank": 7,
+      "capital": null,
+      "population": 101156
+    },
+    {
+      "name": "Quibdó",
+      "region": "CHO",
+      "x": 234.57,
+      "y": 486.03,
+      "rank": 7,
+      "capital": "region",
+      "population": 92780
+    },
+    {
+      "name": "Ocaña",
+      "region": "NSA",
+      "x": 471.36,
+      "y": 303.77,
+      "rank": 7,
+      "capital": null,
+      "population": 83511
+    },
+    {
+      "name": "Arauca",
+      "region": "ARA",
+      "x": 655.74,
+      "y": 385.94,
+      "rank": 7,
+      "capital": "region",
+      "population": 69264
+    },
+    {
+      "name": "El Carmen de Bolívar",
+      "region": "BOL",
+      "x": 345.46,
+      "y": 197.05,
+      "rank": 7,
+      "capital": null,
+      "population": 60980
+    },
+    {
+      "name": "Garzón",
+      "region": "HUI",
+      "x": 306.04,
+      "y": 736.54,
+      "rank": 7,
+      "capital": null,
+      "population": 56603
+    },
+    {
+      "name": "El Banco",
+      "region": "MAG",
+      "x": 426.73,
+      "y": 249.13,
+      "rank": 7,
+      "capital": null,
+      "population": 54522
+    },
+    {
+      "name": "Chiquinquirá",
+      "region": "BOY",
+      "x": 437.64,
+      "y": 491.85,
+      "rank": 7,
+      "capital": null,
+      "population": 53975
+    },
+    {
+      "name": "Pamplona",
+      "region": "NSA",
+      "x": 520.43,
+      "y": 364.8,
+      "rank": 7,
+      "capital": null,
+      "population": 53587
+    },
+    {
+      "name": "Santa Cruz de Lorica",
+      "region": "COR",
+      "x": 296.6,
+      "y": 231.09,
+      "rank": 7,
+      "capital": null,
+      "population": 52771
+    },
+    {
+      "name": "Turbo",
+      "region": "ANT",
+      "x": 230.21,
+      "y": 312.61,
+      "rank": 7,
+      "capital": null,
+      "population": 50508
+    },
+    {
+      "name": "Honda",
+      "region": "TOL",
+      "x": 371.08,
+      "y": 522.59,
+      "rank": 7,
+      "capital": null,
+      "population": 35469
+    },
+    {
+      "name": "Yarumal",
+      "region": "ANT",
+      "x": 311.58,
+      "y": 390.13,
+      "rank": 7,
+      "capital": null,
+      "population": 35315
+    },
+    {
+      "name": "Puerto Berrío",
+      "region": "ANT",
+      "x": 394.92,
+      "y": 430,
+      "rank": 7,
+      "capital": null,
+      "population": 33983
+    },
+    {
+      "name": "Tame",
+      "region": "ARA",
+      "x": 586.12,
+      "y": 431.47,
+      "rank": 7,
+      "capital": null,
+      "population": 29099
+    },
+    {
+      "name": "Tolú",
+      "region": "SUC",
+      "x": 314.06,
+      "y": 210.1,
+      "rank": 7,
+      "capital": null,
+      "population": 27390
+    },
+    {
+      "name": "Socorro",
+      "region": "SAN",
+      "x": 476.97,
+      "y": 431.58,
+      "rank": 7,
+      "capital": null,
+      "population": 24895
+    },
+    {
+      "name": "Ayapel",
+      "region": "COR",
+      "x": 343.46,
+      "y": 296.9,
+      "rank": 7,
+      "capital": null,
+      "population": 23639
+    },
+    {
+      "name": "San Martín",
+      "region": "MET",
+      "x": 446.79,
+      "y": 630.43,
+      "rank": 7,
+      "capital": null,
+      "population": 16273
+    },
+    {
+      "name": "Guapi",
+      "region": "CAU",
+      "x": 147.23,
+      "y": 710.92,
+      "rank": 7,
+      "capital": null,
+      "population": 13853
+    },
+    {
+      "name": "Puerto Carreño",
+      "region": "VID",
+      "x": 889.9,
+      "y": 449.31,
+      "rank": 7,
+      "capital": "region",
+      "population": 10216
+    },
+    {
+      "name": "Inírida",
+      "region": "GUA",
+      "x": 861.6,
+      "y": 617.61,
+      "rank": 7,
+      "capital": "region",
+      "population": 9065
+    },
+    {
+      "name": "Orocue",
+      "region": "CAS",
+      "x": 615.01,
+      "y": 551.04,
+      "rank": 7,
+      "capital": null,
+      "population": 2835
+    },
+    {
+      "name": "Nuquí",
+      "region": "CHO",
+      "x": 190.56,
+      "y": 486.11,
+      "rank": 7,
+      "capital": null,
+      "population": 2741
+    },
+    {
+      "name": "Juradó",
+      "region": "CHO",
+      "x": 156.99,
+      "y": 382.35,
+      "rank": 7,
+      "capital": null,
+      "population": 2351
+    },
+    {
+      "name": "San Vicente del Caguán",
+      "region": "CAQ",
+      "x": 369.19,
+      "y": 743.89,
+      "rank": 7,
+      "capital": null,
+      "population": 1500
+    },
+    {
+      "name": "Soledad",
+      "region": "ATL",
+      "x": 371.43,
+      "y": 111.03,
+      "rank": 8,
+      "capital": null,
+      "population": 698852
+    },
+    {
+      "name": "Valledupar",
+      "region": "CES",
+      "x": 478.58,
+      "y": 142.98,
+      "rank": 8,
+      "capital": "region",
+      "population": 308237
+    },
+    {
+      "name": "Barrancabermeja",
+      "region": "SAN",
+      "x": 435.67,
+      "y": 386.32,
+      "rank": 8,
+      "capital": null,
+      "population": 191403
+    },
+    {
+      "name": "Cartago",
+      "region": "VAC",
+      "x": 287.93,
+      "y": 553.94,
+      "rank": 8,
+      "capital": null,
+      "population": 134827
+    },
+    {
+      "name": "Girardot",
+      "region": "CUN_2",
+      "x": 366.62,
+      "y": 585.81,
+      "rank": 8,
+      "capital": null,
+      "population": 130289
+    },
+    {
+      "name": "Sogamoso",
+      "region": "BOY",
+      "x": 500.51,
+      "y": 484.74,
+      "rank": 8,
+      "capital": null,
+      "population": 126551
+    },
+    {
+      "name": "Magangué",
+      "region": "BOL",
+      "x": 372.9,
+      "y": 232.43,
+      "rank": 8,
+      "capital": null,
+      "population": 100313
+    },
+    {
+      "name": "Sabanalarga",
+      "region": "ATL",
+      "x": 360.73,
+      "y": 131.08,
+      "rank": 8,
+      "capital": null,
+      "population": 68535
+    },
+    {
+      "name": "Arjona",
+      "region": "BOL",
+      "x": 330.16,
+      "y": 158.17,
+      "rank": 8,
+      "capital": null,
+      "population": 50405
+    },
+    {
+      "name": "Túquerres",
+      "region": "NAR",
+      "x": 164.23,
+      "y": 816.9,
+      "rank": 8,
+      "capital": null,
+      "population": 33979
+    },
+    {
+      "name": "Campoalegre",
+      "region": "HUI",
+      "x": 329.08,
+      "y": 702.12,
+      "rank": 8,
+      "capital": null,
+      "population": 22568
+    },
+    {
+      "name": "San José del Guaviare",
+      "region": "MET",
+      "x": 522.05,
+      "y": 710.89,
+      "rank": 8,
+      "capital": "region",
+      "population": 22136
+    },
+    {
+      "name": "Mocoa",
+      "region": "PUT",
+      "x": 235.49,
+      "y": 812.68,
+      "rank": 8,
+      "capital": "region",
+      "population": 22035
+    },
+    {
+      "name": "Sonsón",
+      "region": "ANT",
+      "x": 330.69,
+      "y": 484.65,
+      "rank": 8,
+      "capital": null,
+      "population": 18817
+    },
+    {
+      "name": "Puerto López",
+      "region": "MET",
+      "x": 499.09,
+      "y": 601.76,
+      "rank": 8,
+      "capital": null,
+      "population": 16678
+    },
+    {
+      "name": "Yopal",
+      "region": "CAS",
+      "x": 538.69,
+      "y": 511.5,
+      "rank": 9,
+      "capital": "region",
+      "population": 61029
+    }
+  ]
+}

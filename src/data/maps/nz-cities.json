@@ -1,0 +1,471 @@
+{
+  "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_populated_places.geojson (Natural Earth populated places), fitted to 1000x1300",
+  "updatedAt": "2026-09-04T09:41:00.941Z",
+  "country": "NZ",
+  "countryName": "New Zealand",
+  "viewBox": "0 0 1000 1300",
+  "width": 1000,
+  "height": 1300,
+  "totalCities": 51,
+  "cities": [
+    {
+      "name": "Auckland",
+      "region": "AUK",
+      "x": 481.61,
+      "y": 323.53,
+      "rank": 1,
+      "capital": "region",
+      "population": 1377200
+    },
+    {
+      "name": "Wellington",
+      "region": "WGN",
+      "x": 475.51,
+      "y": 682.57,
+      "rank": 3,
+      "capital": "country",
+      "population": 393400
+    },
+    {
+      "name": "Christchurch",
+      "region": "CAN",
+      "x": 345.97,
+      "y": 862.7,
+      "rank": 3,
+      "capital": "region",
+      "population": 363200
+    },
+    {
+      "name": "Manukau City",
+      "region": "AUK",
+      "x": 489.26,
+      "y": 335.95,
+      "rank": 4,
+      "capital": null,
+      "population": 375600
+    },
+    {
+      "name": "Hamilton",
+      "region": "WKO",
+      "x": 513.84,
+      "y": 399.41,
+      "rank": 4,
+      "capital": "region",
+      "population": 148200
+    },
+    {
+      "name": "Dunedin",
+      "region": "OTA",
+      "x": 226.56,
+      "y": 1054.74,
+      "rank": 4,
+      "capital": "region",
+      "population": 117700
+    },
+    {
+      "name": "Napier",
+      "region": "HKB",
+      "x": 612.46,
+      "y": 541.24,
+      "rank": 4,
+      "capital": "region",
+      "population": 57800
+    },
+    {
+      "name": "Blenheim",
+      "region": "MBH",
+      "x": 425.41,
+      "y": 699.68,
+      "rank": 4,
+      "capital": null,
+      "population": 30300
+    },
+    {
+      "name": "Tauranga",
+      "region": "BOP",
+      "x": 569.24,
+      "y": 394.4,
+      "rank": 6,
+      "capital": "region",
+      "population": 121500
+    },
+    {
+      "name": "Palmerston North",
+      "region": "MWT",
+      "x": 528.15,
+      "y": 607.95,
+      "rank": 6,
+      "capital": null,
+      "population": 82400
+    },
+    {
+      "name": "Hastings",
+      "region": "HKB",
+      "x": 606.36,
+      "y": 552.97,
+      "rank": 6,
+      "capital": "region",
+      "population": 66100
+    },
+    {
+      "name": "Nelson",
+      "region": "NSN",
+      "x": 382.66,
+      "y": 681.53,
+      "rank": 6,
+      "capital": "region",
+      "population": 60800
+    },
+    {
+      "name": "Rotorua",
+      "region": "BOP",
+      "x": 574.07,
+      "y": 429.79,
+      "rank": 6,
+      "capital": null,
+      "population": 56200
+    },
+    {
+      "name": "Whangārei",
+      "region": "NTL",
+      "x": 454.4,
+      "y": 232.39,
+      "rank": 6,
+      "capital": "region",
+      "population": 52200
+    },
+    {
+      "name": "Invercargill",
+      "region": "STL",
+      "x": 109.49,
+      "y": 1102.42,
+      "rank": 6,
+      "capital": "region",
+      "population": 49200
+    },
+    {
+      "name": "Whanganui",
+      "region": "MWT",
+      "x": 493.97,
+      "y": 573.09,
+      "rank": 6,
+      "capital": "region",
+      "population": 43200
+    },
+    {
+      "name": "Gisborne",
+      "region": "GIS",
+      "x": 684.25,
+      "y": 477.79,
+      "rank": 6,
+      "capital": "region",
+      "population": 34300
+    },
+    {
+      "name": "Timaru",
+      "region": "CAN",
+      "x": 266.2,
+      "y": 933.39,
+      "rank": 6,
+      "capital": null,
+      "population": 27200
+    },
+    {
+      "name": "Taupō",
+      "region": "WKO",
+      "x": 561.67,
+      "y": 474.77,
+      "rank": 6,
+      "capital": null,
+      "population": 22600
+    },
+    {
+      "name": "Queenstown",
+      "region": "OTA",
+      "x": 123.55,
+      "y": 989.28,
+      "rank": 6,
+      "capital": null,
+      "population": 16600
+    },
+    {
+      "name": "Waitakere City",
+      "region": "AUK",
+      "x": 468.11,
+      "y": 323.65,
+      "rank": 7,
+      "capital": null,
+      "population": 208100
+    },
+    {
+      "name": "North Shore",
+      "region": "AUK",
+      "x": 482.53,
+      "y": 318.96,
+      "rank": 7,
+      "capital": null,
+      "population": 205605
+    },
+    {
+      "name": "New Plymouth",
+      "region": "TKI",
+      "x": 435.06,
+      "y": 501.21,
+      "rank": 7,
+      "capital": "region",
+      "population": 52500
+    },
+    {
+      "name": "Upper Hutt",
+      "region": "WGN",
+      "x": 491.09,
+      "y": 670.26,
+      "rank": 7,
+      "capital": null,
+      "population": 39200
+    },
+    {
+      "name": "Masterton",
+      "region": "WGN",
+      "x": 529.08,
+      "y": 655.79,
+      "rank": 7,
+      "capital": null,
+      "population": 20200
+    },
+    {
+      "name": "Levin",
+      "region": "MWT",
+      "x": 507.29,
+      "y": 628.37,
+      "rank": 7,
+      "capital": null,
+      "population": 19550
+    },
+    {
+      "name": "Whakatāne",
+      "region": "BOP",
+      "x": 621.37,
+      "y": 417.52,
+      "rank": 7,
+      "capital": null,
+      "population": 18700
+    },
+    {
+      "name": "Ashburton",
+      "region": "CAN",
+      "x": 294.8,
+      "y": 892.55,
+      "rank": 7,
+      "capital": null,
+      "population": 17700
+    },
+    {
+      "name": "Oamaru",
+      "region": "OTA",
+      "x": 253.32,
+      "y": 991.24,
+      "rank": 7,
+      "capital": null,
+      "population": 13000
+    },
+    {
+      "name": "Kaiapoi",
+      "region": "CAN",
+      "x": 347.15,
+      "y": 850.28,
+      "rank": 7,
+      "capital": null,
+      "population": 10200
+    },
+    {
+      "name": "Westport",
+      "region": "WTC",
+      "x": 283.45,
+      "y": 720.26,
+      "rank": 7,
+      "capital": null,
+      "population": 3900
+    },
+    {
+      "name": "Hokitika",
+      "region": "WTC",
+      "x": 249.51,
+      "y": 797.18,
+      "rank": 7,
+      "capital": null,
+      "population": 3078
+    },
+    {
+      "name": "Lower Hutt",
+      "region": "WGN",
+      "x": 483.87,
+      "y": 675.61,
+      "rank": 8,
+      "capital": null,
+      "population": 102400
+    },
+    {
+      "name": "Porirua",
+      "region": "WGN",
+      "x": 480.37,
+      "y": 668.92,
+      "rank": 8,
+      "capital": null,
+      "population": 52500
+    },
+    {
+      "name": "Pukekohe",
+      "region": "AUK",
+      "x": 490.11,
+      "y": 352.26,
+      "rank": 8,
+      "capital": null,
+      "population": 26300
+    },
+    {
+      "name": "Paraparaumu",
+      "region": "WGN",
+      "x": 489.69,
+      "y": 651.47,
+      "rank": 8,
+      "capital": null,
+      "population": 25263
+    },
+    {
+      "name": "Cambridge",
+      "region": "WKO",
+      "x": 525.14,
+      "y": 408.69,
+      "rank": 8,
+      "capital": null,
+      "population": 15192
+    },
+    {
+      "name": "Tokoroa",
+      "region": "WKO",
+      "x": 549.82,
+      "y": 436.49,
+      "rank": 8,
+      "capital": null,
+      "population": 13350
+    },
+    {
+      "name": "Hāwera",
+      "region": "TKI",
+      "x": 447.21,
+      "y": 543.69,
+      "rank": 8,
+      "capital": null,
+      "population": 11100
+    },
+    {
+      "name": "Gore",
+      "region": "STL",
+      "x": 141.35,
+      "y": 1075.18,
+      "rank": 8,
+      "capital": null,
+      "population": 9750
+    },
+    {
+      "name": "Thames",
+      "region": "WKO",
+      "x": 534.14,
+      "y": 348.2,
+      "rank": 8,
+      "capital": null,
+      "population": 6756
+    },
+    {
+      "name": "Kerikeri",
+      "region": "NTL",
+      "x": 430.37,
+      "y": 191.95,
+      "rank": 8,
+      "capital": null,
+      "population": 5856
+    },
+    {
+      "name": "Kaitaia",
+      "region": "NTL",
+      "x": 385.66,
+      "y": 182.09,
+      "rank": 8,
+      "capital": null,
+      "population": 5202
+    },
+    {
+      "name": "Wanaka",
+      "region": "OTA",
+      "x": 146.27,
+      "y": 961.85,
+      "rank": 8,
+      "capital": null,
+      "population": 5037
+    },
+    {
+      "name": "Tūrangi",
+      "region": "WKO",
+      "x": 544.36,
+      "y": 498.15,
+      "rank": 8,
+      "capital": null,
+      "population": 3240
+    },
+    {
+      "name": "Picton",
+      "region": "MBH",
+      "x": 429.35,
+      "y": 680.9,
+      "rank": 8,
+      "capital": null,
+      "population": 2928
+    },
+    {
+      "name": "Kaikōura",
+      "region": "CAN",
+      "x": 408.78,
+      "y": 771.23,
+      "rank": 8,
+      "capital": null,
+      "population": 2172
+    },
+    {
+      "name": "Te Anau",
+      "region": "STL",
+      "x": 70.38,
+      "y": 1023.6,
+      "rank": 8,
+      "capital": null,
+      "population": 1857
+    },
+    {
+      "name": "Oban",
+      "region": "STL",
+      "x": 100.82,
+      "y": 1141.71,
+      "rank": 8,
+      "capital": null,
+      "population": 310
+    },
+    {
+      "name": "Waitangi",
+      "region": "CIT",
+      "x": 986.22,
+      "y": 943.05,
+      "rank": 8,
+      "capital": "region",
+      "population": 300
+    },
+    {
+      "name": "Greymouth",
+      "region": "WTC",
+      "x": 261.77,
+      "y": 777.86,
+      "rank": 9,
+      "capital": "region",
+      "population": 10100
+    }
+  ]
+}

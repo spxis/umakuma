@@ -1,0 +1,318 @@
+{
+  "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_populated_places.geojson (Natural Earth populated places), fitted to 1000x1400",
+  "updatedAt": "2026-09-04T09:41:01.150Z",
+  "country": "SE",
+  "countryName": "Sweden",
+  "viewBox": "0 0 1000 1400",
+  "width": 1000,
+  "height": 1400,
+  "totalCities": 34,
+  "cities": [
+    {
+      "name": "Stockholm",
+      "region": "AB",
+      "x": 570.75,
+      "y": 992.85,
+      "rank": 1,
+      "capital": "country",
+      "population": 1264000
+    },
+    {
+      "name": "Malmö",
+      "region": "M",
+      "x": 298.27,
+      "y": 1373.47,
+      "rank": 4,
+      "capital": "region",
+      "population": 269349
+    },
+    {
+      "name": "Sundsvall",
+      "region": "Y",
+      "x": 520.86,
+      "y": 681.92,
+      "rank": 4,
+      "capital": null,
+      "population": 73389
+    },
+    {
+      "name": "Luleå",
+      "region": "BD",
+      "x": 711.87,
+      "y": 341.88,
+      "rank": 4,
+      "capital": "region",
+      "population": 48638
+    },
+    {
+      "name": "Gothenburg",
+      "region": "O",
+      "x": 247.77,
+      "y": 1157,
+      "rank": 6,
+      "capital": "region",
+      "population": 537797
+    },
+    {
+      "name": "Uppsala",
+      "region": "C",
+      "x": 546.5,
+      "y": 939.35,
+      "rank": 6,
+      "capital": "region",
+      "population": 133117
+    },
+    {
+      "name": "Linköping",
+      "region": "E",
+      "x": 445.33,
+      "y": 1089.26,
+      "rank": 6,
+      "capital": "region",
+      "population": 96732
+    },
+    {
+      "name": "Jönköping",
+      "region": "F",
+      "x": 366.53,
+      "y": 1154.06,
+      "rank": 6,
+      "capital": "region",
+      "population": 89780
+    },
+    {
+      "name": "Umeå",
+      "region": "AC",
+      "x": 646.48,
+      "y": 528.9,
+      "rank": 6,
+      "capital": "region",
+      "population": 78197
+    },
+    {
+      "name": "Östersund",
+      "region": "Z",
+      "x": 395.74,
+      "y": 604.22,
+      "rank": 6,
+      "capital": "region",
+      "population": 46178
+    },
+    {
+      "name": "Örnsköldsvik",
+      "region": "Y",
+      "x": 581.35,
+      "y": 585.66,
+      "rank": 6,
+      "capital": null,
+      "population": 27749
+    },
+    {
+      "name": "Kiruna",
+      "region": "BD",
+      "x": 611.5,
+      "y": 121.52,
+      "rank": 6,
+      "capital": null,
+      "population": 18154
+    },
+    {
+      "name": "Örebro",
+      "region": "T",
+      "x": 423.21,
+      "y": 1000.94,
+      "rank": 7,
+      "capital": "region",
+      "population": 98573
+    },
+    {
+      "name": "Helsingborg",
+      "region": "M",
+      "x": 282.54,
+      "y": 1328.04,
+      "rank": 7,
+      "capital": null,
+      "population": 91304
+    },
+    {
+      "name": "Norrköping",
+      "region": "E",
+      "x": 474.21,
+      "y": 1070.03,
+      "rank": 7,
+      "capital": null,
+      "population": 88639
+    },
+    {
+      "name": "Karlstad",
+      "region": "S",
+      "x": 334.11,
+      "y": 991.26,
+      "rank": 7,
+      "capital": "region",
+      "population": 74141
+    },
+    {
+      "name": "Gävle",
+      "region": "X",
+      "x": 519.66,
+      "y": 858.25,
+      "rank": 7,
+      "capital": "region",
+      "population": 68635
+    },
+    {
+      "name": "Borås",
+      "region": "O",
+      "x": 299.93,
+      "y": 1158.08,
+      "rank": 7,
+      "capital": null,
+      "population": 65008
+    },
+    {
+      "name": "Växjö",
+      "region": "G",
+      "x": 401.61,
+      "y": 1244.54,
+      "rank": 7,
+      "capital": "region",
+      "population": 59600
+    },
+    {
+      "name": "Halmstad",
+      "region": "N",
+      "x": 292.05,
+      "y": 1264.22,
+      "rank": 7,
+      "capital": "region",
+      "population": 55657
+    },
+    {
+      "name": "Trollhättan",
+      "region": "O",
+      "x": 267.47,
+      "y": 1101.05,
+      "rank": 7,
+      "capital": null,
+      "population": 44543
+    },
+    {
+      "name": "Kalmar",
+      "region": "H",
+      "x": 488.11,
+      "y": 1265.82,
+      "rank": 7,
+      "capital": "region",
+      "population": 35024
+    },
+    {
+      "name": "Kristianstad",
+      "region": "M",
+      "x": 362.57,
+      "y": 1330.64,
+      "rank": 7,
+      "capital": "region",
+      "population": 32188
+    },
+    {
+      "name": "Skellefteå",
+      "region": "AC",
+      "x": 669.25,
+      "y": 430.68,
+      "rank": 7,
+      "capital": null,
+      "population": 31311
+    },
+    {
+      "name": "Visby",
+      "region": "I",
+      "x": 591.3,
+      "y": 1163.96,
+      "rank": 7,
+      "capital": "region",
+      "population": 22593
+    },
+    {
+      "name": "Bollnäs",
+      "region": "X",
+      "x": 478.38,
+      "y": 789.7,
+      "rank": 7,
+      "capital": null,
+      "population": 13398
+    },
+    {
+      "name": "Västerås",
+      "region": "U",
+      "x": 491.88,
+      "y": 966.61,
+      "rank": 8,
+      "capital": "region",
+      "population": 107194
+    },
+    {
+      "name": "Borlänge",
+      "region": "W",
+      "x": 432.65,
+      "y": 878.63,
+      "rank": 8,
+      "capital": null,
+      "population": 39422
+    },
+    {
+      "name": "Falun",
+      "region": "W",
+      "x": 444.06,
+      "y": 865.35,
+      "rank": 10,
+      "capital": "region",
+      "population": 36477
+    },
+    {
+      "name": "Karlskrona",
+      "region": "K",
+      "x": 445.22,
+      "y": 1317.68,
+      "rank": 10,
+      "capital": "region",
+      "population": 35212
+    },
+    {
+      "name": "Nyköping",
+      "region": "D",
+      "x": 517.02,
+      "y": 1053.09,
+      "rank": 10,
+      "capital": "region",
+      "population": 27582
+    },
+    {
+      "name": "Vänersborg",
+      "region": "O",
+      "x": 269.47,
+      "y": 1091.37,
+      "rank": 10,
+      "capital": "region",
+      "population": 21835
+    },
+    {
+      "name": "Härnösand",
+      "region": "Y",
+      "x": 548.83,
+      "y": 656.98,
+      "rank": 10,
+      "capital": "region",
+      "population": 17016
+    },
+    {
+      "name": "Mariestad",
+      "region": "O",
+      "x": 349.91,
+      "y": 1058.9,
+      "rank": 10,
+      "capital": "region",
+      "population": 14891
+    }
+  ]
+}

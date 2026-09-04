@@ -1,0 +1,147 @@
+{
+  "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_populated_places.geojson (Natural Earth populated places), fitted to 1000x1100",
+  "updatedAt": "2026-09-04T09:41:01.088Z",
+  "country": "IE",
+  "countryName": "Ireland",
+  "viewBox": "0 0 1000 1100",
+  "width": 1000,
+  "height": 1100,
+  "totalCities": 15,
+  "cities": [
+    {
+      "name": "Dublin",
+      "region": "D",
+      "x": 835,
+      "y": 568.01,
+      "rank": 2,
+      "capital": "country",
+      "population": 1059000
+    },
+    {
+      "name": "Cork",
+      "region": "CO_2",
+      "x": 463.27,
+      "y": 978.43,
+      "rank": 6,
+      "capital": "region",
+      "population": 188907
+    },
+    {
+      "name": "Limerick",
+      "region": "LK_2",
+      "x": 437.84,
+      "y": 762.09,
+      "rank": 6,
+      "capital": "region",
+      "population": 90054
+    },
+    {
+      "name": "Galway",
+      "region": "G_2",
+      "x": 368.03,
+      "y": 591.1,
+      "rank": 7,
+      "capital": "region",
+      "population": 75594
+    },
+    {
+      "name": "Dundalk",
+      "region": "LH",
+      "x": 807.71,
+      "y": 385.71,
+      "rank": 7,
+      "capital": "region",
+      "population": 38884
+    },
+    {
+      "name": "Drogheda",
+      "region": "MH",
+      "x": 817.03,
+      "y": 466.99,
+      "rank": 7,
+      "capital": null,
+      "population": 36533
+    },
+    {
+      "name": "Kilkenny",
+      "region": "KK",
+      "x": 670.66,
+      "y": 764.73,
+      "rank": 7,
+      "capital": "region",
+      "population": 21589
+    },
+    {
+      "name": "Sligo",
+      "region": "SO",
+      "x": 464.61,
+      "y": 313.59,
+      "rank": 7,
+      "capital": "region",
+      "population": 20228
+    },
+    {
+      "name": "Killarney",
+      "region": "KY",
+      "x": 282.48,
+      "y": 931.84,
+      "rank": 7,
+      "capital": null,
+      "population": 11902
+    },
+    {
+      "name": "Waterford",
+      "region": "KK",
+      "x": 695.86,
+      "y": 875.42,
+      "rank": 8,
+      "capital": null,
+      "population": 49275
+    },
+    {
+      "name": "Tralee",
+      "region": "KY",
+      "x": 249.48,
+      "y": 870.51,
+      "rank": 8,
+      "capital": "region",
+      "population": 26384
+    },
+    {
+      "name": "Shannon",
+      "region": "CE",
+      "x": 397.03,
+      "y": 750.71,
+      "rank": 8,
+      "capital": null,
+      "population": 8781
+    },
+    {
+      "name": "Donegal",
+      "region": "DL",
+      "x": 524.75,
+      "y": 206.61,
+      "rank": 8,
+      "capital": null,
+      "population": 2513
+    },
+    {
+      "name": "Monaghan",
+      "region": "MN",
+      "x": 712.7,
+      "y": 317.4,
+      "rank": 10,
+      "capital": "region",
+      "population": 5937
+    },
+    {
+      "name": "Roscommon",
+      "region": "RN",
+      "x": 513.21,
+      "y": 491.28,
+      "rank": 10,
+      "capital": "region",
+      "population": 4860
+    }
+  ]
+}

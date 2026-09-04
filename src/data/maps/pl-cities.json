@@ -1,0 +1,228 @@
+{
+  "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_populated_places.geojson (Natural Earth populated places), fitted to 1000x900",
+  "updatedAt": "2026-09-04T09:41:01.129Z",
+  "country": "PL",
+  "countryName": "Poland",
+  "viewBox": "0 0 1000 900",
+  "width": 1000,
+  "height": 900,
+  "totalCities": 24,
+  "cities": [
+    {
+      "name": "Warsaw",
+      "region": "MZ",
+      "x": 667.65,
+      "y": 403.81,
+      "rank": 2,
+      "capital": "country",
+      "population": 1707000
+    },
+    {
+      "name": "Kraków",
+      "region": "MA",
+      "x": 572.28,
+      "y": 743.45,
+      "rank": 4,
+      "capital": "region",
+      "population": 756000
+    },
+    {
+      "name": "Gdańsk",
+      "region": "PM",
+      "x": 443.83,
+      "y": 74.89,
+      "rank": 4,
+      "capital": "region",
+      "population": 740000
+    },
+    {
+      "name": "Łódź",
+      "region": "LD",
+      "x": 520.64,
+      "y": 478.38,
+      "rank": 6,
+      "capital": "region",
+      "population": 758000
+    },
+    {
+      "name": "Katowice",
+      "region": "SL",
+      "x": 478.5,
+      "y": 713.18,
+      "rank": 7,
+      "capital": "region",
+      "population": 2746000
+    },
+    {
+      "name": "Wrocław",
+      "region": "DS",
+      "x": 284.01,
+      "y": 578.23,
+      "rank": 7,
+      "capital": "region",
+      "population": 634893
+    },
+    {
+      "name": "Poznań",
+      "region": "WP",
+      "x": 277.13,
+      "y": 376.35,
+      "rank": 7,
+      "capital": "region",
+      "population": 623997
+    },
+    {
+      "name": "Gliwice",
+      "region": "SL",
+      "x": 443.71,
+      "y": 702.21,
+      "rank": 7,
+      "capital": null,
+      "population": 507670
+    },
+    {
+      "name": "Szczecin",
+      "region": "ZP",
+      "x": 62.04,
+      "y": 208.54,
+      "rank": 7,
+      "capital": "region",
+      "population": 407811
+    },
+    {
+      "name": "Bydgoszcz",
+      "region": "KP",
+      "x": 384.02,
+      "y": 267.36,
+      "rank": 7,
+      "capital": "region",
+      "population": 366452
+    },
+    {
+      "name": "Lublin",
+      "region": "LU",
+      "x": 824.44,
+      "y": 550.5,
+      "rank": 7,
+      "capital": "region",
+      "population": 360044
+    },
+    {
+      "name": "Gdynia",
+      "region": "PM",
+      "x": 434.01,
+      "y": 49.85,
+      "rank": 7,
+      "capital": null,
+      "population": 314664
+    },
+    {
+      "name": "Białystok",
+      "region": "PD",
+      "x": 866.91,
+      "y": 255,
+      "rank": 7,
+      "capital": "region",
+      "population": 291855
+    },
+    {
+      "name": "Rzeszów",
+      "region": "PK",
+      "x": 776.15,
+      "y": 743.09,
+      "rank": 7,
+      "capital": "region",
+      "population": 245686
+    },
+    {
+      "name": "Kielce",
+      "region": "SK",
+      "x": 639.5,
+      "y": 613.23,
+      "rank": 7,
+      "capital": "region",
+      "population": 215733
+    },
+    {
+      "name": "Zielona Góra",
+      "region": "LB",
+      "x": 140.89,
+      "y": 442.02,
+      "rank": 7,
+      "capital": "region",
+      "population": 118433
+    },
+    {
+      "name": "Grudziądz",
+      "region": "KP",
+      "x": 453.34,
+      "y": 211.91,
+      "rank": 7,
+      "capital": null,
+      "population": 102443
+    },
+    {
+      "name": "Ełk",
+      "region": "WN",
+      "x": 784.25,
+      "y": 149.84,
+      "rank": 7,
+      "capital": null,
+      "population": 55769
+    },
+    {
+      "name": "Bytom",
+      "region": "SL",
+      "x": 467.56,
+      "y": 699.21,
+      "rank": 8,
+      "capital": null,
+      "population": 662247
+    },
+    {
+      "name": "Olsztyn",
+      "region": "WN",
+      "x": 613.21,
+      "y": 165.06,
+      "rank": 8,
+      "capital": "region",
+      "population": 186670
+    },
+    {
+      "name": "Opole",
+      "region": "OP",
+      "x": 371.1,
+      "y": 646.3,
+      "rank": 8,
+      "capital": "region",
+      "population": 131412
+    },
+    {
+      "name": "Elbląg",
+      "region": "WN",
+      "x": 513.28,
+      "y": 106.97,
+      "rank": 8,
+      "capital": "region",
+      "population": 127558
+    },
+    {
+      "name": "Koszalin",
+      "region": "ZP",
+      "x": 219.94,
+      "y": 94.92,
+      "rank": 8,
+      "capital": null,
+      "population": 107450
+    },
+    {
+      "name": "Inowrocław",
+      "region": "KP",
+      "x": 405.89,
+      "y": 320.62,
+      "rank": 8,
+      "capital": null,
+      "population": 79007
+    }
+  ]
+}

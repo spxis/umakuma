@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { GEO_DATASETS, type CountryCode } from "@/lib/geoRegion";
 import { MAP_SOURCE_KEYS } from "@/lib/mapCountries";
-import { SOURCE_CREDITS, SOURCE_CREDIT_COPY, sourcePath } from "@/lib/sourceCredits";
+import { SOURCE_CREDITS, SOURCE_CREDIT_COPY, SOURCE_KEYS, sourcePath } from "@/lib/sourceCredits";
 import { GEO_INSETS, applyInsetTransform, insetTransform, insetTransformAttribute } from "@/lib/geoMapInsets";
 import { geoBoxIsWholeCountry, geoFocusBox } from "@/lib/geoMapFraming";
 import { mapBoxToViewBox, type MapBox } from "@/lib/geoMapFraming";
@@ -162,7 +162,19 @@ export default function CountryMap({
 
   const creditKey = MAP_SOURCE_KEYS[country];
   const credit = SOURCE_CREDITS[creditKey];
-  const creditLine = `${SOURCE_CREDIT_COPY.mapOutlines} ${credit.source}`;
+  /*
+   * Two holders when the cities are on and they are not the outlines' holder,
+   * which is every map but the Natural Earth ones. Named only while the layer
+   * is actually drawn: a credit for something not on screen is noise.
+   */
+  const cityCredit = SOURCE_CREDITS[SOURCE_KEYS.worldmap];
+  const citiesShown = Boolean(cities?.length);
+  const creditLine = [
+    `${SOURCE_CREDIT_COPY.mapOutlines} ${credit.source}`,
+    citiesShown && creditKey !== SOURCE_KEYS.worldmap ? `${SOURCE_CREDIT_COPY.mapCities} ${cityCredit.source}` : null,
+  ]
+    .filter(Boolean)
+    .join(" · ");
   const readable = Boolean(onRegionSelect);
 
   return (
@@ -230,7 +242,13 @@ export default function CountryMap({
 
         {/* Zoomed out, only the cities everyone knows are named; zoomed in there
             is room for the rest, which is how a paper atlas behaves too. */}
-        {cities?.length ? <MapCityLayer cities={cities} stroke={stroke} /> : null}
+        {cities?.length ? (
+          <MapCityLayer
+            cities={cities}
+            stroke={stroke}
+            insetFor={(region) => (region ? insetByCode.get(region)?.transform ?? null : null)}
+          />
+        ) : null}
 
         {/* Tap targets sit above every path so a small region is as easy to hit
             as Hokkaido, which is what keeps the question about knowing the map. */}

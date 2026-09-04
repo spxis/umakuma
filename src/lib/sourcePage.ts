@@ -12,7 +12,7 @@ import { getKanjiDictionarySummary } from "@/lib/kanjiDictionary";
 import { prisma } from "@/lib/prisma";
 import { radicalIndexSummary } from "@/lib/radicalSearchServer";
 import { getSchoolGradeIndex } from "@/lib/schoolGrades";
-import { citysetFor } from "@/lib/geoCities";
+import { totalCitiesPlaced } from "@/lib/geoCities";
 import {
   NATURAL_EARTH_TOTAL_BORDERS,
   NATURAL_EARTH_TOTAL_COUNTRIES,
@@ -279,8 +279,13 @@ function naturalEarth(key: SourceKey): SourceReport {
       { label: REPORT_COPY.regionsDrawn, value: NATURAL_EARTH_TOTAL_REGIONS },
       { label: REPORT_COPY.countriesMapped, value: NATURAL_EARTH_TOTAL_COUNTRIES },
       { label: REPORT_COPY.borders, value: NATURAL_EARTH_TOTAL_BORDERS },
-      /* The city layer is Populated Places, the same provider's other dataset. */
-      { label: REPORT_COPY.citiesPlaced, value: citysetFor("CA")?.totalCities ?? 0 },
+      /*
+       * The city layer is Populated Places, the same provider's other dataset.
+       * Counted across every map that draws one - which now includes Japan and
+       * the United States, whose outlines are somebody else's but whose city
+       * points are Natural Earth's.
+       */
+      { label: REPORT_COPY.citiesPlaced, value: totalCitiesPlaced() },
     ],
     lastImportedAt: imported.at(-1) ?? null,
     version: null,

@@ -1,0 +1,633 @@
+{
+  "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_populated_places.geojson (Natural Earth populated places), fitted to the curated Mercator canvas 1000x1107.9",
+  "updatedAt": "2026-09-04T09:41:01.873Z",
+  "country": "JP",
+  "countryName": "Japan",
+  "viewBox": "0 0 1000 1107.9",
+  "width": 1000,
+  "height": 1107.9,
+  "totalCities": 69,
+  "cities": [
+    {
+      "name": "Tokyo",
+      "region": "13",
+      "x": 549,
+      "y": 640.36,
+      "rank": 0,
+      "capital": "country",
+      "population": 35676000
+    },
+    {
+      "name": "Osaka",
+      "region": "27",
+      "x": 340.58,
+      "y": 700.18,
+      "rank": 1,
+      "capital": null,
+      "population": 11294000
+    },
+    {
+      "name": "Sapporo",
+      "region": "1",
+      "x": 626.98,
+      "y": 170.26,
+      "rank": 2,
+      "capital": null,
+      "population": 2544000
+    },
+    {
+      "name": "Hiroshima",
+      "region": "34",
+      "x": 190.23,
+      "y": 718.14,
+      "rank": 2,
+      "capital": null,
+      "population": 2045000
+    },
+    {
+      "name": "Nagasaki",
+      "region": "42",
+      "x": 64.76,
+      "y": 813.88,
+      "rank": 3,
+      "capital": "region",
+      "population": 435455
+    },
+    {
+      "name": "Nagoya",
+      "region": "23",
+      "x": 409.76,
+      "y": 672.29,
+      "rank": 4,
+      "capital": null,
+      "population": 3230000
+    },
+    {
+      "name": "Fukuoka",
+      "region": "40",
+      "x": 90.44,
+      "y": 765.08,
+      "rank": 4,
+      "capital": null,
+      "population": 2792000
+    },
+    {
+      "name": "Sendai",
+      "region": "4",
+      "x": 603.99,
+      "y": 481.71,
+      "rank": 4,
+      "capital": null,
+      "population": 2250000
+    },
+    {
+      "name": "Kyoto",
+      "region": "26",
+      "x": 352.57,
+      "y": 679.79,
+      "rank": 4,
+      "capital": null,
+      "population": 1805000
+    },
+    {
+      "name": "Naha",
+      "region": "47",
+      "x": 129.94,
+      "y": 935.62,
+      "rank": 4,
+      "capital": null,
+      "population": 905238
+    },
+    {
+      "name": "Nagano",
+      "region": "20",
+      "x": 471.46,
+      "y": 581.8,
+      "rank": 4,
+      "capital": "region",
+      "population": 594311
+    },
+    {
+      "name": "Kōchi",
+      "region": "39",
+      "x": 244.06,
+      "y": 767.12,
+      "rank": 4,
+      "capital": "region",
+      "population": 335570
+    },
+    {
+      "name": "Miyazaki",
+      "region": "45",
+      "x": 140.03,
+      "y": 863.08,
+      "rank": 4,
+      "capital": "region",
+      "population": 324384
+    },
+    {
+      "name": "Hakodate",
+      "region": "1",
+      "x": 597.62,
+      "y": 255.53,
+      "rank": 4,
+      "capital": null,
+      "population": 302984
+    },
+    {
+      "name": "Kushiro",
+      "region": "1",
+      "x": 776.04,
+      "y": 177.11,
+      "rank": 4,
+      "capital": null,
+      "population": 198566
+    },
+    {
+      "name": "Sakata",
+      "region": "6",
+      "x": 553.93,
+      "y": 440.78,
+      "rank": 4,
+      "capital": null,
+      "population": 100446
+    },
+    {
+      "name": "Yokohama",
+      "region": "14",
+      "x": 541.76,
+      "y": 655.83,
+      "rank": 6,
+      "capital": "region",
+      "population": 3697894
+    },
+    {
+      "name": "Kōbe",
+      "region": "28",
+      "x": 324.19,
+      "y": 700.85,
+      "rank": 6,
+      "capital": "region",
+      "population": 1528478
+    },
+    {
+      "name": "Niigata",
+      "region": "15",
+      "x": 514.17,
+      "y": 503.44,
+      "rank": 6,
+      "capital": "region",
+      "population": 569797
+    },
+    {
+      "name": "Kagoshima",
+      "region": "46",
+      "x": 97.95,
+      "y": 882.26,
+      "rank": 6,
+      "capital": "region",
+      "population": 555352
+    },
+    {
+      "name": "Kanazawa",
+      "region": "17",
+      "x": 396.36,
+      "y": 587.31,
+      "rank": 6,
+      "capital": "region",
+      "population": 551249
+    },
+    {
+      "name": "Matsuyama",
+      "region": "38",
+      "x": 206.18,
+      "y": 750.41,
+      "rank": 6,
+      "capital": null,
+      "population": 533541
+    },
+    {
+      "name": "Asahikawa",
+      "region": "1",
+      "x": 678.13,
+      "y": 124.44,
+      "rank": 6,
+      "capital": null,
+      "population": 356612
+    },
+    {
+      "name": "Akita",
+      "region": "5",
+      "x": 565.71,
+      "y": 390.66,
+      "rank": 6,
+      "capital": null,
+      "population": 320069
+    },
+    {
+      "name": "Aomori",
+      "region": "2",
+      "x": 596.15,
+      "y": 318.92,
+      "rank": 6,
+      "capital": "region",
+      "population": 298394
+    },
+    {
+      "name": "Morioka",
+      "region": "3",
+      "x": 616.77,
+      "y": 390.02,
+      "rank": 6,
+      "capital": "region",
+      "population": 295172
+    },
+    {
+      "name": "Fukushima",
+      "region": "7",
+      "x": 584.37,
+      "y": 514.63,
+      "rank": 6,
+      "capital": "region",
+      "population": 294237
+    },
+    {
+      "name": "Hachinohe",
+      "region": "2",
+      "x": 636.89,
+      "y": 339.31,
+      "rank": 6,
+      "capital": null,
+      "population": 239046
+    },
+    {
+      "name": "Hirosaki",
+      "region": "2",
+      "x": 584.37,
+      "y": 335.44,
+      "rank": 6,
+      "capital": null,
+      "population": 174972
+    },
+    {
+      "name": "Muroran",
+      "region": "1",
+      "x": 609.4,
+      "y": 218.83,
+      "rank": 6,
+      "capital": null,
+      "population": 155676
+    },
+    {
+      "name": "Kitakyūshū",
+      "region": "40",
+      "x": 110.66,
+      "y": 748.94,
+      "rank": 7,
+      "capital": "region",
+      "population": 997536
+    },
+    {
+      "name": "Hamamatsu",
+      "region": "22",
+      "x": 450,
+      "y": 698.57,
+      "rank": 7,
+      "capital": null,
+      "population": 977023
+    },
+    {
+      "name": "Kumamoto",
+      "region": "43",
+      "x": 104.8,
+      "y": 811.78,
+      "rank": 7,
+      "capital": "region",
+      "population": 718232
+    },
+    {
+      "name": "Shizuoka",
+      "region": "22",
+      "x": 482.04,
+      "y": 682.55,
+      "rank": 7,
+      "capital": "region",
+      "population": 701561
+    },
+    {
+      "name": "Tsu",
+      "region": "24",
+      "x": 390.3,
+      "y": 698.63,
+      "rank": 7,
+      "capital": "region",
+      "population": 500000
+    },
+    {
+      "name": "Ōita",
+      "region": "44",
+      "x": 148.84,
+      "y": 785.89,
+      "rank": 7,
+      "capital": "region",
+      "population": 448907
+    },
+    {
+      "name": "Wakayama",
+      "region": "30",
+      "x": 324.08,
+      "y": 728.04,
+      "rank": 7,
+      "capital": "region",
+      "population": 440006
+    },
+    {
+      "name": "Gifu",
+      "region": "21",
+      "x": 402.38,
+      "y": 656.29,
+      "rank": 7,
+      "capital": null,
+      "population": 412895
+    },
+    {
+      "name": "Iwaki",
+      "region": "7",
+      "x": 604.99,
+      "y": 556.94,
+      "rank": 7,
+      "capital": null,
+      "population": 357309
+    },
+    {
+      "name": "Mito",
+      "region": "8",
+      "x": 584.86,
+      "y": 598.88,
+      "rank": 7,
+      "capital": "region",
+      "population": 353892
+    },
+    {
+      "name": "Yamagata",
+      "region": "6",
+      "x": 577,
+      "y": 481.58,
+      "rank": 7,
+      "capital": "region",
+      "population": 272209
+    },
+    {
+      "name": "Fukui",
+      "region": "18",
+      "x": 375.74,
+      "y": 617.13,
+      "rank": 7,
+      "capital": "region",
+      "population": 248707
+    },
+    {
+      "name": "Sasebo",
+      "region": "42",
+      "x": 56.55,
+      "y": 790.58,
+      "rank": 7,
+      "capital": null,
+      "population": 237444
+    },
+    {
+      "name": "Matsumoto",
+      "region": "20",
+      "x": 461.64,
+      "y": 606.8,
+      "rank": 7,
+      "capital": null,
+      "population": 224926
+    },
+    {
+      "name": "Kōfu",
+      "region": "19",
+      "x": 491.75,
+      "y": 642.57,
+      "rank": 7,
+      "capital": "region",
+      "population": 197540
+    },
+    {
+      "name": "Kure",
+      "region": "34",
+      "x": 196.35,
+      "y": 726.39,
+      "rank": 7,
+      "capital": null,
+      "population": 196991
+    },
+    {
+      "name": "Nagaoka",
+      "region": "15",
+      "x": 505.34,
+      "y": 532.57,
+      "rank": 7,
+      "capital": null,
+      "population": 195318
+    },
+    {
+      "name": "Tomakomai",
+      "region": "1",
+      "x": 637.38,
+      "y": 198.83,
+      "rank": 7,
+      "capital": "region",
+      "population": 174806
+    },
+    {
+      "name": "Obihiro",
+      "region": "1",
+      "x": 716.91,
+      "y": 180.1,
+      "rank": 7,
+      "capital": null,
+      "population": 173890
+    },
+    {
+      "name": "Matsue",
+      "region": "32",
+      "x": 220.94,
+      "y": 653.64,
+      "rank": 7,
+      "capital": "region",
+      "population": 156811
+    },
+    {
+      "name": "Tottori",
+      "region": "31",
+      "x": 278.21,
+      "y": 651.63,
+      "rank": 7,
+      "capital": null,
+      "population": 154098
+    },
+    {
+      "name": "Otaru",
+      "region": "1",
+      "x": 609.32,
+      "y": 162.74,
+      "rank": 7,
+      "capital": null,
+      "population": 143792
+    },
+    {
+      "name": "Kitami",
+      "region": "1",
+      "x": 752.74,
+      "y": 117.95,
+      "rank": 7,
+      "capital": null,
+      "population": 113137
+    },
+    {
+      "name": "Tsuruoka",
+      "region": "6",
+      "x": 552.96,
+      "y": 454.62,
+      "rank": 7,
+      "capital": null,
+      "population": 99820
+    },
+    {
+      "name": "Maizuru",
+      "region": "26",
+      "x": 332.21,
+      "y": 654.64,
+      "rank": 7,
+      "capital": null,
+      "population": 92465
+    },
+    {
+      "name": "Kawasaki",
+      "region": "14",
+      "x": 546.81,
+      "y": 649.84,
+      "rank": 8,
+      "capital": null,
+      "population": 1437266
+    },
+    {
+      "name": "Okayama",
+      "region": "33",
+      "x": 262.69,
+      "y": 701.32,
+      "rank": 8,
+      "capital": "region",
+      "population": 866092
+    },
+    {
+      "name": "Utsunomiya",
+      "region": "9",
+      "x": 554.91,
+      "y": 587.92,
+      "rank": 8,
+      "capital": "region",
+      "population": 667752
+    },
+    {
+      "name": "Hachiōji",
+      "region": "13",
+      "x": 528.21,
+      "y": 642.13,
+      "rank": 8,
+      "capital": null,
+      "population": 579399
+    },
+    {
+      "name": "Ōtsu",
+      "region": "25",
+      "x": 358.43,
+      "y": 681.32,
+      "rank": 8,
+      "capital": "region",
+      "population": 536976
+    },
+    {
+      "name": "Tokushima",
+      "region": "36",
+      "x": 293.88,
+      "y": 737.28,
+      "rank": 8,
+      "capital": "region",
+      "population": 443760
+    },
+    {
+      "name": "Maebashi",
+      "region": "10",
+      "x": 515.77,
+      "y": 597.52,
+      "rank": 8,
+      "capital": "region",
+      "population": 344871
+    },
+    {
+      "name": "Kōriyama",
+      "region": "7",
+      "x": 579.95,
+      "y": 535.07,
+      "rank": 8,
+      "capital": null,
+      "population": 340560
+    },
+    {
+      "name": "Kawagoe",
+      "region": "11",
+      "x": 536.31,
+      "y": 626.4,
+      "rank": 8,
+      "capital": null,
+      "population": 337931
+    },
+    {
+      "name": "Takamatsu",
+      "region": "37",
+      "x": 268.96,
+      "y": 720.82,
+      "rank": 8,
+      "capital": "region",
+      "population": 334223
+    },
+    {
+      "name": "Toyama",
+      "region": "16",
+      "x": 425.32,
+      "y": 578.74,
+      "rank": 8,
+      "capital": "region",
+      "population": 332812
+    },
+    {
+      "name": "Shimonoseki",
+      "region": "35",
+      "x": 116.81,
+      "y": 743.32,
+      "rank": 8,
+      "capital": null,
+      "population": 245786
+    },
+    {
+      "name": "Takaoka",
+      "region": "16",
+      "x": 414.03,
+      "y": 580.58,
+      "rank": 8,
+      "capital": null,
+      "population": 170077
+    },
+    {
+      "name": "Kanoya",
+      "region": "46",
+      "x": 112.13,
+      "y": 893.93,
+      "rank": 8,
+      "capital": null,
+      "population": 82335
+    }
+  ]
+}

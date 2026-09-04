@@ -17,7 +17,7 @@ import { regionNameLabel, regionNameLines } from "@/lib/regionNames";
 import { MAP_ZOOM_LEVELS } from "@/lib/geoMapFraming";
 import { filterMarks, markFor, markTone, markTotals, type MapMarkLayers } from "@/lib/mapMarks";
 import { CITY_DENSITIES, citiesAtDensity, cityDensityCounts, hasCities, isCityDensity, type CityDensity } from "@/lib/geoCities";
-import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
+import { getStoredEnum, getStoredFlagOneIsTrue, setStoredBooleanFlag, setStoredEnum } from "@/lib/clientStorage";
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 
 import MapCityToggle from "./MapCityToggle";
@@ -142,10 +142,28 @@ export default function MapStudy({
    * paint disagree with the markup React sent.
    */
   const cityCountry = hasCities(country);
-  const [showCities, setShowCities] = usePersistedBoolean("maps.cities.shown", { defaultValue: false });
+  /*
+   * Both read after mount, never during render.
+   *
+   * `usePersistedBoolean` seeds its state from localStorage inside the
+   * useState initialiser, which is fine only while the stored value agrees
+   * with the default - the mark layers default to on and mostly do. Cities
+   * default to off, so the first reader who turns them on and comes back gets
+   * a server paint saying off and a client paint saying on, and React throws a
+   * hydration mismatch. Reading in an effect costs one extra paint and cannot
+   * disagree with the markup that was sent.
+   */
+  const [showCities, setShowCities] = useState(false);
   const [cityDensity, setCityDensity] = useState<CityDensity>("major");
   useEffect(() => {
+    setShowCities(getStoredFlagOneIsTrue("maps.cities.shown", false));
     setCityDensity(getStoredEnum("maps.cities.density", CITY_DENSITIES, "major"));
+  }, []);
+  const toggleCities = useCallback(() => {
+    setShowCities((on) => {
+      setStoredBooleanFlag("maps.cities.shown", !on);
+      return !on;
+    });
   }, []);
   const chooseDensity = useCallback((next: CityDensity) => {
     if (!isCityDensity(next)) return;
@@ -322,7 +340,7 @@ export default function MapStudy({
             {cityCountry ? (
               <MapCityToggle
                 shown={showCities}
-                onToggle={() => setShowCities((on) => !on)}
+                onToggle={toggleCities}
                 density={cityDensity}
                 onDensity={chooseDensity}
                 counts={cityCounts}

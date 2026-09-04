@@ -18,6 +18,15 @@ type Props = {
   cities: MapCity[];
   /** The map's own stroke width at this zoom, so dots hold their proportions. */
   stroke: number;
+  /**
+   * Where a city has to move because its region did.
+   *
+   * Okinawa is drawn in a box at the foot of Japan's map, and its outline is
+   * carried there by a transform at render. Its cities take the same ride or
+   * they float in the sea where the prefecture used to be. Identity today, but
+   * the box is a value somebody may move.
+   */
+  insetFor?: (region: string | null) => { scale: number; x: number; y: number } | null;
 };
 
 const DOT_RATIO = { country: 2.6, region: 2.1, place: 1.5 } as const;
@@ -72,14 +81,19 @@ function labelledCities(cities: MapCity[], stroke: number): Set<MapCity> {
   return chosen;
 }
 
-export default function MapCityLayer({ cities, stroke }: Props) {
+export default function MapCityLayer({ cities, stroke, insetFor }: Props) {
   if (cities.length === 0) return null;
 
-  const named = labelledCities(cities, stroke);
+  const seated = cities.map((city) => {
+    const move = insetFor?.(city.region) ?? null;
+    if (!move) return city;
+    return { ...city, x: move.x + city.x * move.scale, y: move.y + city.y * move.scale };
+  });
+  const named = labelledCities(seated, stroke);
 
   return (
     <g data-testid="map-city-layer">
-      {cities.map((city) => {
+      {seated.map((city) => {
         const r = stroke * dotRatio(city);
         return (
           <g key={`${city.name}-${city.x}-${city.y}`}>

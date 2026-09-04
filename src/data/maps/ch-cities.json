@@ -1,0 +1,264 @@
+{
+  "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_populated_places.geojson (Natural Earth populated places), fitted to 1000x650",
+  "updatedAt": "2026-09-04T09:41:01.102Z",
+  "country": "CH",
+  "countryName": "Switzerland",
+  "viewBox": "0 0 1000 650",
+  "width": 1000,
+  "height": 650,
+  "totalCities": 28,
+  "cities": [
+    {
+      "name": "Geneva",
+      "region": "GE",
+      "x": 41.28,
+      "y": 512.71,
+      "rank": 1,
+      "capital": "region",
+      "population": 1240000
+    },
+    {
+      "name": "Zürich",
+      "region": "ZH",
+      "x": 575.21,
+      "y": 141.85,
+      "rank": 2,
+      "capital": "region",
+      "population": 1108000
+    },
+    {
+      "name": "Bern",
+      "region": "BE",
+      "x": 338.51,
+      "y": 290.81,
+      "rank": 4,
+      "capital": "country",
+      "population": 275329
+    },
+    {
+      "name": "Basel",
+      "region": "BS",
+      "x": 367.18,
+      "y": 77.71,
+      "rank": 7,
+      "capital": "region",
+      "population": 830000
+    },
+    {
+      "name": "Lausanne",
+      "region": "VD",
+      "x": 156.72,
+      "y": 412.34,
+      "rank": 7,
+      "capital": "region",
+      "population": 265702
+    },
+    {
+      "name": "Lucerne",
+      "region": "LU",
+      "x": 516.97,
+      "y": 248.57,
+      "rank": 7,
+      "capital": "region",
+      "population": 250000
+    },
+    {
+      "name": "Lugano",
+      "region": "TI",
+      "x": 670.64,
+      "y": 585.26,
+      "rank": 7,
+      "capital": null,
+      "population": 105388
+    },
+    {
+      "name": "Biel/Bienne",
+      "region": "BE",
+      "x": 291.86,
+      "y": 209.98,
+      "rank": 8,
+      "capital": null,
+      "population": 78708
+    },
+    {
+      "name": "Chur",
+      "region": "GR",
+      "x": 785.22,
+      "y": 310.63,
+      "rank": 8,
+      "capital": "region",
+      "population": 38293
+    },
+    {
+      "name": "St. Gallen",
+      "region": "SG",
+      "x": 752.16,
+      "y": 126.95,
+      "rank": 10,
+      "capital": "region",
+      "population": 70572
+    },
+    {
+      "name": "Schaffhausen",
+      "region": "SH",
+      "x": 593.12,
+      "y": 37.58,
+      "rank": 10,
+      "capital": "region",
+      "population": 33863
+    },
+    {
+      "name": "Fribourg",
+      "region": "FR",
+      "x": 268.42,
+      "y": 327.52,
+      "rank": 10,
+      "capital": "region",
+      "population": 32827
+    },
+    {
+      "name": "Neuchâtel",
+      "region": "NE",
+      "x": 219.52,
+      "y": 262.83,
+      "rank": 10,
+      "capital": "region",
+      "population": 31270
+    },
+    {
+      "name": "Sion",
+      "region": "VS",
+      "x": 311.37,
+      "y": 508.38,
+      "rank": 10,
+      "capital": "region",
+      "population": 28045
+    },
+    {
+      "name": "Zug",
+      "region": "ZG",
+      "x": 562.15,
+      "y": 207.13,
+      "rank": 10,
+      "capital": "region",
+      "population": 23435
+    },
+    {
+      "name": "Frauenfeld",
+      "region": "TG",
+      "x": 652.38,
+      "y": 86.46,
+      "rank": 10,
+      "capital": "region",
+      "population": 21979
+    },
+    {
+      "name": "Bellinzona",
+      "region": "TI",
+      "x": 681.89,
+      "y": 521.94,
+      "rank": 10,
+      "capital": "region",
+      "population": 16572
+    },
+    {
+      "name": "Aarau",
+      "region": "AG",
+      "x": 463.33,
+      "y": 139.38,
+      "rank": 10,
+      "capital": "region",
+      "population": 15501
+    },
+    {
+      "name": "Herisau",
+      "region": "AR",
+      "x": 735.22,
+      "y": 139.95,
+      "rank": 10,
+      "capital": "region",
+      "population": 15438
+    },
+    {
+      "name": "Solothurn",
+      "region": "SO",
+      "x": 354.69,
+      "y": 196.03,
+      "rank": 10,
+      "capital": "region",
+      "population": 14853
+    },
+    {
+      "name": "Schwyz",
+      "region": "SZ",
+      "x": 597.62,
+      "y": 258.07,
+      "rank": 10,
+      "capital": "region",
+      "population": 14177
+    },
+    {
+      "name": "Liestal",
+      "region": "BL",
+      "x": 398.87,
+      "y": 109.23,
+      "rank": 10,
+      "capital": "region",
+      "population": 12832
+    },
+    {
+      "name": "Delémont",
+      "region": "JU",
+      "x": 313.32,
+      "y": 144.84,
+      "rank": 10,
+      "capital": "region",
+      "population": 11315
+    },
+    {
+      "name": "Sarnen",
+      "region": "OW",
+      "x": 508.89,
+      "y": 297.24,
+      "rank": 10,
+      "capital": "region",
+      "population": 9410
+    },
+    {
+      "name": "Altdorf",
+      "region": "UR",
+      "x": 595.68,
+      "y": 303.41,
+      "rank": 10,
+      "capital": "region",
+      "population": 8678
+    },
+    {
+      "name": "Stans",
+      "region": "NW",
+      "x": 539.67,
+      "y": 280.8,
+      "rank": 10,
+      "capital": "region",
+      "population": 7475
+    },
+    {
+      "name": "Glarus",
+      "region": "GL",
+      "x": 689.26,
+      "y": 247.66,
+      "rank": 10,
+      "capital": "region",
+      "population": 5681
+    },
+    {
+      "name": "Appenzell",
+      "region": "AI",
+      "x": 764.5,
+      "y": 155.6,
+      "rank": 10,
+      "capital": "region",
+      "population": 5649
+    }
+  ]
+}

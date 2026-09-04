@@ -1,0 +1,5250 @@
+{
+  "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_populated_places.geojson (Natural Earth populated places), fitted to 1000x600",
+  "updatedAt": "2026-09-04T09:41:00.916Z",
+  "country": "RU",
+  "countryName": "Russia",
+  "viewBox": "0 0 1000 600",
+  "width": 1000,
+  "height": 600,
+  "totalCities": 582,
+  "cities": [
+    {
+      "name": "Moscow",
+      "region": "MOS",
+      "x": 147,
+      "y": 253.36,
+      "rank": 0,
+      "capital": "country",
+      "population": 10452000
+    },
+    {
+      "name": "Saint Petersburg",
+      "region": "SPE",
+      "x": 166.26,
+      "y": 178.43,
+      "rank": 2,
+      "capital": "region",
+      "population": 4553000
+    },
+    {
+      "name": "Novosibirsk",
+      "region": "NVS",
+      "x": 423.67,
+      "y": 452.75,
+      "rank": 3,
+      "capital": "region",
+      "population": 1389000
+    },
+    {
+      "name": "Yekaterinburg",
+      "region": "SVE",
+      "x": 280.57,
+      "y": 361.21,
+      "rank": 3,
+      "capital": "region",
+      "population": 1313000
+    },
+    {
+      "name": "Nizhny Novgorod",
+      "region": "NIZ",
+      "x": 183.41,
+      "y": 285.73,
+      "rank": 3,
+      "capital": "region",
+      "population": 1278000
+    },
+    {
+      "name": "Samara",
+      "region": "SAM",
+      "x": 186.37,
+      "y": 349.91,
+      "rank": 3,
+      "capital": "region",
+      "population": 1137000
+    },
+    {
+      "name": "Kazan",
+      "region": "TA",
+      "x": 204.48,
+      "y": 319.04,
+      "rank": 3,
+      "capital": "region",
+      "population": 1115000
+    },
+    {
+      "name": "Ufa",
+      "region": "BA",
+      "x": 236.11,
+      "y": 363.71,
+      "rank": 3,
+      "capital": "region",
+      "population": 1018000
+    },
+    {
+      "name": "Perm",
+      "region": "PER",
+      "x": 264.19,
+      "y": 330.04,
+      "rank": 3,
+      "capital": "region",
+      "population": 997000
+    },
+    {
+      "name": "Volgograd",
+      "region": "VGG",
+      "x": 108.8,
+      "y": 358.36,
+      "rank": 3,
+      "capital": "region",
+      "population": 984000
+    },
+    {
+      "name": "Krasnoyarsk",
+      "region": "KYA",
+      "x": 500.45,
+      "y": 453.25,
+      "rank": 3,
+      "capital": "region",
+      "population": 925000
+    },
+    {
+      "name": "Barnaul",
+      "region": "ALT",
+      "x": 424.03,
+      "y": 476.46,
+      "rank": 3,
+      "capital": "region",
+      "population": 599579
+    },
+    {
+      "name": "Vladivostok",
+      "region": "PRI",
+      "x": 866.73,
+      "y": 555.52,
+      "rank": 3,
+      "capital": "region",
+      "population": 587022
+    },
+    {
+      "name": "Irkutsk",
+      "region": "IRK",
+      "x": 589.68,
+      "y": 505.91,
+      "rank": 3,
+      "capital": "region",
+      "population": 586695
+    },
+    {
+      "name": "Tomsk",
+      "region": "TOM",
+      "x": 443.3,
+      "y": 437.02,
+      "rank": 3,
+      "capital": "region",
+      "population": 535479
+    },
+    {
+      "name": "Surgut",
+      "region": "KHM",
+      "x": 386.95,
+      "y": 350.7,
+      "rank": 3,
+      "capital": null,
+      "population": 400000
+    },
+    {
+      "name": "Sevastopol",
+      "region": "UA-40",
+      "x": 1.4,
+      "y": 310.03,
+      "rank": 3,
+      "capital": "region",
+      "population": 379200
+    },
+    {
+      "name": "Arkhangelsk",
+      "region": "ARK",
+      "x": 254.41,
+      "y": 195.62,
+      "rank": 3,
+      "capital": "region",
+      "population": 356051
+    },
+    {
+      "name": "Murmansk",
+      "region": "MUR",
+      "x": 280.06,
+      "y": 128.53,
+      "rank": 3,
+      "capital": "region",
+      "population": 319263
+    },
+    {
+      "name": "Chita",
+      "region": "ZAB",
+      "x": 665.81,
+      "y": 498.84,
+      "rank": 3,
+      "capital": "region",
+      "population": 308500
+    },
+    {
+      "name": "Bratsk",
+      "region": "IRK",
+      "x": 566.26,
+      "y": 454.06,
+      "rank": 3,
+      "capital": null,
+      "population": 246348
+    },
+    {
+      "name": "Yakutsk",
+      "region": "SA",
+      "x": 735.36,
+      "y": 332.77,
+      "rank": 3,
+      "capital": "region",
+      "population": 235600
+    },
+    {
+      "name": "Petropavlovsk-Kamchatsky",
+      "region": "KAM",
+      "x": 972.09,
+      "y": 299.27,
+      "rank": 3,
+      "capital": "region",
+      "population": 187282
+    },
+    {
+      "name": "Magadan",
+      "region": "MAG",
+      "x": 867.33,
+      "y": 281.72,
+      "rank": 3,
+      "capital": "region",
+      "population": 95282
+    },
+    {
+      "name": "Anadyr",
+      "region": "CHU",
+      "x": 905.33,
+      "y": 105.73,
+      "rank": 3,
+      "capital": "region",
+      "population": 10332
+    },
+    {
+      "name": "Tiksi",
+      "region": "SA",
+      "x": 675.22,
+      "y": 216.4,
+      "rank": 3,
+      "capital": null,
+      "population": 5700
+    },
+    {
+      "name": "Palana",
+      "region": "KAM",
+      "x": 914.42,
+      "y": 239.88,
+      "rank": 3,
+      "capital": "region",
+      "population": 3671
+    },
+    {
+      "name": "Dikson",
+      "region": "KYA",
+      "x": 478.42,
+      "y": 206.26,
+      "rank": 3,
+      "capital": null,
+      "population": 1113
+    },
+    {
+      "name": "Nizhneyansk",
+      "region": "SA",
+      "x": 704.26,
+      "y": 203.98,
+      "rank": 3,
+      "capital": null,
+      "population": 400
+    },
+    {
+      "name": "Omsk",
+      "region": "OMS",
+      "x": 353.47,
+      "y": 429.42,
+      "rank": 4,
+      "capital": "region",
+      "population": 1135000
+    },
+    {
+      "name": "Chelyabinsk",
+      "region": "CHE",
+      "x": 273.04,
+      "y": 383.98,
+      "rank": 4,
+      "capital": "region",
+      "population": 1091000
+    },
+    {
+      "name": "Rostov-on-Don",
+      "region": "ROS",
+      "x": 65.08,
+      "y": 337.7,
+      "rank": 4,
+      "capital": "region",
+      "population": 1052000
+    },
+    {
+      "name": "Voronezh",
+      "region": "VOR",
+      "x": 109.97,
+      "y": 296.95,
+      "rank": 4,
+      "capital": "region",
+      "population": 844000
+    },
+    {
+      "name": "Saratov",
+      "region": "SAR",
+      "x": 146.62,
+      "y": 341.54,
+      "rank": 4,
+      "capital": "region",
+      "population": 843000
+    },
+    {
+      "name": "Krasnodar",
+      "region": "KDA",
+      "x": 37,
+      "y": 350.84,
+      "rank": 4,
+      "capital": "region",
+      "population": 649851
+    },
+    {
+      "name": "Ulyanovsk",
+      "region": "ULY",
+      "x": 186.99,
+      "y": 329.12,
+      "rank": 4,
+      "capital": "region",
+      "population": 640680
+    },
+    {
+      "name": "Yaroslavl",
+      "region": "YAR",
+      "x": 177.38,
+      "y": 251.25,
+      "rank": 4,
+      "capital": "region",
+      "population": 606730
+    },
+    {
+      "name": "Khabarovsk",
+      "region": "KHA",
+      "x": 858.73,
+      "y": 476.96,
+      "rank": 4,
+      "capital": "region",
+      "population": 579000
+    },
+    {
+      "name": "Orenburg",
+      "region": "ORE",
+      "x": 204.75,
+      "y": 391.32,
+      "rank": 4,
+      "capital": "region",
+      "population": 550204
+    },
+    {
+      "name": "Novokuznetsk",
+      "region": "KEM",
+      "x": 451.66,
+      "y": 477.09,
+      "rank": 4,
+      "capital": null,
+      "population": 539616
+    },
+    {
+      "name": "Ryazan",
+      "region": "RYA",
+      "x": 144.47,
+      "y": 275.64,
+      "rank": 4,
+      "capital": "region",
+      "population": 520173
+    },
+    {
+      "name": "Tyumen",
+      "region": "TYU",
+      "x": 313.38,
+      "y": 376.95,
+      "rank": 4,
+      "capital": "region",
+      "population": 519119
+    },
+    {
+      "name": "Penza",
+      "region": "PNZ",
+      "x": 156.74,
+      "y": 320.43,
+      "rank": 4,
+      "capital": "region",
+      "population": 512602
+    },
+    {
+      "name": "Astrakhan",
+      "region": "AST",
+      "x": 108.3,
+      "y": 404.5,
+      "rank": 4,
+      "capital": "region",
+      "population": 502533
+    },
+    {
+      "name": "Kemerovo",
+      "region": "KEM",
+      "x": 448.13,
+      "y": 454.23,
+      "rank": 4,
+      "capital": "region",
+      "population": 477090
+    },
+    {
+      "name": "Kirov",
+      "region": "KIR",
+      "x": 234.07,
+      "y": 293.74,
+      "rank": 4,
+      "capital": "region",
+      "population": 457437
+    },
+    {
+      "name": "Kaliningrad",
+      "region": "KGD",
+      "x": 71.05,
+      "y": 145.15,
+      "rank": 4,
+      "capital": "region",
+      "population": 434954
+    },
+    {
+      "name": "Bryansk",
+      "region": "BRY",
+      "x": 104.8,
+      "y": 252.32,
+      "rank": 4,
+      "capital": "region",
+      "population": 427236
+    },
+    {
+      "name": "Magnitogorsk",
+      "region": "CHE",
+      "x": 243.7,
+      "y": 392.61,
+      "rank": 4,
+      "capital": null,
+      "population": 413351
+    },
+    {
+      "name": "Tver",
+      "region": "TVE",
+      "x": 151.8,
+      "y": 234.1,
+      "rank": 4,
+      "capital": "region",
+      "population": 400212
+    },
+    {
+      "name": "Nizhny Tagil",
+      "region": "SVE",
+      "x": 285.03,
+      "y": 346.62,
+      "rank": 4,
+      "capital": null,
+      "population": 381116
+    },
+    {
+      "name": "Stavropol",
+      "region": "STA",
+      "x": 55.57,
+      "y": 373.35,
+      "rank": 4,
+      "capital": "region",
+      "population": 363064
+    },
+    {
+      "name": "Ulan-Ude",
+      "region": "BU",
+      "x": 618.03,
+      "y": 509.66,
+      "rank": 4,
+      "capital": "region",
+      "population": 360278
+    },
+    {
+      "name": "Sochi",
+      "region": "KDA",
+      "x": 26.01,
+      "y": 368.53,
+      "rank": 4,
+      "capital": null,
+      "population": 327608
+    },
+    {
+      "name": "Smolensk",
+      "region": "SMO",
+      "x": 112.16,
+      "y": 225.19,
+      "rank": 4,
+      "capital": "region",
+      "population": 320991
+    },
+    {
+      "name": "Nalchik",
+      "region": "KB",
+      "x": 50.14,
+      "y": 399.51,
+      "rank": 4,
+      "capital": "region",
+      "population": 307866
+    },
+    {
+      "name": "Vologda",
+      "region": "VLG",
+      "x": 194.65,
+      "y": 238.11,
+      "rank": 4,
+      "capital": "region",
+      "population": 294889
+    },
+    {
+      "name": "Petrozavodsk",
+      "region": "KR",
+      "x": 201.54,
+      "y": 187.76,
+      "rank": 4,
+      "capital": "region",
+      "population": 265025
+    },
+    {
+      "name": "Angarsk",
+      "region": "IRK",
+      "x": 586.44,
+      "y": 502.34,
+      "rank": 4,
+      "capital": null,
+      "population": 243158
+    },
+    {
+      "name": "Grozny",
+      "region": "CE",
+      "x": 62.52,
+      "y": 416.74,
+      "rank": 4,
+      "capital": "region",
+      "population": 226100
+    },
+    {
+      "name": "Blagoveshchensk",
+      "region": "AMU",
+      "x": 787.37,
+      "y": 485.61,
+      "rank": 4,
+      "capital": "region",
+      "population": 221296
+    },
+    {
+      "name": "Pskov",
+      "region": "PSK",
+      "x": 134.39,
+      "y": 180.39,
+      "rank": 4,
+      "capital": "region",
+      "population": 201990
+    },
+    {
+      "name": "Yuzhno-Sakhalinsk",
+      "region": "SAK",
+      "x": 928.62,
+      "y": 454.99,
+      "rank": 4,
+      "capital": "region",
+      "population": 176484
+    },
+    {
+      "name": "Abakan",
+      "region": "KYA",
+      "x": 485.78,
+      "y": 483.28,
+      "rank": 4,
+      "capital": "region",
+      "population": 167289
+    },
+    {
+      "name": "Norilsk",
+      "region": "KYA",
+      "x": 497.87,
+      "y": 269.29,
+      "rank": 4,
+      "capital": null,
+      "population": 165873
+    },
+    {
+      "name": "Kyzyl",
+      "region": "TY",
+      "x": 506.88,
+      "y": 512.94,
+      "rank": 4,
+      "capital": "region",
+      "population": 108240
+    },
+    {
+      "name": "Ust-Ilimsk",
+      "region": "IRK",
+      "x": 572.91,
+      "y": 428.82,
+      "rank": 4,
+      "capital": null,
+      "population": 100271
+    },
+    {
+      "name": "Vorkuta",
+      "region": "KO",
+      "x": 376.64,
+      "y": 250.16,
+      "rank": 4,
+      "capital": null,
+      "population": 80039
+    },
+    {
+      "name": "Mirny",
+      "region": "SA",
+      "x": 640.04,
+      "y": 358.04,
+      "rank": 4,
+      "capital": null,
+      "population": 40308
+    },
+    {
+      "name": "Okha",
+      "region": "SAK",
+      "x": 875.89,
+      "y": 381.78,
+      "rank": 4,
+      "capital": null,
+      "population": 26560
+    },
+    {
+      "name": "Lensk",
+      "region": "SA",
+      "x": 651.53,
+      "y": 380.86,
+      "rank": 4,
+      "capital": null,
+      "population": 25589
+    },
+    {
+      "name": "Aldan",
+      "region": "SA",
+      "x": 727.74,
+      "y": 387.27,
+      "rank": 4,
+      "capital": null,
+      "population": 24426
+    },
+    {
+      "name": "Ust-Nera",
+      "region": "SA",
+      "x": 786.75,
+      "y": 261.1,
+      "rank": 4,
+      "capital": null,
+      "population": 9148
+    },
+    {
+      "name": "Dalnegorsk",
+      "region": "PRI",
+      "x": 889.06,
+      "y": 521.15,
+      "rank": 4,
+      "capital": null,
+      "population": 8123
+    },
+    {
+      "name": "Okhotsk",
+      "region": "KHA",
+      "x": 829.64,
+      "y": 317.36,
+      "rank": 4,
+      "capital": null,
+      "population": 5570
+    },
+    {
+      "name": "Batagay",
+      "region": "SA",
+      "x": 724.51,
+      "y": 251.87,
+      "rank": 4,
+      "capital": null,
+      "population": 4266
+    },
+    {
+      "name": "Bukachacha",
+      "region": "ZAB",
+      "x": 690.69,
+      "y": 480.05,
+      "rank": 4,
+      "capital": null,
+      "population": 3372
+    },
+    {
+      "name": "Ugolnye Kopi",
+      "region": "CHU",
+      "x": 905.88,
+      "y": 104.56,
+      "rank": 4,
+      "capital": null,
+      "population": 3367
+    },
+    {
+      "name": "Zhigansk",
+      "region": "SA",
+      "x": 676.17,
+      "y": 287.69,
+      "rank": 4,
+      "capital": null,
+      "population": 3237
+    },
+    {
+      "name": "Khatanga",
+      "region": "KYA",
+      "x": 564.6,
+      "y": 237.23,
+      "rank": 4,
+      "capital": null,
+      "population": 3205
+    },
+    {
+      "name": "Chokurdakh",
+      "region": "SA",
+      "x": 753.3,
+      "y": 181.84,
+      "rank": 4,
+      "capital": null,
+      "population": 2506
+    },
+    {
+      "name": "Izhevsk",
+      "region": "UD",
+      "x": 237.3,
+      "y": 328.49,
+      "rank": 6,
+      "capital": "region",
+      "population": 631038
+    },
+    {
+      "name": "Makhachkala",
+      "region": "DA",
+      "x": 71.92,
+      "y": 433.14,
+      "rank": 6,
+      "capital": "region",
+      "population": 554981
+    },
+    {
+      "name": "Lipetsk",
+      "region": "LIP",
+      "x": 122.58,
+      "y": 291.95,
+      "rank": 6,
+      "capital": "region",
+      "population": 515655
+    },
+    {
+      "name": "Tula",
+      "region": "TUL",
+      "x": 129.97,
+      "y": 266,
+      "rank": 6,
+      "capital": "region",
+      "population": 489486
+    },
+    {
+      "name": "Cheboksary",
+      "region": "CU",
+      "x": 198.03,
+      "y": 305.42,
+      "rank": 6,
+      "capital": "region",
+      "population": 446781
+    },
+    {
+      "name": "Ivanovo",
+      "region": "IVA",
+      "x": 176.06,
+      "y": 262.93,
+      "rank": 6,
+      "capital": "region",
+      "population": 420839
+    },
+    {
+      "name": "Kursk",
+      "region": "KRS",
+      "x": 95.84,
+      "y": 276.01,
+      "rank": 6,
+      "capital": "region",
+      "population": 409431
+    },
+    {
+      "name": "Belgorod",
+      "region": "BEL",
+      "x": 85.48,
+      "y": 287.6,
+      "rank": 6,
+      "capital": "region",
+      "population": 345289
+    },
+    {
+      "name": "Kurgan",
+      "region": "KGN",
+      "x": 300.79,
+      "y": 396.17,
+      "rank": 6,
+      "capital": "region",
+      "population": 343129
+    },
+    {
+      "name": "Oryol",
+      "region": "ORL",
+      "x": 109.03,
+      "y": 265.57,
+      "rank": 6,
+      "capital": "region",
+      "population": 334552
+    },
+    {
+      "name": "Vladimir",
+      "region": "VLA",
+      "x": 163.92,
+      "y": 267,
+      "rank": 6,
+      "capital": "region",
+      "population": 318648
+    },
+    {
+      "name": "Tambov",
+      "region": "TAM",
+      "x": 132.96,
+      "y": 302.49,
+      "rank": 6,
+      "capital": "region",
+      "population": 301482
+    },
+    {
+      "name": "Kostroma",
+      "region": "KOS",
+      "x": 183.78,
+      "y": 255.98,
+      "rank": 6,
+      "capital": "region",
+      "population": 277656
+    },
+    {
+      "name": "Komsomolsk-on-Amur",
+      "region": "KHA",
+      "x": 858.38,
+      "y": 443.71,
+      "rank": 6,
+      "capital": "region",
+      "population": 275908
+    },
+    {
+      "name": "Prokopyevsk",
+      "region": "KEM",
+      "x": 448.89,
+      "y": 474.45,
+      "rank": 6,
+      "capital": null,
+      "population": 275615
+    },
+    {
+      "name": "Sterlitamak",
+      "region": "BA",
+      "x": 225.88,
+      "y": 375.84,
+      "rank": 6,
+      "capital": null,
+      "population": 267231
+    },
+    {
+      "name": "Orsk",
+      "region": "ORE",
+      "x": 223.78,
+      "y": 415.5,
+      "rank": 6,
+      "capital": null,
+      "population": 246836
+    },
+    {
+      "name": "Nizhnevartovsk",
+      "region": "KHM",
+      "x": 404.38,
+      "y": 362.35,
+      "rank": 6,
+      "capital": null,
+      "population": 244937
+    },
+    {
+      "name": "Novorossiysk",
+      "region": "KDA",
+      "x": 26.57,
+      "y": 343.55,
+      "rank": 6,
+      "capital": null,
+      "population": 241856
+    },
+    {
+      "name": "Syktyvkar",
+      "region": "KO",
+      "x": 268.22,
+      "y": 268.27,
+      "rank": 6,
+      "capital": "region",
+      "population": 230910
+    },
+    {
+      "name": "Noginsk",
+      "region": "KYA",
+      "x": 503.43,
+      "y": 337.22,
+      "rank": 6,
+      "capital": null,
+      "population": 229731
+    },
+    {
+      "name": "Veliky Novgorod",
+      "region": "NGR",
+      "x": 152.84,
+      "y": 194.4,
+      "rank": 6,
+      "capital": "region",
+      "population": 218717
+    },
+    {
+      "name": "Balakovo",
+      "region": "SAR",
+      "x": 161.39,
+      "y": 347.94,
+      "rank": 6,
+      "capital": null,
+      "population": 199572
+    },
+    {
+      "name": "Severodvinsk",
+      "region": "ARK",
+      "x": 251.79,
+      "y": 192.43,
+      "rank": 6,
+      "capital": null,
+      "population": 194292
+    },
+    {
+      "name": "Zlatoust",
+      "region": "CHE",
+      "x": 261.76,
+      "y": 376.07,
+      "rank": 6,
+      "capital": null,
+      "population": 191366
+    },
+    {
+      "name": "Berezniki",
+      "region": "PER",
+      "x": 278.81,
+      "y": 316.86,
+      "rank": 6,
+      "capital": null,
+      "population": 167748
+    },
+    {
+      "name": "Volgodonsk",
+      "region": "ROS",
+      "x": 82.36,
+      "y": 353.04,
+      "rank": 6,
+      "capital": null,
+      "population": 167731
+    },
+    {
+      "name": "Rubtsovsk",
+      "region": "ALT",
+      "x": 397.27,
+      "y": 495.18,
+      "rank": 6,
+      "capital": null,
+      "population": 161065
+    },
+    {
+      "name": "Nakhodka",
+      "region": "PRI",
+      "x": 877.42,
+      "y": 554.37,
+      "rank": 6,
+      "capital": null,
+      "population": 159551
+    },
+    {
+      "name": "Ussuriysk",
+      "region": "PRI",
+      "x": 863.49,
+      "y": 546.89,
+      "rank": 6,
+      "capital": null,
+      "population": 157068
+    },
+    {
+      "name": "Pervouralsk",
+      "region": "SVE",
+      "x": 277.11,
+      "y": 357.9,
+      "rank": 6,
+      "capital": null,
+      "population": 133600
+    },
+    {
+      "name": "Achinsk",
+      "region": "KYA",
+      "x": 483.26,
+      "y": 447.59,
+      "rank": 6,
+      "capital": null,
+      "population": 117634
+    },
+    {
+      "name": "Vyborg",
+      "region": "LEN",
+      "x": 170.27,
+      "y": 164.28,
+      "rank": 6,
+      "capital": null,
+      "population": 117201
+    },
+    {
+      "name": "Tobolsk",
+      "region": "TYU",
+      "x": 337.58,
+      "y": 373.65,
+      "rank": 6,
+      "capital": null,
+      "population": 113800
+    },
+    {
+      "name": "Noyabrsk",
+      "region": "YAN",
+      "x": 409.41,
+      "y": 331.7,
+      "rank": 6,
+      "capital": null,
+      "population": 110572
+    },
+    {
+      "name": "Elista",
+      "region": "KL",
+      "x": 82.85,
+      "y": 378.16,
+      "rank": 6,
+      "capital": "region",
+      "population": 106971
+    },
+    {
+      "name": "Velikiye Luki",
+      "region": "PSK",
+      "x": 124.22,
+      "y": 204.43,
+      "rank": 6,
+      "capital": null,
+      "population": 103149
+    },
+    {
+      "name": "Ukhta",
+      "region": "KO",
+      "x": 298.64,
+      "y": 260.42,
+      "rank": 6,
+      "capital": null,
+      "population": 102187
+    },
+    {
+      "name": "Kansk",
+      "region": "KYA",
+      "x": 521.97,
+      "y": 452.72,
+      "rank": 6,
+      "capital": null,
+      "population": 101502
+    },
+    {
+      "name": "Serov",
+      "region": "SVE",
+      "x": 301.56,
+      "y": 329.88,
+      "rank": 6,
+      "capital": null,
+      "population": 98438
+    },
+    {
+      "name": "Novy Urengoy",
+      "region": "YAN",
+      "x": 428.89,
+      "y": 296.5,
+      "rank": 6,
+      "capital": null,
+      "population": 94212
+    },
+    {
+      "name": "Usolye-Sibirskoye",
+      "region": "IRK",
+      "x": 584.03,
+      "y": 499.68,
+      "rank": 6,
+      "capital": null,
+      "population": 85900
+    },
+    {
+      "name": "Yalta",
+      "region": "UA-43",
+      "x": 3.63,
+      "y": 316.08,
+      "rank": 6,
+      "capital": null,
+      "population": 79509
+    },
+    {
+      "name": "Birobidzhan",
+      "region": "YEV",
+      "x": 839.32,
+      "y": 482.51,
+      "rank": 6,
+      "capital": "region",
+      "population": 76146
+    },
+    {
+      "name": "Khanty-Mansiysk",
+      "region": "KHM",
+      "x": 359.42,
+      "y": 341.86,
+      "rank": 6,
+      "capital": "region",
+      "population": 67800
+    },
+    {
+      "name": "Neryungri",
+      "region": "SA",
+      "x": 732.88,
+      "y": 413.55,
+      "rank": 6,
+      "capital": null,
+      "population": 66320
+    },
+    {
+      "name": "Lesosibirsk",
+      "region": "KYA",
+      "x": 501.02,
+      "y": 422.73,
+      "rank": 6,
+      "capital": null,
+      "population": 65945
+    },
+    {
+      "name": "Svobodny",
+      "region": "AMU",
+      "x": 785.74,
+      "y": 469.31,
+      "rank": 6,
+      "capital": null,
+      "population": 63620
+    },
+    {
+      "name": "Zima",
+      "region": "IRK",
+      "x": 570.33,
+      "y": 484.31,
+      "rank": 6,
+      "capital": null,
+      "population": 60239
+    },
+    {
+      "name": "Kotlas",
+      "region": "ARK",
+      "x": 245.31,
+      "y": 253.56,
+      "rank": 6,
+      "capital": null,
+      "population": 59879
+    },
+    {
+      "name": "Gorno-Altaysk",
+      "region": "AL",
+      "x": 437.47,
+      "y": 499.1,
+      "rank": 6,
+      "capital": "region",
+      "population": 59868
+    },
+    {
+      "name": "Cheremkhovo",
+      "region": "IRK",
+      "x": 579.1,
+      "y": 494.55,
+      "rank": 6,
+      "capital": null,
+      "population": 57395
+    },
+    {
+      "name": "Krasnokamensk",
+      "region": "ZAB",
+      "x": 710.1,
+      "y": 516.05,
+      "rank": 6,
+      "capital": null,
+      "population": 54316
+    },
+    {
+      "name": "Tayshet",
+      "region": "IRK",
+      "x": 538.93,
+      "y": 457.1,
+      "rank": 6,
+      "capital": null,
+      "population": 52184
+    },
+    {
+      "name": "Nyagan",
+      "region": "KHM",
+      "x": 346.43,
+      "y": 317.14,
+      "rank": 6,
+      "capital": null,
+      "population": 52137
+    },
+    {
+      "name": "Tulun",
+      "region": "IRK",
+      "x": 558.56,
+      "y": 475.91,
+      "rank": 6,
+      "capital": null,
+      "population": 51330
+    },
+    {
+      "name": "Nadym",
+      "region": "YAN",
+      "x": 404.95,
+      "y": 295.01,
+      "rank": 6,
+      "capital": null,
+      "population": 46339
+    },
+    {
+      "name": "Pechora",
+      "region": "KO",
+      "x": 328.25,
+      "y": 256.05,
+      "rank": 6,
+      "capital": null,
+      "population": 46113
+    },
+    {
+      "name": "Usinsk",
+      "region": "KO",
+      "x": 335.37,
+      "y": 248.35,
+      "rank": 6,
+      "capital": null,
+      "population": 45000
+    },
+    {
+      "name": "Akhtubinsk",
+      "region": "AST",
+      "x": 114.8,
+      "y": 373.5,
+      "rank": 6,
+      "capital": null,
+      "population": 44551
+    },
+    {
+      "name": "Nizhneudinsk",
+      "region": "IRK",
+      "x": 546.58,
+      "y": 471.34,
+      "rank": 6,
+      "capital": null,
+      "population": 43326
+    },
+    {
+      "name": "Lesozavodsk",
+      "region": "PRI",
+      "x": 864.96,
+      "y": 520.17,
+      "rank": 6,
+      "capital": null,
+      "population": 41778
+    },
+    {
+      "name": "Birsk",
+      "region": "BA",
+      "x": 238.44,
+      "y": 354.56,
+      "rank": 6,
+      "capital": null,
+      "population": 41014
+    },
+    {
+      "name": "Kandalaksha",
+      "region": "MUR",
+      "x": 257.33,
+      "y": 138.66,
+      "rank": 6,
+      "capital": null,
+      "population": 38126
+    },
+    {
+      "name": "Salekhard",
+      "region": "YAN",
+      "x": 381.98,
+      "y": 268.41,
+      "rank": 6,
+      "capital": "region",
+      "population": 38025
+    },
+    {
+      "name": "Tynda",
+      "region": "AMU",
+      "x": 740.29,
+      "y": 432.63,
+      "rank": 6,
+      "capital": null,
+      "population": 37335
+    },
+    {
+      "name": "Korsakov",
+      "region": "SAK",
+      "x": 931.54,
+      "y": 458.3,
+      "rank": 6,
+      "capital": null,
+      "population": 35091
+    },
+    {
+      "name": "Kondopoga",
+      "region": "KR",
+      "x": 206.15,
+      "y": 184.17,
+      "rank": 6,
+      "capital": null,
+      "population": 34360
+    },
+    {
+      "name": "Veliky Ustyug",
+      "region": "VLG",
+      "x": 238.8,
+      "y": 256.53,
+      "rank": 6,
+      "capital": null,
+      "population": 33237
+    },
+    {
+      "name": "Borzya",
+      "region": "ZAB",
+      "x": 696.26,
+      "y": 515.19,
+      "rank": 6,
+      "capital": null,
+      "population": 30421
+    },
+    {
+      "name": "Sovetskaya Gavan",
+      "region": "KHA",
+      "x": 894.25,
+      "y": 446.03,
+      "rank": 6,
+      "capital": null,
+      "population": 29740
+    },
+    {
+      "name": "Kolpashevo",
+      "region": "TOM",
+      "x": 434.67,
+      "y": 409.37,
+      "rank": 6,
+      "capital": null,
+      "population": 27876
+    },
+    {
+      "name": "Nikolayevsk-on-Amur",
+      "region": "KHA",
+      "x": 864.8,
+      "y": 397.01,
+      "rank": 6,
+      "capital": null,
+      "population": 27152
+    },
+    {
+      "name": "Zeya",
+      "region": "AMU",
+      "x": 766.28,
+      "y": 442.94,
+      "rank": 6,
+      "capital": null,
+      "population": 26999
+    },
+    {
+      "name": "Tara",
+      "region": "OMS",
+      "x": 370.27,
+      "y": 408.22,
+      "rank": 6,
+      "capital": null,
+      "population": 26986
+    },
+    {
+      "name": "Velsk",
+      "region": "ARK",
+      "x": 223.5,
+      "y": 233.39,
+      "rank": 6,
+      "capital": null,
+      "population": 26300
+    },
+    {
+      "name": "Krasnoarmeysk",
+      "region": "SAR",
+      "x": 139.09,
+      "y": 344.79,
+      "rank": 6,
+      "capital": null,
+      "population": 25841
+    },
+    {
+      "name": "Severobaykalsk",
+      "region": "BU",
+      "x": 624.83,
+      "y": 456.38,
+      "rank": 6,
+      "capital": null,
+      "population": 25800
+    },
+    {
+      "name": "Ust-Kut",
+      "region": "IRK",
+      "x": 596.61,
+      "y": 444.07,
+      "rank": 6,
+      "capital": null,
+      "population": 25388
+    },
+    {
+      "name": "Dudinka",
+      "region": "KYA",
+      "x": 488.66,
+      "y": 266.41,
+      "rank": 6,
+      "capital": "region",
+      "population": 23619
+    },
+    {
+      "name": "Inta",
+      "region": "KO",
+      "x": 348.63,
+      "y": 255.9,
+      "rank": 6,
+      "capital": null,
+      "population": 22921
+    },
+    {
+      "name": "Onega",
+      "region": "ARK",
+      "x": 238.59,
+      "y": 189.61,
+      "rank": 6,
+      "capital": null,
+      "population": 22693
+    },
+    {
+      "name": "Naryan-Mar",
+      "region": "NEN",
+      "x": 331.94,
+      "y": 215.53,
+      "rank": 6,
+      "capital": "region",
+      "population": 21658
+    },
+    {
+      "name": "Shimanovsk",
+      "region": "AMU",
+      "x": 779.09,
+      "y": 463.36,
+      "rank": 6,
+      "capital": null,
+      "population": 21466
+    },
+    {
+      "name": "Palatka",
+      "region": "MAG",
+      "x": 862.81,
+      "y": 276.12,
+      "rank": 6,
+      "capital": null,
+      "population": 21452
+    },
+    {
+      "name": "Yeniseysk",
+      "region": "KYA",
+      "x": 499.06,
+      "y": 419.64,
+      "rank": 6,
+      "capital": null,
+      "population": 19920
+    },
+    {
+      "name": "Slyudyanka",
+      "region": "IRK",
+      "x": 585.31,
+      "y": 514.79,
+      "rank": 6,
+      "capital": null,
+      "population": 18809
+    },
+    {
+      "name": "Kyakhta",
+      "region": "BU",
+      "x": 610.19,
+      "y": 530.7,
+      "rank": 6,
+      "capital": null,
+      "population": 18431
+    },
+    {
+      "name": "Bodaybo",
+      "region": "IRK",
+      "x": 655.01,
+      "y": 420.28,
+      "rank": 6,
+      "capital": null,
+      "population": 15933
+    },
+    {
+      "name": "Udachny",
+      "region": "SA",
+      "x": 620.71,
+      "y": 307.87,
+      "rank": 6,
+      "capital": null,
+      "population": 15266
+    },
+    {
+      "name": "Kem",
+      "region": "KR",
+      "x": 238.31,
+      "y": 164.89,
+      "rank": 6,
+      "capital": null,
+      "population": 13829
+    },
+    {
+      "name": "Mogocha",
+      "region": "ZAB",
+      "x": 710.07,
+      "y": 463.93,
+      "rank": 6,
+      "capital": null,
+      "population": 12647
+    },
+    {
+      "name": "Belomorsk",
+      "region": "KR",
+      "x": 234.08,
+      "y": 169.07,
+      "rank": 6,
+      "capital": null,
+      "population": 12165
+    },
+    {
+      "name": "Alexandrovsk-Sakhalinsky",
+      "region": "SAK",
+      "x": 892.42,
+      "y": 415.01,
+      "rank": 6,
+      "capital": null,
+      "population": 12024
+    },
+    {
+      "name": "Magdagachi",
+      "region": "AMU",
+      "x": 757.02,
+      "y": 451.29,
+      "rank": 6,
+      "capital": null,
+      "population": 11739
+    },
+    {
+      "name": "Khilok",
+      "region": "ZAB",
+      "x": 642.55,
+      "y": 512.85,
+      "rank": 6,
+      "capital": null,
+      "population": 10627
+    },
+    {
+      "name": "Nogliki",
+      "region": "SAK",
+      "x": 891.65,
+      "y": 399.64,
+      "rank": 6,
+      "capital": null,
+      "population": 10098
+    },
+    {
+      "name": "Skovorodino",
+      "region": "AMU",
+      "x": 740.32,
+      "y": 450.02,
+      "rank": 6,
+      "capital": null,
+      "population": 10007
+    },
+    {
+      "name": "Vilyuysk",
+      "region": "SA",
+      "x": 680.53,
+      "y": 329.77,
+      "rank": 6,
+      "capital": null,
+      "population": 9948
+    },
+    {
+      "name": "Igrim",
+      "region": "KHM",
+      "x": 348.49,
+      "y": 301.81,
+      "rank": 6,
+      "capital": null,
+      "population": 9545
+    },
+    {
+      "name": "Suntar",
+      "region": "SA",
+      "x": 663.57,
+      "y": 357.89,
+      "rank": 6,
+      "capital": null,
+      "population": 8639
+    },
+    {
+      "name": "Olovyannaya",
+      "region": "ZAB",
+      "x": 686.44,
+      "y": 509.71,
+      "rank": 6,
+      "capital": null,
+      "population": 8247
+    },
+    {
+      "name": "Susuman",
+      "region": "MAG",
+      "x": 825.08,
+      "y": 261.11,
+      "rank": 6,
+      "capital": null,
+      "population": 7367
+    },
+    {
+      "name": "Khandyga",
+      "region": "SA",
+      "x": 763.55,
+      "y": 307.94,
+      "rank": 6,
+      "capital": null,
+      "population": 6796
+    },
+    {
+      "name": "Umba",
+      "region": "MUR",
+      "x": 257.29,
+      "y": 150.84,
+      "rank": 6,
+      "capital": null,
+      "population": 6128
+    },
+    {
+      "name": "Tazovsky",
+      "region": "YAN",
+      "x": 445.51,
+      "y": 282.3,
+      "rank": 6,
+      "capital": null,
+      "population": 5981
+    },
+    {
+      "name": "Tura",
+      "region": "KYA",
+      "x": 555.59,
+      "y": 343.29,
+      "rank": 6,
+      "capital": "region",
+      "population": 5444
+    },
+    {
+      "name": "Chernyshevsky",
+      "region": "SA",
+      "x": 629.79,
+      "y": 353.52,
+      "rank": 6,
+      "capital": null,
+      "population": 5137
+    },
+    {
+      "name": "Ust-Kamchatsk",
+      "region": "KAM",
+      "x": 956.42,
+      "y": 249.36,
+      "rank": 6,
+      "capital": null,
+      "population": 4939
+    },
+    {
+      "name": "Pevek",
+      "region": "CHU",
+      "x": 828.07,
+      "y": 109.34,
+      "rank": 6,
+      "capital": null,
+      "population": 4837
+    },
+    {
+      "name": "Turukhansk",
+      "region": "KYA",
+      "x": 487.98,
+      "y": 316.07,
+      "rank": 6,
+      "capital": null,
+      "population": 4774
+    },
+    {
+      "name": "Bagdarin",
+      "region": "BU",
+      "x": 660.32,
+      "y": 466.83,
+      "rank": 6,
+      "capital": null,
+      "population": 4676
+    },
+    {
+      "name": "Sangar",
+      "region": "SA",
+      "x": 712.05,
+      "y": 315.1,
+      "rank": 6,
+      "capital": null,
+      "population": 4633
+    },
+    {
+      "name": "Omsukchan",
+      "region": "MAG",
+      "x": 860.91,
+      "y": 230.34,
+      "rank": 6,
+      "capital": null,
+      "population": 4201
+    },
+    {
+      "name": "Novy Uoyan",
+      "region": "BU",
+      "x": 641.84,
+      "y": 446.75,
+      "rank": 6,
+      "capital": null,
+      "population": 4184
+    },
+    {
+      "name": "Teeli",
+      "region": "TY",
+      "x": 470.83,
+      "y": 518,
+      "rank": 6,
+      "capital": null,
+      "population": 3732
+    },
+    {
+      "name": "Chersky",
+      "region": "SA",
+      "x": 815.11,
+      "y": 152.66,
+      "rank": 6,
+      "capital": null,
+      "population": 3707
+    },
+    {
+      "name": "Mezen",
+      "region": "ARK",
+      "x": 281.21,
+      "y": 200.24,
+      "rank": 6,
+      "capital": null,
+      "population": 3672
+    },
+    {
+      "name": "Zyryanka",
+      "region": "SA",
+      "x": 809.48,
+      "y": 220.7,
+      "rank": 6,
+      "capital": null,
+      "population": 3627
+    },
+    {
+      "name": "De-Kastri",
+      "region": "KHA",
+      "x": 878.38,
+      "y": 415.55,
+      "rank": 6,
+      "capital": null,
+      "population": 3615
+    },
+    {
+      "name": "Srednekolymsk",
+      "region": "SA",
+      "x": 803.61,
+      "y": 193.47,
+      "rank": 6,
+      "capital": null,
+      "population": 3459
+    },
+    {
+      "name": "Ust-Maya",
+      "region": "SA",
+      "x": 772.88,
+      "y": 337.39,
+      "rank": 6,
+      "capital": null,
+      "population": 3062
+    },
+    {
+      "name": "Provideniya",
+      "region": "CHU",
+      "x": 927.06,
+      "y": 56.43,
+      "rank": 6,
+      "capital": null,
+      "population": 2536
+    },
+    {
+      "name": "Evensk",
+      "region": "MAG",
+      "x": 880.91,
+      "y": 219.15,
+      "rank": 6,
+      "capital": null,
+      "population": 2024
+    },
+    {
+      "name": "Saskylakh",
+      "region": "SA",
+      "x": 613.88,
+      "y": 232.77,
+      "rank": 6,
+      "capital": null,
+      "population": 1920
+    },
+    {
+      "name": "Novy Port",
+      "region": "YAN",
+      "x": 418.79,
+      "y": 268.75,
+      "rank": 6,
+      "capital": null,
+      "population": 1790
+    },
+    {
+      "name": "Oktyabrsky",
+      "region": "KAM",
+      "x": 963.54,
+      "y": 317.64,
+      "rank": 6,
+      "capital": null,
+      "population": 1534
+    },
+    {
+      "name": "Eldikan",
+      "region": "SA",
+      "x": 774.18,
+      "y": 331.22,
+      "rank": 6,
+      "capital": null,
+      "population": 1516
+    },
+    {
+      "name": "Verkhoyansk",
+      "region": "SA",
+      "x": 719.63,
+      "y": 256.35,
+      "rank": 6,
+      "capital": null,
+      "population": 1388
+    },
+    {
+      "name": "Chumikan",
+      "region": "KHA",
+      "x": 817.01,
+      "y": 402.44,
+      "rank": 6,
+      "capital": null,
+      "population": 1305
+    },
+    {
+      "name": "Ayan",
+      "region": "KHA",
+      "x": 823.05,
+      "y": 370.78,
+      "rank": 6,
+      "capital": null,
+      "population": 1286
+    },
+    {
+      "name": "Klyuchi",
+      "region": "KAM",
+      "x": 948.36,
+      "y": 258.14,
+      "rank": 6,
+      "capital": null,
+      "population": 1089
+    },
+    {
+      "name": "Omolon",
+      "region": "CHU",
+      "x": 850.33,
+      "y": 185.23,
+      "rank": 6,
+      "capital": null,
+      "population": 1050
+    },
+    {
+      "name": "Govorovo",
+      "region": "SA",
+      "x": 671.3,
+      "y": 239.2,
+      "rank": 6,
+      "capital": null,
+      "population": 943
+    },
+    {
+      "name": "Uelen",
+      "region": "CHU",
+      "x": 908.7,
+      "y": 32.12,
+      "rank": 6,
+      "capital": null,
+      "population": 776
+    },
+    {
+      "name": "Yerema",
+      "region": "IRK",
+      "x": 605.69,
+      "y": 393.54,
+      "rank": 6,
+      "capital": null,
+      "population": 745
+    },
+    {
+      "name": "Shoyna",
+      "region": "NEN",
+      "x": 301.29,
+      "y": 181.46,
+      "rank": 6,
+      "capital": null,
+      "population": 300
+    },
+    {
+      "name": "Amderma",
+      "region": "NEN",
+      "x": 383.19,
+      "y": 217.83,
+      "rank": 6,
+      "capital": null,
+      "population": 282
+    },
+    {
+      "name": "Vorontsovo",
+      "region": "KYA",
+      "x": 483.86,
+      "y": 233.37,
+      "rank": 6,
+      "capital": null,
+      "population": 100
+    },
+    {
+      "name": "Kovda",
+      "region": "MUR",
+      "x": 253.12,
+      "y": 144.14,
+      "rank": 6,
+      "capital": null,
+      "population": 20
+    },
+    {
+      "name": "Chagda",
+      "region": "SA",
+      "x": 771.54,
+      "y": 343.74,
+      "rank": 6,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Gyda",
+      "region": "YAN",
+      "x": 459.19,
+      "y": 237.74,
+      "rank": 6,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Indiga",
+      "region": "NEN",
+      "x": 316.92,
+      "y": 201.14,
+      "rank": 6,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Khakhar",
+      "region": "KHA",
+      "x": 797.3,
+      "y": 367.24,
+      "rank": 6,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Komsa",
+      "region": "KYA",
+      "x": 486.36,
+      "y": 370.77,
+      "rank": 6,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Krasino",
+      "region": "ARK",
+      "x": 363.97,
+      "y": 187.44,
+      "rank": 6,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Manily",
+      "region": "KAM",
+      "x": 896.82,
+      "y": 183.73,
+      "rank": 6,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Matočkin Šar",
+      "region": "ARK",
+      "x": 392.26,
+      "y": 165.66,
+      "rank": 6,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Menkere",
+      "region": "SA",
+      "x": 670.35,
+      "y": 272.11,
+      "rank": 6,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Mikhaylova",
+      "region": "KYA",
+      "x": 507.28,
+      "y": 191.14,
+      "rank": 6,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Numto",
+      "region": "KHM",
+      "x": 388.31,
+      "y": 315.41,
+      "rank": 6,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Olenyok",
+      "region": "SA",
+      "x": 615.66,
+      "y": 279.63,
+      "rank": 6,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Rusanovo",
+      "region": "ARK",
+      "x": 369.77,
+      "y": 194.37,
+      "rank": 6,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Sagastyr",
+      "region": "SA",
+      "x": 657.03,
+      "y": 198.32,
+      "rank": 6,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Starorybnoye",
+      "region": "KYA",
+      "x": 573.8,
+      "y": 226.81,
+      "rank": 6,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Terbyas",
+      "region": "SA",
+      "x": 671.86,
+      "y": 323.7,
+      "rank": 6,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Ust-Olenyok",
+      "region": "SA",
+      "x": 633.09,
+      "y": 212.54,
+      "rank": 6,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Kazachye",
+      "region": "SA",
+      "x": 709.77,
+      "y": 211.81,
+      "rank": 6,
+      "capital": null,
+      "population": -99
+    },
+    {
+      "name": "Tolyatti",
+      "region": "SAM",
+      "x": 184.99,
+      "y": 342.78,
+      "rank": 7,
+      "capital": null,
+      "population": 702879
+    },
+    {
+      "name": "Vladikavkaz",
+      "region": "SE",
+      "x": 52.72,
+      "y": 411.54,
+      "rank": 7,
+      "capital": "region",
+      "population": 364630
+    },
+    {
+      "name": "Simferopol",
+      "region": "UA-43",
+      "x": 8.43,
+      "y": 312.21,
+      "rank": 7,
+      "capital": "region",
+      "population": 358108
+    },
+    {
+      "name": "Kaluga",
+      "region": "KLU",
+      "x": 127.28,
+      "y": 254.75,
+      "rank": 7,
+      "capital": "region",
+      "population": 338978
+    },
+    {
+      "name": "Yoshkar-Ola",
+      "region": "ME",
+      "x": 206.21,
+      "y": 303.87,
+      "rank": 7,
+      "capital": "region",
+      "population": 324406
+    },
+    {
+      "name": "Volzhsky",
+      "region": "VGG",
+      "x": 111.32,
+      "y": 359.45,
+      "rank": 7,
+      "capital": null,
+      "population": 323293
+    },
+    {
+      "name": "Podolsk",
+      "region": "MOS",
+      "x": 142.51,
+      "y": 255.85,
+      "rank": 7,
+      "capital": null,
+      "population": 320635
+    },
+    {
+      "name": "Cherepovets",
+      "region": "VLG",
+      "x": 185.49,
+      "y": 227.68,
+      "rank": 7,
+      "capital": null,
+      "population": 311850
+    },
+    {
+      "name": "Saransk",
+      "region": "MO",
+      "x": 167.66,
+      "y": 312.33,
+      "rank": 7,
+      "capital": "region",
+      "population": 303394
+    },
+    {
+      "name": "Dzerzhinsk",
+      "region": "NIZ",
+      "x": 179.87,
+      "y": 283.48,
+      "rank": 7,
+      "capital": null,
+      "population": 256537
+    },
+    {
+      "name": "Nizhnekamsk",
+      "region": "TA",
+      "x": 218.51,
+      "y": 334.05,
+      "rank": 7,
+      "capital": null,
+      "population": 234297
+    },
+    {
+      "name": "Noginsk",
+      "region": "MOW",
+      "x": 152.19,
+      "y": 257.68,
+      "rank": 7,
+      "capital": null,
+      "population": 229731
+    },
+    {
+      "name": "Stary Oskol",
+      "region": "BEL",
+      "x": 99.12,
+      "y": 290.85,
+      "rank": 7,
+      "capital": null,
+      "population": 226977
+    },
+    {
+      "name": "Shakhty",
+      "region": "ROS",
+      "x": 73.48,
+      "y": 337.68,
+      "rank": 7,
+      "capital": null,
+      "population": 221312
+    },
+    {
+      "name": "Rybinsk",
+      "region": "YAR",
+      "x": 177.42,
+      "y": 241.71,
+      "rank": 7,
+      "capital": null,
+      "population": 216724
+    },
+    {
+      "name": "Biysk",
+      "region": "ALT",
+      "x": 432.84,
+      "y": 490.08,
+      "rank": 7,
+      "capital": null,
+      "population": 215430
+    },
+    {
+      "name": "Armavir",
+      "region": "KDA",
+      "x": 49.74,
+      "y": 367.37,
+      "rank": 7,
+      "capital": null,
+      "population": 199548
+    },
+    {
+      "name": "Engels",
+      "region": "SAR",
+      "x": 146.35,
+      "y": 342.87,
+      "rank": 7,
+      "capital": null,
+      "population": 196011
+    },
+    {
+      "name": "Kamensk-Uralsky",
+      "region": "SVE",
+      "x": 285.61,
+      "y": 371.58,
+      "rank": 7,
+      "capital": null,
+      "population": 182500
+    },
+    {
+      "name": "Miass",
+      "region": "CHE",
+      "x": 263.2,
+      "y": 380.04,
+      "rank": 7,
+      "capital": null,
+      "population": 167500
+    },
+    {
+      "name": "Salavat",
+      "region": "BA",
+      "x": 223.51,
+      "y": 378.48,
+      "rank": 7,
+      "capital": null,
+      "population": 159893
+    },
+    {
+      "name": "Nakhodka",
+      "region": "YAN",
+      "x": 441.01,
+      "y": 276.67,
+      "rank": 7,
+      "capital": null,
+      "population": 159551
+    },
+    {
+      "name": "Kovrov",
+      "region": "VLA",
+      "x": 170.7,
+      "y": 270.38,
+      "rank": 7,
+      "capital": null,
+      "population": 154224
+    },
+    {
+      "name": "Kerch",
+      "region": "UA-43",
+      "x": 26.29,
+      "y": 328.28,
+      "rank": 7,
+      "capital": null,
+      "population": 152195
+    },
+    {
+      "name": "Almetyevsk",
+      "region": "TA",
+      "x": 214.74,
+      "y": 344.18,
+      "rank": 7,
+      "capital": null,
+      "population": 140437
+    },
+    {
+      "name": "Serpukhov",
+      "region": "MOW",
+      "x": 137.1,
+      "y": 258.85,
+      "rank": 7,
+      "capital": null,
+      "population": 135584
+    },
+    {
+      "name": "Dimitrovgrad",
+      "region": "ULY",
+      "x": 192.77,
+      "y": 336.2,
+      "rank": 7,
+      "capital": null,
+      "population": 132226
+    },
+    {
+      "name": "Murom",
+      "region": "VLA",
+      "x": 165.84,
+      "y": 281.39,
+      "rank": 7,
+      "capital": null,
+      "population": 131287
+    },
+    {
+      "name": "Kamyshin",
+      "region": "VGG",
+      "x": 127.99,
+      "y": 351.64,
+      "rank": 7,
+      "capital": null,
+      "population": 128626
+    },
+    {
+      "name": "Neftekamsk",
+      "region": "BA",
+      "x": 236.51,
+      "y": 341.45,
+      "rank": 7,
+      "capital": null,
+      "population": 126805
+    },
+    {
+      "name": "Cherkessk",
+      "region": "KC",
+      "x": 48.14,
+      "y": 380.62,
+      "rank": 7,
+      "capital": "region",
+      "population": 116224
+    },
+    {
+      "name": "Obninsk",
+      "region": "KLU",
+      "x": 135.09,
+      "y": 252.56,
+      "rank": 7,
+      "capital": null,
+      "population": 107392
+    },
+    {
+      "name": "Derbent",
+      "region": "DA",
+      "x": 68.72,
+      "y": 447.71,
+      "rank": 7,
+      "capital": null,
+      "population": 105965
+    },
+    {
+      "name": "Yevpatoria",
+      "region": "UA-43",
+      "x": 7.36,
+      "y": 304.33,
+      "rank": 7,
+      "capital": null,
+      "population": 105223
+    },
+    {
+      "name": "Sarapul",
+      "region": "UD",
+      "x": 237.27,
+      "y": 335.08,
+      "rank": 7,
+      "capital": null,
+      "population": 101344
+    },
+    {
+      "name": "Glazov",
+      "region": "UD",
+      "x": 245.3,
+      "y": 312.46,
+      "rank": 7,
+      "capital": null,
+      "population": 100676
+    },
+    {
+      "name": "Tuapse",
+      "region": "KDA",
+      "x": 27.58,
+      "y": 358.86,
+      "rank": 7,
+      "capital": null,
+      "population": 99145
+    },
+    {
+      "name": "Votkinsk",
+      "region": "UD",
+      "x": 243.17,
+      "y": 330.19,
+      "rank": 7,
+      "capital": null,
+      "population": 98633
+    },
+    {
+      "name": "Balashov",
+      "region": "SAR",
+      "x": 130.05,
+      "y": 323.89,
+      "rank": 7,
+      "capital": null,
+      "population": 98107
+    },
+    {
+      "name": "Zheleznogorsk",
+      "region": "KRS",
+      "x": 99.01,
+      "y": 265.84,
+      "rank": 7,
+      "capital": null,
+      "population": 97900
+    },
+    {
+      "name": "Kuznetsk",
+      "region": "PNZ",
+      "x": 165.07,
+      "y": 330.45,
+      "rank": 7,
+      "capital": null,
+      "population": 95574
+    },
+    {
+      "name": "Novoaltaysk",
+      "region": "ALT",
+      "x": 425.85,
+      "y": 476.29,
+      "rank": 7,
+      "capital": null,
+      "population": 91386
+    },
+    {
+      "name": "Gatchina",
+      "region": "LEN",
+      "x": 161.27,
+      "y": 179.88,
+      "rank": 7,
+      "capital": null,
+      "population": 90486
+    },
+    {
+      "name": "Yegoryevsk",
+      "region": "MOW",
+      "x": 149.45,
+      "y": 265.02,
+      "rank": 7,
+      "capital": null,
+      "population": 89795
+    },
+    {
+      "name": "Yeysk",
+      "region": "KDA",
+      "x": 50.99,
+      "y": 331.36,
+      "rank": 7,
+      "capital": null,
+      "population": 87814
+    },
+    {
+      "name": "Buzuluk",
+      "region": "ORE",
+      "x": 195.38,
+      "y": 365.66,
+      "rank": 7,
+      "capital": null,
+      "population": 87714
+    },
+    {
+      "name": "Yurga",
+      "region": "KEM",
+      "x": 440.29,
+      "y": 447.09,
+      "rank": 7,
+      "capital": null,
+      "population": 84220
+    },
+    {
+      "name": "Troitsk",
+      "region": "CHE",
+      "x": 266.07,
+      "y": 396.56,
+      "rank": 7,
+      "capital": null,
+      "population": 82338
+    },
+    {
+      "name": "Kaspiysk",
+      "region": "DA",
+      "x": 71.8,
+      "y": 435.05,
+      "rank": 7,
+      "capital": null,
+      "population": 81752
+    },
+    {
+      "name": "Shadrinsk",
+      "region": "KGN",
+      "x": 293.95,
+      "y": 382.23,
+      "rank": 7,
+      "capital": null,
+      "population": 79479
+    },
+    {
+      "name": "Buynaksk",
+      "region": "DA",
+      "x": 67.72,
+      "y": 431.72,
+      "rank": 7,
+      "capital": null,
+      "population": 75800
+    },
+    {
+      "name": "Chusovoy",
+      "region": "PER",
+      "x": 275.46,
+      "y": 333.56,
+      "rank": 7,
+      "capital": null,
+      "population": 72113
+    },
+    {
+      "name": "Volsk",
+      "region": "SAR",
+      "x": 158.93,
+      "y": 345.37,
+      "rank": 7,
+      "capital": null,
+      "population": 70500
+    },
+    {
+      "name": "Belogorsk",
+      "region": "AMU",
+      "x": 791.07,
+      "y": 474.19,
+      "rank": 7,
+      "capital": null,
+      "population": 70203
+    },
+    {
+      "name": "Tuymazy",
+      "region": "BA",
+      "x": 220.27,
+      "y": 354.2,
+      "rank": 7,
+      "capital": null,
+      "population": 68829
+    },
+    {
+      "name": "Ishim",
+      "region": "TYU",
+      "x": 332.68,
+      "y": 402.51,
+      "rank": 7,
+      "capital": null,
+      "population": 67762
+    },
+    {
+      "name": "Kungur",
+      "region": "PER",
+      "x": 263.53,
+      "y": 339.28,
+      "rank": 7,
+      "capital": null,
+      "population": 66389
+    },
+    {
+      "name": "Klintsy",
+      "region": "BRY",
+      "x": 89.52,
+      "y": 240.94,
+      "rank": 7,
+      "capital": null,
+      "population": 66336
+    },
+    {
+      "name": "Polevskoy",
+      "region": "SVE",
+      "x": 274.93,
+      "y": 364.13,
+      "rank": 7,
+      "capital": null,
+      "population": 65770
+    },
+    {
+      "name": "Kumertau",
+      "region": "BA",
+      "x": 217.57,
+      "y": 384.15,
+      "rank": 7,
+      "capital": null,
+      "population": 65321
+    },
+    {
+      "name": "Tikhoretsk",
+      "region": "KDA",
+      "x": 52.75,
+      "y": 352.56,
+      "rank": 7,
+      "capital": null,
+      "population": 64387
+    },
+    {
+      "name": "Belebey",
+      "region": "BA",
+      "x": 218.69,
+      "y": 361.33,
+      "rank": 7,
+      "capital": null,
+      "population": 62582
+    },
+    {
+      "name": "Çistay",
+      "region": "TA",
+      "x": 209.3,
+      "y": 330.81,
+      "rank": 7,
+      "capital": null,
+      "population": 62200
+    },
+    {
+      "name": "Tikhvin",
+      "region": "LEN",
+      "x": 174.07,
+      "y": 199.01,
+      "rank": 7,
+      "capital": null,
+      "population": 62075
+    },
+    {
+      "name": "Labinsk",
+      "region": "KDA",
+      "x": 43.47,
+      "y": 367.57,
+      "rank": 7,
+      "capital": null,
+      "population": 61945
+    },
+    {
+      "name": "Vyksa",
+      "region": "NIZ",
+      "x": 163.89,
+      "y": 284.28,
+      "rank": 7,
+      "capital": null,
+      "population": 61664
+    },
+    {
+      "name": "Sibay",
+      "region": "BA",
+      "x": 235.78,
+      "y": 398.93,
+      "rank": 7,
+      "capital": null,
+      "population": 61590
+    },
+    {
+      "name": "Salsk",
+      "region": "ROS",
+      "x": 67.83,
+      "y": 357.63,
+      "rank": 7,
+      "capital": null,
+      "population": 61000
+    },
+    {
+      "name": "Mikhaylovka",
+      "region": "VGG",
+      "x": 115.07,
+      "y": 337.56,
+      "rank": 7,
+      "capital": null,
+      "population": 58898
+    },
+    {
+      "name": "Solnechnogorsk",
+      "region": "MOW",
+      "x": 148.91,
+      "y": 246.07,
+      "rank": 7,
+      "capital": null,
+      "population": 58891
+    },
+    {
+      "name": "Kogalym",
+      "region": "KHM",
+      "x": 397.34,
+      "y": 343.41,
+      "rank": 7,
+      "capital": null,
+      "population": 58192
+    },
+    {
+      "name": "Borovichi",
+      "region": "NGR",
+      "x": 161.21,
+      "y": 210.48,
+      "rank": 7,
+      "capital": null,
+      "population": 57887
+    },
+    {
+      "name": "Roslavl",
+      "region": "SMO",
+      "x": 105.89,
+      "y": 236.61,
+      "rank": 7,
+      "capital": null,
+      "population": 56971
+    },
+    {
+      "name": "Nizhnyaya Tura",
+      "region": "SVE",
+      "x": 289.61,
+      "y": 337.78,
+      "rank": 7,
+      "capital": null,
+      "population": 56084
+    },
+    {
+      "name": "Sayanogorsk",
+      "region": "KYA",
+      "x": 484.34,
+      "y": 491.55,
+      "rank": 7,
+      "capital": null,
+      "population": 55642
+    },
+    {
+      "name": "Gelendzhik",
+      "region": "KDA",
+      "x": 26.6,
+      "y": 347.15,
+      "rank": 7,
+      "capital": null,
+      "population": 55508
+    },
+    {
+      "name": "Vyazma",
+      "region": "SMO",
+      "x": 126.43,
+      "y": 236.72,
+      "rank": 7,
+      "capital": null,
+      "population": 55500
+    },
+    {
+      "name": "Livny",
+      "region": "ORL",
+      "x": 110.31,
+      "y": 280.16,
+      "rank": 7,
+      "capital": null,
+      "population": 52915
+    },
+    {
+      "name": "Krasnokamsk",
+      "region": "PER",
+      "x": 261.97,
+      "y": 327.05,
+      "rank": 7,
+      "capital": null,
+      "population": 52689
+    },
+    {
+      "name": "Kimry",
+      "region": "TVE",
+      "x": 158.11,
+      "y": 242.76,
+      "rank": 7,
+      "capital": null,
+      "population": 52070
+    },
+    {
+      "name": "Kyshtym",
+      "region": "CHE",
+      "x": 271.55,
+      "y": 374.09,
+      "rank": 7,
+      "capital": null,
+      "population": 50911
+    },
+    {
+      "name": "Otradny",
+      "region": "SAM",
+      "x": 195.2,
+      "y": 354.63,
+      "rank": 7,
+      "capital": null,
+      "population": 50127
+    },
+    {
+      "name": "Kanash",
+      "region": "CU",
+      "x": 193.16,
+      "y": 312.56,
+      "rank": 7,
+      "capital": null,
+      "population": 49886
+    },
+    {
+      "name": "Monchegorsk",
+      "region": "MUR",
+      "x": 267.32,
+      "y": 134.96,
+      "rank": 7,
+      "capital": null,
+      "population": 49868
+    },
+    {
+      "name": "Morshansk",
+      "region": "TAM",
+      "x": 142.52,
+      "y": 298.52,
+      "rank": 7,
+      "capital": null,
+      "population": 49350
+    },
+    {
+      "name": "Verkhnyaya Salda",
+      "region": "SVE",
+      "x": 289.42,
+      "y": 347.46,
+      "rank": 7,
+      "capital": null,
+      "population": 48992
+    },
+    {
+      "name": "Slobodskoy",
+      "region": "KIR",
+      "x": 237.92,
+      "y": 294.94,
+      "rank": 7,
+      "capital": null,
+      "population": 48962
+    },
+    {
+      "name": "Megion",
+      "region": "KHM",
+      "x": 402.02,
+      "y": 359.64,
+      "rank": 7,
+      "capital": null,
+      "population": 48691
+    },
+    {
+      "name": "Torzhok",
+      "region": "TVE",
+      "x": 149.93,
+      "y": 227.27,
+      "rank": 7,
+      "capital": null,
+      "population": 48546
+    },
+    {
+      "name": "Yamburg",
+      "region": "YAN",
+      "x": 429.4,
+      "y": 269.84,
+      "rank": 7,
+      "capital": null,
+      "population": 48488
+    },
+    {
+      "name": "Belaya Kalitva",
+      "region": "ROS",
+      "x": 81.41,
+      "y": 337.4,
+      "rank": 7,
+      "capital": null,
+      "population": 48098
+    },
+    {
+      "name": "Mtsensk",
+      "region": "ORL",
+      "x": 114.55,
+      "y": 266.43,
+      "rank": 7,
+      "capital": null,
+      "population": 47609
+    },
+    {
+      "name": "Gryazi",
+      "region": "LIP",
+      "x": 122.73,
+      "y": 294.92,
+      "rank": 7,
+      "capital": null,
+      "population": 47413
+    },
+    {
+      "name": "Mozhga",
+      "region": "UD",
+      "x": 227.92,
+      "y": 327.52,
+      "rank": 7,
+      "capital": null,
+      "population": 47270
+    },
+    {
+      "name": "Amursk",
+      "region": "KHA",
+      "x": 859.86,
+      "y": 448.13,
+      "rank": 7,
+      "capital": null,
+      "population": 46993
+    },
+    {
+      "name": "Safonovo",
+      "region": "SMO",
+      "x": 121.17,
+      "y": 230.25,
+      "rank": 7,
+      "capital": null,
+      "population": 46637
+    },
+    {
+      "name": "Alatyr",
+      "region": "CU",
+      "x": 182.05,
+      "y": 314.05,
+      "rank": 7,
+      "capital": null,
+      "population": 46427
+    },
+    {
+      "name": "Spassk-Dalny",
+      "region": "PRI",
+      "x": 865.42,
+      "y": 533.51,
+      "rank": 7,
+      "capital": null,
+      "population": 45900
+    },
+    {
+      "name": "Volkhov",
+      "region": "LEN",
+      "x": 173.11,
+      "y": 190.21,
+      "rank": 7,
+      "capital": null,
+      "population": 45673
+    },
+    {
+      "name": "Yefremov",
+      "region": "TUL",
+      "x": 120.78,
+      "y": 277.7,
+      "rank": 7,
+      "capital": null,
+      "population": 45497
+    },
+    {
+      "name": "Strezhevoy",
+      "region": "TOM",
+      "x": 409.6,
+      "y": 367.15,
+      "rank": 7,
+      "capital": null,
+      "population": 44784
+    },
+    {
+      "name": "Artyomovsky",
+      "region": "SVE",
+      "x": 292.19,
+      "y": 360.49,
+      "rank": 7,
+      "capital": null,
+      "population": 44689
+    },
+    {
+      "name": "Kamen-na-Obi",
+      "region": "ALT",
+      "x": 406.91,
+      "y": 465.66,
+      "rank": 7,
+      "capital": null,
+      "population": 44564
+    },
+    {
+      "name": "Timashyovsk",
+      "region": "KDA",
+      "x": 43.22,
+      "y": 345.4,
+      "rank": 7,
+      "capital": null,
+      "population": 44024
+    },
+    {
+      "name": "Dzhankoi",
+      "region": "UA-43",
+      "x": 18.8,
+      "y": 308.9,
+      "rank": 7,
+      "capital": null,
+      "population": 43879
+    },
+    {
+      "name": "Sovetsk",
+      "region": "KGD",
+      "x": 79.8,
+      "y": 153.21,
+      "rank": 7,
+      "capital": null,
+      "population": 43309
+    },
+    {
+      "name": "Mariinsk",
+      "region": "KEM",
+      "x": 462.88,
+      "y": 445.05,
+      "rank": 7,
+      "capital": null,
+      "population": 43122
+    },
+    {
+      "name": "Krasnoufimsk",
+      "region": "SVE",
+      "x": 261.43,
+      "y": 351.94,
+      "rank": 7,
+      "capital": null,
+      "population": 43121
+    },
+    {
+      "name": "Sokol",
+      "region": "VLG",
+      "x": 198.2,
+      "y": 237,
+      "rank": 7,
+      "capital": null,
+      "population": 42174
+    },
+    {
+      "name": "Yemanzhelinsk",
+      "region": "CHE",
+      "x": 269.06,
+      "y": 388.03,
+      "rank": 7,
+      "capital": null,
+      "population": 42023
+    },
+    {
+      "name": "Uryupinsk",
+      "region": "VGG",
+      "x": 115.53,
+      "y": 323.28,
+      "rank": 7,
+      "capital": null,
+      "population": 41644
+    },
+    {
+      "name": "Gai",
+      "region": "ORE",
+      "x": 224.69,
+      "y": 411.71,
+      "rank": 7,
+      "capital": null,
+      "population": 41619
+    },
+    {
+      "name": "Zelenokumsk",
+      "region": "STA",
+      "x": 61.18,
+      "y": 393.22,
+      "rank": 7,
+      "capital": null,
+      "population": 41306
+    },
+    {
+      "name": "Frolovo",
+      "region": "VGG",
+      "x": 114.55,
+      "y": 343.09,
+      "rank": 7,
+      "capital": null,
+      "population": 40882
+    },
+    {
+      "name": "Luga",
+      "region": "LEN",
+      "x": 150.37,
+      "y": 183.76,
+      "rank": 7,
+      "capital": null,
+      "population": 40114
+    },
+    {
+      "name": "Ob",
+      "region": "NVS",
+      "x": 421.68,
+      "y": 452.7,
+      "rank": 7,
+      "capital": null,
+      "population": 39949
+    },
+    {
+      "name": "Uray",
+      "region": "KHM",
+      "x": 329.18,
+      "y": 338.79,
+      "rank": 7,
+      "capital": null,
+      "population": 39878
+    },
+    {
+      "name": "Alexeyevka",
+      "region": "BEL",
+      "x": 96.44,
+      "y": 301.99,
+      "rank": 7,
+      "capital": null,
+      "population": 39848
+    },
+    {
+      "name": "Bogoroditsk",
+      "region": "TUL",
+      "x": 127.6,
+      "y": 272.55,
+      "rank": 7,
+      "capital": null,
+      "population": 39553
+    },
+    {
+      "name": "Tavda",
+      "region": "SVE",
+      "x": 317.88,
+      "y": 365.16,
+      "rank": 7,
+      "capital": null,
+      "population": 39480
+    },
+    {
+      "name": "Kirov",
+      "region": "KLU",
+      "x": 113.64,
+      "y": 245.27,
+      "rank": 7,
+      "capital": null,
+      "population": 39319
+    },
+    {
+      "name": "Vichuga",
+      "region": "IVA",
+      "x": 182.54,
+      "y": 266.29,
+      "rank": 7,
+      "capital": null,
+      "population": 39071
+    },
+    {
+      "name": "Asha",
+      "region": "CHE",
+      "x": 245.44,
+      "y": 367.29,
+      "rank": 7,
+      "capital": null,
+      "population": 38883
+    },
+    {
+      "name": "Guryevsk",
+      "region": "KEM",
+      "x": 444,
+      "y": 467.88,
+      "rank": 7,
+      "capital": null,
+      "population": 38757
+    },
+    {
+      "name": "Millerovo",
+      "region": "ROS",
+      "x": 87.19,
+      "y": 328.23,
+      "rank": 7,
+      "capital": null,
+      "population": 38527
+    },
+    {
+      "name": "Kasimov",
+      "region": "RYA",
+      "x": 156.08,
+      "y": 283.04,
+      "rank": 7,
+      "capital": null,
+      "population": 36663
+    },
+    {
+      "name": "Serdobsk",
+      "region": "PNZ",
+      "x": 145.2,
+      "y": 322.3,
+      "rank": 7,
+      "capital": null,
+      "population": 36652
+    },
+    {
+      "name": "Blagodarny",
+      "region": "STA",
+      "x": 65.4,
+      "y": 383.66,
+      "rank": 7,
+      "capital": null,
+      "population": 35995
+    },
+    {
+      "name": "Boyarka",
+      "region": "KYA",
+      "x": 542.86,
+      "y": 254.6,
+      "rank": 7,
+      "capital": null,
+      "population": 35968
+    },
+    {
+      "name": "Yalutorovsk",
+      "region": "TYU",
+      "x": 315.19,
+      "y": 385.27,
+      "rank": 7,
+      "capital": null,
+      "population": 35892
+    },
+    {
+      "name": "Valuyki",
+      "region": "BEL",
+      "x": 88.49,
+      "y": 301.51,
+      "rank": 7,
+      "capital": null,
+      "population": 35887
+    },
+    {
+      "name": "Sharya",
+      "region": "KOS",
+      "x": 211.41,
+      "y": 275.02,
+      "rank": 7,
+      "capital": null,
+      "population": 35532
+    },
+    {
+      "name": "Shumerlya",
+      "region": "CU",
+      "x": 187.35,
+      "y": 307.07,
+      "rank": 7,
+      "capital": null,
+      "population": 35230
+    },
+    {
+      "name": "Bezhetsk",
+      "region": "TVE",
+      "x": 165.25,
+      "y": 231.76,
+      "rank": 7,
+      "capital": null,
+      "population": 34736
+    },
+    {
+      "name": "Staraya Russa",
+      "region": "NGR",
+      "x": 147,
+      "y": 198.09,
+      "rank": 7,
+      "capital": null,
+      "population": 34303
+    },
+    {
+      "name": "Slavgorod",
+      "region": "ALT",
+      "x": 383.13,
+      "y": 469.56,
+      "rank": 7,
+      "capital": null,
+      "population": 34141
+    },
+    {
+      "name": "Rostov",
+      "region": "YAR",
+      "x": 170.66,
+      "y": 252.21,
+      "rank": 7,
+      "capital": null,
+      "population": 33803
+    },
+    {
+      "name": "Segezha",
+      "region": "KR",
+      "x": 223.89,
+      "y": 172.73,
+      "rank": 7,
+      "capital": null,
+      "population": 33354
+    },
+    {
+      "name": "Kotovsk",
+      "region": "TAM",
+      "x": 131.93,
+      "y": 304.14,
+      "rank": 7,
+      "capital": null,
+      "population": 33077
+    },
+    {
+      "name": "Omutninsk",
+      "region": "KIR",
+      "x": 247.6,
+      "y": 304.77,
+      "rank": 7,
+      "capital": null,
+      "population": 32800
+    },
+    {
+      "name": "Kudymkar",
+      "region": "PER",
+      "x": 263.9,
+      "y": 312.15,
+      "rank": 7,
+      "capital": "region",
+      "population": 32423
+    },
+    {
+      "name": "Barabinsk",
+      "region": "NVS",
+      "x": 390.94,
+      "y": 438.32,
+      "rank": 7,
+      "capital": null,
+      "population": 31508
+    },
+    {
+      "name": "Gubakha",
+      "region": "PER",
+      "x": 278.86,
+      "y": 326.3,
+      "rank": 7,
+      "capital": null,
+      "population": 31424
+    },
+    {
+      "name": "Sasovo",
+      "region": "RYA",
+      "x": 152.42,
+      "y": 291.32,
+      "rank": 7,
+      "capital": null,
+      "population": 31325
+    },
+    {
+      "name": "Karpinsk",
+      "region": "SVE",
+      "x": 299.45,
+      "y": 326.05,
+      "rank": 7,
+      "capital": null,
+      "population": 30807
+    },
+    {
+      "name": "Mednogorsk",
+      "region": "ORE",
+      "x": 218.26,
+      "y": 407.94,
+      "rank": 7,
+      "capital": null,
+      "population": 30676
+    },
+    {
+      "name": "Svetogorsk",
+      "region": "LEN",
+      "x": 175.54,
+      "y": 162.61,
+      "rank": 7,
+      "capital": null,
+      "population": 30115
+    },
+    {
+      "name": "Kirovsk",
+      "region": "MUR",
+      "x": 265.95,
+      "y": 140.94,
+      "rank": 7,
+      "capital": null,
+      "population": 29605
+    },
+    {
+      "name": "Sosnogorsk",
+      "region": "KO",
+      "x": 299.88,
+      "y": 260.84,
+      "rank": 7,
+      "capital": null,
+      "population": 29343
+    },
+    {
+      "name": "Karasuk",
+      "region": "NVS",
+      "x": 381.33,
+      "y": 458.54,
+      "rank": 7,
+      "capital": null,
+      "population": 28589
+    },
+    {
+      "name": "Kartaly",
+      "region": "CHE",
+      "x": 252.14,
+      "y": 404.67,
+      "rank": 7,
+      "capital": null,
+      "population": 28503
+    },
+    {
+      "name": "Zheleznogorsk-Ilimsky",
+      "region": "IRK",
+      "x": 584.72,
+      "y": 447.53,
+      "rank": 7,
+      "capital": null,
+      "population": 28456
+    },
+    {
+      "name": "Kotelnich",
+      "region": "KIR",
+      "x": 224.49,
+      "y": 289.92,
+      "rank": 7,
+      "capital": null,
+      "population": 28431
+    },
+    {
+      "name": "Nevyansk",
+      "region": "SVE",
+      "x": 283.14,
+      "y": 352.43,
+      "rank": 7,
+      "capital": null,
+      "population": 28170
+    },
+    {
+      "name": "Aleysk",
+      "region": "ALT",
+      "x": 413.44,
+      "y": 485.9,
+      "rank": 7,
+      "capital": null,
+      "population": 28019
+    },
+    {
+      "name": "Atkarsk",
+      "region": "SAR",
+      "x": 143.63,
+      "y": 332.45,
+      "rank": 7,
+      "capital": null,
+      "population": 27554
+    },
+    {
+      "name": "Sol-Iletsk",
+      "region": "ORE",
+      "x": 198.73,
+      "y": 397.33,
+      "rank": 7,
+      "capital": null,
+      "population": 27419
+    },
+    {
+      "name": "Asino",
+      "region": "TOM",
+      "x": 453.34,
+      "y": 432.27,
+      "rank": 7,
+      "capital": null,
+      "population": 27070
+    },
+    {
+      "name": "Pugachyov",
+      "region": "SAR",
+      "x": 167.17,
+      "y": 353.92,
+      "rank": 7,
+      "capital": null,
+      "population": 26690
+    },
+    {
+      "name": "Buy",
+      "region": "KOS",
+      "x": 193.96,
+      "y": 253.01,
+      "rank": 7,
+      "capital": null,
+      "population": 26486
+    },
+    {
+      "name": "Nelidovo",
+      "region": "TVE",
+      "x": 131.8,
+      "y": 219.55,
+      "rank": 7,
+      "capital": null,
+      "population": 25349
+    },
+    {
+      "name": "Tatarsk",
+      "region": "NVS",
+      "x": 373.06,
+      "y": 433.88,
+      "rank": 7,
+      "capital": null,
+      "population": 25150
+    },
+    {
+      "name": "Bologoye",
+      "region": "TVE",
+      "x": 155.8,
+      "y": 215.31,
+      "rank": 7,
+      "capital": null,
+      "population": 25142
+    },
+    {
+      "name": "Topki",
+      "region": "KEM",
+      "x": 444.36,
+      "y": 454.25,
+      "rank": 7,
+      "capital": null,
+      "population": 24672
+    },
+    {
+      "name": "Gusinoozyorsk",
+      "region": "BU",
+      "x": 609.36,
+      "y": 518.05,
+      "rank": 7,
+      "capital": null,
+      "population": 24083
+    },
+    {
+      "name": "Kalachinsk",
+      "region": "OMS",
+      "x": 362.14,
+      "y": 432.16,
+      "rank": 7,
+      "capital": null,
+      "population": 24059
+    },
+    {
+      "name": "Lgov",
+      "region": "KRS",
+      "x": 90.95,
+      "y": 270.02,
+      "rank": 7,
+      "capital": null,
+      "population": 23500
+    },
+    {
+      "name": "Tashtagol",
+      "region": "KEM",
+      "x": 455.2,
+      "y": 491.08,
+      "rank": 7,
+      "capital": null,
+      "population": 22779
+    },
+    {
+      "name": "Isilkul",
+      "region": "OMS",
+      "x": 338.02,
+      "y": 423.54,
+      "rank": 7,
+      "capital": null,
+      "population": 21136
+    },
+    {
+      "name": "Cherepanovo",
+      "region": "NVS",
+      "x": 424.05,
+      "y": 464.1,
+      "rank": 7,
+      "capital": null,
+      "population": 20125
+    },
+    {
+      "name": "Rayevsky",
+      "region": "BA",
+      "x": 223.13,
+      "y": 366.04,
+      "rank": 7,
+      "capital": null,
+      "population": 20060
+    },
+    {
+      "name": "Bikin",
+      "region": "KHA",
+      "x": 862.99,
+      "y": 500.25,
+      "rank": 7,
+      "capital": null,
+      "population": 19659
+    },
+    {
+      "name": "Ivdel",
+      "region": "SVE",
+      "x": 308.85,
+      "y": 317.04,
+      "rank": 7,
+      "capital": null,
+      "population": 19379
+    },
+    {
+      "name": "Uzhur",
+      "region": "KYA",
+      "x": 476.27,
+      "y": 459.53,
+      "rank": 7,
+      "capital": null,
+      "population": 19212
+    },
+    {
+      "name": "Kavalerovo",
+      "region": "PRI",
+      "x": 886.91,
+      "y": 526.64,
+      "rank": 7,
+      "capital": null,
+      "population": 18657
+    },
+    {
+      "name": "Kurtamysh",
+      "region": "KGN",
+      "x": 290.93,
+      "y": 399.12,
+      "rank": 7,
+      "capital": null,
+      "population": 17936
+    },
+    {
+      "name": "Sovetsk",
+      "region": "KIR",
+      "x": 220.88,
+      "y": 300.23,
+      "rank": 7,
+      "capital": null,
+      "population": 17869
+    },
+    {
+      "name": "Pallasovka",
+      "region": "VGG",
+      "x": 136.59,
+      "y": 361.32,
+      "rank": 7,
+      "capital": null,
+      "population": 17139
+    },
+    {
+      "name": "Nevelsk",
+      "region": "SAK",
+      "x": 924.33,
+      "y": 462.98,
+      "rank": 7,
+      "capital": null,
+      "population": 17000
+    },
+    {
+      "name": "Poronaysk",
+      "region": "SAK",
+      "x": 912.45,
+      "y": 428.26,
+      "rank": 7,
+      "capital": null,
+      "population": 16677
+    },
+    {
+      "name": "Kamenka",
+      "region": "PNZ",
+      "x": 151.68,
+      "y": 314.55,
+      "rank": 7,
+      "capital": null,
+      "population": 16560
+    },
+    {
+      "name": "Nikel",
+      "region": "MUR",
+      "x": 278.03,
+      "y": 113.48,
+      "rank": 7,
+      "capital": null,
+      "population": 15866
+    },
+    {
+      "name": "Kodinsk",
+      "region": "KYA",
+      "x": 547.84,
+      "y": 419.53,
+      "rank": 7,
+      "capital": null,
+      "population": 15670
+    },
+    {
+      "name": "Gornyak",
+      "region": "ALT",
+      "x": 397.53,
+      "y": 502.81,
+      "rank": 7,
+      "capital": null,
+      "population": 15668
+    },
+    {
+      "name": "Nerchinsk",
+      "region": "ZAB",
+      "x": 691.06,
+      "y": 493.69,
+      "rank": 7,
+      "capital": null,
+      "population": 15360
+    },
+    {
+      "name": "Kulunda",
+      "region": "ALT",
+      "x": 383.49,
+      "y": 475.74,
+      "rank": 7,
+      "capital": null,
+      "population": 15345
+    },
+    {
+      "name": "Vyazemsky",
+      "region": "KHA",
+      "x": 862.08,
+      "y": 489.56,
+      "rank": 7,
+      "capital": null,
+      "population": 15247
+    },
+    {
+      "name": "Chegdomyn",
+      "region": "KHA",
+      "x": 824.81,
+      "y": 454.35,
+      "rank": 7,
+      "capital": null,
+      "population": 14855
+    },
+    {
+      "name": "Golyshmanovo",
+      "region": "TYU",
+      "x": 326.9,
+      "y": 396.05,
+      "rank": 7,
+      "capital": null,
+      "population": 13424
+    },
+    {
+      "name": "Kirensk",
+      "region": "IRK",
+      "x": 612.19,
+      "y": 428.43,
+      "rank": 7,
+      "capital": null,
+      "population": 13308
+    },
+    {
+      "name": "Uyar",
+      "region": "KYA",
+      "x": 511.1,
+      "y": 457.09,
+      "rank": 7,
+      "capital": null,
+      "population": 13167
+    },
+    {
+      "name": "Nazyvayevsk",
+      "region": "OMS",
+      "x": 342.23,
+      "y": 415.89,
+      "rank": 7,
+      "capital": null,
+      "population": 12284
+    },
+    {
+      "name": "Cherlak",
+      "region": "OMS",
+      "x": 359.47,
+      "y": 444.15,
+      "rank": 7,
+      "capital": null,
+      "population": 12122
+    },
+    {
+      "name": "Dolinsk",
+      "region": "SAK",
+      "x": 925.91,
+      "y": 450.44,
+      "rank": 7,
+      "capital": null,
+      "population": 11989
+    },
+    {
+      "name": "Zmeinogorsk",
+      "region": "ALT",
+      "x": 403.97,
+      "y": 502.22,
+      "rank": 7,
+      "capital": null,
+      "population": 11514
+    },
+    {
+      "name": "Aginskoye",
+      "region": "ZAB",
+      "x": 677.26,
+      "y": 509.68,
+      "rank": 7,
+      "capital": "region",
+      "population": 11491
+    },
+    {
+      "name": "Kirs",
+      "region": "KIR",
+      "x": 253.93,
+      "y": 298.44,
+      "rank": 7,
+      "capital": null,
+      "population": 11385
+    },
+    {
+      "name": "Kargat",
+      "region": "NVS",
+      "x": 404.39,
+      "y": 444.95,
+      "rank": 7,
+      "capital": null,
+      "population": 10881
+    },
+    {
+      "name": "Taksimo",
+      "region": "BU",
+      "x": 664.48,
+      "y": 439.42,
+      "rank": 7,
+      "capital": null,
+      "population": 10359
+    },
+    {
+      "name": "Olyokminsk",
+      "region": "SA",
+      "x": 686.97,
+      "y": 374.36,
+      "rank": 7,
+      "capital": null,
+      "population": 10000
+    },
+    {
+      "name": "Pokrovsk",
+      "region": "SA",
+      "x": 735.03,
+      "y": 341.11,
+      "rank": 7,
+      "capital": null,
+      "population": 9763
+    },
+    {
+      "name": "Biryusinsk",
+      "region": "IRK",
+      "x": 537.64,
+      "y": 456.61,
+      "rank": 7,
+      "capital": null,
+      "population": 9583
+    },
+    {
+      "name": "Dombarovsky",
+      "region": "ORE",
+      "x": 226.58,
+      "y": 425.09,
+      "rank": 7,
+      "capital": null,
+      "population": 9556
+    },
+    {
+      "name": "Shira",
+      "region": "KK",
+      "x": 475.56,
+      "y": 470.99,
+      "rank": 7,
+      "capital": null,
+      "population": 9358
+    },
+    {
+      "name": "Igarka",
+      "region": "KYA",
+      "x": 485,
+      "y": 292.85,
+      "rank": 7,
+      "capital": null,
+      "population": 7470
+    },
+    {
+      "name": "Timiryazevskoe",
+      "region": "TOM",
+      "x": 442.78,
+      "y": 436.93,
+      "rank": 7,
+      "capital": null,
+      "population": 7182
+    },
+    {
+      "name": "Makarov",
+      "region": "SAK",
+      "x": 915.4,
+      "y": 436.43,
+      "rank": 7,
+      "capital": null,
+      "population": 6663
+    },
+    {
+      "name": "Verkhnevilyuysk",
+      "region": "SA",
+      "x": 674.41,
+      "y": 336.21,
+      "rank": 7,
+      "capital": null,
+      "population": 6341
+    },
+    {
+      "name": "Bilibino",
+      "region": "CHU",
+      "x": 837.55,
+      "y": 137.15,
+      "rank": 7,
+      "capital": null,
+      "population": 5757
+    },
+    {
+      "name": "Artyomovsk",
+      "region": "KYA",
+      "x": 502.49,
+      "y": 476.33,
+      "rank": 7,
+      "capital": null,
+      "population": 4948
+    },
+    {
+      "name": "Vitim",
+      "region": "SA",
+      "x": 639.43,
+      "y": 401.16,
+      "rank": 7,
+      "capital": null,
+      "population": 3843
+    },
+    {
+      "name": "Krasnogorsk",
+      "region": "SAK",
+      "x": 911.63,
+      "y": 442.15,
+      "rank": 7,
+      "capital": null,
+      "population": 3304
+    },
+    {
+      "name": "Saranpaul",
+      "region": "KHM",
+      "x": 338.77,
+      "y": 278.66,
+      "rank": 7,
+      "capital": null,
+      "population": 2985
+    },
+    {
+      "name": "Severo-Kurilsk",
+      "region": "SAK",
+      "x": 982.81,
+      "y": 336.49,
+      "rank": 7,
+      "capital": null,
+      "population": 2422
+    },
+    {
+      "name": "Egvekinot",
+      "region": "CHU",
+      "x": 892.18,
+      "y": 80.37,
+      "rank": 7,
+      "capital": null,
+      "population": 2248
+    },
+    {
+      "name": "Beringovsky",
+      "region": "CHU",
+      "x": 930.55,
+      "y": 104.42,
+      "rank": 7,
+      "capital": null,
+      "population": 1861
+    },
+    {
+      "name": "Ust-Kuyga",
+      "region": "SA",
+      "x": 712.36,
+      "y": 221.65,
+      "rank": 7,
+      "capital": null,
+      "population": 1517
+    },
+    {
+      "name": "Chelyuskin",
+      "region": "KYA",
+      "x": 567.23,
+      "y": 159.54,
+      "rank": 7,
+      "capital": null,
+      "population": 885
+    },
+    {
+      "name": "Mys Shmidta",
+      "region": "CHU",
+      "x": 858.23,
+      "y": 69.42,
+      "rank": 7,
+      "capital": null,
+      "population": 492
+    },
+    {
+      "name": "Korf",
+      "region": "KAM",
+      "x": 923.89,
+      "y": 197.66,
+      "rank": 7,
+      "capital": null,
+      "population": 400
+    },
+    {
+      "name": "Bugrino",
+      "region": "NEN",
+      "x": 328.52,
+      "y": 191.12,
+      "rank": 7,
+      "capital": null,
+      "population": 300
+    },
+    {
+      "name": "Vikhorevka",
+      "region": "IRK",
+      "x": 563.48,
+      "y": 454.99,
+      "rank": 7,
+      "capital": null,
+      "population": 166
+    },
+    {
+      "name": "Progress",
+      "region": "AMU",
+      "x": 806.91,
+      "y": 484.4,
+      "rank": 7,
+      "capital": null,
+      "population": 146
+    },
+    {
+      "name": "Mukhomornoye",
+      "region": "CHU",
+      "x": 874.8,
+      "y": 116.96,
+      "rank": 7,
+      "capital": null,
+      "population": 100
+    },
+    {
+      "name": "Agapa",
+      "region": "KYA",
+      "x": 507.36,
+      "y": 241.69,
+      "rank": 7,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Bol’sheretsk",
+      "region": "KAM",
+      "x": 966.5,
+      "y": 318.93,
+      "rank": 7,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Ilpyrskoye",
+      "region": "KAM",
+      "x": 921.86,
+      "y": 209.58,
+      "rank": 7,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Karamken",
+      "region": "MAG",
+      "x": 863.14,
+      "y": 273.9,
+      "rank": 7,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Laryak",
+      "region": "KHM",
+      "x": 427.76,
+      "y": 367.82,
+      "rank": 7,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Natara",
+      "region": "SA",
+      "x": 671.06,
+      "y": 265.7,
+      "rank": 7,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Nyukzha",
+      "region": "AMU",
+      "x": 711.95,
+      "y": 423.22,
+      "rank": 7,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Peregrebnoye",
+      "region": "KHM",
+      "x": 350.43,
+      "y": 306.52,
+      "rank": 7,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Podkamennaya Tunguska",
+      "region": "KYA",
+      "x": 491.24,
+      "y": 375.25,
+      "rank": 7,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Shalaurova Island",
+      "region": "SA",
+      "x": 715.26,
+      "y": 167.09,
+      "rank": 7,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Siglan",
+      "region": "MAG",
+      "x": 880.37,
+      "y": 279.26,
+      "rank": 7,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Strelka",
+      "region": "MAG",
+      "x": 852.21,
+      "y": 252.74,
+      "rank": 7,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Trofimovskaya",
+      "region": "SA",
+      "x": 662.84,
+      "y": 207.39,
+      "rank": 7,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Tukchi",
+      "region": "KHA",
+      "x": 824.36,
+      "y": 354.99,
+      "rank": 7,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Tunguskhaya",
+      "region": "SA",
+      "x": 694.98,
+      "y": 307.81,
+      "rank": 7,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Ulkan",
+      "region": "IRK",
+      "x": 612.85,
+      "y": 454.27,
+      "rank": 7,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Utkholok",
+      "region": "KAM",
+      "x": 918.35,
+      "y": 268,
+      "rank": 7,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Varnek",
+      "region": "NEN",
+      "x": 376.64,
+      "y": 214,
+      "rank": 7,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Yessey",
+      "region": "KYA",
+      "x": 564.92,
+      "y": 285.79,
+      "rank": 7,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Zhilinda",
+      "region": "SA",
+      "x": 618.62,
+      "y": 256.64,
+      "rank": 7,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Naberezhnye Chelny",
+      "region": "TA",
+      "x": 222.61,
+      "y": 335.99,
+      "rank": 8,
+      "capital": null,
+      "population": 461086
+    },
+    {
+      "name": "Taganrog",
+      "region": "ROS",
+      "x": 60.49,
+      "y": 331.91,
+      "rank": 8,
+      "capital": null,
+      "population": 279056
+    },
+    {
+      "name": "Kolpino",
+      "region": "SPE",
+      "x": 164.91,
+      "y": 181.83,
+      "rank": 8,
+      "capital": null,
+      "population": 225801
+    },
+    {
+      "name": "Syzran",
+      "region": "SAM",
+      "x": 176.31,
+      "y": 340.82,
+      "rank": 8,
+      "capital": null,
+      "population": 189338
+    },
+    {
+      "name": "Novocherkassk",
+      "region": "ROS",
+      "x": 69.18,
+      "y": 338.85,
+      "rank": 8,
+      "capital": null,
+      "population": 166974
+    },
+    {
+      "name": "Maykop",
+      "region": "AD",
+      "x": 39.35,
+      "y": 362.97,
+      "rank": 8,
+      "capital": "region",
+      "population": 158451
+    },
+    {
+      "name": "Novokuybyshevsk",
+      "region": "SAM",
+      "x": 184.29,
+      "y": 349.4,
+      "rank": 8,
+      "capital": null,
+      "population": 152334
+    },
+    {
+      "name": "Kolomna",
+      "region": "MOW",
+      "x": 145,
+      "y": 266.05,
+      "rank": 8,
+      "capital": null,
+      "population": 147690
+    },
+    {
+      "name": "Pyatigorsk",
+      "region": "STA",
+      "x": 52.63,
+      "y": 390.29,
+      "rank": 8,
+      "capital": null,
+      "population": 142865
+    },
+    {
+      "name": "Arzamas",
+      "region": "NIZ",
+      "x": 172.88,
+      "y": 293.1,
+      "rank": 8,
+      "capital": null,
+      "population": 142597
+    },
+    {
+      "name": "Orekhovo-Zuyevo",
+      "region": "MOW",
+      "x": 153.94,
+      "y": 261.11,
+      "rank": 8,
+      "capital": null,
+      "population": 140247
+    },
+    {
+      "name": "Nevinnomyssk",
+      "region": "STA",
+      "x": 50.88,
+      "y": 376.89,
+      "rank": 8,
+      "capital": null,
+      "population": 134380
+    },
+    {
+      "name": "Kislovodsk",
+      "region": "STA",
+      "x": 48.45,
+      "y": 389,
+      "rank": 8,
+      "capital": null,
+      "population": 132771
+    },
+    {
+      "name": "Novomoskovsk",
+      "region": "TUL",
+      "x": 131.01,
+      "y": 271.74,
+      "rank": 8,
+      "capital": null,
+      "population": 130982
+    },
+    {
+      "name": "Yelets",
+      "region": "LIP",
+      "x": 116.43,
+      "y": 284.83,
+      "rank": 8,
+      "capital": null,
+      "population": 115919
+    },
+    {
+      "name": "Nefteyugansk",
+      "region": "KHM",
+      "x": 381.18,
+      "y": 350.72,
+      "rank": 8,
+      "capital": null,
+      "population": 112632
+    },
+    {
+      "name": "Bataysk",
+      "region": "ROS",
+      "x": 64.2,
+      "y": 338.79,
+      "rank": 8,
+      "capital": null,
+      "population": 109962
+    },
+    {
+      "name": "Sergiyev Posad",
+      "region": "MOW",
+      "x": 155.81,
+      "y": 252.05,
+      "rank": 8,
+      "capital": null,
+      "population": 109252
+    },
+    {
+      "name": "Leninsk-Kuznetsky",
+      "region": "KEM",
+      "x": 446.81,
+      "y": 463.43,
+      "rank": 8,
+      "capital": null,
+      "population": 109023
+    },
+    {
+      "name": "Oktyabrsky",
+      "region": "BA",
+      "x": 217.59,
+      "y": 354.54,
+      "rank": 8,
+      "capital": null,
+      "population": 108200
+    },
+    {
+      "name": "Chapayevsk",
+      "region": "SAM",
+      "x": 181.77,
+      "y": 349.76,
+      "rank": 8,
+      "capital": null,
+      "population": 107164
+    },
+    {
+      "name": "Novotroitsk",
+      "region": "ORE",
+      "x": 221.64,
+      "y": 414.13,
+      "rank": 8,
+      "capital": null,
+      "population": 106186
+    },
+    {
+      "name": "Kiselyovsk",
+      "region": "KEM",
+      "x": 448.61,
+      "y": 473.01,
+      "rank": 8,
+      "capital": null,
+      "population": 104000
+    },
+    {
+      "name": "Solikamsk",
+      "region": "PER",
+      "x": 280.82,
+      "y": 314.1,
+      "rank": 8,
+      "capital": null,
+      "population": 100812
+    },
+    {
+      "name": "Zelenodolsk",
+      "region": "TA",
+      "x": 201.97,
+      "y": 314.79,
+      "rank": 8,
+      "capital": null,
+      "population": 99600
+    },
+    {
+      "name": "Novoshakhtinsk",
+      "region": "ROS",
+      "x": 72,
+      "y": 334.73,
+      "rank": 8,
+      "capital": null,
+      "population": 99478
+    },
+    {
+      "name": "Michurinsk",
+      "region": "TAM",
+      "x": 129.95,
+      "y": 295.11,
+      "rank": 8,
+      "capital": null,
+      "population": 93499
+    },
+    {
+      "name": "Kineshma",
+      "region": "IVA",
+      "x": 186.1,
+      "y": 265.2,
+      "rank": 8,
+      "capital": null,
+      "population": 92983
+    },
+    {
+      "name": "Bugulma",
+      "region": "TA",
+      "x": 214.44,
+      "y": 350.17,
+      "rank": 8,
+      "capital": null,
+      "population": 91900
+    },
+    {
+      "name": "Kirovo-Chepetsk",
+      "region": "KIR",
+      "x": 235.65,
+      "y": 295.89,
+      "rank": 8,
+      "capital": null,
+      "population": 90252
+    },
+    {
+      "name": "Shchyokino",
+      "region": "TUL",
+      "x": 127.39,
+      "y": 266.76,
+      "rank": 8,
+      "capital": null,
+      "population": 86088
+    },
+    {
+      "name": "Anzhero-Sudzhensk",
+      "region": "KEM",
+      "x": 449.86,
+      "y": 444.27,
+      "rank": 8,
+      "capital": null,
+      "population": 83692
+    },
+    {
+      "name": "Asbest",
+      "region": "SVE",
+      "x": 287.13,
+      "y": 362.76,
+      "rank": 8,
+      "capital": null,
+      "population": 81248
+    },
+    {
+      "name": "Klin",
+      "region": "MOW",
+      "x": 149.48,
+      "y": 243.06,
+      "rank": 8,
+      "capital": null,
+      "population": 80778
+    },
+    {
+      "name": "Kropotkin",
+      "region": "KDA",
+      "x": 51.11,
+      "y": 359.38,
+      "rank": 8,
+      "capital": null,
+      "population": 79599
+    },
+    {
+      "name": "Kamensk-Shakhtinsky",
+      "region": "ROS",
+      "x": 79.91,
+      "y": 332.36,
+      "rank": 8,
+      "capital": null,
+      "population": 75814
+    },
+    {
+      "name": "Georgiyevsk",
+      "region": "STA",
+      "x": 55.94,
+      "y": 392.43,
+      "rank": 8,
+      "capital": null,
+      "population": 72649
+    },
+    {
+      "name": "Chernogorsk",
+      "region": "KK",
+      "x": 484.24,
+      "y": 481.32,
+      "rank": 8,
+      "capital": null,
+      "population": 71582
+    },
+    {
+      "name": "Borisoglebsk",
+      "region": "VOR",
+      "x": 122.22,
+      "y": 318.61,
+      "rank": 8,
+      "capital": null,
+      "population": 68597
+    },
+    {
+      "name": "Apatity",
+      "region": "MUR",
+      "x": 264.77,
+      "y": 140.01,
+      "rank": 8,
+      "capital": null,
+      "population": 66907
+    },
+    {
+      "name": "Aleksin",
+      "region": "TUL",
+      "x": 130.96,
+      "y": 260.07,
+      "rank": 8,
+      "capital": null,
+      "population": 66885
+    },
+    {
+      "name": "Leninogorsk",
+      "region": "TA",
+      "x": 212.79,
+      "y": 347.94,
+      "rank": 8,
+      "capital": null,
+      "population": 66263
+    },
+    {
+      "name": "Krasnoturyinsk",
+      "region": "SVE",
+      "x": 300.57,
+      "y": 326.78,
+      "rank": 8,
+      "capital": null,
+      "population": 64878
+    },
+    {
+      "name": "Rzhev",
+      "region": "TVE",
+      "x": 138.49,
+      "y": 229.1,
+      "rank": 8,
+      "capital": null,
+      "population": 63414
+    },
+    {
+      "name": "Balakhna",
+      "region": "NIZ",
+      "x": 183.04,
+      "y": 282.04,
+      "rank": 8,
+      "capital": null,
+      "population": 63083
+    },
+    {
+      "name": "Iskitim",
+      "region": "NVS",
+      "x": 424.84,
+      "y": 458.42,
+      "rank": 8,
+      "capital": null,
+      "population": 61827
+    },
+    {
+      "name": "Shuya",
+      "region": "IVA",
+      "x": 176.07,
+      "y": 266.29,
+      "rank": 8,
+      "capital": null,
+      "population": 60705
+    },
+    {
+      "name": "Arsenyev",
+      "region": "PRI",
+      "x": 872.3,
+      "y": 536.58,
+      "rank": 8,
+      "capital": null,
+      "population": 58700
+    },
+    {
+      "name": "Severomorsk",
+      "region": "MUR",
+      "x": 282.09,
+      "y": 129.1,
+      "rank": 8,
+      "capital": null,
+      "population": 53921
+    },
+    {
+      "name": "Vyshny Volochyok",
+      "region": "TVE",
+      "x": 154.53,
+      "y": 220.55,
+      "rank": 8,
+      "capital": null,
+      "population": 53800
+    },
+    {
+      "name": "Buguruslan",
+      "region": "ORE",
+      "x": 204.32,
+      "y": 357.5,
+      "rank": 8,
+      "capital": null,
+      "population": 53511
+    },
+    {
+      "name": "Ruzayevka",
+      "region": "MO",
+      "x": 165.22,
+      "y": 311.82,
+      "rank": 8,
+      "capital": null,
+      "population": 49311
+    },
+    {
+      "name": "Apsheronsk",
+      "region": "KDA",
+      "x": 35.44,
+      "y": 361.12,
+      "rank": 8,
+      "capital": null,
+      "population": 45876
+    },
+    {
+      "name": "Mozdok",
+      "region": "SE",
+      "x": 59.72,
+      "y": 404.96,
+      "rank": 8,
+      "capital": null,
+      "population": 45702
+    },
+    {
+      "name": "Shebekino",
+      "region": "BEL",
+      "x": 84.56,
+      "y": 291.39,
+      "rank": 8,
+      "capital": null,
+      "population": 45194
+    },
+    {
+      "name": "Chernyakhovsk",
+      "region": "KGD",
+      "x": 74.04,
+      "y": 155.02,
+      "rank": 8,
+      "capital": null,
+      "population": 45187
+    },
+    {
+      "name": "Alapayevsk",
+      "region": "SVE",
+      "x": 294.69,
+      "y": 354.27,
+      "rank": 8,
+      "capital": null,
+      "population": 44000
+    },
+    {
+      "name": "Novozybkov",
+      "region": "BRY",
+      "x": 85.55,
+      "y": 240.47,
+      "rank": 8,
+      "capital": null,
+      "population": 43534
+    },
+    {
+      "name": "Partizansk",
+      "region": "PRI",
+      "x": 877.71,
+      "y": 549.6,
+      "rank": 8,
+      "capital": null,
+      "population": 42489
+    },
+    {
+      "name": "Uglich",
+      "region": "YAR",
+      "x": 169.57,
+      "y": 243.23,
+      "rank": 8,
+      "capital": null,
+      "population": 37732
+    },
+    {
+      "name": "Slantsy",
+      "region": "LEN",
+      "x": 148.96,
+      "y": 170.56,
+      "rank": 8,
+      "capital": null,
+      "population": 36209
+    },
+    {
+      "name": "Severouralsk",
+      "region": "SVE",
+      "x": 302.24,
+      "y": 321.41,
+      "rank": 8,
+      "capital": null,
+      "population": 36138
+    },
+    {
+      "name": "Verkhny Ufaley",
+      "region": "CHE",
+      "x": 272.3,
+      "y": 368.56,
+      "rank": 8,
+      "capital": null,
+      "population": 33879
+    },
+    {
+      "name": "Zaozyorny",
+      "region": "KYA",
+      "x": 514.19,
+      "y": 455.27,
+      "rank": 8,
+      "capital": null,
+      "population": 33865
+    },
+    {
+      "name": "Dyatkovo",
+      "region": "BRY",
+      "x": 108.14,
+      "y": 249.23,
+      "rank": 8,
+      "capital": null,
+      "population": 33527
+    },
+    {
+      "name": "Kholmsk",
+      "region": "SAK",
+      "x": 922.84,
+      "y": 457.87,
+      "rank": 8,
+      "capital": null,
+      "population": 32911
+    },
+    {
+      "name": "Dalnerechensk",
+      "region": "PRI",
+      "x": 864.44,
+      "y": 513.4,
+      "rank": 8,
+      "capital": null,
+      "population": 28300
+    },
+    {
+      "name": "Bakal",
+      "region": "CHE",
+      "x": 254.56,
+      "y": 374.83,
+      "rank": 8,
+      "capital": null,
+      "population": 26559
+    },
+    {
+      "name": "Bogotol",
+      "region": "KYA",
+      "x": 475.88,
+      "y": 447.21,
+      "rank": 8,
+      "capital": null,
+      "population": 23622
+    },
+    {
+      "name": "Kizel",
+      "region": "PER",
+      "x": 280.7,
+      "y": 324.35,
+      "rank": 8,
+      "capital": null,
+      "population": 22135
+    },
+    {
+      "name": "Toguchin",
+      "region": "NVS",
+      "x": 434.98,
+      "y": 452.69,
+      "rank": 8,
+      "capital": null,
+      "population": 21886
+    },
+    {
+      "name": "Petrovsk-Zabaykalsky",
+      "region": "ZAB",
+      "x": 629.07,
+      "y": 515.74,
+      "rank": 8,
+      "capital": null,
+      "population": 20889
+    },
+    {
+      "name": "Krasnouralsk",
+      "region": "SVE",
+      "x": 288.81,
+      "y": 342.07,
+      "rank": 8,
+      "capital": null,
+      "population": 20571
+    },
+    {
+      "name": "Polyarny",
+      "region": "MUR",
+      "x": 283.68,
+      "y": 128.23,
+      "rank": 8,
+      "capital": null,
+      "population": 19200
+    },
+    {
+      "name": "Vanino",
+      "region": "KHA",
+      "x": 893.09,
+      "y": 444.87,
+      "rank": 8,
+      "capital": null,
+      "population": 18618
+    },
+    {
+      "name": "Abaza",
+      "region": "KK",
+      "x": 472.97,
+      "y": 495.75,
+      "rank": 8,
+      "capital": null,
+      "population": 18094
+    },
+    {
+      "name": "Kirsanov",
+      "region": "TAM",
+      "x": 139.02,
+      "y": 311.22,
+      "rank": 8,
+      "capital": null,
+      "population": 17975
+    },
+    {
+      "name": "Plast",
+      "region": "CHE",
+      "x": 263.02,
+      "y": 390.25,
+      "rank": 8,
+      "capital": null,
+      "population": 17050
+    },
+    {
+      "name": "Kupino",
+      "region": "NVS",
+      "x": 378.57,
+      "y": 448.44,
+      "rank": 8,
+      "capital": null,
+      "population": 16333
+    },
+    {
+      "name": "Nikolayevsk",
+      "region": "VGG",
+      "x": 127.5,
+      "y": 352.41,
+      "rank": 8,
+      "capital": null,
+      "population": 16044
+    },
+    {
+      "name": "Shilka",
+      "region": "ZAB",
+      "x": 687.31,
+      "y": 496.57,
+      "rank": 8,
+      "capital": null,
+      "population": 14132
+    },
+    {
+      "name": "Uglegorsk",
+      "region": "SAK",
+      "x": 906.2,
+      "y": 435.61,
+      "rank": 8,
+      "capital": null,
+      "population": 12669
+    },
+    {
+      "name": "Severny",
+      "region": "KO",
+      "x": 377.91,
+      "y": 249.19,
+      "rank": 8,
+      "capital": null,
+      "population": 11562
+    },
+    {
+      "name": "Obluchye",
+      "region": "YEV",
+      "x": 823.14,
+      "y": 487.84,
+      "rank": 8,
+      "capital": null,
+      "population": 10000
+    },
+    {
+      "name": "Mundybash",
+      "region": "KEM",
+      "x": 451.91,
+      "y": 484.33,
+      "rank": 8,
+      "capital": null,
+      "population": 5870
+    },
+    {
+      "name": "Lavrentiya",
+      "region": "CHU",
+      "x": 914.81,
+      "y": 40.38,
+      "rank": 8,
+      "capital": null,
+      "population": 1242
+    },
+    {
+      "name": "Mikhalkino",
+      "region": "SA",
+      "x": 808.21,
+      "y": 146.52,
+      "rank": 8,
+      "capital": null,
+      "population": 570
+    },
+    {
+      "name": "Oymyakon",
+      "region": "SA",
+      "x": 794.14,
+      "y": 275.1,
+      "rank": 8,
+      "capital": null,
+      "population": 500
+    },
+    {
+      "name": "Sherlovaya Gora",
+      "region": "ZAB",
+      "x": 693.95,
+      "y": 513.77,
+      "rank": 8,
+      "capital": null,
+      "population": 411
+    },
+    {
+      "name": "Put’ Lenina",
+      "region": "SA",
+      "x": 592.83,
+      "y": 283.25,
+      "rank": 8,
+      "capital": null,
+      "population": 298
+    },
+    {
+      "name": "Enurmino",
+      "region": "CHU",
+      "x": 895.67,
+      "y": 40.15,
+      "rank": 8,
+      "capital": null,
+      "population": 297
+    },
+    {
+      "name": "Gubkin",
+      "region": "BEL",
+      "x": 96.54,
+      "y": 287.93,
+      "rank": 8,
+      "capital": null,
+      "population": 272
+    },
+    {
+      "name": "Bunge Land",
+      "region": "SA",
+      "x": 698.24,
+      "y": 151.21,
+      "rank": 8,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Khorgo",
+      "region": "SA",
+      "x": 607.64,
+      "y": 212.24,
+      "rank": 8,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Omtschak",
+      "region": "MAG",
+      "x": 834.28,
+      "y": 273.92,
+      "rank": 8,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Pakhachi",
+      "region": "KAM",
+      "x": 932.32,
+      "y": 177.69,
+      "rank": 8,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Zvëzdnyj",
+      "region": "CHU",
+      "x": 832.25,
+      "y": 60.06,
+      "rank": 8,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Nazran",
+      "region": "IN",
+      "x": 55.34,
+      "y": 410.71,
+      "rank": 9,
+      "capital": "region",
+      "population": 93357
+    },
+    {
+      "name": "Ust-Ordynsky",
+      "region": "IRK",
+      "x": 592.6,
+      "y": 498.21,
+      "rank": 9,
+      "capital": "region",
+      "population": 14538
+    }
+  ]
+}

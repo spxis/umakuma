@@ -1,0 +1,723 @@
+{
+  "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_populated_places.geojson (Natural Earth populated places), fitted to 1000x1400",
+  "updatedAt": "2026-09-04T09:40:57.672Z",
+  "country": "TH",
+  "countryName": "Thailand",
+  "viewBox": "0 0 1000 1400",
+  "width": 1000,
+  "height": 1400,
+  "totalCities": 79,
+  "cities": [
+    {
+      "name": "Bangkok",
+      "region": "10",
+      "x": 407.17,
+      "y": 632.6,
+      "rank": 1,
+      "capital": "country",
+      "population": 6704000
+    },
+    {
+      "name": "Chiang Mai",
+      "region": "50",
+      "x": 271.02,
+      "y": 154.7,
+      "rank": 4,
+      "capital": "region",
+      "population": 397211
+    },
+    {
+      "name": "Nakhon Ratchasima",
+      "region": "30",
+      "x": 552.1,
+      "y": 514.48,
+      "rank": 4,
+      "capital": "region",
+      "population": 334984
+    },
+    {
+      "name": "Surat Thani",
+      "region": "84",
+      "x": 296.86,
+      "y": 1067.06,
+      "rank": 4,
+      "capital": "region",
+      "population": 157627
+    },
+    {
+      "name": "Hat Yai",
+      "region": "90",
+      "x": 402.14,
+      "y": 1270.87,
+      "rank": 6,
+      "capital": null,
+      "population": 317954
+    },
+    {
+      "name": "Ubon Ratchathani",
+      "region": "34",
+      "x": 801.04,
+      "y": 488.05,
+      "rank": 6,
+      "capital": "region",
+      "population": 273893
+    },
+    {
+      "name": "Khon Kaen",
+      "region": "40",
+      "x": 617.58,
+      "y": 379.82,
+      "rank": 6,
+      "capital": "region",
+      "population": 251056
+    },
+    {
+      "name": "Nakhon Si Thammarat",
+      "region": "80",
+      "x": 355.44,
+      "y": 1138.16,
+      "rank": 6,
+      "capital": "region",
+      "population": 232335
+    },
+    {
+      "name": "Phuket",
+      "region": "83",
+      "x": 206.58,
+      "y": 1186.98,
+      "rank": 6,
+      "capital": "region",
+      "population": 141618
+    },
+    {
+      "name": "Nakhon Sawan",
+      "region": "60",
+      "x": 367.12,
+      "y": 448.41,
+      "rank": 6,
+      "capital": "region",
+      "population": 111915
+    },
+    {
+      "name": "Songkhla",
+      "region": "90",
+      "x": 410.47,
+      "y": 1250.7,
+      "rank": 6,
+      "capital": "region",
+      "population": 48616
+    },
+    {
+      "name": "Samut Prakan",
+      "region": "11",
+      "x": 416.03,
+      "y": 646.32,
+      "rank": 7,
+      "capital": "region",
+      "population": 388920
+    },
+    {
+      "name": "Nonthaburi",
+      "region": "12",
+      "x": 404.31,
+      "y": 624.88,
+      "rank": 7,
+      "capital": "region",
+      "population": 258550
+    },
+    {
+      "name": "Udon Thani",
+      "region": "41",
+      "x": 613.04,
+      "y": 286.79,
+      "rank": 7,
+      "capital": "region",
+      "population": 247231
+    },
+    {
+      "name": "Chon Buri",
+      "region": "20",
+      "x": 451.71,
+      "y": 665.86,
+      "rank": 7,
+      "capital": "region",
+      "population": 226618
+    },
+    {
+      "name": "Lampang",
+      "region": "52",
+      "x": 315.46,
+      "y": 203.19,
+      "rank": 7,
+      "capital": "region",
+      "population": 204081
+    },
+    {
+      "name": "Si Racha",
+      "region": "20",
+      "x": 445.15,
+      "y": 688.67,
+      "rank": 7,
+      "capital": null,
+      "population": 178916
+    },
+    {
+      "name": "Phitsanulok",
+      "region": "65",
+      "x": 385.96,
+      "y": 341.88,
+      "rank": 7,
+      "capital": "region",
+      "population": 164017
+    },
+    {
+      "name": "Pathum Thani",
+      "region": "13",
+      "x": 408.93,
+      "y": 607.55,
+      "rank": 7,
+      "capital": "region",
+      "population": 154412
+    },
+    {
+      "name": "Yala",
+      "region": "95",
+      "x": 478.47,
+      "y": 1313.02,
+      "rank": 7,
+      "capital": "region",
+      "population": 148140
+    },
+    {
+      "name": "Trang",
+      "region": "92",
+      "x": 321.33,
+      "y": 1217.12,
+      "rank": 7,
+      "capital": "region",
+      "population": 147820
+    },
+    {
+      "name": "Phra Nakhon Si Ayutthaya",
+      "region": "14",
+      "x": 412.21,
+      "y": 575.28,
+      "rank": 7,
+      "capital": "region",
+      "population": 145615
+    },
+    {
+      "name": "Chiang Rai",
+      "region": "57",
+      "x": 347.46,
+      "y": 50.31,
+      "rank": 7,
+      "capital": "region",
+      "population": 117127
+    },
+    {
+      "name": "Ratchaburi",
+      "region": "70",
+      "x": 343.46,
+      "y": 652.23,
+      "rank": 7,
+      "capital": "region",
+      "population": 106996
+    },
+    {
+      "name": "Nong Khai",
+      "region": "43",
+      "x": 608.9,
+      "y": 242.54,
+      "rank": 7,
+      "capital": "region",
+      "population": 104505
+    },
+    {
+      "name": "Chanthaburi",
+      "region": "22",
+      "x": 552.94,
+      "y": 740.02,
+      "rank": 7,
+      "capital": "region",
+      "population": 99819
+    },
+    {
+      "name": "Phetchaburi",
+      "region": "76",
+      "x": 354.28,
+      "y": 692.78,
+      "rank": 7,
+      "capital": "region",
+      "population": 90497
+    },
+    {
+      "name": "Chumphon",
+      "region": "86",
+      "x": 283.29,
+      "y": 938.2,
+      "rank": 7,
+      "capital": "region",
+      "population": 85686
+    },
+    {
+      "name": "Nan",
+      "region": "55",
+      "x": 431.27,
+      "y": 156.95,
+      "rank": 7,
+      "capital": "region",
+      "population": 82483
+    },
+    {
+      "name": "Prachin Buri",
+      "region": "25",
+      "x": 486.24,
+      "y": 603.78,
+      "rank": 7,
+      "capital": "region",
+      "population": 79757
+    },
+    {
+      "name": "Uttaradit",
+      "region": "53",
+      "x": 370.42,
+      "y": 265.91,
+      "rank": 7,
+      "capital": "region",
+      "population": 76630
+    },
+    {
+      "name": "Sakon Nakhon",
+      "region": "47",
+      "x": 735.98,
+      "y": 307.61,
+      "rank": 7,
+      "capital": "region",
+      "population": 76237
+    },
+    {
+      "name": "Saraburi",
+      "region": "19",
+      "x": 440.73,
+      "y": 559.1,
+      "rank": 7,
+      "capital": "region",
+      "population": 70769
+    },
+    {
+      "name": "Narathiwat",
+      "region": "96",
+      "x": 528.83,
+      "y": 1324.17,
+      "rank": 7,
+      "capital": "region",
+      "population": 68112
+    },
+    {
+      "name": "Kanchanaburi",
+      "region": "71",
+      "x": 316.22,
+      "y": 607.14,
+      "rank": 7,
+      "capital": "region",
+      "population": 63699
+    },
+    {
+      "name": "Surin",
+      "region": "32",
+      "x": 679.26,
+      "y": 524.16,
+      "rank": 7,
+      "capital": "region",
+      "population": 62536
+    },
+    {
+      "name": "Chaiyaphum",
+      "region": "36",
+      "x": 546.13,
+      "y": 438.54,
+      "rank": 7,
+      "capital": "region",
+      "population": 58350
+    },
+    {
+      "name": "Lopburi",
+      "region": "16",
+      "x": 416.87,
+      "y": 533.22,
+      "rank": 7,
+      "capital": "region",
+      "population": 57761
+    },
+    {
+      "name": "Nakhon Phanom",
+      "region": "48",
+      "x": 791.76,
+      "y": 285.16,
+      "rank": 7,
+      "capital": "region",
+      "population": 55377
+    },
+    {
+      "name": "Hua Hin",
+      "region": "77",
+      "x": 354.36,
+      "y": 744.15,
+      "rank": 7,
+      "capital": null,
+      "population": 50456
+    },
+    {
+      "name": "Buri Ram",
+      "region": "31",
+      "x": 644.91,
+      "y": 513.77,
+      "rank": 7,
+      "capital": "region",
+      "population": 47292
+    },
+    {
+      "name": "Mae Sot",
+      "region": "63",
+      "x": 231.85,
+      "y": 351.25,
+      "rank": 7,
+      "capital": null,
+      "population": 45781
+    },
+    {
+      "name": "Si Sa Ket",
+      "region": "33",
+      "x": 755.56,
+      "y": 501.07,
+      "rank": 7,
+      "capital": "region",
+      "population": 44751
+    },
+    {
+      "name": "Phrae",
+      "region": "54",
+      "x": 376.56,
+      "y": 216.65,
+      "rank": 7,
+      "capital": "region",
+      "population": 38538
+    },
+    {
+      "name": "Rayong",
+      "region": "21",
+      "x": 477.65,
+      "y": 734.68,
+      "rank": 7,
+      "capital": "region",
+      "population": 37035
+    },
+    {
+      "name": "Loei",
+      "region": "42",
+      "x": 517.63,
+      "y": 279.18,
+      "rank": 7,
+      "capital": "region",
+      "population": 35273
+    },
+    {
+      "name": "Tak",
+      "region": "63",
+      "x": 282.57,
+      "y": 335.87,
+      "rank": 7,
+      "capital": "region",
+      "population": 33146
+    },
+    {
+      "name": "Thung Song",
+      "region": "80",
+      "x": 332.8,
+      "y": 1161.35,
+      "rank": 7,
+      "capital": null,
+      "population": 28223
+    },
+    {
+      "name": "Aranyaprathet",
+      "region": "27",
+      "x": 589.14,
+      "y": 638.8,
+      "rank": 7,
+      "capital": null,
+      "population": 22472
+    },
+    {
+      "name": "Uthai Thani",
+      "region": "61",
+      "x": 363.02,
+      "y": 478.46,
+      "rank": 7,
+      "capital": "region",
+      "population": 22219
+    },
+    {
+      "name": "Phayao",
+      "region": "56",
+      "x": 354.29,
+      "y": 120.39,
+      "rank": 7,
+      "capital": "region",
+      "population": 21058
+    },
+    {
+      "name": "Bua Yai",
+      "region": "30",
+      "x": 580.82,
+      "y": 459.13,
+      "rank": 7,
+      "capital": null,
+      "population": 18269
+    },
+    {
+      "name": "Sukhothai Thani",
+      "region": "64",
+      "x": 338.91,
+      "y": 324.3,
+      "rank": 7,
+      "capital": "region",
+      "population": 10276
+    },
+    {
+      "name": "Pattani",
+      "region": "94",
+      "x": 475.16,
+      "y": 1283.4,
+      "rank": 10,
+      "capital": "region",
+      "population": 150000
+    },
+    {
+      "name": "Nakhon Pathom",
+      "region": "73",
+      "x": 365.84,
+      "y": 626.24,
+      "rank": 10,
+      "capital": "region",
+      "population": 117927
+    },
+    {
+      "name": "Samut Sakhon",
+      "region": "74",
+      "x": 385.02,
+      "y": 652.95,
+      "rank": 10,
+      "capital": "region",
+      "population": 63498
+    },
+    {
+      "name": "Kamphaeng Phet",
+      "region": "62",
+      "x": 318.43,
+      "y": 375.09,
+      "rank": 10,
+      "capital": "region",
+      "population": 58787
+    },
+    {
+      "name": "Kalasin",
+      "region": "46",
+      "x": 679.14,
+      "y": 378.41,
+      "rank": 10,
+      "capital": "region",
+      "population": 55102
+    },
+    {
+      "name": "Suphan Buri",
+      "region": "72",
+      "x": 372.03,
+      "y": 564.56,
+      "rank": 10,
+      "capital": "region",
+      "population": 53399
+    },
+    {
+      "name": "Maha Sarakham",
+      "region": "44",
+      "x": 660.26,
+      "y": 401.71,
+      "rank": 10,
+      "capital": "region",
+      "population": 51584
+    },
+    {
+      "name": "Phetchabun",
+      "region": "67",
+      "x": 466.12,
+      "y": 380.67,
+      "rank": 10,
+      "capital": "region",
+      "population": 50656
+    },
+    {
+      "name": "Chachoengsao",
+      "region": "24",
+      "x": 458.69,
+      "y": 639.54,
+      "rank": 10,
+      "capital": "region",
+      "population": 49741
+    },
+    {
+      "name": "Phatthalung",
+      "region": "93",
+      "x": 365.65,
+      "y": 1212.36,
+      "rank": 10,
+      "capital": "region",
+      "population": 43522
+    },
+    {
+      "name": "Roi Et",
+      "region": "45",
+      "x": 692.84,
+      "y": 413.89,
+      "rank": 10,
+      "capital": "region",
+      "population": 39328
+    },
+    {
+      "name": "Phichit",
+      "region": "66",
+      "x": 392.72,
+      "y": 378.69,
+      "rank": 10,
+      "capital": "region",
+      "population": 35760
+    },
+    {
+      "name": "Samut Songkhram",
+      "region": "75",
+      "x": 359.9,
+      "y": 664.49,
+      "rank": 10,
+      "capital": "region",
+      "population": 35065
+    },
+    {
+      "name": "Satun",
+      "region": "91",
+      "x": 364.12,
+      "y": 1306.69,
+      "rank": 10,
+      "capital": "region",
+      "population": 34544
+    },
+    {
+      "name": "Prachuap Khiri Khan",
+      "region": "77",
+      "x": 340.73,
+      "y": 816.54,
+      "rank": 10,
+      "capital": "region",
+      "population": 33521
+    },
+    {
+      "name": "Krabi",
+      "region": "81",
+      "x": 256.34,
+      "y": 1170.67,
+      "rank": 10,
+      "capital": "region",
+      "population": 31219
+    },
+    {
+      "name": "Ranong",
+      "region": "85",
+      "x": 231.86,
+      "y": 989.93,
+      "rank": 10,
+      "capital": "region",
+      "population": 24561
+    },
+    {
+      "name": "Yasothon",
+      "region": "35",
+      "x": 738.3,
+      "y": 438.14,
+      "rank": 10,
+      "capital": "region",
+      "population": 21643
+    },
+    {
+      "name": "Trat",
+      "region": "23",
+      "x": 591.05,
+      "y": 775.39,
+      "rank": 10,
+      "capital": "region",
+      "population": 21590
+    },
+    {
+      "name": "Nakhon Nayok",
+      "region": "26",
+      "x": 471.49,
+      "y": 590.31,
+      "rank": 10,
+      "capital": "region",
+      "population": 21309
+    },
+    {
+      "name": "Sing Buri",
+      "region": "17",
+      "x": 397.02,
+      "y": 525.34,
+      "rank": 10,
+      "capital": "region",
+      "population": 20046
+    },
+    {
+      "name": "Chai Nat",
+      "region": "18",
+      "x": 372.02,
+      "y": 497.66,
+      "rank": 10,
+      "capital": "region",
+      "population": 15469
+    },
+    {
+      "name": "Lamphun",
+      "region": "51",
+      "x": 273.2,
+      "y": 176.09,
+      "rank": 10,
+      "capital": "region",
+      "population": 14030
+    },
+    {
+      "name": "Ang Thong",
+      "region": "15",
+      "x": 401.42,
+      "y": 554.04,
+      "rank": 10,
+      "capital": "region",
+      "population": 13738
+    },
+    {
+      "name": "Phang Nga",
+      "region": "82",
+      "x": 221.19,
+      "y": 1132.74,
+      "rank": 10,
+      "capital": "region",
+      "population": 9676
+    },
+    {
+      "name": "Mae Hong Son",
+      "region": "58",
+      "x": 181.35,
+      "y": 106.02,
+      "rank": 10,
+      "capital": "region",
+      "population": 9109
+    }
+  ]
+}

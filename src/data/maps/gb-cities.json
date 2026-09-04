@@ -1,0 +1,525 @@
+{
+  "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_populated_places.geojson (Natural Earth populated places), fitted to 1000x1100",
+  "updatedAt": "2026-09-04T09:40:55.477Z",
+  "country": "GB",
+  "countryName": "United Kingdom",
+  "viewBox": "0 0 1000 1100",
+  "width": 1000,
+  "height": 1100,
+  "totalCities": 57,
+  "cities": [
+    {
+      "name": "London",
+      "region": "WSM",
+      "x": 818.56,
+      "y": 945.29,
+      "rank": 0,
+      "capital": "country",
+      "population": 8567000
+    },
+    {
+      "name": "Glasgow",
+      "region": "GLG",
+      "x": 572.77,
+      "y": 503.27,
+      "rank": 3,
+      "capital": null,
+      "population": 1160000
+    },
+    {
+      "name": "Birmingham",
+      "region": "BIR",
+      "x": 704.8,
+      "y": 848.1,
+      "rank": 4,
+      "capital": null,
+      "population": 2285000
+    },
+    {
+      "name": "Manchester",
+      "region": "MAN",
+      "x": 685,
+      "y": 746.98,
+      "rank": 4,
+      "capital": null,
+      "population": 2230000
+    },
+    {
+      "name": "Belfast",
+      "region": "BFS",
+      "x": 469.61,
+      "y": 627.27,
+      "rank": 4,
+      "capital": null,
+      "population": 450406
+    },
+    {
+      "name": "Leeds",
+      "region": "LDS",
+      "x": 726.82,
+      "y": 715.06,
+      "rank": 6,
+      "capital": null,
+      "population": 1529000
+    },
+    {
+      "name": "Newcastle upon Tyne",
+      "region": "NET",
+      "x": 722.55,
+      "y": 593.61,
+      "rank": 6,
+      "capital": null,
+      "population": 882000
+    },
+    {
+      "name": "Cardiff",
+      "region": "CRF",
+      "x": 626.37,
+      "y": 948.19,
+      "rank": 6,
+      "capital": null,
+      "population": 861400
+    },
+    {
+      "name": "Liverpool",
+      "region": "LIV",
+      "x": 641.93,
+      "y": 753.73,
+      "rank": 6,
+      "capital": null,
+      "population": 811000
+    },
+    {
+      "name": "Edinburgh",
+      "region": "EDH",
+      "x": 630.87,
+      "y": 496,
+      "rank": 6,
+      "capital": null,
+      "population": 504966
+    },
+    {
+      "name": "Wick",
+      "region": "HLD",
+      "x": 642.57,
+      "y": 244.54,
+      "rank": 6,
+      "capital": null,
+      "population": 7147
+    },
+    {
+      "name": "Lerwick",
+      "region": "ZET",
+      "x": 742.83,
+      "y": 70.9,
+      "rank": 6,
+      "capital": null,
+      "population": 6594
+    },
+    {
+      "name": "Nottingham",
+      "region": "NGM",
+      "x": 750.9,
+      "y": 800.81,
+      "rank": 7,
+      "capital": null,
+      "population": 825600
+    },
+    {
+      "name": "Brighton",
+      "region": "BNH",
+      "x": 817.02,
+      "y": 1013.37,
+      "rank": 7,
+      "capital": null,
+      "population": 503008
+    },
+    {
+      "name": "Portsmouth",
+      "region": "POR",
+      "x": 758.86,
+      "y": 1017.49,
+      "rank": 7,
+      "capital": null,
+      "population": 442252
+    },
+    {
+      "name": "Middlesbrough",
+      "region": "STT",
+      "x": 745.17,
+      "y": 634.87,
+      "rank": 7,
+      "capital": null,
+      "population": 416042
+    },
+    {
+      "name": "Stoke-on-Trent",
+      "region": "STE",
+      "x": 689.02,
+      "y": 795.09,
+      "rank": 7,
+      "capital": null,
+      "population": 390801
+    },
+    {
+      "name": "Coventry",
+      "region": "COV",
+      "x": 730.71,
+      "y": 855.71,
+      "rank": 7,
+      "capital": null,
+      "population": 388271
+    },
+    {
+      "name": "Kingston upon Hull",
+      "region": "KHL",
+      "x": 799.97,
+      "y": 717.98,
+      "rank": 7,
+      "capital": null,
+      "population": 302296
+    },
+    {
+      "name": "Blackpool",
+      "region": "BPL",
+      "x": 637.25,
+      "y": 710.59,
+      "rank": 7,
+      "capital": null,
+      "population": 272792
+    },
+    {
+      "name": "Plymouth",
+      "region": "PLY",
+      "x": 560.55,
+      "y": 1057.85,
+      "rank": 7,
+      "capital": null,
+      "population": 247297
+    },
+    {
+      "name": "Luton",
+      "region": "LUT",
+      "x": 798.74,
+      "y": 907.43,
+      "rank": 7,
+      "capital": null,
+      "population": 235958
+    },
+    {
+      "name": "Oxford",
+      "region": "OXF",
+      "x": 747.12,
+      "y": 921.27,
+      "rank": 7,
+      "capital": null,
+      "population": 192796
+    },
+    {
+      "name": "Norwich",
+      "region": "NFK",
+      "x": 902.76,
+      "y": 827.92,
+      "rank": 7,
+      "capital": null,
+      "population": 190756
+    },
+    {
+      "name": "Aberdeen",
+      "region": "ABE",
+      "x": 694.22,
+      "y": 375.43,
+      "rank": 7,
+      "capital": null,
+      "population": 189364
+    },
+    {
+      "name": "York",
+      "region": "YOR",
+      "x": 755.28,
+      "y": 698.47,
+      "rank": 7,
+      "capital": null,
+      "population": 158947
+    },
+    {
+      "name": "Dundee",
+      "region": "DND",
+      "x": 644.06,
+      "y": 443.35,
+      "rank": 7,
+      "capital": null,
+      "population": 151592
+    },
+    {
+      "name": "Ipswich",
+      "region": "SFK",
+      "x": 897.26,
+      "y": 884.96,
+      "rank": 7,
+      "capital": null,
+      "population": 143767
+    },
+    {
+      "name": "Peterborough",
+      "region": "PTE",
+      "x": 807.78,
+      "y": 837.65,
+      "rank": 7,
+      "capital": null,
+      "population": 140141
+    },
+    {
+      "name": "Cambridge",
+      "region": "CAM",
+      "x": 831.33,
+      "y": 874.18,
+      "rank": 7,
+      "capital": null,
+      "population": 128488
+    },
+    {
+      "name": "Exeter",
+      "region": "DEV",
+      "x": 601.87,
+      "y": 1026.96,
+      "rank": 7,
+      "capital": null,
+      "population": 113118
+    },
+    {
+      "name": "Bath",
+      "region": "BAS",
+      "x": 677.87,
+      "y": 958.73,
+      "rank": 7,
+      "capital": null,
+      "population": 93238
+    },
+    {
+      "name": "Londonderry/Derry",
+      "region": "DRY",
+      "x": 390.41,
+      "y": 580.78,
+      "rank": 7,
+      "capital": null,
+      "population": 83652
+    },
+    {
+      "name": "Scarborough",
+      "region": "NYK",
+      "x": 792.79,
+      "y": 664.46,
+      "rank": 7,
+      "capital": null,
+      "population": 70571
+    },
+    {
+      "name": "Ayr",
+      "region": "SAY",
+      "x": 549.75,
+      "y": 544.2,
+      "rank": 7,
+      "capital": null,
+      "population": 69042
+    },
+    {
+      "name": "Inverness",
+      "region": "HLD",
+      "x": 578.4,
+      "y": 340.83,
+      "rank": 7,
+      "capital": null,
+      "population": 45158
+    },
+    {
+      "name": "Perth",
+      "region": "PKN",
+      "x": 619.49,
+      "y": 450.79,
+      "rank": 7,
+      "capital": null,
+      "population": 39654
+    },
+    {
+      "name": "Dover",
+      "region": "KEN",
+      "x": 909.63,
+      "y": 979.4,
+      "rank": 7,
+      "capital": null,
+      "population": 36384
+    },
+    {
+      "name": "Dumfries",
+      "region": "DGY",
+      "x": 610.13,
+      "y": 584.84,
+      "rank": 7,
+      "capital": null,
+      "population": 31044
+    },
+    {
+      "name": "Penzance",
+      "region": "CON",
+      "x": 469.61,
+      "y": 1079.87,
+      "rank": 7,
+      "capital": null,
+      "population": 20812
+    },
+    {
+      "name": "Lisburn",
+      "region": "LSB",
+      "x": 462.12,
+      "y": 635.37,
+      "rank": 7,
+      "capital": null,
+      "population": 12899
+    },
+    {
+      "name": "Kirkwall",
+      "region": "ORK",
+      "x": 650.4,
+      "y": 190.61,
+      "rank": 7,
+      "capital": null,
+      "population": 8500
+    },
+    {
+      "name": "Sheffield",
+      "region": "SHF",
+      "x": 730.2,
+      "y": 757.9,
+      "rank": 8,
+      "capital": null,
+      "population": 1292900
+    },
+    {
+      "name": "Southend-on-Sea",
+      "region": "SOS",
+      "x": 871.23,
+      "y": 938.77,
+      "rank": 8,
+      "capital": null,
+      "population": 618386
+    },
+    {
+      "name": "Bristol",
+      "region": "BST",
+      "x": 663.18,
+      "y": 951.93,
+      "rank": 8,
+      "capital": null,
+      "population": 553528
+    },
+    {
+      "name": "Bradford",
+      "region": "BRD",
+      "x": 714.67,
+      "y": 714.95,
+      "rank": 8,
+      "capital": null,
+      "population": 501700
+    },
+    {
+      "name": "Leicester",
+      "region": "LCE",
+      "x": 753.26,
+      "y": 832.28,
+      "rank": 8,
+      "capital": null,
+      "population": 457983
+    },
+    {
+      "name": "Sunderland",
+      "region": "SND",
+      "x": 736.09,
+      "y": 602.25,
+      "rank": 8,
+      "capital": null,
+      "population": 452934
+    },
+    {
+      "name": "Bournemouth",
+      "region": "BMH",
+      "x": 706.39,
+      "y": 1024.98,
+      "rank": 8,
+      "capital": null,
+      "population": 426945
+    },
+    {
+      "name": "Southampton",
+      "region": "STH",
+      "x": 738.3,
+      "y": 1007.61,
+      "rank": 8,
+      "capital": null,
+      "population": 384417
+    },
+    {
+      "name": "Reading",
+      "region": "OXF",
+      "x": 764.32,
+      "y": 949.61,
+      "rank": 8,
+      "capital": null,
+      "population": 369804
+    },
+    {
+      "name": "Swansea",
+      "region": "SWA",
+      "x": 577.43,
+      "y": 932.22,
+      "rank": 8,
+      "capital": null,
+      "population": 294339
+    },
+    {
+      "name": "Chester",
+      "region": "CHW",
+      "x": 645.21,
+      "y": 775.92,
+      "rank": 8,
+      "capital": null,
+      "population": 89531
+    },
+    {
+      "name": "Greenock",
+      "region": "IVC",
+      "x": 544.04,
+      "y": 495.03,
+      "rank": 8,
+      "capital": null,
+      "population": 74635
+    },
+    {
+      "name": "Carlisle",
+      "region": "CMA",
+      "x": 645.82,
+      "y": 604.42,
+      "rank": 8,
+      "capital": null,
+      "population": 72633
+    },
+    {
+      "name": "Omagh",
+      "region": "OMH",
+      "x": 389.27,
+      "y": 621.4,
+      "rank": 8,
+      "capital": null,
+      "population": 21056
+    },
+    {
+      "name": "Fort William",
+      "region": "HLD",
+      "x": 527.56,
+      "y": 404.79,
+      "rank": 8,
+      "capital": null,
+      "population": 9652
+    }
+  ]
+}

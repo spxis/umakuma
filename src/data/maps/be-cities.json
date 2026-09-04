@@ -1,0 +1,102 @@
+{
+  "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_populated_places.geojson (Natural Earth populated places), fitted to 1000x900",
+  "updatedAt": "2026-09-04T09:41:01.117Z",
+  "country": "BE",
+  "countryName": "Belgium",
+  "viewBox": "0 0 1000 900",
+  "width": 1000,
+  "height": 900,
+  "totalCities": 10,
+  "cities": [
+    {
+      "name": "Brussels",
+      "region": "BRU",
+      "x": 465.68,
+      "y": 311.67,
+      "rank": 2,
+      "capital": "country",
+      "population": 1743000
+    },
+    {
+      "name": "Antwerp",
+      "region": "VAN",
+      "x": 487.02,
+      "y": 153.05,
+      "rank": 6,
+      "capital": "region",
+      "population": 920000
+    },
+    {
+      "name": "Charleroi",
+      "region": "WHT",
+      "x": 496.28,
+      "y": 481.78,
+      "rank": 7,
+      "capital": null,
+      "population": 345367
+    },
+    {
+      "name": "Bruges",
+      "region": "VWV",
+      "x": 183.28,
+      "y": 151.04,
+      "rank": 7,
+      "capital": "region",
+      "population": 146469
+    },
+    {
+      "name": "Namur",
+      "region": "WNA",
+      "x": 605.88,
+      "y": 461.05,
+      "rank": 7,
+      "capital": "region",
+      "population": 106284
+    },
+    {
+      "name": "Liège",
+      "region": "WLG",
+      "x": 790.17,
+      "y": 393.82,
+      "rank": 8,
+      "capital": "region",
+      "population": 749110
+    },
+    {
+      "name": "Ghent",
+      "region": "VOV",
+      "x": 303.1,
+      "y": 230.78,
+      "rank": 8,
+      "capital": "region",
+      "population": 444336
+    },
+    {
+      "name": "Mons",
+      "region": "WHT",
+      "x": 362.9,
+      "y": 470.74,
+      "rank": 10,
+      "capital": "region",
+      "population": 91277
+    },
+    {
+      "name": "Hasselt",
+      "region": "VLI",
+      "x": 725.99,
+      "y": 272.13,
+      "rank": 10,
+      "capital": "region",
+      "population": 69222
+    },
+    {
+      "name": "Arlon",
+      "region": "WLX",
+      "x": 858.56,
+      "y": 780.88,
+      "rank": 10,
+      "capital": "region",
+      "population": 26179
+    }
+  ]
+}

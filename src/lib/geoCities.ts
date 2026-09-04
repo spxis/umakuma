@@ -1,4 +1,10 @@
+import auCities from "@/data/maps/au-cities.json";
 import caCities from "@/data/maps/ca-cities.json";
+import cnCities from "@/data/maps/cn-cities.json";
+import jpCities from "@/data/maps/jp-cities.json";
+import thCities from "@/data/maps/th-cities.json";
+import twCities from "@/data/maps/tw-cities.json";
+import usCities from "@/data/maps/us-cities.json";
 
 import type { CountryCode } from "./geoRegionTypes";
 
@@ -10,10 +16,18 @@ import type { CountryCode } from "./geoRegionTypes";
  * boundaries went through - so a city needs no transform here, and cannot
  * drift from the outline under it.
  *
- * Canada only, as a pilot. Japan and the United States come from different
- * builders on different projections (GSI Global Map and Census TopoJSON), so
- * their canvases are not Natural Earth's and a city point would land in the
- * wrong place. They need their own ingest, not this one.
+ * Every country whose map is loaded has one, Japan and the United States
+ * included. Neither needed migrating to Natural Earth: the United States is
+ * drawn through `geoAlbersUsa`, which the city builder rebuilds exactly - and
+ * which carries Alaska and Hawaii in their own insets, so their cities land in
+ * those boxes without a special case. Japan's outlines are curated Mercator
+ * paths with no projection in code, so the builder recovers the transform by
+ * least squares and refuses to write the file unless every city lands inside
+ * its own prefecture.
+ *
+ * The other 25 Natural Earth countries are built and committed but not
+ * imported here, the same way their maps are: loading all thirty-two would
+ * pull three quarters of a megabyte of points in for maps nobody can open yet.
  */
 export type MapCity = {
   name: string;
@@ -51,7 +65,13 @@ export type CityDensity = (typeof CITY_DENSITIES)[number];
 export const MAJOR_CITY_RANK = 4;
 
 const CITYSETS: Partial<Record<CountryCode, MapCityset>> = {
+  JP: jpCities as MapCityset,
+  US: usCities as MapCityset,
   CA: caCities as MapCityset,
+  TH: thCities as MapCityset,
+  CN: cnCities as MapCityset,
+  AU: auCities as MapCityset,
+  TW: twCities as MapCityset,
 };
 
 export function isCityDensity(value: string): value is CityDensity {
@@ -87,4 +107,19 @@ export function cityDensityCounts(country: CountryCode): Record<CityDensity, num
     major: citiesAtDensity(country, "major").length,
     all: citiesAtDensity(country, "all").length,
   };
+}
+
+/**
+ * Every city we draw, across every map that has them.
+ *
+ * The accreditation page's figure. Counted rather than typed, so adding a
+ * country's cities cannot leave the page claiming a total nobody has.
+ */
+export function totalCitiesPlaced(): number {
+  return Object.values(CITYSETS).reduce((sum, set) => sum + (set?.totalCities ?? 0), 0);
+}
+
+/** The countries whose maps draw cities, for the tests and the report. */
+export function countriesWithCities(): CountryCode[] {
+  return Object.keys(CITYSETS) as CountryCode[];
 }

@@ -1,0 +1,453 @@
+{
+  "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_populated_places.geojson (Natural Earth populated places), fitted to 1000x850",
+  "updatedAt": "2026-09-04T09:40:55.699Z",
+  "country": "ES",
+  "countryName": "Spain",
+  "viewBox": "0 0 1000 850",
+  "width": 1000,
+  "height": 850,
+  "totalCities": 49,
+  "cities": [
+    {
+      "name": "Madrid",
+      "region": "M",
+      "x": 679.63,
+      "y": 202.21,
+      "rank": 1,
+      "capital": "country",
+      "population": 5567000
+    },
+    {
+      "name": "Barcelona",
+      "region": "B",
+      "x": 909.05,
+      "y": 143.96,
+      "rank": 2,
+      "capital": "region",
+      "population": 4920000
+    },
+    {
+      "name": "Seville",
+      "region": "SE",
+      "x": 584.29,
+      "y": 356.97,
+      "rank": 3,
+      "capital": "region",
+      "population": 1212045
+    },
+    {
+      "name": "Valencia",
+      "region": "V",
+      "x": 811.54,
+      "y": 247.75,
+      "rank": 3,
+      "capital": "region",
+      "population": 808000
+    },
+    {
+      "name": "Bilbao",
+      "region": "BI",
+      "x": 708.66,
+      "y": 53.62,
+      "rank": 4,
+      "capital": null,
+      "population": 875552
+    },
+    {
+      "name": "Vigo",
+      "region": "PO",
+      "x": 485.07,
+      "y": 101.57,
+      "rank": 4,
+      "capital": null,
+      "population": 378952
+    },
+    {
+      "name": "Las Palmas de Gran Canaria",
+      "region": "GC",
+      "x": 129.77,
+      "y": 810.03,
+      "rank": 4,
+      "capital": "region",
+      "population": 378495
+    },
+    {
+      "name": "Córdoba",
+      "region": "CO",
+      "x": 634.74,
+      "y": 333.26,
+      "rank": 4,
+      "capital": null,
+      "population": 321376
+    },
+    {
+      "name": "Zaragoza",
+      "region": "Z",
+      "x": 788.65,
+      "y": 135.69,
+      "rank": 6,
+      "capital": "region",
+      "population": 649404
+    },
+    {
+      "name": "Murcia",
+      "region": "MU",
+      "x": 784.34,
+      "y": 327.13,
+      "rank": 6,
+      "capital": "region",
+      "population": 406807
+    },
+    {
+      "name": "Granada",
+      "region": "GR",
+      "x": 683.45,
+      "y": 370.9,
+      "rank": 6,
+      "capital": null,
+      "population": 388290
+    },
+    {
+      "name": "Palma de Mallorca",
+      "region": "PM",
+      "x": 933.95,
+      "y": 236.9,
+      "rank": 6,
+      "capital": "region",
+      "population": 375773
+    },
+    {
+      "name": "A Coruña",
+      "region": "C",
+      "x": 500.19,
+      "y": 44.41,
+      "rank": 6,
+      "capital": null,
+      "population": 370610
+    },
+    {
+      "name": "Santa Cruz de Tenerife",
+      "region": "TF",
+      "x": 94.49,
+      "y": 785.35,
+      "rank": 6,
+      "capital": "region",
+      "population": 336061
+    },
+    {
+      "name": "Valladolid",
+      "region": "VA",
+      "x": 638.29,
+      "y": 136.83,
+      "rank": 6,
+      "capital": "region",
+      "population": 322304
+    },
+    {
+      "name": "Cádiz",
+      "region": "CA",
+      "x": 570.19,
+      "y": 402.49,
+      "rank": 6,
+      "capital": null,
+      "population": 283157
+    },
+    {
+      "name": "Pamplona",
+      "region": "NA",
+      "x": 757.8,
+      "y": 75.41,
+      "rank": 6,
+      "capital": "region",
+      "population": 274545
+    },
+    {
+      "name": "Melilla",
+      "region": "ML",
+      "x": 710.43,
+      "y": 468.16,
+      "rank": 6,
+      "capital": "region",
+      "population": 141308
+    },
+    {
+      "name": "Ourense",
+      "region": "OR",
+      "x": 518.52,
+      "y": 97.61,
+      "rank": 6,
+      "capital": null,
+      "population": 118107
+    },
+    {
+      "name": "Ceuta",
+      "region": "CE",
+      "x": 610.56,
+      "y": 436.71,
+      "rank": 6,
+      "capital": "region",
+      "population": 78674
+    },
+    {
+      "name": "Málaga",
+      "region": "MA",
+      "x": 648.52,
+      "y": 393.89,
+      "rank": 7,
+      "capital": null,
+      "population": 550058
+    },
+    {
+      "name": "Donostia-San Sebastián",
+      "region": "SS",
+      "x": 744.73,
+      "y": 49.53,
+      "rank": 7,
+      "capital": null,
+      "population": 357468
+    },
+    {
+      "name": "Alicante",
+      "region": "A",
+      "x": 810.24,
+      "y": 307,
+      "rank": 7,
+      "capital": null,
+      "population": 315863
+    },
+    {
+      "name": "Oviedo",
+      "region": "O",
+      "x": 598.52,
+      "y": 47.3,
+      "rank": 7,
+      "capital": "region",
+      "population": 235651
+    },
+    {
+      "name": "Santander",
+      "region": "S",
+      "x": 675.6,
+      "y": 46.86,
+      "rank": 7,
+      "capital": "region",
+      "population": 208763
+    },
+    {
+      "name": "Cartagena",
+      "region": "MU",
+      "x": 791.05,
+      "y": 346.74,
+      "rank": 7,
+      "capital": null,
+      "population": 201274
+    },
+    {
+      "name": "Castelló de la Plana",
+      "region": "CS",
+      "x": 824.71,
+      "y": 222.06,
+      "rank": 7,
+      "capital": null,
+      "population": 180610
+    },
+    {
+      "name": "Almería",
+      "region": "AL",
+      "x": 731.66,
+      "y": 388.09,
+      "rank": 7,
+      "capital": null,
+      "population": 179405
+    },
+    {
+      "name": "Burgos",
+      "region": "BU",
+      "x": 680.05,
+      "y": 100.63,
+      "rank": 7,
+      "capital": null,
+      "population": 170183
+    },
+    {
+      "name": "Salamanca",
+      "region": "SA",
+      "x": 601.6,
+      "y": 171.56,
+      "rank": 7,
+      "capital": null,
+      "population": 162353
+    },
+    {
+      "name": "Albacete",
+      "region": "AB",
+      "x": 752.98,
+      "y": 274.65,
+      "rank": 7,
+      "capital": null,
+      "population": 158094
+    },
+    {
+      "name": "Huelva",
+      "region": "H",
+      "x": 544.66,
+      "y": 363.74,
+      "rank": 7,
+      "capital": null,
+      "population": 144174
+    },
+    {
+      "name": "Logroño",
+      "region": "LO",
+      "x": 728.16,
+      "y": 94.13,
+      "rank": 7,
+      "capital": "region",
+      "population": 143698
+    },
+    {
+      "name": "Badajoz",
+      "region": "BA",
+      "x": 546.27,
+      "y": 278.78,
+      "rank": 7,
+      "capital": null,
+      "population": 140133
+    },
+    {
+      "name": "Tarragona",
+      "region": "T",
+      "x": 873.41,
+      "y": 159.85,
+      "rank": 7,
+      "capital": null,
+      "population": 126291
+    },
+    {
+      "name": "Jaén",
+      "region": "J",
+      "x": 674.62,
+      "y": 339.32,
+      "rank": 7,
+      "capital": null,
+      "population": 116400
+    },
+    {
+      "name": "Santiago de Compostela",
+      "region": "C",
+      "x": 494.29,
+      "y": 67.46,
+      "rank": 7,
+      "capital": "region",
+      "population": 92430
+    },
+    {
+      "name": "Lorca",
+      "region": "MU",
+      "x": 761.3,
+      "y": 342.86,
+      "rank": 7,
+      "capital": null,
+      "population": 86119
+    },
+    {
+      "name": "Toledo",
+      "region": "TO",
+      "x": 666.32,
+      "y": 230.03,
+      "rank": 7,
+      "capital": "region",
+      "population": 74632
+    },
+    {
+      "name": "Guadalajara",
+      "region": "GU",
+      "x": 700.17,
+      "y": 190.11,
+      "rank": 7,
+      "capital": null,
+      "population": 72850
+    },
+    {
+      "name": "Arrecife",
+      "region": "GC",
+      "x": 222.88,
+      "y": 775.02,
+      "rank": 7,
+      "capital": null,
+      "population": 52944
+    },
+    {
+      "name": "Gijón",
+      "region": "O",
+      "x": 604.82,
+      "y": 38.08,
+      "rank": 8,
+      "capital": null,
+      "population": 335972
+    },
+    {
+      "name": "Vitoria-Gasteiz",
+      "region": "VI",
+      "x": 718.74,
+      "y": 74.42,
+      "rank": 8,
+      "capital": "region",
+      "population": 224578
+    },
+    {
+      "name": "Marbella",
+      "region": "MA",
+      "x": 628.98,
+      "y": 404.28,
+      "rank": 8,
+      "capital": null,
+      "population": 186131
+    },
+    {
+      "name": "Mataró",
+      "region": "B",
+      "x": 919,
+      "y": 135.23,
+      "rank": 8,
+      "capital": null,
+      "population": 183293
+    },
+    {
+      "name": "León",
+      "region": "LE",
+      "x": 607.46,
+      "y": 87.75,
+      "rank": 8,
+      "capital": null,
+      "population": 136227
+    },
+    {
+      "name": "Algeciras",
+      "region": "CA",
+      "x": 604.68,
+      "y": 423.91,
+      "rank": 8,
+      "capital": null,
+      "population": 111027
+    },
+    {
+      "name": "Linares",
+      "region": "J",
+      "x": 681.51,
+      "y": 323.03,
+      "rank": 8,
+      "capital": null,
+      "population": 59761
+    },
+    {
+      "name": "Mérida",
+      "region": "BA",
+      "x": 571.94,
+      "y": 278.03,
+      "rank": 10,
+      "capital": "region",
+      "population": 52423
+    }
+  ]
+}

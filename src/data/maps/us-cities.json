@@ -1,0 +1,6933 @@
+{
+  "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_populated_places.geojson (Natural Earth populated places), Albers USA, fitted to 1000x620",
+  "updatedAt": "2026-09-04T09:41:01.817Z",
+  "country": "US",
+  "countryName": "United States",
+  "viewBox": "0 0 1000 620",
+  "width": 1000,
+  "height": 620,
+  "totalCities": 769,
+  "cities": [
+    {
+      "name": "New York City",
+      "region": "NY",
+      "x": 914.04,
+      "y": 217.1,
+      "rank": 0,
+      "capital": null,
+      "population": 19040000
+    },
+    {
+      "name": "Los Angeles",
+      "region": "CA",
+      "x": 142.55,
+      "y": 362.69,
+      "rank": 0,
+      "capital": null,
+      "population": 12500000
+    },
+    {
+      "name": "Washington",
+      "region": "DC",
+      "x": 872.7,
+      "y": 268.2,
+      "rank": 0,
+      "capital": "country",
+      "population": 4338000
+    },
+    {
+      "name": "Chicago",
+      "region": "IL",
+      "x": 685.74,
+      "y": 228.24,
+      "rank": 1,
+      "capital": null,
+      "population": 8990000
+    },
+    {
+      "name": "Miami",
+      "region": "FL",
+      "x": 866.83,
+      "y": 568.47,
+      "rank": 1,
+      "capital": null,
+      "population": 5585000
+    },
+    {
+      "name": "Atlanta",
+      "region": "GA",
+      "x": 761.81,
+      "y": 404.13,
+      "rank": 1,
+      "capital": "region",
+      "population": 4506000
+    },
+    {
+      "name": "Houston",
+      "region": "TX",
+      "x": 560.25,
+      "y": 506.99,
+      "rank": 1,
+      "capital": null,
+      "population": 4459000
+    },
+    {
+      "name": "San Francisco",
+      "region": "CA",
+      "x": 91.53,
+      "y": 262.26,
+      "rank": 1,
+      "capital": null,
+      "population": 3450000
+    },
+    {
+      "name": "Denver",
+      "region": "CO",
+      "x": 394.76,
+      "y": 274.6,
+      "rank": 1,
+      "capital": "region",
+      "population": 2313000
+    },
+    {
+      "name": "Philadelphia",
+      "region": "PA",
+      "x": 898.45,
+      "y": 238.62,
+      "rank": 2,
+      "capital": null,
+      "population": 5492000
+    },
+    {
+      "name": "Dallas",
+      "region": "TX",
+      "x": 532.76,
+      "y": 438.97,
+      "rank": 2,
+      "capital": null,
+      "population": 4798000
+    },
+    {
+      "name": "Boston",
+      "region": "MA",
+      "x": 952.27,
+      "y": 170.05,
+      "rank": 2,
+      "capital": "region",
+      "population": 4467000
+    },
+    {
+      "name": "Detroit",
+      "region": "MI",
+      "x": 759.57,
+      "y": 208.92,
+      "rank": 2,
+      "capital": null,
+      "population": 4101000
+    },
+    {
+      "name": "Phoenix",
+      "region": "AZ",
+      "x": 251.31,
+      "y": 398.71,
+      "rank": 2,
+      "capital": "region",
+      "population": 3551000
+    },
+    {
+      "name": "Seattle",
+      "region": "WA",
+      "x": 153.23,
+      "y": 50.56,
+      "rank": 2,
+      "capital": null,
+      "population": 3074000
+    },
+    {
+      "name": "San Diego",
+      "region": "CA",
+      "x": 155.31,
+      "y": 396.4,
+      "rank": 2,
+      "capital": null,
+      "population": 2916000
+    },
+    {
+      "name": "Minneapolis",
+      "region": "MN",
+      "x": 590.98,
+      "y": 163.29,
+      "rank": 2,
+      "capital": null,
+      "population": 2616000
+    },
+    {
+      "name": "Tampa",
+      "region": "FL",
+      "x": 815.13,
+      "y": 527.96,
+      "rank": 2,
+      "capital": null,
+      "population": 2314000
+    },
+    {
+      "name": "St. Louis",
+      "region": "MO",
+      "x": 647.15,
+      "y": 303.74,
+      "rank": 2,
+      "capital": null,
+      "population": 2199000
+    },
+    {
+      "name": "Honolulu",
+      "region": "HI",
+      "x": 319.9,
+      "y": 546.02,
+      "rank": 2,
+      "capital": "region",
+      "population": 786000
+    },
+    {
+      "name": "New Orleans",
+      "region": "LA",
+      "x": 661.93,
+      "y": 498.38,
+      "rank": 2,
+      "capital": null,
+      "population": 785000
+    },
+    {
+      "name": "Anchorage",
+      "region": "AK",
+      "x": 167.51,
+      "y": 541.13,
+      "rank": 2,
+      "capital": null,
+      "population": 260283
+    },
+    {
+      "name": "Cleveland",
+      "region": "OH",
+      "x": 784.49,
+      "y": 224.93,
+      "rank": 3,
+      "capital": null,
+      "population": 1890000
+    },
+    {
+      "name": "Portland",
+      "region": "OR",
+      "x": 135.04,
+      "y": 93.54,
+      "rank": 3,
+      "capital": null,
+      "population": 1875000
+    },
+    {
+      "name": "Pittsburgh",
+      "region": "PA",
+      "x": 816.24,
+      "y": 243.58,
+      "rank": 3,
+      "capital": null,
+      "population": 1838000
+    },
+    {
+      "name": "Las Vegas",
+      "region": "NV",
+      "x": 207.41,
+      "y": 328.18,
+      "rank": 3,
+      "capital": null,
+      "population": 1823000
+    },
+    {
+      "name": "San Jose",
+      "region": "CA",
+      "x": 97.39,
+      "y": 274.54,
+      "rank": 3,
+      "capital": null,
+      "population": 1668000
+    },
+    {
+      "name": "Cincinnati",
+      "region": "OH",
+      "x": 745.31,
+      "y": 282.84,
+      "rank": 3,
+      "capital": null,
+      "population": 1636000
+    },
+    {
+      "name": "Sacramento",
+      "region": "CA",
+      "x": 111.91,
+      "y": 249.37,
+      "rank": 3,
+      "capital": "region",
+      "population": 1604000
+    },
+    {
+      "name": "San Antonio",
+      "region": "TX",
+      "x": 499.06,
+      "y": 513.59,
+      "rank": 3,
+      "capital": null,
+      "population": 1473000
+    },
+    {
+      "name": "Milwaukee",
+      "region": "WI",
+      "x": 678.85,
+      "y": 202.14,
+      "rank": 3,
+      "capital": null,
+      "population": 1388000
+    },
+    {
+      "name": "Raleigh",
+      "region": "NC",
+      "x": 857.85,
+      "y": 343.02,
+      "rank": 3,
+      "capital": "region",
+      "population": 1163515
+    },
+    {
+      "name": "Memphis",
+      "region": "TN",
+      "x": 655.78,
+      "y": 382.18,
+      "rank": 3,
+      "capital": null,
+      "population": 1081000
+    },
+    {
+      "name": "Norfolk",
+      "region": "VA",
+      "x": 894.58,
+      "y": 310.98,
+      "rank": 3,
+      "capital": null,
+      "population": 1047869
+    },
+    {
+      "name": "Buffalo",
+      "region": "NY",
+      "x": 824.96,
+      "y": 186,
+      "rank": 3,
+      "capital": null,
+      "population": 1016000
+    },
+    {
+      "name": "Salt Lake City",
+      "region": "UT",
+      "x": 281.37,
+      "y": 236.09,
+      "rank": 3,
+      "capital": "region",
+      "population": 966000
+    },
+    {
+      "name": "Omaha",
+      "region": "NE",
+      "x": 547.44,
+      "y": 248.02,
+      "rank": 3,
+      "capital": null,
+      "population": 877110
+    },
+    {
+      "name": "Nashville",
+      "region": "TN",
+      "x": 712.2,
+      "y": 354.42,
+      "rank": 3,
+      "capital": "region",
+      "population": 877000
+    },
+    {
+      "name": "Oklahoma City",
+      "region": "OK",
+      "x": 520.16,
+      "y": 377.98,
+      "rank": 3,
+      "capital": "region",
+      "population": 788000
+    },
+    {
+      "name": "Des Moines",
+      "region": "IA",
+      "x": 587.11,
+      "y": 239.86,
+      "rank": 3,
+      "capital": "region",
+      "population": 380655
+    },
+    {
+      "name": "Boise",
+      "region": "ID",
+      "x": 224.03,
+      "y": 160.15,
+      "rank": 3,
+      "capital": "region",
+      "population": 338071
+    },
+    {
+      "name": "Jackson",
+      "region": "MS",
+      "x": 656.87,
+      "y": 446.33,
+      "rank": 3,
+      "capital": "region",
+      "population": 250902
+    },
+    {
+      "name": "Santa Fe",
+      "region": "NM",
+      "x": 369.08,
+      "y": 364.01,
+      "rank": 3,
+      "capital": "region",
+      "population": 92681
+    },
+    {
+      "name": "Cheyenne",
+      "region": "WY",
+      "x": 400.5,
+      "y": 243.44,
+      "rank": 3,
+      "capital": "region",
+      "population": 72927
+    },
+    {
+      "name": "Bismarck",
+      "region": "ND",
+      "x": 474.14,
+      "y": 121.28,
+      "rank": 3,
+      "capital": "region",
+      "population": 63871
+    },
+    {
+      "name": "Fairbanks",
+      "region": "AK",
+      "x": 172.97,
+      "y": 512.2,
+      "rank": 3,
+      "capital": null,
+      "population": 56993
+    },
+    {
+      "name": "Helena",
+      "region": "MT",
+      "x": 301.58,
+      "y": 107.12,
+      "rank": 3,
+      "capital": "region",
+      "population": 38725
+    },
+    {
+      "name": "Juneau",
+      "region": "AK",
+      "x": 231.25,
+      "y": 552.71,
+      "rank": 3,
+      "capital": "region",
+      "population": 30711
+    },
+    {
+      "name": "Pierre",
+      "region": "SD",
+      "x": 478.29,
+      "y": 176.08,
+      "rank": 3,
+      "capital": "region",
+      "population": 13879
+    },
+    {
+      "name": "Kodiak",
+      "region": "AK",
+      "x": 158.7,
+      "y": 568.43,
+      "rank": 3,
+      "capital": null,
+      "population": 9461
+    },
+    {
+      "name": "Bethel",
+      "region": "AK",
+      "x": 122.64,
+      "y": 543.2,
+      "rank": 3,
+      "capital": null,
+      "population": 6228
+    },
+    {
+      "name": "Utqiagvik",
+      "region": "AK",
+      "x": 144.9,
+      "y": 463.01,
+      "rank": 3,
+      "capital": null,
+      "population": 4336
+    },
+    {
+      "name": "Valdez",
+      "region": "AK",
+      "x": 180.81,
+      "y": 540.57,
+      "rank": 3,
+      "capital": null,
+      "population": 4036
+    },
+    {
+      "name": "Nome",
+      "region": "AK",
+      "x": 113.87,
+      "y": 512.49,
+      "rank": 3,
+      "capital": null,
+      "population": 3485
+    },
+    {
+      "name": "Prudhoe Bay",
+      "region": "AK",
+      "x": 166.39,
+      "y": 470.23,
+      "rank": 3,
+      "capital": null,
+      "population": 2500
+    },
+    {
+      "name": "Point Hope",
+      "region": "AK",
+      "x": 114.98,
+      "y": 482.23,
+      "rank": 3,
+      "capital": null,
+      "population": 461
+    },
+    {
+      "name": "Cold Bay",
+      "region": "AK",
+      "x": 113.27,
+      "y": 586.26,
+      "rank": 3,
+      "capital": null,
+      "population": 200
+    },
+    {
+      "name": "Baltimore",
+      "region": "MD",
+      "x": 877.66,
+      "y": 258.42,
+      "rank": 4,
+      "capital": null,
+      "population": 2255000
+    },
+    {
+      "name": "San Bernardino",
+      "region": "CA",
+      "x": 159.57,
+      "y": 364.96,
+      "rank": 4,
+      "capital": null,
+      "population": 1745000
+    },
+    {
+      "name": "Kansas City",
+      "region": "MO",
+      "x": 571.56,
+      "y": 295.92,
+      "rank": 4,
+      "capital": null,
+      "population": 1469000
+    },
+    {
+      "name": "Fort Worth",
+      "region": "TX",
+      "x": 522.56,
+      "y": 439.58,
+      "rank": 4,
+      "capital": null,
+      "population": 1440454
+    },
+    {
+      "name": "Indianapolis",
+      "region": "IN",
+      "x": 714.71,
+      "y": 272.94,
+      "rank": 4,
+      "capital": "region",
+      "population": 1436000
+    },
+    {
+      "name": "Orlando",
+      "region": "FL",
+      "x": 834.36,
+      "y": 512.41,
+      "rank": 4,
+      "capital": null,
+      "population": 1350000
+    },
+    {
+      "name": "Austin",
+      "region": "TX",
+      "x": 513.97,
+      "y": 494.92,
+      "rank": 4,
+      "capital": "region",
+      "population": 1161000
+    },
+    {
+      "name": "Bridgeport",
+      "region": "CT",
+      "x": 924.54,
+      "y": 203.9,
+      "rank": 4,
+      "capital": null,
+      "population": 1018000
+    },
+    {
+      "name": "Jacksonville",
+      "region": "FL",
+      "x": 822.6,
+      "y": 473.04,
+      "rank": 4,
+      "capital": null,
+      "population": 988000
+    },
+    {
+      "name": "Tulsa",
+      "region": "OK",
+      "x": 548.86,
+      "y": 363.58,
+      "rank": 4,
+      "capital": null,
+      "population": 946962
+    },
+    {
+      "name": "Richmond",
+      "region": "VA",
+      "x": 871.16,
+      "y": 299.58,
+      "rank": 4,
+      "capital": "region",
+      "population": 912000
+    },
+    {
+      "name": "Albuquerque",
+      "region": "NM",
+      "x": 355.02,
+      "y": 375.69,
+      "rank": 4,
+      "capital": null,
+      "population": 898642
+    },
+    {
+      "name": "Tucson",
+      "region": "AZ",
+      "x": 268.44,
+      "y": 429.82,
+      "rank": 4,
+      "capital": null,
+      "population": 823000
+    },
+    {
+      "name": "Rochester",
+      "region": "NY",
+      "x": 843.88,
+      "y": 175.78,
+      "rank": 4,
+      "capital": null,
+      "population": 755000
+    },
+    {
+      "name": "El Paso",
+      "region": "TX",
+      "x": 349.09,
+      "y": 450.3,
+      "rank": 4,
+      "capital": null,
+      "population": 753000
+    },
+    {
+      "name": "Saint Paul",
+      "region": "MN",
+      "x": 593.67,
+      "y": 164.06,
+      "rank": 4,
+      "capital": "region",
+      "population": 734854
+    },
+    {
+      "name": "Syracuse",
+      "region": "NY",
+      "x": 867.85,
+      "y": 173.7,
+      "rank": 4,
+      "capital": null,
+      "population": 662577
+    },
+    {
+      "name": "Knoxville",
+      "region": "TN",
+      "x": 763.63,
+      "y": 353.22,
+      "rank": 4,
+      "capital": null,
+      "population": 655400
+    },
+    {
+      "name": "Fresno",
+      "region": "CA",
+      "x": 130.11,
+      "y": 296.92,
+      "rank": 4,
+      "capital": null,
+      "population": 616353
+    },
+    {
+      "name": "Vancouver",
+      "region": "WA",
+      "x": 136.34,
+      "y": 91.39,
+      "rank": 4,
+      "capital": null,
+      "population": 525802
+    },
+    {
+      "name": "Colorado Springs",
+      "region": "CO",
+      "x": 396.22,
+      "y": 294.64,
+      "rank": 4,
+      "capital": null,
+      "population": 493654
+    },
+    {
+      "name": "Laredo",
+      "region": "TX",
+      "x": 477.73,
+      "y": 555.62,
+      "rank": 4,
+      "capital": null,
+      "population": 434768
+    },
+    {
+      "name": "Baton Rouge",
+      "region": "LA",
+      "x": 641.05,
+      "y": 488.6,
+      "rank": 4,
+      "capital": "region",
+      "population": 422072
+    },
+    {
+      "name": "Columbia",
+      "region": "SC",
+      "x": 821.88,
+      "y": 389.82,
+      "rank": 4,
+      "capital": "region",
+      "population": 398093
+    },
+    {
+      "name": "Spokane",
+      "region": "WA",
+      "x": 225.54,
+      "y": 67.52,
+      "rank": 4,
+      "capital": null,
+      "population": 347705
+    },
+    {
+      "name": "Reno",
+      "region": "NV",
+      "x": 144.88,
+      "y": 235.86,
+      "rank": 4,
+      "capital": null,
+      "population": 328585
+    },
+    {
+      "name": "Corpus Christi",
+      "region": "TX",
+      "x": 519.75,
+      "y": 551.44,
+      "rank": 4,
+      "capital": null,
+      "population": 277454
+    },
+    {
+      "name": "Shreveport",
+      "region": "LA",
+      "x": 589.43,
+      "y": 444.66,
+      "rank": 4,
+      "capital": null,
+      "population": 248053
+    },
+    {
+      "name": "Salem",
+      "region": "OR",
+      "x": 126.17,
+      "y": 104.8,
+      "rank": 4,
+      "capital": "region",
+      "population": 229010
+    },
+    {
+      "name": "Tallahassee",
+      "region": "FL",
+      "x": 772.5,
+      "y": 477.28,
+      "rank": 4,
+      "capital": "region",
+      "population": 221222
+    },
+    {
+      "name": "Montgomery",
+      "region": "AL",
+      "x": 729.91,
+      "y": 438.93,
+      "rank": 4,
+      "capital": "region",
+      "population": 198325
+    },
+    {
+      "name": "Amarillo",
+      "region": "TX",
+      "x": 442.11,
+      "y": 380.42,
+      "rank": 4,
+      "capital": null,
+      "population": 181766
+    },
+    {
+      "name": "Santa Barbara",
+      "region": "CA",
+      "x": 118.06,
+      "y": 348.26,
+      "rank": 4,
+      "capital": null,
+      "population": 181632
+    },
+    {
+      "name": "Savannah",
+      "region": "GA",
+      "x": 827.39,
+      "y": 433.95,
+      "rank": 4,
+      "capital": null,
+      "population": 180187
+    },
+    {
+      "name": "Fargo",
+      "region": "ND",
+      "x": 535.49,
+      "y": 121.54,
+      "rank": 4,
+      "capital": null,
+      "population": 162842
+    },
+    {
+      "name": "Wilmington",
+      "region": "NC",
+      "x": 876.84,
+      "y": 374.94,
+      "rank": 4,
+      "capital": null,
+      "population": 161560
+    },
+    {
+      "name": "Olympia",
+      "region": "WA",
+      "x": 141.21,
+      "y": 60.11,
+      "rank": 4,
+      "capital": "region",
+      "population": 156984
+    },
+    {
+      "name": "Sioux Falls",
+      "region": "SD",
+      "x": 535.83,
+      "y": 195.99,
+      "rank": 4,
+      "capital": null,
+      "population": 155724
+    },
+    {
+      "name": "Topeka",
+      "region": "KS",
+      "x": 553.28,
+      "y": 297.42,
+      "rank": 4,
+      "capital": "region",
+      "population": 132091
+    },
+    {
+      "name": "Charleston",
+      "region": "WV",
+      "x": 796.16,
+      "y": 294.42,
+      "rank": 4,
+      "capital": "region",
+      "population": 123799
+    },
+    {
+      "name": "Billings",
+      "region": "MT",
+      "x": 352.49,
+      "y": 132.99,
+      "rank": 4,
+      "capital": null,
+      "population": 104552
+    },
+    {
+      "name": "Burlington",
+      "region": "VT",
+      "x": 906.78,
+      "y": 131.99,
+      "rank": 4,
+      "capital": null,
+      "population": 93807
+    },
+    {
+      "name": "Sault Ste. Marie",
+      "region": "MI",
+      "x": 727.09,
+      "y": 119.08,
+      "rank": 4,
+      "capital": null,
+      "population": 83805
+    },
+    {
+      "name": "Missoula",
+      "region": "MT",
+      "x": 273.05,
+      "y": 95.63,
+      "rank": 4,
+      "capital": null,
+      "population": 72856
+    },
+    {
+      "name": "Great Falls",
+      "region": "MT",
+      "x": 316,
+      "y": 89.05,
+      "rank": 4,
+      "capital": null,
+      "population": 66558
+    },
+    {
+      "name": "Flagstaff",
+      "region": "AZ",
+      "x": 265.39,
+      "y": 361.09,
+      "rank": 4,
+      "capital": null,
+      "population": 63993
+    },
+    {
+      "name": "Casper",
+      "region": "WY",
+      "x": 379.68,
+      "y": 202.71,
+      "rank": 4,
+      "capital": null,
+      "population": 60791
+    },
+    {
+      "name": "Hilo",
+      "region": "HI",
+      "x": 378.41,
+      "y": 581.45,
+      "rank": 4,
+      "capital": null,
+      "population": 52391
+    },
+    {
+      "name": "Eureka",
+      "region": "CA",
+      "x": 81.97,
+      "y": 188.63,
+      "rank": 4,
+      "capital": null,
+      "population": 42398
+    },
+    {
+      "name": "Minot",
+      "region": "ND",
+      "x": 468.04,
+      "y": 89.27,
+      "rank": 4,
+      "capital": null,
+      "population": 39439
+    },
+    {
+      "name": "Augusta",
+      "region": "ME",
+      "x": 960.61,
+      "y": 121.63,
+      "rank": 4,
+      "capital": "region",
+      "population": 24042
+    },
+    {
+      "name": "Elko",
+      "region": "NV",
+      "x": 218.46,
+      "y": 222.86,
+      "rank": 4,
+      "capital": null,
+      "population": 19252
+    },
+    {
+      "name": "International Falls",
+      "region": "MN",
+      "x": 586.3,
+      "y": 82.8,
+      "rank": 4,
+      "capital": null,
+      "population": 15240
+    },
+    {
+      "name": "Sitka",
+      "region": "AK",
+      "x": 230.31,
+      "y": 563.16,
+      "rank": 4,
+      "capital": null,
+      "population": 8931
+    },
+    {
+      "name": "Long Beach",
+      "region": "CA",
+      "x": 141.7,
+      "y": 368.79,
+      "rank": 6,
+      "capital": null,
+      "population": 2036134
+    },
+    {
+      "name": "Oakland",
+      "region": "CA",
+      "x": 93.71,
+      "y": 262.39,
+      "rank": 6,
+      "capital": null,
+      "population": 1510271
+    },
+    {
+      "name": "Virginia Beach",
+      "region": "VA",
+      "x": 899.76,
+      "y": 309.76,
+      "rank": 6,
+      "capital": null,
+      "population": 1491000
+    },
+    {
+      "name": "Providence",
+      "region": "RI",
+      "x": 949.72,
+      "y": 182.58,
+      "rank": 6,
+      "capital": "region",
+      "population": 1277000
+    },
+    {
+      "name": "Columbus",
+      "region": "OH",
+      "x": 767.77,
+      "y": 261.3,
+      "rank": 6,
+      "capital": "region",
+      "population": 1270000
+    },
+    {
+      "name": "West Palm Beach",
+      "region": "FL",
+      "x": 865.36,
+      "y": 547.23,
+      "rank": 6,
+      "capital": null,
+      "population": 1250000
+    },
+    {
+      "name": "Birmingham",
+      "region": "AL",
+      "x": 717.17,
+      "y": 413.78,
+      "rank": 6,
+      "capital": null,
+      "population": 1128047
+    },
+    {
+      "name": "Charlotte",
+      "region": "NC",
+      "x": 821.17,
+      "y": 362.3,
+      "rank": 6,
+      "capital": null,
+      "population": 995000
+    },
+    {
+      "name": "Louisville",
+      "region": "KY",
+      "x": 725.55,
+      "y": 306.41,
+      "rank": 6,
+      "capital": null,
+      "population": 948000
+    },
+    {
+      "name": "Hartford",
+      "region": "CT",
+      "x": 929.74,
+      "y": 188.92,
+      "rank": 6,
+      "capital": "region",
+      "population": 913000
+    },
+    {
+      "name": "Albany",
+      "region": "NY",
+      "x": 907.84,
+      "y": 173.83,
+      "rank": 6,
+      "capital": "region",
+      "population": 870716
+    },
+    {
+      "name": "St. Petersburg",
+      "region": "FL",
+      "x": 811.39,
+      "y": 532.51,
+      "rank": 6,
+      "capital": null,
+      "population": 800313
+    },
+    {
+      "name": "Dayton",
+      "region": "OH",
+      "x": 748.04,
+      "y": 269.12,
+      "rank": 6,
+      "capital": null,
+      "population": 773000
+    },
+    {
+      "name": "Tacoma",
+      "region": "WA",
+      "x": 149.11,
+      "y": 57.7,
+      "rank": 6,
+      "capital": null,
+      "population": 719868
+    },
+    {
+      "name": "Sarasota",
+      "region": "FL",
+      "x": 815.68,
+      "y": 541.67,
+      "rank": 6,
+      "capital": null,
+      "population": 589959
+    },
+    {
+      "name": "Harrisburg",
+      "region": "PA",
+      "x": 868.65,
+      "y": 237.42,
+      "rank": 6,
+      "capital": "region",
+      "population": 528892
+    },
+    {
+      "name": "Toledo",
+      "region": "OH",
+      "x": 753.45,
+      "y": 225.51,
+      "rank": 6,
+      "capital": null,
+      "population": 469924
+    },
+    {
+      "name": "Bakersfield",
+      "region": "CA",
+      "x": 135.62,
+      "y": 330.36,
+      "rank": 6,
+      "capital": null,
+      "population": 443129
+    },
+    {
+      "name": "Charleston",
+      "region": "SC",
+      "x": 845.29,
+      "y": 413.45,
+      "rank": 6,
+      "capital": null,
+      "population": 411940
+    },
+    {
+      "name": "Wichita",
+      "region": "KS",
+      "x": 524.34,
+      "y": 328.28,
+      "rank": 6,
+      "capital": null,
+      "population": 401843
+    },
+    {
+      "name": "Greensboro",
+      "region": "NC",
+      "x": 836.3,
+      "y": 340.04,
+      "rank": 6,
+      "capital": null,
+      "population": 388887
+    },
+    {
+      "name": "Trenton",
+      "region": "NJ",
+      "x": 904.33,
+      "y": 231.03,
+      "rank": 6,
+      "capital": "region",
+      "population": 366513
+    },
+    {
+      "name": "Provo",
+      "region": "UT",
+      "x": 284.29,
+      "y": 248.66,
+      "rank": 6,
+      "capital": null,
+      "population": 356712
+    },
+    {
+      "name": "Madison",
+      "region": "WI",
+      "x": 654.72,
+      "y": 203.03,
+      "rank": 6,
+      "capital": "region",
+      "population": 327447
+    },
+    {
+      "name": "Youngstown",
+      "region": "OH",
+      "x": 803.04,
+      "y": 230.51,
+      "rank": 6,
+      "capital": null,
+      "population": 311990
+    },
+    {
+      "name": "Lansing",
+      "region": "MI",
+      "x": 734.14,
+      "y": 203.13,
+      "rank": 6,
+      "capital": "region",
+      "population": 279952
+    },
+    {
+      "name": "Little Rock",
+      "region": "AR",
+      "x": 614.45,
+      "y": 393.51,
+      "rank": 6,
+      "capital": "region",
+      "population": 270893
+    },
+    {
+      "name": "Lexington",
+      "region": "KY",
+      "x": 747.64,
+      "y": 307.89,
+      "rank": 6,
+      "capital": null,
+      "population": 264578
+    },
+    {
+      "name": "Augusta",
+      "region": "GA",
+      "x": 806.31,
+      "y": 404.42,
+      "rank": 6,
+      "capital": null,
+      "population": 262332
+    },
+    {
+      "name": "Canton",
+      "region": "OH",
+      "x": 792.05,
+      "y": 239.12,
+      "rank": 6,
+      "capital": null,
+      "population": 258660
+    },
+    {
+      "name": "Chattanooga",
+      "region": "TN",
+      "x": 742.25,
+      "y": 376.25,
+      "rank": 6,
+      "capital": null,
+      "population": 257589
+    },
+    {
+      "name": "Mobile",
+      "region": "AL",
+      "x": 699.94,
+      "y": 479.64,
+      "rank": 6,
+      "capital": null,
+      "population": 253466
+    },
+    {
+      "name": "Lincoln",
+      "region": "NE",
+      "x": 536.2,
+      "y": 257.45,
+      "rank": 6,
+      "capital": "region",
+      "population": 246220
+    },
+    {
+      "name": "Eugene",
+      "region": "OR",
+      "x": 119.48,
+      "y": 123.35,
+      "rank": 6,
+      "capital": null,
+      "population": 245158
+    },
+    {
+      "name": "Pensacola",
+      "region": "FL",
+      "x": 716.39,
+      "y": 484.01,
+      "rank": 6,
+      "capital": null,
+      "population": 234384
+    },
+    {
+      "name": "Lancaster",
+      "region": "CA",
+      "x": 147.65,
+      "y": 348.87,
+      "rank": 6,
+      "capital": null,
+      "population": 225799
+    },
+    {
+      "name": "Daytona Beach",
+      "region": "FL",
+      "x": 838.89,
+      "y": 495.9,
+      "rank": 6,
+      "capital": null,
+      "population": 216890
+    },
+    {
+      "name": "Lubbock",
+      "region": "TX",
+      "x": 438.91,
+      "y": 417.48,
+      "rank": 6,
+      "capital": null,
+      "population": 213300
+    },
+    {
+      "name": "Huntsville",
+      "region": "AL",
+      "x": 718.49,
+      "y": 386.71,
+      "rank": 6,
+      "capital": null,
+      "population": 212733
+    },
+    {
+      "name": "Springfield",
+      "region": "MO",
+      "x": 594.89,
+      "y": 338.98,
+      "rank": 6,
+      "capital": null,
+      "population": 210939
+    },
+    {
+      "name": "Green Bay",
+      "region": "WI",
+      "x": 674.67,
+      "y": 168.69,
+      "rank": 6,
+      "capital": null,
+      "population": 198611
+    },
+    {
+      "name": "Gainesville",
+      "region": "FL",
+      "x": 812.34,
+      "y": 489.97,
+      "rank": 6,
+      "capital": null,
+      "population": 191097
+    },
+    {
+      "name": "Fort Myers",
+      "region": "FL",
+      "x": 831.22,
+      "y": 555.02,
+      "rank": 6,
+      "capital": null,
+      "population": 188606
+    },
+    {
+      "name": "Brownsville",
+      "region": "TX",
+      "x": 517.16,
+      "y": 591.89,
+      "rank": 6,
+      "capital": null,
+      "population": 181399
+    },
+    {
+      "name": "Evansville",
+      "region": "IN",
+      "x": 694.81,
+      "y": 315.16,
+      "rank": 6,
+      "capital": null,
+      "population": 174102
+    },
+    {
+      "name": "Peoria",
+      "region": "IL",
+      "x": 655.47,
+      "y": 256.79,
+      "rank": 6,
+      "capital": null,
+      "population": 172308
+    },
+    {
+      "name": "Cedar Rapids",
+      "region": "IA",
+      "x": 619.22,
+      "y": 229.94,
+      "rank": 6,
+      "capital": null,
+      "population": 170621
+    },
+    {
+      "name": "Waco",
+      "region": "TX",
+      "x": 525.85,
+      "y": 466.38,
+      "rank": 6,
+      "capital": null,
+      "population": 167347
+    },
+    {
+      "name": "Lafayette",
+      "region": "LA",
+      "x": 624.39,
+      "y": 495.16,
+      "rank": 6,
+      "capital": null,
+      "population": 158214
+    },
+    {
+      "name": "Salinas",
+      "region": "CA",
+      "x": 97.67,
+      "y": 289.82,
+      "rank": 6,
+      "capital": null,
+      "population": 156784
+    },
+    {
+      "name": "Santa Cruz",
+      "region": "CA",
+      "x": 92.86,
+      "y": 281.69,
+      "rank": 6,
+      "capital": null,
+      "population": 148444
+    },
+    {
+      "name": "Portland",
+      "region": "ME",
+      "x": 957.29,
+      "y": 137.44,
+      "rank": 6,
+      "capital": null,
+      "population": 135866
+    },
+    {
+      "name": "Springfield",
+      "region": "IL",
+      "x": 655.85,
+      "y": 277.14,
+      "rank": 6,
+      "capital": "region",
+      "population": 134715
+    },
+    {
+      "name": "Monterey",
+      "region": "CA",
+      "x": 92.86,
+      "y": 290.41,
+      "rank": 6,
+      "capital": null,
+      "population": 124288
+    },
+    {
+      "name": "Saginaw",
+      "region": "MI",
+      "x": 741.84,
+      "y": 186.63,
+      "rank": 6,
+      "capital": null,
+      "population": 121379
+    },
+    {
+      "name": "Abilene",
+      "region": "TX",
+      "x": 477.58,
+      "y": 444.93,
+      "rank": 6,
+      "capital": null,
+      "population": 114247
+    },
+    {
+      "name": "Tyler",
+      "region": "TX",
+      "x": 560.75,
+      "y": 448.45,
+      "rank": 6,
+      "capital": null,
+      "population": 112245
+    },
+    {
+      "name": "Medford",
+      "region": "OR",
+      "x": 112.14,
+      "y": 161.56,
+      "rank": 6,
+      "capital": null,
+      "population": 108525
+    },
+    {
+      "name": "Odessa",
+      "region": "TX",
+      "x": 427.31,
+      "y": 455.83,
+      "rank": 6,
+      "capital": null,
+      "population": 106054
+    },
+    {
+      "name": "Grand Junction",
+      "region": "CO",
+      "x": 332.51,
+      "y": 282.22,
+      "rank": 6,
+      "capital": null,
+      "population": 104214
+    },
+    {
+      "name": "Lynchburg",
+      "region": "VA",
+      "x": 842.55,
+      "y": 308.15,
+      "rank": 6,
+      "capital": null,
+      "population": 103893
+    },
+    {
+      "name": "Wichita Falls",
+      "region": "TX",
+      "x": 501.69,
+      "y": 412.73,
+      "rank": 6,
+      "capital": null,
+      "population": 101212
+    },
+    {
+      "name": "Yakima",
+      "region": "WA",
+      "x": 174.07,
+      "y": 79.29,
+      "rank": 6,
+      "capital": null,
+      "population": 99287
+    },
+    {
+      "name": "St. George",
+      "region": "UT",
+      "x": 238.83,
+      "y": 312.72,
+      "rank": 6,
+      "capital": null,
+      "population": 98638
+    },
+    {
+      "name": "Chico",
+      "region": "CA",
+      "x": 112.81,
+      "y": 222.64,
+      "rank": 6,
+      "capital": null,
+      "population": 95888
+    },
+    {
+      "name": "Yuma",
+      "region": "AZ",
+      "x": 201.39,
+      "y": 406.96,
+      "rank": 6,
+      "capital": null,
+      "population": 92489
+    },
+    {
+      "name": "Charlottesville",
+      "region": "VA",
+      "x": 851.51,
+      "y": 292.38,
+      "rank": 6,
+      "capital": null,
+      "population": 87925
+    },
+    {
+      "name": "Duluth",
+      "region": "MN",
+      "x": 607.44,
+      "y": 122.45,
+      "rank": 6,
+      "capital": null,
+      "population": 84800
+    },
+    {
+      "name": "Idaho Falls",
+      "region": "ID",
+      "x": 289.86,
+      "y": 176.11,
+      "rank": 6,
+      "capital": null,
+      "population": 79399
+    },
+    {
+      "name": "Alexandria",
+      "region": "LA",
+      "x": 615.26,
+      "y": 470.59,
+      "rank": 6,
+      "capital": null,
+      "population": 76565
+    },
+    {
+      "name": "Bend",
+      "region": "OR",
+      "x": 147.1,
+      "y": 131.08,
+      "rank": 6,
+      "capital": null,
+      "population": 75441
+    },
+    {
+      "name": "Wausau",
+      "region": "WI",
+      "x": 648.18,
+      "y": 161.05,
+      "rank": 6,
+      "capital": null,
+      "population": 75422
+    },
+    {
+      "name": "Freeport",
+      "region": "TX",
+      "x": 560.21,
+      "y": 524.47,
+      "rank": 6,
+      "capital": null,
+      "population": 74892
+    },
+    {
+      "name": "Rapid City",
+      "region": "SD",
+      "x": 431.98,
+      "y": 179.72,
+      "rank": 6,
+      "capital": null,
+      "population": 73632
+    },
+    {
+      "name": "Galveston",
+      "region": "TX",
+      "x": 571.07,
+      "y": 516.73,
+      "rank": 6,
+      "capital": null,
+      "population": 68612
+    },
+    {
+      "name": "Victoria",
+      "region": "TX",
+      "x": 527.92,
+      "y": 527.86,
+      "rank": 6,
+      "capital": null,
+      "population": 64209
+    },
+    {
+      "name": "Pocatello",
+      "region": "ID",
+      "x": 281.01,
+      "y": 188.16,
+      "rank": 6,
+      "capital": null,
+      "population": 63998
+    },
+    {
+      "name": "Wenatchee",
+      "region": "WA",
+      "x": 181.61,
+      "y": 62.37,
+      "rank": 6,
+      "capital": null,
+      "population": 62625
+    },
+    {
+      "name": "Ithaca",
+      "region": "NY",
+      "x": 865.12,
+      "y": 188.28,
+      "rank": 6,
+      "capital": null,
+      "population": 59930
+    },
+    {
+      "name": "Grand Forks",
+      "region": "ND",
+      "x": 532.01,
+      "y": 98.21,
+      "rank": 6,
+      "capital": null,
+      "population": 58566
+    },
+    {
+      "name": "Carson City",
+      "region": "NV",
+      "x": 143.73,
+      "y": 244.1,
+      "rank": 6,
+      "capital": "region",
+      "population": 57341
+    },
+    {
+      "name": "Jefferson City",
+      "region": "MO",
+      "x": 613.84,
+      "y": 306.78,
+      "rank": 6,
+      "capital": "region",
+      "population": 55139
+    },
+    {
+      "name": "Prescott",
+      "region": "AZ",
+      "x": 248.79,
+      "y": 372.17,
+      "rank": 6,
+      "capital": null,
+      "population": 55038
+    },
+    {
+      "name": "Biloxi",
+      "region": "MS",
+      "x": 684.44,
+      "y": 487.26,
+      "rank": 6,
+      "capital": null,
+      "population": 50644
+    },
+    {
+      "name": "Bangor",
+      "region": "ME",
+      "x": 972.85,
+      "y": 106.65,
+      "rank": 6,
+      "capital": null,
+      "population": 50213
+    },
+    {
+      "name": "Myrtle Beach",
+      "region": "SC",
+      "x": 862.02,
+      "y": 390.01,
+      "rank": 6,
+      "capital": null,
+      "population": 49357
+    },
+    {
+      "name": "Lewiston",
+      "region": "ID",
+      "x": 225.39,
+      "y": 96.08,
+      "rank": 6,
+      "capital": null,
+      "population": 49289
+    },
+    {
+      "name": "Brunswick",
+      "region": "GA",
+      "x": 823.25,
+      "y": 454.4,
+      "rank": 6,
+      "capital": null,
+      "population": 47085
+    },
+    {
+      "name": "Concord",
+      "region": "NH",
+      "x": 939.85,
+      "y": 152.96,
+      "rank": 6,
+      "capital": "region",
+      "population": 44606
+    },
+    {
+      "name": "Klamath Falls",
+      "region": "OR",
+      "x": 128.8,
+      "y": 168.68,
+      "rank": 6,
+      "capital": null,
+      "population": 42978
+    },
+    {
+      "name": "Frankfort",
+      "region": "KY",
+      "x": 740.78,
+      "y": 305.28,
+      "rank": 6,
+      "capital": "region",
+      "population": 36688
+    },
+    {
+      "name": "Alamogordo",
+      "region": "NM",
+      "x": 362.11,
+      "y": 426.44,
+      "rank": 6,
+      "capital": null,
+      "population": 36058
+    },
+    {
+      "name": "Butte",
+      "region": "MT",
+      "x": 291.73,
+      "y": 118.75,
+      "rank": 6,
+      "capital": null,
+      "population": 34190
+    },
+    {
+      "name": "Kalispell",
+      "region": "MT",
+      "x": 273.83,
+      "y": 65.79,
+      "rank": 6,
+      "capital": null,
+      "population": 32062
+    },
+    {
+      "name": "Coos Bay",
+      "region": "OR",
+      "x": 97.86,
+      "y": 132.89,
+      "rank": 6,
+      "capital": null,
+      "population": 31976
+    },
+    {
+      "name": "Douglas",
+      "region": "AZ",
+      "x": 290.75,
+      "y": 452.45,
+      "rank": 6,
+      "capital": null,
+      "population": 30185
+    },
+    {
+      "name": "Key West",
+      "region": "FL",
+      "x": 839.64,
+      "y": 600.41,
+      "rank": 6,
+      "capital": null,
+      "population": 29377
+    },
+    {
+      "name": "Laramie",
+      "region": "WY",
+      "x": 388.08,
+      "y": 238.35,
+      "rank": 6,
+      "capital": null,
+      "population": 26934
+    },
+    {
+      "name": "Vicksburg",
+      "region": "MS",
+      "x": 643.8,
+      "y": 445.87,
+      "rank": 6,
+      "capital": null,
+      "population": 25701
+    },
+    {
+      "name": "Carlsbad",
+      "region": "NM",
+      "x": 393.34,
+      "y": 440.25,
+      "rank": 6,
+      "capital": null,
+      "population": 25302
+    },
+    {
+      "name": "Bemidji",
+      "region": "MN",
+      "x": 564.64,
+      "y": 108.22,
+      "rank": 6,
+      "capital": null,
+      "population": 14796
+    },
+    {
+      "name": "Palmer",
+      "region": "AK",
+      "x": 170.19,
+      "y": 537.92,
+      "rank": 6,
+      "capital": null,
+      "population": 13111
+    },
+    {
+      "name": "Los Alamos",
+      "region": "NM",
+      "x": 363.13,
+      "y": 358.74,
+      "rank": 6,
+      "capital": null,
+      "population": 12233
+    },
+    {
+      "name": "Havre",
+      "region": "MT",
+      "x": 343.7,
+      "y": 69.86,
+      "rank": 6,
+      "capital": null,
+      "population": 11154
+    },
+    {
+      "name": "Cody",
+      "region": "WY",
+      "x": 340.62,
+      "y": 159.95,
+      "rank": 6,
+      "capital": null,
+      "population": 9161
+    },
+    {
+      "name": "Ketchikan",
+      "region": "AK",
+      "x": 249.54,
+      "y": 571.04,
+      "rank": 6,
+      "capital": null,
+      "population": 9070
+    },
+    {
+      "name": "Kenai",
+      "region": "AK",
+      "x": 162.58,
+      "y": 546.58,
+      "rank": 6,
+      "capital": null,
+      "population": 7610
+    },
+    {
+      "name": "Ely",
+      "region": "NV",
+      "x": 225.77,
+      "y": 260.89,
+      "rank": 6,
+      "capital": null,
+      "population": 4216
+    },
+    {
+      "name": "Unalaska",
+      "region": "AK",
+      "x": 94.5,
+      "y": 593.77,
+      "rank": 6,
+      "capital": null,
+      "population": 3571
+    },
+    {
+      "name": "Seward",
+      "region": "AK",
+      "x": 169.65,
+      "y": 549.56,
+      "rank": 6,
+      "capital": null,
+      "population": 2900
+    },
+    {
+      "name": "Cordova",
+      "region": "AK",
+      "x": 183.6,
+      "y": 544.93,
+      "rank": 6,
+      "capital": null,
+      "population": 2257
+    },
+    {
+      "name": "Hooper Bay",
+      "region": "AK",
+      "x": 107.36,
+      "y": 535.04,
+      "rank": 6,
+      "capital": null,
+      "population": 1079
+    },
+    {
+      "name": "Skagway",
+      "region": "AK",
+      "x": 225.14,
+      "y": 545.06,
+      "rank": 6,
+      "capital": null,
+      "population": 955
+    },
+    {
+      "name": "Fort Yukon",
+      "region": "AK",
+      "x": 179.25,
+      "y": 497.9,
+      "rank": 6,
+      "capital": null,
+      "population": 833
+    },
+    {
+      "name": "Gambell",
+      "region": "AK",
+      "x": 91.6,
+      "y": 513.35,
+      "rank": 6,
+      "capital": null,
+      "population": 681
+    },
+    {
+      "name": "Galena",
+      "region": "AK",
+      "x": 142.3,
+      "y": 513.79,
+      "rank": 6,
+      "capital": null,
+      "population": 500
+    },
+    {
+      "name": "Togiak",
+      "region": "AK",
+      "x": 126.55,
+      "y": 557.23,
+      "rank": 6,
+      "capital": null,
+      "population": 236
+    },
+    {
+      "name": "Wainwright",
+      "region": "AK",
+      "x": 136.1,
+      "y": 467.44,
+      "rank": 6,
+      "capital": null,
+      "population": 174
+    },
+    {
+      "name": "Kaktovik",
+      "region": "AK",
+      "x": 180.16,
+      "y": 470.18,
+      "rank": 6,
+      "capital": null,
+      "population": 101
+    },
+    {
+      "name": "Red Devil",
+      "region": "AK",
+      "x": 139.86,
+      "y": 537.01,
+      "rank": 6,
+      "capital": null,
+      "population": 25
+    },
+    {
+      "name": "Irvine",
+      "region": "CA",
+      "x": 147.86,
+      "y": 372.48,
+      "rank": 7,
+      "capital": null,
+      "population": 3010232
+    },
+    {
+      "name": "Fort Lauderdale",
+      "region": "FL",
+      "x": 867.24,
+      "y": 560.61,
+      "rank": 7,
+      "capital": null,
+      "population": 2042042
+    },
+    {
+      "name": "New Haven",
+      "region": "CT",
+      "x": 928.63,
+      "y": 199.45,
+      "rank": 7,
+      "capital": null,
+      "population": 846766
+    },
+    {
+      "name": "Lowell",
+      "region": "MA",
+      "x": 946.64,
+      "y": 164.52,
+      "rank": 7,
+      "capital": null,
+      "population": 723629
+    },
+    {
+      "name": "Akron",
+      "region": "OH",
+      "x": 788.77,
+      "y": 233.43,
+      "rank": 7,
+      "capital": null,
+      "population": 703200
+    },
+    {
+      "name": "Stockton",
+      "region": "CA",
+      "x": 111.27,
+      "y": 263.68,
+      "rank": 7,
+      "capital": null,
+      "population": 685306
+    },
+    {
+      "name": "Oceanside",
+      "region": "CA",
+      "x": 154.12,
+      "y": 385.22,
+      "rank": 7,
+      "capital": null,
+      "population": 609854
+    },
+    {
+      "name": "Gary",
+      "region": "IN",
+      "x": 691.32,
+      "y": 233.79,
+      "rank": 7,
+      "capital": null,
+      "population": 591180
+    },
+    {
+      "name": "Covington",
+      "region": "KY",
+      "x": 744.68,
+      "y": 284.73,
+      "rank": 7,
+      "capital": null,
+      "population": 585489
+    },
+    {
+      "name": "Grand Rapids",
+      "region": "MI",
+      "x": 715.36,
+      "y": 200.08,
+      "rank": 7,
+      "capital": null,
+      "population": 535829
+    },
+    {
+      "name": "Everett",
+      "region": "WA",
+      "x": 157.09,
+      "y": 43.35,
+      "rank": 7,
+      "capital": null,
+      "population": 486903
+    },
+    {
+      "name": "Columbia",
+      "region": "MO",
+      "x": 610.73,
+      "y": 298.42,
+      "rank": 7,
+      "capital": null,
+      "population": 398093
+    },
+    {
+      "name": "Palm Springs",
+      "region": "CA",
+      "x": 171.69,
+      "y": 375.64,
+      "rank": 7,
+      "capital": null,
+      "population": 390115
+    },
+    {
+      "name": "Ogden",
+      "region": "UT",
+      "x": 282.49,
+      "y": 225.87,
+      "rank": 7,
+      "capital": null,
+      "population": 377224
+    },
+    {
+      "name": "St. Charles",
+      "region": "MO",
+      "x": 642.39,
+      "y": 300.69,
+      "rank": 7,
+      "capital": null,
+      "population": 360485
+    },
+    {
+      "name": "Greenville",
+      "region": "SC",
+      "x": 794.34,
+      "y": 374.47,
+      "rank": 7,
+      "capital": null,
+      "population": 350954
+    },
+    {
+      "name": "Aurora",
+      "region": "IL",
+      "x": 674.94,
+      "y": 231.02,
+      "rank": 7,
+      "capital": null,
+      "population": 350000
+    },
+    {
+      "name": "Modesto",
+      "region": "CA",
+      "x": 114.55,
+      "y": 271.65,
+      "rank": 7,
+      "capital": null,
+      "population": 323386
+    },
+    {
+      "name": "Fort Wayne",
+      "region": "IN",
+      "x": 728.93,
+      "y": 241.24,
+      "rank": 7,
+      "capital": null,
+      "population": 299871
+    },
+    {
+      "name": "Flint",
+      "region": "MI",
+      "x": 747.24,
+      "y": 195.15,
+      "rank": 7,
+      "capital": null,
+      "population": 295212
+    },
+    {
+      "name": "Worcester",
+      "region": "MA",
+      "x": 941.06,
+      "y": 174.44,
+      "rank": 7,
+      "capital": null,
+      "population": 287365
+    },
+    {
+      "name": "Winston-Salem",
+      "region": "NC",
+      "x": 828.05,
+      "y": 340.63,
+      "rank": 7,
+      "capital": null,
+      "population": 281683
+    },
+    {
+      "name": "Newark",
+      "region": "NJ",
+      "x": 911.3,
+      "y": 218.23,
+      "rank": 7,
+      "capital": null,
+      "population": 280123
+    },
+    {
+      "name": "Ann Arbor",
+      "region": "MI",
+      "x": 748.79,
+      "y": 211.12,
+      "rank": 7,
+      "capital": null,
+      "population": 265976
+    },
+    {
+      "name": "Naples",
+      "region": "FL",
+      "x": 834.17,
+      "y": 565.75,
+      "rank": 7,
+      "capital": null,
+      "population": 262306
+    },
+    {
+      "name": "Lakeville",
+      "region": "MN",
+      "x": 591.37,
+      "y": 170.71,
+      "rank": 7,
+      "capital": null,
+      "population": 261308
+    },
+    {
+      "name": "Davenport",
+      "region": "IA",
+      "x": 637.43,
+      "y": 238.38,
+      "rank": 7,
+      "capital": null,
+      "population": 255738
+    },
+    {
+      "name": "Fayetteville",
+      "region": "NC",
+      "x": 856.52,
+      "y": 359.81,
+      "rank": 7,
+      "capital": null,
+      "population": 243306
+    },
+    {
+      "name": "Santa Rosa",
+      "region": "CA",
+      "x": 90.65,
+      "y": 246.35,
+      "rank": 7,
+      "capital": null,
+      "population": 231792
+    },
+    {
+      "name": "Fort Collins",
+      "region": "CO",
+      "x": 395.28,
+      "y": 256.07,
+      "rank": 7,
+      "capital": null,
+      "population": 228385
+    },
+    {
+      "name": "Fort Pierce",
+      "region": "FL",
+      "x": 858.79,
+      "y": 532.51,
+      "rank": 7,
+      "capital": null,
+      "population": 228245
+    },
+    {
+      "name": "Kissimmee",
+      "region": "FL",
+      "x": 834.61,
+      "y": 517.33,
+      "rank": 7,
+      "capital": null,
+      "population": 225494
+    },
+    {
+      "name": "York",
+      "region": "PA",
+      "x": 872.66,
+      "y": 243.75,
+      "rank": 7,
+      "capital": null,
+      "population": 218010
+    },
+    {
+      "name": "Columbus",
+      "region": "GA",
+      "x": 753.89,
+      "y": 433.84,
+      "rank": 7,
+      "capital": null,
+      "population": 217980
+    },
+    {
+      "name": "Waukegan",
+      "region": "IL",
+      "x": 681.3,
+      "y": 216.96,
+      "rank": 7,
+      "capital": null,
+      "population": 200000
+    },
+    {
+      "name": "Roanoke",
+      "region": "VA",
+      "x": 829.24,
+      "y": 313.74,
+      "rank": 7,
+      "capital": null,
+      "population": 198171
+    },
+    {
+      "name": "Manchester",
+      "region": "NH",
+      "x": 942.37,
+      "y": 157.22,
+      "rank": 7,
+      "capital": null,
+      "population": 196566
+    },
+    {
+      "name": "Kalamazoo",
+      "region": "MI",
+      "x": 718.35,
+      "y": 214.95,
+      "rank": 7,
+      "capital": null,
+      "population": 183381
+    },
+    {
+      "name": "Erie",
+      "region": "PA",
+      "x": 808.48,
+      "y": 206.08,
+      "rank": 7,
+      "capital": null,
+      "population": 178182
+    },
+    {
+      "name": "Denton",
+      "region": "TX",
+      "x": 526.63,
+      "y": 428.92,
+      "rank": 7,
+      "capital": null,
+      "population": 176930
+    },
+    {
+      "name": "Wahiawa",
+      "region": "HI",
+      "x": 316.45,
+      "y": 541.58,
+      "rank": 7,
+      "capital": null,
+      "population": 174766
+    },
+    {
+      "name": "Wilmington",
+      "region": "DE",
+      "x": 893.32,
+      "y": 244.37,
+      "rank": 7,
+      "capital": null,
+      "population": 161560
+    },
+    {
+      "name": "Wilkes-Barre",
+      "region": "PA",
+      "x": 880.69,
+      "y": 212.42,
+      "rank": 7,
+      "capital": null,
+      "population": 158913
+    },
+    {
+      "name": "Scranton",
+      "region": "PA",
+      "x": 883.43,
+      "y": 208.14,
+      "rank": 7,
+      "capital": null,
+      "population": 156196
+    },
+    {
+      "name": "Niagara Falls",
+      "region": "NY",
+      "x": 821.63,
+      "y": 181.74,
+      "rank": 7,
+      "capital": null,
+      "population": 153134
+    },
+    {
+      "name": "Fayetteville",
+      "region": "AR",
+      "x": 580.61,
+      "y": 364.55,
+      "rank": 7,
+      "capital": null,
+      "population": 151671
+    },
+    {
+      "name": "Coral Gables",
+      "region": "FL",
+      "x": 865.8,
+      "y": 570.3,
+      "rank": 7,
+      "capital": null,
+      "population": 150000
+    },
+    {
+      "name": "Edinburg",
+      "region": "TX",
+      "x": 503.96,
+      "y": 583.14,
+      "rank": 7,
+      "capital": null,
+      "population": 150000
+    },
+    {
+      "name": "Schenectady",
+      "region": "NY",
+      "x": 904.11,
+      "y": 171,
+      "rank": 7,
+      "capital": null,
+      "population": 149255
+    },
+    {
+      "name": "Pasadena",
+      "region": "CA",
+      "x": 144.8,
+      "y": 360.65,
+      "rank": 7,
+      "capital": null,
+      "population": 144618
+    },
+    {
+      "name": "Urbana",
+      "region": "IL",
+      "x": 679.58,
+      "y": 268.09,
+      "rank": 7,
+      "capital": null,
+      "population": 144074
+    },
+    {
+      "name": "Belleville",
+      "region": "IL",
+      "x": 651.48,
+      "y": 306,
+      "rank": 7,
+      "capital": null,
+      "population": 143900
+    },
+    {
+      "name": "Asheville",
+      "region": "NC",
+      "x": 789.08,
+      "y": 358.18,
+      "rank": 7,
+      "capital": null,
+      "population": 142755
+    },
+    {
+      "name": "Ocala",
+      "region": "FL",
+      "x": 817.4,
+      "y": 499.71,
+      "rank": 7,
+      "capital": null,
+      "population": 141382
+    },
+    {
+      "name": "Binghamton",
+      "region": "NY",
+      "x": 876.01,
+      "y": 193.84,
+      "rank": 7,
+      "capital": null,
+      "population": 139895
+    },
+    {
+      "name": "Killeen",
+      "region": "TX",
+      "x": 514.65,
+      "y": 475.91,
+      "rank": 7,
+      "capital": null,
+      "population": 137919
+    },
+    {
+      "name": "Fredericksburg",
+      "region": "VA",
+      "x": 867.72,
+      "y": 282.96,
+      "rank": 7,
+      "capital": null,
+      "population": 133134
+    },
+    {
+      "name": "Clarksville",
+      "region": "TN",
+      "x": 701.18,
+      "y": 347.34,
+      "rank": 7,
+      "capital": null,
+      "population": 132536
+    },
+    {
+      "name": "Cape Coral",
+      "region": "FL",
+      "x": 828.96,
+      "y": 556.19,
+      "rank": 7,
+      "capital": null,
+      "population": 132489
+    },
+    {
+      "name": "Caldwell",
+      "region": "ID",
+      "x": 217.3,
+      "y": 157.48,
+      "rank": 7,
+      "capital": null,
+      "population": 132476
+    },
+    {
+      "name": "Racine",
+      "region": "WI",
+      "x": 681.13,
+      "y": 208.76,
+      "rank": 7,
+      "capital": null,
+      "population": 131654
+    },
+    {
+      "name": "Bloomington",
+      "region": "IL",
+      "x": 665.62,
+      "y": 260.7,
+      "rank": 7,
+      "capital": null,
+      "population": 128979
+    },
+    {
+      "name": "Alexandria",
+      "region": "VA",
+      "x": 872.39,
+      "y": 270.5,
+      "rank": 7,
+      "capital": null,
+      "population": 127273
+    },
+    {
+      "name": "Bremerton",
+      "region": "WA",
+      "x": 148.29,
+      "y": 49.77,
+      "rank": 7,
+      "capital": null,
+      "population": 126820
+    },
+    {
+      "name": "Boulder",
+      "region": "CO",
+      "x": 390.96,
+      "y": 268.18,
+      "rank": 7,
+      "capital": null,
+      "population": 122274
+    },
+    {
+      "name": "Visalia",
+      "region": "CA",
+      "x": 135.66,
+      "y": 308.17,
+      "rank": 7,
+      "capital": null,
+      "population": 121968
+    },
+    {
+      "name": "Tuscaloosa",
+      "region": "AL",
+      "x": 704.53,
+      "y": 421.85,
+      "rank": 7,
+      "capital": null,
+      "population": 121373
+    },
+    {
+      "name": "Yuba City",
+      "region": "CA",
+      "x": 112.9,
+      "y": 236.43,
+      "rank": 7,
+      "capital": null,
+      "population": 116217
+    },
+    {
+      "name": "Murfreesboro",
+      "region": "TN",
+      "x": 719.91,
+      "y": 361.04,
+      "rank": 7,
+      "capital": null,
+      "population": 115774
+    },
+    {
+      "name": "Macon",
+      "region": "GA",
+      "x": 777.91,
+      "y": 422.26,
+      "rank": 7,
+      "capital": null,
+      "population": 115592
+    },
+    {
+      "name": "Las Cruces",
+      "region": "NM",
+      "x": 345.44,
+      "y": 437.89,
+      "rank": 7,
+      "capital": null,
+      "population": 115167
+    },
+    {
+      "name": "Norman",
+      "region": "OK",
+      "x": 521.5,
+      "y": 383.68,
+      "rank": 7,
+      "capital": null,
+      "population": 113525
+    },
+    {
+      "name": "St. Cloud",
+      "region": "MN",
+      "x": 576.38,
+      "y": 150.68,
+      "rank": 7,
+      "capital": null,
+      "population": 112794
+    },
+    {
+      "name": "Pueblo",
+      "region": "CO",
+      "x": 397.81,
+      "y": 308,
+      "rank": 7,
+      "capital": null,
+      "population": 112195
+    },
+    {
+      "name": "Beaumont",
+      "region": "TX",
+      "x": 584.29,
+      "y": 498.95,
+      "rank": 7,
+      "capital": null,
+      "population": 111485
+    },
+    {
+      "name": "Santa Maria",
+      "region": "CA",
+      "x": 108.34,
+      "y": 333.41,
+      "rank": 7,
+      "capital": null,
+      "population": 110705
+    },
+    {
+      "name": "Athens",
+      "region": "GA",
+      "x": 779.27,
+      "y": 396.86,
+      "rank": 7,
+      "capital": null,
+      "population": 110301
+    },
+    {
+      "name": "Rochester",
+      "region": "MN",
+      "x": 604.15,
+      "y": 184.38,
+      "rank": 7,
+      "capital": null,
+      "population": 108511
+    },
+    {
+      "name": "Utica",
+      "region": "NY",
+      "x": 882.16,
+      "y": 169.42,
+      "rank": 7,
+      "capital": null,
+      "population": 105150
+    },
+    {
+      "name": "Council Bluffs",
+      "region": "IA",
+      "x": 549.93,
+      "y": 247.51,
+      "rank": 7,
+      "capital": null,
+      "population": 101805
+    },
+    {
+      "name": "Monroe",
+      "region": "LA",
+      "x": 620.36,
+      "y": 443.45,
+      "rank": 7,
+      "capital": null,
+      "population": 101724
+    },
+    {
+      "name": "Muskegon",
+      "region": "MI",
+      "x": 705.38,
+      "y": 195.02,
+      "rank": 7,
+      "capital": null,
+      "population": 101177
+    },
+    {
+      "name": "Bloomington",
+      "region": "IN",
+      "x": 710.02,
+      "y": 286.72,
+      "rank": 7,
+      "capital": null,
+      "population": 100310
+    },
+    {
+      "name": "Bellingham",
+      "region": "WA",
+      "x": 157.79,
+      "y": 25.14,
+      "rank": 7,
+      "capital": null,
+      "population": 99662
+    },
+    {
+      "name": "Midland",
+      "region": "TX",
+      "x": 432.66,
+      "y": 452.01,
+      "rank": 7,
+      "capital": null,
+      "population": 98501
+    },
+    {
+      "name": "Waterloo",
+      "region": "IA",
+      "x": 607.51,
+      "y": 218.64,
+      "rank": 7,
+      "capital": null,
+      "population": 98347
+    },
+    {
+      "name": "Merced",
+      "region": "CA",
+      "x": 121.13,
+      "y": 281.65,
+      "rank": 7,
+      "capital": null,
+      "population": 96091
+    },
+    {
+      "name": "Redding",
+      "region": "CA",
+      "x": 109.03,
+      "y": 201.46,
+      "rank": 7,
+      "capital": null,
+      "population": 96058
+    },
+    {
+      "name": "Rock Hill",
+      "region": "SC",
+      "x": 818.57,
+      "y": 368.81,
+      "rank": 7,
+      "capital": null,
+      "population": 94564
+    },
+    {
+      "name": "Fort Smith",
+      "region": "AR",
+      "x": 576.55,
+      "y": 379.89,
+      "rank": 7,
+      "capital": null,
+      "population": 93988
+    },
+    {
+      "name": "Greenville",
+      "region": "NC",
+      "x": 881.16,
+      "y": 342.22,
+      "rank": 7,
+      "capital": null,
+      "population": 92565
+    },
+    {
+      "name": "Lawton",
+      "region": "OK",
+      "x": 503.62,
+      "y": 397.33,
+      "rank": 7,
+      "capital": null,
+      "population": 91752
+    },
+    {
+      "name": "Sioux City",
+      "region": "IA",
+      "x": 541.06,
+      "y": 219.62,
+      "rank": 7,
+      "capital": null,
+      "population": 90932
+    },
+    {
+      "name": "Hickory",
+      "region": "NC",
+      "x": 810.23,
+      "y": 352.01,
+      "rank": 7,
+      "capital": null,
+      "population": 89462
+    },
+    {
+      "name": "Albany",
+      "region": "GA",
+      "x": 771.73,
+      "y": 451.87,
+      "rank": 7,
+      "capital": null,
+      "population": 88766
+    },
+    {
+      "name": "San Angelo",
+      "region": "TX",
+      "x": 463.35,
+      "y": 466.46,
+      "rank": 7,
+      "capital": null,
+      "population": 88256
+    },
+    {
+      "name": "State College",
+      "region": "PA",
+      "x": 850.25,
+      "y": 229.11,
+      "rank": 7,
+      "capital": null,
+      "population": 87926
+    },
+    {
+      "name": "Vero Beach",
+      "region": "FL",
+      "x": 856.79,
+      "y": 528.44,
+      "rank": 7,
+      "capital": null,
+      "population": 86039
+    },
+    {
+      "name": "Muncie",
+      "region": "IN",
+      "x": 726.9,
+      "y": 261.59,
+      "rank": 7,
+      "capital": null,
+      "population": 85449
+    },
+    {
+      "name": "Huntington",
+      "region": "WV",
+      "x": 781.97,
+      "y": 294.92,
+      "rank": 7,
+      "capital": null,
+      "population": 85396
+    },
+    {
+      "name": "Alton",
+      "region": "IL",
+      "x": 647.79,
+      "y": 297.95,
+      "rank": 7,
+      "capital": null,
+      "population": 84276
+    },
+    {
+      "name": "Victorville",
+      "region": "CA",
+      "x": 161.86,
+      "y": 355.91,
+      "rank": 7,
+      "capital": null,
+      "population": 83496
+    },
+    {
+      "name": "Gulfport",
+      "region": "MS",
+      "x": 680.51,
+      "y": 488.18,
+      "rank": 7,
+      "capital": null,
+      "population": 82165
+    },
+    {
+      "name": "St. Joseph",
+      "region": "MO",
+      "x": 567.25,
+      "y": 281.08,
+      "rank": 7,
+      "capital": null,
+      "population": 78012
+    },
+    {
+      "name": "Decatur",
+      "region": "IL",
+      "x": 667.35,
+      "y": 275.14,
+      "rank": 7,
+      "capital": null,
+      "population": 77868
+    },
+    {
+      "name": "Jacksonville",
+      "region": "NC",
+      "x": 883.79,
+      "y": 361.44,
+      "rank": 7,
+      "capital": null,
+      "population": 77288
+    },
+    {
+      "name": "Atlantic City",
+      "region": "NJ",
+      "x": 913.93,
+      "y": 248.56,
+      "rank": 7,
+      "capital": null,
+      "population": 76573
+    },
+    {
+      "name": "St. Augustine",
+      "region": "FL",
+      "x": 830.91,
+      "y": 481.67,
+      "rank": 7,
+      "capital": null,
+      "population": 76331
+    },
+    {
+      "name": "Texarkana",
+      "region": "AR",
+      "x": 583.97,
+      "y": 423.58,
+      "rank": 7,
+      "capital": null,
+      "population": 74414
+    },
+    {
+      "name": "Joplin",
+      "region": "MO",
+      "x": 573.88,
+      "y": 341.6,
+      "rank": 7,
+      "capital": null,
+      "population": 73763
+    },
+    {
+      "name": "Oshkosh",
+      "region": "WI",
+      "x": 666.96,
+      "y": 180.68,
+      "rank": 7,
+      "capital": null,
+      "population": 72698
+    },
+    {
+      "name": "Logan",
+      "region": "UT",
+      "x": 286.59,
+      "y": 215.05,
+      "rank": 7,
+      "capital": null,
+      "population": 72490
+    },
+    {
+      "name": "Bowling Green",
+      "region": "KY",
+      "x": 716.36,
+      "y": 335.43,
+      "rank": 7,
+      "capital": null,
+      "population": 71140
+    },
+    {
+      "name": "Kankakee",
+      "region": "IL",
+      "x": 683.43,
+      "y": 244.9,
+      "rank": 7,
+      "capital": null,
+      "population": 69608
+    },
+    {
+      "name": "Johnstown",
+      "region": "PA",
+      "x": 834.61,
+      "y": 242.75,
+      "rank": 7,
+      "capital": null,
+      "population": 69286
+    },
+    {
+      "name": "Lima",
+      "region": "OH",
+      "x": 746.89,
+      "y": 246.74,
+      "rank": 7,
+      "capital": null,
+      "population": 68364
+    },
+    {
+      "name": "Pontiac",
+      "region": "MI",
+      "x": 754.73,
+      "y": 202.35,
+      "rank": 7,
+      "capital": null,
+      "population": 67994
+    },
+    {
+      "name": "Owensboro",
+      "region": "KY",
+      "x": 702.92,
+      "y": 318.96,
+      "rank": 7,
+      "capital": null,
+      "population": 67825
+    },
+    {
+      "name": "Longview",
+      "region": "WA",
+      "x": 135.06,
+      "y": 79.2,
+      "rank": 7,
+      "capital": null,
+      "population": 66231
+    },
+    {
+      "name": "San Luis Obispo",
+      "region": "CA",
+      "x": 106.43,
+      "y": 324.91,
+      "rank": 7,
+      "capital": null,
+      "population": 65386
+    },
+    {
+      "name": "Houma",
+      "region": "LA",
+      "x": 650.2,
+      "y": 507.44,
+      "rank": 7,
+      "capital": null,
+      "population": 64592
+    },
+    {
+      "name": "Jackson",
+      "region": "TN",
+      "x": 676.95,
+      "y": 370.09,
+      "rank": 7,
+      "capital": null,
+      "population": 63196
+    },
+    {
+      "name": "Dubuque",
+      "region": "IA",
+      "x": 634.96,
+      "y": 217.16,
+      "rank": 7,
+      "capital": null,
+      "population": 62483
+    },
+    {
+      "name": "Elmira",
+      "region": "NY",
+      "x": 861.71,
+      "y": 197.04,
+      "rank": 7,
+      "capital": null,
+      "population": 62376
+    },
+    {
+      "name": "Conway",
+      "region": "AR",
+      "x": 611.97,
+      "y": 385.59,
+      "rank": 7,
+      "capital": null,
+      "population": 61995
+    },
+    {
+      "name": "Dothan",
+      "region": "AL",
+      "x": 749.35,
+      "y": 462.55,
+      "rank": 7,
+      "capital": null,
+      "population": 61741
+    },
+    {
+      "name": "Anderson",
+      "region": "SC",
+      "x": 790.83,
+      "y": 382.93,
+      "rank": 7,
+      "capital": null,
+      "population": 61558
+    },
+    {
+      "name": "Valdosta",
+      "region": "GA",
+      "x": 790.46,
+      "y": 466.31,
+      "rank": 7,
+      "capital": null,
+      "population": 61179
+    },
+    {
+      "name": "Temple",
+      "region": "TX",
+      "x": 521.6,
+      "y": 476.36,
+      "rank": 7,
+      "capital": null,
+      "population": 61161
+    },
+    {
+      "name": "Kokomo",
+      "region": "IN",
+      "x": 713.64,
+      "y": 256.38,
+      "rank": 7,
+      "capital": null,
+      "population": 61121
+    },
+    {
+      "name": "Corvallis",
+      "region": "OR",
+      "x": 120.03,
+      "y": 111.3,
+      "rank": 7,
+      "capital": null,
+      "population": 59030
+    },
+    {
+      "name": "Hattiesburg",
+      "region": "MS",
+      "x": 675.19,
+      "y": 466.99,
+      "rank": 7,
+      "capital": null,
+      "population": 58874
+    },
+    {
+      "name": "Morgantown",
+      "region": "WV",
+      "x": 820.05,
+      "y": 261.29,
+      "rank": 7,
+      "capital": null,
+      "population": 58808
+    },
+    {
+      "name": "Jonesboro",
+      "region": "AR",
+      "x": 642.68,
+      "y": 367.19,
+      "rank": 7,
+      "capital": null,
+      "population": 58619
+    },
+    {
+      "name": "Lewiston",
+      "region": "ME",
+      "x": 955.18,
+      "y": 128.04,
+      "rank": 7,
+      "capital": null,
+      "population": 57688
+    },
+    {
+      "name": "Florence",
+      "region": "SC",
+      "x": 844.15,
+      "y": 381.59,
+      "rank": 7,
+      "capital": null,
+      "population": 57438
+    },
+    {
+      "name": "Ames",
+      "region": "IA",
+      "x": 586.81,
+      "y": 229.98,
+      "rank": 7,
+      "capital": null,
+      "population": 57104
+    },
+    {
+      "name": "Port Arthur",
+      "region": "TX",
+      "x": 587.72,
+      "y": 503.07,
+      "rank": 7,
+      "capital": null,
+      "population": 56945
+    },
+    {
+      "name": "Tulare",
+      "region": "CA",
+      "x": 134.52,
+      "y": 310.63,
+      "rank": 7,
+      "capital": null,
+      "population": 55908
+    },
+    {
+      "name": "Fond du Lac",
+      "region": "WI",
+      "x": 668.93,
+      "y": 186.19,
+      "rank": 7,
+      "capital": null,
+      "population": 54299
+    },
+    {
+      "name": "Winchester",
+      "region": "VA",
+      "x": 851.99,
+      "y": 265.88,
+      "rank": 7,
+      "capital": null,
+      "population": 53941
+    },
+    {
+      "name": "Eagle Pass",
+      "region": "TX",
+      "x": 459.44,
+      "y": 527.98,
+      "rank": 7,
+      "capital": null,
+      "population": 53276
+    },
+    {
+      "name": "Pine Bluff",
+      "region": "AR",
+      "x": 620.91,
+      "y": 404.69,
+      "rank": 7,
+      "capital": null,
+      "population": 53217
+    },
+    {
+      "name": "Wheeling",
+      "region": "WV",
+      "x": 805.6,
+      "y": 253.75,
+      "rank": 7,
+      "capital": null,
+      "population": 52492
+    },
+    {
+      "name": "Titusville",
+      "region": "FL",
+      "x": 845.17,
+      "y": 508.43,
+      "rank": 7,
+      "capital": null,
+      "population": 52311
+    },
+    {
+      "name": "Wailuku",
+      "region": "HI",
+      "x": 348.31,
+      "y": 555.2,
+      "rank": 7,
+      "capital": null,
+      "population": 52148
+    },
+    {
+      "name": "Albany",
+      "region": "OR",
+      "x": 123.27,
+      "y": 111.13,
+      "rank": 7,
+      "capital": null,
+      "population": 51376
+    },
+    {
+      "name": "Sumter",
+      "region": "SC",
+      "x": 834.69,
+      "y": 389.47,
+      "rank": 7,
+      "capital": null,
+      "population": 50868
+    },
+    {
+      "name": "Salina",
+      "region": "KS",
+      "x": 519.88,
+      "y": 302.28,
+      "rank": 7,
+      "capital": null,
+      "population": 48031
+    },
+    {
+      "name": "Goldsboro",
+      "region": "NC",
+      "x": 871.05,
+      "y": 349.43,
+      "rank": 7,
+      "capital": null,
+      "population": 47602
+    },
+    {
+      "name": "Twin Falls",
+      "region": "ID",
+      "x": 247.37,
+      "y": 189.02,
+      "rank": 7,
+      "capital": null,
+      "population": 47315
+    },
+    {
+      "name": "Quincy",
+      "region": "IL",
+      "x": 625.56,
+      "y": 275.55,
+      "rank": 7,
+      "capital": null,
+      "population": 47108
+    },
+    {
+      "name": "Aiken",
+      "region": "SC",
+      "x": 810.86,
+      "y": 401.72,
+      "rank": 7,
+      "capital": null,
+      "population": 46196
+    },
+    {
+      "name": "Grants Pass",
+      "region": "OR",
+      "x": 105.72,
+      "y": 157.03,
+      "rank": 7,
+      "capital": null,
+      "population": 46189
+    },
+    {
+      "name": "Roswell",
+      "region": "NM",
+      "x": 389.8,
+      "y": 417.94,
+      "rank": 7,
+      "capital": null,
+      "population": 46096
+    },
+    {
+      "name": "Newport",
+      "region": "RI",
+      "x": 953.3,
+      "y": 189.39,
+      "rank": 7,
+      "capital": null,
+      "population": 45968
+    },
+    {
+      "name": "Danville",
+      "region": "VA",
+      "x": 841.42,
+      "y": 327.32,
+      "rank": 7,
+      "capital": null,
+      "population": 45894
+    },
+    {
+      "name": "Jamestown",
+      "region": "NY",
+      "x": 822.39,
+      "y": 204.4,
+      "rank": 7,
+      "capital": null,
+      "population": 45756
+    },
+    {
+      "name": "Walla Walla",
+      "region": "WA",
+      "x": 203.61,
+      "y": 99.08,
+      "rank": 7,
+      "capital": null,
+      "population": 45150
+    },
+    {
+      "name": "El Centro",
+      "region": "CA",
+      "x": 184.75,
+      "y": 401.11,
+      "rank": 7,
+      "capital": null,
+      "population": 45000
+    },
+    {
+      "name": "Bozeman",
+      "region": "MT",
+      "x": 313.54,
+      "y": 129.74,
+      "rank": 7,
+      "capital": null,
+      "population": 44921
+    },
+    {
+      "name": "Richland",
+      "region": "WA",
+      "x": 190.51,
+      "y": 90.66,
+      "rank": 7,
+      "capital": null,
+      "population": 44869
+    },
+    {
+      "name": "Hot Springs",
+      "region": "AR",
+      "x": 601.43,
+      "y": 399.2,
+      "rank": 7,
+      "capital": null,
+      "population": 44182
+    },
+    {
+      "name": "Lufkin",
+      "region": "TX",
+      "x": 571.8,
+      "y": 471.08,
+      "rank": 7,
+      "capital": null,
+      "population": 43264
+    },
+    {
+      "name": "Traverse City",
+      "region": "MI",
+      "x": 711.72,
+      "y": 159.73,
+      "rank": 7,
+      "capital": null,
+      "population": 43189
+    },
+    {
+      "name": "Kingman",
+      "region": "AZ",
+      "x": 222.54,
+      "y": 353.6,
+      "rank": 7,
+      "capital": null,
+      "population": 42182
+    },
+    {
+      "name": "Gadsden",
+      "region": "AL",
+      "x": 731.1,
+      "y": 401.4,
+      "rank": 7,
+      "capital": null,
+      "population": 41709
+    },
+    {
+      "name": "Conroe",
+      "region": "TX",
+      "x": 558.09,
+      "y": 494.23,
+      "rank": 7,
+      "capital": null,
+      "population": 41643
+    },
+    {
+      "name": "Paducah",
+      "region": "KY",
+      "x": 678.21,
+      "y": 336.74,
+      "rank": 7,
+      "capital": null,
+      "population": 41317
+    },
+    {
+      "name": "Sherman",
+      "region": "TX",
+      "x": 536.36,
+      "y": 419.55,
+      "rank": 7,
+      "capital": null,
+      "population": 40284
+    },
+    {
+      "name": "Muskogee",
+      "region": "OK",
+      "x": 558.95,
+      "y": 371.93,
+      "rank": 7,
+      "capital": null,
+      "population": 39295
+    },
+    {
+      "name": "Greenville",
+      "region": "MS",
+      "x": 639.11,
+      "y": 422.29,
+      "rank": 7,
+      "capital": null,
+      "population": 38107
+    },
+    {
+      "name": "Bullhead City",
+      "region": "AZ",
+      "x": 213.19,
+      "y": 352.74,
+      "rank": 7,
+      "capital": null,
+      "population": 37989
+    },
+    {
+      "name": "Beckley",
+      "region": "WV",
+      "x": 805.87,
+      "y": 305.93,
+      "rank": 7,
+      "capital": null,
+      "population": 37836
+    },
+    {
+      "name": "Bristol",
+      "region": "VA",
+      "x": 792.51,
+      "y": 334.64,
+      "rank": 7,
+      "capital": null,
+      "population": 37443
+    },
+    {
+      "name": "Del Rio",
+      "region": "TX",
+      "x": 452.2,
+      "y": 513.04,
+      "rank": 7,
+      "capital": null,
+      "population": 36068
+    },
+    {
+      "name": "Tupelo",
+      "region": "MS",
+      "x": 681.28,
+      "y": 400.44,
+      "rank": 7,
+      "capital": null,
+      "population": 35956
+    },
+    {
+      "name": "Huntsville",
+      "region": "TX",
+      "x": 556.23,
+      "y": 485.01,
+      "rank": 7,
+      "capital": null,
+      "population": 35590
+    },
+    {
+      "name": "Moorhead",
+      "region": "MN",
+      "x": 536.22,
+      "y": 121.61,
+      "rank": 7,
+      "capital": null,
+      "population": 35528
+    },
+    {
+      "name": "West Bend",
+      "region": "WI",
+      "x": 673.8,
+      "y": 193.63,
+      "rank": 7,
+      "capital": null,
+      "population": 34530
+    },
+    {
+      "name": "Coeur d'Alene",
+      "region": "ID",
+      "x": 235.06,
+      "y": 69.48,
+      "rank": 7,
+      "capital": null,
+      "population": 34514
+    },
+    {
+      "name": "Watertown",
+      "region": "NY",
+      "x": 867.28,
+      "y": 152.57,
+      "rank": 7,
+      "capital": null,
+      "population": 33821
+    },
+    {
+      "name": "Clovis",
+      "region": "NM",
+      "x": 415.87,
+      "y": 397.26,
+      "rank": 7,
+      "capital": null,
+      "population": 33792
+    },
+    {
+      "name": "Oak Ridge",
+      "region": "TN",
+      "x": 757.3,
+      "y": 353.09,
+      "rank": 7,
+      "capital": null,
+      "population": 33556
+    },
+    {
+      "name": "Winona",
+      "region": "MN",
+      "x": 617.42,
+      "y": 183.19,
+      "rank": 7,
+      "capital": null,
+      "population": 32897
+    },
+    {
+      "name": "Aberdeen",
+      "region": "WA",
+      "x": 127.37,
+      "y": 57.48,
+      "rank": 7,
+      "capital": null,
+      "population": 32745
+    },
+    {
+      "name": "Carbondale",
+      "region": "IL",
+      "x": 666.25,
+      "y": 323.07,
+      "rank": 7,
+      "capital": null,
+      "population": 32444
+    },
+    {
+      "name": "Beaufort",
+      "region": "SC",
+      "x": 833.74,
+      "y": 423.58,
+      "rank": 7,
+      "capital": null,
+      "population": 31626
+    },
+    {
+      "name": "Nacogdoches",
+      "region": "TX",
+      "x": 573.11,
+      "y": 465.11,
+      "rank": 7,
+      "capital": null,
+      "population": 30691
+    },
+    {
+      "name": "Roseburg",
+      "region": "OR",
+      "x": 110.24,
+      "y": 140.1,
+      "rank": 7,
+      "capital": null,
+      "population": 30479
+    },
+    {
+      "name": "Burlington",
+      "region": "IA",
+      "x": 629.59,
+      "y": 255.65,
+      "rank": 7,
+      "capital": null,
+      "population": 29773
+    },
+    {
+      "name": "Shawnee",
+      "region": "OK",
+      "x": 530.73,
+      "y": 381.03,
+      "rank": 7,
+      "capital": null,
+      "population": 29628
+    },
+    {
+      "name": "Gillette",
+      "region": "WY",
+      "x": 396.16,
+      "y": 171.99,
+      "rank": 7,
+      "capital": null,
+      "population": 29113
+    },
+    {
+      "name": "Emporia",
+      "region": "KS",
+      "x": 544.46,
+      "y": 312,
+      "rank": 7,
+      "capital": null,
+      "population": 29048
+    },
+    {
+      "name": "Hobbs",
+      "region": "NM",
+      "x": 414.18,
+      "y": 435.35,
+      "rank": 7,
+      "capital": null,
+      "population": 28738
+    },
+    {
+      "name": "Ukiah",
+      "region": "CA",
+      "x": 86.63,
+      "y": 228.63,
+      "rank": 7,
+      "capital": null,
+      "population": 27828
+    },
+    {
+      "name": "Mason City",
+      "region": "IA",
+      "x": 593.02,
+      "y": 204.26,
+      "rank": 7,
+      "capital": null,
+      "population": 27802
+    },
+    {
+      "name": "Cedar City",
+      "region": "UT",
+      "x": 250.21,
+      "y": 301.65,
+      "rank": 7,
+      "capital": null,
+      "population": 27738
+    },
+    {
+      "name": "Superior",
+      "region": "WI",
+      "x": 607.54,
+      "y": 123.84,
+      "rank": 7,
+      "capital": null,
+      "population": 27580
+    },
+    {
+      "name": "Marinette",
+      "region": "WI",
+      "x": 679.4,
+      "y": 155.46,
+      "rank": 7,
+      "capital": null,
+      "population": 27169
+    },
+    {
+      "name": "Marquette",
+      "region": "MI",
+      "x": 680,
+      "y": 122.96,
+      "rank": 7,
+      "capital": null,
+      "population": 26591
+    },
+    {
+      "name": "Aberdeen",
+      "region": "SD",
+      "x": 508.62,
+      "y": 152.59,
+      "rank": 7,
+      "capital": null,
+      "population": 26041
+    },
+    {
+      "name": "Dodge City",
+      "region": "KS",
+      "x": 477.29,
+      "y": 325.07,
+      "rank": 7,
+      "capital": null,
+      "population": 25932
+    },
+    {
+      "name": "Scottsbluff",
+      "region": "NE",
+      "x": 421.11,
+      "y": 228.78,
+      "rank": 7,
+      "capital": null,
+      "population": 25475
+    },
+    {
+      "name": "Ponca City",
+      "region": "OK",
+      "x": 528.34,
+      "y": 350.21,
+      "rank": 7,
+      "capital": null,
+      "population": 25273
+    },
+    {
+      "name": "Kingsville",
+      "region": "TX",
+      "x": 510.63,
+      "y": 556.33,
+      "rank": 7,
+      "capital": null,
+      "population": 25264
+    },
+    {
+      "name": "North Platte",
+      "region": "NE",
+      "x": 467.96,
+      "y": 248.36,
+      "rank": 7,
+      "capital": null,
+      "population": 25247
+    },
+    {
+      "name": "Norfolk",
+      "region": "NE",
+      "x": 523.97,
+      "y": 230.07,
+      "rank": 7,
+      "capital": null,
+      "population": 25030
+    },
+    {
+      "name": "Enterprise",
+      "region": "AL",
+      "x": 740.52,
+      "y": 461.17,
+      "rank": 7,
+      "capital": null,
+      "population": 24205
+    },
+    {
+      "name": "Natchez",
+      "region": "MS",
+      "x": 635.11,
+      "y": 464.26,
+      "rank": 7,
+      "capital": null,
+      "population": 23863
+    },
+    {
+      "name": "Gallup",
+      "region": "NM",
+      "x": 318.61,
+      "y": 361.66,
+      "rank": 7,
+      "capital": null,
+      "population": 23800
+    },
+    {
+      "name": "Durango",
+      "region": "CO",
+      "x": 338.82,
+      "y": 324.42,
+      "rank": 7,
+      "capital": null,
+      "population": 23233
+    },
+    {
+      "name": "Dublin",
+      "region": "GA",
+      "x": 792.05,
+      "y": 427.46,
+      "rank": 7,
+      "capital": null,
+      "population": 22623
+    },
+    {
+      "name": "El Dorado",
+      "region": "AR",
+      "x": 609.62,
+      "y": 428,
+      "rank": 7,
+      "capital": null,
+      "population": 22416
+    },
+    {
+      "name": "Brookings",
+      "region": "SD",
+      "x": 535.04,
+      "y": 178.99,
+      "rank": 7,
+      "capital": null,
+      "population": 22411
+    },
+    {
+      "name": "Montrose",
+      "region": "CO",
+      "x": 342.45,
+      "y": 297.53,
+      "rank": 7,
+      "capital": null,
+      "population": 21789
+    },
+    {
+      "name": "Cumberland",
+      "region": "MD",
+      "x": 840,
+      "y": 257.22,
+      "rank": 7,
+      "capital": null,
+      "population": 21316
+    },
+    {
+      "name": "Barstow",
+      "region": "CA",
+      "x": 168.43,
+      "y": 349.02,
+      "rank": 7,
+      "capital": null,
+      "population": 21119
+    },
+    {
+      "name": "Arcata",
+      "region": "CA",
+      "x": 83.51,
+      "y": 187.46,
+      "rank": 7,
+      "capital": null,
+      "population": 20905
+    },
+    {
+      "name": "Poplar Bluff",
+      "region": "MO",
+      "x": 646.87,
+      "y": 346.2,
+      "rank": 7,
+      "capital": null,
+      "population": 20662
+    },
+    {
+      "name": "Selma",
+      "region": "AL",
+      "x": 715.94,
+      "y": 439.27,
+      "rank": 7,
+      "capital": null,
+      "population": 20126
+    },
+    {
+      "name": "Bay City",
+      "region": "TX",
+      "x": 548.31,
+      "y": 524.03,
+      "rank": 7,
+      "capital": null,
+      "population": 18663
+    },
+    {
+      "name": "Escanaba",
+      "region": "MI",
+      "x": 686.93,
+      "y": 140.28,
+      "rank": 7,
+      "capital": null,
+      "population": 17318
+    },
+    {
+      "name": "Pendleton",
+      "region": "OR",
+      "x": 194.8,
+      "y": 105.97,
+      "rank": 7,
+      "capital": null,
+      "population": 16799
+    },
+    {
+      "name": "Dickinson",
+      "region": "ND",
+      "x": 443.51,
+      "y": 117.72,
+      "rank": 7,
+      "capital": null,
+      "population": 16399
+    },
+    {
+      "name": "Hancock",
+      "region": "MI",
+      "x": 660.94,
+      "y": 111.6,
+      "rank": 7,
+      "capital": null,
+      "population": 16355
+    },
+    {
+      "name": "Yankton",
+      "region": "SD",
+      "x": 524.93,
+      "y": 210.88,
+      "rank": 7,
+      "capital": null,
+      "population": 15580
+    },
+    {
+      "name": "Līhuʻe",
+      "region": "HI",
+      "x": 288.34,
+      "y": 530.91,
+      "rank": 7,
+      "capital": null,
+      "population": 15536
+    },
+    {
+      "name": "Boulder City",
+      "region": "NV",
+      "x": 212.19,
+      "y": 333.42,
+      "rank": 7,
+      "capital": null,
+      "population": 15479
+    },
+    {
+      "name": "Scottsdale",
+      "region": "AZ",
+      "x": 254.06,
+      "y": 398.26,
+      "rank": 7,
+      "capital": null,
+      "population": 15401
+    },
+    {
+      "name": "Mitchell",
+      "region": "SD",
+      "x": 515,
+      "y": 191.99,
+      "rank": 7,
+      "capital": null,
+      "population": 15205
+    },
+    {
+      "name": "Jamestown",
+      "region": "ND",
+      "x": 506.14,
+      "y": 120.36,
+      "rank": 7,
+      "capital": null,
+      "population": 15081
+    },
+    {
+      "name": "Vernal",
+      "region": "UT",
+      "x": 320.22,
+      "y": 249.5,
+      "rank": 7,
+      "capital": null,
+      "population": 14353
+    },
+    {
+      "name": "Cadillac",
+      "region": "MI",
+      "x": 716.29,
+      "y": 170.89,
+      "rank": 7,
+      "capital": null,
+      "population": 14097
+    },
+    {
+      "name": "Dumas",
+      "region": "TX",
+      "x": 440.53,
+      "y": 366.03,
+      "rank": 7,
+      "capital": null,
+      "population": 13629
+    },
+    {
+      "name": "Williston",
+      "region": "ND",
+      "x": 432.93,
+      "y": 88.56,
+      "rank": 7,
+      "capital": null,
+      "population": 13564
+    },
+    {
+      "name": "Douglas",
+      "region": "GA",
+      "x": 796.49,
+      "y": 450.2,
+      "rank": 7,
+      "capital": null,
+      "population": 13441
+    },
+    {
+      "name": "Beeville",
+      "region": "TX",
+      "x": 513.09,
+      "y": 536.55,
+      "rank": 7,
+      "capital": null,
+      "population": 13004
+    },
+    {
+      "name": "Woodward",
+      "region": "OK",
+      "x": 487.07,
+      "y": 355.42,
+      "rank": 7,
+      "capital": null,
+      "population": 12931
+    },
+    {
+      "name": "Petoskey",
+      "region": "MI",
+      "x": 720.65,
+      "y": 145.08,
+      "rank": 7,
+      "capital": null,
+      "population": 12667
+    },
+    {
+      "name": "Coffeyville",
+      "region": "KS",
+      "x": 554.21,
+      "y": 342.84,
+      "rank": 7,
+      "capital": null,
+      "population": 11760
+    },
+    {
+      "name": "Port Lavaca",
+      "region": "TX",
+      "x": 535.22,
+      "y": 532.14,
+      "rank": 7,
+      "capital": null,
+      "population": 11743
+    },
+    {
+      "name": "Crescent City",
+      "region": "CA",
+      "x": 87.51,
+      "y": 167.62,
+      "rank": 7,
+      "capital": null,
+      "population": 11534
+    },
+    {
+      "name": "Riverton",
+      "region": "WY",
+      "x": 346.69,
+      "y": 194.64,
+      "rank": 7,
+      "capital": null,
+      "population": 11508
+    },
+    {
+      "name": "Rhinelander",
+      "region": "WI",
+      "x": 650.56,
+      "y": 145.63,
+      "rank": 7,
+      "capital": null,
+      "population": 11483
+    },
+    {
+      "name": "Green River",
+      "region": "WY",
+      "x": 324.64,
+      "y": 226.01,
+      "rank": 7,
+      "capital": null,
+      "population": 11358
+    },
+    {
+      "name": "Guymon",
+      "region": "OK",
+      "x": 450.34,
+      "y": 348,
+      "rank": 7,
+      "capital": null,
+      "population": 11178
+    },
+    {
+      "name": "Price",
+      "region": "UT",
+      "x": 295.84,
+      "y": 265.36,
+      "rank": 7,
+      "capital": null,
+      "population": 10281
+    },
+    {
+      "name": "Astoria",
+      "region": "OR",
+      "x": 122.09,
+      "y": 74.2,
+      "rank": 7,
+      "capital": null,
+      "population": 10011
+    },
+    {
+      "name": "Winslow",
+      "region": "AZ",
+      "x": 281.84,
+      "y": 367.73,
+      "rank": 7,
+      "capital": null,
+      "population": 9931
+    },
+    {
+      "name": "Kailua-Kona",
+      "region": "HI",
+      "x": 359.28,
+      "y": 583.07,
+      "rank": 7,
+      "capital": null,
+      "population": 9870
+    },
+    {
+      "name": "Winnemucca",
+      "region": "NV",
+      "x": 186.87,
+      "y": 212.6,
+      "rank": 7,
+      "capital": null,
+      "population": 9666
+    },
+    {
+      "name": "Presque Isle",
+      "region": "ME",
+      "x": 972.32,
+      "y": 63.09,
+      "rank": 7,
+      "capital": null,
+      "population": 9466
+    },
+    {
+      "name": "Craig",
+      "region": "CO",
+      "x": 353.45,
+      "y": 252.5,
+      "rank": 7,
+      "capital": null,
+      "population": 9391
+    },
+    {
+      "name": "Trinidad",
+      "region": "CO",
+      "x": 397.71,
+      "y": 333.13,
+      "rank": 7,
+      "capital": null,
+      "population": 9156
+    },
+    {
+      "name": "Virginia",
+      "region": "MN",
+      "x": 600.24,
+      "y": 106.25,
+      "rank": 7,
+      "capital": null,
+      "population": 8709
+    },
+    {
+      "name": "Socorro",
+      "region": "NM",
+      "x": 347.68,
+      "y": 398.51,
+      "rank": 7,
+      "capital": null,
+      "population": 8668
+    },
+    {
+      "name": "Lamar",
+      "region": "CO",
+      "x": 432.34,
+      "y": 315.17,
+      "rank": 7,
+      "capital": null,
+      "population": 8620
+    },
+    {
+      "name": "Miles City",
+      "region": "MT",
+      "x": 395.76,
+      "y": 124.16,
+      "rank": 7,
+      "capital": null,
+      "population": 8615
+    },
+    {
+      "name": "Rawlins",
+      "region": "WY",
+      "x": 362.13,
+      "y": 224.63,
+      "rank": 7,
+      "capital": null,
+      "population": 8533
+    },
+    {
+      "name": "Wasilla",
+      "region": "AK",
+      "x": 168.99,
+      "y": 538.14,
+      "rank": 7,
+      "capital": null,
+      "population": 8521
+    },
+    {
+      "name": "Pecos",
+      "region": "TX",
+      "x": 405.18,
+      "y": 463.89,
+      "rank": 7,
+      "capital": null,
+      "population": 8372
+    },
+    {
+      "name": "McCook",
+      "region": "NE",
+      "x": 469.34,
+      "y": 269.44,
+      "rank": 7,
+      "capital": null,
+      "population": 8012
+    },
+    {
+      "name": "Fort Stockton",
+      "region": "TX",
+      "x": 415.99,
+      "y": 476.5,
+      "rank": 7,
+      "capital": null,
+      "population": 7721
+    },
+    {
+      "name": "Gunnison",
+      "region": "CO",
+      "x": 358.75,
+      "y": 297.96,
+      "rank": 7,
+      "capital": null,
+      "population": 7324
+    },
+    {
+      "name": "Raton",
+      "region": "NM",
+      "x": 398.33,
+      "y": 339.4,
+      "rank": 7,
+      "capital": null,
+      "population": 7073
+    },
+    {
+      "name": "Needles",
+      "region": "CA",
+      "x": 211.06,
+      "y": 359.2,
+      "rank": 7,
+      "capital": null,
+      "population": 6974
+    },
+    {
+      "name": "Homer",
+      "region": "AK",
+      "x": 161.73,
+      "y": 553.78,
+      "rank": 7,
+      "capital": null,
+      "population": 6560
+    },
+    {
+      "name": "Sidney",
+      "region": "NE",
+      "x": 431.15,
+      "y": 246,
+      "rank": 7,
+      "capital": null,
+      "population": 6492
+    },
+    {
+      "name": "Douglas",
+      "region": "WY",
+      "x": 394.7,
+      "y": 206.31,
+      "rank": 7,
+      "capital": null,
+      "population": 6298
+    },
+    {
+      "name": "Bar Harbor",
+      "region": "ME",
+      "x": 984.23,
+      "y": 112.92,
+      "rank": 7,
+      "capital": null,
+      "population": 6090
+    },
+    {
+      "name": "Chadron",
+      "region": "NE",
+      "x": 433.54,
+      "y": 208.06,
+      "rank": 7,
+      "capital": null,
+      "population": 5798
+    },
+    {
+      "name": "Moab",
+      "region": "UT",
+      "x": 313.83,
+      "y": 291.49,
+      "rank": 7,
+      "capital": null,
+      "population": 5730
+    },
+    {
+      "name": "Falfurrias",
+      "region": "TX",
+      "x": 504.73,
+      "y": 562.64,
+      "rank": 7,
+      "capital": null,
+      "population": 5349
+    },
+    {
+      "name": "Tucumcari",
+      "region": "NM",
+      "x": 407.77,
+      "y": 379.33,
+      "rank": 7,
+      "capital": null,
+      "population": 5313
+    },
+    {
+      "name": "Willcox",
+      "region": "AZ",
+      "x": 288.33,
+      "y": 431.8,
+      "rank": 7,
+      "capital": null,
+      "population": 5146
+    },
+    {
+      "name": "Bishop",
+      "region": "CA",
+      "x": 157.11,
+      "y": 289.28,
+      "rank": 7,
+      "capital": null,
+      "population": 4827
+    },
+    {
+      "name": "Mount Shasta",
+      "region": "CA",
+      "x": 114.8,
+      "y": 186.14,
+      "rank": 7,
+      "capital": null,
+      "population": 3855
+    },
+    {
+      "name": "Ely",
+      "region": "MN",
+      "x": 610.66,
+      "y": 97.46,
+      "rank": 7,
+      "capital": null,
+      "population": 3731
+    },
+    {
+      "name": "Salmon",
+      "region": "ID",
+      "x": 267.44,
+      "y": 133.12,
+      "rank": 7,
+      "capital": null,
+      "population": 3601
+    },
+    {
+      "name": "Thermopolis",
+      "region": "WY",
+      "x": 351.37,
+      "y": 181.25,
+      "rank": 7,
+      "capital": null,
+      "population": 3445
+    },
+    {
+      "name": "Kanab",
+      "region": "UT",
+      "x": 256.99,
+      "y": 317.31,
+      "rank": 7,
+      "capital": null,
+      "population": 3442
+    },
+    {
+      "name": "Kitty Hawk",
+      "region": "NC",
+      "x": 908.25,
+      "y": 325.89,
+      "rank": 7,
+      "capital": null,
+      "population": 3413
+    },
+    {
+      "name": "Glasgow",
+      "region": "MT",
+      "x": 387.95,
+      "y": 83.62,
+      "rank": 7,
+      "capital": null,
+      "population": 3240
+    },
+    {
+      "name": "Kotzebue",
+      "region": "AK",
+      "x": 125.64,
+      "y": 495.37,
+      "rank": 7,
+      "capital": null,
+      "population": 3194
+    },
+    {
+      "name": "Mobridge",
+      "region": "SD",
+      "x": 478.17,
+      "y": 149.8,
+      "rank": 7,
+      "capital": null,
+      "population": 3156
+    },
+    {
+      "name": "Montpelier",
+      "region": "ID",
+      "x": 297.47,
+      "y": 203.46,
+      "rank": 7,
+      "capital": null,
+      "population": 2997
+    },
+    {
+      "name": "Parowan",
+      "region": "UT",
+      "x": 254.9,
+      "y": 298.71,
+      "rank": 7,
+      "capital": null,
+      "population": 2571
+    },
+    {
+      "name": "Apalachicola",
+      "region": "FL",
+      "x": 760.77,
+      "y": 495.03,
+      "rank": 7,
+      "capital": null,
+      "population": 2284
+    },
+    {
+      "name": "Gila Bend",
+      "region": "AZ",
+      "x": 237.35,
+      "y": 407.65,
+      "rank": 7,
+      "capital": null,
+      "population": 2088
+    },
+    {
+      "name": "Wrangell",
+      "region": "AK",
+      "x": 243.77,
+      "y": 563.79,
+      "rank": 7,
+      "capital": null,
+      "population": 2070
+    },
+    {
+      "name": "Monticello",
+      "region": "UT",
+      "x": 315.16,
+      "y": 307.69,
+      "rank": 7,
+      "capital": null,
+      "population": 1864
+    },
+    {
+      "name": "Denali Park",
+      "region": "AK",
+      "x": 169.64,
+      "y": 521.17,
+      "rank": 7,
+      "capital": null,
+      "population": 1826
+    },
+    {
+      "name": "John Day",
+      "region": "OR",
+      "x": 185.57,
+      "y": 132.66,
+      "rank": 7,
+      "capital": null,
+      "population": 1573
+    },
+    {
+      "name": "Tombstone",
+      "region": "AZ",
+      "x": 282.16,
+      "y": 443.15,
+      "rank": 7,
+      "capital": null,
+      "population": 1570
+    },
+    {
+      "name": "Grand Canyon Village",
+      "region": "AZ",
+      "x": 259.94,
+      "y": 340.57,
+      "rank": 7,
+      "capital": null,
+      "population": 1550
+    },
+    {
+      "name": "Kotlik",
+      "region": "AK",
+      "x": 118.38,
+      "y": 524.89,
+      "rank": 7,
+      "capital": null,
+      "population": 1002
+    },
+    {
+      "name": "Unalakleet",
+      "region": "AK",
+      "x": 128.76,
+      "y": 519.55,
+      "rank": 7,
+      "capital": null,
+      "population": 741
+    },
+    {
+      "name": "Aniak",
+      "region": "AK",
+      "x": 131.6,
+      "y": 537.9,
+      "rank": 7,
+      "capital": null,
+      "population": 501
+    },
+    {
+      "name": "Kivalina",
+      "region": "AK",
+      "x": 120.89,
+      "y": 488.14,
+      "rank": 7,
+      "capital": null,
+      "population": 374
+    },
+    {
+      "name": "Hoonah",
+      "region": "AK",
+      "x": 227.58,
+      "y": 555.33,
+      "rank": 7,
+      "capital": null,
+      "population": 361
+    },
+    {
+      "name": "King Salmon",
+      "region": "AK",
+      "x": 141.29,
+      "y": 561.23,
+      "rank": 7,
+      "capital": null,
+      "population": 292
+    },
+    {
+      "name": "Ambler",
+      "region": "AK",
+      "x": 140.29,
+      "y": 495.28,
+      "rank": 7,
+      "capital": null,
+      "population": 258
+    },
+    {
+      "name": "Koyuk",
+      "region": "AK",
+      "x": 128.4,
+      "y": 511.1,
+      "rank": 7,
+      "capital": null,
+      "population": 254
+    },
+    {
+      "name": "Shishmaref",
+      "region": "AK",
+      "x": 114.14,
+      "y": 498.63,
+      "rank": 7,
+      "capital": null,
+      "population": 254
+    },
+    {
+      "name": "Quinhagak",
+      "region": "AK",
+      "x": 121.06,
+      "y": 551.27,
+      "rank": 7,
+      "capital": null,
+      "population": 250
+    },
+    {
+      "name": "Newhalen",
+      "region": "AK",
+      "x": 148.55,
+      "y": 553.32,
+      "rank": 7,
+      "capital": null,
+      "population": 160
+    },
+    {
+      "name": "McGrath",
+      "region": "AK",
+      "x": 146.41,
+      "y": 527.86,
+      "rank": 7,
+      "capital": null,
+      "population": 138
+    },
+    {
+      "name": "Tanacross",
+      "region": "AK",
+      "x": 189.18,
+      "y": 521.58,
+      "rank": 7,
+      "capital": null,
+      "population": 136
+    },
+    {
+      "name": "Chignik",
+      "region": "AK",
+      "x": 133,
+      "y": 579.59,
+      "rank": 7,
+      "capital": null,
+      "population": 118
+    },
+    {
+      "name": "Yakutat",
+      "region": "AK",
+      "x": 208.04,
+      "y": 548.67,
+      "rank": 7,
+      "capital": null,
+      "population": 109
+    },
+    {
+      "name": "Circle",
+      "region": "AK",
+      "x": 183.86,
+      "y": 503.07,
+      "rank": 7,
+      "capital": null,
+      "population": 100
+    },
+    {
+      "name": "Wales",
+      "region": "AK",
+      "x": 106.83,
+      "y": 502.33,
+      "rank": 7,
+      "capital": null,
+      "population": 99
+    },
+    {
+      "name": "Karluk",
+      "region": "AK",
+      "x": 150.17,
+      "y": 570.21,
+      "rank": 7,
+      "capital": null,
+      "population": 96
+    },
+    {
+      "name": "Hughes",
+      "region": "AK",
+      "x": 151.26,
+      "y": 503.71,
+      "rank": 7,
+      "capital": null,
+      "population": 78
+    },
+    {
+      "name": "Pilot Point",
+      "region": "AK",
+      "x": 137.14,
+      "y": 569.87,
+      "rank": 7,
+      "capital": null,
+      "population": 68
+    },
+    {
+      "name": "Atka",
+      "region": "AK",
+      "x": 56.23,
+      "y": 597.58,
+      "rank": 7,
+      "capital": null,
+      "population": 61
+    },
+    {
+      "name": "False Pass",
+      "region": "AK",
+      "x": 109.79,
+      "y": 588.54,
+      "rank": 7,
+      "capital": null,
+      "population": 35
+    },
+    {
+      "name": "Nikolski",
+      "region": "AK",
+      "x": 82.31,
+      "y": 598.64,
+      "rank": 7,
+      "capital": null,
+      "population": 18
+    },
+    {
+      "name": "Wiseman",
+      "region": "AK",
+      "x": 163.84,
+      "y": 492.75,
+      "rank": 7,
+      "capital": null,
+      "population": 14
+    },
+    {
+      "name": "Mesa",
+      "region": "AZ",
+      "x": 255.69,
+      "y": 400.22,
+      "rank": 8,
+      "capital": null,
+      "population": 1085394
+    },
+    {
+      "name": "Stamford",
+      "region": "CT",
+      "x": 919.75,
+      "y": 208.05,
+      "rank": 8,
+      "capital": null,
+      "population": 746920
+    },
+    {
+      "name": "Arlington",
+      "region": "TX",
+      "x": 528.52,
+      "y": 440.89,
+      "rank": 8,
+      "capital": null,
+      "population": 724777
+    },
+    {
+      "name": "Pasadena",
+      "region": "TX",
+      "x": 564.16,
+      "y": 508.76,
+      "rank": 8,
+      "capital": null,
+      "population": 628492
+    },
+    {
+      "name": "San Mateo",
+      "region": "CA",
+      "x": 91.65,
+      "y": 268.01,
+      "rank": 8,
+      "capital": null,
+      "population": 626406
+    },
+    {
+      "name": "Aurora",
+      "region": "CO",
+      "x": 397.67,
+      "y": 275.9,
+      "rank": 8,
+      "capital": null,
+      "population": 587540
+    },
+    {
+      "name": "Joliet",
+      "region": "IL",
+      "x": 678.57,
+      "y": 236.04,
+      "rank": 8,
+      "capital": null,
+      "population": 578460
+    },
+    {
+      "name": "Kansas City",
+      "region": "KS",
+      "x": 571.15,
+      "y": 295.82,
+      "rank": 8,
+      "capital": null,
+      "population": 501577
+    },
+    {
+      "name": "Glendale",
+      "region": "AZ",
+      "x": 249.69,
+      "y": 396.44,
+      "rank": 8,
+      "capital": null,
+      "population": 500000
+    },
+    {
+      "name": "Allentown",
+      "region": "PA",
+      "x": 889.98,
+      "y": 225.38,
+      "rank": 8,
+      "capital": null,
+      "population": 496442
+    },
+    {
+      "name": "Berkeley",
+      "region": "CA",
+      "x": 94.25,
+      "y": 260.92,
+      "rank": 8,
+      "capital": null,
+      "population": 496356
+    },
+    {
+      "name": "Springfield",
+      "region": "MA",
+      "x": 929.46,
+      "y": 180.91,
+      "rank": 8,
+      "capital": null,
+      "population": 421780
+    },
+    {
+      "name": "Miami Beach",
+      "region": "FL",
+      "x": 868.64,
+      "y": 567.7,
+      "rank": 8,
+      "capital": null,
+      "population": 407750
+    },
+    {
+      "name": "Metairie",
+      "region": "LA",
+      "x": 660.67,
+      "y": 498.13,
+      "rank": 8,
+      "capital": null,
+      "population": 394206
+    },
+    {
+      "name": "Elgin",
+      "region": "IL",
+      "x": 674.61,
+      "y": 224.85,
+      "rank": 8,
+      "capital": null,
+      "population": 389514
+    },
+    {
+      "name": "Hampton",
+      "region": "VA",
+      "x": 892.54,
+      "y": 307.25,
+      "rank": 8,
+      "capital": null,
+      "population": 366766
+    },
+    {
+      "name": "McAllen",
+      "region": "TX",
+      "x": 502.5,
+      "y": 585.33,
+      "rank": 8,
+      "capital": null,
+      "population": 364004
+    },
+    {
+      "name": "Evanston",
+      "region": "IL",
+      "x": 684.28,
+      "y": 223.83,
+      "rank": 8,
+      "capital": null,
+      "population": 350000
+    },
+    {
+      "name": "Salem",
+      "region": "MA",
+      "x": 954.14,
+      "y": 165.1,
+      "rank": 8,
+      "capital": null,
+      "population": 335509
+    },
+    {
+      "name": "Sanford",
+      "region": "FL",
+      "x": 835.39,
+      "y": 505.97,
+      "rank": 8,
+      "capital": null,
+      "population": 333460
+    },
+    {
+      "name": "Durham",
+      "region": "NC",
+      "x": 852.1,
+      "y": 338.85,
+      "rank": 8,
+      "capital": null,
+      "population": 309495
+    },
+    {
+      "name": "Riverside",
+      "region": "CA",
+      "x": 156.95,
+      "y": 368.53,
+      "rank": 8,
+      "capital": null,
+      "population": 297554
+    },
+    {
+      "name": "Bartlett",
+      "region": "TN",
+      "x": 659.06,
+      "y": 380.21,
+      "rank": 8,
+      "capital": null,
+      "population": 286423
+    },
+    {
+      "name": "Melbourne",
+      "region": "FL",
+      "x": 850.95,
+      "y": 519.44,
+      "rank": 8,
+      "capital": null,
+      "population": 265414
+    },
+    {
+      "name": "Rockford",
+      "region": "IL",
+      "x": 661.41,
+      "y": 220.67,
+      "rank": 8,
+      "capital": null,
+      "population": 255978
+    },
+    {
+      "name": "Coral Springs",
+      "region": "FL",
+      "x": 864.17,
+      "y": 558.1,
+      "rank": 8,
+      "capital": null,
+      "population": 250000
+    },
+    {
+      "name": "Waukesha",
+      "region": "WI",
+      "x": 673.78,
+      "y": 202.97,
+      "rank": 8,
+      "capital": null,
+      "population": 249912
+    },
+    {
+      "name": "South Bend",
+      "region": "IN",
+      "x": 708.93,
+      "y": 229.75,
+      "rank": 8,
+      "capital": null,
+      "population": 239822
+    },
+    {
+      "name": "Lancaster",
+      "region": "PA",
+      "x": 879.33,
+      "y": 240.64,
+      "rank": 8,
+      "capital": null,
+      "population": 209489
+    },
+    {
+      "name": "Appleton",
+      "region": "WI",
+      "x": 668.79,
+      "y": 175.05,
+      "rank": 8,
+      "capital": null,
+      "population": 203665
+    },
+    {
+      "name": "Waterbury",
+      "region": "CT",
+      "x": 925.02,
+      "y": 195.24,
+      "rank": 8,
+      "capital": null,
+      "population": 174236
+    },
+    {
+      "name": "Poughkeepsie",
+      "region": "NY",
+      "x": 910.18,
+      "y": 195.34,
+      "rank": 8,
+      "capital": null,
+      "population": 170996
+    },
+    {
+      "name": "Rock Island",
+      "region": "IL",
+      "x": 638.39,
+      "y": 239.7,
+      "rank": 8,
+      "capital": null,
+      "population": 165728
+    },
+    {
+      "name": "Paterson",
+      "region": "NJ",
+      "x": 910.17,
+      "y": 213.41,
+      "rank": 8,
+      "capital": null,
+      "population": 151205
+    },
+    {
+      "name": "National City",
+      "region": "CA",
+      "x": 156.04,
+      "y": 397.64,
+      "rank": 8,
+      "capital": null,
+      "population": 150000
+    },
+    {
+      "name": "Elkhart",
+      "region": "IN",
+      "x": 713.56,
+      "y": 229.27,
+      "rank": 8,
+      "capital": null,
+      "population": 149190
+    },
+    {
+      "name": "Independence",
+      "region": "MO",
+      "x": 574.85,
+      "y": 296.27,
+      "rank": 8,
+      "capital": null,
+      "population": 148102
+    },
+    {
+      "name": "Bryan",
+      "region": "TX",
+      "x": 540.52,
+      "y": 486.13,
+      "rank": 8,
+      "capital": null,
+      "population": 146692
+    },
+    {
+      "name": "Vallejo",
+      "region": "CA",
+      "x": 95.93,
+      "y": 255.81,
+      "rank": 8,
+      "capital": null,
+      "population": 146289
+    },
+    {
+      "name": "New Bedford",
+      "region": "MA",
+      "x": 958.25,
+      "y": 184.2,
+      "rank": 8,
+      "capital": null,
+      "population": 136082
+    },
+    {
+      "name": "Lafayette",
+      "region": "IN",
+      "x": 701.3,
+      "y": 259.19,
+      "rank": 8,
+      "capital": null,
+      "population": 133977
+    },
+    {
+      "name": "Greeley",
+      "region": "CO",
+      "x": 400.34,
+      "y": 259.75,
+      "rank": 8,
+      "capital": null,
+      "population": 125410
+    },
+    {
+      "name": "Spartanburg",
+      "region": "SC",
+      "x": 802.33,
+      "y": 371.1,
+      "rank": 8,
+      "capital": null,
+      "population": 124126
+    },
+    {
+      "name": "Southaven",
+      "region": "MS",
+      "x": 656.49,
+      "y": 386.11,
+      "rank": 8,
+      "capital": null,
+      "population": 121268
+    },
+    {
+      "name": "New Albany",
+      "region": "IN",
+      "x": 724.13,
+      "y": 304.65,
+      "rank": 8,
+      "capital": null,
+      "population": 120625
+    },
+    {
+      "name": "Beaver Falls",
+      "region": "PA",
+      "x": 809.77,
+      "y": 237.35,
+      "rank": 8,
+      "capital": null,
+      "population": 120125
+    },
+    {
+      "name": "Petersburg",
+      "region": "VA",
+      "x": 873.44,
+      "y": 306.59,
+      "rank": 8,
+      "capital": null,
+      "population": 118577
+    },
+    {
+      "name": "Columbia",
+      "region": "TN",
+      "x": 708.87,
+      "y": 367.36,
+      "rank": 8,
+      "capital": null,
+      "population": 116091
+    },
+    {
+      "name": "Spring Hill",
+      "region": "FL",
+      "x": 811.75,
+      "y": 516.51,
+      "rank": 8,
+      "capital": null,
+      "population": 114697
+    },
+    {
+      "name": "Harlingen",
+      "region": "TX",
+      "x": 513.41,
+      "y": 585.67,
+      "rank": 8,
+      "capital": null,
+      "population": 110339
+    },
+    {
+      "name": "Winter Haven",
+      "region": "FL",
+      "x": 829.16,
+      "y": 524.25,
+      "rank": 8,
+      "capital": null,
+      "population": 108932
+    },
+    {
+      "name": "Kennewick",
+      "region": "WA",
+      "x": 192.41,
+      "y": 92.98,
+      "rank": 8,
+      "capital": null,
+      "population": 102504
+    },
+    {
+      "name": "Panama City",
+      "region": "FL",
+      "x": 746.93,
+      "y": 486.84,
+      "rank": 8,
+      "capital": null,
+      "population": 100072
+    },
+    {
+      "name": "Iowa City",
+      "region": "IA",
+      "x": 621.69,
+      "y": 236.79,
+      "rank": 8,
+      "capital": null,
+      "population": 98516
+    },
+    {
+      "name": "New London",
+      "region": "CT",
+      "x": 941.41,
+      "y": 195.64,
+      "rank": 8,
+      "capital": null,
+      "population": 96178
+    },
+    {
+      "name": "Lawrence",
+      "region": "KS",
+      "x": 560.43,
+      "y": 299.41,
+      "rank": 8,
+      "capital": null,
+      "population": 92726
+    },
+    {
+      "name": "La Crosse",
+      "region": "WI",
+      "x": 624.09,
+      "y": 188.47,
+      "rank": 8,
+      "capital": null,
+      "population": 87381
+    },
+    {
+      "name": "Baytown",
+      "region": "TX",
+      "x": 567.64,
+      "y": 506.6,
+      "rank": 8,
+      "capital": null,
+      "population": 86034
+    },
+    {
+      "name": "Homestead",
+      "region": "FL",
+      "x": 862.94,
+      "y": 576.32,
+      "rank": 8,
+      "capital": null,
+      "population": 85967
+    },
+    {
+      "name": "Springfield",
+      "region": "OH",
+      "x": 754.35,
+      "y": 264.5,
+      "rank": 8,
+      "capital": null,
+      "population": 84576
+    },
+    {
+      "name": "Slidell",
+      "region": "LA",
+      "x": 667.42,
+      "y": 491.17,
+      "rank": 8,
+      "capital": null,
+      "population": 84239
+    },
+    {
+      "name": "Lake Charles",
+      "region": "LA",
+      "x": 601.28,
+      "y": 495.39,
+      "rank": 8,
+      "capital": null,
+      "population": 83821
+    },
+    {
+      "name": "Annapolis",
+      "region": "MD",
+      "x": 881.1,
+      "y": 264.7,
+      "rank": 8,
+      "capital": "region",
+      "population": 81300
+    },
+    {
+      "name": "Eau Claire",
+      "region": "WI",
+      "x": 618.86,
+      "y": 166.05,
+      "rank": 8,
+      "capital": null,
+      "population": 79740
+    },
+    {
+      "name": "Hagerstown",
+      "region": "MD",
+      "x": 857.52,
+      "y": 254.18,
+      "rank": 8,
+      "capital": null,
+      "population": 79662
+    },
+    {
+      "name": "Altoona",
+      "region": "PA",
+      "x": 842.57,
+      "y": 236.89,
+      "rank": 8,
+      "capital": null,
+      "population": 78607
+    },
+    {
+      "name": "Mansfield",
+      "region": "OH",
+      "x": 773.3,
+      "y": 242.84,
+      "rank": 8,
+      "capital": null,
+      "population": 77768
+    },
+    {
+      "name": "Johnson City",
+      "region": "TN",
+      "x": 790.35,
+      "y": 341.76,
+      "rank": 8,
+      "capital": null,
+      "population": 77538
+    },
+    {
+      "name": "Dover",
+      "region": "DE",
+      "x": 896.53,
+      "y": 257.26,
+      "rank": 8,
+      "capital": "region",
+      "population": 76039
+    },
+    {
+      "name": "Longview",
+      "region": "TX",
+      "x": 571.23,
+      "y": 444.98,
+      "rank": 8,
+      "capital": null,
+      "population": 75920
+    },
+    {
+      "name": "Auburn",
+      "region": "AL",
+      "x": 744.21,
+      "y": 431.79,
+      "rank": 8,
+      "capital": null,
+      "population": 73929
+    },
+    {
+      "name": "Terre Haute",
+      "region": "IN",
+      "x": 694.24,
+      "y": 281.39,
+      "rank": 8,
+      "capital": null,
+      "population": 73236
+    },
+    {
+      "name": "Battle Creek",
+      "region": "MI",
+      "x": 724.93,
+      "y": 213.56,
+      "rank": 8,
+      "capital": null,
+      "population": 70820
+    },
+    {
+      "name": "San Marcos",
+      "region": "TX",
+      "x": 510.01,
+      "y": 503.48,
+      "rank": 8,
+      "capital": null,
+      "population": 70371
+    },
+    {
+      "name": "Texas City",
+      "region": "TX",
+      "x": 567.82,
+      "y": 514.31,
+      "rank": 8,
+      "capital": null,
+      "population": 69914
+    },
+    {
+      "name": "Janesville",
+      "region": "WI",
+      "x": 661.52,
+      "y": 211.35,
+      "rank": 8,
+      "capital": null,
+      "population": 69278
+    },
+    {
+      "name": "St. Charles",
+      "region": "MD",
+      "x": 875.26,
+      "y": 274.55,
+      "rank": 8,
+      "capital": null,
+      "population": 69208
+    },
+    {
+      "name": "Bay City",
+      "region": "MI",
+      "x": 742.34,
+      "y": 182.61,
+      "rank": 8,
+      "capital": null,
+      "population": 68549
+    },
+    {
+      "name": "Blacksburg",
+      "region": "VA",
+      "x": 821.18,
+      "y": 316.05,
+      "rank": 8,
+      "capital": null,
+      "population": 67508
+    },
+    {
+      "name": "Port Charlotte",
+      "region": "FL",
+      "x": 825.17,
+      "y": 547.84,
+      "rank": 8,
+      "capital": null,
+      "population": 64279
+    },
+    {
+      "name": "Parkersburg",
+      "region": "WV",
+      "x": 794.24,
+      "y": 273.77,
+      "rank": 8,
+      "capital": null,
+      "population": 61935
+    },
+    {
+      "name": "Marietta",
+      "region": "GA",
+      "x": 758,
+      "y": 399.69,
+      "rank": 8,
+      "capital": null,
+      "population": 61360
+    },
+    {
+      "name": "Dalton",
+      "region": "GA",
+      "x": 748.07,
+      "y": 382.39,
+      "rank": 8,
+      "capital": null,
+      "population": 58557
+    },
+    {
+      "name": "Benton Harbor",
+      "region": "MI",
+      "x": 704.58,
+      "y": 220.38,
+      "rank": 8,
+      "capital": null,
+      "population": 58382
+    },
+    {
+      "name": "Rocky Mount",
+      "region": "NC",
+      "x": 872.26,
+      "y": 336.49,
+      "rank": 8,
+      "capital": null,
+      "population": 58361
+    },
+    {
+      "name": "Kingsport",
+      "region": "TN",
+      "x": 785.92,
+      "y": 337.03,
+      "rank": 8,
+      "capital": null,
+      "population": 57467
+    },
+    {
+      "name": "Manhattan",
+      "region": "KS",
+      "x": 537.44,
+      "y": 294.14,
+      "rank": 8,
+      "capital": null,
+      "population": 56949
+    },
+    {
+      "name": "Williamsport",
+      "region": "PA",
+      "x": 862.38,
+      "y": 216.43,
+      "rank": 8,
+      "capital": null,
+      "population": 56877
+    },
+    {
+      "name": "Mankato",
+      "region": "MN",
+      "x": 579.6,
+      "y": 181.92,
+      "rank": 8,
+      "capital": null,
+      "population": 56325
+    },
+    {
+      "name": "Lake Havasu City",
+      "region": "AZ",
+      "x": 215,
+      "y": 368.02,
+      "rank": 8,
+      "capital": null,
+      "population": 56133
+    },
+    {
+      "name": "Springfield",
+      "region": "OR",
+      "x": 121.36,
+      "y": 123.86,
+      "rank": 8,
+      "capital": null,
+      "population": 56032
+    },
+    {
+      "name": "Saratoga Springs",
+      "region": "NY",
+      "x": 905.17,
+      "y": 164.55,
+      "rank": 8,
+      "capital": null,
+      "population": 55793
+    },
+    {
+      "name": "Sheboygan",
+      "region": "WI",
+      "x": 680.71,
+      "y": 185.71,
+      "rank": 8,
+      "capital": null,
+      "population": 53705
+    },
+    {
+      "name": "Leesburg",
+      "region": "FL",
+      "x": 823.61,
+      "y": 507.3,
+      "rank": 8,
+      "capital": null,
+      "population": 49574
+    },
+    {
+      "name": "Lancaster",
+      "region": "OH",
+      "x": 775.1,
+      "y": 266.26,
+      "rank": 8,
+      "capital": null,
+      "population": 48829
+    },
+    {
+      "name": "Palm Coast",
+      "region": "FL",
+      "x": 833.9,
+      "y": 489.28,
+      "rank": 8,
+      "capital": null,
+      "population": 48577
+    },
+    {
+      "name": "Stillwater",
+      "region": "OK",
+      "x": 528.5,
+      "y": 363.12,
+      "rank": 8,
+      "capital": null,
+      "population": 47667
+    },
+    {
+      "name": "Pittsfield",
+      "region": "MA",
+      "x": 916.84,
+      "y": 176.42,
+      "rank": 8,
+      "capital": null,
+      "population": 46230
+    },
+    {
+      "name": "Enid",
+      "region": "OK",
+      "x": 514.12,
+      "y": 357.03,
+      "rank": 8,
+      "capital": null,
+      "population": 46138
+    },
+    {
+      "name": "New Braunfels",
+      "region": "TX",
+      "x": 506.33,
+      "y": 507.55,
+      "rank": 8,
+      "capital": null,
+      "population": 45840
+    },
+    {
+      "name": "Grand Island",
+      "region": "NE",
+      "x": 508.11,
+      "y": 254.69,
+      "rank": 8,
+      "capital": null,
+      "population": 45651
+    },
+    {
+      "name": "Florence",
+      "region": "AL",
+      "x": 698.96,
+      "y": 386.73,
+      "rank": 8,
+      "capital": null,
+      "population": 45349
+    },
+    {
+      "name": "Delano",
+      "region": "CA",
+      "x": 133.84,
+      "y": 320.81,
+      "rank": 8,
+      "capital": null,
+      "population": 44757
+    },
+    {
+      "name": "Casa Grande",
+      "region": "AZ",
+      "x": 254.88,
+      "y": 412.3,
+      "rank": 8,
+      "capital": null,
+      "population": 44655
+    },
+    {
+      "name": "Hutchinson",
+      "region": "KS",
+      "x": 514.08,
+      "y": 319.32,
+      "rank": 8,
+      "capital": null,
+      "population": 44477
+    },
+    {
+      "name": "Richmond",
+      "region": "IN",
+      "x": 736.2,
+      "y": 268.81,
+      "rank": 8,
+      "capital": null,
+      "population": 44400
+    },
+    {
+      "name": "Farmington",
+      "region": "NM",
+      "x": 331.96,
+      "y": 335.42,
+      "rank": 8,
+      "capital": null,
+      "population": 43278
+    },
+    {
+      "name": "Harrisonburg",
+      "region": "VA",
+      "x": 843.09,
+      "y": 284.29,
+      "rank": 8,
+      "capital": null,
+      "population": 42538
+    },
+    {
+      "name": "Meridian",
+      "region": "MS",
+      "x": 684.54,
+      "y": 442.95,
+      "rank": 8,
+      "capital": null,
+      "population": 42290
+    },
+    {
+      "name": "Salisbury",
+      "region": "NC",
+      "x": 825.86,
+      "y": 350.94,
+      "rank": 8,
+      "capital": null,
+      "population": 41352
+    },
+    {
+      "name": "Cape Girardeau",
+      "region": "MO",
+      "x": 661.69,
+      "y": 332.92,
+      "rank": 8,
+      "capital": null,
+      "population": 40427
+    },
+    {
+      "name": "Zanesville",
+      "region": "OH",
+      "x": 784.36,
+      "y": 259.88,
+      "rank": 8,
+      "capital": null,
+      "population": 40052
+    },
+    {
+      "name": "Marion",
+      "region": "IN",
+      "x": 721.42,
+      "y": 253.92,
+      "rank": 8,
+      "capital": null,
+      "population": 38297
+    },
+    {
+      "name": "New Iberia",
+      "region": "LA",
+      "x": 628.47,
+      "y": 499.39,
+      "rank": 8,
+      "capital": null,
+      "population": 37540
+    },
+    {
+      "name": "Bowling Green",
+      "region": "OH",
+      "x": 752.6,
+      "y": 231.64,
+      "rank": 8,
+      "capital": null,
+      "population": 37080
+    },
+    {
+      "name": "Hopkinsville",
+      "region": "KY",
+      "x": 698.21,
+      "y": 340,
+      "rank": 8,
+      "capital": null,
+      "population": 35604
+    },
+    {
+      "name": "Cleburne",
+      "region": "TX",
+      "x": 521.45,
+      "y": 448.3,
+      "rank": 8,
+      "capital": null,
+      "population": 35545
+    },
+    {
+      "name": "Orangeburg",
+      "region": "SC",
+      "x": 826.74,
+      "y": 400.45,
+      "rank": 8,
+      "capital": null,
+      "population": 35472
+    },
+    {
+      "name": "Bartlesville",
+      "region": "OK",
+      "x": 547.95,
+      "y": 349.42,
+      "rank": 8,
+      "capital": null,
+      "population": 34610
+    },
+    {
+      "name": "Lumberton",
+      "region": "NC",
+      "x": 855.99,
+      "y": 369.62,
+      "rank": 8,
+      "capital": null,
+      "population": 32785
+    },
+    {
+      "name": "Galesburg",
+      "region": "IL",
+      "x": 641.83,
+      "y": 251.81,
+      "rank": 8,
+      "capital": null,
+      "population": 32094
+    },
+    {
+      "name": "LaGrange",
+      "region": "GA",
+      "x": 751.45,
+      "y": 421.31,
+      "rank": 8,
+      "capital": null,
+      "population": 31776
+    },
+    {
+      "name": "Kearney",
+      "region": "NE",
+      "x": 495.83,
+      "y": 259.34,
+      "rank": 8,
+      "capital": null,
+      "population": 31553
+    },
+    {
+      "name": "Lake City",
+      "region": "FL",
+      "x": 804.6,
+      "y": 478.91,
+      "rank": 8,
+      "capital": null,
+      "population": 29395
+    },
+    {
+      "name": "Plattsburgh",
+      "region": "NY",
+      "x": 901.83,
+      "y": 128.14,
+      "rank": 8,
+      "capital": null,
+      "population": 29238
+    },
+    {
+      "name": "Laurel",
+      "region": "MS",
+      "x": 677.46,
+      "y": 458.5,
+      "rank": 8,
+      "capital": null,
+      "population": 28841
+    },
+    {
+      "name": "Clarksburg",
+      "region": "WV",
+      "x": 814.92,
+      "y": 270.08,
+      "rank": 8,
+      "capital": null,
+      "population": 28773
+    },
+    {
+      "name": "Garden City",
+      "region": "KS",
+      "x": 462.74,
+      "y": 319.52,
+      "rank": 8,
+      "capital": null,
+      "population": 28564
+    },
+    {
+      "name": "Brainerd",
+      "region": "MN",
+      "x": 575.44,
+      "y": 132.9,
+      "rank": 8,
+      "capital": null,
+      "population": 28187
+    },
+    {
+      "name": "Paso Robles",
+      "region": "CA",
+      "x": 107.87,
+      "y": 317.27,
+      "rank": 8,
+      "capital": null,
+      "population": 27157
+    },
+    {
+      "name": "Fort Dodge",
+      "region": "IA",
+      "x": 577.41,
+      "y": 219.2,
+      "rank": 8,
+      "capital": null,
+      "population": 26879
+    },
+    {
+      "name": "Ottumwa",
+      "region": "IA",
+      "x": 607.59,
+      "y": 252.01,
+      "rank": 8,
+      "capital": null,
+      "population": 25982
+    },
+    {
+      "name": "Faribault",
+      "region": "MN",
+      "x": 591.2,
+      "y": 178.78,
+      "rank": 8,
+      "capital": null,
+      "population": 25376
+    },
+    {
+      "name": "Waterville",
+      "region": "ME",
+      "x": 961.19,
+      "y": 115.84,
+      "rank": 8,
+      "capital": null,
+      "population": 25152
+    },
+    {
+      "name": "Ardmore",
+      "region": "OK",
+      "x": 526.88,
+      "y": 407.18,
+      "rank": 8,
+      "capital": null,
+      "population": 24960
+    },
+    {
+      "name": "Big Spring",
+      "region": "TX",
+      "x": 444.65,
+      "y": 447.96,
+      "rank": 8,
+      "capital": null,
+      "population": 24122
+    },
+    {
+      "name": "Paragould",
+      "region": "AR",
+      "x": 646.01,
+      "y": 362.15,
+      "rank": 8,
+      "capital": null,
+      "population": 23450
+    },
+    {
+      "name": "Alice",
+      "region": "TX",
+      "x": 506.47,
+      "y": 551.02,
+      "rank": 8,
+      "capital": null,
+      "population": 22655
+    },
+    {
+      "name": "Crestview",
+      "region": "FL",
+      "x": 728,
+      "y": 475.4,
+      "rank": 8,
+      "capital": null,
+      "population": 22403
+    },
+    {
+      "name": "Madisonville",
+      "region": "KY",
+      "x": 697.03,
+      "y": 329.52,
+      "rank": 8,
+      "capital": null,
+      "population": 22294
+    },
+    {
+      "name": "McAlester",
+      "region": "OK",
+      "x": 551.86,
+      "y": 390.35,
+      "rank": 8,
+      "capital": null,
+      "population": 21668
+    },
+    {
+      "name": "Palatka",
+      "region": "FL",
+      "x": 825.3,
+      "y": 488.13,
+      "rank": 8,
+      "capital": null,
+      "population": 21452
+    },
+    {
+      "name": "Hays",
+      "region": "KS",
+      "x": 490.35,
+      "y": 300.28,
+      "rank": 8,
+      "capital": null,
+      "population": 21394
+    },
+    {
+      "name": "Brownwood",
+      "region": "TX",
+      "x": 491.13,
+      "y": 462.06,
+      "rank": 8,
+      "capital": null,
+      "population": 20988
+    },
+    {
+      "name": "Albert Lea",
+      "region": "MN",
+      "x": 589.99,
+      "y": 193.25,
+      "rank": 8,
+      "capital": null,
+      "population": 20522
+    },
+    {
+      "name": "Waycross",
+      "region": "GA",
+      "x": 806.76,
+      "y": 455.41,
+      "rank": 8,
+      "capital": null,
+      "population": 19824
+    },
+    {
+      "name": "Kirksville",
+      "region": "MO",
+      "x": 605.44,
+      "y": 270.57,
+      "rank": 8,
+      "capital": null,
+      "population": 19193
+    },
+    {
+      "name": "Centralia",
+      "region": "WA",
+      "x": 138.42,
+      "y": 66.76,
+      "rank": 8,
+      "capital": null,
+      "population": 18880
+    },
+    {
+      "name": "Willmar",
+      "region": "MN",
+      "x": 562.69,
+      "y": 160.71,
+      "rank": 8,
+      "capital": null,
+      "population": 18473
+    },
+    {
+      "name": "Alpena",
+      "region": "MI",
+      "x": 745.29,
+      "y": 149.04,
+      "rank": 8,
+      "capital": null,
+      "population": 18330
+    },
+    {
+      "name": "Las Vegas",
+      "region": "NM",
+      "x": 381.68,
+      "y": 367.32,
+      "rank": 8,
+      "capital": null,
+      "population": 16998
+    },
+    {
+      "name": "Deming",
+      "region": "NM",
+      "x": 327.04,
+      "y": 436.86,
+      "rank": 8,
+      "capital": null,
+      "population": 16298
+    },
+    {
+      "name": "Iron Mountain",
+      "region": "MI",
+      "x": 671.24,
+      "y": 139.95,
+      "rank": 8,
+      "capital": null,
+      "population": 16183
+    },
+    {
+      "name": "Hereford",
+      "region": "TX",
+      "x": 431.22,
+      "y": 388.94,
+      "rank": 8,
+      "capital": null,
+      "population": 15675
+    },
+    {
+      "name": "La Grande",
+      "region": "OR",
+      "x": 203.66,
+      "y": 116.1,
+      "rank": 8,
+      "capital": null,
+      "population": 15004
+    },
+    {
+      "name": "Burley",
+      "region": "ID",
+      "x": 258.01,
+      "y": 191.65,
+      "rank": 8,
+      "capital": null,
+      "population": 14042
+    },
+    {
+      "name": "Glenwood Springs",
+      "region": "CO",
+      "x": 354.62,
+      "y": 274.71,
+      "rank": 8,
+      "capital": null,
+      "population": 14004
+    },
+    {
+      "name": "Tomah",
+      "region": "WI",
+      "x": 635.66,
+      "y": 183.72,
+      "rank": 8,
+      "capital": null,
+      "population": 12997
+    },
+    {
+      "name": "Ontario",
+      "region": "OR",
+      "x": 214.52,
+      "y": 148.45,
+      "rank": 8,
+      "capital": null,
+      "population": 12187
+    },
+    {
+      "name": "Vernon",
+      "region": "TX",
+      "x": 487.2,
+      "y": 406.94,
+      "rank": 8,
+      "capital": null,
+      "population": 11660
+    },
+    {
+      "name": "Spencer",
+      "region": "IA",
+      "x": 561.45,
+      "y": 205.06,
+      "rank": 8,
+      "capital": null,
+      "population": 11203
+    },
+    {
+      "name": "Safford",
+      "region": "AZ",
+      "x": 292.52,
+      "y": 419.22,
+      "rank": 8,
+      "capital": null,
+      "population": 10668
+    },
+    {
+      "name": "Crookston",
+      "region": "MN",
+      "x": 538.41,
+      "y": 101.63,
+      "rank": 8,
+      "capital": null,
+      "population": 8653
+    },
+    {
+      "name": "Montpelier",
+      "region": "VT",
+      "x": 917.8,
+      "y": 134.24,
+      "rank": 8,
+      "capital": "region",
+      "population": 8538
+    },
+    {
+      "name": "Alliance",
+      "region": "NE",
+      "x": 434.52,
+      "y": 224.52,
+      "rank": 8,
+      "capital": null,
+      "population": 8344
+    },
+    {
+      "name": "Tillamook",
+      "region": "OR",
+      "x": 117.17,
+      "y": 89.82,
+      "rank": 8,
+      "capital": null,
+      "population": 8145
+    },
+    {
+      "name": "London",
+      "region": "KY",
+      "x": 757.45,
+      "y": 327.63,
+      "rank": 8,
+      "capital": null,
+      "population": 7844
+    },
+    {
+      "name": "Devils Lake",
+      "region": "ND",
+      "x": 504.55,
+      "y": 93.5,
+      "rank": 8,
+      "capital": null,
+      "population": 7813
+    },
+    {
+      "name": "Richfield",
+      "region": "UT",
+      "x": 271.25,
+      "y": 280.25,
+      "rank": 8,
+      "capital": null,
+      "population": 7621
+    },
+    {
+      "name": "Truth or Consequences",
+      "region": "NM",
+      "x": 338.75,
+      "y": 418.52,
+      "rank": 8,
+      "capital": null,
+      "population": 7121
+    },
+    {
+      "name": "Dalhart",
+      "region": "TX",
+      "x": 430.96,
+      "y": 360.91,
+      "rank": 8,
+      "capital": null,
+      "population": 7088
+    },
+    {
+      "name": "Ironwood",
+      "region": "MI",
+      "x": 637.78,
+      "y": 128.21,
+      "rank": 8,
+      "capital": null,
+      "population": 7064
+    },
+    {
+      "name": "Powell",
+      "region": "WY",
+      "x": 346.03,
+      "y": 155.36,
+      "rank": 8,
+      "capital": null,
+      "population": 6895
+    },
+    {
+      "name": "Lander",
+      "region": "WY",
+      "x": 340.66,
+      "y": 198.26,
+      "rank": 8,
+      "capital": null,
+      "population": 6821
+    },
+    {
+      "name": "Houlton",
+      "region": "ME",
+      "x": 978.44,
+      "y": 74.05,
+      "rank": 8,
+      "capital": null,
+      "population": 6703
+    },
+    {
+      "name": "Alpine",
+      "region": "TX",
+      "x": 400.15,
+      "y": 487.22,
+      "rank": 8,
+      "capital": null,
+      "population": 6587
+    },
+    {
+      "name": "Childress",
+      "region": "TX",
+      "x": 470.53,
+      "y": 400.1,
+      "rank": 8,
+      "capital": null,
+      "population": 6557
+    },
+    {
+      "name": "Glendive",
+      "region": "MT",
+      "x": 414.57,
+      "y": 110.34,
+      "rank": 8,
+      "capital": null,
+      "population": 5856
+    },
+    {
+      "name": "Polson",
+      "region": "MT",
+      "x": 274.03,
+      "y": 77.35,
+      "rank": 8,
+      "capital": null,
+      "population": 5326
+    },
+    {
+      "name": "Nephi",
+      "region": "UT",
+      "x": 278.98,
+      "y": 260.09,
+      "rank": 8,
+      "capital": null,
+      "population": 5117
+    },
+    {
+      "name": "Dillon",
+      "region": "MT",
+      "x": 286.36,
+      "y": 135.69,
+      "rank": 8,
+      "capital": null,
+      "population": 4463
+    },
+    {
+      "name": "Hardin",
+      "region": "MT",
+      "x": 366.69,
+      "y": 136.08,
+      "rank": 8,
+      "capital": null,
+      "population": 4448
+    },
+    {
+      "name": "Goodland",
+      "region": "KS",
+      "x": 449.85,
+      "y": 287.75,
+      "rank": 8,
+      "capital": null,
+      "population": 4378
+    },
+    {
+      "name": "Calais",
+      "region": "ME",
+      "x": 993.7,
+      "y": 91.79,
+      "rank": 8,
+      "capital": null,
+      "population": 3306
+    },
+    {
+      "name": "Tonopah",
+      "region": "NV",
+      "x": 180.6,
+      "y": 278.46,
+      "rank": 8,
+      "capital": null,
+      "population": 3261
+    },
+    {
+      "name": "Lead",
+      "region": "SD",
+      "x": 423.93,
+      "y": 173,
+      "rank": 8,
+      "capital": null,
+      "population": 2874
+    },
+    {
+      "name": "Dillingham",
+      "region": "AK",
+      "x": 134.12,
+      "y": 557.95,
+      "rank": 8,
+      "capital": null,
+      "population": 2488
+    },
+    {
+      "name": "White Sulphur Springs",
+      "region": "WV",
+      "x": 821.02,
+      "y": 303.16,
+      "rank": 8,
+      "capital": null,
+      "population": 2407
+    },
+    {
+      "name": "Van Horn",
+      "region": "TX",
+      "x": 379.17,
+      "y": 470.05,
+      "rank": 8,
+      "capital": null,
+      "population": 2175
+    },
+    {
+      "name": "Talkeetna",
+      "region": "AK",
+      "x": 166.16,
+      "y": 532.48,
+      "rank": 8,
+      "capital": null,
+      "population": 1078
+    },
+    {
+      "name": "Wallace",
+      "region": "ID",
+      "x": 246.75,
+      "y": 76.65,
+      "rank": 8,
+      "capital": null,
+      "population": 1028
+    },
+    {
+      "name": "Selawik",
+      "region": "AK",
+      "x": 133.36,
+      "y": 498.54,
+      "rank": 8,
+      "capital": null,
+      "population": 832
+    },
+    {
+      "name": "Mountain Village",
+      "region": "AK",
+      "x": 116.68,
+      "y": 532.17,
+      "rank": 8,
+      "capital": null,
+      "population": 755
+    },
+    {
+      "name": "Sand Point",
+      "region": "AK",
+      "x": 123.22,
+      "y": 586.3,
+      "rank": 8,
+      "capital": null,
+      "population": 667
+    },
+    {
+      "name": "Big Delta",
+      "region": "AK",
+      "x": 179.8,
+      "y": 516.85,
+      "rank": 8,
+      "capital": null,
+      "population": 591
+    },
+    {
+      "name": "Mendocino",
+      "region": "CA",
+      "x": 77.94,
+      "y": 222.43,
+      "rank": 8,
+      "capital": null,
+      "population": 548
+    },
+    {
+      "name": "Hydaburg",
+      "region": "AK",
+      "x": 245.1,
+      "y": 573.72,
+      "rank": 8,
+      "capital": null,
+      "population": 382
+    },
+    {
+      "name": "Tununak",
+      "region": "AK",
+      "x": 109.18,
+      "y": 542.91,
+      "rank": 8,
+      "capital": null,
+      "population": 352
+    },
+    {
+      "name": "Tanana",
+      "region": "AK",
+      "x": 158.39,
+      "y": 510.48,
+      "rank": 8,
+      "capital": null,
+      "population": 308
+    },
+    {
+      "name": "Goodnews Bay",
+      "region": "AK",
+      "x": 121.78,
+      "y": 556.32,
+      "rank": 8,
+      "capital": null,
+      "population": 230
+    },
+    {
+      "name": "Cantwell",
+      "region": "AK",
+      "x": 169.72,
+      "y": 523.85,
+      "rank": 8,
+      "capital": null,
+      "population": 222
+    },
+    {
+      "name": "Atqasuk",
+      "region": "AK",
+      "x": 143.02,
+      "y": 469.22,
+      "rank": 8,
+      "capital": null,
+      "population": 201
+    },
+    {
+      "name": "Kaltag",
+      "region": "AK",
+      "x": 136.1,
+      "y": 516.61,
+      "rank": 8,
+      "capital": null,
+      "population": 190
+    },
+    {
+      "name": "Whittier",
+      "region": "AK",
+      "x": 172.31,
+      "y": 544.18,
+      "rank": 8,
+      "capital": null,
+      "population": 177
+    },
+    {
+      "name": "Kobuk",
+      "region": "AK",
+      "x": 143.19,
+      "y": 496.83,
+      "rank": 8,
+      "capital": null,
+      "population": 151
+    },
+    {
+      "name": "Gulkana",
+      "region": "AK",
+      "x": 183.27,
+      "y": 531.28,
+      "rank": 8,
+      "capital": null,
+      "population": 119
+    },
+    {
+      "name": "Perryville",
+      "region": "AK",
+      "x": 129.53,
+      "y": 582.31,
+      "rank": 8,
+      "capital": null,
+      "population": 113
+    },
+    {
+      "name": "Eagle",
+      "region": "AK",
+      "x": 194.47,
+      "y": 509.48,
+      "rank": 8,
+      "capital": null,
+      "population": 104
+    },
+    {
+      "name": "Port Heiden",
+      "region": "AK",
+      "x": 132.39,
+      "y": 574.42,
+      "rank": 8,
+      "capital": null,
+      "population": 102
+    },
+    {
+      "name": "Koyukuk",
+      "region": "AK",
+      "x": 139.79,
+      "y": 512.51,
+      "rank": 8,
+      "capital": null,
+      "population": 101
+    },
+    {
+      "name": "Emmonak",
+      "region": "AK",
+      "x": 114.67,
+      "y": 526.37,
+      "rank": 8,
+      "capital": null,
+      "population": 100
+    },
+    {
+      "name": "Nyac",
+      "region": "AK",
+      "x": 129.65,
+      "y": 542.26,
+      "rank": 8,
+      "capital": null,
+      "population": 100
+    },
+    {
+      "name": "Mekoryuk",
+      "region": "AK",
+      "x": 105.38,
+      "y": 543.8,
+      "rank": 8,
+      "capital": null,
+      "population": 99
+    },
+    {
+      "name": "Allakaket",
+      "region": "AK",
+      "x": 156.3,
+      "y": 499.64,
+      "rank": 8,
+      "capital": null,
+      "population": 97
+    },
+    {
+      "name": "Teller",
+      "region": "AK",
+      "x": 111.81,
+      "y": 506.09,
+      "rank": 8,
+      "capital": null,
+      "population": 83
+    },
+    {
+      "name": "Nenana",
+      "region": "AK",
+      "x": 168.54,
+      "y": 514.72,
+      "rank": 8,
+      "capital": null,
+      "population": 75
+    },
+    {
+      "name": "Lake Minchumina",
+      "region": "AK",
+      "x": 157.88,
+      "y": 520.59,
+      "rank": 8,
+      "capital": null,
+      "population": 32
+    },
+    {
+      "name": "Montana",
+      "region": "AK",
+      "x": 166.41,
+      "y": 534.39,
+      "rank": 8,
+      "capital": null,
+      "population": 10
+    }
+  ]
+}

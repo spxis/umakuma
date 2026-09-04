@@ -1,0 +1,1434 @@
+{
+  "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_populated_places.geojson (Natural Earth populated places), fitted to 1000x1400",
+  "updatedAt": "2026-09-04T09:41:01.074Z",
+  "country": "AR",
+  "countryName": "Argentina",
+  "viewBox": "0 0 1000 1400",
+  "width": 1000,
+  "height": 1400,
+  "totalCities": 158,
+  "cities": [
+    {
+      "name": "Buenos Aires",
+      "region": "C",
+      "x": 628.87,
+      "y": 546.87,
+      "rank": 1,
+      "capital": "country",
+      "population": 12795000
+    },
+    {
+      "name": "Córdoba",
+      "region": "X",
+      "x": 430.54,
+      "y": 404.36,
+      "rank": 3,
+      "capital": "region",
+      "population": 1452000
+    },
+    {
+      "name": "Mendoza",
+      "region": "M",
+      "x": 266.25,
+      "y": 469.12,
+      "rank": 3,
+      "capital": "region",
+      "population": 893000
+    },
+    {
+      "name": "Mar del Plata",
+      "region": "B",
+      "x": 647.45,
+      "y": 691.92,
+      "rank": 3,
+      "capital": null,
+      "population": 555897
+    },
+    {
+      "name": "Posadas",
+      "region": "N",
+      "x": 742.73,
+      "y": 246.79,
+      "rank": 3,
+      "capital": "region",
+      "population": 357119
+    },
+    {
+      "name": "Bahía Blanca",
+      "region": "B",
+      "x": 491.01,
+      "y": 714.55,
+      "rank": 3,
+      "capital": null,
+      "population": 281536
+    },
+    {
+      "name": "Comodoro Rivadavia",
+      "region": "U",
+      "x": 327.98,
+      "y": 1014.39,
+      "rank": 3,
+      "capital": null,
+      "population": 140850
+    },
+    {
+      "name": "Río Gallegos",
+      "region": "Z",
+      "x": 291.12,
+      "y": 1258.95,
+      "rank": 3,
+      "capital": "region",
+      "population": 85700
+    },
+    {
+      "name": "Puerto Deseado",
+      "region": "Z",
+      "x": 375.77,
+      "y": 1092.51,
+      "rank": 3,
+      "capital": null,
+      "population": 3305
+    },
+    {
+      "name": "Rosario",
+      "region": "S",
+      "x": 554.26,
+      "y": 472.68,
+      "rank": 4,
+      "capital": null,
+      "population": 1203000
+    },
+    {
+      "name": "San Miguel de Tucumán",
+      "region": "T",
+      "x": 393.03,
+      "y": 211.36,
+      "rank": 4,
+      "capital": "region",
+      "population": 830000
+    },
+    {
+      "name": "Salta",
+      "region": "A",
+      "x": 385.32,
+      "y": 125.93,
+      "rank": 4,
+      "capital": "region",
+      "population": 512686
+    },
+    {
+      "name": "Santa Fe",
+      "region": "S",
+      "x": 555.74,
+      "y": 416.81,
+      "rank": 4,
+      "capital": "region",
+      "population": 489505
+    },
+    {
+      "name": "San Juan",
+      "region": "J",
+      "x": 274.97,
+      "y": 412.68,
+      "rank": 4,
+      "capital": "region",
+      "population": 447048
+    },
+    {
+      "name": "Neuquén",
+      "region": "Q",
+      "x": 301.08,
+      "y": 723.73,
+      "rank": 4,
+      "capital": "region",
+      "population": 242092
+    },
+    {
+      "name": "Formosa",
+      "region": "P",
+      "x": 659.06,
+      "y": 191.16,
+      "rank": 4,
+      "capital": "region",
+      "population": 221383
+    },
+    {
+      "name": "Santa Rosa",
+      "region": "L",
+      "x": 424.88,
+      "y": 624.08,
+      "rank": 4,
+      "capital": "region",
+      "population": 111424
+    },
+    {
+      "name": "Bariloche",
+      "region": "R",
+      "x": 201.56,
+      "y": 821.86,
+      "rank": 4,
+      "capital": null,
+      "population": 95394
+    },
+    {
+      "name": "Rawson",
+      "region": "U",
+      "x": 398.17,
+      "y": 905.1,
+      "rank": 4,
+      "capital": "region",
+      "population": 26335
+    },
+    {
+      "name": "El Calafate",
+      "region": "Z",
+      "x": 205.25,
+      "y": 1210.7,
+      "rank": 4,
+      "capital": null,
+      "population": 8000
+    },
+    {
+      "name": "San Luis",
+      "region": "D",
+      "x": 353.75,
+      "y": 484.6,
+      "rank": 6,
+      "capital": "region",
+      "population": 432310
+    },
+    {
+      "name": "Resistencia",
+      "region": "H",
+      "x": 625.88,
+      "y": 243.98,
+      "rank": 6,
+      "capital": "region",
+      "population": 387158
+    },
+    {
+      "name": "Santiago del Estero",
+      "region": "G",
+      "x": 428.54,
+      "y": 252.23,
+      "rank": 6,
+      "capital": "region",
+      "population": 354692
+    },
+    {
+      "name": "San Salvador de Jujuy",
+      "region": "Y",
+      "x": 389.72,
+      "y": 100.67,
+      "rank": 6,
+      "capital": "region",
+      "population": 305891
+    },
+    {
+      "name": "San Fernando del Valle de Catamarca",
+      "region": "K",
+      "x": 372.38,
+      "y": 281.13,
+      "rank": 6,
+      "capital": "region",
+      "population": 188812
+    },
+    {
+      "name": "La Rioja",
+      "region": "F",
+      "x": 333.41,
+      "y": 321.13,
+      "rank": 6,
+      "capital": "region",
+      "population": 162620
+    },
+    {
+      "name": "Río Cuarto",
+      "region": "X",
+      "x": 424.14,
+      "y": 477.21,
+      "rank": 6,
+      "capital": null,
+      "population": 153757
+    },
+    {
+      "name": "San Rafael",
+      "region": "M",
+      "x": 285.75,
+      "y": 540.9,
+      "rank": 6,
+      "capital": null,
+      "population": 109163
+    },
+    {
+      "name": "Tandil",
+      "region": "B",
+      "x": 597.09,
+      "y": 659.53,
+      "rank": 6,
+      "capital": null,
+      "population": 104325
+    },
+    {
+      "name": "Olavarría",
+      "region": "B",
+      "x": 558.43,
+      "y": 639.63,
+      "rank": 6,
+      "capital": null,
+      "population": 86320
+    },
+    {
+      "name": "Necochea",
+      "region": "B",
+      "x": 606.98,
+      "y": 712.64,
+      "rank": 6,
+      "capital": null,
+      "population": 80478
+    },
+    {
+      "name": "Gualeguaychú",
+      "region": "E",
+      "x": 630.07,
+      "y": 479.58,
+      "rank": 6,
+      "capital": null,
+      "population": 78676
+    },
+    {
+      "name": "San Ramón de la Nueva Orán",
+      "region": "A",
+      "x": 427.55,
+      "y": 56.81,
+      "rank": 6,
+      "capital": null,
+      "population": 74059
+    },
+    {
+      "name": "Goya",
+      "region": "W",
+      "x": 612.02,
+      "y": 314.38,
+      "rank": 6,
+      "capital": null,
+      "population": 72304
+    },
+    {
+      "name": "Viedma",
+      "region": "B",
+      "x": 465.01,
+      "y": 801.18,
+      "rank": 6,
+      "capital": "region",
+      "population": 59122
+    },
+    {
+      "name": "Ushuaia",
+      "region": "V",
+      "x": 320.94,
+      "y": 1390.5,
+      "rank": 6,
+      "capital": "region",
+      "population": 58028
+    },
+    {
+      "name": "Río Grande",
+      "region": "V",
+      "x": 334.15,
+      "y": 1347.86,
+      "rank": 6,
+      "capital": null,
+      "population": 31095
+    },
+    {
+      "name": "Esquel",
+      "region": "U",
+      "x": 206.49,
+      "y": 895.59,
+      "rank": 6,
+      "capital": null,
+      "population": 20048
+    },
+    {
+      "name": "Zapala",
+      "region": "Q",
+      "x": 235.26,
+      "y": 724.56,
+      "rank": 6,
+      "capital": null,
+      "population": 19152
+    },
+    {
+      "name": "Río Colorado",
+      "region": "L",
+      "x": 431.23,
+      "y": 722.89,
+      "rank": 6,
+      "capital": null,
+      "population": 11499
+    },
+    {
+      "name": "Sarmiento",
+      "region": "U",
+      "x": 281.01,
+      "y": 1004.95,
+      "rank": 6,
+      "capital": null,
+      "population": 5185
+    },
+    {
+      "name": "Perito Moreno",
+      "region": "Z",
+      "x": 229.7,
+      "y": 1050.43,
+      "rank": 6,
+      "capital": null,
+      "population": 3766
+    },
+    {
+      "name": "Puerto San Julián",
+      "region": "Z",
+      "x": 326.69,
+      "y": 1158.92,
+      "rank": 6,
+      "capital": null,
+      "population": 2347
+    },
+    {
+      "name": "La Plata",
+      "region": "B",
+      "x": 644.54,
+      "y": 561.19,
+      "rank": 7,
+      "capital": "region",
+      "population": 694253
+    },
+    {
+      "name": "Concordia",
+      "region": "E",
+      "x": 651.89,
+      "y": 411.86,
+      "rank": 7,
+      "capital": null,
+      "population": 145210
+    },
+    {
+      "name": "Reconquista",
+      "region": "S",
+      "x": 598.02,
+      "y": 313.7,
+      "rank": 7,
+      "capital": null,
+      "population": 90184
+    },
+    {
+      "name": "Zárate",
+      "region": "B",
+      "x": 609.08,
+      "y": 523.59,
+      "rank": 7,
+      "capital": null,
+      "population": 88781
+    },
+    {
+      "name": "Pergamino",
+      "region": "B",
+      "x": 556.02,
+      "y": 512.86,
+      "rank": 7,
+      "capital": null,
+      "population": 87652
+    },
+    {
+      "name": "Junín",
+      "region": "B",
+      "x": 541.28,
+      "y": 541.15,
+      "rank": 7,
+      "capital": null,
+      "population": 85007
+    },
+    {
+      "name": "Luján",
+      "region": "B",
+      "x": 605.44,
+      "y": 543.7,
+      "rank": 7,
+      "capital": null,
+      "population": 81749
+    },
+    {
+      "name": "Venado Tuerto",
+      "region": "S",
+      "x": 507.27,
+      "y": 504.77,
+      "rank": 7,
+      "capital": null,
+      "population": 72340
+    },
+    {
+      "name": "San Pedro de Jujuy",
+      "region": "Y",
+      "x": 406.22,
+      "y": 102.18,
+      "rank": 7,
+      "capital": null,
+      "population": 58430
+    },
+    {
+      "name": "General Pico",
+      "region": "L",
+      "x": 443.29,
+      "y": 583.85,
+      "rank": 7,
+      "capital": null,
+      "population": 57029
+    },
+    {
+      "name": "Azul",
+      "region": "B",
+      "x": 574.2,
+      "y": 635.36,
+      "rank": 7,
+      "capital": null,
+      "population": 53941
+    },
+    {
+      "name": "Río Tercero",
+      "region": "X",
+      "x": 432.58,
+      "y": 437.27,
+      "rank": 7,
+      "capital": null,
+      "population": 53389
+    },
+    {
+      "name": "Villa Mercedes",
+      "region": "D",
+      "x": 384.78,
+      "y": 500.72,
+      "rank": 7,
+      "capital": null,
+      "population": 49345
+    },
+    {
+      "name": "Libertador General San Martín",
+      "region": "Y",
+      "x": 409.32,
+      "y": 85.35,
+      "rank": 7,
+      "capital": null,
+      "population": 49267
+    },
+    {
+      "name": "Mercedes",
+      "region": "W",
+      "x": 655.8,
+      "y": 318.42,
+      "rank": 7,
+      "capital": null,
+      "population": 30649
+    },
+    {
+      "name": "Tunuyán",
+      "region": "M",
+      "x": 260.35,
+      "y": 498.22,
+      "rank": 7,
+      "capital": null,
+      "population": 22834
+    },
+    {
+      "name": "Chascomús",
+      "region": "B",
+      "x": 640.47,
+      "y": 588.16,
+      "rank": 7,
+      "capital": null,
+      "population": 21054
+    },
+    {
+      "name": "Chilecito",
+      "region": "F",
+      "x": 309.35,
+      "y": 311.28,
+      "rank": 7,
+      "capital": null,
+      "population": 20343
+    },
+    {
+      "name": "Charata",
+      "region": "H",
+      "x": 543.5,
+      "y": 230.44,
+      "rank": 7,
+      "capital": null,
+      "population": 18297
+    },
+    {
+      "name": "Lobos",
+      "region": "B",
+      "x": 604.45,
+      "y": 569.65,
+      "rank": 7,
+      "capital": null,
+      "population": 18278
+    },
+    {
+      "name": "Añatuya",
+      "region": "G",
+      "x": 481.4,
+      "y": 281.6,
+      "rank": 7,
+      "capital": null,
+      "population": 14133
+    },
+    {
+      "name": "Mar de Ajó",
+      "region": "B",
+      "x": 682.28,
+      "y": 640.3,
+      "rank": 7,
+      "capital": null,
+      "population": 13610
+    },
+    {
+      "name": "Frías",
+      "region": "G",
+      "x": 395.69,
+      "y": 288.6,
+      "rank": 7,
+      "capital": null,
+      "population": 13594
+    },
+    {
+      "name": "Sunchales",
+      "region": "S",
+      "x": 525.2,
+      "y": 386.59,
+      "rank": 7,
+      "capital": null,
+      "population": 12655
+    },
+    {
+      "name": "Malargüe",
+      "region": "M",
+      "x": 244.1,
+      "y": 579.09,
+      "rank": 7,
+      "capital": null,
+      "population": 11847
+    },
+    {
+      "name": "Cafayate",
+      "region": "A",
+      "x": 364.7,
+      "y": 180.72,
+      "rank": 7,
+      "capital": null,
+      "population": 11785
+    },
+    {
+      "name": "Cerrillos",
+      "region": "A",
+      "x": 382.79,
+      "y": 130.83,
+      "rank": 7,
+      "capital": null,
+      "population": 11498
+    },
+    {
+      "name": "Monte Quemado",
+      "region": "G",
+      "x": 482.07,
+      "y": 169.32,
+      "rank": 7,
+      "capital": null,
+      "population": 11387
+    },
+    {
+      "name": "Belén",
+      "region": "K",
+      "x": 325.43,
+      "y": 247.14,
+      "rank": 7,
+      "capital": null,
+      "population": 11359
+    },
+    {
+      "name": "Benito Juárez",
+      "region": "B",
+      "x": 574.51,
+      "y": 672.81,
+      "rank": 7,
+      "capital": null,
+      "population": 10609
+    },
+    {
+      "name": "Vera",
+      "region": "S",
+      "x": 576.59,
+      "y": 326.57,
+      "rank": 7,
+      "capital": null,
+      "population": 9979
+    },
+    {
+      "name": "San Justo",
+      "region": "S",
+      "x": 560.98,
+      "y": 381.52,
+      "rank": 7,
+      "capital": null,
+      "population": 9607
+    },
+    {
+      "name": "Juan José Castelli",
+      "region": "H",
+      "x": 567.19,
+      "y": 177.76,
+      "rank": 7,
+      "capital": null,
+      "population": 9421
+    },
+    {
+      "name": "Chamical",
+      "region": "F",
+      "x": 353.42,
+      "y": 360.41,
+      "rank": 7,
+      "capital": null,
+      "population": 8989
+    },
+    {
+      "name": "Chos Malal",
+      "region": "Q",
+      "x": 225.07,
+      "y": 661.03,
+      "rank": 7,
+      "capital": null,
+      "population": 8556
+    },
+    {
+      "name": "San Antonio Oeste",
+      "region": "R",
+      "x": 403.36,
+      "y": 797.07,
+      "rank": 7,
+      "capital": null,
+      "population": 8492
+    },
+    {
+      "name": "Las Lomitas",
+      "region": "P",
+      "x": 569.56,
+      "y": 125.08,
+      "rank": 7,
+      "capital": null,
+      "population": 7683
+    },
+    {
+      "name": "Carhué",
+      "region": "B",
+      "x": 477.23,
+      "y": 648.59,
+      "rank": 7,
+      "capital": null,
+      "population": 7190
+    },
+    {
+      "name": "Rinconada",
+      "region": "Y",
+      "x": 355.86,
+      "y": 27.17,
+      "rank": 7,
+      "capital": null,
+      "population": 6692
+    },
+    {
+      "name": "Victorica",
+      "region": "L",
+      "x": 385.96,
+      "y": 607.04,
+      "rank": 7,
+      "capital": null,
+      "population": 4458
+    },
+    {
+      "name": "La Paz",
+      "region": "M",
+      "x": 311.71,
+      "y": 492.38,
+      "rank": 7,
+      "capital": null,
+      "population": 4400
+    },
+    {
+      "name": "San Antonio de los Cobres",
+      "region": "A",
+      "x": 349.41,
+      "y": 100.89,
+      "rank": 7,
+      "capital": null,
+      "population": 4000
+    },
+    {
+      "name": "Darregueira",
+      "region": "B",
+      "x": 462.28,
+      "y": 670.02,
+      "rank": 7,
+      "capital": null,
+      "population": 3412
+    },
+    {
+      "name": "Villalonga",
+      "region": "B",
+      "x": 477.91,
+      "y": 763.93,
+      "rank": 7,
+      "capital": null,
+      "population": 2838
+    },
+    {
+      "name": "Sierra Colorada",
+      "region": "R",
+      "x": 311.74,
+      "y": 792.18,
+      "rank": 7,
+      "capital": null,
+      "population": 1522
+    },
+    {
+      "name": "Las Lajas",
+      "region": "Q",
+      "x": 224.48,
+      "y": 708.96,
+      "rank": 7,
+      "capital": null,
+      "population": 1218
+    },
+    {
+      "name": "Los Blancos",
+      "region": "A",
+      "x": 493.8,
+      "y": 76.87,
+      "rank": 7,
+      "capital": null,
+      "population": 1145
+    },
+    {
+      "name": "Rodeo",
+      "region": "J",
+      "x": 250.63,
+      "y": 357.24,
+      "rank": 7,
+      "capital": null,
+      "population": 701
+    },
+    {
+      "name": "Las Plumas",
+      "region": "U",
+      "x": 331.8,
+      "y": 923.89,
+      "rank": 7,
+      "capital": null,
+      "population": 605
+    },
+    {
+      "name": "Gastre",
+      "region": "U",
+      "x": 269.43,
+      "y": 865.58,
+      "rank": 7,
+      "capital": null,
+      "population": 557
+    },
+    {
+      "name": "Telsen",
+      "region": "U",
+      "x": 340.64,
+      "y": 867.9,
+      "rank": 7,
+      "capital": null,
+      "population": 500
+    },
+    {
+      "name": "Corrientes",
+      "region": "W",
+      "x": 632.56,
+      "y": 245.58,
+      "rank": 8,
+      "capital": "region",
+      "population": 340823
+    },
+    {
+      "name": "Paraná",
+      "region": "E",
+      "x": 561.17,
+      "y": 421.65,
+      "rank": 8,
+      "capital": "region",
+      "population": 262295
+    },
+    {
+      "name": "San Nicolás de los Arroyos",
+      "region": "B",
+      "x": 568.67,
+      "y": 489.38,
+      "rank": 8,
+      "capital": null,
+      "population": 127742
+    },
+    {
+      "name": "San Martín",
+      "region": "M",
+      "x": 278.13,
+      "y": 476.66,
+      "rank": 8,
+      "capital": null,
+      "population": 117399
+    },
+    {
+      "name": "Trelew",
+      "region": "U",
+      "x": 391.12,
+      "y": 903.01,
+      "rank": 8,
+      "capital": null,
+      "population": 93442
+    },
+    {
+      "name": "Villa María",
+      "region": "X",
+      "x": 463.05,
+      "y": 447.34,
+      "rank": 8,
+      "capital": null,
+      "population": 92453
+    },
+    {
+      "name": "Rafaela",
+      "region": "S",
+      "x": 527.18,
+      "y": 400.02,
+      "rank": 8,
+      "capital": null,
+      "population": 88713
+    },
+    {
+      "name": "Yacuíba",
+      "region": "A",
+      "x": 451.95,
+      "y": 10.26,
+      "rank": 8,
+      "capital": null,
+      "population": 82803
+    },
+    {
+      "name": "Presidencia Roque Sáenz Peña",
+      "region": "H",
+      "x": 572.26,
+      "y": 213.41,
+      "rank": 8,
+      "capital": null,
+      "population": 81879
+    },
+    {
+      "name": "Campana",
+      "region": "B",
+      "x": 611.7,
+      "y": 526.72,
+      "rank": 8,
+      "capital": null,
+      "population": 81612
+    },
+    {
+      "name": "General Roca",
+      "region": "R",
+      "x": 315.9,
+      "y": 726.21,
+      "rank": 8,
+      "capital": null,
+      "population": 73212
+    },
+    {
+      "name": "Villa Carlos Paz",
+      "region": "X",
+      "x": 419.19,
+      "y": 405.22,
+      "rank": 8,
+      "capital": null,
+      "population": 69451
+    },
+    {
+      "name": "Concepción del Uruguay",
+      "region": "E",
+      "x": 641.44,
+      "y": 457.41,
+      "rank": 8,
+      "capital": null,
+      "population": 67895
+    },
+    {
+      "name": "Las Heras",
+      "region": "M",
+      "x": 266.76,
+      "y": 466.72,
+      "rank": 8,
+      "capital": null,
+      "population": 66663
+    },
+    {
+      "name": "Puerto Madryn",
+      "region": "U",
+      "x": 400,
+      "y": 882.8,
+      "rank": 8,
+      "capital": null,
+      "population": 64555
+    },
+    {
+      "name": "Tartagal",
+      "region": "A",
+      "x": 447.48,
+      "y": 32.11,
+      "rank": 8,
+      "capital": null,
+      "population": 60819
+    },
+    {
+      "name": "San Francisco",
+      "region": "X",
+      "x": 505.74,
+      "y": 406.98,
+      "rank": 8,
+      "capital": null,
+      "population": 59062
+    },
+    {
+      "name": "Punta Alta",
+      "region": "B",
+      "x": 496.9,
+      "y": 720.63,
+      "rank": 8,
+      "capital": null,
+      "population": 57209
+    },
+    {
+      "name": "Chivilcoy",
+      "region": "B",
+      "x": 572.49,
+      "y": 555.86,
+      "rank": 8,
+      "capital": null,
+      "population": 54514
+    },
+    {
+      "name": "Mercedes",
+      "region": "B",
+      "x": 593.79,
+      "y": 546.84,
+      "rank": 8,
+      "capital": null,
+      "population": 52949
+    },
+    {
+      "name": "Cutral Có",
+      "region": "Q",
+      "x": 262.43,
+      "y": 724.86,
+      "rank": 8,
+      "capital": null,
+      "population": 47814
+    },
+    {
+      "name": "San-Lorenzo",
+      "region": "W",
+      "x": 632.71,
+      "y": 272.26,
+      "rank": 8,
+      "capital": null,
+      "population": 47626
+    },
+    {
+      "name": "Tres Arroyos",
+      "region": "B",
+      "x": 557.33,
+      "y": 701.64,
+      "rank": 8,
+      "capital": null,
+      "population": 47136
+    },
+    {
+      "name": "Villa Constitución",
+      "region": "S",
+      "x": 564.98,
+      "y": 484.99,
+      "rank": 8,
+      "capital": null,
+      "population": 44271
+    },
+    {
+      "name": "Alta Gracia",
+      "region": "X",
+      "x": 421.65,
+      "y": 415.33,
+      "rank": 8,
+      "capital": null,
+      "population": 40384
+    },
+    {
+      "name": "Bell Ville",
+      "region": "X",
+      "x": 483.49,
+      "y": 455.73,
+      "rank": 8,
+      "capital": null,
+      "population": 35105
+    },
+    {
+      "name": "9 de Julio",
+      "region": "B",
+      "x": 542.17,
+      "y": 577.53,
+      "rank": 8,
+      "capital": null,
+      "population": 34718
+    },
+    {
+      "name": "Chacabuco",
+      "region": "B",
+      "x": 557.42,
+      "y": 544.6,
+      "rank": 8,
+      "capital": null,
+      "population": 34587
+    },
+    {
+      "name": "Gualeguay",
+      "region": "E",
+      "x": 600.78,
+      "y": 483.38,
+      "rank": 8,
+      "capital": null,
+      "population": 33120
+    },
+    {
+      "name": "Villa Ángela",
+      "region": "H",
+      "x": 561.08,
+      "y": 246.5,
+      "rank": 8,
+      "capital": null,
+      "population": 30051
+    },
+    {
+      "name": "Coronel Suárez",
+      "region": "B",
+      "x": 504.23,
+      "y": 661.31,
+      "rank": 8,
+      "capital": null,
+      "population": 27000
+    },
+    {
+      "name": "Dolores",
+      "region": "B",
+      "x": 649.25,
+      "y": 621.2,
+      "rank": 8,
+      "capital": null,
+      "population": 25190
+    },
+    {
+      "name": "Victoria",
+      "region": "E",
+      "x": 572.17,
+      "y": 459.13,
+      "rank": 8,
+      "capital": null,
+      "population": 25139
+    },
+    {
+      "name": "Lincoln",
+      "region": "B",
+      "x": 520.7,
+      "y": 552.84,
+      "rank": 8,
+      "capital": null,
+      "population": 24798
+    },
+    {
+      "name": "25 de Mayo",
+      "region": "B",
+      "x": 566.57,
+      "y": 577.96,
+      "rank": 8,
+      "capital": null,
+      "population": 24668
+    },
+    {
+      "name": "General Güemes",
+      "region": "A",
+      "x": 399.32,
+      "y": 120.99,
+      "rank": 8,
+      "capital": null,
+      "population": 19828
+    },
+    {
+      "name": "Balcarce",
+      "region": "B",
+      "x": 625.7,
+      "y": 683.19,
+      "rank": 8,
+      "capital": null,
+      "population": 18967
+    },
+    {
+      "name": "Veinticinco de Mayo",
+      "region": "L",
+      "x": 312.01,
+      "y": 674.94,
+      "rank": 8,
+      "capital": null,
+      "population": 17430
+    },
+    {
+      "name": "Eldorado",
+      "region": "N",
+      "x": 795.23,
+      "y": 201.42,
+      "rank": 8,
+      "capital": null,
+      "population": 17365
+    },
+    {
+      "name": "Joaquín V. González",
+      "region": "A",
+      "x": 432.36,
+      "y": 138.62,
+      "rank": 8,
+      "capital": null,
+      "population": 13376
+    },
+    {
+      "name": "Humahuaca",
+      "region": "Y",
+      "x": 387.7,
+      "y": 59.29,
+      "rank": 8,
+      "capital": null,
+      "population": 11369
+    },
+    {
+      "name": "Choele Choel",
+      "region": "R",
+      "x": 378.97,
+      "y": 735.45,
+      "rank": 8,
+      "capital": null,
+      "population": 10000
+    },
+    {
+      "name": "Pedro Luro",
+      "region": "B",
+      "x": 476.48,
+      "y": 745.46,
+      "rank": 8,
+      "capital": null,
+      "population": 7100
+    },
+    {
+      "name": "asentamiento",
+      "region": "P",
+      "x": 522.46,
+      "y": 90.08,
+      "rank": 8,
+      "capital": null,
+      "population": 6453
+    },
+    {
+      "name": "Doctor Pedro P. Peña",
+      "region": "P",
+      "x": 506.25,
+      "y": 29.92,
+      "rank": 8,
+      "capital": null,
+      "population": 6143
+    },
+    {
+      "name": "Chepes",
+      "region": "F",
+      "x": 343.73,
+      "y": 402.65,
+      "rank": 8,
+      "capital": null,
+      "population": 6020
+    },
+    {
+      "name": "Ingeniero Jacobacci",
+      "region": "R",
+      "x": 256.32,
+      "y": 824.77,
+      "rank": 8,
+      "capital": null,
+      "population": 5719
+    },
+    {
+      "name": "Veintiocho de Noviembre",
+      "region": "Z",
+      "x": 212.6,
+      "y": 1263.25,
+      "rank": 8,
+      "capital": null,
+      "population": 5300
+    },
+    {
+      "name": "Abra Pampa",
+      "region": "Y",
+      "x": 374.06,
+      "y": 39,
+      "rank": 8,
+      "capital": null,
+      "population": 4480
+    },
+    {
+      "name": "Comandante Fontana",
+      "region": "P",
+      "x": 603.63,
+      "y": 153.07,
+      "rank": 8,
+      "capital": null,
+      "population": 4277
+    },
+    {
+      "name": "El Maitén",
+      "region": "U",
+      "x": 208.5,
+      "y": 859.46,
+      "rank": 8,
+      "capital": null,
+      "population": 4269
+    },
+    {
+      "name": "General Conesa",
+      "region": "R",
+      "x": 419.48,
+      "y": 770.5,
+      "rank": 8,
+      "capital": null,
+      "population": 2958
+    },
+    {
+      "name": "Pampa del Infierno",
+      "region": "H",
+      "x": 545.64,
+      "y": 201,
+      "rank": 8,
+      "capital": null,
+      "population": 2921
+    },
+    {
+      "name": "Chumbicha",
+      "region": "K",
+      "x": 355.78,
+      "y": 297.97,
+      "rank": 8,
+      "capital": null,
+      "population": 2572
+    },
+    {
+      "name": "Gobernador Gregores",
+      "region": "Z",
+      "x": 255.64,
+      "y": 1140.16,
+      "rank": 8,
+      "capital": null,
+      "population": 2519
+    },
+    {
+      "name": "Uspallata",
+      "region": "M",
+      "x": 247.09,
+      "y": 457.7,
+      "rank": 8,
+      "capital": null,
+      "population": 2390
+    },
+    {
+      "name": "Río Mayo",
+      "region": "U",
+      "x": 246.41,
+      "y": 1010.49,
+      "rank": 8,
+      "capital": null,
+      "population": 1825
+    },
+    {
+      "name": "Trancas",
+      "region": "T",
+      "x": 390.54,
+      "y": 186.23,
+      "rank": 8,
+      "capital": null,
+      "population": 1599
+    },
+    {
+      "name": "Alto Río Senguer",
+      "region": "U",
+      "x": 227.76,
+      "y": 984.29,
+      "rank": 8,
+      "capital": null,
+      "population": 1548
+    },
+    {
+      "name": "Villa Rumipal",
+      "region": "X",
+      "x": 419.64,
+      "y": 437.34,
+      "rank": 8,
+      "capital": null,
+      "population": 1269
+    },
+    {
+      "name": "Susques",
+      "region": "Y",
+      "x": 343.95,
+      "y": 68.69,
+      "rank": 8,
+      "capital": null,
+      "population": 1093
+    },
+    {
+      "name": "Comallo",
+      "region": "R",
+      "x": 234.03,
+      "y": 814.77,
+      "rank": 8,
+      "capital": null,
+      "population": 741
+    },
+    {
+      "name": "Tinogasta",
+      "region": "K",
+      "x": 305.91,
+      "y": 265.07,
+      "rank": 8,
+      "capital": null,
+      "population": 587
+    },
+    {
+      "name": "Comandante Luis Piedrabuena",
+      "region": "Z",
+      "x": 295.61,
+      "y": 1188.72,
+      "rank": 8,
+      "capital": null,
+      "population": 410
+    }
+  ]
+}

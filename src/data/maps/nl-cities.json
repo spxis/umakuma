@@ -1,0 +1,138 @@
+{
+  "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_populated_places.geojson (Natural Earth populated places), fitted to 1000x1100",
+  "updatedAt": "2026-09-04T09:40:57.696Z",
+  "country": "NL",
+  "countryName": "Netherlands",
+  "viewBox": "0 0 1000 1100",
+  "width": 1000,
+  "height": 1100,
+  "totalCities": 14,
+  "cities": [
+    {
+      "name": "Amsterdam",
+      "region": "NH",
+      "x": 423.33,
+      "y": 473.4,
+      "rank": 1,
+      "capital": "country",
+      "population": 1031000
+    },
+    {
+      "name": "The Hague",
+      "region": "ZH",
+      "x": 267.89,
+      "y": 578.16,
+      "rank": 4,
+      "capital": null,
+      "population": 1406000
+    },
+    {
+      "name": "Rotterdam",
+      "region": "ZH",
+      "x": 317.17,
+      "y": 640.61,
+      "rank": 6,
+      "capital": null,
+      "population": 1005000
+    },
+    {
+      "name": "Utrecht",
+      "region": "UT",
+      "x": 472.11,
+      "y": 571.93,
+      "rank": 7,
+      "capital": "region",
+      "population": 640000
+    },
+    {
+      "name": "Haarlem",
+      "region": "NH",
+      "x": 355.46,
+      "y": 461.76,
+      "rank": 7,
+      "capital": "region",
+      "population": 349957
+    },
+    {
+      "name": "Groningen",
+      "region": "GR",
+      "x": 814.88,
+      "y": 131.49,
+      "rank": 7,
+      "capital": "region",
+      "population": 216688
+    },
+    {
+      "name": "Leeuwarden",
+      "region": "FR",
+      "x": 628.37,
+      "y": 122.07,
+      "rank": 7,
+      "capital": "region",
+      "population": 125778
+    },
+    {
+      "name": "Eindhoven",
+      "region": "NB",
+      "x": 564.07,
+      "y": 833.95,
+      "rank": 8,
+      "capital": null,
+      "population": 398053
+    },
+    {
+      "name": "Arnhem",
+      "region": "GE",
+      "x": 665.29,
+      "y": 615.25,
+      "rank": 10,
+      "capital": "region",
+      "population": 141674
+    },
+    {
+      "name": "'s-Hertogenbosch",
+      "region": "NB",
+      "x": 519.36,
+      "y": 734.98,
+      "rank": 10,
+      "capital": "region",
+      "population": 134520
+    },
+    {
+      "name": "Maastricht",
+      "region": "LI",
+      "x": 608.36,
+      "y": 1059.31,
+      "rank": 10,
+      "capital": "region",
+      "population": 122378
+    },
+    {
+      "name": "Zwolle",
+      "region": "OV",
+      "x": 704.87,
+      "y": 405.34,
+      "rank": 10,
+      "capital": "region",
+      "population": 111805
+    },
+    {
+      "name": "Assen",
+      "region": "DR",
+      "x": 809.37,
+      "y": 217.76,
+      "rank": 10,
+      "capital": "region",
+      "population": 62237
+    },
+    {
+      "name": "Middelburg",
+      "region": "ZE",
+      "x": 104.13,
+      "y": 801.12,
+      "rank": 10,
+      "capital": "region",
+      "population": 46485
+    }
+  ]
+}

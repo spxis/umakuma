@@ -1,0 +1,552 @@
+{
+  "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_populated_places.geojson (Natural Earth populated places), fitted to 1000x1300",
+  "updatedAt": "2026-09-04T09:40:57.527Z",
+  "country": "VN",
+  "countryName": "Vietnam",
+  "viewBox": "0 0 1000 1300",
+  "width": 1000,
+  "height": 1300,
+  "totalCities": 60,
+  "cities": [
+    {
+      "name": "Ho Chi Minh City",
+      "region": "SG",
+      "x": 568.11,
+      "y": 1107.38,
+      "rank": 2,
+      "capital": "region",
+      "population": 5314000
+    },
+    {
+      "name": "Hanoi",
+      "region": "HN",
+      "x": 497.16,
+      "y": 205.02,
+      "rank": 2,
+      "capital": "country",
+      "population": 4378000
+    },
+    {
+      "name": "Haiphong",
+      "region": "HP",
+      "x": 565.22,
+      "y": 222.98,
+      "rank": 4,
+      "capital": "region",
+      "population": 1969000
+    },
+    {
+      "name": "Da Nang",
+      "region": "DN",
+      "x": 698.32,
+      "y": 641.47,
+      "rank": 4,
+      "capital": "region",
+      "population": 1000000
+    },
+    {
+      "name": "Cần Thơ",
+      "region": "73",
+      "x": 487.47,
+      "y": 1169.86,
+      "rank": 6,
+      "capital": "region",
+      "population": 1121000
+    },
+    {
+      "name": "Huế",
+      "region": "26",
+      "x": 641.57,
+      "y": 605.84,
+      "rank": 6,
+      "capital": "region",
+      "population": 950000
+    },
+    {
+      "name": "Qui Nhơn",
+      "region": "31",
+      "x": 779.28,
+      "y": 841.07,
+      "rank": 6,
+      "capital": "region",
+      "population": 805290
+    },
+    {
+      "name": "Biên Hòa",
+      "region": "39",
+      "x": 579.06,
+      "y": 1089.12,
+      "rank": 6,
+      "capital": "region",
+      "population": 652646
+    },
+    {
+      "name": "Vinh",
+      "region": "22",
+      "x": 482.38,
+      "y": 410.08,
+      "rank": 6,
+      "capital": "region",
+      "population": 593645
+    },
+    {
+      "name": "Thái Nguyên",
+      "region": "69",
+      "x": 495.89,
+      "y": 155.42,
+      "rank": 6,
+      "capital": "region",
+      "population": 500000
+    },
+    {
+      "name": "Nha Trang",
+      "region": "34",
+      "x": 779.84,
+      "y": 975.58,
+      "rank": 6,
+      "capital": "region",
+      "population": 411556
+    },
+    {
+      "name": "Nam Định",
+      "region": "67",
+      "x": 525.91,
+      "y": 259.14,
+      "rank": 6,
+      "capital": null,
+      "population": 243186
+    },
+    {
+      "name": "Thanh Hóa",
+      "region": "21",
+      "x": 492.76,
+      "y": 311.74,
+      "rank": 6,
+      "capital": "region",
+      "population": 197551
+    },
+    {
+      "name": "Đồng Hới",
+      "region": "24",
+      "x": 558.98,
+      "y": 517.08,
+      "rank": 6,
+      "capital": "region",
+      "population": 189265
+    },
+    {
+      "name": "Cam Ranh",
+      "region": "34",
+      "x": 784.49,
+      "y": 1006.13,
+      "rank": 6,
+      "capital": null,
+      "population": 146771
+    },
+    {
+      "name": "Pleiku",
+      "region": "30",
+      "x": 678.45,
+      "y": 824.08,
+      "rank": 6,
+      "capital": "region",
+      "population": 142900
+    },
+    {
+      "name": "Cà Mau",
+      "region": "59",
+      "x": 433.54,
+      "y": 1246.35,
+      "rank": 7,
+      "capital": "region",
+      "population": 356636
+    },
+    {
+      "name": "Long Xuyên",
+      "region": "44",
+      "x": 457.3,
+      "y": 1140.76,
+      "rank": 7,
+      "capital": "region",
+      "population": 350000
+    },
+    {
+      "name": "Việt Trì",
+      "region": "68",
+      "x": 463.06,
+      "y": 178.91,
+      "rank": 7,
+      "capital": "region",
+      "population": 350000
+    },
+    {
+      "name": "Buôn Ma Thuột",
+      "region": "33",
+      "x": 683.43,
+      "y": 939.69,
+      "rank": 7,
+      "capital": "region",
+      "population": 349945
+    },
+    {
+      "name": "Phan Thiết",
+      "region": "40",
+      "x": 688.59,
+      "y": 1091.95,
+      "rank": 7,
+      "capital": "region",
+      "population": 336846
+    },
+    {
+      "name": "Rạch Giá",
+      "region": "47",
+      "x": 428.76,
+      "y": 1172.71,
+      "rank": 7,
+      "capital": "region",
+      "population": 300000
+    },
+    {
+      "name": "Sóc Trăng",
+      "region": "52",
+      "x": 505.57,
+      "y": 1209.09,
+      "rank": 7,
+      "capital": "region",
+      "population": 300000
+    },
+    {
+      "name": "Da Lat",
+      "region": "35",
+      "x": 715.61,
+      "y": 1004.21,
+      "rank": 7,
+      "capital": "region",
+      "population": 256019
+    },
+    {
+      "name": "Quảng Ngãi",
+      "region": "29",
+      "x": 748.17,
+      "y": 720.93,
+      "rank": 7,
+      "capital": "region",
+      "population": 250000
+    },
+    {
+      "name": "Vũng Tàu",
+      "region": "43",
+      "x": 601.14,
+      "y": 1143.07,
+      "rank": 7,
+      "capital": "region",
+      "population": 248767
+    },
+    {
+      "name": "Bạc Liêu",
+      "region": "55",
+      "x": 482.99,
+      "y": 1237.45,
+      "rank": 7,
+      "capital": "region",
+      "population": 225000
+    },
+    {
+      "name": "Sơn Tây",
+      "region": "HN",
+      "x": 469.09,
+      "y": 195.84,
+      "rank": 7,
+      "capital": null,
+      "population": 189547
+    },
+    {
+      "name": "Phan Rang–Tháp Chàm",
+      "region": "36",
+      "x": 764.33,
+      "y": 1035.77,
+      "rank": 7,
+      "capital": "region",
+      "population": 179773
+    },
+    {
+      "name": "Hạ Long",
+      "region": "13",
+      "x": 599.81,
+      "y": 211.61,
+      "rank": 7,
+      "capital": "region",
+      "population": 172915
+    },
+    {
+      "name": "Hà Tĩnh",
+      "region": "23",
+      "x": 500.58,
+      "y": 442.31,
+      "rank": 7,
+      "capital": "region",
+      "population": 165396
+    },
+    {
+      "name": "Tân An",
+      "region": "41",
+      "x": 543.41,
+      "y": 1127.45,
+      "rank": 7,
+      "capital": "region",
+      "population": 137498
+    },
+    {
+      "name": "Cẩm Phả",
+      "region": "13",
+      "x": 617.82,
+      "y": 204.5,
+      "rank": 7,
+      "capital": null,
+      "population": 135477
+    },
+    {
+      "name": "Ninh Bình",
+      "region": "18",
+      "x": 507.34,
+      "y": 273.65,
+      "rank": 7,
+      "capital": "region",
+      "population": 130517
+    },
+    {
+      "name": "Mỹ Tho",
+      "region": "46",
+      "x": 537.64,
+      "y": 1143.55,
+      "rank": 7,
+      "capital": "region",
+      "population": 124143
+    },
+    {
+      "name": "Kon Tum",
+      "region": "28",
+      "x": 676.8,
+      "y": 788.91,
+      "rank": 7,
+      "capital": "region",
+      "population": 105489
+    },
+    {
+      "name": "Hòa Bình",
+      "region": "14",
+      "x": 455.23,
+      "y": 224.25,
+      "rank": 7,
+      "capital": "region",
+      "population": 105260
+    },
+    {
+      "name": "Quảng Trị",
+      "region": "25",
+      "x": 609.47,
+      "y": 581.36,
+      "rank": 7,
+      "capital": "region",
+      "population": 72722
+    },
+    {
+      "name": "Châu Đốc",
+      "region": "44",
+      "x": 431.21,
+      "y": 1112.54,
+      "rank": 7,
+      "capital": "region",
+      "population": 70239
+    },
+    {
+      "name": "Lào Cai",
+      "region": "02",
+      "x": 344.94,
+      "y": 74.63,
+      "rank": 7,
+      "capital": "region",
+      "population": 67206
+    },
+    {
+      "name": "Bắc Giang",
+      "region": "54",
+      "x": 526.05,
+      "y": 184.75,
+      "rank": 7,
+      "capital": "region",
+      "population": 53728
+    },
+    {
+      "name": "Hớn Quản",
+      "region": "58",
+      "x": 559.21,
+      "y": 1029.37,
+      "rank": 7,
+      "capital": null,
+      "population": 40279
+    },
+    {
+      "name": "Hà Giang",
+      "region": "03",
+      "x": 427.83,
+      "y": 46.55,
+      "rank": 7,
+      "capital": "region",
+      "population": 38362
+    },
+    {
+      "name": "Thủ Dầu Một",
+      "region": "57",
+      "x": 563.77,
+      "y": 1089.21,
+      "rank": 10,
+      "capital": "region",
+      "population": 244277
+    },
+    {
+      "name": "Thái Bình",
+      "region": "20",
+      "x": 536.86,
+      "y": 256.5,
+      "rank": 10,
+      "capital": "region",
+      "population": 210000
+    },
+    {
+      "name": "Cao Lãnh",
+      "region": "45",
+      "x": 475.98,
+      "y": 1133.21,
+      "rank": 10,
+      "capital": "region",
+      "population": 149837
+    },
+    {
+      "name": "Lạng Sơn",
+      "region": "09",
+      "x": 571.55,
+      "y": 133.91,
+      "rank": 10,
+      "capital": "region",
+      "population": 148000
+    },
+    {
+      "name": "Trà Vinh",
+      "region": "51",
+      "x": 536.24,
+      "y": 1180.12,
+      "rank": 10,
+      "capital": "region",
+      "population": 131360
+    },
+    {
+      "name": "Tây Ninh",
+      "region": "37",
+      "x": 520.2,
+      "y": 1058.11,
+      "rank": 10,
+      "capital": "region",
+      "population": 126370
+    },
+    {
+      "name": "Vĩnh Long",
+      "region": "49",
+      "x": 504.28,
+      "y": 1151.8,
+      "rank": 10,
+      "capital": "region",
+      "population": 103314
+    },
+    {
+      "name": "Yên Bái",
+      "region": "06",
+      "x": 417.99,
+      "y": 145.61,
+      "rank": 10,
+      "capital": "region",
+      "population": 96540
+    },
+    {
+      "name": "Tuy Hòa",
+      "region": "32",
+      "x": 791.59,
+      "y": 902.3,
+      "rank": 10,
+      "capital": "region",
+      "population": 69596
+    },
+    {
+      "name": "Bến Tre",
+      "region": "50",
+      "x": 539.8,
+      "y": 1153.68,
+      "rank": 10,
+      "capital": "region",
+      "population": 59442
+    },
+    {
+      "name": "Hải Dương",
+      "region": "61",
+      "x": 536.74,
+      "y": 213.32,
+      "rank": 10,
+      "capital": "region",
+      "population": 58030
+    },
+    {
+      "name": "Cao Bằng",
+      "region": "04",
+      "x": 531.8,
+      "y": 62.07,
+      "rank": 10,
+      "capital": "region",
+      "population": 41112
+    },
+    {
+      "name": "Tuyên Quang",
+      "region": "07",
+      "x": 445.49,
+      "y": 135.95,
+      "rank": 10,
+      "capital": "region",
+      "population": 36430
+    },
+    {
+      "name": "Bắc Kạn",
+      "region": "53",
+      "x": 496.36,
+      "y": 108.57,
+      "rank": 10,
+      "capital": "region",
+      "population": 29227
+    },
+    {
+      "name": "Sơn La",
+      "region": "05",
+      "x": 338.65,
+      "y": 177.68,
+      "rank": 10,
+      "capital": "region",
+      "population": 19054
+    },
+    {
+      "name": "Đông Hà",
+      "region": "25",
+      "x": 603.83,
+      "y": 572.63,
+      "rank": 10,
+      "capital": "region",
+      "population": 17662
+    },
+    {
+      "name": "Luan Chau",
+      "region": "71",
+      "x": 292.96,
+      "y": 140.61,
+      "rank": 10,
+      "capital": "region",
+      "population": 7335
+    }
+  ]
+}

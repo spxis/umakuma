@@ -178,4 +178,11 @@ export const SOURCE_CREDIT_COPY = {
    * shapes were changed, and every map here is reprojected and simplified.
    */
   mapOutlines: "Region outlines edited from",
+  /*
+   * The cities are a second provider's dataset on somebody else's outlines:
+   * Japan's shapes are GSI's and the United States' are the Census Bureau's,
+   * while every city on either map is Natural Earth's. One credit naming only
+   * the outlines would be a true sentence that leaves the other holder out.
+   */
+  mapCities: "Cities from",
 } as const;

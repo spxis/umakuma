@@ -1,0 +1,354 @@
+{
+  "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_populated_places.geojson (Natural Earth populated places), fitted to 1000x1400",
+  "updatedAt": "2026-09-04T09:40:57.572Z",
+  "country": "PH",
+  "countryName": "Philippines",
+  "viewBox": "0 0 1000 1400",
+  "width": 1000,
+  "height": 1400,
+  "totalCities": 38,
+  "cities": [
+    {
+      "name": "Manila",
+      "region": null,
+      "x": 433.84,
+      "y": 553.98,
+      "rank": 1,
+      "capital": "country",
+      "population": 11100000
+    },
+    {
+      "name": "Davao City",
+      "region": "DAS",
+      "x": 824.13,
+      "y": 1190.3,
+      "rank": 3,
+      "capital": null,
+      "population": 1402000
+    },
+    {
+      "name": "Cebu City",
+      "region": "CEB",
+      "x": 676.6,
+      "y": 918.04,
+      "rank": 3,
+      "capital": null,
+      "population": 815000
+    },
+    {
+      "name": "Iloilo City",
+      "region": "ILI",
+      "x": 563.31,
+      "y": 885.89,
+      "rank": 3,
+      "capital": null,
+      "population": 387681
+    },
+    {
+      "name": "General Santos",
+      "region": "SCO",
+      "x": 786.36,
+      "y": 1275.85,
+      "rank": 4,
+      "capital": null,
+      "population": 950530
+    },
+    {
+      "name": "Zamboanga City",
+      "region": "ZAS",
+      "x": 524.36,
+      "y": 1207.66,
+      "rank": 4,
+      "capital": null,
+      "population": 773000
+    },
+    {
+      "name": "Baguio",
+      "region": "BEN",
+      "x": 401.1,
+      "y": 398.65,
+      "rank": 4,
+      "capital": null,
+      "population": 447824
+    },
+    {
+      "name": "Laoag",
+      "region": "ILN",
+      "x": 404.13,
+      "y": 248.19,
+      "rank": 4,
+      "capital": null,
+      "population": 207048
+    },
+    {
+      "name": "Cagayan de Oro",
+      "region": "MSR",
+      "x": 743.73,
+      "y": 1076.86,
+      "rank": 6,
+      "capital": null,
+      "population": 1121561
+    },
+    {
+      "name": "Bacolod",
+      "region": "NEC",
+      "x": 599.82,
+      "y": 892.04,
+      "rank": 6,
+      "capital": null,
+      "population": 949354
+    },
+    {
+      "name": "Naga",
+      "region": "CAS",
+      "x": 615.41,
+      "y": 637.87,
+      "rank": 6,
+      "capital": null,
+      "population": 741635
+    },
+    {
+      "name": "Batangas City",
+      "region": "BTG",
+      "x": 436.96,
+      "y": 624.12,
+      "rank": 6,
+      "capital": null,
+      "population": 424508
+    },
+    {
+      "name": "Legazpi",
+      "region": "ALB",
+      "x": 662.7,
+      "y": 675.8,
+      "rank": 6,
+      "capital": null,
+      "population": 320081
+    },
+    {
+      "name": "Angeles",
+      "region": "PAM",
+      "x": 398.32,
+      "y": 507.94,
+      "rank": 6,
+      "capital": null,
+      "population": 314493
+    },
+    {
+      "name": "Cotabato City",
+      "region": null,
+      "x": 707.51,
+      "y": 1182.11,
+      "rank": 6,
+      "capital": null,
+      "population": 279519
+    },
+    {
+      "name": "Puerto Princesa",
+      "region": "PLW",
+      "x": 244.76,
+      "y": 965.47,
+      "rank": 6,
+      "capital": null,
+      "population": 157144
+    },
+    {
+      "name": "Tuguegarao",
+      "region": "CAG",
+      "x": 495.63,
+      "y": 298.43,
+      "rank": 6,
+      "capital": null,
+      "population": 115105
+    },
+    {
+      "name": "Roxas",
+      "region": "CAP",
+      "x": 580.34,
+      "y": 810.99,
+      "rank": 6,
+      "capital": null,
+      "population": 102688
+    },
+    {
+      "name": "Calbayog",
+      "region": "WSA",
+      "x": 734.41,
+      "y": 769.06,
+      "rank": 6,
+      "capital": null,
+      "population": 67921
+    },
+    {
+      "name": "Vigan",
+      "region": "ILS",
+      "x": 386.97,
+      "y": 301.15,
+      "rank": 6,
+      "capital": null,
+      "population": 48545
+    },
+    {
+      "name": "Quezon City",
+      "region": null,
+      "x": 437.95,
+      "y": 550.23,
+      "rank": 7,
+      "capital": null,
+      "population": 2761720
+    },
+    {
+      "name": "Iligan",
+      "region": "LAN",
+      "x": 704.3,
+      "y": 1100.9,
+      "rank": 7,
+      "capital": null,
+      "population": 464599
+    },
+    {
+      "name": "Pasay",
+      "region": null,
+      "x": 435.45,
+      "y": 558.72,
+      "rank": 7,
+      "capital": null,
+      "population": 403064
+    },
+    {
+      "name": "Olongapo",
+      "region": "ZMB",
+      "x": 376.57,
+      "y": 534.62,
+      "rank": 7,
+      "capital": null,
+      "population": 304388
+    },
+    {
+      "name": "Cadiz",
+      "region": "NEC",
+      "x": 627.03,
+      "y": 864.12,
+      "rank": 7,
+      "capital": null,
+      "population": 283157
+    },
+    {
+      "name": "Tacloban",
+      "region": "LEY",
+      "x": 768.1,
+      "y": 838.27,
+      "rank": 7,
+      "capital": null,
+      "population": 280006
+    },
+    {
+      "name": "San Pablo",
+      "region": "LAG",
+      "x": 461.88,
+      "y": 599.72,
+      "rank": 7,
+      "capital": null,
+      "population": 240830
+    },
+    {
+      "name": "Cabanatuan",
+      "region": "NUE",
+      "x": 432.67,
+      "y": 477.77,
+      "rank": 7,
+      "capital": null,
+      "population": 220250
+    },
+    {
+      "name": "Butuan",
+      "region": "AGN",
+      "x": 815.64,
+      "y": 1033.79,
+      "rank": 7,
+      "capital": null,
+      "population": 190557
+    },
+    {
+      "name": "Tarlac City",
+      "region": "TAR",
+      "x": 401.65,
+      "y": 479.14,
+      "rank": 7,
+      "capital": null,
+      "population": 183930
+    },
+    {
+      "name": "Ormoc",
+      "region": "LEY",
+      "x": 735.47,
+      "y": 854.43,
+      "rank": 7,
+      "capital": null,
+      "population": 167584
+    },
+    {
+      "name": "Dagupan",
+      "region": "PAN",
+      "x": 382.14,
+      "y": 431.01,
+      "rank": 7,
+      "capital": null,
+      "population": 163676
+    },
+    {
+      "name": "Pagadian",
+      "region": "ZAS",
+      "x": 644.74,
+      "y": 1128.25,
+      "rank": 7,
+      "capital": null,
+      "population": 159590
+    },
+    {
+      "name": "Ozamiz",
+      "region": "MSC",
+      "x": 673.07,
+      "y": 1103.19,
+      "rank": 7,
+      "capital": null,
+      "population": 97806
+    },
+    {
+      "name": "Surigao City",
+      "region": "SUN",
+      "x": 810.32,
+      "y": 962.72,
+      "rank": 7,
+      "capital": null,
+      "population": 87832
+    },
+    {
+      "name": "Tagum",
+      "region": "DAV",
+      "x": 838.62,
+      "y": 1167.15,
+      "rank": 7,
+      "capital": null,
+      "population": 6726
+    },
+    {
+      "name": "San Carlos",
+      "region": "NEC",
+      "x": 633.15,
+      "y": 898.83,
+      "rank": 7,
+      "capital": null,
+      "population": 6353
+    },
+    {
+      "name": "Gingoog",
+      "region": "MSR",
+      "x": 780.92,
+      "y": 1044.25,
+      "rank": 7,
+      "capital": null,
+      "population": 218
+    }
+  ]
+}

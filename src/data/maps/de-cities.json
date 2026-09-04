@@ -1,0 +1,534 @@
+{
+  "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_populated_places.geojson (Natural Earth populated places), fitted to 1000x1100",
+  "updatedAt": "2026-09-04T09:40:55.607Z",
+  "country": "DE",
+  "countryName": "Germany",
+  "viewBox": "0 0 1000 1100",
+  "width": 1000,
+  "height": 1100,
+  "totalCities": 58,
+  "cities": [
+    {
+      "name": "Berlin",
+      "region": "BE",
+      "x": 754.67,
+      "y": 355.61,
+      "rank": 1,
+      "capital": "country",
+      "population": 3406000
+    },
+    {
+      "name": "Frankfurt",
+      "region": "HE",
+      "x": 341.63,
+      "y": 699.58,
+      "rank": 2,
+      "capital": null,
+      "population": 2895000
+    },
+    {
+      "name": "Hamburg",
+      "region": "HH",
+      "x": 464.37,
+      "y": 215.57,
+      "rank": 2,
+      "capital": "region",
+      "population": 1757000
+    },
+    {
+      "name": "Munich",
+      "region": "BY",
+      "x": 607.28,
+      "y": 978.01,
+      "rank": 2,
+      "capital": "region",
+      "population": 1275000
+    },
+    {
+      "name": "Dresden",
+      "region": "SN",
+      "x": 793.8,
+      "y": 561.58,
+      "rank": 4,
+      "capital": "region",
+      "population": 617515
+    },
+    {
+      "name": "Stuttgart",
+      "region": "BW",
+      "x": 385.74,
+      "y": 886.38,
+      "rank": 6,
+      "capital": "region",
+      "population": 2944700
+    },
+    {
+      "name": "Cologne",
+      "region": "NW",
+      "x": 191.47,
+      "y": 576.94,
+      "rank": 6,
+      "capital": null,
+      "population": 1004000
+    },
+    {
+      "name": "Nuremberg",
+      "region": "BY",
+      "x": 559.46,
+      "y": 792.9,
+      "rank": 6,
+      "capital": null,
+      "population": 737304
+    },
+    {
+      "name": "Bremen",
+      "region": "HB",
+      "x": 362.59,
+      "y": 280.53,
+      "rank": 6,
+      "capital": "region",
+      "population": 724909
+    },
+    {
+      "name": "Mannheim",
+      "region": "BW",
+      "x": 320.81,
+      "y": 783.46,
+      "rank": 7,
+      "capital": null,
+      "population": 2362000
+    },
+    {
+      "name": "Düsseldorf",
+      "region": "NW",
+      "x": 178.63,
+      "y": 535.67,
+      "rank": 7,
+      "capital": "region",
+      "population": 1220000
+    },
+    {
+      "name": "Saarbrücken",
+      "region": "SL",
+      "x": 182.08,
+      "y": 813.44,
+      "rank": 7,
+      "capital": "region",
+      "population": 770001
+    },
+    {
+      "name": "Hanover",
+      "region": "NI",
+      "x": 439.05,
+      "y": 382.21,
+      "rank": 7,
+      "capital": "region",
+      "population": 722490
+    },
+    {
+      "name": "Bonn",
+      "region": "NW",
+      "x": 201.78,
+      "y": 607.23,
+      "rank": 7,
+      "capital": null,
+      "population": 680543
+    },
+    {
+      "name": "Wiesbaden",
+      "region": "HE",
+      "x": 303.2,
+      "y": 701.27,
+      "rank": 7,
+      "capital": "region",
+      "population": 617126
+    },
+    {
+      "name": "Leipzig",
+      "region": "SN",
+      "x": 674.28,
+      "y": 525.58,
+      "rank": 7,
+      "capital": null,
+      "population": 542529
+    },
+    {
+      "name": "Koblenz",
+      "region": "RP",
+      "x": 246.02,
+      "y": 661.24,
+      "rank": 7,
+      "capital": null,
+      "population": 312633
+    },
+    {
+      "name": "Münster",
+      "region": "NW",
+      "x": 256.72,
+      "y": 433.51,
+      "rank": 7,
+      "capital": null,
+      "population": 270184
+    },
+    {
+      "name": "Kiel",
+      "region": "SH",
+      "x": 475.96,
+      "y": 105.95,
+      "rank": 7,
+      "capital": "region",
+      "population": 269427
+    },
+    {
+      "name": "Freiburg im Breisgau",
+      "region": "BW",
+      "x": 258.44,
+      "y": 992.84,
+      "rank": 7,
+      "capital": null,
+      "population": 254889
+    },
+    {
+      "name": "Lübeck",
+      "region": "SH",
+      "x": 520.5,
+      "y": 170.84,
+      "rank": 7,
+      "capital": null,
+      "population": 235390
+    },
+    {
+      "name": "Osnabrück",
+      "region": "NI",
+      "x": 295.43,
+      "y": 391.24,
+      "rank": 7,
+      "capital": null,
+      "population": 231268
+    },
+    {
+      "name": "Magdeburg",
+      "region": "ST",
+      "x": 603.14,
+      "y": 415.13,
+      "rank": 7,
+      "capital": "region",
+      "population": 229826
+    },
+    {
+      "name": "Potsdam",
+      "region": "BB",
+      "x": 727.06,
+      "y": 374.02,
+      "rank": 7,
+      "capital": "region",
+      "population": 218095
+    },
+    {
+      "name": "Rostock",
+      "region": "MV",
+      "x": 642.81,
+      "y": 141.14,
+      "rank": 7,
+      "capital": null,
+      "population": 203080
+    },
+    {
+      "name": "Ulm",
+      "region": "BW",
+      "x": 459.61,
+      "y": 940.76,
+      "rank": 7,
+      "capital": null,
+      "population": 172955
+    },
+    {
+      "name": "Würzburg",
+      "region": "BY",
+      "x": 456.41,
+      "y": 743.59,
+      "rank": 7,
+      "capital": null,
+      "population": 168561
+    },
+    {
+      "name": "Regensburg",
+      "region": "BY",
+      "x": 655.96,
+      "y": 851.95,
+      "rank": 7,
+      "capital": null,
+      "population": 164359
+    },
+    {
+      "name": "Ingolstadt",
+      "region": "BY",
+      "x": 594.55,
+      "y": 888.23,
+      "rank": 7,
+      "capital": null,
+      "population": 163325
+    },
+    {
+      "name": "Göttingen",
+      "region": "NI",
+      "x": 455.59,
+      "y": 501.52,
+      "rank": 7,
+      "capital": null,
+      "population": 139419
+    },
+    {
+      "name": "Bremerhaven",
+      "region": "HB",
+      "x": 345.71,
+      "y": 213.84,
+      "rank": 7,
+      "capital": null,
+      "population": 137751
+    },
+    {
+      "name": "Cottbus",
+      "region": "BB",
+      "x": 839.78,
+      "y": 457.87,
+      "rank": 7,
+      "capital": null,
+      "population": 105067
+    },
+    {
+      "name": "Jena",
+      "region": "TH",
+      "x": 602.16,
+      "y": 584.04,
+      "rank": 7,
+      "capital": null,
+      "population": 104712
+    },
+    {
+      "name": "Gera",
+      "region": "TH",
+      "x": 645.8,
+      "y": 591.71,
+      "rank": 7,
+      "capital": null,
+      "population": 104659
+    },
+    {
+      "name": "Flensburg",
+      "region": "SH",
+      "x": 419.63,
+      "y": 41.47,
+      "rank": 7,
+      "capital": null,
+      "population": 97930
+    },
+    {
+      "name": "Rosenheim",
+      "region": "BY",
+      "x": 660.84,
+      "y": 1016.71,
+      "rank": 7,
+      "capital": null,
+      "population": 92809
+    },
+    {
+      "name": "Gießen",
+      "region": "HE",
+      "x": 341.09,
+      "y": 631.46,
+      "rank": 7,
+      "capital": null,
+      "population": 82358
+    },
+    {
+      "name": "Stralsund",
+      "region": "MV",
+      "x": 720.2,
+      "y": 106.48,
+      "rank": 7,
+      "capital": null,
+      "population": 61368
+    },
+    {
+      "name": "Hof",
+      "region": "BY",
+      "x": 633.68,
+      "y": 669.84,
+      "rank": 7,
+      "capital": null,
+      "population": 56153
+    },
+    {
+      "name": "Passau",
+      "region": "BY",
+      "x": 780.4,
+      "y": 910.78,
+      "rank": 7,
+      "capital": null,
+      "population": 50560
+    },
+    {
+      "name": "Essen",
+      "region": "NW",
+      "x": 200.99,
+      "y": 504.41,
+      "rank": 8,
+      "capital": null,
+      "population": 1742135
+    },
+    {
+      "name": "Duisburg",
+      "region": "NW",
+      "x": 177.49,
+      "y": 506.08,
+      "rank": 8,
+      "capital": null,
+      "population": 1276757
+    },
+    {
+      "name": "Wuppertal",
+      "region": "NW",
+      "x": 213.16,
+      "y": 533.15,
+      "rank": 8,
+      "capital": null,
+      "population": 776525
+    },
+    {
+      "name": "Dortmund",
+      "region": "NW",
+      "x": 239.43,
+      "y": 494.85,
+      "rank": 8,
+      "capital": null,
+      "population": 588462
+    },
+    {
+      "name": "Heidelberg",
+      "region": "BW",
+      "x": 341.55,
+      "y": 795.32,
+      "rank": 8,
+      "capital": null,
+      "population": 426590
+    },
+    {
+      "name": "Karlsruhe",
+      "region": "BW",
+      "x": 312.4,
+      "y": 853.7,
+      "rank": 8,
+      "capital": null,
+      "population": 377487
+    },
+    {
+      "name": "Augsburg",
+      "region": "BY",
+      "x": 543.83,
+      "y": 947.91,
+      "rank": 8,
+      "capital": null,
+      "population": 358989
+    },
+    {
+      "name": "Bielefeld",
+      "region": "NW",
+      "x": 335.81,
+      "y": 427.72,
+      "rank": 8,
+      "capital": null,
+      "population": 331906
+    },
+    {
+      "name": "Chemnitz",
+      "region": "SN",
+      "x": 721.44,
+      "y": 595.35,
+      "rank": 8,
+      "capital": null,
+      "population": 302643
+    },
+    {
+      "name": "Kassel",
+      "region": "HE",
+      "x": 418.39,
+      "y": 532.14,
+      "rank": 8,
+      "capital": null,
+      "population": 289924
+    },
+    {
+      "name": "Brunswick",
+      "region": "NI",
+      "x": 506.38,
+      "y": 399.04,
+      "rank": 8,
+      "capital": null,
+      "population": 244715
+    },
+    {
+      "name": "Fürth",
+      "region": "BY",
+      "x": 552.12,
+      "y": 790.13,
+      "rank": 8,
+      "capital": null,
+      "population": 237844
+    },
+    {
+      "name": "Erfurt",
+      "region": "TH",
+      "x": 553.34,
+      "y": 579,
+      "rank": 8,
+      "capital": "region",
+      "population": 203254
+    },
+    {
+      "name": "Oldenburg",
+      "region": "NI",
+      "x": 313.76,
+      "y": 272.16,
+      "rank": 8,
+      "capital": null,
+      "population": 167458
+    },
+    {
+      "name": "Coburg",
+      "region": "BY",
+      "x": 548.35,
+      "y": 678.03,
+      "rank": 8,
+      "capital": null,
+      "population": 61054
+    },
+    {
+      "name": "Emden",
+      "region": "NI",
+      "x": 230.53,
+      "y": 235.67,
+      "rank": 8,
+      "capital": null,
+      "population": 51526
+    },
+    {
+      "name": "Mainz",
+      "region": "RP",
+      "x": 304.87,
+      "y": 715.11,
+      "rank": 9,
+      "capital": "region",
+      "population": 184997
+    },
+    {
+      "name": "Schwerin",
+      "region": "MV",
+      "x": 582.95,
+      "y": 203.78,
+      "rank": 9,
+      "capital": "region",
+      "population": 96641
+    }
+  ]
+}

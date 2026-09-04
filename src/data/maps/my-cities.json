@@ -1,0 +1,300 @@
+{
+  "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_populated_places.geojson (Natural Earth populated places), fitted to 1000x500",
+  "updatedAt": "2026-09-04T09:40:57.688Z",
+  "country": "MY",
+  "countryName": "Malaysia",
+  "viewBox": "0 0 1000 500",
+  "width": 1000,
+  "height": 500,
+  "totalCities": 32,
+  "cities": [
+    {
+      "name": "Kuala Lumpur",
+      "region": "14",
+      "x": 102.41,
+      "y": 298.71,
+      "rank": 2,
+      "capital": "country",
+      "population": 1448000
+    },
+    {
+      "name": "George Town",
+      "region": "07",
+      "x": 34.23,
+      "y": 181.61,
+      "rank": 4,
+      "capital": "region",
+      "population": 2500000
+    },
+    {
+      "name": "Kuching",
+      "region": "13",
+      "x": 544.26,
+      "y": 382.87,
+      "rank": 4,
+      "capital": "region",
+      "population": 570407
+    },
+    {
+      "name": "Putrajaya",
+      "region": "16",
+      "x": 102.63,
+      "y": 309.33,
+      "rank": 4,
+      "capital": null,
+      "population": 67964
+    },
+    {
+      "name": "Klang",
+      "region": "10",
+      "x": 90.01,
+      "y": 303.53,
+      "rank": 6,
+      "capital": "region",
+      "population": 956000
+    },
+    {
+      "name": "Johor Bahru",
+      "region": "01",
+      "x": 206.07,
+      "y": 384.46,
+      "rank": 6,
+      "capital": "region",
+      "population": 875000
+    },
+    {
+      "name": "Melaka City",
+      "region": "04",
+      "x": 130.5,
+      "y": 346.76,
+      "rank": 6,
+      "capital": "region",
+      "population": 788706
+    },
+    {
+      "name": "Ipoh",
+      "region": "08",
+      "x": 71.29,
+      "y": 223.66,
+      "rank": 6,
+      "capital": "region",
+      "population": 673318
+    },
+    {
+      "name": "Kota Kinabalu",
+      "region": "12",
+      "x": 838.23,
+      "y": 153.43,
+      "rank": 6,
+      "capital": "region",
+      "population": 527671
+    },
+    {
+      "name": "Kota Bharu",
+      "region": "03",
+      "x": 131.41,
+      "y": 146.41,
+      "rank": 6,
+      "capital": "region",
+      "population": 505583
+    },
+    {
+      "name": "Sandakan",
+      "region": "12",
+      "x": 940.06,
+      "y": 159.37,
+      "rank": 6,
+      "capital": null,
+      "population": 392288
+    },
+    {
+      "name": "Kuantan",
+      "region": "06",
+      "x": 186.05,
+      "y": 264.09,
+      "rank": 6,
+      "capital": "region",
+      "population": 366229
+    },
+    {
+      "name": "Tawau",
+      "region": "12",
+      "x": 930.19,
+      "y": 239.97,
+      "rank": 6,
+      "capital": null,
+      "population": 306462
+    },
+    {
+      "name": "Taiping",
+      "region": "08",
+      "x": 53.84,
+      "y": 209.91,
+      "rank": 6,
+      "capital": null,
+      "population": 237095
+    },
+    {
+      "name": "Sibu",
+      "region": "13",
+      "x": 621.62,
+      "y": 343.06,
+      "rank": 6,
+      "capital": null,
+      "population": 203832
+    },
+    {
+      "name": "Butterworth",
+      "region": "07",
+      "x": 37.83,
+      "y": 181.47,
+      "rank": 7,
+      "capital": null,
+      "population": 821652
+    },
+    {
+      "name": "Seremban",
+      "region": "05",
+      "x": 115.05,
+      "y": 320.81,
+      "rank": 7,
+      "capital": "region",
+      "population": 372917
+    },
+    {
+      "name": "Sungai Petani",
+      "region": "02",
+      "x": 42.01,
+      "y": 169.61,
+      "rank": 7,
+      "capital": null,
+      "population": 358499
+    },
+    {
+      "name": "Kuala Terengganu",
+      "region": "11",
+      "x": 176.42,
+      "y": 187.21,
+      "rank": 7,
+      "capital": "region",
+      "population": 350210
+    },
+    {
+      "name": "Alor Setar",
+      "region": "02",
+      "x": 36.85,
+      "y": 145.81,
+      "rank": 7,
+      "capital": "region",
+      "population": 336475
+    },
+    {
+      "name": "Miri",
+      "region": "13",
+      "x": 730.51,
+      "y": 235.16,
+      "rank": 7,
+      "capital": null,
+      "population": 228212
+    },
+    {
+      "name": "Batu Pahat",
+      "region": "01",
+      "x": 165.51,
+      "y": 365.29,
+      "rank": 7,
+      "capital": null,
+      "population": 199619
+    },
+    {
+      "name": "Muar",
+      "region": "01",
+      "x": 146.81,
+      "y": 355.75,
+      "rank": 7,
+      "capital": null,
+      "population": 191346
+    },
+    {
+      "name": "Kluang",
+      "region": "01",
+      "x": 185.27,
+      "y": 355.81,
+      "rank": 7,
+      "capital": null,
+      "population": 169828
+    },
+    {
+      "name": "Bintulu",
+      "region": "13",
+      "x": 682.43,
+      "y": 298.58,
+      "rank": 7,
+      "capital": null,
+      "population": 151617
+    },
+    {
+      "name": "Lahad Datu",
+      "region": "12",
+      "x": 952.17,
+      "y": 200.01,
+      "rank": 7,
+      "capital": null,
+      "population": 105622
+    },
+    {
+      "name": "Teluk Intan",
+      "region": "08",
+      "x": 69.27,
+      "y": 253.74,
+      "rank": 7,
+      "capital": null,
+      "population": 101659
+    },
+    {
+      "name": "Chukai",
+      "region": "11",
+      "x": 192.73,
+      "y": 243.49,
+      "rank": 7,
+      "capital": null,
+      "population": 82425
+    },
+    {
+      "name": "Raub",
+      "region": "06",
+      "x": 110.57,
+      "y": 265.37,
+      "rank": 7,
+      "capital": null,
+      "population": 40024
+    },
+    {
+      "name": "Shah Alam",
+      "region": "10",
+      "x": 95.28,
+      "y": 302.39,
+      "rank": 10,
+      "capital": "region",
+      "population": 481654
+    },
+    {
+      "name": "Kangar",
+      "region": "09",
+      "x": 27.72,
+      "y": 129.33,
+      "rank": 10,
+      "capital": "region",
+      "population": 63869
+    },
+    {
+      "name": "Kuala Lipis",
+      "region": "06",
+      "x": 120.95,
+      "y": 245.43,
+      "rank": 10,
+      "capital": "region",
+      "population": 15448
+    }
+  ]
+}

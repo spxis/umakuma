@@ -1,16 +1,22 @@
 import { describe, expect, it } from "vitest";
 
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+
 import caMap from "@/data/maps/ca-map.json";
 
+import { GEO_DATASETS, type CountryCode } from "./geoRegion";
 import {
   CITY_DENSITIES,
   MAJOR_CITY_RANK,
   citiesAtDensity,
   cityDensityCounts,
   citysetFor,
+  countriesWithCities,
   hasCities,
   isCapital,
   isCityDensity,
+  totalCitiesPlaced,
 } from "./geoCities";
 
 const cityset = citysetFor("CA")!;
@@ -19,6 +25,9 @@ const boxes = new Map(
     (region) => [region.code, region.bbox] as const,
   ),
 );
+
+const mapBoxes = (country: CountryCode) =>
+  new Map(GEO_DATASETS[country].regions.map((region) => [String(region.code), region.map.bbox] as const));
 
 /*
  * The whole promise of the city layer is that a point lands on the province it
@@ -129,18 +138,25 @@ describe("the density steps", () => {
 });
 
 /*
- * Japan and the United States are drawn from GSI Global Map and Census
- * TopoJSON, on their own projections, so a Natural Earth city point would land
- * somewhere arbitrary on those canvases. They get no layer until they get their
- * own ingest - and the toggle must not appear for them.
+ * A country has a city layer when its map is loaded, and not otherwise.
+ *
+ * Japan and the United States were the two this could not be done for at
+ * first. Neither needed migrating in the end: the United States is drawn
+ * through Albers USA, which the builder rebuilds exactly, and Japan's
+ * transform is recovered from its curated canvas and checked city by city.
  */
-describe("countries without a city layer", () => {
-  it("are every country but Canada", () => {
-    expect(hasCities("CA")).toBe(true);
-    expect(hasCities("JP")).toBe(false);
-    expect(hasCities("US")).toBe(false);
-    expect(citiesAtDensity("JP", "all")).toEqual([]);
-    expect(citysetFor("US")).toBeNull();
+describe("which countries have a city layer", () => {
+  it("is every country whose map is loaded", () => {
+    for (const country of ["JP", "US", "CA", "TH", "CN", "AU", "TW"] as const) {
+      expect({ country, has: hasCities(country) }).toEqual({ country, has: true });
+    }
+  });
+
+  it("is nobody whose map is not", () => {
+    /* Built and committed, deliberately unimported - see the catalogue tests. */
+    expect(hasCities("GB" as CountryCode)).toBe(false);
+    expect(citiesAtDensity("GB" as CountryCode, "all")).toEqual([]);
+    expect(citysetFor("GB" as CountryCode)).toBeNull();
   });
 });
 
@@ -151,5 +167,109 @@ describe("places that are not cities", () => {
 
   it("keeps every remaining place a populated one", () => {
     expect(cityset.cities.filter((city) => city.population === 0)).toEqual([]);
+  });
+});
+
+/*
+ * The promise holds for every country, not just the one it was built for.
+ *
+ * Three projections produce these files - Natural Earth's own fit, Albers USA
+ * rebuilt from us-atlas, and a least-squares recovery of Japan's curated
+ * Mercator canvas - and the only thing that makes any of them trustworthy is
+ * that a city lands inside the division it is filed under. Checked here for
+ * all of them at once, because a rebuild of one map without its cities would
+ * otherwise go unnoticed until somebody looked at the picture.
+ *
+ * Okinawa is excluded: its outline is stored already moved into the box at the
+ * foot of Japan's map, so the bbox comparison is against the box rather than
+ * the sea, and `MapCityLayer` applies the same move at render.
+ */
+describe("every country that draws cities", () => {
+  it("has a cityset on the same canvas as its map", () => {
+    for (const country of countriesWithCities()) {
+      const set = citysetFor(country)!;
+      const dataset = GEO_DATASETS[country];
+      expect({ country, width: set.width, height: set.height }).toEqual({
+        country,
+        width: dataset.width,
+        height: dataset.height,
+      });
+    }
+  });
+
+  it("puts every city inside the division it is filed under", () => {
+    const strays: string[] = [];
+    for (const country of countriesWithCities()) {
+      const boxesFor = mapBoxes(country);
+      for (const city of citysetFor(country)!.cities) {
+        if (!city.region) continue;
+        const box = boxesFor.get(city.region);
+        if (!box) continue;
+        const [x0, y0, x1, y1] = box;
+        const inside = city.x >= x0 - 8 && city.x <= x1 + 8 && city.y >= y0 - 8 && city.y <= y1 + 8;
+        if (!inside) strays.push(`${country}:${city.name}(${city.region})`);
+      }
+    }
+    expect(strays).toEqual([]);
+  });
+
+  it("names a division the map actually has", () => {
+    const unknown: string[] = [];
+    for (const country of countriesWithCities()) {
+      const boxesFor = mapBoxes(country);
+      for (const city of citysetFor(country)!.cities) {
+        if (city.region && !boxesFor.has(city.region)) unknown.push(`${country}:${city.name}(${city.region})`);
+      }
+    }
+    expect(unknown).toEqual([]);
+  });
+
+  it("keeps every city on the canvas", () => {
+    for (const country of countriesWithCities()) {
+      const set = citysetFor(country)!;
+      for (const city of set.cities) {
+        expect(city.x).toBeGreaterThanOrEqual(0);
+        expect(city.y).toBeGreaterThanOrEqual(0);
+        expect(city.x).toBeLessThanOrEqual(set.width);
+        expect(city.y).toBeLessThanOrEqual(set.height);
+      }
+    }
+  });
+
+  it("includes Japan and the United States, which needed no migration", () => {
+    expect(countriesWithCities()).toEqual(expect.arrayContaining(["JP", "US", "CA"]));
+    /* Albers USA carries these two in their own boxes; nothing special-cases them. */
+    const us = citysetFor("US")!.cities;
+    expect(us.map((c) => c.name)).toContain("Anchorage");
+    expect(us.map((c) => c.name)).toContain("Honolulu");
+    /* Okinawa's cities ride into the inset with its outline. */
+    expect(citysetFor("JP")!.cities.map((c) => c.name)).toContain("Naha");
+  });
+
+  it("counts the accreditation figure from the data", () => {
+    const summed = countriesWithCities().reduce((n, country) => n + citysetFor(country)!.totalCities, 0);
+    expect(totalCitiesPlaced()).toBe(summed);
+    expect(totalCitiesPlaced()).toBeGreaterThan(1000);
+  });
+});
+
+/*
+ * The 25 catalogue countries are built and committed but not imported, the same
+ * way their maps are: loading all thirty-two would pull three quarters of a
+ * megabyte of points in for maps nobody can open yet.
+ */
+describe("the catalogue countries", () => {
+  it("have their cities on disk", () => {
+    for (const code of ["fr", "it", "es", "br", "ru", "gb"]) {
+      const raw = readFileSync(join(process.cwd(), `src/data/maps/${code}-cities.json`), "utf8");
+      expect((JSON.parse(raw) as { totalCities: number }).totalCities).toBeGreaterThan(0);
+    }
+  });
+
+  it("are not imported into the bundle", () => {
+    const source = readFileSync(join(process.cwd(), "src/lib/geoCities.ts"), "utf8");
+    for (const code of ["fr", "it", "es", "br", "ru", "gb"]) {
+      expect(source).not.toContain(`${code}-cities.json`);
+    }
   });
 });

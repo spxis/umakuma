@@ -1,0 +1,516 @@
+{
+  "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_populated_places.geojson (Natural Earth populated places), fitted to 1000x1150",
+  "updatedAt": "2026-09-04T09:40:55.662Z",
+  "country": "IT",
+  "countryName": "Italy",
+  "viewBox": "0 0 1000 1150",
+  "width": 1000,
+  "height": 1150,
+  "totalCities": 56,
+  "cities": [
+    {
+      "name": "Rome",
+      "region": "RM",
+      "x": 476.76,
+      "y": 514.46,
+      "rank": 0,
+      "capital": "country",
+      "population": 3339000
+    },
+    {
+      "name": "Milan",
+      "region": "MI",
+      "x": 248.86,
+      "y": 155.33,
+      "rank": 2,
+      "capital": null,
+      "population": 2945000
+    },
+    {
+      "name": "Naples",
+      "region": "NA",
+      "x": 608.91,
+      "y": 617.88,
+      "rank": 2,
+      "capital": null,
+      "population": 2250000
+    },
+    {
+      "name": "Palermo",
+      "region": "PA",
+      "x": 544.3,
+      "y": 888.12,
+      "rank": 3,
+      "capital": null,
+      "population": 863000
+    },
+    {
+      "name": "Florence",
+      "region": "FI",
+      "x": 388.64,
+      "y": 327.14,
+      "rank": 4,
+      "capital": null,
+      "population": 1500000
+    },
+    {
+      "name": "Catania",
+      "region": "CT",
+      "x": 681.14,
+      "y": 947.82,
+      "rank": 4,
+      "capital": null,
+      "population": 674542
+    },
+    {
+      "name": "Venice",
+      "region": "VE",
+      "x": 466.66,
+      "y": 163.32,
+      "rank": 4,
+      "capital": null,
+      "population": 270816
+    },
+    {
+      "name": "Turin",
+      "region": "TO",
+      "x": 139.73,
+      "y": 189.54,
+      "rank": 6,
+      "capital": null,
+      "population": 1652000
+    },
+    {
+      "name": "Genoa",
+      "region": "GE",
+      "x": 225.23,
+      "y": 259.83,
+      "rank": 6,
+      "capital": null,
+      "population": 647497
+    },
+    {
+      "name": "Sassari",
+      "region": "SS",
+      "x": 182.77,
+      "y": 623.67,
+      "rank": 6,
+      "capital": null,
+      "population": 120729
+    },
+    {
+      "name": "Salerno",
+      "region": "SA",
+      "x": 648.86,
+      "y": 633,
+      "rank": 7,
+      "capital": null,
+      "population": 954265
+    },
+    {
+      "name": "Bari",
+      "region": "BA",
+      "x": 804.89,
+      "y": 583.97,
+      "rank": 7,
+      "capital": null,
+      "population": 500577
+    },
+    {
+      "name": "Bologna",
+      "region": "BO",
+      "x": 396.09,
+      "y": 255.79,
+      "rank": 7,
+      "capital": null,
+      "population": 488172
+    },
+    {
+      "name": "Verona",
+      "region": "VR",
+      "x": 373.07,
+      "y": 162.17,
+      "rank": 7,
+      "capital": null,
+      "population": 347459
+    },
+    {
+      "name": "Pescara",
+      "region": "PE",
+      "x": 603.89,
+      "y": 457.9,
+      "rank": 7,
+      "capital": null,
+      "population": 314789
+    },
+    {
+      "name": "Cagliari",
+      "region": "CA",
+      "x": 217.21,
+      "y": 774.9,
+      "rank": 7,
+      "capital": null,
+      "population": 291511
+    },
+    {
+      "name": "Messina",
+      "region": "ME",
+      "x": 715.86,
+      "y": 877.22,
+      "rank": 7,
+      "capital": null,
+      "population": 252026
+    },
+    {
+      "name": "Trieste",
+      "region": "TS",
+      "x": 568.26,
+      "y": 141.6,
+      "rank": 7,
+      "capital": null,
+      "population": 216035
+    },
+    {
+      "name": "Pisa",
+      "region": "PI",
+      "x": 327.63,
+      "y": 331.82,
+      "rank": 7,
+      "capital": null,
+      "population": 203336
+    },
+    {
+      "name": "Taranto",
+      "region": "TA",
+      "x": 834.84,
+      "y": 642.69,
+      "rank": 7,
+      "capital": null,
+      "population": 202033
+    },
+    {
+      "name": "Bergamo",
+      "region": "BG",
+      "x": 282.13,
+      "y": 133.91,
+      "rank": 7,
+      "capital": null,
+      "population": 200000
+    },
+    {
+      "name": "Parma",
+      "region": "PR",
+      "x": 324.77,
+      "y": 223.58,
+      "rank": 7,
+      "capital": null,
+      "population": 166011
+    },
+    {
+      "name": "Lecce",
+      "region": "LE",
+      "x": 905.19,
+      "y": 653.28,
+      "rank": 7,
+      "capital": null,
+      "population": 162582
+    },
+    {
+      "name": "Livorno",
+      "region": "LI",
+      "x": 320.18,
+      "y": 348.43,
+      "rank": 7,
+      "capital": null,
+      "population": 156274
+    },
+    {
+      "name": "Foggia",
+      "region": "FG",
+      "x": 705.56,
+      "y": 553.82,
+      "rank": 7,
+      "capital": null,
+      "population": 155203
+    },
+    {
+      "name": "Perugia",
+      "region": "PG",
+      "x": 470.17,
+      "y": 394.22,
+      "rank": 7,
+      "capital": null,
+      "population": 149125
+    },
+    {
+      "name": "Ravenna",
+      "region": "RA",
+      "x": 458.31,
+      "y": 264.28,
+      "rank": 7,
+      "capital": null,
+      "population": 134631
+    },
+    {
+      "name": "Ferrara",
+      "region": "FE",
+      "x": 415.56,
+      "y": 221.32,
+      "rank": 7,
+      "capital": null,
+      "population": 130992
+    },
+    {
+      "name": "Syracuse",
+      "region": "SR",
+      "x": 698.92,
+      "y": 989.97,
+      "rank": 7,
+      "capital": null,
+      "population": 123657
+    },
+    {
+      "name": "Trento",
+      "region": "TN",
+      "x": 383.21,
+      "y": 98.86,
+      "rank": 7,
+      "capital": null,
+      "population": 107808
+    },
+    {
+      "name": "Brindisi",
+      "region": "BR",
+      "x": 886.84,
+      "y": 626.54,
+      "rank": 7,
+      "capital": null,
+      "population": 104437
+    },
+    {
+      "name": "Ancona",
+      "region": "AN",
+      "x": 549.95,
+      "y": 345.2,
+      "rank": 7,
+      "capital": null,
+      "population": 100507
+    },
+    {
+      "name": "Bolzano",
+      "region": "BZ",
+      "x": 400.32,
+      "y": 57.48,
+      "rank": 7,
+      "capital": null,
+      "population": 95895
+    },
+    {
+      "name": "Catanzaro",
+      "region": "CZ",
+      "x": 794.62,
+      "y": 804.61,
+      "rank": 7,
+      "capital": null,
+      "population": 95251
+    },
+    {
+      "name": "Arezzo",
+      "region": "AR",
+      "x": 433.15,
+      "y": 359.21,
+      "rank": 7,
+      "capital": null,
+      "population": 91589
+    },
+    {
+      "name": "Marsala",
+      "region": "TP",
+      "x": 473.33,
+      "y": 920.31,
+      "rank": 7,
+      "capital": null,
+      "population": 77784
+    },
+    {
+      "name": "L’Aquila",
+      "region": "AQ",
+      "x": 543.37,
+      "y": 469.25,
+      "rank": 7,
+      "capital": null,
+      "population": 68503
+    },
+    {
+      "name": "Benevento",
+      "region": "BN",
+      "x": 646.2,
+      "y": 588.08,
+      "rank": 7,
+      "capital": null,
+      "population": 61791
+    },
+    {
+      "name": "Civitavecchia",
+      "region": "RM",
+      "x": 426.63,
+      "y": 494.17,
+      "rank": 7,
+      "capital": null,
+      "population": 61316
+    },
+    {
+      "name": "Siena",
+      "region": "SI",
+      "x": 395.16,
+      "y": 373.16,
+      "rank": 7,
+      "capital": null,
+      "population": 52625
+    },
+    {
+      "name": "Olbia",
+      "region": "OT",
+      "x": 254.43,
+      "y": 608.19,
+      "rank": 7,
+      "capital": null,
+      "population": 45366
+    },
+    {
+      "name": "Caserta",
+      "region": "CE",
+      "x": 615.53,
+      "y": 596.12,
+      "rank": 8,
+      "capital": null,
+      "population": 250000
+    },
+    {
+      "name": "Como",
+      "region": "CO",
+      "x": 241.74,
+      "y": 121.44,
+      "rank": 8,
+      "capital": null,
+      "population": 250000
+    },
+    {
+      "name": "Reggio Calabria",
+      "region": "RC",
+      "x": 723.27,
+      "y": 885.46,
+      "rank": 8,
+      "capital": null,
+      "population": 180353
+    },
+    {
+      "name": "Treviso",
+      "region": "TV",
+      "x": 460.12,
+      "y": 140.36,
+      "rank": 8,
+      "capital": null,
+      "population": 177309
+    },
+    {
+      "name": "Modena",
+      "region": "MO",
+      "x": 366.67,
+      "y": 240.46,
+      "rank": 8,
+      "capital": null,
+      "population": 175502
+    },
+    {
+      "name": "Udine",
+      "region": "UD",
+      "x": 529.05,
+      "y": 100.48,
+      "rank": 8,
+      "capital": null,
+      "population": 119009
+    },
+    {
+      "name": "Barletta",
+      "region": "BT",
+      "x": 758.95,
+      "y": 565.67,
+      "rank": 8,
+      "capital": null,
+      "population": 107830
+    },
+    {
+      "name": "Novara",
+      "region": "NO",
+      "x": 208.21,
+      "y": 155.69,
+      "rank": 8,
+      "capital": null,
+      "population": 100910
+    },
+    {
+      "name": "Asti",
+      "region": "AT",
+      "x": 176.94,
+      "y": 205.81,
+      "rank": 8,
+      "capital": null,
+      "population": 71276
+    },
+    {
+      "name": "Ragusa",
+      "region": "RG",
+      "x": 654.93,
+      "y": 1005.06,
+      "rank": 8,
+      "capital": null,
+      "population": 68956
+    },
+    {
+      "name": "Crotone",
+      "region": "KR",
+      "x": 834.11,
+      "y": 784.52,
+      "rank": 8,
+      "capital": null,
+      "population": 60010
+    },
+    {
+      "name": "Vibo Valentia",
+      "region": "VV",
+      "x": 756.93,
+      "y": 829.43,
+      "rank": 8,
+      "capital": null,
+      "population": 33957
+    },
+    {
+      "name": "Potenza",
+      "region": "PZ",
+      "x": 726.4,
+      "y": 634.35,
+      "rank": 10,
+      "capital": null,
+      "population": 69060
+    },
+    {
+      "name": "Campobasso",
+      "region": "CB",
+      "x": 638.12,
+      "y": 545.68,
+      "rank": 10,
+      "capital": null,
+      "population": 50762
+    },
+    {
+      "name": "Aosta",
+      "region": "AO",
+      "x": 119.27,
+      "y": 122.1,
+      "rank": 10,
+      "capital": null,
+      "population": 34062
+    }
+  ]
+}

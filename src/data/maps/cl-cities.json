@@ -1,0 +1,768 @@
+{
+  "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_populated_places.geojson (Natural Earth populated places), fitted to 1000x1600",
+  "updatedAt": "2026-09-04T09:41:01.221Z",
+  "country": "CL",
+  "countryName": "Chile",
+  "viewBox": "0 0 1000 1600",
+  "width": 1000,
+  "height": 1600,
+  "totalCities": 84,
+  "cities": [
+    {
+      "name": "Santiago",
+      "region": "RM",
+      "x": 914.16,
+      "y": 716.09,
+      "rank": 0,
+      "capital": "country",
+      "population": 5720000
+    },
+    {
+      "name": "Concepción",
+      "region": "BI",
+      "x": 865.07,
+      "y": 802.63,
+      "rank": 3,
+      "capital": "region",
+      "population": 889725
+    },
+    {
+      "name": "Valparaíso",
+      "region": "VS",
+      "x": 893.61,
+      "y": 706.14,
+      "rank": 3,
+      "capital": null,
+      "population": 854000
+    },
+    {
+      "name": "Antofagasta",
+      "region": "AN",
+      "x": 920.71,
+      "y": 467.42,
+      "rank": 3,
+      "capital": "region",
+      "population": 309832
+    },
+    {
+      "name": "Iquique",
+      "region": "TA",
+      "x": 927.48,
+      "y": 381.09,
+      "rank": 3,
+      "capital": "region",
+      "population": 227499
+    },
+    {
+      "name": "Puerto Montt",
+      "region": "LL",
+      "x": 870.01,
+      "y": 920.45,
+      "rank": 3,
+      "capital": "region",
+      "population": 174629
+    },
+    {
+      "name": "Valdivia",
+      "region": "LR",
+      "x": 863.18,
+      "y": 878.71,
+      "rank": 3,
+      "capital": "region",
+      "population": 159599
+    },
+    {
+      "name": "Punta Arenas",
+      "region": "MA",
+      "x": 907.66,
+      "y": 1217.1,
+      "rank": 3,
+      "capital": "region",
+      "population": 117430
+    },
+    {
+      "name": "Arica",
+      "region": "AP",
+      "x": 923.85,
+      "y": 336.62,
+      "rank": 4,
+      "capital": "region",
+      "population": 185999
+    },
+    {
+      "name": "La Serena",
+      "region": "CO",
+      "x": 901.24,
+      "y": 626.16,
+      "rank": 4,
+      "capital": "region",
+      "population": 154521
+    },
+    {
+      "name": "Los Ángeles",
+      "region": "BI",
+      "x": 879.6,
+      "y": 818.88,
+      "rank": 4,
+      "capital": null,
+      "population": 145239
+    },
+    {
+      "name": "Copiapó",
+      "region": "AT",
+      "x": 921.86,
+      "y": 561.97,
+      "rank": 4,
+      "capital": "region",
+      "population": 129280
+    },
+    {
+      "name": "Coyhaique",
+      "region": "AI",
+      "x": 887.72,
+      "y": 1024.31,
+      "rank": 4,
+      "capital": "region",
+      "population": 45787
+    },
+    {
+      "name": "Temuco",
+      "region": "AR",
+      "x": 875.44,
+      "y": 850.71,
+      "rank": 6,
+      "capital": "region",
+      "population": 265901
+    },
+    {
+      "name": "Rancagua",
+      "region": "LI",
+      "x": 912.21,
+      "y": 734.62,
+      "rank": 6,
+      "capital": "region",
+      "population": 233268
+    },
+    {
+      "name": "Talca",
+      "region": "ML",
+      "x": 892.97,
+      "y": 766.67,
+      "rank": 6,
+      "capital": "region",
+      "population": 197479
+    },
+    {
+      "name": "Osorno",
+      "region": "LL",
+      "x": 865.64,
+      "y": 897.9,
+      "rank": 6,
+      "capital": null,
+      "population": 154131
+    },
+    {
+      "name": "Chillán",
+      "region": "NB",
+      "x": 884.09,
+      "y": 796.64,
+      "rank": 6,
+      "capital": null,
+      "population": 150396
+    },
+    {
+      "name": "Calama",
+      "region": "AN",
+      "x": 955.59,
+      "y": 437.25,
+      "rank": 6,
+      "capital": null,
+      "population": 143084
+    },
+    {
+      "name": "Curicó",
+      "region": "ML",
+      "x": 901.75,
+      "y": 755.19,
+      "rank": 6,
+      "capital": null,
+      "population": 113711
+    },
+    {
+      "name": "Ovalle",
+      "region": "CO",
+      "x": 902.39,
+      "y": 644.17,
+      "rank": 6,
+      "capital": null,
+      "population": 77138
+    },
+    {
+      "name": "Trehuaco",
+      "region": "AT",
+      "x": 912.1,
+      "y": 592.37,
+      "rank": 6,
+      "capital": null,
+      "population": 44895
+    },
+    {
+      "name": "Ancud",
+      "region": "LL",
+      "x": 853.22,
+      "y": 931.08,
+      "rank": 6,
+      "capital": null,
+      "population": 28020
+    },
+    {
+      "name": "Tocopilla",
+      "region": "AN",
+      "x": 925.81,
+      "y": 427.82,
+      "rank": 6,
+      "capital": null,
+      "population": 24460
+    },
+    {
+      "name": "Puerto Natales",
+      "region": "MA",
+      "x": 882.96,
+      "y": 1180.6,
+      "rank": 6,
+      "capital": null,
+      "population": 20000
+    },
+    {
+      "name": "Chañaral",
+      "region": "AT",
+      "x": 915.36,
+      "y": 535.94,
+      "rank": 6,
+      "capital": null,
+      "population": 13543
+    },
+    {
+      "name": "Taltal",
+      "region": "AN",
+      "x": 918.91,
+      "y": 511.87,
+      "rank": 6,
+      "capital": null,
+      "population": 10018
+    },
+    {
+      "name": "Puerto Aisén",
+      "region": "AI",
+      "x": 876.43,
+      "y": 1020.18,
+      "rank": 6,
+      "capital": "region",
+      "population": 8067
+    },
+    {
+      "name": "Puerto Williams",
+      "region": "MA",
+      "x": 956.11,
+      "y": 1263.21,
+      "rank": 6,
+      "capital": null,
+      "population": 2500
+    },
+    {
+      "name": "Mejillones",
+      "region": "AN",
+      "x": 919.6,
+      "y": 453.45,
+      "rank": 6,
+      "capital": null,
+      "population": 2041
+    },
+    {
+      "name": "Atlético Morelia",
+      "region": "CO",
+      "x": 899.19,
+      "y": 627.51,
+      "rank": 7,
+      "capital": null,
+      "population": 161317
+    },
+    {
+      "name": "San Antonio",
+      "region": "VS",
+      "x": 893.84,
+      "y": 720.16,
+      "rank": 7,
+      "capital": null,
+      "population": 104292
+    },
+    {
+      "name": "Los Andes",
+      "region": "VS",
+      "x": 915.29,
+      "y": 700.58,
+      "rank": 7,
+      "capital": null,
+      "population": 56859
+    },
+    {
+      "name": "Lota",
+      "region": "BI",
+      "x": 862.98,
+      "y": 809.27,
+      "rank": 7,
+      "capital": null,
+      "population": 49763
+    },
+    {
+      "name": "Constitución",
+      "region": "ML",
+      "x": 877.32,
+      "y": 764.28,
+      "rank": 7,
+      "capital": null,
+      "population": 37917
+    },
+    {
+      "name": "Illapel",
+      "region": "CO",
+      "x": 903.07,
+      "y": 670.09,
+      "rank": 7,
+      "capital": null,
+      "population": 26340
+    },
+    {
+      "name": "Victoria",
+      "region": "AR",
+      "x": 880.01,
+      "y": 838.17,
+      "rank": 7,
+      "capital": null,
+      "population": 24555
+    },
+    {
+      "name": "Lebu",
+      "region": "BI",
+      "x": 853.42,
+      "y": 822.73,
+      "rank": 7,
+      "capital": null,
+      "population": 22345
+    },
+    {
+      "name": "Salamanca",
+      "region": "CO",
+      "x": 907.18,
+      "y": 673.89,
+      "rank": 7,
+      "capital": null,
+      "population": 20214
+    },
+    {
+      "name": "Diego de Almagro",
+      "region": "AT",
+      "x": 928.37,
+      "y": 536.56,
+      "rank": 7,
+      "capital": null,
+      "population": 18137
+    },
+    {
+      "name": "Vicuña",
+      "region": "CO",
+      "x": 912.47,
+      "y": 629.45,
+      "rank": 7,
+      "capital": null,
+      "population": 13496
+    },
+    {
+      "name": "Los Lagos",
+      "region": "LR",
+      "x": 871.06,
+      "y": 879.24,
+      "rank": 7,
+      "capital": null,
+      "population": 12813
+    },
+    {
+      "name": "Carahue",
+      "region": "AR",
+      "x": 863.74,
+      "y": 850.43,
+      "rank": 7,
+      "capital": null,
+      "population": 11875
+    },
+    {
+      "name": "Pozo Almonte",
+      "region": "TA",
+      "x": 935.34,
+      "y": 381.63,
+      "rank": 7,
+      "capital": null,
+      "population": 10830
+    },
+    {
+      "name": "Caldera",
+      "region": "AT",
+      "x": 910.59,
+      "y": 554.26,
+      "rank": 7,
+      "capital": null,
+      "population": 10259
+    },
+    {
+      "name": "Quellón",
+      "region": "LL",
+      "x": 858.53,
+      "y": 962.18,
+      "rank": 7,
+      "capital": null,
+      "population": 7029
+    },
+    {
+      "name": "Cochrane",
+      "region": "AI",
+      "x": 880.03,
+      "y": 1067.53,
+      "rank": 7,
+      "capital": null,
+      "population": 4441
+    },
+    {
+      "name": "Huasco",
+      "region": "AT",
+      "x": 901.84,
+      "y": 589.82,
+      "rank": 7,
+      "capital": null,
+      "population": 2558
+    },
+    {
+      "name": "Toconao",
+      "region": "AN",
+      "x": 976.43,
+      "y": 456.24,
+      "rank": 7,
+      "capital": null,
+      "population": 378
+    },
+    {
+      "name": "Villa O'Higgins",
+      "region": "AI",
+      "x": 879.92,
+      "y": 1098.04,
+      "rank": 7,
+      "capital": null,
+      "population": 250
+    },
+    {
+      "name": "Lagunas",
+      "region": "TA",
+      "x": 937.98,
+      "y": 399.78,
+      "rank": 7,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Viña del Mar",
+      "region": "VS",
+      "x": 894.88,
+      "y": 705.56,
+      "rank": 8,
+      "capital": null,
+      "population": 503534
+    },
+    {
+      "name": "Talcahuano",
+      "region": "BI",
+      "x": 863.65,
+      "y": 799.78,
+      "rank": 8,
+      "capital": null,
+      "population": 288074
+    },
+    {
+      "name": "San Bernardo",
+      "region": "RM",
+      "x": 913.1,
+      "y": 720.14,
+      "rank": 8,
+      "capital": null,
+      "population": 246762
+    },
+    {
+      "name": "Coronel",
+      "region": "BI",
+      "x": 862.95,
+      "y": 807.75,
+      "rank": 8,
+      "capital": null,
+      "population": 92940
+    },
+    {
+      "name": "Linares",
+      "region": "ML",
+      "x": 894.57,
+      "y": 777.34,
+      "rank": 8,
+      "capital": null,
+      "population": 81015
+    },
+    {
+      "name": "Quillota",
+      "region": "VS",
+      "x": 901.2,
+      "y": 701.85,
+      "rank": 8,
+      "capital": null,
+      "population": 79686
+    },
+    {
+      "name": "San Fernando",
+      "region": "LI",
+      "x": 906.96,
+      "y": 745.03,
+      "rank": 8,
+      "capital": "region",
+      "population": 60746
+    },
+    {
+      "name": "San Felipe",
+      "region": "VS",
+      "x": 912.73,
+      "y": 698.55,
+      "rank": 8,
+      "capital": null,
+      "population": 59294
+    },
+    {
+      "name": "Angol",
+      "region": "AR",
+      "x": 872.52,
+      "y": 827.18,
+      "rank": 8,
+      "capital": null,
+      "population": 44856
+    },
+    {
+      "name": "Villarrica",
+      "region": "AR",
+      "x": 882.56,
+      "y": 864.58,
+      "rank": 8,
+      "capital": null,
+      "population": 31602
+    },
+    {
+      "name": "Cauquenes",
+      "region": "ML",
+      "x": 879.74,
+      "y": 780.65,
+      "rank": 8,
+      "capital": null,
+      "population": 31362
+    },
+    {
+      "name": "Curanilahue",
+      "region": "BI",
+      "x": 859.58,
+      "y": 819.27,
+      "rank": 8,
+      "capital": null,
+      "population": 30611
+    },
+    {
+      "name": "Castro",
+      "region": "LL",
+      "x": 855,
+      "y": 946.55,
+      "rank": 8,
+      "capital": null,
+      "population": 29926
+    },
+    {
+      "name": "La Ligua",
+      "region": "VS",
+      "x": 901.6,
+      "y": 691.18,
+      "rank": 8,
+      "capital": null,
+      "population": 26665
+    },
+    {
+      "name": "La Unión",
+      "region": "LR",
+      "x": 866.25,
+      "y": 890.54,
+      "rank": 8,
+      "capital": null,
+      "population": 26298
+    },
+    {
+      "name": "Puerto Varas",
+      "region": "LL",
+      "x": 868.79,
+      "y": 916.92,
+      "rank": 8,
+      "capital": null,
+      "population": 24958
+    },
+    {
+      "name": "Nueva Imperial",
+      "region": "AR",
+      "x": 867.91,
+      "y": 851.11,
+      "rank": 8,
+      "capital": null,
+      "population": 18777
+    },
+    {
+      "name": "Collipulli",
+      "region": "AR",
+      "x": 878.11,
+      "y": 831.1,
+      "rank": 8,
+      "capital": null,
+      "population": 16392
+    },
+    {
+      "name": "Loncoche",
+      "region": "AR",
+      "x": 874.74,
+      "y": 866.98,
+      "rank": 8,
+      "capital": null,
+      "population": 15590
+    },
+    {
+      "name": "Río Bueno",
+      "region": "LR",
+      "x": 868.8,
+      "y": 891.76,
+      "rank": 8,
+      "capital": null,
+      "population": 15456
+    },
+    {
+      "name": "Tierra Amarilla",
+      "region": "AT",
+      "x": 922.97,
+      "y": 564.73,
+      "rank": 8,
+      "capital": null,
+      "population": 12888
+    },
+    {
+      "name": "Calbuco",
+      "region": "LL",
+      "x": 865.16,
+      "y": 927.95,
+      "rank": 8,
+      "capital": null,
+      "population": 12490
+    },
+    {
+      "name": "Pichilemu",
+      "region": "LI",
+      "x": 885.79,
+      "y": 740.05,
+      "rank": 8,
+      "capital": null,
+      "population": 11603
+    },
+    {
+      "name": "Lonquimay",
+      "region": "AR",
+      "x": 902.11,
+      "y": 842.91,
+      "rank": 8,
+      "capital": null,
+      "population": 10237
+    },
+    {
+      "name": "Quirihue",
+      "region": "NB",
+      "x": 875.42,
+      "y": 788.46,
+      "rank": 8,
+      "capital": null,
+      "population": 6529
+    },
+    {
+      "name": "Combarbalá",
+      "region": "CO",
+      "x": 906.75,
+      "y": 658.66,
+      "rank": 8,
+      "capital": null,
+      "population": 5134
+    },
+    {
+      "name": "Santa Bárbara",
+      "region": "BI",
+      "x": 886.24,
+      "y": 823.63,
+      "rank": 8,
+      "capital": null,
+      "population": 3494
+    },
+    {
+      "name": "María Elena",
+      "region": "AN",
+      "x": 938,
+      "y": 434.51,
+      "rank": 8,
+      "capital": null,
+      "population": 2370
+    },
+    {
+      "name": "Nueva Toltén",
+      "region": "AR",
+      "x": 863.21,
+      "y": 863.33,
+      "rank": 8,
+      "capital": null,
+      "population": 2293
+    },
+    {
+      "name": "Chonchi",
+      "region": "LL",
+      "x": 854.54,
+      "y": 950.55,
+      "rank": 8,
+      "capital": null,
+      "population": 381
+    },
+    {
+      "name": "Río Verde",
+      "region": "MA",
+      "x": 899.56,
+      "y": 1204.04,
+      "rank": 8,
+      "capital": null,
+      "population": 358
+    },
+    {
+      "name": "Cuya",
+      "region": "TA",
+      "x": 927.55,
+      "y": 352.3,
+      "rank": 8,
+      "capital": null,
+      "population": 20
+    },
+    {
+      "name": "Chuquicamata",
+      "region": "AN",
+      "x": 955.4,
+      "y": 433.95,
+      "rank": 8,
+      "capital": null,
+      "population": 0
+    }
+  ]
+}

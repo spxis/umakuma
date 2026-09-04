@@ -1,0 +1,93 @@
+{
+  "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_populated_places.geojson (Natural Earth populated places), fitted to 1000x600",
+  "updatedAt": "2026-09-04T09:41:01.110Z",
+  "country": "AT",
+  "countryName": "Austria",
+  "viewBox": "0 0 1000 600",
+  "width": 1000,
+  "height": 600,
+  "totalCities": 9,
+  "cities": [
+    {
+      "name": "Vienna",
+      "region": "9",
+      "x": 896.65,
+      "y": 195.69,
+      "rank": 1,
+      "capital": "country",
+      "population": 2400000
+    },
+    {
+      "name": "Linz",
+      "region": "4",
+      "x": 627.28,
+      "y": 179.25,
+      "rank": 7,
+      "capital": "region",
+      "population": 349161
+    },
+    {
+      "name": "Graz",
+      "region": "6",
+      "x": 778.32,
+      "y": 418.21,
+      "rank": 7,
+      "capital": "region",
+      "population": 263234
+    },
+    {
+      "name": "Salzburg",
+      "region": "5",
+      "x": 465.11,
+      "y": 278.59,
+      "rank": 7,
+      "capital": "region",
+      "population": 206279
+    },
+    {
+      "name": "Innsbruck",
+      "region": "7",
+      "x": 249.33,
+      "y": 378.17,
+      "rank": 7,
+      "capital": "region",
+      "population": 155214
+    },
+    {
+      "name": "Klagenfurt",
+      "region": "2",
+      "x": 633.5,
+      "y": 509.8,
+      "rank": 7,
+      "capital": "region",
+      "population": 90610
+    },
+    {
+      "name": "Wiener Neustadt",
+      "region": "3",
+      "x": 884.46,
+      "y": 271.29,
+      "rank": 8,
+      "capital": null,
+      "population": 82762
+    },
+    {
+      "name": "Bregenz",
+      "region": "8",
+      "x": 34.78,
+      "y": 324.06,
+      "rank": 10,
+      "capital": "region",
+      "population": 26928
+    },
+    {
+      "name": "Eisenstadt",
+      "region": "1",
+      "x": 921.32,
+      "y": 266.53,
+      "rank": 10,
+      "capital": "region",
+      "population": 13165
+    }
+  ]
+}

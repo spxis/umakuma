@@ -1,0 +1,1713 @@
+{
+  "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_populated_places.geojson (Natural Earth populated places), fitted to 1000x650",
+  "updatedAt": "2026-09-04T09:40:55.861Z",
+  "country": "MX",
+  "countryName": "Mexico",
+  "viewBox": "0 0 1000 650",
+  "width": 1000,
+  "height": 650,
+  "totalCities": 189,
+  "cities": [
+    {
+      "name": "Mexico City",
+      "region": "DIF",
+      "x": 595.68,
+      "y": 484.82,
+      "rank": 0,
+      "capital": "country",
+      "population": 19028000
+    },
+    {
+      "name": "Monterrey",
+      "region": "NLE",
+      "x": 553.55,
+      "y": 267.73,
+      "rank": 1,
+      "capital": "region",
+      "population": 3712000
+    },
+    {
+      "name": "Guadalajara",
+      "region": "JAL",
+      "x": 457.39,
+      "y": 442.59,
+      "rank": 2,
+      "capital": "region",
+      "population": 4198000
+    },
+    {
+      "name": "Puebla City",
+      "region": "PUE",
+      "x": 626.75,
+      "y": 498.53,
+      "rank": 2,
+      "capital": "region",
+      "population": 2195000
+    },
+    {
+      "name": "Tijuana",
+      "region": "BCN",
+      "x": 51.76,
+      "y": 4.46,
+      "rank": 3,
+      "capital": null,
+      "population": 1553000
+    },
+    {
+      "name": "Mérida",
+      "region": "YUC",
+      "x": 904.85,
+      "y": 414.98,
+      "rank": 3,
+      "capital": "region",
+      "population": 965000
+    },
+    {
+      "name": "Ciudad Madero Tamaulipas",
+      "region": "TAM",
+      "x": 634.51,
+      "y": 383.95,
+      "rank": 3,
+      "capital": null,
+      "population": 859419
+    },
+    {
+      "name": "Chihuahua City",
+      "region": "CHH",
+      "x": 375.18,
+      "y": 162.07,
+      "rank": 3,
+      "capital": "region",
+      "population": 793000
+    },
+    {
+      "name": "Acapulco de Juárez",
+      "region": "GRO",
+      "x": 571.14,
+      "y": 576.31,
+      "rank": 3,
+      "capital": null,
+      "population": 715584
+    },
+    {
+      "name": "Veracruz",
+      "region": "VER",
+      "x": 694.21,
+      "y": 491.19,
+      "rank": 3,
+      "capital": null,
+      "population": 578963
+    },
+    {
+      "name": "Cancun",
+      "region": "ROO",
+      "x": 994.76,
+      "y": 399.24,
+      "rank": 3,
+      "capital": null,
+      "population": 542043
+    },
+    {
+      "name": "Tuxtla Gutiérrez",
+      "region": "CHP",
+      "x": 798.96,
+      "y": 571.14,
+      "rank": 3,
+      "capital": "region",
+      "population": 481128
+    },
+    {
+      "name": "Juarez",
+      "region": "SIN",
+      "x": 359.08,
+      "y": 351.5,
+      "rank": 3,
+      "capital": null,
+      "population": 368204
+    },
+    {
+      "name": "León de Los Aldama",
+      "region": "GUA",
+      "x": 510.7,
+      "y": 426,
+      "rank": 4,
+      "capital": null,
+      "population": 1488000
+    },
+    {
+      "name": "Torreón",
+      "region": "COA",
+      "x": 456.14,
+      "y": 271.31,
+      "rank": 4,
+      "capital": null,
+      "population": 1144000
+    },
+    {
+      "name": "San Luis Potosí",
+      "region": "SLP",
+      "x": 533.29,
+      "y": 390.24,
+      "rank": 4,
+      "capital": "region",
+      "population": 992000
+    },
+    {
+      "name": "Mexicali",
+      "region": "BCN",
+      "x": 99.77,
+      "y": 3.93,
+      "rank": 4,
+      "capital": "region",
+      "population": 885000
+    },
+    {
+      "name": "Culiacán",
+      "region": "SIN",
+      "x": 330.32,
+      "y": 294.2,
+      "rank": 4,
+      "capital": "region",
+      "population": 809000
+    },
+    {
+      "name": "Hermosillo",
+      "region": "SON",
+      "x": 226.48,
+      "y": 139.43,
+      "rank": 4,
+      "capital": "region",
+      "population": 595811
+    },
+    {
+      "name": "Matamoros",
+      "region": "TAM",
+      "x": 642.54,
+      "y": 258.54,
+      "rank": 4,
+      "capital": null,
+      "population": 538785
+    },
+    {
+      "name": "Oaxaca de Juárez",
+      "region": "OAX",
+      "x": 680.08,
+      "y": 565.31,
+      "rank": 4,
+      "capital": "region",
+      "population": 530728
+    },
+    {
+      "name": "Nuevo Laredo",
+      "region": "TAM",
+      "x": 577.09,
+      "y": 203.42,
+      "rank": 4,
+      "capital": null,
+      "population": 349550
+    },
+    {
+      "name": "Colima",
+      "region": "COL",
+      "x": 444.08,
+      "y": 492.94,
+      "rank": 4,
+      "capital": "region",
+      "population": 223287
+    },
+    {
+      "name": "Campeche",
+      "region": "CAM",
+      "x": 879.35,
+      "y": 457.09,
+      "rank": 4,
+      "capital": "region",
+      "population": 205212
+    },
+    {
+      "name": "La Paz",
+      "region": "BCS",
+      "x": 235.84,
+      "y": 313.89,
+      "rank": 4,
+      "capital": "region",
+      "population": 189767
+    },
+    {
+      "name": "Nogales",
+      "region": "SON",
+      "x": 231.6,
+      "y": 61.98,
+      "rank": 4,
+      "capital": null,
+      "population": 178097
+    },
+    {
+      "name": "Guaymas",
+      "region": "SON",
+      "x": 225.91,
+      "y": 180.48,
+      "rank": 4,
+      "capital": null,
+      "population": 103449
+    },
+    {
+      "name": "Ciudad Juárez",
+      "region": "CHH",
+      "x": 366.07,
+      "y": 54.61,
+      "rank": 6,
+      "capital": null,
+      "population": 1343000
+    },
+    {
+      "name": "Santiago de Querétaro",
+      "region": "QUE",
+      "x": 553.83,
+      "y": 445.8,
+      "rank": 6,
+      "capital": "region",
+      "population": 961000
+    },
+    {
+      "name": "Aguascalientes City",
+      "region": "AGU",
+      "x": 491.5,
+      "y": 400.49,
+      "rank": 6,
+      "capital": "region",
+      "population": 869000
+    },
+    {
+      "name": "Cuernavaca",
+      "region": "MOR",
+      "x": 592.5,
+      "y": 503.22,
+      "rank": 6,
+      "capital": "region",
+      "population": 834001
+    },
+    {
+      "name": "Saltillo",
+      "region": "COA",
+      "x": 532.34,
+      "y": 276.67,
+      "rank": 6,
+      "capital": "region",
+      "population": 754000
+    },
+    {
+      "name": "Durango",
+      "region": "DUR",
+      "x": 415.78,
+      "y": 324.59,
+      "rank": 6,
+      "capital": "region",
+      "population": 457140
+    },
+    {
+      "name": "Villahermosa",
+      "region": "TAB",
+      "x": 804.58,
+      "y": 526.78,
+      "rank": 6,
+      "capital": "region",
+      "population": 428564
+    },
+    {
+      "name": "Ciudad Victoria",
+      "region": "TAM",
+      "x": 592.79,
+      "y": 335.34,
+      "rank": 6,
+      "capital": "region",
+      "population": 274900
+    },
+    {
+      "name": "Ensenada",
+      "region": "BCN",
+      "x": 63.2,
+      "y": 28.11,
+      "rank": 6,
+      "capital": null,
+      "population": 256565
+    },
+    {
+      "name": "Los Mochis",
+      "region": "SIN",
+      "x": 280.68,
+      "y": 258.53,
+      "rank": 6,
+      "capital": null,
+      "population": 249047
+    },
+    {
+      "name": "Monclova",
+      "region": "COA",
+      "x": 519.09,
+      "y": 225.04,
+      "rank": 6,
+      "capital": null,
+      "population": 236244
+    },
+    {
+      "name": "Tapachula",
+      "region": "CHP",
+      "x": 832.96,
+      "y": 634.3,
+      "rank": 6,
+      "capital": null,
+      "population": 221521
+    },
+    {
+      "name": "Chetumal",
+      "region": "ROO",
+      "x": 955.98,
+      "y": 497.12,
+      "rank": 6,
+      "capital": "region",
+      "population": 154517
+    },
+    {
+      "name": "Delicias",
+      "region": "CHH",
+      "x": 392.86,
+      "y": 178.22,
+      "rank": 6,
+      "capital": null,
+      "population": 114783
+    },
+    {
+      "name": "Manzanillo",
+      "region": "COL",
+      "x": 424.03,
+      "y": 498.98,
+      "rank": 6,
+      "capital": null,
+      "population": 110735
+    },
+    {
+      "name": "San Miguel de Cozumel",
+      "region": "ROO",
+      "x": 993.28,
+      "y": 422.61,
+      "rank": 6,
+      "capital": null,
+      "population": 73934
+    },
+    {
+      "name": "Progreso",
+      "region": "YUC",
+      "x": 902.34,
+      "y": 404.15,
+      "rank": 6,
+      "capital": null,
+      "population": 47124
+    },
+    {
+      "name": "Santo Domingo Tehuantepec",
+      "region": "OAX",
+      "x": 729.68,
+      "y": 589.73,
+      "rank": 6,
+      "capital": null,
+      "population": 42776
+    },
+    {
+      "name": "Cabo San Lucas",
+      "region": "BCS",
+      "x": 246.66,
+      "y": 358.15,
+      "rank": 6,
+      "capital": null,
+      "population": 42601
+    },
+    {
+      "name": "Ometepec",
+      "region": "GRO",
+      "x": 621.64,
+      "y": 581.3,
+      "rank": 6,
+      "capital": null,
+      "population": 30271
+    },
+    {
+      "name": "Toluca",
+      "region": "MEX",
+      "x": 578.59,
+      "y": 490.57,
+      "rank": 7,
+      "capital": "region",
+      "population": 1531000
+    },
+    {
+      "name": "Morelia",
+      "region": "MIC",
+      "x": 527.7,
+      "y": 475.57,
+      "rank": 7,
+      "capital": "region",
+      "population": 644306
+    },
+    {
+      "name": "Mazatán",
+      "region": "SON",
+      "x": 251.45,
+      "y": 143.8,
+      "rank": 7,
+      "capital": null,
+      "population": 500000
+    },
+    {
+      "name": "Pachuca",
+      "region": "HID",
+      "x": 608.27,
+      "y": 461.36,
+      "rank": 7,
+      "capital": "region",
+      "population": 319581
+    },
+    {
+      "name": "Tepic",
+      "region": "NAY",
+      "x": 407.31,
+      "y": 412.71,
+      "rank": 7,
+      "capital": "region",
+      "population": 318781
+    },
+    {
+      "name": "Ciudad Obregon",
+      "region": "SON",
+      "x": 254.84,
+      "y": 198.44,
+      "rank": 7,
+      "capital": null,
+      "population": 288002
+    },
+    {
+      "name": "Coatzacoalcos",
+      "region": "VER",
+      "x": 753.7,
+      "y": 525.51,
+      "rank": 7,
+      "capital": null,
+      "population": 287285
+    },
+    {
+      "name": "Uruapan",
+      "region": "MIC",
+      "x": 498.67,
+      "y": 486.61,
+      "rank": 7,
+      "capital": null,
+      "population": 264531
+    },
+    {
+      "name": "Poza Rica",
+      "region": "VER",
+      "x": 650.25,
+      "y": 445.54,
+      "rank": 7,
+      "capital": null,
+      "population": 254481
+    },
+    {
+      "name": "Zumpango",
+      "region": "MEX",
+      "x": 596.18,
+      "y": 471.99,
+      "rank": 7,
+      "capital": null,
+      "population": 250000
+    },
+    {
+      "name": "Tehuacán",
+      "region": "PUE",
+      "x": 654.68,
+      "y": 518.13,
+      "rank": 7,
+      "capital": null,
+      "population": 241429
+    },
+    {
+      "name": "Zacatecas",
+      "region": "ZAC",
+      "x": 482.3,
+      "y": 369.4,
+      "rank": 7,
+      "capital": "region",
+      "population": 234481
+    },
+    {
+      "name": "Córdoba",
+      "region": "VER",
+      "x": 669.4,
+      "y": 501.15,
+      "rank": 7,
+      "capital": null,
+      "population": 220563
+    },
+    {
+      "name": "Zamora",
+      "region": "MIC",
+      "x": 491.77,
+      "y": 466.99,
+      "rank": 7,
+      "capital": null,
+      "population": 214947
+    },
+    {
+      "name": "Minatitlán",
+      "region": "VER",
+      "x": 750.29,
+      "y": 530.61,
+      "rank": 7,
+      "capital": null,
+      "population": 201902
+    },
+    {
+      "name": "Salamanca",
+      "region": "GUA",
+      "x": 527.19,
+      "y": 446.28,
+      "rank": 7,
+      "capital": null,
+      "population": 197524
+    },
+    {
+      "name": "Puerto Vallarta",
+      "region": "JAL",
+      "x": 394.78,
+      "y": 441.41,
+      "rank": 7,
+      "capital": null,
+      "population": 187134
+    },
+    {
+      "name": "Teziutlán",
+      "region": "PUE",
+      "x": 653.8,
+      "y": 470.13,
+      "rank": 7,
+      "capital": null,
+      "population": 177796
+    },
+    {
+      "name": "Lázaro Cárdenas",
+      "region": "MIC",
+      "x": 494.31,
+      "y": 537.86,
+      "rank": 7,
+      "capital": null,
+      "population": 160087
+    },
+    {
+      "name": "Ciudad del Carmen",
+      "region": "CAM",
+      "x": 838.78,
+      "y": 501.49,
+      "rank": 7,
+      "capital": null,
+      "population": 156195
+    },
+    {
+      "name": "Piedras Negras",
+      "region": "COA",
+      "x": 546.17,
+      "y": 161.51,
+      "rank": 7,
+      "capital": null,
+      "population": 139619
+    },
+    {
+      "name": "Navojoa",
+      "region": "SON",
+      "x": 268.73,
+      "y": 212.67,
+      "rank": 7,
+      "capital": null,
+      "population": 116093
+    },
+    {
+      "name": "Guanajuato City",
+      "region": "GUA",
+      "x": 524.49,
+      "y": 430.55,
+      "rank": 7,
+      "capital": "region",
+      "population": 112200
+    },
+    {
+      "name": "Tuxpan",
+      "region": "VER",
+      "x": 650.87,
+      "y": 430.31,
+      "rank": 7,
+      "capital": null,
+      "population": 109049
+    },
+    {
+      "name": "Fresnillo",
+      "region": "ZAC",
+      "x": 473.36,
+      "y": 355.37,
+      "rank": 7,
+      "capital": null,
+      "population": 105488
+    },
+    {
+      "name": "Guasave City",
+      "region": "SIN",
+      "x": 297,
+      "y": 266.98,
+      "rank": 7,
+      "capital": null,
+      "population": 96860
+    },
+    {
+      "name": "Lagos de Moreno",
+      "region": "JAL",
+      "x": 503.26,
+      "y": 418.37,
+      "rank": 7,
+      "capital": null,
+      "population": 94127
+    },
+    {
+      "name": "Ciudad Guzmán",
+      "region": "JAL",
+      "x": 452.85,
+      "y": 476.21,
+      "rank": 7,
+      "capital": null,
+      "population": 92161
+    },
+    {
+      "name": "Tecomán",
+      "region": "COL",
+      "x": 438.65,
+      "y": 503.72,
+      "rank": 7,
+      "capital": null,
+      "population": 91321
+    },
+    {
+      "name": "Cuauhtémoc",
+      "region": "CHH",
+      "x": 350.83,
+      "y": 169.08,
+      "rank": 7,
+      "capital": null,
+      "population": 90835
+    },
+    {
+      "name": "Agua Prieta",
+      "region": "SON",
+      "x": 273.21,
+      "y": 63.77,
+      "rank": 7,
+      "capital": null,
+      "population": 86083
+    },
+    {
+      "name": "Salina Cruz",
+      "region": "OAX",
+      "x": 730.97,
+      "y": 595.41,
+      "rank": 7,
+      "capital": null,
+      "population": 81063
+    },
+    {
+      "name": "Tamazunchale ♤",
+      "region": "SLP",
+      "x": 605.9,
+      "y": 420.69,
+      "rank": 7,
+      "capital": null,
+      "population": 72685
+    },
+    {
+      "name": "Matehuala",
+      "region": "SLP",
+      "x": 544.19,
+      "y": 338.13,
+      "rank": 7,
+      "capital": null,
+      "population": 67717
+    },
+    {
+      "name": "Guamúchil",
+      "region": "SIN",
+      "x": 308.83,
+      "y": 271,
+      "rank": 7,
+      "capital": null,
+      "population": 62695
+    },
+    {
+      "name": "Linares",
+      "region": "NLE",
+      "x": 578.04,
+      "y": 295.75,
+      "rank": 7,
+      "capital": null,
+      "population": 57731
+    },
+    {
+      "name": "Heroica Caborca",
+      "region": "SON",
+      "x": 193.47,
+      "y": 80.24,
+      "rank": 7,
+      "capital": null,
+      "population": 57357
+    },
+    {
+      "name": "Nuevo Casas Grandes",
+      "region": "CHH",
+      "x": 321.59,
+      "y": 97.92,
+      "rank": 7,
+      "capital": null,
+      "population": 54826
+    },
+    {
+      "name": "San Pedro",
+      "region": "COA",
+      "x": 470.04,
+      "y": 264.88,
+      "rank": 7,
+      "capital": null,
+      "population": 53688
+    },
+    {
+      "name": "Taxco",
+      "region": "GRO",
+      "x": 580.1,
+      "y": 515.74,
+      "rank": 7,
+      "capital": null,
+      "population": 53217
+    },
+    {
+      "name": "Valladolid",
+      "region": "YUC",
+      "x": 951.99,
+      "y": 421.14,
+      "rank": 7,
+      "capital": null,
+      "population": 48479
+    },
+    {
+      "name": "Huajuapan de León",
+      "region": "OAX",
+      "x": 641.71,
+      "y": 541.01,
+      "rank": 7,
+      "capital": null,
+      "population": 47844
+    },
+    {
+      "name": "Tizimín",
+      "region": "YUC",
+      "x": 952.07,
+      "y": 404.96,
+      "rank": 7,
+      "capital": null,
+      "population": 41993
+    },
+    {
+      "name": "Santa Rosalía de Camargo",
+      "region": "CHH",
+      "x": 402.65,
+      "y": 196.31,
+      "rank": 7,
+      "capital": null,
+      "population": 37743
+    },
+    {
+      "name": "La Barca",
+      "region": "JAL",
+      "x": 482.6,
+      "y": 456.46,
+      "rank": 7,
+      "capital": null,
+      "population": 35345
+    },
+    {
+      "name": "Pánuco",
+      "region": "VER",
+      "x": 624.39,
+      "y": 392.61,
+      "rank": 7,
+      "capital": null,
+      "population": 35316
+    },
+    {
+      "name": "Cananea",
+      "region": "SON",
+      "x": 250.36,
+      "y": 74.22,
+      "rank": 7,
+      "capital": null,
+      "population": 33433
+    },
+    {
+      "name": "Tenosique",
+      "region": "TAB",
+      "x": 854.88,
+      "y": 541.62,
+      "rank": 7,
+      "capital": null,
+      "population": 32415
+    },
+    {
+      "name": "Parras de la Fuente",
+      "region": "COA",
+      "x": 495.3,
+      "y": 276.83,
+      "rank": 7,
+      "capital": null,
+      "population": 32253
+    },
+    {
+      "name": "Petatlán",
+      "region": "GRO",
+      "x": 525.44,
+      "y": 553.19,
+      "rank": 7,
+      "capital": null,
+      "population": 31910
+    },
+    {
+      "name": "Ticul",
+      "region": "YUC",
+      "x": 909.46,
+      "y": 434.53,
+      "rank": 7,
+      "capital": null,
+      "population": 30519
+    },
+    {
+      "name": "Huatabampobambo",
+      "region": "SON",
+      "x": 262.8,
+      "y": 221.17,
+      "rank": 7,
+      "capital": null,
+      "population": 30426
+    },
+    {
+      "name": "San Fernando",
+      "region": "TAM",
+      "x": 622.75,
+      "y": 295.12,
+      "rank": 7,
+      "capital": null,
+      "population": 29171
+    },
+    {
+      "name": "Escuinapa de Hidalgo",
+      "region": "SIN",
+      "x": 378.64,
+      "y": 365.02,
+      "rank": 7,
+      "capital": null,
+      "population": 28248
+    },
+    {
+      "name": "Champotón",
+      "region": "CAM",
+      "x": 873.45,
+      "y": 474.4,
+      "rank": 7,
+      "capital": null,
+      "population": 26636
+    },
+    {
+      "name": "Tuxpan",
+      "region": "NAY",
+      "x": 394.96,
+      "y": 397.58,
+      "rank": 7,
+      "capital": null,
+      "population": 26115
+    },
+    {
+      "name": "Felipe Carrillo Puerto",
+      "region": "ROO",
+      "x": 960.58,
+      "y": 458.63,
+      "rank": 7,
+      "capital": null,
+      "population": 24807
+    },
+    {
+      "name": "Ciudad Altamirano",
+      "region": "GRO",
+      "x": 545.95,
+      "y": 524.96,
+      "rank": 7,
+      "capital": null,
+      "population": 24533
+    },
+    {
+      "name": "San Pedro Pochutla",
+      "region": "OAX",
+      "x": 688.63,
+      "y": 612.63,
+      "rank": 7,
+      "capital": null,
+      "population": 24481
+    },
+    {
+      "name": "Pijijiapan",
+      "region": "CHP",
+      "x": 798.88,
+      "y": 608.54,
+      "rank": 7,
+      "capital": null,
+      "population": 23675
+    },
+    {
+      "name": "Santiago Papasquiaro",
+      "region": "DUR",
+      "x": 395.05,
+      "y": 296.22,
+      "rank": 7,
+      "capital": null,
+      "population": 22750
+    },
+    {
+      "name": "Frontera",
+      "region": "TAB",
+      "x": 811.58,
+      "y": 505.92,
+      "rank": 7,
+      "capital": null,
+      "population": 22621
+    },
+    {
+      "name": "Ojinaga",
+      "region": "CHH",
+      "x": 427.32,
+      "y": 131.88,
+      "rank": 7,
+      "capital": null,
+      "population": 22128
+    },
+    {
+      "name": "Tlaxiaco",
+      "region": "OAX",
+      "x": 645.95,
+      "y": 559.86,
+      "rank": 7,
+      "capital": null,
+      "population": 21391
+    },
+    {
+      "name": "San Felipe",
+      "region": "BCN",
+      "x": 113.39,
+      "y": 62.92,
+      "rank": 7,
+      "capital": null,
+      "population": 20750
+    },
+    {
+      "name": "Puerto Escondido",
+      "region": "OAX",
+      "x": 668.26,
+      "y": 608.83,
+      "rank": 7,
+      "capital": null,
+      "population": 19488
+    },
+    {
+      "name": "El Dorado",
+      "region": "SIN",
+      "x": 330.04,
+      "y": 311.72,
+      "rank": 7,
+      "capital": null,
+      "population": 17365
+    },
+    {
+      "name": "Compostela",
+      "region": "NAY",
+      "x": 406.46,
+      "y": 422.31,
+      "rank": 7,
+      "capital": null,
+      "population": 16162
+    },
+    {
+      "name": "Santiago Tuxtla",
+      "region": "VER",
+      "x": 723.81,
+      "y": 514.7,
+      "rank": 7,
+      "capital": null,
+      "population": 15681
+    },
+    {
+      "name": "Izamal",
+      "region": "YUC",
+      "x": 924.44,
+      "y": 414.58,
+      "rank": 7,
+      "capital": null,
+      "population": 14954
+    },
+    {
+      "name": "Tecuala",
+      "region": "NAY",
+      "x": 389.2,
+      "y": 381.01,
+      "rank": 7,
+      "capital": null,
+      "population": 14921
+    },
+    {
+      "name": "Tamuín",
+      "region": "SLP",
+      "x": 606.32,
+      "y": 395.85,
+      "rank": 7,
+      "capital": null,
+      "population": 14748
+    },
+    {
+      "name": "Juan Aldama",
+      "region": "ZAC",
+      "x": 456.71,
+      "y": 316.11,
+      "rank": 7,
+      "capital": null,
+      "population": 14162
+    },
+    {
+      "name": "Guerrero Negro",
+      "region": "BCS",
+      "x": 124.81,
+      "y": 170.92,
+      "rank": 7,
+      "capital": null,
+      "population": 13054
+    },
+    {
+      "name": "Isla Mujeres",
+      "region": "ROO",
+      "x": 998.46,
+      "y": 397.49,
+      "rank": 7,
+      "capital": null,
+      "population": 12491
+    },
+    {
+      "name": "Maclovio Herrera",
+      "region": "TAM",
+      "x": 627.45,
+      "y": 362.46,
+      "rank": 7,
+      "capital": null,
+      "population": 12292
+    },
+    {
+      "name": "La Cruz",
+      "region": "SIN",
+      "x": 344.51,
+      "y": 326.58,
+      "rank": 7,
+      "capital": null,
+      "population": 11900
+    },
+    {
+      "name": "Santa Rosalía",
+      "region": "BCS",
+      "x": 181.32,
+      "y": 199.01,
+      "rank": 7,
+      "capital": null,
+      "population": 11899
+    },
+    {
+      "name": "El Fuerte",
+      "region": "SIN",
+      "x": 293.65,
+      "y": 237.07,
+      "rank": 7,
+      "capital": null,
+      "population": 11171
+    },
+    {
+      "name": "Santa Bárbara",
+      "region": "CHH",
+      "x": 381.67,
+      "y": 226.97,
+      "rank": 7,
+      "capital": null,
+      "population": 10800
+    },
+    {
+      "name": "Coalcomán de Vázquez Pallares",
+      "region": "MIC",
+      "x": 462.81,
+      "y": 508.88,
+      "rank": 7,
+      "capital": null,
+      "population": 10715
+    },
+    {
+      "name": "Valparaíso",
+      "region": "ZAC",
+      "x": 450.4,
+      "y": 369.16,
+      "rank": 7,
+      "capital": null,
+      "population": 10545
+    },
+    {
+      "name": "Ayutla de los Libres",
+      "region": "GRO",
+      "x": 598.71,
+      "y": 571.81,
+      "rank": 7,
+      "capital": null,
+      "population": 9897
+    },
+    {
+      "name": "Miguel Ahumada",
+      "region": "CHH",
+      "x": 364.33,
+      "y": 92.71,
+      "rank": 7,
+      "capital": null,
+      "population": 9326
+    },
+    {
+      "name": "Ciudad Tula",
+      "region": "TAM",
+      "x": 574.31,
+      "y": 360.81,
+      "rank": 7,
+      "capital": null,
+      "population": 9054
+    },
+    {
+      "name": "Cuencamé",
+      "region": "DUR",
+      "x": 447.08,
+      "y": 295.73,
+      "rank": 7,
+      "capital": null,
+      "population": 8876
+    },
+    {
+      "name": "Mitla",
+      "region": "OAX",
+      "x": 689.37,
+      "y": 570.79,
+      "rank": 7,
+      "capital": null,
+      "population": 7547
+    },
+    {
+      "name": "San Quintín",
+      "region": "BCN",
+      "x": 79.01,
+      "y": 76.17,
+      "rank": 7,
+      "capital": null,
+      "population": 5433
+    },
+    {
+      "name": "Punta Prieta",
+      "region": "BCN",
+      "x": 127.71,
+      "y": 137.96,
+      "rank": 7,
+      "capital": null,
+      "population": 527
+    },
+    {
+      "name": "Sierra Mojada",
+      "region": "COA",
+      "x": 448.03,
+      "y": 211.15,
+      "rank": 7,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Ciudad Nezahualcóyotl",
+      "region": "MEX",
+      "x": 599.1,
+      "y": 485.96,
+      "rank": 8,
+      "capital": null,
+      "population": 1109363
+    },
+    {
+      "name": "Tlaxcala",
+      "region": "TLA",
+      "x": 625.61,
+      "y": 488.49,
+      "rank": 8,
+      "capital": "region",
+      "population": 503878
+    },
+    {
+      "name": "Reynosa",
+      "region": "TAM",
+      "x": 617.2,
+      "y": 252.27,
+      "rank": 8,
+      "capital": null,
+      "population": 498654
+    },
+    {
+      "name": "Xalapa",
+      "region": "VER",
+      "x": 668.64,
+      "y": 479.8,
+      "rank": 8,
+      "capital": "region",
+      "population": 452186
+    },
+    {
+      "name": "Gómez Palacio",
+      "region": "DUR",
+      "x": 453.68,
+      "y": 271.35,
+      "rank": 8,
+      "capital": null,
+      "population": 399328
+    },
+    {
+      "name": "Guanajuato",
+      "region": "GUA",
+      "x": 540.3,
+      "y": 447.6,
+      "rank": 8,
+      "capital": null,
+      "population": 383697
+    },
+    {
+      "name": "Orizaba",
+      "region": "VER",
+      "x": 662.52,
+      "y": 503.85,
+      "rank": 8,
+      "capital": null,
+      "population": 355333
+    },
+    {
+      "name": "Irapuato",
+      "region": "GUA",
+      "x": 522.23,
+      "y": 442.6,
+      "rank": 8,
+      "capital": null,
+      "population": 339554
+    },
+    {
+      "name": "Ciudad Madero",
+      "region": "TAM",
+      "x": 635.58,
+      "y": 383.26,
+      "rank": 8,
+      "capital": null,
+      "population": 192736
+    },
+    {
+      "name": "San Cristóbal de las Casas",
+      "region": "CHP",
+      "x": 816.33,
+      "y": 570.04,
+      "rank": 8,
+      "capital": null,
+      "population": 186661
+    },
+    {
+      "name": "Chilpancingo",
+      "region": "GRO",
+      "x": 584.72,
+      "y": 551.49,
+      "rank": 8,
+      "capital": "region",
+      "population": 182387
+    },
+    {
+      "name": "San Juan del Río",
+      "region": "QUE",
+      "x": 566.59,
+      "y": 452.55,
+      "rank": 8,
+      "capital": null,
+      "population": 147559
+    },
+    {
+      "name": "Ciudad Valles",
+      "region": "SLP",
+      "x": 597.57,
+      "y": 396.05,
+      "rank": 8,
+      "capital": null,
+      "population": 114964
+    },
+    {
+      "name": "Iguala",
+      "region": "GRO",
+      "x": 582.88,
+      "y": 522.73,
+      "rank": 8,
+      "capital": null,
+      "population": 112106
+    },
+    {
+      "name": "Escuintla",
+      "region": "CHP",
+      "x": 819.71,
+      "y": 619.96,
+      "rank": 8,
+      "capital": null,
+      "population": 107638
+    },
+    {
+      "name": "Hidalgo del Parral",
+      "region": "CHH",
+      "x": 386.58,
+      "y": 222.45,
+      "rank": 8,
+      "capital": null,
+      "population": 103378
+    },
+    {
+      "name": "Apatzingán",
+      "region": "MIC",
+      "x": 489.39,
+      "y": 498.52,
+      "rank": 8,
+      "capital": null,
+      "population": 98422
+    },
+    {
+      "name": "Atlixco",
+      "region": "PUE",
+      "x": 618.7,
+      "y": 503.39,
+      "rank": 8,
+      "capital": null,
+      "population": 97842
+    },
+    {
+      "name": "Ciudad Mante",
+      "region": "TAM",
+      "x": 599.27,
+      "y": 369.68,
+      "rank": 8,
+      "capital": null,
+      "population": 79981
+    },
+    {
+      "name": "Rioverde",
+      "region": "SLP",
+      "x": 566.48,
+      "y": 398.34,
+      "rank": 8,
+      "capital": null,
+      "population": 69613
+    },
+    {
+      "name": "Juchitán de Zaragoza",
+      "region": "OAX",
+      "x": 736.6,
+      "y": 585.87,
+      "rank": 8,
+      "capital": null,
+      "population": 67637
+    },
+    {
+      "name": "Jaltipan de Morelos",
+      "region": "VER",
+      "x": 743.36,
+      "y": 532.38,
+      "rank": 8,
+      "capital": null,
+      "population": 66998
+    },
+    {
+      "name": "Ciudad Hidalgo",
+      "region": "MIC",
+      "x": 548.13,
+      "y": 477.28,
+      "rank": 8,
+      "capital": null,
+      "population": 64154
+    },
+    {
+      "name": "Autlán de Navarro",
+      "region": "JAL",
+      "x": 422.89,
+      "y": 473.72,
+      "rank": 8,
+      "capital": null,
+      "population": 47669
+    },
+    {
+      "name": "Montemorelos",
+      "region": "NLE",
+      "x": 569.3,
+      "y": 284.37,
+      "rank": 8,
+      "capital": null,
+      "population": 42640
+    },
+    {
+      "name": "Ciudad Constitución",
+      "region": "BCS",
+      "x": 195.31,
+      "y": 279.83,
+      "rank": 8,
+      "capital": null,
+      "population": 39915
+    },
+    {
+      "name": "Nueva Rosita",
+      "region": "COA",
+      "x": 525.13,
+      "y": 188.24,
+      "rank": 8,
+      "capital": null,
+      "population": 36642
+    },
+    {
+      "name": "Sabinas Hidalgo",
+      "region": "NLE",
+      "x": 557.96,
+      "y": 238.36,
+      "rank": 8,
+      "capital": null,
+      "population": 32047
+    },
+    {
+      "name": "Paraíso",
+      "region": "TAB",
+      "x": 792.72,
+      "y": 513.45,
+      "rank": 8,
+      "capital": null,
+      "population": 23830
+    },
+    {
+      "name": "Magdalena de Kino",
+      "region": "SON",
+      "x": 229.41,
+      "y": 85.83,
+      "rank": 8,
+      "capital": null,
+      "population": 23359
+    },
+    {
+      "name": "Tekax",
+      "region": "YUC",
+      "x": 918.25,
+      "y": 440.8,
+      "rank": 8,
+      "capital": null,
+      "population": 22806
+    },
+    {
+      "name": "Motul",
+      "region": "YUC",
+      "x": 915.46,
+      "y": 409.43,
+      "rank": 8,
+      "capital": null,
+      "population": 21253
+    },
+    {
+      "name": "Atoyac de Álvarez",
+      "region": "GRO",
+      "x": 553.7,
+      "y": 564.23,
+      "rank": 8,
+      "capital": null,
+      "population": 20515
+    },
+    {
+      "name": "Allende",
+      "region": "COA",
+      "x": 536.48,
+      "y": 174.84,
+      "rank": 8,
+      "capital": null,
+      "population": 19636
+    },
+    {
+      "name": "Acatlán de Osorio",
+      "region": "PUE",
+      "x": 632.64,
+      "y": 527.58,
+      "rank": 8,
+      "capital": null,
+      "population": 18879
+    },
+    {
+      "name": "Santiago Ixcuintla",
+      "region": "NAY",
+      "x": 396.5,
+      "y": 401.48,
+      "rank": 8,
+      "capital": null,
+      "population": 18365
+    },
+    {
+      "name": "Miahuatlán de Porfirio Díaz",
+      "region": "OAX",
+      "x": 683.43,
+      "y": 591.69,
+      "rank": 8,
+      "capital": null,
+      "population": 17632
+    },
+    {
+      "name": "Peto",
+      "region": "YUC",
+      "x": 930.25,
+      "y": 442.17,
+      "rank": 8,
+      "capital": null,
+      "population": 17607
+    },
+    {
+      "name": "Villa Unión",
+      "region": "SIN",
+      "x": 365.15,
+      "y": 352.42,
+      "rank": 8,
+      "capital": null,
+      "population": 15443
+    },
+    {
+      "name": "Cárdenas",
+      "region": "SLP",
+      "x": 576.49,
+      "y": 395.74,
+      "rank": 8,
+      "capital": null,
+      "population": 15331
+    },
+    {
+      "name": "Tecpán de Galeana",
+      "region": "GRO",
+      "x": 545.29,
+      "y": 562.55,
+      "rank": 8,
+      "capital": null,
+      "population": 14638
+    },
+    {
+      "name": "Vicente Guerrero",
+      "region": "BCN",
+      "x": 77.62,
+      "y": 68.76,
+      "rank": 8,
+      "capital": null,
+      "population": 12829
+    },
+    {
+      "name": "Balancán",
+      "region": "TAB",
+      "x": 850.72,
+      "y": 530.67,
+      "rank": 8,
+      "capital": null,
+      "population": 11895
+    },
+    {
+      "name": "Nacozari de García",
+      "region": "SON",
+      "x": 268.9,
+      "y": 95.38,
+      "rank": 8,
+      "capital": null,
+      "population": 11872
+    },
+    {
+      "name": "Ascensión",
+      "region": "CHH",
+      "x": 320.53,
+      "y": 73.85,
+      "rank": 8,
+      "capital": null,
+      "population": 11781
+    },
+    {
+      "name": "Loreto",
+      "region": "BCS",
+      "x": 207.27,
+      "y": 246.52,
+      "rank": 8,
+      "capital": null,
+      "population": 11227
+    },
+    {
+      "name": "Villanueva",
+      "region": "ZAC",
+      "x": 472.54,
+      "y": 384.04,
+      "rank": 8,
+      "capital": null,
+      "population": 11138
+    },
+    {
+      "name": "Ciudad Canatlán",
+      "region": "DUR",
+      "x": 412.6,
+      "y": 307.44,
+      "rank": 8,
+      "capital": null,
+      "population": 10342
+    },
+    {
+      "name": "Halachó",
+      "region": "YUC",
+      "x": 891.25,
+      "y": 433.29,
+      "rank": 8,
+      "capital": null,
+      "population": 9165
+    },
+    {
+      "name": "Esperanza",
+      "region": "SON",
+      "x": 254.9,
+      "y": 194.46,
+      "rank": 8,
+      "capital": null,
+      "population": 3836
+    },
+    {
+      "name": "Nautla",
+      "region": "VER",
+      "x": 672.27,
+      "y": 455.61,
+      "rank": 8,
+      "capital": null,
+      "population": 2890
+    },
+    {
+      "name": "Altata",
+      "region": "SIN",
+      "x": 313.1,
+      "y": 300.37,
+      "rank": 8,
+      "capital": null,
+      "population": 1000
+    }
+  ]
+}

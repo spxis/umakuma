@@ -1,0 +1,237 @@
+{
+  "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_populated_places.geojson (Natural Earth populated places), fitted to 1000x1400",
+  "updatedAt": "2026-09-04T09:40:57.536Z",
+  "country": "TW",
+  "countryName": "Taiwan",
+  "viewBox": "0 0 1000 1400",
+  "width": 1000,
+  "height": 1400,
+  "totalCities": 25,
+  "cities": [
+    {
+      "name": "Taipei",
+      "region": "TPE",
+      "x": 883.08,
+      "y": 275,
+      "rank": 1,
+      "capital": "country",
+      "population": 6900273
+    },
+    {
+      "name": "Kaohsiung",
+      "region": "KHH",
+      "x": 531.4,
+      "y": 983.72,
+      "rank": 3,
+      "capital": "region",
+      "population": 2769072
+    },
+    {
+      "name": "Taichung",
+      "region": "TXG",
+      "x": 645.43,
+      "y": 535.99,
+      "rank": 4,
+      "capital": "region",
+      "population": 2629323
+    },
+    {
+      "name": "New Taipei",
+      "region": "TPQ",
+      "x": 855.48,
+      "y": 281.91,
+      "rank": 5,
+      "capital": "region",
+      "population": 3893740
+    },
+    {
+      "name": "Magong",
+      "region": "PEN",
+      "x": 347.97,
+      "y": 706.92,
+      "rank": 5,
+      "capital": "region",
+      "population": 56435
+    },
+    {
+      "name": "Tainan",
+      "region": "TNN",
+      "x": 513.86,
+      "y": 875.42,
+      "rank": 6,
+      "capital": "region",
+      "population": 1876312
+    },
+    {
+      "name": "Hsinchu",
+      "region": "HSZ",
+      "x": 724.91,
+      "y": 339.95,
+      "rank": 6,
+      "capital": "region",
+      "population": 750000
+    },
+    {
+      "name": "Hualien City",
+      "region": "HUA",
+      "x": 892.9,
+      "y": 585.41,
+      "rank": 6,
+      "capital": "region",
+      "population": 350468
+    },
+    {
+      "name": "Taitung City",
+      "region": "TTT",
+      "x": 769.24,
+      "y": 948.17,
+      "rank": 6,
+      "capital": "region",
+      "population": 175000
+    },
+    {
+      "name": "Zhongli",
+      "region": "TAO",
+      "x": 789.13,
+      "y": 296.17,
+      "rank": 7,
+      "capital": null,
+      "population": 1632616
+    },
+    {
+      "name": "Changhua",
+      "region": "CHA",
+      "x": 600.05,
+      "y": 559.07,
+      "rank": 7,
+      "capital": "region",
+      "population": 750000
+    },
+    {
+      "name": "Pingtung City",
+      "region": "PIF",
+      "x": 590.03,
+      "y": 969.69,
+      "rank": 7,
+      "capital": "region",
+      "population": 503530
+    },
+    {
+      "name": "Chiayi City",
+      "region": "CYI",
+      "x": 578.24,
+      "y": 735.43,
+      "rank": 7,
+      "capital": "region",
+      "population": 500000
+    },
+    {
+      "name": "Keelung",
+      "region": "KEE",
+      "x": 927.02,
+      "y": 246.04,
+      "rank": 7,
+      "capital": "region",
+      "population": 500000
+    },
+    {
+      "name": "Miaoli City",
+      "region": "MIA",
+      "x": 682.84,
+      "y": 412.74,
+      "rank": 7,
+      "capital": "region",
+      "population": 150000
+    },
+    {
+      "name": "Taoyuan",
+      "region": "TAO",
+      "x": 814.34,
+      "y": 289.08,
+      "rank": 8,
+      "capital": "region",
+      "population": 500000
+    },
+    {
+      "name": "Nantou City",
+      "region": "NAN",
+      "x": 645.73,
+      "y": 605.45,
+      "rank": 8,
+      "capital": "region",
+      "population": 165000
+    },
+    {
+      "name": "Yilan City",
+      "region": "ILA",
+      "x": 932.11,
+      "y": 359.11,
+      "rank": 8,
+      "capital": "region",
+      "population": 150000
+    },
+    {
+      "name": "Douliu",
+      "region": "YUN",
+      "x": 607.91,
+      "y": 667.06,
+      "rank": 8,
+      "capital": "region",
+      "population": 106653
+    },
+    {
+      "name": "Puzi",
+      "region": "CYQ",
+      "x": 525.95,
+      "y": 739.42,
+      "rank": 8,
+      "capital": null,
+      "population": 50000
+    },
+    {
+      "name": "Pingzhen",
+      "region": "TAO",
+      "x": 788.96,
+      "y": 302.4,
+      "rank": 9,
+      "capital": null,
+      "population": 201632
+    },
+    {
+      "name": "Zhubei",
+      "region": "HSQ",
+      "x": 734.34,
+      "y": 335.07,
+      "rank": 9,
+      "capital": "region",
+      "population": 200000
+    },
+    {
+      "name": "Yangmei",
+      "region": "TAO",
+      "x": 771.28,
+      "y": 310.46,
+      "rank": 9,
+      "capital": null,
+      "population": 175000
+    },
+    {
+      "name": "Bade",
+      "region": "TAO",
+      "x": 811.09,
+      "y": 298.35,
+      "rank": 9,
+      "capital": null,
+      "population": 172065
+    },
+    {
+      "name": "Taibao",
+      "region": "CYQ",
+      "x": 550.67,
+      "y": 742.82,
+      "rank": 9,
+      "capital": "region",
+      "population": 35000
+    }
+  ]
+}

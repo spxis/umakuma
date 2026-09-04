@@ -1,0 +1,2028 @@
+{
+  "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_populated_places.geojson (Natural Earth populated places), fitted to 1000x800",
+  "updatedAt": "2026-09-04T09:40:56.947Z",
+  "country": "AU",
+  "countryName": "Australia",
+  "viewBox": "0 0 1000 800",
+  "width": 1000,
+  "height": 800,
+  "totalCities": 224,
+  "cities": [
+    {
+      "name": "Sydney",
+      "region": "NSW",
+      "x": 801.26,
+      "y": 587.15,
+      "rank": 0,
+      "capital": "region",
+      "population": 4630000
+    },
+    {
+      "name": "Melbourne",
+      "region": "VIC",
+      "x": 674.77,
+      "y": 665.14,
+      "rank": 1,
+      "capital": "region",
+      "population": 4170000
+    },
+    {
+      "name": "Perth",
+      "region": "WA",
+      "x": 120.23,
+      "y": 545.32,
+      "rank": 2,
+      "capital": "region",
+      "population": 1532000
+    },
+    {
+      "name": "Brisbane",
+      "region": "QLD",
+      "x": 858.05,
+      "y": 443.5,
+      "rank": 3,
+      "capital": "region",
+      "population": 1860000
+    },
+    {
+      "name": "Adelaide",
+      "region": "SA",
+      "x": 559.99,
+      "y": 591.27,
+      "rank": 3,
+      "capital": "region",
+      "population": 1145000
+    },
+    {
+      "name": "Newcastle",
+      "region": "NSW",
+      "x": 814.88,
+      "y": 566.85,
+      "rank": 3,
+      "capital": null,
+      "population": 540796
+    },
+    {
+      "name": "Canberra",
+      "region": "ACT",
+      "x": 757.84,
+      "y": 614.72,
+      "rank": 3,
+      "capital": "country",
+      "population": 327700
+    },
+    {
+      "name": "Townsville",
+      "region": "QLD",
+      "x": 750.98,
+      "y": 236.81,
+      "rank": 3,
+      "capital": null,
+      "population": 138954
+    },
+    {
+      "name": "Darwin",
+      "region": "NT",
+      "x": 400.35,
+      "y": 66.69,
+      "rank": 3,
+      "capital": "region",
+      "population": 93080
+    },
+    {
+      "name": "Hobart",
+      "region": "TAS",
+      "x": 705.44,
+      "y": 783.16,
+      "rank": 3,
+      "capital": "region",
+      "population": 80870
+    },
+    {
+      "name": "Alice Springs",
+      "region": "NT",
+      "x": 470.4,
+      "y": 326.79,
+      "rank": 3,
+      "capital": null,
+      "population": 27710
+    },
+    {
+      "name": "Gold Coast",
+      "region": "QLD",
+      "x": 864.15,
+      "y": 459.33,
+      "rank": 4,
+      "capital": null,
+      "population": 527660
+    },
+    {
+      "name": "Cairns",
+      "region": "QLD",
+      "x": 734.16,
+      "y": 180.2,
+      "rank": 4,
+      "capital": null,
+      "population": 154225
+    },
+    {
+      "name": "Bendigo",
+      "region": "VIC",
+      "x": 664.01,
+      "y": 639.75,
+      "rank": 4,
+      "capital": null,
+      "population": 81657
+    },
+    {
+      "name": "Mandurah",
+      "region": "WA",
+      "x": 120.37,
+      "y": 558.77,
+      "rank": 4,
+      "capital": null,
+      "population": 73356
+    },
+    {
+      "name": "Rockhampton",
+      "region": "QLD",
+      "x": 819.86,
+      "y": 341.36,
+      "rank": 4,
+      "capital": null,
+      "population": 65850
+    },
+    {
+      "name": "Orange",
+      "region": "NSW",
+      "x": 762.79,
+      "y": 568.36,
+      "rank": 4,
+      "capital": null,
+      "population": 39329
+    },
+    {
+      "name": "Kalgoorlie",
+      "region": "WA",
+      "x": 226.18,
+      "y": 503.84,
+      "rank": 4,
+      "capital": null,
+      "population": 36852
+    },
+    {
+      "name": "Mount Isa",
+      "region": "QLD",
+      "x": 591.15,
+      "y": 259.76,
+      "rank": 4,
+      "capital": null,
+      "population": 33200
+    },
+    {
+      "name": "Dubbo",
+      "region": "NSW",
+      "x": 755.9,
+      "y": 543.57,
+      "rank": 4,
+      "capital": null,
+      "population": 31574
+    },
+    {
+      "name": "Geraldton",
+      "region": "WA",
+      "x": 85.08,
+      "y": 475.07,
+      "rank": 4,
+      "capital": null,
+      "population": 27258
+    },
+    {
+      "name": "Albany",
+      "region": "WA",
+      "x": 168.87,
+      "y": 610.84,
+      "rank": 4,
+      "capital": null,
+      "population": 26445
+    },
+    {
+      "name": "Armidale",
+      "region": "NSW",
+      "x": 820.71,
+      "y": 510.58,
+      "rank": 4,
+      "capital": null,
+      "population": 22673
+    },
+    {
+      "name": "Whyalla",
+      "region": "SA",
+      "x": 541.6,
+      "y": 546.22,
+      "rank": 4,
+      "capital": null,
+      "population": 22559
+    },
+    {
+      "name": "Devonport",
+      "region": "TAS",
+      "x": 692.24,
+      "y": 744.22,
+      "rank": 4,
+      "capital": null,
+      "population": 19317
+    },
+    {
+      "name": "Broken Hill",
+      "region": "NSW",
+      "x": 617.67,
+      "y": 524.35,
+      "rank": 4,
+      "capital": null,
+      "population": 17395
+    },
+    {
+      "name": "Karratha",
+      "region": "WA",
+      "x": 105.01,
+      "y": 282.07,
+      "rank": 4,
+      "capital": null,
+      "population": 16796
+    },
+    {
+      "name": "Griffith",
+      "region": "NSW",
+      "x": 702.03,
+      "y": 585.55,
+      "rank": 4,
+      "capital": null,
+      "population": 15455
+    },
+    {
+      "name": "Port Hedland",
+      "region": "WA",
+      "x": 140.93,
+      "y": 267.6,
+      "rank": 4,
+      "capital": null,
+      "population": 14288
+    },
+    {
+      "name": "Wangaratta",
+      "region": "VIC",
+      "x": 702.34,
+      "y": 633.85,
+      "rank": 4,
+      "capital": null,
+      "population": 14022
+    },
+    {
+      "name": "Port Lincoln",
+      "region": "SA",
+      "x": 508.34,
+      "y": 585.32,
+      "rank": 4,
+      "capital": null,
+      "population": 13630
+    },
+    {
+      "name": "Broome",
+      "region": "WA",
+      "x": 213.83,
+      "y": 204.95,
+      "rank": 4,
+      "capital": null,
+      "population": 13218
+    },
+    {
+      "name": "Portland",
+      "region": "VIC",
+      "x": 611.91,
+      "y": 672.61,
+      "rank": 4,
+      "capital": null,
+      "population": 11808
+    },
+    {
+      "name": "Busselton",
+      "region": "WA",
+      "x": 116.58,
+      "y": 586.04,
+      "rank": 4,
+      "capital": null,
+      "population": 10214
+    },
+    {
+      "name": "Katherine",
+      "region": "NT",
+      "x": 433.61,
+      "y": 112.7,
+      "rank": 4,
+      "capital": null,
+      "population": 10141
+    },
+    {
+      "name": "Windorah",
+      "region": "QLD",
+      "x": 651.67,
+      "y": 373.43,
+      "rank": 4,
+      "capital": null,
+      "population": 158
+    },
+    {
+      "name": "Wollongong",
+      "region": "NSW",
+      "x": 793.48,
+      "y": 598.88,
+      "rank": 6,
+      "capital": null,
+      "population": 260914
+    },
+    {
+      "name": "Geelong",
+      "region": "VIC",
+      "x": 663.52,
+      "y": 672.27,
+      "rank": 6,
+      "capital": null,
+      "population": 160991
+    },
+    {
+      "name": "Albury",
+      "region": "NSW",
+      "x": 714.57,
+      "y": 628.08,
+      "rank": 6,
+      "capital": null,
+      "population": 104258
+    },
+    {
+      "name": "Toowoomba",
+      "region": "QLD",
+      "x": 836.02,
+      "y": 442.93,
+      "rank": 6,
+      "capital": null,
+      "population": 92800
+    },
+    {
+      "name": "Mackay",
+      "region": "QLD",
+      "x": 797.36,
+      "y": 286.27,
+      "rank": 6,
+      "capital": null,
+      "population": 75922
+    },
+    {
+      "name": "Launceston",
+      "region": "TAS",
+      "x": 705.81,
+      "y": 751.44,
+      "rank": 6,
+      "capital": null,
+      "population": 72458
+    },
+    {
+      "name": "Bundaberg",
+      "region": "QLD",
+      "x": 852.98,
+      "y": 381.73,
+      "rank": 6,
+      "capital": null,
+      "population": 52472
+    },
+    {
+      "name": "Port Macquarie",
+      "region": "NSW",
+      "x": 841.94,
+      "y": 535.7,
+      "rank": 6,
+      "capital": null,
+      "population": 48547
+    },
+    {
+      "name": "Mildura",
+      "region": "VIC",
+      "x": 628.31,
+      "y": 577.26,
+      "rank": 6,
+      "capital": null,
+      "population": 47867
+    },
+    {
+      "name": "Caloundra",
+      "region": "QLD",
+      "x": 862.34,
+      "y": 428.65,
+      "rank": 6,
+      "capital": null,
+      "population": 38706
+    },
+    {
+      "name": "Tamworth",
+      "region": "NSW",
+      "x": 804.2,
+      "y": 522.28,
+      "rank": 6,
+      "capital": null,
+      "population": 38551
+    },
+    {
+      "name": "Lismore",
+      "region": "NSW",
+      "x": 858.45,
+      "y": 475.91,
+      "rank": 6,
+      "capital": null,
+      "population": 31430
+    },
+    {
+      "name": "Gladstone",
+      "region": "QLD",
+      "x": 833.49,
+      "y": 354.73,
+      "rank": 6,
+      "capital": null,
+      "population": 30489
+    },
+    {
+      "name": "Warrnambool",
+      "region": "VIC",
+      "x": 627.95,
+      "y": 674.54,
+      "rank": 6,
+      "capital": null,
+      "population": 29928
+    },
+    {
+      "name": "Mount Gambier",
+      "region": "SA",
+      "x": 597.44,
+      "y": 660.07,
+      "rank": 6,
+      "capital": null,
+      "population": 23209
+    },
+    {
+      "name": "Maryborough",
+      "region": "QLD",
+      "x": 858.29,
+      "y": 398.38,
+      "rank": 6,
+      "capital": null,
+      "population": 20678
+    },
+    {
+      "name": "Burnie",
+      "region": "TAS",
+      "x": 685.16,
+      "y": 740.68,
+      "rank": 6,
+      "capital": null,
+      "population": 19972
+    },
+    {
+      "name": "Forster",
+      "region": "NSW",
+      "x": 831.82,
+      "y": 551.89,
+      "rank": 6,
+      "capital": null,
+      "population": 17591
+    },
+    {
+      "name": "Port Augusta",
+      "region": "SA",
+      "x": 545.99,
+      "y": 533.84,
+      "rank": 6,
+      "capital": null,
+      "population": 13897
+    },
+    {
+      "name": "Bowen",
+      "region": "QLD",
+      "x": 780.25,
+      "y": 257.49,
+      "rank": 6,
+      "capital": null,
+      "population": 10983
+    },
+    {
+      "name": "Innisfail",
+      "region": "QLD",
+      "x": 738.85,
+      "y": 195.58,
+      "rank": 6,
+      "capital": null,
+      "population": 10143
+    },
+    {
+      "name": "Grafton",
+      "region": "NSW",
+      "x": 848.3,
+      "y": 495.61,
+      "rank": 6,
+      "capital": null,
+      "population": 9955
+    },
+    {
+      "name": "Moree",
+      "region": "NSW",
+      "x": 787.75,
+      "y": 481.59,
+      "rank": 6,
+      "capital": null,
+      "population": 8203
+    },
+    {
+      "name": "Esperance",
+      "region": "WA",
+      "x": 241.5,
+      "y": 575.64,
+      "rank": 6,
+      "capital": null,
+      "population": 7888
+    },
+    {
+      "name": "Carnarvon",
+      "region": "WA",
+      "x": 51.86,
+      "y": 388.47,
+      "rank": 6,
+      "capital": null,
+      "population": 7392
+    },
+    {
+      "name": "Northam",
+      "region": "WA",
+      "x": 135.03,
+      "y": 536.25,
+      "rank": 6,
+      "capital": null,
+      "population": 5855
+    },
+    {
+      "name": "Kununurra",
+      "region": "WA",
+      "x": 354.75,
+      "y": 144.74,
+      "rank": 6,
+      "capital": null,
+      "population": 5679
+    },
+    {
+      "name": "Roma",
+      "region": "QLD",
+      "x": 775.06,
+      "y": 411.3,
+      "rank": 6,
+      "capital": null,
+      "population": 5496
+    },
+    {
+      "name": "Newman",
+      "region": "WA",
+      "x": 173.09,
+      "y": 335.71,
+      "rank": 6,
+      "capital": null,
+      "population": 5138
+    },
+    {
+      "name": "Goondiwindi",
+      "region": "NSW",
+      "x": 800.28,
+      "y": 461.55,
+      "rank": 6,
+      "capital": null,
+      "population": 4251
+    },
+    {
+      "name": "Manjimup",
+      "region": "WA",
+      "x": 133.66,
+      "y": 597.16,
+      "rank": 6,
+      "capital": null,
+      "population": 4240
+    },
+    {
+      "name": "Tennant Creek",
+      "region": "NT",
+      "x": 477.26,
+      "y": 232.21,
+      "rank": 6,
+      "capital": null,
+      "population": 3889
+    },
+    {
+      "name": "Derby",
+      "region": "WA",
+      "x": 243.61,
+      "y": 187.27,
+      "rank": 6,
+      "capital": null,
+      "population": 3199
+    },
+    {
+      "name": "Weipa",
+      "region": "QLD",
+      "x": 653.72,
+      "y": 76.86,
+      "rank": 6,
+      "capital": null,
+      "population": 2830
+    },
+    {
+      "name": "Charleville",
+      "region": "QLD",
+      "x": 723.69,
+      "y": 402.08,
+      "rank": 6,
+      "capital": null,
+      "population": 1900
+    },
+    {
+      "name": "Ceduna",
+      "region": "SA",
+      "x": 466.34,
+      "y": 523.64,
+      "rank": 6,
+      "capital": null,
+      "population": 1586
+    },
+    {
+      "name": "Halls Creek",
+      "region": "WA",
+      "x": 333.75,
+      "y": 202.51,
+      "rank": 6,
+      "capital": null,
+      "population": 1209
+    },
+    {
+      "name": "Cloncurry",
+      "region": "QLD",
+      "x": 612.91,
+      "y": 260.22,
+      "rank": 6,
+      "capital": null,
+      "population": 1202
+    },
+    {
+      "name": "Exmouth",
+      "region": "WA",
+      "x": 50.81,
+      "y": 318.29,
+      "rank": 6,
+      "capital": null,
+      "population": 1085
+    },
+    {
+      "name": "Norseman",
+      "region": "WA",
+      "x": 235.47,
+      "y": 537.36,
+      "rank": 6,
+      "capital": null,
+      "population": 1004
+    },
+    {
+      "name": "Yulara",
+      "region": "NT",
+      "x": 410.54,
+      "y": 363.6,
+      "rank": 6,
+      "capital": null,
+      "population": 930
+    },
+    {
+      "name": "Georgetown",
+      "region": "QLD",
+      "x": 682.3,
+      "y": 208.67,
+      "rank": 6,
+      "capital": null,
+      "population": 818
+    },
+    {
+      "name": "Wyndham",
+      "region": "WA",
+      "x": 343.16,
+      "y": 141.28,
+      "rank": 6,
+      "capital": null,
+      "population": 800
+    },
+    {
+      "name": "Meekatharra",
+      "region": "WA",
+      "x": 156.13,
+      "y": 414,
+      "rank": 6,
+      "capital": null,
+      "population": 654
+    },
+    {
+      "name": "Onslow",
+      "region": "WA",
+      "x": 70.37,
+      "y": 308.83,
+      "rank": 6,
+      "capital": null,
+      "population": 573
+    },
+    {
+      "name": "Quilpie",
+      "region": "QLD",
+      "x": 682.44,
+      "y": 403.54,
+      "rank": 6,
+      "capital": null,
+      "population": 560
+    },
+    {
+      "name": "Hughenden",
+      "region": "QLD",
+      "x": 692.18,
+      "y": 268.91,
+      "rank": 6,
+      "capital": null,
+      "population": 421
+    },
+    {
+      "name": "Laverton",
+      "region": "WA",
+      "x": 240.22,
+      "y": 452.86,
+      "rank": 6,
+      "capital": null,
+      "population": 316
+    },
+    {
+      "name": "Leonora",
+      "region": "WA",
+      "x": 219.29,
+      "y": 460.85,
+      "rank": 6,
+      "capital": null,
+      "population": 227
+    },
+    {
+      "name": "Thargomindah",
+      "region": "QLD",
+      "x": 671.11,
+      "y": 435.21,
+      "rank": 6,
+      "capital": null,
+      "population": 203
+    },
+    {
+      "name": "Three Springs",
+      "region": "WA",
+      "x": 110.47,
+      "y": 489.48,
+      "rank": 6,
+      "capital": null,
+      "population": 190
+    },
+    {
+      "name": "Camooweal",
+      "region": "QLD",
+      "x": 562.19,
+      "y": 239.85,
+      "rank": 6,
+      "capital": null,
+      "population": 187
+    },
+    {
+      "name": "Karumba",
+      "region": "QLD",
+      "x": 624.08,
+      "y": 185.98,
+      "rank": 6,
+      "capital": null,
+      "population": 173
+    },
+    {
+      "name": "Erldunda",
+      "region": "NT",
+      "x": 456.34,
+      "y": 362.74,
+      "rank": 6,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Cranbourne",
+      "region": "VIC",
+      "x": 679.89,
+      "y": 672.09,
+      "rank": 7,
+      "capital": null,
+      "population": 460491
+    },
+    {
+      "name": "Nowra",
+      "region": "NSW",
+      "x": 786.6,
+      "y": 608.94,
+      "rank": 7,
+      "capital": null,
+      "population": 94781
+    },
+    {
+      "name": "Ballarat",
+      "region": "VIC",
+      "x": 654.43,
+      "y": 657.51,
+      "rank": 7,
+      "capital": null,
+      "population": 85109
+    },
+    {
+      "name": "Coffs Harbour",
+      "region": "NSW",
+      "x": 849.66,
+      "y": 509.91,
+      "rank": 7,
+      "capital": null,
+      "population": 62978
+    },
+    {
+      "name": "Wagga Wagga",
+      "region": "NSW",
+      "x": 724.67,
+      "y": 607.25,
+      "rank": 7,
+      "capital": null,
+      "population": 55381
+    },
+    {
+      "name": "Taree",
+      "region": "NSW",
+      "x": 831.57,
+      "y": 544.87,
+      "rank": 7,
+      "capital": null,
+      "population": 44182
+    },
+    {
+      "name": "Shepparton",
+      "region": "VIC",
+      "x": 685.41,
+      "y": 632.62,
+      "rank": 7,
+      "capital": null,
+      "population": 33550
+    },
+    {
+      "name": "Tweed Heads",
+      "region": "NSW",
+      "x": 865.75,
+      "y": 461.98,
+      "rank": 7,
+      "capital": null,
+      "population": 33065
+    },
+    {
+      "name": "Queanbeyan",
+      "region": "ACT",
+      "x": 759.18,
+      "y": 616.56,
+      "rank": 7,
+      "capital": null,
+      "population": 32602
+    },
+    {
+      "name": "Melton",
+      "region": "VIC",
+      "x": 667.62,
+      "y": 661.57,
+      "rank": 7,
+      "capital": null,
+      "population": 32368
+    },
+    {
+      "name": "Caboolture",
+      "region": "QLD",
+      "x": 857.66,
+      "y": 434.66,
+      "rank": 7,
+      "capital": null,
+      "population": 31513
+    },
+    {
+      "name": "Sunbury",
+      "region": "VIC",
+      "x": 670.42,
+      "y": 659.03,
+      "rank": 7,
+      "capital": null,
+      "population": 29925
+    },
+    {
+      "name": "Bunbury",
+      "region": "WA",
+      "x": 121.26,
+      "y": 578,
+      "rank": 7,
+      "capital": null,
+      "population": 26998
+    },
+    {
+      "name": "Hervey Bay",
+      "region": "QLD",
+      "x": 861.64,
+      "y": 392.7,
+      "rank": 7,
+      "capital": null,
+      "population": 25114
+    },
+    {
+      "name": "Sale",
+      "region": "VIC",
+      "x": 712.35,
+      "y": 675.43,
+      "rank": 7,
+      "capital": null,
+      "population": 22486
+    },
+    {
+      "name": "Katoomba",
+      "region": "NSW",
+      "x": 784.82,
+      "y": 581.11,
+      "rank": 7,
+      "capital": null,
+      "population": 22076
+    },
+    {
+      "name": "Goulburn",
+      "region": "NSW",
+      "x": 770.25,
+      "y": 603.74,
+      "rank": 7,
+      "capital": null,
+      "population": 20940
+    },
+    {
+      "name": "Kwinana Beach",
+      "region": "WA",
+      "x": 119.87,
+      "y": 552.14,
+      "rank": 7,
+      "capital": null,
+      "population": 20086
+    },
+    {
+      "name": "Echuca",
+      "region": "NSW",
+      "x": 673.95,
+      "y": 625.93,
+      "rank": 7,
+      "capital": null,
+      "population": 19457
+    },
+    {
+      "name": "Roebourne",
+      "region": "WA",
+      "x": 110.8,
+      "y": 282.53,
+      "rank": 7,
+      "capital": null,
+      "population": 19260
+    },
+    {
+      "name": "Maitland",
+      "region": "NSW",
+      "x": 811.43,
+      "y": 561.45,
+      "rank": 7,
+      "capital": null,
+      "population": 18625
+    },
+    {
+      "name": "Traralgon",
+      "region": "VIC",
+      "x": 702.46,
+      "y": 676.51,
+      "rank": 7,
+      "capital": null,
+      "population": 18226
+    },
+    {
+      "name": "Murray Bridge",
+      "region": "SA",
+      "x": 572.33,
+      "y": 596.32,
+      "rank": 7,
+      "capital": null,
+      "population": 18194
+    },
+    {
+      "name": "Gawler",
+      "region": "SA",
+      "x": 562.7,
+      "y": 583.79,
+      "rank": 7,
+      "capital": null,
+      "population": 16362
+    },
+    {
+      "name": "Kingston",
+      "region": "TAS",
+      "x": 705.35,
+      "y": 786.33,
+      "rank": 7,
+      "capital": null,
+      "population": 14371
+    },
+    {
+      "name": "Ballina",
+      "region": "NSW",
+      "x": 863.74,
+      "y": 477.78,
+      "rank": 7,
+      "capital": null,
+      "population": 14242
+    },
+    {
+      "name": "Richmond",
+      "region": "NSW",
+      "x": 793.13,
+      "y": 579.67,
+      "rank": 7,
+      "capital": null,
+      "population": 13880
+    },
+    {
+      "name": "Singleton",
+      "region": "NSW",
+      "x": 804.34,
+      "y": 556.91,
+      "rank": 7,
+      "capital": null,
+      "population": 13813
+    },
+    {
+      "name": "Bongaree",
+      "region": "QLD",
+      "x": 861.72,
+      "y": 435.17,
+      "rank": 7,
+      "capital": null,
+      "population": 13649
+    },
+    {
+      "name": "Horsham",
+      "region": "VIC",
+      "x": 625.29,
+      "y": 635.78,
+      "rank": 7,
+      "capital": null,
+      "population": 12830
+    },
+    {
+      "name": "Port Pirie",
+      "region": "SA",
+      "x": 549.74,
+      "y": 550.33,
+      "rank": 7,
+      "capital": null,
+      "population": 12506
+    },
+    {
+      "name": "Warwick",
+      "region": "QLD",
+      "x": 835.13,
+      "y": 458.55,
+      "rank": 7,
+      "capital": null,
+      "population": 12347
+    },
+    {
+      "name": "Kempsey",
+      "region": "NSW",
+      "x": 841.3,
+      "y": 527.14,
+      "rank": 7,
+      "capital": null,
+      "population": 11840
+    },
+    {
+      "name": "Gympie",
+      "region": "QLD",
+      "x": 855.09,
+      "y": 413.07,
+      "rank": 7,
+      "capital": null,
+      "population": 11649
+    },
+    {
+      "name": "Muswellbrook",
+      "region": "NSW",
+      "x": 800.07,
+      "y": 549.27,
+      "rank": 7,
+      "capital": null,
+      "population": 11630
+    },
+    {
+      "name": "Parkes",
+      "region": "NSW",
+      "x": 745.4,
+      "y": 562.82,
+      "rank": 7,
+      "capital": null,
+      "population": 11137
+    },
+    {
+      "name": "Lithgow",
+      "region": "NSW",
+      "x": 782.26,
+      "y": 575.83,
+      "rank": 7,
+      "capital": null,
+      "population": 11128
+    },
+    {
+      "name": "Bairnsdale",
+      "region": "VIC",
+      "x": 723.08,
+      "y": 670.07,
+      "rank": 7,
+      "capital": null,
+      "population": 11005
+    },
+    {
+      "name": "Yeppoon",
+      "region": "QLD",
+      "x": 825.51,
+      "y": 336.64,
+      "rank": 7,
+      "capital": null,
+      "population": 10769
+    },
+    {
+      "name": "Batemans Bay",
+      "region": "NSW",
+      "x": 776.85,
+      "y": 626.57,
+      "rank": 7,
+      "capital": null,
+      "population": 10557
+    },
+    {
+      "name": "Kiama",
+      "region": "NSW",
+      "x": 791.64,
+      "y": 605.54,
+      "rank": 7,
+      "capital": null,
+      "population": 10379
+    },
+    {
+      "name": "Moranbah",
+      "region": "QLD",
+      "x": 771.45,
+      "y": 303.45,
+      "rank": 7,
+      "capital": null,
+      "population": 10000
+    },
+    {
+      "name": "Dalby",
+      "region": "QLD",
+      "x": 823.33,
+      "y": 432.39,
+      "rank": 7,
+      "capital": null,
+      "population": 9847
+    },
+    {
+      "name": "Charters Towers",
+      "region": "QLD",
+      "x": 738.03,
+      "y": 254.96,
+      "rank": 7,
+      "capital": null,
+      "population": 9573
+    },
+    {
+      "name": "Emerald",
+      "region": "QLD",
+      "x": 770.28,
+      "y": 338.87,
+      "rank": 7,
+      "capital": null,
+      "population": 9398
+    },
+    {
+      "name": "Swan Hill",
+      "region": "VIC",
+      "x": 652.74,
+      "y": 605.86,
+      "rank": 7,
+      "capital": null,
+      "population": 9276
+    },
+    {
+      "name": "Ulladulla",
+      "region": "NSW",
+      "x": 782.76,
+      "y": 619.37,
+      "rank": 7,
+      "capital": null,
+      "population": 9250
+    },
+    {
+      "name": "Colac",
+      "region": "VIC",
+      "x": 648.3,
+      "y": 675.04,
+      "rank": 7,
+      "capital": null,
+      "population": 9089
+    },
+    {
+      "name": "Ayr",
+      "region": "QLD",
+      "x": 763.86,
+      "y": 245.62,
+      "rank": 7,
+      "capital": null,
+      "population": 9078
+    },
+    {
+      "name": "Hamilton",
+      "region": "VIC",
+      "x": 620.72,
+      "y": 659.11,
+      "rank": 7,
+      "capital": null,
+      "population": 8869
+    },
+    {
+      "name": "Kingaroy",
+      "region": "QLD",
+      "x": 837.06,
+      "y": 418.78,
+      "rank": 7,
+      "capital": null,
+      "population": 8573
+    },
+    {
+      "name": "Inverell",
+      "region": "NSW",
+      "x": 812.18,
+      "y": 491.78,
+      "rank": 7,
+      "capital": null,
+      "population": 8561
+    },
+    {
+      "name": "Deniliquin",
+      "region": "NSW",
+      "x": 678.88,
+      "y": 612.39,
+      "rank": 7,
+      "capital": null,
+      "population": 8024
+    },
+    {
+      "name": "Victor Harbor",
+      "region": "SA",
+      "x": 559.83,
+      "y": 605.82,
+      "rank": 7,
+      "capital": null,
+      "population": 7760
+    },
+    {
+      "name": "Young",
+      "region": "NSW",
+      "x": 744.63,
+      "y": 590.41,
+      "rank": 7,
+      "capital": null,
+      "population": 7501
+    },
+    {
+      "name": "Leeton",
+      "region": "NSW",
+      "x": 708.23,
+      "y": 592.1,
+      "rank": 7,
+      "capital": null,
+      "population": 7299
+    },
+    {
+      "name": "Gunnedah",
+      "region": "NSW",
+      "x": 791.79,
+      "y": 517.93,
+      "rank": 7,
+      "capital": null,
+      "population": 7148
+    },
+    {
+      "name": "Narrabri",
+      "region": "NSW",
+      "x": 784.42,
+      "y": 501.54,
+      "rank": 7,
+      "capital": null,
+      "population": 7082
+    },
+    {
+      "name": "Maryborough",
+      "region": "VIC",
+      "x": 653.3,
+      "y": 645.62,
+      "rank": 7,
+      "capital": null,
+      "population": 7046
+    },
+    {
+      "name": "Stawell",
+      "region": "VIC",
+      "x": 635.33,
+      "y": 644.55,
+      "rank": 7,
+      "capital": null,
+      "population": 6991
+    },
+    {
+      "name": "Atherton",
+      "region": "QLD",
+      "x": 726.85,
+      "y": 188.41,
+      "rank": 7,
+      "capital": null,
+      "population": 6959
+    },
+    {
+      "name": "Cowra",
+      "region": "NSW",
+      "x": 753.3,
+      "y": 580.15,
+      "rank": 7,
+      "capital": null,
+      "population": 6795
+    },
+    {
+      "name": "Byron Bay",
+      "region": "NSW",
+      "x": 865.37,
+      "y": 473.17,
+      "rank": 7,
+      "capital": null,
+      "population": 6764
+    },
+    {
+      "name": "Tumut",
+      "region": "NSW",
+      "x": 740.72,
+      "y": 613.37,
+      "rank": 7,
+      "capital": null,
+      "population": 6526
+    },
+    {
+      "name": "Cooma",
+      "region": "NSW",
+      "x": 755.05,
+      "y": 636.73,
+      "rank": 7,
+      "capital": null,
+      "population": 6520
+    },
+    {
+      "name": "Merimbula",
+      "region": "NSW",
+      "x": 767.64,
+      "y": 653.64,
+      "rank": 7,
+      "capital": null,
+      "population": 6367
+    },
+    {
+      "name": "Biloela",
+      "region": "QLD",
+      "x": 816.25,
+      "y": 365.2,
+      "rank": 7,
+      "capital": null,
+      "population": 6309
+    },
+    {
+      "name": "Ingham",
+      "region": "QLD",
+      "x": 739.21,
+      "y": 221.65,
+      "rank": 7,
+      "capital": null,
+      "population": 6127
+    },
+    {
+      "name": "Bathurst",
+      "region": "NSW",
+      "x": 771.38,
+      "y": 572.67,
+      "rank": 7,
+      "capital": null,
+      "population": 6111
+    },
+    {
+      "name": "Ararat",
+      "region": "VIC",
+      "x": 637.75,
+      "y": 649.8,
+      "rank": 7,
+      "capital": null,
+      "population": 6110
+    },
+    {
+      "name": "Wonthaggi",
+      "region": "VIC",
+      "x": 684.44,
+      "y": 684.27,
+      "rank": 7,
+      "capital": null,
+      "population": 5985
+    },
+    {
+      "name": "Mudgee",
+      "region": "NSW",
+      "x": 773.92,
+      "y": 553.47,
+      "rank": 7,
+      "capital": null,
+      "population": 5391
+    },
+    {
+      "name": "McMinns Lagoon",
+      "region": "NT",
+      "x": 405.01,
+      "y": 69.03,
+      "rank": 7,
+      "capital": null,
+      "population": 5025
+    },
+    {
+      "name": "Forbes",
+      "region": "NSW",
+      "x": 741.87,
+      "y": 568.53,
+      "rank": 7,
+      "capital": null,
+      "population": 4838
+    },
+    {
+      "name": "Berri",
+      "region": "SA",
+      "x": 598.65,
+      "y": 577.83,
+      "rank": 7,
+      "capital": null,
+      "population": 4716
+    },
+    {
+      "name": "Cobram",
+      "region": "VIC",
+      "x": 691.18,
+      "y": 622.56,
+      "rank": 7,
+      "capital": null,
+      "population": 4659
+    },
+    {
+      "name": "Scone",
+      "region": "NSW",
+      "x": 799.89,
+      "y": 544.76,
+      "rank": 7,
+      "capital": null,
+      "population": 4624
+    },
+    {
+      "name": "Narrogin",
+      "region": "WA",
+      "x": 148.88,
+      "y": 564.48,
+      "rank": 7,
+      "capital": null,
+      "population": 4238
+    },
+    {
+      "name": "Smithton",
+      "region": "TAS",
+      "x": 671.41,
+      "y": 734.1,
+      "rank": 7,
+      "capital": null,
+      "population": 4202
+    },
+    {
+      "name": "Proserpine",
+      "region": "QLD",
+      "x": 787.22,
+      "y": 268,
+      "rank": 7,
+      "capital": null,
+      "population": 3976
+    },
+    {
+      "name": "Katanning",
+      "region": "WA",
+      "x": 158.52,
+      "y": 581.26,
+      "rank": 7,
+      "capital": null,
+      "population": 3934
+    },
+    {
+      "name": "Seymour",
+      "region": "VIC",
+      "x": 679.17,
+      "y": 647.38,
+      "rank": 7,
+      "capital": null,
+      "population": 3693
+    },
+    {
+      "name": "Clare",
+      "region": "SA",
+      "x": 560.94,
+      "y": 565.68,
+      "rank": 7,
+      "capital": null,
+      "population": 3061
+    },
+    {
+      "name": "Port Douglas",
+      "region": "QLD",
+      "x": 728.25,
+      "y": 170.31,
+      "rank": 7,
+      "capital": null,
+      "population": 3000
+    },
+    {
+      "name": "Longreach",
+      "region": "QLD",
+      "x": 688.39,
+      "y": 329.55,
+      "rank": 7,
+      "capital": null,
+      "population": 2894
+    },
+    {
+      "name": "Wallaroo",
+      "region": "SA",
+      "x": 542.38,
+      "y": 567.42,
+      "rank": 7,
+      "capital": null,
+      "population": 2779
+    },
+    {
+      "name": "Tom Price",
+      "region": "WA",
+      "x": 130.53,
+      "y": 324.95,
+      "rank": 7,
+      "capital": null,
+      "population": 2723
+    },
+    {
+      "name": "Merredin",
+      "region": "WA",
+      "x": 165.78,
+      "y": 528.15,
+      "rank": 7,
+      "capital": null,
+      "population": 2668
+    },
+    {
+      "name": "Bordertown",
+      "region": "SA",
+      "x": 599.32,
+      "y": 625.14,
+      "rank": 7,
+      "capital": null,
+      "population": 2583
+    },
+    {
+      "name": "Scottsdale",
+      "region": "TAS",
+      "x": 713.36,
+      "y": 745.38,
+      "rank": 7,
+      "capital": null,
+      "population": 2468
+    },
+    {
+      "name": "Queenstown",
+      "region": "TAS",
+      "x": 676.57,
+      "y": 762.99,
+      "rank": 7,
+      "capital": null,
+      "population": 2352
+    },
+    {
+      "name": "Yamba",
+      "region": "NSW",
+      "x": 857.5,
+      "y": 490.15,
+      "rank": 7,
+      "capital": null,
+      "population": 1806
+    },
+    {
+      "name": "Tumby Bay",
+      "region": "SA",
+      "x": 512.58,
+      "y": 577.23,
+      "rank": 7,
+      "capital": null,
+      "population": 1791
+    },
+    {
+      "name": "Mount Barker",
+      "region": "WA",
+      "x": 163.5,
+      "y": 602.52,
+      "rank": 7,
+      "capital": null,
+      "population": 1781
+    },
+    {
+      "name": "Peterborough",
+      "region": "SA",
+      "x": 566.17,
+      "y": 545.65,
+      "rank": 7,
+      "capital": null,
+      "population": 1689
+    },
+    {
+      "name": "Wagin",
+      "region": "WA",
+      "x": 153.5,
+      "y": 572.51,
+      "rank": 7,
+      "capital": null,
+      "population": 1598
+    },
+    {
+      "name": "Kalbarri",
+      "region": "WA",
+      "x": 72.49,
+      "y": 450.9,
+      "rank": 7,
+      "capital": null,
+      "population": 1537
+    },
+    {
+      "name": "Penola",
+      "region": "SA",
+      "x": 598.94,
+      "y": 649.8,
+      "rank": 7,
+      "capital": null,
+      "population": 1514
+    },
+    {
+      "name": "Meningie",
+      "region": "SA",
+      "x": 573.16,
+      "y": 609.59,
+      "rank": 7,
+      "capital": null,
+      "population": 1501
+    },
+    {
+      "name": "Gingin",
+      "region": "WA",
+      "x": 119.43,
+      "y": 531.18,
+      "rank": 7,
+      "capital": null,
+      "population": 1446
+    },
+    {
+      "name": "Ouyen",
+      "region": "VIC",
+      "x": 630.13,
+      "y": 597.92,
+      "rank": 7,
+      "capital": null,
+      "population": 1400
+    },
+    {
+      "name": "Port Denison",
+      "region": "WA",
+      "x": 93.16,
+      "y": 486.09,
+      "rank": 7,
+      "capital": null,
+      "population": 1213
+    },
+    {
+      "name": "Oatlands",
+      "region": "TAS",
+      "x": 707.98,
+      "y": 770.97,
+      "rank": 7,
+      "capital": null,
+      "population": 1157
+    },
+    {
+      "name": "Winton",
+      "region": "QLD",
+      "x": 664.59,
+      "y": 303.12,
+      "rank": 7,
+      "capital": null,
+      "population": 1157
+    },
+    {
+      "name": "Ravensthorpe",
+      "region": "WA",
+      "x": 205.48,
+      "y": 572.9,
+      "rank": 7,
+      "capital": null,
+      "population": 1101
+    },
+    {
+      "name": "Barcaldine",
+      "region": "QLD",
+      "x": 709.82,
+      "y": 334.1,
+      "rank": 7,
+      "capital": null,
+      "population": 1068
+    },
+    {
+      "name": "Streaky Bay",
+      "region": "SA",
+      "x": 477.07,
+      "y": 540.29,
+      "rank": 7,
+      "capital": null,
+      "population": 1060
+    },
+    {
+      "name": "Pannawonica",
+      "region": "WA",
+      "x": 96.3,
+      "y": 304.6,
+      "rank": 7,
+      "capital": null,
+      "population": 686
+    },
+    {
+      "name": "Pine Creek",
+      "region": "NT",
+      "x": 423.16,
+      "y": 97.96,
+      "rank": 7,
+      "capital": null,
+      "population": 665
+    },
+    {
+      "name": "Kimba",
+      "region": "SA",
+      "x": 519.79,
+      "y": 548.61,
+      "rank": 7,
+      "capital": null,
+      "population": 636
+    },
+    {
+      "name": "Boulia",
+      "region": "QLD",
+      "x": 597.63,
+      "y": 310.91,
+      "rank": 7,
+      "capital": null,
+      "population": 600
+    },
+    {
+      "name": "Cowell",
+      "region": "SA",
+      "x": 528.82,
+      "y": 561.24,
+      "rank": 7,
+      "capital": null,
+      "population": 537
+    },
+    {
+      "name": "Andamooka",
+      "region": "SA",
+      "x": 535.47,
+      "y": 485.36,
+      "rank": 7,
+      "capital": null,
+      "population": 528
+    },
+    {
+      "name": "Eidsvold",
+      "region": "QLD",
+      "x": 826.39,
+      "y": 389.54,
+      "rank": 7,
+      "capital": null,
+      "population": 459
+    },
+    {
+      "name": "Woomera Village",
+      "region": "SA",
+      "x": 527.88,
+      "y": 502.02,
+      "rank": 7,
+      "capital": null,
+      "population": 450
+    },
+    {
+      "name": "Wilcannia",
+      "region": "NSW",
+      "x": 656.24,
+      "y": 517.9,
+      "rank": 7,
+      "capital": null,
+      "population": 442
+    },
+    {
+      "name": "Mount Magnet",
+      "region": "WA",
+      "x": 146.93,
+      "y": 449.81,
+      "rank": 7,
+      "capital": null,
+      "population": 424
+    },
+    {
+      "name": "Kaltukatjara",
+      "region": "WA",
+      "x": 369.81,
+      "y": 377.73,
+      "rank": 7,
+      "capital": null,
+      "population": 355
+    },
+    {
+      "name": "Richmond",
+      "region": "QLD",
+      "x": 669.52,
+      "y": 264.07,
+      "rank": 7,
+      "capital": null,
+      "population": 296
+    },
+    {
+      "name": "Birdsville",
+      "region": "QLD",
+      "x": 583.41,
+      "y": 380.64,
+      "rank": 7,
+      "capital": null,
+      "population": 283
+    },
+    {
+      "name": "Ivanhoe",
+      "region": "NSW",
+      "x": 671.61,
+      "y": 550.34,
+      "rank": 7,
+      "capital": null,
+      "population": 265
+    },
+    {
+      "name": "Morawa",
+      "region": "WA",
+      "x": 114.36,
+      "y": 481.41,
+      "rank": 7,
+      "capital": null,
+      "population": 259
+    },
+    {
+      "name": "Theodore",
+      "region": "QLD",
+      "x": 806.07,
+      "y": 377.03,
+      "rank": 7,
+      "capital": null,
+      "population": 246
+    },
+    {
+      "name": "Adelaide River",
+      "region": "NT",
+      "x": 406.53,
+      "y": 85.34,
+      "rank": 7,
+      "capital": null,
+      "population": 237
+    },
+    {
+      "name": "Kingston SE",
+      "region": "SA",
+      "x": 581.66,
+      "y": 636.23,
+      "rank": 7,
+      "capital": null,
+      "population": 206
+    },
+    {
+      "name": "Burketown",
+      "region": "QLD",
+      "x": 595.84,
+      "y": 190,
+      "rank": 7,
+      "capital": null,
+      "population": 200
+    },
+    {
+      "name": "Southern Cross",
+      "region": "WA",
+      "x": 185.47,
+      "y": 519.51,
+      "rank": 7,
+      "capital": null,
+      "population": 187
+    },
+    {
+      "name": "Bicheno",
+      "region": "TAS",
+      "x": 725.19,
+      "y": 763.28,
+      "rank": 7,
+      "capital": null,
+      "population": 177
+    },
+    {
+      "name": "Bedourie",
+      "region": "QLD",
+      "x": 587.02,
+      "y": 344.42,
+      "rank": 7,
+      "capital": null,
+      "population": 142
+    },
+    {
+      "name": "Kingoonya",
+      "region": "SA",
+      "x": 498.5,
+      "y": 495.69,
+      "rank": 7,
+      "capital": null,
+      "population": 50
+    },
+    {
+      "name": "Newcastle Waters",
+      "region": "NT",
+      "x": 461.13,
+      "y": 183.57,
+      "rank": 7,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Sunshine Coast Region",
+      "region": "QLD",
+      "x": 861.08,
+      "y": 425.61,
+      "rank": 8,
+      "capital": null,
+      "population": 71043
+    },
+    {
+      "name": "Central Coast",
+      "region": "NSW",
+      "x": 804.34,
+      "y": 576.95,
+      "rank": 8,
+      "capital": null,
+      "population": 3026
+    },
+    {
+      "name": "Bourke",
+      "region": "NSW",
+      "x": 709.14,
+      "y": 487.87,
+      "rank": 8,
+      "capital": null,
+      "population": 2475
+    }
+  ]
+}

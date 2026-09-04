@@ -1,0 +1,813 @@
+{
+  "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_populated_places.geojson (Natural Earth populated places), fitted to 1000x1300",
+  "updatedAt": "2026-09-04T09:41:01.263Z",
+  "country": "PE",
+  "countryName": "Peru",
+  "viewBox": "0 0 1000 1300",
+  "width": 1000,
+  "height": 1300,
+  "totalCities": 89,
+  "cities": [
+    {
+      "name": "Lima",
+      "region": "LIM_2",
+      "x": 363.28,
+      "y": 851.22,
+      "rank": 1,
+      "capital": "country",
+      "population": 8012000
+    },
+    {
+      "name": "Trujillo",
+      "region": "LAL",
+      "x": 223.43,
+      "y": 574.16,
+      "rank": 3,
+      "capital": "region",
+      "population": 765171
+    },
+    {
+      "name": "Cuzco",
+      "region": "CUS",
+      "x": 713.86,
+      "y": 956.67,
+      "rank": 3,
+      "capital": "region",
+      "population": 361182
+    },
+    {
+      "name": "Tacna",
+      "region": "TAC",
+      "x": 825.47,
+      "y": 1276.28,
+      "rank": 3,
+      "capital": "region",
+      "population": 280098
+    },
+    {
+      "name": "Ica",
+      "region": "ICA",
+      "x": 455.56,
+      "y": 993.9,
+      "rank": 3,
+      "capital": "region",
+      "population": 279420
+    },
+    {
+      "name": "Arequipa",
+      "region": "ARE",
+      "x": 740.99,
+      "y": 1162.2,
+      "rank": 4,
+      "capital": "region",
+      "population": 815000
+    },
+    {
+      "name": "Iquitos",
+      "region": "LOR",
+      "x": 629.01,
+      "y": 263.53,
+      "rank": 4,
+      "capital": "region",
+      "population": 458729
+    },
+    {
+      "name": "Huancayo",
+      "region": "JUN",
+      "x": 491.53,
+      "y": 853.09,
+      "rank": 4,
+      "capital": "region",
+      "population": 412733
+    },
+    {
+      "name": "Piura",
+      "region": "PIU",
+      "x": 107.84,
+      "y": 368.54,
+      "rank": 4,
+      "capital": "region",
+      "population": 396932
+    },
+    {
+      "name": "Chimbote",
+      "region": "ANC",
+      "x": 255.66,
+      "y": 641.24,
+      "rank": 4,
+      "capital": null,
+      "population": 349846
+    },
+    {
+      "name": "Pucallpa",
+      "region": "UCA",
+      "x": 537.94,
+      "y": 590.4,
+      "rank": 4,
+      "capital": "region",
+      "population": 310750
+    },
+    {
+      "name": "Callao",
+      "region": "CAL",
+      "x": 357.55,
+      "y": 852.96,
+      "rank": 6,
+      "capital": "region",
+      "population": 876877
+    },
+    {
+      "name": "Chiclayo",
+      "region": "LAM",
+      "x": 164.98,
+      "y": 478.38,
+      "rank": 6,
+      "capital": "region",
+      "population": 596792
+    },
+    {
+      "name": "Juliaca",
+      "region": "PUN",
+      "x": 837.25,
+      "y": 1098.96,
+      "rank": 6,
+      "capital": null,
+      "population": 245675
+    },
+    {
+      "name": "Ayacucho",
+      "region": "AYA",
+      "x": 559.14,
+      "y": 930.69,
+      "rank": 6,
+      "capital": "region",
+      "population": 166314
+    },
+    {
+      "name": "Huánuco",
+      "region": "HUC",
+      "x": 418.9,
+      "y": 700.35,
+      "rank": 6,
+      "capital": "region",
+      "population": 158145
+    },
+    {
+      "name": "Cajamarca",
+      "region": "CAJ",
+      "x": 257.27,
+      "y": 505.05,
+      "rank": 6,
+      "capital": "region",
+      "population": 142665
+    },
+    {
+      "name": "Cerro de Pasco",
+      "region": "PAS",
+      "x": 417.03,
+      "y": 754.87,
+      "rank": 6,
+      "capital": "region",
+      "population": 137232
+    },
+    {
+      "name": "Tumbes",
+      "region": "TUM",
+      "x": 119.03,
+      "y": 251.81,
+      "rank": 6,
+      "capital": "region",
+      "population": 109223
+    },
+    {
+      "name": "Talara",
+      "region": "PIU",
+      "x": 61.35,
+      "y": 324.11,
+      "rank": 6,
+      "capital": null,
+      "population": 99074
+    },
+    {
+      "name": "Huaraz",
+      "region": "ANC",
+      "x": 328.69,
+      "y": 673.22,
+      "rank": 6,
+      "capital": "region",
+      "population": 86934
+    },
+    {
+      "name": "Pisco",
+      "region": "ICA",
+      "x": 421.47,
+      "y": 968.69,
+      "rank": 6,
+      "capital": null,
+      "population": 81207
+    },
+    {
+      "name": "Puerto Maldonado",
+      "region": "MDD",
+      "x": 907.85,
+      "y": 894.37,
+      "rank": 6,
+      "capital": "region",
+      "population": 67155
+    },
+    {
+      "name": "Paita",
+      "region": "PIU",
+      "x": 73.03,
+      "y": 360.32,
+      "rank": 6,
+      "capital": null,
+      "population": 56151
+    },
+    {
+      "name": "Moquegua",
+      "region": "MOQ",
+      "x": 780.14,
+      "y": 1217.71,
+      "rank": 6,
+      "capital": "region",
+      "population": 54517
+    },
+    {
+      "name": "Ilo",
+      "region": "MOQ",
+      "x": 752.42,
+      "y": 1249.08,
+      "rank": 6,
+      "capital": null,
+      "population": 53476
+    },
+    {
+      "name": "Huancavelica",
+      "region": "HUV",
+      "x": 506.07,
+      "y": 903.35,
+      "rank": 6,
+      "capital": "region",
+      "population": 44388
+    },
+    {
+      "name": "Pacasmayo",
+      "region": "LAL",
+      "x": 184.19,
+      "y": 523.49,
+      "rank": 6,
+      "capital": null,
+      "population": 39282
+    },
+    {
+      "name": "Nasca",
+      "region": "ICA",
+      "x": 509.48,
+      "y": 1047.76,
+      "rank": 6,
+      "capital": null,
+      "population": 23556
+    },
+    {
+      "name": "Contamana",
+      "region": "LOR",
+      "x": 503.97,
+      "y": 517.54,
+      "rank": 6,
+      "capital": null,
+      "population": 18921
+    },
+    {
+      "name": "Salaverry",
+      "region": "LAL",
+      "x": 225.61,
+      "y": 581.23,
+      "rank": 6,
+      "capital": null,
+      "population": 10066
+    },
+    {
+      "name": "Tarapoto",
+      "region": "SAM",
+      "x": 401.27,
+      "y": 458.94,
+      "rank": 6,
+      "capital": null,
+      "population": 936
+    },
+    {
+      "name": "Gueppi",
+      "region": "LOR",
+      "x": 489.1,
+      "y": 6.19,
+      "rank": 6,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Sullana",
+      "region": "PIU",
+      "x": 104.1,
+      "y": 345.78,
+      "rank": 7,
+      "capital": null,
+      "population": 160789
+    },
+    {
+      "name": "Chincha Alta",
+      "region": "ICA",
+      "x": 426.87,
+      "y": 948.1,
+      "rank": 7,
+      "capital": null,
+      "population": 153076
+    },
+    {
+      "name": "Puno",
+      "region": "PUN",
+      "x": 843.99,
+      "y": 1122.77,
+      "rank": 7,
+      "capital": "region",
+      "population": 116552
+    },
+    {
+      "name": "Chulucanas",
+      "region": "PIU",
+      "x": 140.34,
+      "y": 359.7,
+      "rank": 7,
+      "capital": null,
+      "population": 68835
+    },
+    {
+      "name": "Abancay",
+      "region": "APU",
+      "x": 650.56,
+      "y": 964.12,
+      "rank": 7,
+      "capital": "region",
+      "population": 55111
+    },
+    {
+      "name": "Tingo María",
+      "region": "HUC",
+      "x": 436.21,
+      "y": 655.65,
+      "rank": 7,
+      "capital": null,
+      "population": 53177
+    },
+    {
+      "name": "Jaén",
+      "region": "CAJ",
+      "x": 236.81,
+      "y": 403.01,
+      "rank": 7,
+      "capital": null,
+      "population": 52493
+    },
+    {
+      "name": "Moyobamba",
+      "region": "SAM",
+      "x": 366.9,
+      "y": 426.45,
+      "rank": 7,
+      "capital": "region",
+      "population": 47734
+    },
+    {
+      "name": "Juanjuí",
+      "region": "SAM",
+      "x": 383.15,
+      "y": 505.71,
+      "rank": 7,
+      "capital": null,
+      "population": 37715
+    },
+    {
+      "name": "Sicuani",
+      "region": "CUS",
+      "x": 764.16,
+      "y": 1011.61,
+      "rank": 7,
+      "capital": null,
+      "population": 33575
+    },
+    {
+      "name": "Pativilca",
+      "region": "LIM",
+      "x": 310.54,
+      "y": 756.26,
+      "rank": 7,
+      "capital": null,
+      "population": 31905
+    },
+    {
+      "name": "Tocache",
+      "region": "SAM",
+      "x": 398.86,
+      "y": 577.18,
+      "rank": 7,
+      "capital": null,
+      "population": 29029
+    },
+    {
+      "name": "Chancay",
+      "region": "LIM",
+      "x": 347.9,
+      "y": 816.88,
+      "rank": 7,
+      "capital": null,
+      "population": 26958
+    },
+    {
+      "name": "Chachapoyas",
+      "region": "AMA",
+      "x": 303.32,
+      "y": 439.49,
+      "rank": 7,
+      "capital": "region",
+      "population": 25978
+    },
+    {
+      "name": "Sechura",
+      "region": "PIU",
+      "x": 94.62,
+      "y": 393.54,
+      "rank": 7,
+      "capital": null,
+      "population": 23020
+    },
+    {
+      "name": "Jauja",
+      "region": "JUN",
+      "x": 470.73,
+      "y": 833.27,
+      "rank": 7,
+      "capital": null,
+      "population": 21057
+    },
+    {
+      "name": "Camaná",
+      "region": "ARE",
+      "x": 660.07,
+      "y": 1175.33,
+      "rank": 7,
+      "capital": null,
+      "population": 20956
+    },
+    {
+      "name": "Ayaviri",
+      "region": "PUN",
+      "x": 806.67,
+      "y": 1054.25,
+      "rank": 7,
+      "capital": null,
+      "population": 19310
+    },
+    {
+      "name": "Huanta",
+      "region": "AYA",
+      "x": 557.12,
+      "y": 914.73,
+      "rank": 7,
+      "capital": null,
+      "population": 18627
+    },
+    {
+      "name": "Requena",
+      "region": "LOR",
+      "x": 582.24,
+      "y": 356.89,
+      "rank": 7,
+      "capital": null,
+      "population": 18000
+    },
+    {
+      "name": "Huarmey",
+      "region": "ANC",
+      "x": 285.02,
+      "y": 711.83,
+      "rank": 7,
+      "capital": null,
+      "population": 16172
+    },
+    {
+      "name": "Ilave",
+      "region": "PUN",
+      "x": 868.37,
+      "y": 1140.91,
+      "rank": 7,
+      "capital": null,
+      "population": 16033
+    },
+    {
+      "name": "Pimentel",
+      "region": "LAM",
+      "x": 158.44,
+      "y": 483.19,
+      "rank": 7,
+      "capital": null,
+      "population": 15552
+    },
+    {
+      "name": "Junín",
+      "region": "JUN",
+      "x": 435.22,
+      "y": 787.35,
+      "rank": 7,
+      "capital": null,
+      "population": 15320
+    },
+    {
+      "name": "San Ramón",
+      "region": "JUN",
+      "x": 481.76,
+      "y": 785.82,
+      "rank": 7,
+      "capital": null,
+      "population": 14708
+    },
+    {
+      "name": "Chota",
+      "region": "CAJ",
+      "x": 248.5,
+      "y": 462.52,
+      "rank": 7,
+      "capital": null,
+      "population": 14240
+    },
+    {
+      "name": "Cajabamba",
+      "region": "CAJ",
+      "x": 291.98,
+      "y": 538.09,
+      "rank": 7,
+      "capital": null,
+      "population": 13486
+    },
+    {
+      "name": "Chilca",
+      "region": "LIM",
+      "x": 385.11,
+      "y": 884.61,
+      "rank": 7,
+      "capital": null,
+      "population": 12884
+    },
+    {
+      "name": "Santiago",
+      "region": "ICA",
+      "x": 454.59,
+      "y": 1002.51,
+      "rank": 7,
+      "capital": null,
+      "population": 10449
+    },
+    {
+      "name": "Olmos",
+      "region": "LAM",
+      "x": 170.58,
+      "y": 422.69,
+      "rank": 7,
+      "capital": null,
+      "population": 9800
+    },
+    {
+      "name": "Coracora",
+      "region": "AYA",
+      "x": 588.11,
+      "y": 1061.41,
+      "rank": 7,
+      "capital": null,
+      "population": 7420
+    },
+    {
+      "name": "Desaguadero",
+      "region": "PUN",
+      "x": 910.05,
+      "y": 1176.57,
+      "rank": 7,
+      "capital": null,
+      "population": 5329
+    },
+    {
+      "name": "Caballococha",
+      "region": "LOR",
+      "x": 822.92,
+      "y": 276.03,
+      "rank": 7,
+      "capital": null,
+      "population": 3195
+    },
+    {
+      "name": "New Rocafuerte",
+      "region": "LOR",
+      "x": 477.06,
+      "y": 63.98,
+      "rank": 7,
+      "capital": null,
+      "population": 40
+    },
+    {
+      "name": "Andoas",
+      "region": "LOR",
+      "x": 406.21,
+      "y": 203.44,
+      "rank": 7,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Puca Urco",
+      "region": "LOR",
+      "x": 723.57,
+      "y": 163.32,
+      "rank": 7,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Soldado Bartra",
+      "region": "LOR",
+      "x": 451.16,
+      "y": 176.08,
+      "rank": 7,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Chosica",
+      "region": "LIM_2",
+      "x": 386.92,
+      "y": 842.84,
+      "rank": 8,
+      "capital": null,
+      "population": 88606
+    },
+    {
+      "name": "Huacho",
+      "region": "LIM_2",
+      "x": 323.32,
+      "y": 785.23,
+      "rank": 8,
+      "capital": null,
+      "population": 80474
+    },
+    {
+      "name": "Tarma",
+      "region": "JUN",
+      "x": 454.72,
+      "y": 805.72,
+      "rank": 8,
+      "capital": null,
+      "population": 51350
+    },
+    {
+      "name": "Ferreñafe",
+      "region": "LAM",
+      "x": 167.47,
+      "y": 468.92,
+      "rank": 8,
+      "capital": null,
+      "population": 50184
+    },
+    {
+      "name": "Mollendo",
+      "region": "ARE",
+      "x": 707.17,
+      "y": 1204.33,
+      "rank": 8,
+      "capital": null,
+      "population": 49033
+    },
+    {
+      "name": "Huaura",
+      "region": "LIM",
+      "x": 324.68,
+      "y": 781.67,
+      "rank": 8,
+      "capital": "region",
+      "population": 40400
+    },
+    {
+      "name": "La Oroya",
+      "region": "JUN",
+      "x": 440.17,
+      "y": 813.56,
+      "rank": 8,
+      "capital": null,
+      "population": 33345
+    },
+    {
+      "name": "Huamachuco",
+      "region": "LAL",
+      "x": 291.37,
+      "y": 551.59,
+      "rank": 8,
+      "capital": null,
+      "population": 30835
+    },
+    {
+      "name": "Casma",
+      "region": "ANC",
+      "x": 281.1,
+      "y": 667.23,
+      "rank": 8,
+      "capital": null,
+      "population": 30000
+    },
+    {
+      "name": "Satipo",
+      "region": "JUN",
+      "x": 526.9,
+      "y": 795.05,
+      "rank": 8,
+      "capital": null,
+      "population": 15532
+    },
+    {
+      "name": "Lamas",
+      "region": "SAM",
+      "x": 398.44,
+      "y": 453.28,
+      "rank": 8,
+      "capital": null,
+      "population": 13693
+    },
+    {
+      "name": "Motupe",
+      "region": "LAM",
+      "x": 173.51,
+      "y": 434.77,
+      "rank": 8,
+      "capital": null,
+      "population": 13681
+    },
+    {
+      "name": "Puquio",
+      "region": "AYA",
+      "x": 564.95,
+      "y": 1038.67,
+      "rank": 8,
+      "capital": null,
+      "population": 10491
+    },
+    {
+      "name": "Otuzco",
+      "region": "LAL",
+      "x": 254.9,
+      "y": 558.26,
+      "rank": 8,
+      "capital": null,
+      "population": 10134
+    },
+    {
+      "name": "Putina",
+      "region": "PUN",
+      "x": 885.91,
+      "y": 1098.02,
+      "rank": 8,
+      "capital": null,
+      "population": 8118
+    },
+    {
+      "name": "Urubamba",
+      "region": "CUS",
+      "x": 704.09,
+      "y": 940.9,
+      "rank": 8,
+      "capital": null,
+      "population": 7540
+    },
+    {
+      "name": "Santo Tomás",
+      "region": "CUS",
+      "x": 705.61,
+      "y": 1022.85,
+      "rank": 8,
+      "capital": null,
+      "population": 4134
+    },
+    {
+      "name": "Nauta",
+      "region": "LOR",
+      "x": 591.47,
+      "y": 321.53,
+      "rank": 8,
+      "capital": null,
+      "population": 2500
+    },
+    {
+      "name": "Tournavista",
+      "region": "HUC",
+      "x": 525.99,
+      "y": 630.26,
+      "rank": 8,
+      "capital": null,
+      "population": 511
+    }
+  ]
+}
