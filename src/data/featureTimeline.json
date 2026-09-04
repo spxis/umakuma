@@ -4316,11 +4316,23 @@
     "id": "sheet-title-names-it",
     "name": "The worksheet titles itself wrongly for one kanji",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-03",
+    "summary": "A worksheet for a single character is titled Writing practice, Chosen characters, which is neither. It should name what it is showing, mentioning the kanji. Work out what every other way in should be titled too, not just this one. Reported 2026-09-03 by John.",
+    "dateIsEstimate": false,
+    "version": "0.381.0",
+    "releasedAt": "2026-09-04T03:10:21Z"
+  },
+  {
+    "id": "written-with-beside-related",
+    "name": "Written with belongs beside Related",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-03",
-    "version": "0.381.0",
-    "releasedAt": "2026-09-04T03:10:21Z",
-    "summary": "A worksheet for a single character is titled Writing practice, Chosen characters, which is neither. It should name what it is showing, mentioning the kanji. Work out what every other way in should be titled too, not just this one. Reported 2026-09-03 by John."
+    "version": "0.382.0",
+    "releasedAt": "2026-09-04T03:14:25Z",
+    "summary": "Written with holds radicals only, so it is the same kind of fact as the Built from group in Related and should sit next to it rather than in its own block further up. Requested 2026-09-03 by John."
   }
 ]

@@ -98,14 +98,6 @@ export const KANJI_SECTION_BLOCKS: readonly KanjiSectionBlock[] = [
     ),
   },
   {
-    id: SUBJECT_SECTIONS.parts,
-    /* RADKFILE covers 6,355 characters, so plenty have no entry at all. */
-    has: (view) => view.parts.length > 0,
-    render: (view) => (
-      <RadicalPartsBlock parts={view.parts} headingHref={view.sectionHref?.(SUBJECT_SECTIONS.parts)} />
-    ),
-  },
-  {
     id: SUBJECT_SECTIONS.meanings,
     has: (view) => view.dictionary !== null,
     render: (view) =>
@@ -124,6 +116,23 @@ export const KANJI_SECTION_BLOCKS: readonly KanjiSectionBlock[] = [
     has: (view) => view.page.words.length > 0,
     render: (view) => (
       <UsedInWordsBlock words={view.page.words} headingHref={view.sectionHref?.(SUBJECT_SECTIONS.words)} />
+    ),
+  },
+  /*
+   * Beside Related, not up by the stroke chart.
+   *
+   * Both answer the same question from different books: RADKFILE lists the
+   * shapes a character is written with, and WaniKani's Built from lists the
+   * radicals it teaches it as. They were a scroll apart with the meanings and
+   * every compound between them, so a reader comparing the two had to hold one
+   * of them in their head.
+   */
+  {
+    id: SUBJECT_SECTIONS.parts,
+    /* RADKFILE covers 6,355 characters, so plenty have no entry at all. */
+    has: (view) => view.parts.length > 0,
+    render: (view) => (
+      <RadicalPartsBlock parts={view.parts} headingHref={view.sectionHref?.(SUBJECT_SECTIONS.parts)} />
     ),
   },
   {
