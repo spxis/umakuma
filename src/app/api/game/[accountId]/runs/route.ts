@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { canAccessAccount } from "@/lib/accountAccess";
+import { isAuthorizedAdmin } from "@/lib/admin";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import {
   GAME_KINDS,
@@ -20,6 +21,7 @@ import {
   isGameTimeLimitMs,
 } from "@/lib/gameMode";
 import { hydrateGameQuestions, toGameRunSummary } from "@/lib/gameModeServer";
+import { isAdminOnlyMapCountry, isMapCountry } from "@/lib/mapCountries";
 import {
   findResumableDailyRun,
   GameRunConflictError,
@@ -40,8 +42,16 @@ const bodySchema = z.object({
   practiceList: z.string().refine(isGamePracticeList).default(GAME_PRACTICE_LISTS.trouble),
   ultraMode: z.boolean().default(false),
   timeLimitMs: z.number().int().refine(isGameTimeLimitMs).nullable().default(null),
-  /* Map mode only; Japan when unspecified, which is every older client. */
-  mapCountry: z.enum(["JP", "US", "CA"]).optional(),
+  /*
+   * Map mode only; Japan when unspecified, which is every older client.
+   *
+   * Asked of the country registry rather than spelled out here. The literal
+   * list said JP, US, CA long after the lobby had started offering four pilot
+   * countries, so an admin who picked Thailand got "Could not start the game"
+   * and no way to tell why - the same shape of failure the refine below this
+   * object exists to prevent.
+   */
+  mapCountry: z.string().refine(isMapCountry).optional(),
 })
   // Only the games that offer Ultra have to satisfy it. A stale `ultraMode` from
   // a previous Match round would otherwise reject a Map or Practice start
@@ -71,6 +81,17 @@ export async function POST(request: Request, context: { params: Promise<{ accoun
         const { accountId } = await context.params;
         if (!(await canAccessAccount(request, accountId))) {
           return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+        }
+
+        /*
+         * A pilot country is admin-only, and this is where that is enforced.
+         * The lobby hides them from everyone else, but hiding a choice is not
+         * refusing it - the country arrives in the request body, so the answer
+         * has to be given again on the server.
+         */
+        const country = parsed.data.mapCountry;
+        if (country && isAdminOnlyMapCountry(country) && !(await isAuthorizedAdmin(request))) {
+          return NextResponse.json({ error: "That map is not available." }, { status: 403 });
         }
 
         const rules = gameKindRules(parsed.data.kind);

@@ -1,6 +1,6 @@
 "use client";
 
-import JapanMap from "@/app/game/JapanMap";
+import CountryMap from "@/app/game/CountryMap";
 import { MAP_TONES } from "@/app/game/GameMode.constants";
 import { geoRegionBox } from "@/lib/geoMapFraming";
 import type { CountryCode } from "@/lib/geoRegion";
@@ -39,7 +39,7 @@ export default function MapRegionShape({
   return (
     <figure className="overflow-hidden rounded-2xl border border-line bg-surface-muted">
       <div className="w-full p-2" style={{ aspectRatio: String(MAP_SHAPE_FRAME_ASPECT) }}>
-        <JapanMap
+        <CountryMap
           country={country}
           marks={[{ code, tone: MAP_TONES.target }]}
           box={geoRegionBox(country, code, MAP_SHAPE_FRAME_ASPECT)}

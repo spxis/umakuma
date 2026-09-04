@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
 import PublicPageHeader from "@/app/shared/PublicPageHeader";
 import UmaKumaPageBanner from "@/app/shared/UmaKumaPageBanner";
@@ -28,11 +28,10 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { source } = await params;
-  const canonical = source === "camap" ? "worldmap" : source;
-  if (!isSourceKey(canonical)) return { title: SOURCES_COPY.title };
+  if (!isSourceKey(source)) return { title: SOURCES_COPY.title };
   return {
-    title: `${SOURCE_CREDITS[canonical].source} · ${SOURCES_COPY.title}`,
-    description: `What UmaKuma holds from ${SOURCE_CREDITS[canonical].source}, and when it last came in.`,
+    title: `${SOURCE_CREDITS[source].source} · ${SOURCES_COPY.title}`,
+    description: `What UmaKuma holds from ${SOURCE_CREDITS[source].source}, and when it last came in.`,
   };
 }
 
@@ -46,9 +45,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
  */
 export default async function SourcePage({ params }: Props) {
   const { source } = await params;
-  if (source === "camap") {
-    redirect("/sources/worldmap");
-  }
   if (!isSourceKey(source)) notFound();
 
   const [report, showcase] = await Promise.all([loadCachedSourceReport(source), loadCachedShowcase(source)]);

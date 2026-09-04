@@ -10,6 +10,7 @@ import { PAGE_SHELL_PADDING, PAGE_WIDTH } from "@/app/shared/pageShell";
 import { resolveViewerMenuInfo } from "@/app/users/[nickname]/userPageAuth";
 import { authOptions } from "@/lib/auth";
 import { parseMapPath } from "@/lib/mapAddress";
+import { canUseMapCountry } from "@/lib/mapCountries";
 import { mapRegionKanjiFacts } from "@/lib/mapRegionKanji";
 
 import MapStudy from "../MapStudy";
@@ -45,6 +46,14 @@ export default async function MapStudyPage({ params }: Props) {
     viewerEmail: session?.user?.email?.trim().toLowerCase() ?? null,
     sessionName: session?.user?.name?.trim() ?? null,
   });
+  const isAdmin = viewerMenuInfo?.isAdmin ?? false;
+
+  /*
+   * A pilot country has no public page. Not a redirect to Japan and not an
+   * empty state: to anyone but an admin the address should look like a country
+   * we have never heard of, which is what it is until the pilot ends.
+   */
+  if (!canUseMapCountry(address.country, isAdmin)) notFound();
 
   return (
     <div className={PAGE_SHELL_PADDING}>
@@ -57,6 +66,7 @@ export default async function MapStudyPage({ params }: Props) {
           initialArea={address.area}
           kanjiFacts={mapRegionKanjiFacts()}
           accountId={viewerMenuInfo?.accountId ?? null}
+          isAdmin={isAdmin}
         />
       </div>
     </div>

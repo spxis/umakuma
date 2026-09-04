@@ -19,6 +19,35 @@ export const SOURCES_COPY = {
 } as const;
 
 /**
+ * The mapped-country panels under a map source's report.
+ *
+ * Here rather than in the component for the reason every other string is: this
+ * map is the en-CA dictionary a locale layer will swap. "Catalogue" is the
+ * Canadian spelling, and the tier a country sits in is named the same way in
+ * the summary chips and on its own card.
+ */
+export const MAPPED_COUNTRIES_COPY = {
+  heading: "Mapped country",
+  worldHeading: "Countries mapped from Natural Earth",
+  worldLede: (countries: number) =>
+    `${countries} countries and administrative divisions with full boundary geometry`,
+  /** Beside a count, in the summary row above the grid. */
+  tierSummary: { public: "Public", pilot: "Admin pilot", catalog: "Catalogue" },
+  /** On a country's own card, where the count is the country itself. */
+  tierBadge: { public: "Public", pilot: "Pilot", catalog: "Catalogue" },
+  flagLabel: (country: string) => `${country} flag`,
+  regionsOf: (count: number, plural: string) => `${count} ${plural.toLowerCase()}`,
+  japan: {
+    name: "Japan (日本)",
+    detail: "Outlines provided by Global Map Japan (GSI)",
+  },
+  unitedStates: {
+    name: "United States",
+    detail: "50 states and the District of Columbia · Cartographic boundary TopoJSON from U.S. Census Bureau",
+  },
+} as const;
+
+/**
  * What each source is, in a sentence, and what of it we take.
  *
  * The takings are lists rather than prose so a reader can check a fact on a

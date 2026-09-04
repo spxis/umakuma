@@ -5,7 +5,7 @@ import { JSDOM } from "jsdom";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
-import JapanMap from "@/app/game/JapanMap";
+import CountryMap from "@/app/game/CountryMap";
 import SourceCredit from "@/app/shared/SourceCredit";
 import { SOURCE_CREDITS, SOURCE_KEY_VALUES, SOURCE_KEYS, sourcePath } from "@/lib/sourceCredits";
 import { SHOWCASE_DEFAULTS } from "@/lib/sourceShowcase";
@@ -136,7 +136,7 @@ describe("the map credits its outlines", () => {
     ["US", SOURCE_KEYS.usmap],
     ["CA", SOURCE_KEYS.worldmap],
   ] as const)("names the holder of the %s outlines, and says they were edited", (country, key) => {
-    const text = render(<JapanMap marks={[]} country={country} />).body.textContent ?? "";
+    const text = render(<CountryMap marks={[]} country={country} />).body.textContent ?? "";
     expect(text).toContain(SOURCE_CREDITS[key].source);
     expect(text).toContain("edited");
   });
@@ -147,10 +147,10 @@ describe("the map credits its outlines", () => {
    * running game is a way to lose the run to a stray tap.
    */
   it("leads to the source page when the map is read, and nowhere when it is played", () => {
-    const read = render(<JapanMap marks={[]} country="JP" onRegionSelect={() => {}} />);
+    const read = render(<CountryMap marks={[]} country="JP" onRegionSelect={() => {}} />);
     expect([...read.querySelectorAll("a")].map((a) => a.getAttribute("href"))).toContain(sourcePath(SOURCE_KEYS.jpmap));
 
-    const played = render(<JapanMap marks={[]} country="JP" showHandles />);
+    const played = render(<CountryMap marks={[]} country="JP" showHandles />);
     expect(played.querySelectorAll("a")).toHaveLength(0);
     expect(played.body.textContent).toContain(SOURCE_CREDITS.jpmap.source);
   });
@@ -241,7 +241,7 @@ describe("a few rows of the source", () => {
     const japanese = [...panel(SOURCE_KEYS.wanikani).querySelectorAll('[lang="ja"]')].map((el) => el.textContent);
     expect(japanese).toEqual(["力", "曜", "鬱"]);
 
-    const english = panel(SOURCE_KEYS.camap);
+    const english = panel(SOURCE_KEYS.worldmap);
     expect([...english.querySelectorAll('[lang="ja"]')]).toHaveLength(0);
     expect(english.body.textContent).toContain("Prince Edward Island");
   });

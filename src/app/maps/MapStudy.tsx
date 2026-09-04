@@ -2,13 +2,13 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import JapanMap, { type MapMark } from "@/app/game/JapanMap";
+import CountryMap, { type MapMark } from "@/app/game/CountryMap";
 import { MAP_TONES } from "@/app/game/GameMode.constants";
 import ModalShell from "@/app/shared/ModalShell";
 import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
 import { MODAL_LAYERS } from "@/app/shared/modalLayers";
 import { GEO_DATASETS } from "@/lib/geoRegion";
-import { MAP_COUNTRIES, type MapCountryCode } from "@/lib/mapCountries";
+import { getPlayableMapCountries, type MapCountryCode } from "@/lib/mapCountries";
 import { mapHref, parseMapPath } from "@/lib/mapAddress";
 import { regionCodesInArea } from "@/lib/mapDirectory";
 import { mapViewTitle, regionByCode, regionsInOrder } from "@/lib/mapStudy";
@@ -48,6 +48,7 @@ export default function MapStudy({
   initialArea,
   kanjiFacts,
   accountId,
+  isAdmin,
 }: {
   initialCountry: MapCountryCode;
   initialCode: string | number | null;
@@ -57,6 +58,8 @@ export default function MapStudy({
   kanjiFacts: MapKanjiFacts;
   /** The reader's own account, or null for a visitor. */
   accountId: string | null;
+  /** Decides whether the pilot countries are among the ones offered. */
+  isAdmin: boolean;
 }) {
   const [country, setCountry] = useState<MapCountryCode>(initialCountry);
   const [code, setCode] = useState<string | number | null>(initialCode);
@@ -102,6 +105,13 @@ export default function MapStudy({
     window.addEventListener("popstate", onPopState);
     return () => window.removeEventListener("popstate", onPopState);
   }, []);
+
+  /*
+   * The pilot countries only exist for an admin. The page has already refused
+   * their addresses to everyone else, so this is the same answer given twice
+   * on purpose: the switcher must not offer a button that leads to a 404.
+   */
+  const countries = useMemo(() => getPlayableMapCountries(isAdmin), [isAdmin]);
 
   const view = useMapZoom(country, initialCode, regionCodesInArea(regions, initialArea));
   const marking = useMapMarks(accountId, country);
@@ -244,7 +254,7 @@ export default function MapStudy({
           <span className="text-[11px] font-black uppercase tracking-[0.12em] text-foreground/60">
             {MAP_STUDY_COPY.countryLabel}
           </span>
-          {MAP_COUNTRIES.map((entry) => (
+          {countries.map((entry) => (
             <button
               key={entry.code}
               type="button"
@@ -281,7 +291,7 @@ export default function MapStudy({
         ) : null}
 
         <div className={`relative ${MAP_STUDY_HEIGHT} rounded-2xl border border-line bg-surface-muted p-2`}>
-          <JapanMap
+          <CountryMap
             marks={marks}
             country={country}
             box={view.box}

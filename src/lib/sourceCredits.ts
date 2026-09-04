@@ -41,8 +41,6 @@ export const SOURCE_KEYS = {
   jpmap: "jpmap",
   usmap: "usmap",
   worldmap: "worldmap",
-  /** Legacy alias for worldmap */
-  camap: "worldmap",
 } as const;
 
 export const SOURCE_KEY_VALUES = [

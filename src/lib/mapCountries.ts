@@ -1,10 +1,17 @@
 /**
  * Countries Map mode can play on, in the order the lobby offers them.
  *
- * Japan first and by default: it is what UmaKuma is for, and the other two are
- * a bonus. Adding Europe or Asia later means adding a dataset and a line here,
+ * Japan first and by default: it is what UmaKuma is for, and the rest are a
+ * bonus. Adding Europe or Asia later means adding a dataset and a line here,
  * not a code path - which is why the country rides in the request rather than
  * being a separate game.
+ *
+ * `adminOnly` is a pilot, not a decoration. A country wearing it is one being
+ * tried out before anyone else sees it, so every way in has to agree: the
+ * lobby offers it only to an admin, the runs route refuses it for anyone else,
+ * and /maps/<slug> is a 404 rather than a public page. It shipped as a label
+ * on the lobby dropdown alone, which left the four pilot maps readable by
+ * anybody who guessed the address and unplayable by the admin they were for.
  */
 import { SOURCE_KEYS, type SourceKey } from "./sourceCredits";
 
@@ -27,6 +34,23 @@ export function getPlayableMapCountries(isAdmin = false) {
   return ALL_MAP_COUNTRIES.filter((country) => country.playable && (isAdmin || !country.adminOnly));
 }
 
+/** Whether the country is still a pilot, and so admin-only wherever it appears. */
+export function isAdminOnlyMapCountry(code: string): boolean {
+  return ALL_MAP_COUNTRIES.some((country) => country.code === code && country.adminOnly);
+}
+
+/**
+ * The one question every entrance asks: may this viewer have this country?
+ *
+ * The lobby, the runs route and the map page each used to answer it their own
+ * way, and the three answers disagreed.
+ */
+export function canUseMapCountry(code: string, isAdmin: boolean): boolean {
+  return ALL_MAP_COUNTRIES.some(
+    (country) => country.code === code && country.playable && (isAdmin || !country.adminOnly),
+  );
+}
+
 /** Every country the engine supports, playable or not. */
 export const MAP_COUNTRIES_ALL = ALL_MAP_COUNTRIES;
 
@@ -39,10 +63,10 @@ export function isMapCountry(value: string): value is MapCountryCode {
 /**
  * Whose outlines each board is drawing.
  *
- * Three countries, three rights holders, three sets of terms - and only Japan's
- * compels anything. Keeping the answer here rather than in the map component
- * means a fourth country arrives with its credit attached, the way its dataset
- * and its label already do.
+ * Three rights holders across the countries we load, and only Japan's compels
+ * anything. Keeping the answer here rather than in the map component means the
+ * next country arrives with its credit attached, the way its dataset and its
+ * label already do.
  */
 export const MAP_SOURCE_KEYS: Record<MapCountryCode, SourceKey> = Object.fromEntries(
   ALL_MAP_COUNTRIES.map((country) => [country.code, country.source]),

@@ -25,7 +25,7 @@ function placeFromSubjectId(subjectId: number): { country: CountryCode; code: st
 import GameChoiceTile from "./GameChoiceTile";
 import GameRunnerFrame from "./GameRunnerFrame";
 import { GAME_COPY, MAP_TONES } from "./GameMode.constants";
-import JapanMap, { type MapMark } from "./JapanMap";
+import CountryMap, { type MapMark } from "./CountryMap";
 import type { MapTone } from "./GameMode.types";
 import { useGameAnswerKeys } from "./useGameAnswerKeys";
 import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
@@ -180,11 +180,11 @@ function MapBoard({
       <div className="mt-2 flex min-h-0 flex-1 flex-col gap-2 sm:mt-4 sm:gap-4">
         <div className={`grid min-h-0 flex-1 gap-2 sm:gap-4 ${showCloseUp ? "grid-cols-2" : "grid-cols-1"}`}>
           <MapCard caption={GAME_COPY.nameHighlightedRegion(divisionName)}>
-            <JapanMap marks={marks} country={country} showHandles />
+            <CountryMap marks={marks} country={country} showHandles />
           </MapCard>
           {showCloseUp ? (
             <MapCard caption={GAME_COPY.mapCloseUp}>
-              <JapanMap marks={marks} country={country} focusCodes={[promptCode]} />
+              <CountryMap marks={marks} country={country} focusCodes={[promptCode]} />
             </MapCard>
           ) : null}
         </div>
@@ -231,7 +231,7 @@ function MapBoard({
         </p>
       </div>
       <div className="min-h-0 flex-1 rounded-xl border border-line bg-surface-muted p-1.5 sm:p-2">
-        <JapanMap
+        <CountryMap
           marks={marks}
           country={country}
           focusCodes={marks.map((mark) => mark.code)}

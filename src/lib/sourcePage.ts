@@ -12,6 +12,11 @@ import { getKanjiDictionarySummary } from "@/lib/kanjiDictionary";
 import { prisma } from "@/lib/prisma";
 import { radicalIndexSummary } from "@/lib/radicalSearchServer";
 import { getSchoolGradeIndex } from "@/lib/schoolGrades";
+import {
+  NATURAL_EARTH_TOTAL_BORDERS,
+  NATURAL_EARTH_TOTAL_COUNTRIES,
+  NATURAL_EARTH_TOTAL_REGIONS,
+} from "@/lib/naturalEarthCountries";
 import { SOURCE_KEYS, type SourceKey } from "@/lib/sourceCredits";
 import { cachedSourceReport } from "@/lib/sourceReportCache";
 import { wordFrequencySummary } from "@/lib/wordFrequency";
@@ -248,18 +253,32 @@ function geoMap(key: SourceKey, country: CountryCode): SourceReport {
 }
 
 /**
- * What Natural Earth provides: regions drawn, countries mapped, and bordering pairs
- * across Canada and all world regional datasets.
+ * What Natural Earth provides: regions drawn, countries mapped, and bordering
+ * pairs across Canada and all world regional datasets.
+ *
+ * Counted from the country manifest rather than typed in. The three figures
+ * were literals - 1244, 30, 2591 - on the one page whose whole job is to say
+ * truthfully what we hold from whom, and the sums that produce them were
+ * already exported and going unused.
+ *
+ * The date is the newest of the datasets this build actually loads, not
+ * Canada's alone. Canada's config sets `skipMetaWrite`, so its meta keeps the
+ * date of the first pull; reading only that file had the page reporting Aug 30
+ * for a set of maps brought in on Sep 4.
  */
 function naturalEarth(key: SourceKey): SourceReport {
+  const imported = [caMeta.updatedAt, thMeta.updatedAt, cnMeta.updatedAt, auMeta.updatedAt, twMeta.updatedAt]
+    .filter((value): value is string => typeof value === "string" && value.length > 0)
+    .sort();
+
   return {
     key,
     counts: [
-      { label: REPORT_COPY.regionsDrawn, value: 1244 },
-      { label: REPORT_COPY.countriesMapped, value: 30 },
-      { label: REPORT_COPY.borders, value: 2591 },
+      { label: REPORT_COPY.regionsDrawn, value: NATURAL_EARTH_TOTAL_REGIONS },
+      { label: REPORT_COPY.countriesMapped, value: NATURAL_EARTH_TOTAL_COUNTRIES },
+      { label: REPORT_COPY.borders, value: NATURAL_EARTH_TOTAL_BORDERS },
     ],
-    lastImportedAt: caMeta.updatedAt ?? null,
+    lastImportedAt: imported.at(-1) ?? null,
     version: null,
     generatedAtMs: Date.now(),
   };
