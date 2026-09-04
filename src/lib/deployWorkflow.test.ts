@@ -7,6 +7,7 @@ const WORKFLOW = readFileSync(
   join(process.cwd(), ".github/workflows/vercel-deploy.yml"),
   "utf8",
 );
+const CI = readFileSync(join(process.cwd(), ".github/workflows/ci.yml"), "utf8");
 
 /**
  * The deploy path, held to the two rules that make it safe.
@@ -64,5 +65,27 @@ describe("the production deploy", () => {
     expect(WORKFLOW).toMatch(/::error::Deploy failed three times/);
     /* Exactly the two network calls, and nothing else, get a second chance. */
     expect(WORKFLOW.match(/for attempt in 1 2 3/g)).toHaveLength(2);
+  });
+});
+
+/**
+ * CI runs the same audit command as the deploy, so it has to treat it the same
+ * way. On 2026-09-03 only the deploy workflow was given the retry, and when the
+ * registry timed out for over half an hour that night, CI failed a commit whose
+ * every other check was green while the deploy rode the same outage out. One
+ * command answering to two rules is the bug.
+ */
+describe("continuous integration", () => {
+  it("retries the audit exactly as the deploy does", () => {
+    const start = CI.indexOf("Audit production dependencies");
+    const audit = CI.slice(start, CI.indexOf("- name:", start + 10));
+    expect(audit).toMatch(/for attempt in/);
+    expect(audit).toMatch(/pnpm security:check/);
+    expect(audit).toMatch(/::error::Audit failed three times/);
+  });
+
+  /* The audit is the only network call here, so it is the only retry. */
+  it("retries nothing else", () => {
+    expect(CI.match(/for attempt in 1 2 3/g)).toHaveLength(1);
   });
 });

@@ -32,8 +32,30 @@ jobs:
       - name: Run quality checks
         run: pnpm quality:check
 
+      # Same three attempts the deploy workflow gives it, and for the same
+      # reason: the audit asks registry.npmjs.org a question, and on
+      # 2026-09-03 the answer was a socket timeout for over half an hour - on
+      # this runner as well as locally. A timeout is not a finding; it is no
+      # answer. A real vulnerability fails all three attempts alike, so the
+      # gate is exactly as strict as before. Only the network gets a retry.
+      #
+      # The deploy workflow was given this on the same night and CI was not,
+      # so a registry outage failed CI while the deploy rode it out - the two
+      # run the same command and have to treat it the same way.
       - name: Audit production dependencies
-        run: pnpm security:check
+        run: |
+          for attempt in 1 2 3; do
+            if pnpm security:check; then
+              echo "Audit clean on attempt $attempt."
+              exit 0
+            fi
+            if [ "$attempt" -lt 3 ]; then
+              echo "::warning::Audit attempt $attempt failed; retrying in 20s."
+              sleep 20
+            fi
+          done
+          echo "::error::Audit failed three times. Read the output above: a repeated finding is real, a repeated timeout means the registry is down."
+          exit 1
 
       - name: Build app
         run: pnpm build
