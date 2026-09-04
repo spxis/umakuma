@@ -11,8 +11,6 @@ export const UK_STUDY_COPY = {
   nothingDue: "Nothing due. Come back when the next batch comes round.",
   nothingToLearn: "Nothing new at this level. Clear your reviews to move up.",
   reveal: "Show me",
-  gotIt: "I knew it",
-  missedIt: "I missed it",
   loading: "Reading your queue…",
   failed: "Could not read your queue. Try again?",
   done: "That's the batch. Well done.",
@@ -23,8 +21,6 @@ export const UK_STUDY_COPY = {
   remaining: (left: number) => `${left} to go`,
   readingLabel: "Reading",
   meaningLabel: "Meaning",
-  /* Self-graded for now, and it says so rather than pretending to mark. */
-  honesty: "You mark your own answer. Typed grading comes later.",
 } as const;
 
 /** How many items one sitting hands over at a time. */

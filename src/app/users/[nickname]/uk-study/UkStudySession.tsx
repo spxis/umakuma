@@ -7,6 +7,8 @@ import { glyphTextSizeClass } from "@/app/shared/glyphSizes";
 import { REVIEW_RESULTS, SUBJECT_TYPE_DISPLAY, type SubjectType } from "@/lib/domainConstants";
 import { srsStageTone } from "@/lib/srs/srsStageTone";
 
+import StudyReviewFlashActionRow from "../study-explorer/components/StudyReviewFlashActionRow";
+
 import { UK_STUDY_BATCH, UK_STUDY_COPY as copy } from "./UkStudy.constants";
 
 type Item = {
@@ -53,6 +55,9 @@ export default function UkStudySession({ accountId }: { accountId: string }) {
   const [revealed, setRevealed] = useState(false);
   const [note, setNote] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  /* The row draws a running count on each button, the way it does in the
+     Study explorer, so a sitting reads the same there and here. */
+  const [tally, setTally] = useState({ wrong: 0, skipped: 0, correct: 0 });
 
   const load = useCallback(async () => {
     try {
@@ -84,6 +89,7 @@ export default function UkStudySession({ accountId }: { accountId: string }) {
       setAt(0);
       setRevealed(false);
       setNote(null);
+      setTally({ wrong: 0, skipped: 0, correct: 0 });
     } finally {
       setBusy(false);
     }
@@ -95,6 +101,23 @@ export default function UkStudySession({ accountId }: { accountId: string }) {
     setAt(0);
     setRevealed(false);
     setNote(null);
+    setTally({ wrong: 0, skipped: 0, correct: 0 });
+  }
+
+  function advance() {
+    setRevealed(false);
+    if (batch && at + 1 >= batch.length) {
+      setBatch(null);
+      void load();
+    } else {
+      setAt((current) => current + 1);
+    }
+  }
+
+  /** Passes without writing, so the item keeps its stage and comes back. */
+  function skip() {
+    setTally((current) => ({ ...current, skipped: current.skipped + 1 }));
+    advance();
   }
 
   async function answer(result: "correct" | "wrong") {
@@ -113,13 +136,12 @@ export default function UkStudySession({ accountId }: { accountId: string }) {
       }
     } finally {
       setBusy(false);
-      setRevealed(false);
-      if (batch && at + 1 >= batch.length) {
-        setBatch(null);
-        void load();
-      } else {
-        setAt((current) => current + 1);
-      }
+      setTally((current) =>
+        result === REVIEW_RESULTS.correct
+          ? { ...current, correct: current.correct + 1 }
+          : { ...current, wrong: current.wrong + 1 },
+      );
+      advance();
     }
   }
 
@@ -171,16 +193,22 @@ export default function UkStudySession({ accountId }: { accountId: string }) {
             </div>
           ) : null}
 
-          <div className="mt-6 flex flex-wrap justify-center gap-2">
+          <div className="mx-auto mt-6 max-w-lg">
             {revealed ? (
-              <>
-                <button type="button" disabled={busy} className={PRIMARY} onClick={() => answer(REVIEW_RESULTS.correct)}>
-                  {copy.gotIt}
-                </button>
-                <button type="button" disabled={busy} className={QUIET} onClick={() => answer(REVIEW_RESULTS.wrong)}>
-                  {copy.missedIt}
-                </button>
-              </>
+              /* The site's own answer row: Wrong / Skip / Correct, its keyboard
+                 shortcuts and its running tallies. Two hand-rolled buttons here
+                 would have been a third way to answer a question on a site that
+                 already has two. */
+              <StudyReviewFlashActionRow
+                isPracticeItem={false}
+                assignmentId={item.subjectId}
+                wrong={tally.wrong}
+                skipped={tally.skipped}
+                correct={tally.correct}
+                isSubmittingSelected={busy}
+                onSubmit={(_id, result) => answer(result)}
+                onSkipCurrent={skip}
+              />
             ) : (
               <button type="button" className={PRIMARY} onClick={() => setRevealed(true)}>
                 {copy.reveal}
@@ -188,9 +216,7 @@ export default function UkStudySession({ accountId }: { accountId: string }) {
             )}
           </div>
 
-          <p className="mt-4 text-[11px] font-semibold text-foreground/60">
-            {copy.remaining(left)} · {copy.honesty}
-          </p>
+          <p className="mt-4 text-[11px] font-semibold text-foreground/60">{copy.remaining(left)}</p>
         </div>
       ) : (
         <div className="flex flex-wrap gap-2 rounded-3xl border border-line bg-surface p-5 shadow-sm">
