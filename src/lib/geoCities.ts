@@ -88,16 +88,3 @@ export function cityDensityCounts(country: CountryCode): Record<CityDensity, num
     all: citiesAtDensity(country, "all").length,
   };
 }
-
-/**
- * The cities of one division, most important first.
- *
- * Used by the region panel, where the question is "what is in Ontario" rather
- * than "what is on the map", so the density control does not apply.
- */
-export function citiesInRegion(country: CountryCode, code: string | number | null): MapCity[] {
-  if (code === null) return [];
-  const cityset = CITYSETS[country];
-  if (!cityset) return [];
-  return cityset.cities.filter((city) => city.region === String(code));
-}

@@ -6,13 +6,11 @@ import {
   CITY_DENSITIES,
   MAJOR_CITY_RANK,
   citiesAtDensity,
-  citiesInRegion,
   cityDensityCounts,
   citysetFor,
   hasCities,
   isCapital,
   isCityDensity,
-  type MapCity,
 } from "./geoCities";
 
 const cityset = citysetFor("CA")!;
@@ -146,25 +144,6 @@ describe("countries without a city layer", () => {
   });
 });
 
-describe("the cities of one region", () => {
-  it("are the ones filed under that region, and nothing else", () => {
-    const ontario = citiesInRegion("CA", "ON");
-    expect(ontario.length).toBeGreaterThan(0);
-    expect(ontario.every((city: MapCity) => city.region === "ON")).toBe(true);
-    expect(ontario.map((city) => city.name)).toContain("Toronto");
-  });
-
-  it("are empty when nothing is chosen", () => {
-    expect(citiesInRegion("CA", null)).toEqual([]);
-  });
-});
-
-/*
- * Natural Earth files a handful of abandoned settlements under Populated
- * Places and marks each one "Historic place". Ennadai in Nunavut is Canada's:
- * its people were relocated in the 1950s and the dataset gives it a population
- * of zero. A layer switched on by pressing "Cities" should not draw one.
- */
 describe("places that are not cities", () => {
   it("leaves out the abandoned ones the dataset flags", () => {
     expect(cityset.cities.map((city) => city.name)).not.toContain("Ennadai");

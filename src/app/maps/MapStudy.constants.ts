@@ -66,13 +66,6 @@ export const MAP_CITY_COPY = {
     major: (count: number) => `${count} major`,
     all: (count: number) => `all ${count}`,
   },
-  /** Under the region panel's heading, when a division is open. */
-  inRegion: (count: number, division: string) =>
-    count === 1 ? `1 city in this ${division}` : `${count} cities in this ${division}`,
-  none: "Natural Earth lists no cities here.",
-  /** Beside a city in the panel list. */
-  capitalOfCountry: "National capital",
-  capitalOfRegion: "Capital",
 } as const;
 
 /** The shape drawn on its own at the top of the panel. */
