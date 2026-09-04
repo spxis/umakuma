@@ -4844,11 +4844,23 @@
     "id": "word-jisho-link",
     "name": "A way out to Jisho from each word",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "An arrow on the right of a word's row, shown only while that row is hovered or the link has focus, opening the word on jisho.org in a new tab. Out of the way of reading and still reachable by keyboard. Requested 2026-09-04 by John.",
+    "dateIsEstimate": false,
+    "version": "0.425.0",
+    "releasedAt": "2026-09-04T15:08:42Z"
+  },
+  {
+    "id": "umakuma-explorer",
+    "name": "UmaKuma Explorer",
+    "area": "platform",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.425.0",
-    "releasedAt": "2026-09-04T15:08:42Z",
-    "summary": "An arrow on the right of a word's row, shown only while that row is hovered or the link has focus, opening the word on jisho.org in a new tab. Out of the way of reading and still reachable by keyboard. Requested 2026-09-04 by John."
+    "version": "0.426.0",
+    "releasedAt": "2026-09-04T15:12:01Z",
+    "summary": "Browse our own hundred levels the way the JLPT Explorer browses the JLPT lists."
   }
 ]

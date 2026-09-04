@@ -476,6 +476,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Hitonigiri", ja: "一握り", reading: "ひとにぎり", gloss: "a handful to play among the thirty you may read" },
   { romaji: "Fuzoku", ja: "付属", reading: "ふぞく", gloss: "every kanji belonging to the word, the word's own included" },
   { romaji: "Henji", ja: "返事", reading: "へんじ", gloss: "the fuller answer, waiting one tab away" },
+  { romaji: "hohaba", ja: "歩幅", reading: "ほはば", gloss: "the length of a stride" },
 ];
 
 /**

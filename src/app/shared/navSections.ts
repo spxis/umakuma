@@ -65,6 +65,8 @@ export type NavSection = {
  * Groups in header order. A section with one child links straight to it and
  * shows no second row; the sub-nav would just repeat the header.
  */
+import { UK_EXPLORER_PAGE } from "@/app/users/[nickname]/umakuma-explorer/umakumaExplorerPage";
+
 export const NAV_SECTIONS: NavSection[] = [
   /*
    * Reviews, and the two records of them. History and Stats had a group of
@@ -91,6 +93,9 @@ export const NAV_SECTIONS: NavSection[] = [
     children: [
       { label: DASHBOARD_TAB_LABELS.wk, path: "library-explorer", requires: MEMBER_CAPABILITIES.wanikaniLibrary },
       { label: DASHBOARD_TAB_LABELS.jlpt, path: "jlpt-explorer" },
+      /* Ours, beside theirs. No capability gate: the curriculum is the
+         site, and it reads the same whether or not WaniKani is connected. */
+      { label: UK_EXPLORER_PAGE.tab, path: UK_EXPLORER_PAGE.path },
       { label: "Grades", path: "grades" },
       { label: "Practice", path: "practice" },
       /* Public, so it has no user segment: a map is the same for everyone. */

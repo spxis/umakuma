@@ -36,6 +36,8 @@ const PUBLIC_ROUTES: Record<string, string> = {
     "Static school-grade catalogue. No database, cached publicly.",
   "joyo-readings/[character]/route.ts": "Static jōyō readings. No database, cached publicly.",
   "stroke-order/[character]/route.ts": "Static KanjiVG stroke data. No database, cached publicly.",
+  "uk-ladder/route.ts":
+    "The UmaKuma curriculum itself - which of our hundred levels teaches each radical, kanji and word. It has one answer for everybody and no member appears in it, so somebody deciding whether to start here can read all hundred levels before making an account, the way they can already read the JLPT lists. It does reach the database, for WaniKani's words, but only through the ten-minute crosswalk cache rather than per request. A member's own progress over these items is a different route, and that one is guarded.",
   "reading-books/cover/route.ts":
     "Book covers for the public reading pages. Reads no member data, but does query the database and call two external APIs - rate limited for that reason.",
 };
