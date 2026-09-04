@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { GEO_DATASETS } from "./geoRegion";
-import { FACT_HEADINGS, regionFacts, regionKanji, regionsInOrder } from "./mapStudy";
+import { FACT_HEADINGS, mapViewTitle, regionByCode, regionFacts, regionKanji, regionsInOrder } from "./mapStudy";
 
 const tokyo = GEO_DATASETS.JP.regions.find((region) => region.code === 13)!;
 const california = GEO_DATASETS.US.regions.find((region) => region.code === "CA")!;
@@ -48,5 +48,19 @@ describe("what the panel says about a region", () => {
   it("knows the kanji a prefecture is written with", () => {
     expect(regionKanji(tokyo)).toEqual(["東", "京"]);
     expect(regionKanji(california)).toEqual([]);
+  });
+});
+
+describe("what the map says it is looking at", () => {
+  it("names the region, the place inside it, or just the place", () => {
+    const osaka = regionByCode("JP", 27)!;
+    expect(mapViewTitle("Kansai", null)).toBe("Kansai");
+    expect(mapViewTitle("Kansai", osaka)).toBe("Kansai · 大阪府 Osaka");
+    expect(mapViewTitle(null, osaka)).toBe("大阪府 Osaka");
+  });
+
+  /* The country chips already say which country; a title would repeat them. */
+  it("says nothing for a plain country", () => {
+    expect(mapViewTitle(null, null)).toBeNull();
   });
 });

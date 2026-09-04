@@ -4412,11 +4412,23 @@
     "id": "cache-the-accreditation-pages",
     "name": "Cache the accreditation pages",
     "area": "platform",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-03",
+    "summary": "Both /sources pages ran three Prisma reads and rebuilt a border-pair Set per map on every view, including every crawler hit. Each report is now held in process for ten minutes, which removes the repeat database work, and the index settles its readers so one dead source no longer hides eleven healthy ones. The CDN half did not land: a Cache-Control header was added and Vercel overrides it, because every page carrying PublicPageHeader is dynamic - the header reads the session - and Next sends no-store on a dynamic route. Verified against a local next start, which applies the header, and not against production, which does not. Sparing the app the request needs partial prerendering; filed separately. Requested 2026-09-03 by John as part of the source accreditation epic.",
+    "dateIsEstimate": false,
+    "version": "0.389.0",
+    "releasedAt": "2026-09-04T04:33:25Z"
+  },
+  {
+    "id": "map-view-title",
+    "name": "The map says what it is looking at",
+    "area": "platform",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-03",
-    "version": "0.389.0",
-    "releasedAt": "2026-09-04T04:33:25Z",
-    "summary": "Both /sources pages ran three Prisma reads and rebuilt a border-pair Set per map on every view, including every crawler hit. Each report is now held in process for ten minutes, which removes the repeat database work, and the index settles its readers so one dead source no longer hides eleven healthy ones. The CDN half did not land: a Cache-Control header was added and Vercel overrides it, because every page carrying PublicPageHeader is dynamic - the header reads the session - and Next sends no-store on a dynamic route. Verified against a local next start, which applies the header, and not against production, which does not. Sparing the app the request needs partial prerendering; filed separately. Requested 2026-09-03 by John as part of the source accreditation epic."
+    "version": "0.390.0",
+    "releasedAt": "2026-09-04T04:48:59Z",
+    "summary": "At /maps/japan/region/kansai the only signs that Kansai is what is framed are the URL and the side panel; the map itself has no title. Put an overlay title in the map's top-left corner - there is room, and the pan hint already sits bottom-left in that style - naming the region, and the region and the province when one is chosen (Kansai \u00b7 Osaka). John also suggested a leader line from the region's centre to a label, the way the game's handles point. Requested 2026-09-03 by John."
   }
 ]

@@ -11,7 +11,7 @@ import { GEO_DATASETS } from "@/lib/geoRegion";
 import { MAP_COUNTRIES, type MapCountryCode } from "@/lib/mapCountries";
 import { mapHref, parseMapPath } from "@/lib/mapAddress";
 import { regionCodesInArea } from "@/lib/mapDirectory";
-import { regionByCode, regionsInOrder } from "@/lib/mapStudy";
+import { mapViewTitle, regionByCode, regionsInOrder } from "@/lib/mapStudy";
 import { regionNameLabel, regionNameLines } from "@/lib/regionNames";
 
 import { MAP_ZOOM_LEVELS } from "@/lib/geoMapFraming";
@@ -178,6 +178,7 @@ export default function MapStudy({
    */
   const litArea = hoveredArea ?? area;
   const areaCodes = regionCodesInArea(regions, litArea);
+  const viewTitle = mapViewTitle(litArea, selected ?? null);
 
   const marks: MapMark[] = [
     ...painted,
@@ -270,6 +271,21 @@ export default function MapStudy({
             regionLabel={regionLabel}
             svgProps={view.panProps}
           />
+          {/*
+            * What is framed, said on the map itself. The address and the panel
+            * both knew; the picture did not, and a picture of seven lit
+            * prefectures with no name is a quiz rather than a map. Top-left,
+            * across from the zoom controls; the corners below are taken by the
+            * pan hint and the credit.
+            */}
+          {viewTitle ? (
+            <p
+              aria-live="polite"
+              className="pointer-events-none absolute left-3 top-3 max-w-[60%] truncate rounded-full bg-surface/90 px-3 py-1 text-[11px] font-black uppercase tracking-[0.12em] text-foreground shadow-sm backdrop-blur"
+            >
+              {viewTitle}
+            </p>
+          ) : null}
           {/*
             * Over the map rather than beside it: the controls belong to what
             * they change, and a row above the map would push it down on the

@@ -1,4 +1,5 @@
 import { GEO_DATASETS, type GeoRegion } from "./geoRegion";
+import { regionNameLabel } from "./regionNames";
 import { getPrefectureMetadataByCode } from "./japanPrefectures";
 import type { MapCountryCode } from "./mapCountries";
 
@@ -141,4 +142,19 @@ export function regionFacts(region: GeoRegion): FactGroup[] {
 /** The kanji a Japanese prefecture is written with; empty elsewhere. */
 export function regionKanji(region: GeoRegion): string[] {
   return region.extras?.kanjiTagging?.prefectureKanji ?? [];
+}
+
+/**
+ * What the map is looking at, said once, on the map.
+ *
+ * At /maps/japan/region/kansai the only signs that Kansai was framed were the
+ * address bar and the side panel; the map itself said nothing. "Kansai" when a
+ * region is lit, "Kansai · 大阪府 Osaka" once a prefecture is chosen inside
+ * it, "大阪府 Osaka" for a prefecture on its own, and nothing at all for a
+ * plain country - the country chips already say which.
+ */
+export function mapViewTitle(area: string | null, region: GeoRegion | null): string | null {
+  const place = region ? regionNameLabel(region) : null;
+  if (area && place) return `${area} · ${place}`;
+  return area ?? place;
 }
