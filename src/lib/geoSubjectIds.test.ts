@@ -3,18 +3,20 @@ import { describe, expect, it } from "vitest";
 /* Registers all seven; nothing is in memory until something loads it. */
 import "./geoDatasetsAll";
 
-import { getAllGeoRegions, getGeoRegionsByCountry, type CountryCode } from "./geoRegion";
+import { getGeoRegionsByCountry } from "./geoRegion";
 import {
   GEO_REGION_COUNTS,
   GEO_SUBJECT_ID_BASES,
   geoRegionIdFromSubjectId,
   geoSubjectId,
   isGeoSubjectId,
+  type GameMapCountry,
 } from "./geoSubjectIds";
 import { isMapSubjectId, mapSubjectId } from "./japanPrefectures";
 
 
-const COUNTRIES: CountryCode[] = ["JP", "US", "CA", "TH", "CN", "AU", "TW"];
+/* The countries the game reserves id ranges for - not every country with a map. */
+const COUNTRIES: GameMapCountry[] = ["JP", "US", "CA", "TH", "CN", "AU", "TW"];
 
 describe("backward compatibility with recorded runs", () => {
   /*
@@ -38,14 +40,32 @@ describe("backward compatibility with recorded runs", () => {
 });
 
 describe("geoSubjectId", () => {
-  it("assigns an id to every region in every country", () => {
-    for (const region of getAllGeoRegions()) {
-      expect(geoSubjectId(region.country, region.code)).not.toBeNull();
+  /*
+   * An id for every region the game can ask about, and none for the rest.
+   *
+   * A run stores its questions as these ids, so a country joins the scheme
+   * only when somebody assigns it a range. The twenty-five countries opened
+   * for reading have maps and no ids, and that is the correct answer rather
+   * than a gap - `geoSubjectId` returns null instead of inventing one.
+   */
+  it("assigns an id to every region of a country the game can play", () => {
+    for (const country of COUNTRIES) {
+      for (const region of getGeoRegionsByCountry(country)) {
+        expect(geoSubjectId(region.country, region.code)).not.toBeNull();
+      }
+    }
+  });
+
+  it("gives no id to a country the game has no range for", () => {
+    for (const region of getGeoRegionsByCountry("FR")) {
+      expect(geoSubjectId(region.country, region.code)).toBeNull();
     }
   });
 
   it("never collides across the whole pool", () => {
-    const ids = getAllGeoRegions().map((region) => geoSubjectId(region.country, region.code));
+    const ids = COUNTRIES.flatMap((country) =>
+      getGeoRegionsByCountry(country).map((region) => geoSubjectId(region.country, region.code)),
+    );
     expect(new Set(ids).size).toBe(ids.length);
   });
 
@@ -57,9 +77,12 @@ describe("geoSubjectId", () => {
 
 describe("geoRegionIdFromSubjectId", () => {
   it("round-trips every region back to its composite id", () => {
-    for (const region of getAllGeoRegions()) {
-      const id = geoSubjectId(region.country, region.code) as number;
-      expect(geoRegionIdFromSubjectId(id)).toBe(region.id);
+    /* Only the countries with a reserved range have ids to round-trip. */
+    for (const country of COUNTRIES) {
+      for (const region of getGeoRegionsByCountry(country)) {
+        const id = geoSubjectId(region.country, region.code) as number;
+        expect(geoRegionIdFromSubjectId(id)).toBe(region.id);
+      }
     }
   });
 
@@ -82,6 +105,6 @@ describe("the counts the id scheme depends on", () => {
    * that ever happens.
    */
   it.each(COUNTRIES)("still has the expected number of divisions for %s", (country) => {
-    expect(getGeoRegionsByCountry(country)).toHaveLength(GEO_REGION_COUNTS[country]);
+    expect(getGeoRegionsByCountry(country)).toHaveLength(GEO_REGION_COUNTS[country as GameMapCountry]);
   });
 });

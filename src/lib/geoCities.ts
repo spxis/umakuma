@@ -137,3 +137,23 @@ export function citiesOfRegion(cities: MapCity[], code: string | number | null):
   const wanted = String(code);
   return cities.filter((city) => city.region === wanted);
 }
+
+/**
+ * A division's capital, taken from the only place that actually knows.
+ *
+ * Natural Earth marks capitals in Populated Places - `Admin-1 capital` on the
+ * city itself. The boundary builder had no such field and fell back to the
+ * division's own name, or to whatever `name_alt` held, so France's Aisne was
+ * given the capital "Aisne" and Ain was given "Rhone-Alpes", which is a region
+ * rather than a city. Both were inventions presented as fact.
+ *
+ * Null where Natural Earth does not say. Ninety-four of France's ninety-six
+ * departments come back null, and that is the correct answer.
+ */
+export function capitalOfRegion(country: CountryCode, code: string | number | null): MapCity | null {
+  if (code === null) return null;
+  const cityset = CITYSETS[country];
+  if (!cityset) return null;
+  const wanted = String(code);
+  return cityset.cities.find((city) => city.region === wanted && city.capital !== null) ?? null;
+}

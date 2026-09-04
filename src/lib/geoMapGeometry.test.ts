@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { GEO_DATASETS, type CountryCode } from "./geoRegion";
 import { getPlayableMapCountries } from "./mapCountries";
-import { GEO_REGION_COUNTS } from "./geoSubjectIds";
+import { GEO_REGION_COUNTS, type GameMapCountry } from "./geoSubjectIds";
 
 /**
  * The maps have to be maps.
@@ -47,7 +47,7 @@ const MINIMUM_VERTICES = 12;
 
 describe("map geometry", () => {
   it.each(COUNTRIES)("%s has every region it claims", (country) => {
-    expect(GEO_DATASETS[country].regions).toHaveLength(GEO_REGION_COUNTS[country]);
+    expect(GEO_DATASETS[country].regions).toHaveLength(GEO_REGION_COUNTS[country as GameMapCountry]);
   });
 
   it.each(COUNTRIES)("%s gives every region a drawable outline", (country) => {

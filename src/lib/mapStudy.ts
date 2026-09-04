@@ -1,4 +1,6 @@
+import { capitalOfRegion } from "./geoCities";
 import { GEO_DATASETS, type GeoRegion } from "./geoRegion";
+import { isCuratedMapCountry } from "./mapCountries";
 import { regionNameLabel } from "./regionNames";
 import { getPrefectureMetadataByCode } from "./japanPrefectures";
 import type { MapCountryCode } from "./mapCountries";
@@ -105,14 +107,34 @@ export function regionFacts(region: GeoRegion): FactGroup[] {
   const jp = region.country === DEFAULT_MAP_COUNTRY ? getPrefectureMetadataByCode(Number(region.code)) : undefined;
   const extras = region.extras ?? {};
 
+  /*
+   * Only what we actually know.
+   *
+   * Japan, the United States and Canada carry facts a person wrote. Every
+   * other country was generated from Natural Earth boundaries, which hold no
+   * capital, population or area at all - so the builder filled the capital
+   * with the division's own name and the rest with zero, and the panel printed
+   * "Capital: Aisne" and "Population 0" as though they were true.
+   *
+   * For those countries the capital comes from Populated Places, which really
+   * does mark them, and everything the boundaries cannot answer is left out.
+   * A blank row is honest; an invented one is not.
+   */
+  const curated = isCuratedMapCountry(region.country);
+  const marked = curated ? null : capitalOfRegion(region.country, region.code);
+
   const glance: Fact[] = [
-    fact(FACT_LABELS.capital, region.capital.name, region.capital.nameNative),
-    region.largestCity && region.largestCity !== region.capital.name
+    curated
+      ? fact(FACT_LABELS.capital, region.capital.name, region.capital.nameNative)
+      : fact(FACT_LABELS.capital, marked?.name),
+    curated && region.largestCity && region.largestCity !== region.capital.name
       ? fact(FACT_LABELS.largestCity, region.largestCity, jp?.largestCity?.kanji)
       : null,
     fact(FACT_LABELS.region, region.region),
-    fact(FACT_LABELS.population, region.population),
-    fact(FACT_LABELS.area, `${number.format(region.areaKm2)} km² · ${number.format(region.areaSqMi)} sq mi`),
+    fact(FACT_LABELS.population, region.population > 0 ? region.population : null),
+    region.areaKm2 > 0
+      ? fact(FACT_LABELS.area, `${number.format(region.areaKm2)} km² · ${number.format(region.areaSqMi)} sq mi`)
+      : null,
     /* Years are names, not counts: 1850, never 1,850. */
     fact(FACT_LABELS.admitted, extras.admittedYear?.toString()),
     fact(FACT_LABELS.statehoodOrder, extras.statehoodOrder?.toString()),

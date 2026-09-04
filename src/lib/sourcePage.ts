@@ -219,7 +219,7 @@ function curriculum(): SourceReport {
  * files carry a source line and no date; the meta files carry the date. Both
  * are written by the same `pnpm map:build:all` run, so either one dates it.
  */
-const MAP_BUILD_DATES: Record<CountryCode, string> = {
+const MAP_BUILD_DATES: Partial<Record<CountryCode, string>> = {
   JP: jpMeta.updatedAt,
   US: usMeta.updatedAt,
   CA: caMeta.updatedAt,

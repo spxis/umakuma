@@ -1,4 +1,4 @@
-import { GEO_REGION_COUNTS } from "@/lib/geoSubjectIds";
+import { GEO_REGION_COUNTS, isGameMapCountry } from "@/lib/geoSubjectIds";
 import {
   GAME_KINDS,
   GAME_PRACTICE_LISTS,
@@ -59,7 +59,9 @@ export function gameSelectionAvailableCount(setup: GameSetupResponse, selection:
    * count would otherwise read 47 while a round of 51 states was queued up.
    */
   if (rules.usesMapCountry) {
-    return GEO_REGION_COUNTS[selection.mapCountry ?? "JP"];
+    /* Only a country the game has an id range for can be selected here. */
+    const chosen = selection.mapCountry ?? "JP";
+    return GEO_REGION_COUNTS[isGameMapCountry(chosen) ? chosen : "JP"];
   }
 
   return gameAvailableCount(

@@ -1,4 +1,43 @@
-export type CountryCode = "JP" | "US" | "CA" | "TH" | "CN" | "AU" | "TW";
+/**
+ * Every country that has a map on disk.
+ *
+ * Not every one is loaded at any moment - each is its own chunk now, fetched
+ * when a surface draws it - but each has a dataset module and can be asked
+ * for. See `geoDatasetLoaders`.
+ */
+export type CountryCode =
+  | "JP"
+  | "US"
+  | "CA"
+  | "AU"
+  | "CN"
+  | "TW"
+  | "TH"
+  | "AR"
+  | "AT"
+  | "BE"
+  | "BR"
+  | "CL"
+  | "CO"
+  | "FR"
+  | "DE"
+  | "IE"
+  | "IT"
+  | "MY"
+  | "MX"
+  | "NL"
+  | "NZ"
+  | "NO"
+  | "PE"
+  | "PH"
+  | "PL"
+  | "RU"
+  | "KR"
+  | "ES"
+  | "SE"
+  | "CH"
+  | "GB"
+  | "VN";
 export type DivisionType = "prefecture" | "state" | "province" | "territory" | "district";
 
 export interface GeoRegionCapital {

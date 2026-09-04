@@ -20,7 +20,17 @@ import { MAP_SUBJECT_ID_BASE } from "./japanPrefectures";
  * fixed; if one were ever added, ids after it would shift, so `geoRegionCount`
  * is pinned by a test to make that break loudly rather than silently.
  */
-export const GEO_SUBJECT_ID_BASES: Record<CountryCode, number> = {
+/**
+ * The countries the map game can run on.
+ *
+ * Narrower than `CountryCode`, deliberately: every run stores its questions as
+ * subject ids drawn from these ranges, so a country only joins the game when
+ * somebody assigns it a range - which is a decision about data that outlives
+ * the code, not a line of layout.
+ */
+export type GameMapCountry = "JP" | "US" | "CA" | "TH" | "CN" | "AU" | "TW";
+
+export const GEO_SUBJECT_ID_BASES: Record<GameMapCountry, number> = {
   JP: MAP_SUBJECT_ID_BASE,
   US: MAP_SUBJECT_ID_BASE + 1_000,
   CA: MAP_SUBJECT_ID_BASE + 2_000,
@@ -31,7 +41,14 @@ export const GEO_SUBJECT_ID_BASES: Record<CountryCode, number> = {
 };
 
 /** How many divisions each country has; ids are only stable while these hold. */
-export const GEO_REGION_COUNTS: Record<CountryCode, number> = {
+export const GAME_MAP_COUNTRIES = ["JP", "US", "CA", "TH", "CN", "AU", "TW"] as const;
+
+/** Whether the map game has a reserved id range for this country. */
+export function isGameMapCountry(code: string): code is GameMapCountry {
+  return (GAME_MAP_COUNTRIES as readonly string[]).includes(code);
+}
+
+export const GEO_REGION_COUNTS: Record<GameMapCountry, number> = {
   JP: 47,
   US: 51,
   CA: 13,
@@ -41,7 +58,7 @@ export const GEO_REGION_COUNTS: Record<CountryCode, number> = {
   TW: 21,
 };
 
-const COUNTRY_CODES = Object.keys(GEO_SUBJECT_ID_BASES) as CountryCode[];
+const COUNTRY_CODES = Object.keys(GEO_SUBJECT_ID_BASES) as GameMapCountry[];
 
 function sortedCodesFor(country: CountryCode): string[] {
   return getGeoRegionsByCountry(country)
@@ -66,13 +83,16 @@ const OFFSETS_BY_COUNTRY = new Map<CountryCode, Map<string, number>>(
 
 /** The reserved subject id for a region, given its country and code. */
 export function geoSubjectId(country: CountryCode, code: string | number): number | null {
+  /* A country the game has no id range for has no subject id, by definition. */
+  if (!isGameMapCountry(country)) return null;
   const offset = OFFSETS_BY_COUNTRY.get(country)?.get(String(code));
   return offset === undefined ? null : GEO_SUBJECT_ID_BASES[country] + offset;
 }
 
 /** Whether an id falls in any country's reserved map band. */
 export function isGeoSubjectId(subjectId: number): boolean {
-  return COUNTRY_CODES.some((country) => {
+  /* Only the countries with a reserved range can own one of these ids. */
+  return GAME_MAP_COUNTRIES.some((country) => {
     const offset = subjectId - GEO_SUBJECT_ID_BASES[country];
     return offset >= 1 && offset <= GEO_REGION_COUNTS[country];
   });

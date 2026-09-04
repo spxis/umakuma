@@ -33,19 +33,23 @@ describe("the country picker", () => {
     expect(labels(draw("CA", false))).toEqual(["Japan", "Canada", "Other countries"]);
   });
 
-  it("hides the pilot countries from a viewer who may not open them", () => {
-    const groups = mapCountryGroups(false);
-    const offered = groups.parts.flatMap((g) => g.countries.map((c) => c.code));
-    expect(offered).not.toContain("TH");
-    expect(offered).not.toContain("CN");
+  it("groups the rest by part of the world, in a fixed order", () => {
+    const publicParts = mapCountryGroups(false).parts.map((g) => g.part);
+    expect(publicParts).toEqual(["Asia", "Oceania", "North America", "South America", "Europe"]);
   });
 
-  it("groups the rest by part of the world, dropping the empty ones", () => {
-    const publicParts = mapCountryGroups(false).parts.map((g) => g.part);
-    expect(publicParts).toEqual(["North America"]);
-
-    const adminParts = mapCountryGroups(true).parts.map((g) => g.part);
-    expect(adminParts).toEqual(["Asia", "Oceania", "North America"]);
+  it("shows an admin the pilot countries and everyone else only the open ones", () => {
+    const asAdmin = mapCountryGroups(true).parts.flatMap((g) => g.countries.map((c) => c.code));
+    const asReader = mapCountryGroups(false).parts.flatMap((g) => g.countries.map((c) => c.code));
+    for (const pilot of ["TH", "CN", "AU", "TW"]) {
+      expect(asAdmin).toContain(pilot);
+      expect(asReader).not.toContain(pilot);
+    }
+    /* And the twenty-five opened for reading are there for both. */
+    for (const open of ["FR", "BR", "KR"]) {
+      expect(asReader).toContain(open);
+      expect(asAdmin).toContain(open);
+    }
   });
 
   it("never puts Japan in a group as well as at the front", () => {

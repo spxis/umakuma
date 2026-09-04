@@ -59,9 +59,9 @@ describe("the pilot countries", () => {
   });
 
   it("say no to a country that is not on the map at all", () => {
-    expect(isMapCountry("GB")).toBe(false);
-    expect(canUseMapCountry("GB", true)).toBe(false);
-    expect(isAdminOnlyMapCountry("GB")).toBe(false);
+    expect(isMapCountry("ZZ")).toBe(false);
+    expect(canUseMapCountry("ZZ", true)).toBe(false);
+    expect(isAdminOnlyMapCountry("ZZ")).toBe(false);
   });
 });
 

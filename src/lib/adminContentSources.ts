@@ -13,7 +13,7 @@ import jpMap from "@/data/maps/jp-map.json";
 import usMap from "@/data/maps/us-map.json";
 
 import { GEO_DATASETS, type CountryCode } from "./geoRegion";
-import { GEO_REGION_COUNTS } from "./geoSubjectIds";
+import { GEO_REGION_COUNTS, isGameMapCountry } from "./geoSubjectIds";
 import { prisma } from "./prisma";
 import { getSchoolGradeIndex } from "./schoolGrades";
 
@@ -80,7 +80,7 @@ export type AdminContentSources = {
  * it - but provenance is most of what an admin panel about generated data is
  * for. A map with no recorded source is one nobody can regenerate.
  */
-const MAP_SOURCES: Record<CountryCode, string> = {
+const MAP_SOURCES: Partial<Record<CountryCode, string>> = {
   JP: jpMap.source,
   US: usMap.source,
   CA: caMap.source,
@@ -133,8 +133,8 @@ function buildMapRows(): MapSourceRow[] {
       countryName: dataset.countryName,
       divisionTypeName: dataset.divisionTypeName,
       regions: dataset.regions.length,
-      expectedRegions: GEO_REGION_COUNTS[country],
-      source: MAP_SOURCES[country],
+      expectedRegions: isGameMapCountry(country) ? GEO_REGION_COUNTS[country] : dataset.regions.length,
+      source: MAP_SOURCES[country] ?? "",
       viewBox: dataset.viewBox,
       averagePathCommands: dataset.regions.length
         ? Math.round(commands / dataset.regions.length)

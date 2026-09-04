@@ -49,7 +49,7 @@ describe("a map's address", () => {
   });
 
   it("refuses a path that names nothing real, rather than guessing", () => {
-    expect(parseMapPath(["france"])).toBeNull();
+    expect(parseMapPath(["atlantis"])).toBeNull();
     expect(parseMapPath(["japan", "atlantis"])).toBeNull();
     expect(parseMapPath(["japan", "gifu", "extra"])).toBeNull();
     expect(countryForSlug("JAPAN")).toBe("JP");
