@@ -4640,11 +4640,23 @@
     "id": "radicals-come-first-and-level-one-is-theirs",
     "name": "Radicals come first, and level one is theirs",
     "area": "platform",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-04",
+    "summary": "The ladder promised a radical is taught before the kanji built from it, and that was quietly untrue for every kanji at level 1: placeRadicals puts a radical two levels early and clamps at 1, so all six level-1 kanji had their radicals in the same level as themselves - \u5e74 with four of them. There is nowhere below level 1, so kanji now start at level 2 and level 1 is 17 radicals and 18 kana words with no kanji at all: shapes and \u3053\u308c/\u305d\u308c/\u306f\u3044, nothing to cross-reference. 8,424 radical-to-kanji pairs now checked by test, zero violations. Level 1 falls from 46 subjects to 35, against WaniKani's 80.",
+    "dateIsEstimate": false,
+    "version": "0.408.0",
+    "releasedAt": "2026-09-04T13:25:58Z"
+  },
+  {
+    "id": "map-directory-refill",
+    "name": "The region directory is empty after lazy loading",
+    "area": "games",
     "kind": "bug",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.408.0",
-    "releasedAt": "2026-09-04T13:25:58Z",
-    "summary": "The ladder promised a radical is taught before the kanji built from it, and that was quietly untrue for every kanji at level 1: placeRadicals puts a radical two levels early and clamps at 1, so all six level-1 kanji had their radicals in the same level as themselves - \u5e74 with four of them. There is nowhere below level 1, so kanji now start at level 2 and level 1 is 17 radicals and 18 kana words with no kanji at all: shapes and \u3053\u308c/\u305d\u308c/\u306f\u3044, nothing to cross-reference. 8,424 radical-to-kanji pairs now checked by test, zero violations. Level 1 falls from 46 subjects to 35, against WaniKani's 80."
+    "version": "0.409.0",
+    "releasedAt": "2026-09-04T13:33:48Z",
+    "summary": "0.405.0 began loading a country's data only when a map draws it, and left the region list memoised on the country alone. A country's first render happens before its chunk arrives, so the empty list built on that pass was kept: the map drew forty-seven prefectures beside a panel reading All 0 prefectures. The list now waits for the data it is listing."
   }
 ]
