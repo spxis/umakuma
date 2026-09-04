@@ -162,3 +162,71 @@ export function summarizeLadderLevels(rows: readonly LadderRow[], levels: number
 
   return summaries;
 }
+
+export type LadderLevelGroup = {
+  level: number;
+  nLevel: number | null;
+  radicals: LadderRow[];
+  kanji: LadderRow[];
+  vocabulary: LadderRow[];
+  /** Kanji taught up to and including this level. */
+  kanjiThrough: number;
+  wordsThrough: number;
+};
+
+/** How many levels one page of the level view shows. */
+export const LADDER_LEVELS_PER_PAGE = 10;
+
+/**
+ * The ladder read a level at a time, rather than a row at a time.
+ *
+ * A table answers "where is this kanji"; this answers "what is a level made
+ * of", which is the question anybody deciding whether a level is fair actually
+ * asks. Radicals, then that level's kanji, then its words — the order a level
+ * is met in, and the order the build placed them.
+ */
+export function groupLadderByLevel(
+  rows: readonly LadderRow[],
+  levels: number,
+  page = 1,
+  pageSize = LADDER_LEVELS_PER_PAGE,
+): { groups: LadderLevelGroup[]; page: number; pageCount: number } {
+  const byLevel = new Map<number, LadderRow[]>();
+  for (const row of rows) {
+    const held = byLevel.get(row.ukLevel);
+    if (held) held.push(row);
+    else byLevel.set(row.ukLevel, [row]);
+  }
+
+  const pageCount = Math.max(1, Math.ceil(levels / pageSize));
+  const wanted = Math.min(Math.max(1, page), pageCount);
+  const first = (wanted - 1) * pageSize + 1;
+  const last = Math.min(levels, first + pageSize - 1);
+
+  /* Running totals are over the whole ladder, not the page, so a level on
+     page five still says how much a member knows by the time they reach it. */
+  let kanjiThrough = 0;
+  let wordsThrough = 0;
+  const groups: LadderLevelGroup[] = [];
+
+  for (let level = 1; level <= last; level += 1) {
+    const held = byLevel.get(level) ?? [];
+    const kanji = held.filter((row) => row.kind === "kanji");
+    const vocabulary = held.filter((row) => row.kind === "vocabulary");
+    kanjiThrough += kanji.length;
+    wordsThrough += vocabulary.length;
+    if (level < first) continue;
+
+    groups.push({
+      level,
+      nLevel: kanji.find((row) => row.nLevel !== null)?.nLevel ?? null,
+      radicals: held.filter((row) => row.kind === "radical"),
+      kanji,
+      vocabulary,
+      kanjiThrough,
+      wordsThrough,
+    });
+  }
+
+  return { groups, page: wanted, pageCount };
+}

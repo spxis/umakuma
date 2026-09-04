@@ -9,6 +9,11 @@ import { KANJI_GRADE_BAND_VALUES, type KanjiGradeBand } from "@/lib/kanjiCoverag
 import { LADDER_SOURCE_LABELS, LADDER_SOURCE_VALUES, type LadderRow, type LadderSource } from "@/lib/ladder/ladderCrosswalk";
 import { LADDER_DEFAULT_PAGE_SIZE, type LadderFacets, type LadderLevelSummary } from "@/lib/ladder/ladderQuery";
 
+import SegmentedControl from "@/app/shared/SegmentedControl";
+import { usePersistedTab } from "@/lib/usePersistedTab";
+import type { LadderLevelGroup } from "@/lib/ladder/ladderQuery";
+
+import AdminLadderLevels from "./AdminLadderLevels";
 import AdminLadderShape from "./AdminLadderShape";
 import AdminPaginationControls from "./AdminPaginationControls";
 import AdminPanelHeader from "./AdminPanelHeader";
@@ -20,6 +25,13 @@ import {
   LADDER_SOURCE_BADGE,
 } from "./AdminLadder.constants";
 
+/** Table or levels: the same rows read two ways, remembered per member. */
+const LADDER_VIEWS = ["rows", "levels"] as const;
+type LadderView = (typeof LADDER_VIEWS)[number];
+const VIEW_STORAGE_KEY = "wr:admin:ladder-view";
+
+type LevelsPayload = { groups: LadderLevelGroup[]; page: number; pageCount: number; levels: LadderLevelSummary[] };
+
 type Payload = {
   rows: LadderRow[];
   total: number;
@@ -27,6 +39,8 @@ type Payload = {
   pageSize: number;
   facets: LadderFacets;
   levels: LadderLevelSummary[];
+  /** How many levels the ladder has, so the level view can page over them. */
+  ladderLevels: number;
 };
 
 const CHIP = "inline-flex h-7 items-center rounded-full border px-2.5 text-[11px] font-bold transition";
@@ -50,6 +64,7 @@ export default function AdminLadderBrowser({
   checkingSession: boolean;
 }) {
   const [page, setPage] = useState(1);
+  const [view, setView] = usePersistedTab<LadderView>(VIEW_STORAGE_KEY, LADDER_VIEWS, "rows");
   const [rawSearch, setRawSearch] = useState("");
   const [search, setSearch] = useState("");
   const [kind, setKind] = useState<SubjectType | null>(null);
@@ -57,6 +72,13 @@ export default function AdminLadderBrowser({
   const [band, setBand] = useState<KanjiGradeBand | null>(null);
   const [level, setLevel] = useState<number | null>(null);
   const [missingOnly, setMissingOnly] = useState(false);
+
+  /* Changing view starts at page one: the two views page over different
+     things — fifty rows against ten levels — so a page number does not carry. */
+  function chooseView(next: LadderView) {
+    setView(next);
+    setPage(1);
+  }
 
   /* The list is in memory on the server, but a keystroke is still a request. */
   useEffect(() => {
@@ -86,6 +108,7 @@ export default function AdminLadderBrowser({
   const chooseMissing = change(setMissingOnly);
 
   const url = useMemo(() => {
+    if (view === "levels") return `/api/admin/ladder/items?view=levels&page=${page}`;
     const params = new URLSearchParams({ page: String(page), pageSize: String(LADDER_DEFAULT_PAGE_SIZE) });
     if (search) params.set("search", search);
     if (kind) params.set("kind", kind);
@@ -97,13 +120,13 @@ export default function AdminLadderBrowser({
     }
     if (missingOnly) params.set("missingFromWanikani", "1");
     return `/api/admin/ladder/items?${params.toString()}`;
-  }, [page, search, kind, source, band, level, missingOnly]);
+  }, [view, page, search, kind, source, band, level, missingOnly]);
 
-  const { data, error, isLoading } = useSWR<Payload>(
+  const { data, error, isLoading } = useSWR<Payload & Partial<LevelsPayload>>(
     sessionAuthorized && !checkingSession ? url : null,
     async (target: string) => {
       const response = await fetch(target);
-      const payload = (await response.json()) as Payload & { error?: string };
+      const payload = (await response.json()) as Payload & Partial<LevelsPayload> & { error?: string };
       if (!response.ok) throw new Error(payload.error ?? copy.loadFailed);
       return payload;
     },
@@ -114,13 +137,31 @@ export default function AdminLadderBrowser({
   if (!sessionAuthorized) return <Shell><Note>{copy.needsAuth}</Note></Shell>;
   if (error || !data) return <Shell><Note tone="bad">{copy.loadFailed}</Note></Shell>;
 
-  const pageCount = Math.max(1, Math.ceil(data.total / data.pageSize));
+  const pageCount =
+    view === "levels" ? (data.pageCount ?? 1) : Math.max(1, Math.ceil(data.total / data.pageSize));
   const filtered = Boolean(search || kind || source || band || level !== null || missingOnly);
 
   return (
     <Shell>
       <AdminLadderShape levels={data.levels} selected={level} onSelect={chooseLevel} />
 
+      <div className="mt-3 flex flex-wrap items-center gap-2">
+        <SegmentedControl
+          value={view}
+          onChange={chooseView}
+          ariaLabel={copy.title}
+          options={[
+            { value: "rows", label: copy.view.rows },
+            { value: "levels", label: copy.view.levels },
+          ]}
+        />
+
+        {view === "levels" ? (
+          <p className="text-[11px] font-semibold text-foreground/60">{copy.levels.hint}</p>
+        ) : null}
+      </div>
+
+      {view === "rows" ? (
       <div className="mt-3 flex flex-wrap items-center gap-2">
         <input
           type="search"
@@ -202,7 +243,15 @@ export default function AdminLadderBrowser({
           </button>
         ) : null}
       </div>
+      ) : null}
 
+      {view === "levels" ? (
+        <div className="mt-3">
+          <AdminLadderLevels groups={data.groups ?? []} />
+        </div>
+      ) : null}
+
+      {view === "rows" ? (
       <div className="mt-3 overflow-x-auto">
         <table className="w-full min-w-[46rem] text-left text-sm">
           <thead className="text-[10px] font-black uppercase tracking-[0.08em] text-foreground/60">
@@ -257,13 +306,14 @@ export default function AdminLadderBrowser({
         </table>
         {data.rows.length === 0 ? <Note>{copy.none}</Note> : null}
       </div>
+      ) : null}
 
       <div className="mt-3">
         <AdminPaginationControls
           page={data.page}
           pageCount={pageCount}
-          itemLabel={copy.items}
-          total={data.total}
+          itemLabel={view === "levels" ? copy.view.levels.toLowerCase() : copy.items}
+          total={view === "levels" ? (data.ladderLevels ?? pageCount) : data.total}
           onFirst={() => setPage(1)}
           onPrevious={() => setPage((current) => Math.max(1, current - 1))}
           onNext={() => setPage((current) => Math.min(pageCount, current + 1))}

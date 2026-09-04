@@ -37,6 +37,12 @@ export const ADMIN_LADDER_COPY = {
     meaning: "Meaning",
   },
   /* The one place the two level scales are named side by side. */
+  view: { rows: "Table", levels: "Levels" },
+  levels: {
+    noKanji: "Radicals and kana words only — no kanji at this level.",
+    known: "known",
+    hint: "Radicals in cyan, then that level's kanji, then its words.",
+  },
   ukPrefix: "UK",
   wkPrefix: "WK",
   notTaught: "—",

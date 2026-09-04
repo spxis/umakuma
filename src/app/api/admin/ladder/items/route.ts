@@ -8,7 +8,12 @@ import { KANJI_LADDER_LEVELS } from "@/lib/kanjiLadder";
 import { SUBJECT_TYPE_VALUES } from "@/lib/domainConstants";
 import { LADDER_SOURCE_VALUES } from "@/lib/ladder/ladderCrosswalk";
 import { loadLadderCrosswalk } from "@/lib/ladder/ladderCrosswalkServer";
-import { LADDER_DEFAULT_PAGE_SIZE, LADDER_PAGE_SIZES, queryLadder } from "@/lib/ladder/ladderQuery";
+import {
+  groupLadderByLevel,
+  LADDER_DEFAULT_PAGE_SIZE,
+  LADDER_PAGE_SIZES,
+  queryLadder,
+} from "@/lib/ladder/ladderQuery";
 
 const querySchema = z.object({
   page: z.coerce.number().int().min(1).max(10_000).default(1),
@@ -21,6 +26,9 @@ const querySchema = z.object({
   ukLevelMin: z.coerce.number().int().min(1).max(KANJI_LADDER_LEVELS).nullish(),
   ukLevelMax: z.coerce.number().int().min(1).max(KANJI_LADDER_LEVELS).nullish(),
   missingFromWanikani: z.enum(["1", "0"]).nullish(),
+  /* A table answers "where is this kanji"; the level view answers "what is
+     a level made of". Same rows, grouped rather than paged. */
+  view: z.enum(["rows", "levels"]).default("rows"),
 });
 
 /**
@@ -51,6 +59,15 @@ export async function GET(request: Request) {
         }
 
         const { rows, levels } = await loadLadderCrosswalk();
+
+        if (parsed.data.view === "levels") {
+          const grouped = groupLadderByLevel(rows, KANJI_LADDER_LEVELS, parsed.data.page);
+          return NextResponse.json(
+            { ...grouped, levels, ladderLevels: KANJI_LADDER_LEVELS },
+            { headers: { "Cache-Control": "private, max-age=10, stale-while-revalidate=20" } },
+          );
+        }
+
         const result = queryLadder(rows, {
           page: parsed.data.page,
           pageSize: parsed.data.pageSize,
