@@ -158,3 +158,26 @@ describe("opening a region", () => {
     expect(document.querySelector('h3 button[aria-label^="Open "]')).toBeNull();
   });
 });
+
+/*
+ * Choosing a region must not move it. The open control was a text button
+ * taller than the heading, so the row grew when it appeared and everything
+ * below shifted. The row is a fixed height now and the control fits inside it.
+ */
+describe("the heading row when a region is chosen", () => {
+  it("keeps the row one height whether or not the region is held", () => {
+    const rows = (document: Document) =>
+      [...document.querySelectorAll("h3")].map((heading) => heading.parentElement?.className ?? "");
+    for (const className of [...rows(draw()), ...rows(draw({}, null, "Tohoku"))]) {
+      expect(className).toMatch(/\bh-6\b/);
+    }
+  });
+
+  it("fits the open control inside the row rather than growing it", () => {
+    const open = draw({}, null, "Tohoku").querySelector('button[aria-label^="Open "]');
+    expect(open?.className).toMatch(/\bh-6\b/);
+    expect(open?.className).toMatch(/\bw-6\b/);
+    expect(open?.querySelector("svg")).not.toBeNull();
+    expect(open?.textContent?.trim()).toBe("");
+  });
+});

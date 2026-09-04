@@ -52,7 +52,6 @@ export const MAP_DIRECTORY_COPY = {
   regionTitle: (region: string) => `Highlight ${region} on the map`,
   /** "Open Tohoku": frame the map on the region. */
   regionOpen: (region: string) => `Open ${region}`,
-  open: "Open",
 } as const;
 
 export const MAP_SHAPE_COPY = { caption: (name: string) => `The shape of ${name}, with its neighbours in outline.` } as const;

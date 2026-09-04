@@ -90,7 +90,15 @@ export default function MapRegionDirectory({
                 * explicit open control - a sibling of the heading button,
                 * never inside it.
                 */}
-              <div className="mb-1 flex items-center gap-1">
+              {/*
+                * The row is one fixed height whether or not the region is
+                * held. The open control used to be a text button taller than
+                * the heading, so choosing a region grew its row and shoved
+                * everything under it down a few pixels - a click that moves
+                * the thing you clicked. Now it is an icon the height of the
+                * row, and choosing changes the colour and nothing else.
+                */}
+              <div className="mb-1 flex h-6 items-center gap-1">
                 <h3 className="min-w-0 flex-1">
                   <button
                     type="button"
@@ -105,7 +113,7 @@ export default function MapRegionDirectory({
                     onFocus={() => onAreaHover(area.name)}
                     onBlur={() => onAreaHover(null)}
                     title={MAP_DIRECTORY_COPY.regionTitle(area.name)}
-                    className={`block w-full cursor-pointer truncate rounded-lg px-1 py-0.5 text-left text-[11px] font-black uppercase tracking-[0.12em] transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 ${
+                    className={`block h-6 w-full cursor-pointer truncate rounded-lg px-1 text-left text-[11px] font-black uppercase leading-6 tracking-[0.12em] transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 ${
                       area.name === activeArea
                         ? "bg-accent/15 text-accent"
                         : "text-foreground/60 hover:bg-surface-muted hover:text-foreground"
@@ -120,9 +128,13 @@ export default function MapRegionDirectory({
                     onClick={() => onAreaOpen(area.name)}
                     aria-label={MAP_DIRECTORY_COPY.regionOpen(area.name)}
                     title={MAP_DIRECTORY_COPY.regionOpen(area.name)}
-                    className="inline-flex h-6 shrink-0 items-center rounded-lg border border-accent/40 bg-accent/10 px-2 text-[10px] font-black uppercase tracking-[0.08em] text-accent transition hover:bg-accent hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70"
+                    className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-lg text-accent transition hover:bg-accent hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70"
                   >
-                    {MAP_DIRECTORY_COPY.open}
+                    {/* A magnifier with a plus: zoom to it. */}
+                    <svg viewBox="0 0 20 20" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                      <circle cx="8.5" cy="8.5" r="5.5" />
+                      <path d="M12.5 12.5 17 17M8.5 6v5M6 8.5h5" />
+                    </svg>
                   </button>
                 ) : null}
               </div>

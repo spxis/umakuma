@@ -4364,11 +4364,23 @@
     "id": "parallel-level-ladder",
     "name": "Parallel level ladder",
     "area": "jlpt",
+    "status": "shipped",
     "kind": "feature",
+    "date": "2026-09-03",
+    "summary": "A WaniKani-parallel progression over roughly 100 levels, covering the kanji WaniKani leaves out.",
+    "dateIsEstimate": false,
+    "version": "0.385.0",
+    "releasedAt": "2026-09-04T04:03:48Z"
+  },
+  {
+    "id": "map-region-row-height",
+    "name": "Choosing a region heading makes the row jump",
+    "area": "platform",
+    "kind": "bug",
     "status": "shipped",
     "date": "2026-09-03",
-    "version": "0.385.0",
-    "releasedAt": "2026-09-04T04:03:48Z",
-    "summary": "A WaniKani-parallel progression over roughly 100 levels, covering the kanji WaniKani leaves out."
+    "version": "0.386.0",
+    "releasedAt": "2026-09-04T04:20:35Z",
+    "summary": "When a region heading is clicked the Open control appears beside it and is taller than the heading row, so the row grows and everything under it shifts. Replace the text button with an icon the same height as the row - a magnifier or an expand glyph - so choosing changes colour and nothing else moves. Reported 2026-09-03 by John with screenshots of both states."
   }
 ]
