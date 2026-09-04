@@ -6,6 +6,7 @@ import { GAME_COPY, GAME_KIND_ACCENT, GAME_KIND_EMOJI,
 import GameLeaderboardMobile from "./GameLeaderboardMobile";
 import type { GameLeaderboardDay } from "./GameMode.types";
 import LoadingState from "../shared/LoadingState";
+import { wkLevelBadge } from "@/lib/levelBadge";
 
 type Props = {
   days: GameLeaderboardDay[];
@@ -67,7 +68,7 @@ export default function GameLeaderboard({ days, members, metric, loading }: Prop
                         <span aria-hidden="true">{GAME_KIND_EMOJI[entry.kind]}</span> {gameKindLabelWithCountry(entry.kind, entry.mapCountry)}
                       </span>
                       {gameKindRules(entry.kind).usesLevel ? (
-                        <span className={GAME_LEVEL_PILL_CLASS}>{entry.level === null ? "All" : `L${entry.level}`}</span>
+                        <span className={GAME_LEVEL_PILL_CLASS}>{wkLevelBadge(entry.level) ?? "All"}</span>
                       ) : null}
                     <GameCategoryPill kind={entry.kind} category={entry.category} />
                     </div>

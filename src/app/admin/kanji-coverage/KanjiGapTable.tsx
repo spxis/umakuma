@@ -5,6 +5,7 @@ import {
 
 import { KANJI_BAND_CLASSES, KANJI_COVERAGE_COPY } from "./KanjiCoverage.constants";
 import { noTranslateClass } from "@/app/shared/japaneseText";
+import { wkLevelBadge } from "@/lib/levelBadge";
 
 type Props = {
   entries: KanjiCoverageEntry[];
@@ -56,7 +57,7 @@ export default function KanjiGapTable({ entries, showBand = true }: Props) {
                 {entry.frequencyRank ?? KANJI_COVERAGE_COPY.noFrequency}
               </td>
               <td className="py-2 tabular-nums text-foreground/60">
-                {entry.wkLevel === null ? "-" : `L${entry.wkLevel}`}
+                {wkLevelBadge(entry.wkLevel) ?? "-"}
               </td>
             </tr>
           ))}

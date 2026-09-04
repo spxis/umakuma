@@ -10,6 +10,7 @@ import {
   gameDifficultyLabel,
 } from "./GameMode.constants";
 import type { GameLeaderboardDay } from "./GameMode.types";
+import { wkLevelBadge } from "@/lib/levelBadge";
 
 type Props = {
   days: GameLeaderboardDay[];
@@ -68,7 +69,7 @@ export default function GameLeaderboardMobile({ days, members, metric }: Props) 
                     <span aria-hidden="true">{GAME_KIND_EMOJI[entry.kind]}</span> {gameKindLabelWithCountry(entry.kind, entry.mapCountry)}
                   </span>
                   {gameKindRules(entry.kind).usesLevel ? (
-                    <span className={GAME_LEVEL_PILL_CLASS}>{entry.level === null ? "All" : `L${entry.level}`}</span>
+                    <span className={GAME_LEVEL_PILL_CLASS}>{wkLevelBadge(entry.level) ?? "All"}</span>
                   ) : null}
                   <GameCategoryPill kind={entry.kind} category={entry.category} />
                   <span className={entry.ultraMode ? "text-fuchsia-700" : entry.choiceCount >= 3 ? "text-red-600" : undefined}>

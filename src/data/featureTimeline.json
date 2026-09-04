@@ -4856,11 +4856,23 @@
     "id": "umakuma-explorer",
     "name": "UmaKuma Explorer",
     "area": "platform",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "Browse our own hundred levels the way the JLPT Explorer browses the JLPT lists.",
+    "dateIsEstimate": false,
+    "version": "0.426.0",
+    "releasedAt": "2026-09-04T15:12:01Z"
+  },
+  {
+    "id": "level-prefixes",
+    "name": "No more L17: WaniKani reads WK17, ours reads UK17",
+    "area": "platform",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.426.0",
-    "releasedAt": "2026-09-04T15:12:01Z",
-    "summary": "Browse our own hundred levels the way the JLPT Explorer browses the JLPT lists."
+    "version": "0.427.0",
+    "releasedAt": "2026-09-04T15:21:32Z",
+    "summary": "John: 'WK levels should now read WK17... umakuma is UK17. No more L17 anywhere.' Site-wide sweep, not a local fix - SubjectPill draws a bare L{n}, and so do the explorer cards, list rows, subject columns, the identity block, the glyph metadata badges and the game tiles. Every one of them means WaniKani's level and none of them says so, which only became visible once a second ladder existed. This is Phase B2 of the levels plan brought forward."
   }
 ]

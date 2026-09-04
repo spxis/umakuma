@@ -9,7 +9,8 @@ export const UK_EXPLORER_COPY = {
   blurb:
     "A hundred levels, built here. Radicals come before the kanji they build, kanji before the words that use them, and each JLPT level finishes on a level you can point at.",
   search: "Search a kanji, a word or a meaning…",
-  levelLabel: "Level",
+  /* Ours, said out loud: the pills beside it carry WaniKani's. */
+  levelLabel: "UmaKuma level",
   jump: "Jump to level",
   radicals: "Radicals",
   kanji: "Kanji",

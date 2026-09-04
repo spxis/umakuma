@@ -14,6 +14,7 @@ import { SUBJECT_TYPE_DISPLAY } from "@/lib/domainConstants";
 import { JP_TEXT_CLASS } from "./japaneseText";
 import { glyphTextSizeClass } from "./glyphSizes";
 import type { SubjectSelection } from "./useSubjectSelection";
+import { wkLevelBadge } from "@/lib/levelBadge";
 
 type Props<TRow extends SubjectListRow> = {
   rows: TRow[];
@@ -150,7 +151,7 @@ export default function SubjectCards<TRow extends SubjectListRow>({
              */}
             {row.wkLevel !== null ? (
               <span className="subject-pill pointer-events-none absolute right-1.5 top-1.5 border-line bg-surface text-foreground">
-                L{row.wkLevel}
+                {wkLevelBadge(row.wkLevel)}
               </span>
             ) : null}
             {/* The tick takes the badge corner while choosing: the level pill

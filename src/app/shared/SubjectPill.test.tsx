@@ -43,7 +43,9 @@ describe("what a surface may put on it", () => {
   it("carries the member's success rate and level as marks of their own", () => {
     const text = draw(<SubjectPill glyph="山" level={3} successRate={87.4} />).body.textContent ?? "";
     expect(text).toContain("87%");
-    expect(text).toContain("L3");
+    /* WK3, not L3: the pill draws WaniKani's level and now says so, because a
+       bare number means two things since UmaKuma got a ladder of its own. */
+    expect(text).toContain("WK3");
   });
 
   it("carries neither mark when the surface knows neither", () => {

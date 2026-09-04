@@ -12,6 +12,7 @@ import { LIST_ITEM_KIND_DISPLAY } from "@/lib/domainConstants";
 import type { ListSubjectRow } from "@/lib/studySubjectItems";
 
 import { itemToneClass } from "@/app/users/[nickname]/lists/listItemDisplay";
+import { wkLevelBadge } from "@/lib/levelBadge";
 
 /**
  * One item of a list as a page anybody can read draws it: a row for
@@ -36,7 +37,7 @@ export function ListRow({ row, after }: { row: ListSubjectRow; after?: ReactNode
         <span className={`subject-pill border-line bg-surface ${itemToneClass(row.kind)}`}>
           {LIST_ITEM_KIND_DISPLAY[row.kind].singular}
         </span>
-        {row.wkLevel !== null ? <span className="subject-pill border-line bg-surface text-foreground/70">L{row.wkLevel}</span> : null}
+        {row.wkLevel !== null ? <span className="subject-pill border-line bg-surface text-foreground/70">{wkLevelBadge(row.wkLevel)}</span> : null}
       </span>
     </>
   );

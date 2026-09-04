@@ -6,6 +6,7 @@ import {
   shortSubjectTypeLabel,
 } from "../../level-explorer/lib/levelExplorerDisplay";
 import type { StudyQueueItem } from "./studyExplorerTypes";
+import { wkLevelBadge } from "@/lib/levelBadge";
 
 const BULK_MODE_KEY = "wr:study-bulk-mode";
 
@@ -59,7 +60,7 @@ export function useStudyBulkReset({ filteredItems }: Args) {
     () =>
       selectedItems.map(
         (item) =>
-          `${item.characters} • ${shortSubjectTypeLabel(item.subjectType)} • ${typeof item.wkLevel === "number" ? `L${item.wkLevel}` : "L?"} • SRS ${item.srsStage}`,
+          `${item.characters} • ${shortSubjectTypeLabel(item.subjectType)} • ${wkLevelBadge(item.wkLevel) ?? "WK?"} • SRS ${item.srsStage}`,
       ),
     [selectedItems],
   );

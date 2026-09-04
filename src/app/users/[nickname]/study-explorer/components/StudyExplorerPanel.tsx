@@ -128,6 +128,11 @@ export default function StudyExplorerPanel({
   const totalReviewsInVisibleLevels = Object.values(reviewLevelCounts).reduce((sum, count) => sum + count, 0);
   const totalLessonsInVisibleLevels = lessonLevelOptions.reduce((sum, [, count]) => sum + count, 0);
   const allTypeCount = queueMode === STUDY_QUEUE_TYPES.lesson ? (viewedLevel === null ? totalItems : (lessonLevelCounts[viewedLevel] ?? typeCounts.all)) : typeCounts.all;
+  /* Bare on purpose, and the only place left that is. The Study explorer runs
+     over WaniKani's library or a member's own uploaded one, and this component
+     is not told which — so "WK3" here would be a lie half the time. It sits
+     inside "<library name> (L3)", which names the ladder beside it. Prefix it
+     properly once the panel knows its source. */
   const studyLevelHeaderLabel = `L${Math.max(1, studySourceLevel ?? 1)}`;
   /* The library and level; the page header above already says Study. */
   const studyHeaderLabel = `${studySourceHeaderLabel} (${studyLevelHeaderLabel})`;

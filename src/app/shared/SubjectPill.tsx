@@ -8,6 +8,7 @@ import { JP_TEXT_CLASS, NO_TRANSLATE_CLASS } from "./japaneseText";
 import { pillWords, pillWordsTitle } from "./pillWords";
 import { subjectGlyphTone } from "./subjectListView";
 import { usePillWords } from "./usePillWords";
+import { wkLevelBadge } from "@/lib/levelBadge";
 
 /**
  * One item, as a pill: the glyph, and the words for it when they are wanted.
@@ -57,7 +58,7 @@ function Meta({ level, successRate }: { level?: number | null; successRate?: num
       ) : null}
       {taught ? (
         <span translate="no" className={META_PILL}>
-          L{level}
+          {wkLevelBadge(level)}
         </span>
       ) : null}
     </span>

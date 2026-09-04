@@ -24,6 +24,7 @@ import UmaKumaPageBanner from "./shared/UmaKumaPageBanner";
 import { viewerAddress } from "@/app/shared/viewerAddress";
 import { newcomerLanding } from "./authAccess";
 import { loadSignupSettings } from "@/lib/signupSettingsServer";
+import { wkLevelBadge } from "@/lib/levelBadge";
 export const dynamic = "force-dynamic";
 function getReadingChallengeMemberDelegate(): typeof prisma.readingChallengeMember | null {
   return prisma.readingChallengeMember;
@@ -369,7 +370,7 @@ export default async function Home() {
                 Avg. Level / Top Score
               </p>
               <p className="mt-2 text-4xl font-black text-foreground sm:text-5xl">
-                L{averageLevel}
+                {wkLevelBadge(averageLevel)}
               </p>
               <p className="text-sm font-semibold text-foreground/65">{formatNumber(topScore)} pts</p>
             </article>

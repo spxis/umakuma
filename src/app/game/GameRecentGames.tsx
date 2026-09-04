@@ -4,6 +4,7 @@ import { formatRelativeFromNow } from "@/lib/timeFormat";
 import GameCategoryPill from "./GameCategoryPill";
 import { GAME_COPY, GAME_KIND_ACCENT, GAME_KIND_EMOJI, GAME_KIND_LABELS, GAME_LEVEL_PILL_CLASS, gameDifficultyLabel } from "./GameMode.constants";
 import LoadingState from "../shared/LoadingState";
+import { wkLevelBadge } from "@/lib/levelBadge";
 
 type Props = {
   entries: GameLeaderboardEntry[];
@@ -33,7 +34,7 @@ export default function GameRecentGames({ entries, loading, onChallenge }: Props
                     <span aria-hidden="true">{GAME_KIND_EMOJI[entry.kind]}</span> {GAME_KIND_LABELS[entry.kind]}
                   </span>
                   {gameKindRules(entry.kind).usesLevel ? (
-                    <span className={GAME_LEVEL_PILL_CLASS}>{entry.level === null ? "All" : `L${entry.level}`}</span>
+                    <span className={GAME_LEVEL_PILL_CLASS}>{wkLevelBadge(entry.level) ?? "All"}</span>
                   ) : null}
                   <GameCategoryPill kind={entry.kind} category={entry.category} />
                   <span>{gameDifficultyLabel(entry.kind, entry.choiceCount, entry.ultraMode, entry.direction)}</span>

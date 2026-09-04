@@ -23,6 +23,7 @@ import {
   type SearchSource,
 } from "./globalSearch";
 import { isKept, type SearchFilters } from "./searchFilters";
+import { wkLevelBadge } from "@/lib/levelBadge";
 
 export type { SearchResults } from "./globalSearch";
 
@@ -139,7 +140,7 @@ async function searchWanikani(variants: string[]): Promise<SearchHit[]> {
       reading,
       badges: [
         isSubjectType(row.subjectType) ? SUBJECT_TYPE_DISPLAY[row.subjectType].short : row.subjectType,
-        `L${row.level}`,
+        wkLevelBadge(row.level) ?? "",
       ],
       href: null,
       score: ranked.score,

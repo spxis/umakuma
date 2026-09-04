@@ -15,6 +15,7 @@ import {
   SUBJECT_VIEW_COPY,
   type SubjectListRow,
 } from "./subjectListView";
+import { wkLevelBadge } from "@/lib/levelBadge";
 
 /**
  * What a list puts in its columns.
@@ -138,7 +139,7 @@ export function levelColumn<TRow extends SubjectListRow>(
       const level = read(row);
       return (
         <span className="block text-xs font-bold text-foreground/70">
-          {level === null ? "" : `L${level}`}
+          {wkLevelBadge(level) ?? ""}
         </span>
       );
     },

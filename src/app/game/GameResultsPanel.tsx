@@ -10,6 +10,7 @@ import {
   gameDifficultyLabel,
   gameTimeLimitLabel,
 } from "./GameMode.constants";
+import { wkLevelBadge } from "@/lib/levelBadge";
 
 type Props = {
   run: GameRunSummary;
@@ -38,7 +39,7 @@ export default function GameResultsPanel({
       </p>
       <div className="mt-2 flex flex-wrap items-center justify-center gap-2 text-sm font-black text-foreground/65">
         {run.kind === GAME_KINDS.match || run.kind === GAME_KINDS.timeAttack ? (
-          <span className={GAME_LEVEL_PILL_CLASS}>{run.level === null ? "All levels" : `L${run.level}`}</span>
+          <span className={GAME_LEVEL_PILL_CLASS}>{wkLevelBadge(run.level) ?? "All levels"}</span>
         ) : null}
         <GameCategoryPill kind={run.kind} category={run.category} />
         <span>{run.questionCount} questions</span>

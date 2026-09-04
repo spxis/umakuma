@@ -16,11 +16,10 @@ function hrefFor(row: LadderRow): string | null {
   return subjectHref({ subjectType: row.kind, characters: row.characters, slug: null });
 }
 
-/* No level badge on these pills. `SubjectPill` draws a level as a bare "L3",
-   which is WaniKani's number — inside a card headed "Level 1" a member reads
-   it as ours, and the one thing this page exists to teach is which level
-   teaches what. The WK number belongs here eventually, but labelled: the
-   planned WK/UK badge pair, not a naked L. */
+/* The WaniKani level rides along, now that a level says whose it is. A pill
+   reading WK3 inside a card headed UmaKuma Level 1 is a fact about two
+   ladders rather than a contradiction — which is the whole reason for the
+   prefix. Items WaniKani never teaches carry no badge at all. */
 function Group({ label, rows }: { label: string; rows: LadderRow[] }) {
   if (rows.length === 0) return null;
   return (
@@ -36,6 +35,7 @@ function Group({ label, rows }: { label: string; rows: LadderRow[] }) {
               subjectType={row.kind}
               meaning={row.primaryMeaning}
               href={hrefFor(row)}
+              level={row.wkLevel}
             />
           </li>
         ))}
