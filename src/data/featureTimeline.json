@@ -4832,11 +4832,23 @@
     "id": "word-every-kanji",
     "name": "Used in words leaves out the kanji you are reading",
     "area": "study",
+    "status": "shipped",
     "kind": "bug",
+    "date": "2026-09-04",
+    "summary": "The kanji whose page you are on was dropped from each word's chips, so growth business drew three chips under a four-character word and a reader counting them finds the maths wrong. It is drawn now, ringed as the one you are on, with no href - it still leads nowhere and says so. Reported 2026-09-04 by John.",
+    "dateIsEstimate": false,
+    "version": "0.424.0",
+    "releasedAt": "2026-09-04T15:07:54Z"
+  },
+  {
+    "id": "word-jisho-link",
+    "name": "A way out to Jisho from each word",
+    "area": "study",
+    "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.424.0",
-    "releasedAt": "2026-09-04T15:07:54Z",
-    "summary": "The kanji whose page you are on was dropped from each word's chips, so growth business drew three chips under a four-character word and a reader counting them finds the maths wrong. It is drawn now, ringed as the one you are on, with no href - it still leads nowhere and says so. Reported 2026-09-04 by John."
+    "version": "0.425.0",
+    "releasedAt": "2026-09-04T15:08:42Z",
+    "summary": "An arrow on the right of a word's row, shown only while that row is hovered or the link has focus, opening the word on jisho.org in a new tab. Out of the way of reading and still reachable by keyboard. Requested 2026-09-04 by John."
   }
 ]
