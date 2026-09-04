@@ -62,6 +62,31 @@ function loadKanjiSubjectIds(): Map<string, number> {
   return ids;
 }
 
+/**
+ * WaniKani's *radical* subject ids, kept apart from their kanji ids.
+ *
+ * They teach 七 twice, once as a radical and once as a kanji, under different
+ * ids. Linking one of our radicals to their kanji id would let somebody who
+ * learned the shape be credited with the character, which is not the same
+ * thing - so the two maps stay separate and a radical only ever pairs with a
+ * radical.
+ */
+function loadRadicalSubjectIds(): Map<string, number> {
+  const index = readJson<{ files: string[] }>("wk-catalog-levels/index.json");
+  const ids = new Map<string, number>();
+  for (const file of index.files) {
+    const level = readJson<{ radicals?: { characters: string | null; wkSubjectId: number; hiddenAt: string | null }[] }>(
+      join("wk-catalog-levels", file),
+    );
+    for (const subject of level.radicals ?? []) {
+      /* The ones WaniKani draws rather than writes have no character at all,
+         and there is nothing to pair them with. */
+      if (subject.characters && !subject.hiddenAt) ids.set(subject.characters, subject.wkSubjectId);
+    }
+  }
+  return ids;
+}
+
 export function ladderSeedPlan(): { rows: UkSubjectPlanRow[]; ladder: LadderFile } {
   const ladder = readJson<LadderFile>("kanjiLadder.json");
   return {
@@ -72,6 +97,7 @@ export function ladderSeedPlan(): { rows: UkSubjectPlanRow[]; ladder: LadderFile
       vocabulary: ladder.vocabularyLevel,
       dictionary: loadDictionary(),
       kanjiSubjectIds: loadKanjiSubjectIds(),
+      radicalSubjectIds: loadRadicalSubjectIds(),
     }),
   };
 }

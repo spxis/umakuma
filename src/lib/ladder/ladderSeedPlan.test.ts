@@ -151,3 +151,40 @@ describe("the schema and the code name the same domain values", () => {
     expect(membersOf("UkSubjectKind")).toEqual(Object.values(UK_SUBJECT_KINDS).sort());
   });
 });
+
+describe("radicals linked to WaniKani's own", () => {
+  const input = {
+    kanji: { 七: { level: 3, waniKaniLevel: 2, nLevel: 5 } },
+    radicals: { 七: 2, 丿: 1 },
+    vocabulary: {},
+    dictionary: new Map([["七", { meanings: ["seven"], onReadings: ["シチ"], kunReadings: ["なな"], grade: 1 }]]),
+    kanjiSubjectIds: new Map([["七", 500]]),
+    radicalSubjectIds: new Map([["七", 12]]),
+  };
+
+  it("pairs a radical with WaniKani's radical, never with their kanji", () => {
+    /* WaniKani teaches 七 twice under different ids. Linking our radical to
+       their kanji id would credit somebody who learned the shape with knowing
+       the character, which is not the same thing. */
+    const rows = buildLadderSeedPlan(input);
+    const radical = rows.find((row) => row.key === "radical:七");
+    const kanji = rows.find((row) => row.key === "kanji:七");
+    expect(radical?.wkSubjectId).toBe(12);
+    expect(kanji?.wkSubjectId).toBe(500);
+  });
+
+  it("leaves a radical WaniKani does not teach unlinked", () => {
+    expect(buildLadderSeedPlan(input).find((row) => row.key === "radical:丿")?.wkSubjectId).toBeNull();
+  });
+
+  it("keeps the source as radkfile even when WaniKani teaches it too", () => {
+    /* Where an item came from and who else teaches it are different
+       questions. The list is still RADKFILE's. */
+    expect(buildLadderSeedPlan(input).find((row) => row.key === "radical:七")?.source).toBe("radkfile");
+  });
+
+  it("links without the map at all, so the seed still runs", () => {
+    const { radicalSubjectIds: _omitted, ...without } = input;
+    expect(buildLadderSeedPlan(without).find((row) => row.key === "radical:七")?.wkSubjectId).toBeNull();
+  });
+});

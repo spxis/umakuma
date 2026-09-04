@@ -42,6 +42,15 @@ export type LadderSeedInput = {
   dictionary: ReadonlyMap<string, { meanings: string[]; onReadings: string[]; kunReadings: string[]; grade: number | null }>;
   /** WaniKani's kanji subject ids by character, so a row can link to its catalogue entry. */
   kanjiSubjectIds: ReadonlyMap<string, number>;
+  /**
+   * WaniKani's *radical* subject ids by character.
+   *
+   * Separate from the kanji map on purpose: WaniKani teaches 七 twice, once as
+   * a radical and once as a kanji, with different ids. Matching a radical of
+   * ours to their kanji id would let somebody who learned the shape be
+   * credited with knowing the character, which is not the same thing.
+   */
+  radicalSubjectIds?: ReadonlyMap<string, number>;
 };
 
 function kanjiRows(input: LadderSeedInput): UkSubjectPlanRow[] {
@@ -64,9 +73,19 @@ function kanjiRows(input: LadderSeedInput): UkSubjectPlanRow[] {
 }
 
 /**
- * Radicals are RADKFILE's, which WaniKani does not use, so every one of them
+ * Radicals are RADKFILE's list, which is not WaniKani's, so every one of them
  * carries its own content. 247 of the 253 are also kanji, so the dictionary
  * names most; the rest are shapes with no meaning of their own and stay empty.
+ *
+ * They do still link where WaniKani teaches the same character. That link was
+ * missing and it cost more than it looked: a WaniKani member importing their
+ * progress matched **none** of their radicals, because the match is made on
+ * `wkSubjectId` and every radical of ours had null. 196 of 241 have a
+ * counterpart by character, so 196 items of somebody's work were being thrown
+ * away on every import.
+ *
+ * The source stays `radkfile` regardless — where an item came from and who
+ * else teaches it are different questions, and the list is still RADKFILE's.
  */
 function radicalRows(input: LadderSeedInput): UkSubjectPlanRow[] {
   return Object.entries(input.radicals).map(([characters, level]) => {
@@ -76,7 +95,7 @@ function radicalRows(input: LadderSeedInput): UkSubjectPlanRow[] {
       kind: UK_SUBJECT_KINDS.radical,
       characters,
       level,
-      wkSubjectId: null,
+      wkSubjectId: input.radicalSubjectIds?.get(characters) ?? null,
       source: LADDER_SOURCES.radkfile,
       nLevel: null,
       schoolGrade: null,
