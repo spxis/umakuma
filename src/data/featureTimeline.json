@@ -5036,11 +5036,23 @@
     "id": "xp-second-ladder",
     "name": "XP: the second ladder",
     "area": "platform",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "XP: the second ladder",
+    "dateIsEstimate": false,
+    "version": "0.441.0",
+    "releasedAt": "2026-09-04T22:46:58Z"
+  },
+  {
+    "id": "xp-wiring",
+    "name": "XP where the work happens",
+    "area": "platform",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.441.0",
-    "releasedAt": "2026-09-04T22:46:58Z",
-    "summary": "XP: the second ladder"
+    "version": "0.442.0",
+    "releasedAt": "2026-09-04T22:47:01Z",
+    "summary": "XP where the work happens"
   }
 ]
