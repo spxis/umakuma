@@ -5,6 +5,7 @@ import AdminContentSourcesPanel from "./AdminContentSourcesPanel";
 import type { AdminControlRoomProps } from "./AdminControlRoom.types";
 import AdminJlptCatalogPanel from "./AdminJlptCatalogPanel";
 import AdminJlptCatalogOperationsPanel from "./AdminJlptCatalogOperationsPanel";
+import AdminSourcesPanel from "./AdminSourcesPanel";
 import { usePersistedTab } from "@/lib/usePersistedTab";
 
 type DataWorkspaceMode = "catalog" | "operations";
@@ -45,6 +46,7 @@ const DATASETS = [
   { id: "jlpt", label: "JLPT", hasModes: true },
   { id: "grades", label: "Grades", hasModes: false },
   { id: "maps", label: "Maps", hasModes: false },
+  { id: "sources", label: "Sources", hasModes: false },
 ] as const;
 
 export type DataView = (typeof DATASETS)[number]["id"];
@@ -137,6 +139,10 @@ export default function AdminDataWorkspaceSection({
           sessionAuthorized={sessionAuthorized}
           checkingSession={checkingSession}
         />
+      ) : null}
+
+      {dataCatalogView === "sources" ? (
+        <AdminSourcesPanel sessionAuthorized={sessionAuthorized} checkingSession={checkingSession} />
       ) : null}
 
       {dataCatalogView === "jlpt" ? (
