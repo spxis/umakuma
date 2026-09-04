@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { useAdminFeedback } from "./AdminFeedbackProvider";
 import AdminCatalogBrowser from "./AdminCatalogBrowser";
+import AdminCatalogGapCard from "./AdminCatalogGapCard";
 import SurfaceCard from "../shared/SurfaceCard";
 
 type CatalogStatusResponse = {
@@ -349,6 +350,8 @@ export default function AdminCatalogPanel({ viewMode = "all", sessionAuthorized,
           <p className="mt-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-xs font-semibold text-red-800">Last error: {status.state.lastError}</p>
         ) : null}
       </SurfaceCard> : null}
+
+      {showOperations ? <AdminCatalogGapCard busy={syncing || loading} /> : null}
 
       {showOperations ? <SurfaceCard tone="plain" padding="md">
         <p className="text-xs font-bold uppercase tracking-[0.1em] text-foreground/60">Recent runs</p>

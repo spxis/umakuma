@@ -4472,11 +4472,23 @@
     "id": "a-few-rows-of-every-source",
     "name": "A few rows of every source",
     "area": "platform",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "The accreditation pages said what we hold from a source and never showed any of it. Each page gets a handful of chosen specimens - the component written into 1,337 characters, the pronoun ranked 67 in anime and band 12 of 48 in print - with an admin able to override the picks per source. Chosen, never the first row of the file.",
+    "dateIsEstimate": false,
+    "version": "0.394.0",
+    "releasedAt": "2026-09-04T07:59:20Z"
+  },
+  {
+    "id": "catalog-gap-visible",
+    "name": "The catalogue says what it is missing",
+    "area": "admin",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.394.0",
-    "releasedAt": "2026-09-04T07:59:20Z",
-    "summary": "The accreditation pages said what we hold from a source and never showed any of it. Each page gets a handful of chosen specimens - the component written into 1,337 characters, the pronoun ranked 67 in anime and band 12 of 48 in print - with an admin able to override the picks per source. Chosen, never the first row of the file."
+    "version": "0.395.0",
+    "releasedAt": "2026-09-04T08:04:01Z",
+    "summary": "The catalogue gap reopens every time WaniKani adds subjects and nothing says so. The admin catalogue panel already reports drift - missing levels, duplicate rows - and the count belongs beside them, but findCatalogGap reads every account's assignment cache and all 9,400 rows' relation arrays, so it cannot ride the status endpoint the panel polls. A button that measures on demand and reports the ids, next to the sync controls. Raised 2026-09-02."
   }
 ]
