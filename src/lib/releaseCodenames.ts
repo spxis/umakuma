@@ -437,6 +437,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Mitabi Kiku", ja: "三度聞く", reading: "みたびきく", gloss: "ask three times before calling silence a no" },
   { romaji: "Muttsu no Hajimari", ja: "六つの始まり", reading: "むっつのはじまり", gloss: "it begins with six, and climbs from there" },
   { romaji: "Memori no Takasa", ja: "目盛りの高さ", reading: "めもりのたかさ", gloss: "one notch high, held or not" },
+  { romaji: "Moto no Homare", ja: "元の誉れ", reading: "もとのほまれ", gloss: "the credit belongs where it came from" },
 ];
 
 /**

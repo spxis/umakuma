@@ -4376,11 +4376,23 @@
     "id": "map-region-row-height",
     "name": "Choosing a region heading makes the row jump",
     "area": "platform",
+    "status": "shipped",
     "kind": "bug",
+    "date": "2026-09-03",
+    "summary": "When a region heading is clicked the Open control appears beside it and is taller than the heading row, so the row grows and everything under it shifts. Replace the text button with an icon the same height as the row - a magnifier or an expand glyph - so choosing changes colour and nothing else moves. Reported 2026-09-03 by John with screenshots of both states.",
+    "dateIsEstimate": false,
+    "version": "0.386.0",
+    "releasedAt": "2026-09-04T04:20:35Z"
+  },
+  {
+    "id": "credit-jmdict-and-jiten",
+    "name": "Credit JMdict and Jiten",
+    "area": "platform",
+    "kind": "feature",
     "status": "shipped",
     "date": "2026-09-03",
-    "version": "0.386.0",
-    "releasedAt": "2026-09-04T04:20:35Z",
-    "summary": "When a region heading is clicked the Open control appears beside it and is taller than the heading row, so the row grows and everything under it shifts. Replace the text button with an icon the same height as the row - a magnifier or an expand glyph - so choosing changes colour and nothing else moves. Reported 2026-09-03 by John with screenshots of both states."
+    "version": "0.387.0",
+    "releasedAt": "2026-09-04T04:23:12Z",
+    "summary": "The ladder ranks vocabulary against JMdict's newspaper frequency bands and Jiten's eleven per-medium lists. Both are CC BY-SA 4.0, so a visible credit is a licence condition and neither has a page. Register both in sourceCredits, give each a reader over wordFrequency.json and copy on /sources. Requested 2026-09-03 by John as the first slice of the source accreditation epic."
   }
 ]
