@@ -456,6 +456,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Kiban no Ichidan", ja: "基盤の一段", reading: "きばんのいちだん", gloss: "the first course of the foundation" },
   { romaji: "Kumihimo no Kudan", ja: "組紐の九段", reading: "くみひものくだん", gloss: "a braided cord of nine tiers" },
   { romaji: "Keiryou", ja: "軽量", reading: "けいりょう", gloss: "light to carry: one country at a time" },
+  { romaji: "Kodama", ja: "木霊", reading: "こだま", gloss: "an echo: the panel answers the map" },
 ];
 
 /**

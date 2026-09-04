@@ -4604,11 +4604,23 @@
     "id": "map-lazy-countries",
     "name": "Load map data one country at a time",
     "area": "games",
+    "status": "shipped",
     "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "A map page loaded all seven countries at once, because geoRegion.ts imported fourteen data files at the top and built every one of them eagerly. That is three and a half megabytes, of which Canada is a megabyte on its own and the four admin-only countries are 1.6 MB a public visitor downloads and is then refused by the page. Each country is its own chunk now, fetched when a map actually draws it. Measured on production builds: Japan 3651 KB to 682 KB, the United States 3394 to 991, Canada 3421 to 1641. The gate on the pilot countries now holds at the network as well as at the page, since nobody downloads a country they cannot open.",
+    "dateIsEstimate": false,
+    "version": "0.405.0",
+    "releasedAt": "2026-09-04T13:12:19Z"
+  },
+  {
+    "id": "map-panel-cities",
+    "name": "The side panel draws the region's cities too",
+    "area": "games",
+    "kind": "bug",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.405.0",
-    "releasedAt": "2026-09-04T13:12:19Z",
-    "summary": "A map page loaded all seven countries at once, because geoRegion.ts imported fourteen data files at the top and built every one of them eagerly. That is three and a half megabytes, of which Canada is a megabyte on its own and the four admin-only countries are 1.6 MB a public visitor downloads and is then refused by the page. Each country is its own chunk now, fetched when a map actually draws it. Measured on production builds: Japan 3651 KB to 682 KB, the United States 3394 to 991, Canada 3421 to 1641. The gate on the pilot countries now holds at the network as well as at the page, since nobody downloads a country they cannot open."
+    "version": "0.406.0",
+    "releasedAt": "2026-09-04T13:12:55Z",
+    "summary": "Turning Cities on lit the country map and left the shape in the panel beside it bare, so one switch meant two different things depending which map you were looking at. The panel is handed the very same cities the map is drawing, narrowed to the region it frames, so it follows the switch and the density without a second control to keep in step."
   }
 ]
