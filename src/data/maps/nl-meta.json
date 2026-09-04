@@ -1,0 +1,453 @@
+{
+  "updatedAt": "2026-09-04T06:16:49.517Z",
+  "standard": "Natural Earth admin-1 vector dataset",
+  "country": "NL",
+  "countryName": "Netherlands",
+  "divisionTypeName": "Province",
+  "divisionTypePlural": "Provinces",
+  "totalRegions": 12,
+  "regions": [
+    {
+      "code": "DR",
+      "name": "Drenthe",
+      "nameNative": "Drenthe",
+      "type": "province",
+      "capital": "Drenthe",
+      "largestCity": "Drenthe",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Netherlands",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        826.33,
+        271.71
+      ],
+      "bbox": [
+        711.11,
+        138.15,
+        933.71,
+        369.74
+      ],
+      "neighbors": [
+        "FR",
+        "GR",
+        "OV"
+      ]
+    },
+    {
+      "code": "FL",
+      "name": "Flevoland",
+      "nameNative": "Flevoland",
+      "type": "province",
+      "capital": "Flevoland",
+      "largestCity": "Flevoland",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Netherlands",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        568.37,
+        393.63
+      ],
+      "bbox": [
+        466.67,
+        283.04,
+        686.06,
+        508.01
+      ],
+      "neighbors": [
+        "FR",
+        "GE",
+        "NH",
+        "OV",
+        "UT"
+      ]
+    },
+    {
+      "code": "FR",
+      "name": "Friesland",
+      "nameNative": "Friesland",
+      "type": "province",
+      "capital": "Frise",
+      "largestCity": "Friesland",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Netherlands",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        631.98,
+        185.4
+      ],
+      "bbox": [
+        416.78,
+        17.69,
+        782.22,
+        302.67
+      ],
+      "neighbors": [
+        "DR",
+        "FL",
+        "GR",
+        "NH",
+        "OV"
+      ]
+    },
+    {
+      "code": "GE",
+      "name": "Gelderland",
+      "nameNative": "Gelderland",
+      "type": "province",
+      "capital": "Geldern",
+      "largestCity": "Gelderland",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Netherlands",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        668.38,
+        585.7
+      ],
+      "bbox": [
+        443.97,
+        406.72,
+        879.32,
+        714.81
+      ],
+      "neighbors": [
+        "FL",
+        "LI",
+        "NB",
+        "OV",
+        "UT",
+        "ZH"
+      ]
+    },
+    {
+      "code": "GR",
+      "name": "Groningen",
+      "nameNative": "Groningen",
+      "type": "province",
+      "capital": "Groninga",
+      "largestCity": "Groningen",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Netherlands",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        850.77,
+        131.33
+      ],
+      "bbox": [
+        718.22,
+        0,
+        960.59,
+        277.19
+      ],
+      "neighbors": [
+        "DR",
+        "FR"
+      ]
+    },
+    {
+      "code": "LI",
+      "name": "Limburg",
+      "nameNative": "Limburg",
+      "type": "province",
+      "capital": "Limbourg",
+      "largestCity": "Limburg",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Netherlands",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        667.04,
+        925.06
+      ],
+      "bbox": [
+        576.88,
+        697.45,
+        736.77,
+        1100
+      ],
+      "neighbors": [
+        "GE",
+        "NB"
+      ]
+    },
+    {
+      "code": "NB",
+      "name": "North Brabant",
+      "nameNative": "Noord-Brabant",
+      "type": "province",
+      "capital": "Brabante del Norte",
+      "largestCity": "North Brabant",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Netherlands",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        488.51,
+        783.19
+      ],
+      "bbox": [
+        244.99,
+        675.62,
+        697.4,
+        917.25
+      ],
+      "neighbors": [
+        "GE",
+        "LI",
+        "ZE",
+        "ZH"
+      ]
+    },
+    {
+      "code": "NH",
+      "name": "North Holland",
+      "nameNative": "Noord-Holland",
+      "type": "province",
+      "capital": "Holanda do Norte",
+      "largestCity": "North Holland",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Netherlands",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        426.28,
+        376
+      ],
+      "bbox": [
+        323.98,
+        146.62,
+        531.95,
+        545.38
+      ],
+      "neighbors": [
+        "FL",
+        "FR",
+        "UT",
+        "ZH"
+      ]
+    },
+    {
+      "code": "OV",
+      "name": "Overijssel",
+      "nameNative": "Overijssel",
+      "type": "province",
+      "capital": "Overijssel",
+      "largestCity": "Overijssel",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Netherlands",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        785.66,
+        434.64
+      ],
+      "bbox": [
+        629.97,
+        276.49,
+        932.58,
+        565.1
+      ],
+      "neighbors": [
+        "DR",
+        "FL",
+        "FR",
+        "GE"
+      ]
+    },
+    {
+      "code": "UT",
+      "name": "Utrecht",
+      "nameNative": "Utrecht",
+      "type": "province",
+      "capital": "Utrecht",
+      "largestCity": "Utrecht",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Netherlands",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        484.39,
+        570.92
+      ],
+      "bbox": [
+        387.9,
+        499.45,
+        592.32,
+        633.92
+      ],
+      "neighbors": [
+        "FL",
+        "GE",
+        "NH",
+        "ZH"
+      ]
+    },
+    {
+      "code": "ZE",
+      "name": "Zeeland",
+      "nameNative": "Zeeland",
+      "type": "province",
+      "capital": "Zelanda",
+      "largestCity": "Zeeland",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Netherlands",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        154.75,
+        823.36
+      ],
+      "bbox": [
+        39.41,
+        705.95,
+        266.69,
+        918.32
+      ],
+      "neighbors": [
+        "NB",
+        "ZH"
+      ]
+    },
+    {
+      "code": "ZH",
+      "name": "South Holland",
+      "nameNative": "Zuid-Holland",
+      "type": "province",
+      "capital": "Hollande-méridionale",
+      "largestCity": "South Holland",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Netherlands",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        323.61,
+        633.95
+      ],
+      "bbox": [
+        167.93,
+        478.69,
+        487.04,
+        750.79
+      ],
+      "neighbors": [
+        "GE",
+        "NB",
+        "NH",
+        "UT",
+        "ZE"
+      ]
+    }
+  ]
+}

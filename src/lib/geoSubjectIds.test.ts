@@ -10,7 +10,7 @@ import {
 } from "./geoSubjectIds";
 import { isMapSubjectId, mapSubjectId } from "./japanPrefectures";
 
-const COUNTRIES: CountryCode[] = ["JP", "US", "CA"];
+const COUNTRIES: CountryCode[] = ["JP", "US", "CA", "TH", "CN", "AU", "TW"];
 
 describe("backward compatibility with recorded runs", () => {
   /*
@@ -25,7 +25,7 @@ describe("backward compatibility with recorded runs", () => {
   });
 
   it("keeps the other countries clear of the range Japan already claimed", () => {
-    for (const country of ["US", "CA"] as const) {
+    for (const country of ["US", "CA", "TH", "CN", "AU", "TW"] as const) {
       for (const region of getGeoRegionsByCountry(country)) {
         expect(isMapSubjectId(geoSubjectId(country, region.code) as number)).toBe(false);
       }
@@ -35,13 +35,13 @@ describe("backward compatibility with recorded runs", () => {
 
 describe("geoSubjectId", () => {
   it("assigns an id to every region in every country", () => {
-    for (const region of getAllGeoRegions()) {
+    for (const region of getAllGeoRegions(true)) {
       expect(geoSubjectId(region.country, region.code)).not.toBeNull();
     }
   });
 
   it("never collides across the whole pool", () => {
-    const ids = getAllGeoRegions().map((region) => geoSubjectId(region.country, region.code));
+    const ids = getAllGeoRegions(true).map((region) => geoSubjectId(region.country, region.code));
     expect(new Set(ids).size).toBe(ids.length);
   });
 
@@ -53,7 +53,7 @@ describe("geoSubjectId", () => {
 
 describe("geoRegionIdFromSubjectId", () => {
   it("round-trips every region back to its composite id", () => {
-    for (const region of getAllGeoRegions()) {
+    for (const region of getAllGeoRegions(true)) {
       const id = geoSubjectId(region.country, region.code) as number;
       expect(geoRegionIdFromSubjectId(id)).toBe(region.id);
     }

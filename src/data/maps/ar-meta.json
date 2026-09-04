@@ -1,0 +1,892 @@
+{
+  "updatedAt": "2026-09-04T06:16:50.332Z",
+  "standard": "Natural Earth admin-1 vector dataset",
+  "country": "AR",
+  "countryName": "Argentina",
+  "divisionTypeName": "Province",
+  "divisionTypePlural": "Provinces",
+  "totalRegions": 24,
+  "regions": [
+    {
+      "code": "A",
+      "name": "Salta",
+      "nameNative": "Salta",
+      "type": "province",
+      "capital": "Salta",
+      "largestCity": "Salta",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Argentina",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        408.64,
+        105.07
+      ],
+      "bbox": [
+        264.47,
+        8.81,
+        504.64,
+        193.73
+      ],
+      "neighbors": [
+        "G",
+        "H",
+        "K",
+        "P",
+        "T",
+        "Y"
+      ]
+    },
+    {
+      "code": "B",
+      "name": "Buenos Aires",
+      "nameNative": "Buenos Aires",
+      "type": "federal district",
+      "capital": "Buenos Aires",
+      "largestCity": "Buenos Aires",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Argentina",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        551.82,
+        629.23
+      ],
+      "bbox": [
+        452.67,
+        486.2,
+        682.85,
+        811.1
+      ],
+      "neighbors": [
+        "C",
+        "E",
+        "L",
+        "R",
+        "S",
+        "X"
+      ]
+    },
+    {
+      "code": "C",
+      "name": "Buenos Aires",
+      "nameNative": "Ciudad de Buenos Aires",
+      "type": "federal district",
+      "capital": "BUENOS AIRES D.F.",
+      "largestCity": "Buenos Aires",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Argentina",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        628.14,
+        548.18
+      ],
+      "bbox": [
+        624.31,
+        543.02,
+        632.81,
+        553.77
+      ],
+      "neighbors": [
+        "B"
+      ]
+    },
+    {
+      "code": "D",
+      "name": "San Luis",
+      "nameNative": "San Luis",
+      "type": "province",
+      "capital": "San Luis",
+      "largestCity": "San Luis",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Argentina",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        365.06,
+        503.08
+      ],
+      "bbox": [
+        315.78,
+        424.04,
+        405.7,
+        598.36
+      ],
+      "neighbors": [
+        "F",
+        "J",
+        "L",
+        "M",
+        "X"
+      ]
+    },
+    {
+      "code": "E",
+      "name": "Entre Ríos",
+      "nameNative": "Entre Ríos",
+      "type": "province",
+      "capital": "Entre-Rios",
+      "largestCity": "Entre Ríos",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Argentina",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        608.15,
+        436.46
+      ],
+      "bbox": [
+        551.34,
+        358.33,
+        661.91,
+        522.83
+      ],
+      "neighbors": [
+        "B",
+        "S",
+        "W"
+      ]
+    },
+    {
+      "code": "F",
+      "name": "La Rioja",
+      "nameNative": "La Rioja",
+      "type": "province",
+      "capital": "La Rioja",
+      "largestCity": "La Rioja",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Argentina",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        320.24,
+        331.94
+      ],
+      "bbox": [
+        228.86,
+        252,
+        386.61,
+        427.11
+      ],
+      "neighbors": [
+        "D",
+        "J",
+        "K",
+        "X"
+      ]
+    },
+    {
+      "code": "G",
+      "name": "Santiago del Estero",
+      "nameNative": "Santiago del Estero",
+      "type": "province",
+      "capital": "Santiago del Estero",
+      "largestCity": "Santiago del Estero",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Argentina",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        464.92,
+        249.85
+      ],
+      "bbox": [
+        394.56,
+        159.51,
+        525.53,
+        353.37
+      ],
+      "neighbors": [
+        "A",
+        "H",
+        "K",
+        "S",
+        "T",
+        "X"
+      ]
+    },
+    {
+      "code": "H",
+      "name": "Chaco",
+      "nameNative": "Chaco",
+      "type": "province",
+      "capital": "El Chaco",
+      "largestCity": "Chaco",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Argentina",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        560.81,
+        196.23
+      ],
+      "bbox": [
+        461.98,
+        98.99,
+        651.11,
+        266.98
+      ],
+      "neighbors": [
+        "A",
+        "G",
+        "P",
+        "S",
+        "W"
+      ]
+    },
+    {
+      "code": "J",
+      "name": "San Juan",
+      "nameNative": "San Juan",
+      "type": "province",
+      "capital": "San Juan",
+      "largestCity": "San Juan",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Argentina",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        260.86,
+        382.47
+      ],
+      "bbox": [
+        200.58,
+        281.47,
+        339.39,
+        447.4
+      ],
+      "neighbors": [
+        "D",
+        "F",
+        "M"
+      ]
+    },
+    {
+      "code": "K",
+      "name": "Catamarca",
+      "nameNative": "Catamarca",
+      "type": "province",
+      "capital": "Catamarca",
+      "largestCity": "Catamarca",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Argentina",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        326.79,
+        232.75
+      ],
+      "bbox": [
+        247.23,
+        143.48,
+        405.54,
+        351.35
+      ],
+      "neighbors": [
+        "A",
+        "F",
+        "G",
+        "T",
+        "X"
+      ]
+    },
+    {
+      "code": "L",
+      "name": "La Pampa",
+      "nameNative": "La Pampa",
+      "type": "province",
+      "capital": "El Pampa",
+      "largestCity": "La Pampa",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Argentina",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        386.26,
+        645.36
+      ],
+      "bbox": [
+        289.28,
+        555.89,
+        456.94,
+        738.33
+      ],
+      "neighbors": [
+        "B",
+        "D",
+        "M",
+        "Q",
+        "R",
+        "X"
+      ]
+    },
+    {
+      "code": "M",
+      "name": "Mendoza",
+      "nameNative": "Mendoza",
+      "type": "province",
+      "capital": "Mendoza",
+      "largestCity": "Mendoza",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Argentina",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        276.18,
+        540.79
+      ],
+      "bbox": [
+        209.44,
+        430.6,
+        349.57,
+        665.3
+      ],
+      "neighbors": [
+        "D",
+        "J",
+        "L",
+        "Q",
+        "R"
+      ]
+    },
+    {
+      "code": "N",
+      "name": "Misiones",
+      "nameNative": "Misiones",
+      "type": "province",
+      "capital": "Missões",
+      "largestCity": "Misiones",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Argentina",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        790.99,
+        229.62
+      ],
+      "bbox": [
+        737.43,
+        172.93,
+        830.82,
+        281.19
+      ],
+      "neighbors": [
+        "W"
+      ]
+    },
+    {
+      "code": "P",
+      "name": "Formosa",
+      "nameNative": "Formosa",
+      "type": "province",
+      "capital": "Formosa",
+      "largestCity": "Formosa",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Argentina",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        594.38,
+        134.38
+      ],
+      "bbox": [
+        503.45,
+        29.57,
+        684.53,
+        220.95
+      ],
+      "neighbors": [
+        "A",
+        "H"
+      ]
+    },
+    {
+      "code": "Q",
+      "name": "Neuquén",
+      "nameNative": "Neuquén",
+      "type": "province",
+      "capital": "Neuquém",
+      "largestCity": "Neuquén",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Argentina",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        233.05,
+        713.24
+      ],
+      "bbox": [
+        179.32,
+        608.52,
+        302.74,
+        819.55
+      ],
+      "neighbors": [
+        "L",
+        "M",
+        "R"
+      ]
+    },
+    {
+      "code": "R",
+      "name": "Río Negro",
+      "nameNative": "Río Negro",
+      "type": "province",
+      "capital": "Río Negro",
+      "largestCity": "Río Negro",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Argentina",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        330.05,
+        784.31
+      ],
+      "bbox": [
+        182.96,
+        665.3,
+        471.01,
+        858.77
+      ],
+      "neighbors": [
+        "B",
+        "L",
+        "M",
+        "Q",
+        "U"
+      ]
+    },
+    {
+      "code": "S",
+      "name": "Santa Fe",
+      "nameNative": "Santa Fe",
+      "type": "province",
+      "capital": "Santa Fé",
+      "largestCity": "Santa Fe",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Argentina",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        548.41,
+        376.15
+      ],
+      "bbox": [
+        475.77,
+        262.93,
+        629.43,
+        531.46
+      ],
+      "neighbors": [
+        "B",
+        "E",
+        "G",
+        "H",
+        "W",
+        "X"
+      ]
+    },
+    {
+      "code": "T",
+      "name": "Tucumán",
+      "nameNative": "Tucumán",
+      "type": "province",
+      "capital": "Tucumão",
+      "largestCity": "Tucumán",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Argentina",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        387.52,
+        217.06
+      ],
+      "bbox": [
+        356.57,
+        180.3,
+        420.75,
+        263.6
+      ],
+      "neighbors": [
+        "A",
+        "G",
+        "K"
+      ]
+    },
+    {
+      "code": "U",
+      "name": "Chubut",
+      "nameNative": "Chubut",
+      "type": "province",
+      "capital": "Chubut",
+      "largestCity": "Chubut",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Argentina",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        294.31,
+        927.8
+      ],
+      "bbox": [
+        179.11,
+        850.4,
+        445.24,
+        1026.82
+      ],
+      "neighbors": [
+        "R",
+        "Z"
+      ]
+    },
+    {
+      "code": "V",
+      "name": "Tierra del Fuego",
+      "nameNative": "Tierra del Fuego",
+      "type": "national territory",
+      "capital": "Feuerland",
+      "largestCity": "Tierra del Fuego",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Argentina",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        341.35,
+        1370.12
+      ],
+      "bbox": [
+        308.62,
+        1300.45,
+        430.1,
+        1400
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "W",
+      "name": "Corrientes",
+      "nameNative": "Corrientes",
+      "type": "province",
+      "capital": "Corrientes",
+      "largestCity": "Corrientes",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Argentina",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        667.53,
+        301.26
+      ],
+      "bbox": [
+        595.06,
+        236.86,
+        750.03,
+        385.25
+      ],
+      "neighbors": [
+        "E",
+        "H",
+        "N",
+        "S"
+      ]
+    },
+    {
+      "code": "X",
+      "name": "Córdoba",
+      "nameNative": "Córdoba",
+      "type": "province",
+      "capital": "Cordova",
+      "largestCity": "Córdoba",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Argentina",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        445.15,
+        432.91
+      ],
+      "bbox": [
+        373.59,
+        321.28,
+        516.78,
+        556.37
+      ],
+      "neighbors": [
+        "B",
+        "D",
+        "F",
+        "G",
+        "K",
+        "L",
+        "S"
+      ]
+    },
+    {
+      "code": "Y",
+      "name": "Jujuy",
+      "nameNative": "Jujuy",
+      "type": "province",
+      "capital": "Jujuy",
+      "largestCity": "Jujuy",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Argentina",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        371.09,
+        64.31
+      ],
+      "bbox": [
+        314.49,
+        0,
+        433.53,
+        118.79
+      ],
+      "neighbors": [
+        "A"
+      ]
+    },
+    {
+      "code": "Z",
+      "name": "Santa Cruz",
+      "nameNative": "Santa Cruz",
+      "type": "province",
+      "capital": "Santa Cruz",
+      "largestCity": "Santa Cruz",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Argentina",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        265.32,
+        1139.36
+      ],
+      "bbox": [
+        169.18,
+        1019.94,
+        380.9,
+        1289.74
+      ],
+      "neighbors": [
+        "U"
+      ]
+    }
+  ]
+}

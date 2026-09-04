@@ -24,10 +24,22 @@ export const GEO_SUBJECT_ID_BASES: Record<CountryCode, number> = {
   JP: MAP_SUBJECT_ID_BASE,
   US: MAP_SUBJECT_ID_BASE + 1_000,
   CA: MAP_SUBJECT_ID_BASE + 2_000,
+  TH: MAP_SUBJECT_ID_BASE + 3_000,
+  CN: MAP_SUBJECT_ID_BASE + 4_000,
+  AU: MAP_SUBJECT_ID_BASE + 5_000,
+  TW: MAP_SUBJECT_ID_BASE + 6_000,
 };
 
 /** How many divisions each country has; ids are only stable while these hold. */
-export const GEO_REGION_COUNTS: Record<CountryCode, number> = { JP: 47, US: 51, CA: 13 };
+export const GEO_REGION_COUNTS: Record<CountryCode, number> = {
+  JP: 47,
+  US: 51,
+  CA: 13,
+  TH: 77,
+  CN: 31,
+  AU: 10,
+  TW: 21,
+};
 
 const COUNTRY_CODES = Object.keys(GEO_SUBJECT_ID_BASES) as CountryCode[];
 

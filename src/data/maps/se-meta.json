@@ -1,0 +1,783 @@
+{
+  "updatedAt": "2026-09-04T06:16:50.438Z",
+  "standard": "Natural Earth admin-1 vector dataset",
+  "country": "SE",
+  "countryName": "Sweden",
+  "divisionTypeName": "County",
+  "divisionTypePlural": "Counties",
+  "totalRegions": 21,
+  "regions": [
+    {
+      "code": "AB",
+      "name": "Stockholm",
+      "nameNative": "Stockholm",
+      "type": "county",
+      "capital": "Stockholms län",
+      "largestCity": "Stockholm",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Sweden",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        573.49,
+        976.83
+      ],
+      "bbox": [
+        530.48,
+        900.53,
+        620.74,
+        1040.29
+      ],
+      "neighbors": [
+        "C",
+        "D"
+      ]
+    },
+    {
+      "code": "AC",
+      "name": "Västerbotten",
+      "nameNative": "Västerbotten",
+      "type": "county",
+      "capital": "Västerbottens län",
+      "largestCity": "Västerbotten",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Sweden",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        536.24,
+        430.33
+      ],
+      "bbox": [
+        383.26,
+        281.83,
+        700.97,
+        573.82
+      ],
+      "neighbors": [
+        "BD",
+        "Y",
+        "Z"
+      ]
+    },
+    {
+      "code": "BD",
+      "name": "Norrbotten",
+      "nameNative": "Norrbotten",
+      "type": "county",
+      "capital": "Norrbottens län",
+      "largestCity": "Norrbotten",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Sweden",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        614.83,
+        215.08
+      ],
+      "bbox": [
+        429.07,
+        0,
+        792.14,
+        398.05
+      ],
+      "neighbors": [
+        "AC"
+      ]
+    },
+    {
+      "code": "C",
+      "name": "Uppsala",
+      "nameNative": "Uppsala",
+      "type": "county",
+      "capital": "Uppsala län",
+      "largestCity": "Uppsala",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Sweden",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        548.33,
+        920.54
+      ],
+      "bbox": [
+        503.18,
+        859.38,
+        593.6,
+        987.97
+      ],
+      "neighbors": [
+        "AB",
+        "D",
+        "U",
+        "X"
+      ]
+    },
+    {
+      "code": "D",
+      "name": "Södermanland",
+      "nameNative": "Södermanland",
+      "type": "county",
+      "capital": "Södermanlands län",
+      "largestCity": "Södermanland",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Sweden",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        500.57,
+        1018.82
+      ],
+      "bbox": [
+        445.25,
+        973.87,
+        549.6,
+        1066.07
+      ],
+      "neighbors": [
+        "AB",
+        "C",
+        "E",
+        "T",
+        "U"
+      ]
+    },
+    {
+      "code": "E",
+      "name": "Östergötland",
+      "nameNative": "Östergötland",
+      "type": "county",
+      "capital": "Östergötlands län",
+      "largestCity": "Östergötland",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Sweden",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        447.52,
+        1093.54
+      ],
+      "bbox": [
+        381.2,
+        1028.15,
+        514.84,
+        1160.33
+      ],
+      "neighbors": [
+        "D",
+        "F",
+        "H",
+        "O",
+        "T"
+      ]
+    },
+    {
+      "code": "F",
+      "name": "Jönköping",
+      "nameNative": "Jönköping",
+      "type": "county",
+      "capital": "Jönköpings län",
+      "largestCity": "Jönköping",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Sweden",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        381.36,
+        1180.47
+      ],
+      "bbox": [
+        306.37,
+        1108.16,
+        448.1,
+        1243.88
+      ],
+      "neighbors": [
+        "E",
+        "G",
+        "H",
+        "N",
+        "O"
+      ]
+    },
+    {
+      "code": "G",
+      "name": "Kronoberg",
+      "nameNative": "Kronoberg",
+      "type": "county",
+      "capital": "Kronobergs län",
+      "largestCity": "Kronoberg",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Sweden",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        388.83,
+        1252.41
+      ],
+      "bbox": [
+        317.39,
+        1208.13,
+        458.7,
+        1295.92
+      ],
+      "neighbors": [
+        "F",
+        "H",
+        "K",
+        "M",
+        "N"
+      ]
+    },
+    {
+      "code": "H",
+      "name": "Kalmar",
+      "nameNative": "Kalmar",
+      "type": "county",
+      "capital": "Kalmar län",
+      "largestCity": "Kalmar",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Sweden",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        473.59,
+        1213.02
+      ],
+      "bbox": [
+        431.7,
+        1117.42,
+        528.37,
+        1311.38
+      ],
+      "neighbors": [
+        "E",
+        "F",
+        "G",
+        "K"
+      ]
+    },
+    {
+      "code": "I",
+      "name": "Gotland",
+      "nameNative": "Gotland",
+      "type": "county",
+      "capital": "Gotlands län",
+      "largestCity": "Gotland",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Sweden",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        604.79,
+        1176.08
+      ],
+      "bbox": [
+        581.65,
+        1083.89,
+        645.61,
+        1237.6
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "K",
+      "name": "Blekinge",
+      "nameNative": "Blekinge",
+      "type": "county",
+      "capital": "Blekinge län",
+      "largestCity": "Blekinge",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Sweden",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        423.42,
+        1304.55
+      ],
+      "bbox": [
+        378.58,
+        1282.38,
+        471.86,
+        1334.1
+      ],
+      "neighbors": [
+        "G",
+        "H",
+        "M"
+      ]
+    },
+    {
+      "code": "M",
+      "name": "Skåne",
+      "nameNative": "Skåne",
+      "type": "county",
+      "capital": "Skåne",
+      "largestCity": "Skåne",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Sweden",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        332.49,
+        1337.5
+      ],
+      "bbox": [
+        268.1,
+        1278.94,
+        388.41,
+        1400
+      ],
+      "neighbors": [
+        "G",
+        "K",
+        "N"
+      ]
+    },
+    {
+      "code": "N",
+      "name": "Halland",
+      "nameNative": "Halland",
+      "type": "county",
+      "capital": "Hallands län",
+      "largestCity": "Halland",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Sweden",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        291.64,
+        1233.5
+      ],
+      "bbox": [
+        242.22,
+        1167.16,
+        339.65,
+        1298.7
+      ],
+      "neighbors": [
+        "F",
+        "G",
+        "M",
+        "O"
+      ]
+    },
+    {
+      "code": "O",
+      "name": "Västra Götaland",
+      "nameNative": "Västra Götaland",
+      "type": "county",
+      "capital": "Västra Götaland",
+      "largestCity": "Västra Götaland",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Sweden",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        298.81,
+        1097.63
+      ],
+      "bbox": [
+        207.86,
+        1000.21,
+        401.82,
+        1215.34
+      ],
+      "neighbors": [
+        "E",
+        "F",
+        "N",
+        "S",
+        "T"
+      ]
+    },
+    {
+      "code": "S",
+      "name": "Värmland",
+      "nameNative": "Värmland",
+      "type": "county",
+      "capital": "Värmlands län",
+      "largestCity": "Värmland",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Sweden",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        317.47,
+        949.04
+      ],
+      "bbox": [
+        240.52,
+        818.41,
+        385.14,
+        1054.62
+      ],
+      "neighbors": [
+        "O",
+        "T",
+        "W"
+      ]
+    },
+    {
+      "code": "T",
+      "name": "Örebro",
+      "nameNative": "Orebro",
+      "type": "county",
+      "capital": "Örebro",
+      "largestCity": "Örebro",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Sweden",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        411.47,
+        991.99
+      ],
+      "bbox": [
+        375.83,
+        915.57,
+        453.98,
+        1065.47
+      ],
+      "neighbors": [
+        "D",
+        "E",
+        "O",
+        "S",
+        "U",
+        "W"
+      ]
+    },
+    {
+      "code": "U",
+      "name": "Västmanland",
+      "nameNative": "Västmanland",
+      "type": "county",
+      "capital": "Västmanlands län",
+      "largestCity": "Västmanland",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Sweden",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        480.31,
+        945.71
+      ],
+      "bbox": [
+        434.98,
+        894.46,
+        532.61,
+        1008.26
+      ],
+      "neighbors": [
+        "C",
+        "D",
+        "T",
+        "W",
+        "X"
+      ]
+    },
+    {
+      "code": "W",
+      "name": "Dalarna",
+      "nameNative": "Dalarna",
+      "type": "county",
+      "capital": "Dalecarlia",
+      "largestCity": "Dalarna",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Sweden",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        381.86,
+        829.65
+      ],
+      "bbox": [
+        275.16,
+        694.07,
+        498.63,
+        939.61
+      ],
+      "neighbors": [
+        "S",
+        "T",
+        "U",
+        "X",
+        "Z"
+      ]
+    },
+    {
+      "code": "X",
+      "name": "Gävleborg",
+      "nameNative": "Gävleborg",
+      "type": "county",
+      "capital": "Gävleborgs län",
+      "largestCity": "Gävleborg",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Sweden",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        475.46,
+        779.1
+      ],
+      "bbox": [
+        386.72,
+        688.02,
+        533.23,
+        905.69
+      ],
+      "neighbors": [
+        "C",
+        "U",
+        "W",
+        "Y",
+        "Z"
+      ]
+    },
+    {
+      "code": "Y",
+      "name": "Västernorrland",
+      "nameNative": "Västernorrland",
+      "type": "county",
+      "capital": "Västernorrlands län",
+      "largestCity": "Västernorrland",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Sweden",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        515.79,
+        610.24
+      ],
+      "bbox": [
+        403.59,
+        518.42,
+        607.68,
+        707.25
+      ],
+      "neighbors": [
+        "AC",
+        "X",
+        "Z"
+      ]
+    },
+    {
+      "code": "Z",
+      "name": "Jämtland",
+      "nameNative": "Jämtland",
+      "type": "county",
+      "capital": "Jämtlands län",
+      "largestCity": "Jämtland",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Sweden",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        380.53,
+        597.56
+      ],
+      "bbox": [
+        274.42,
+        407.78,
+        502.66,
+        766.88
+      ],
+      "neighbors": [
+        "AC",
+        "W",
+        "X",
+        "Y"
+      ]
+    }
+  ]
+}

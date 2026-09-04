@@ -1,0 +1,361 @@
+{
+  "updatedAt": "2026-09-04T06:16:49.164Z",
+  "standard": "Natural Earth admin-1 vector dataset",
+  "country": "AU",
+  "countryName": "Australia",
+  "divisionTypeName": "State / territory",
+  "divisionTypePlural": "States and territories",
+  "totalRegions": 10,
+  "regions": [
+    {
+      "code": "ACT",
+      "name": "Australian Capital Territory",
+      "nameNative": "Australian Capital Territory",
+      "type": "territory",
+      "capital": "Australian Capital Territory",
+      "largestCity": "Australian Capital Territory",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Australia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        754.97,
+        619.39
+      ],
+      "bbox": [
+        750.17,
+        611.41,
+        762.87,
+        629.19
+      ],
+      "neighbors": [
+        "NSW"
+      ]
+    },
+    {
+      "code": "NSW",
+      "name": "New South Wales",
+      "nameNative": "New South Wales",
+      "type": "state",
+      "capital": "New South Wales",
+      "largestCity": "New South Wales",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Australia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        725.69,
+        537.76
+      ],
+      "bbox": [
+        606.6,
+        454.88,
+        866.33,
+        667.79
+      ],
+      "neighbors": [
+        "ACT",
+        "QLD",
+        "SA",
+        "VIC",
+        "X02~"
+      ]
+    },
+    {
+      "code": "NSW_2",
+      "name": "Lord Howe Island",
+      "nameNative": "Lord Howe Island",
+      "type": "territory",
+      "capital": "Lord Howe Island",
+      "largestCity": "Lord Howe Island",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Australia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        960.27,
+        558.95
+      ],
+      "bbox": [
+        959.75,
+        557.93,
+        960.72,
+        559.76
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "NT",
+      "name": "Northern Territory",
+      "nameNative": "Northern Territory",
+      "type": "territory",
+      "capital": "Northern Territory",
+      "largestCity": "Northern Territory",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Australia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        458.9,
+        225.55
+      ],
+      "bbox": [
+        359.93,
+        32.91,
+        562.11,
+        382.68
+      ],
+      "neighbors": [
+        "QLD",
+        "SA",
+        "WA"
+      ]
+    },
+    {
+      "code": "QLD",
+      "name": "Queensland",
+      "nameNative": "Queensland",
+      "type": "state",
+      "capital": "Queensland",
+      "largestCity": "Queensland",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Australia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        694.49,
+        308.18
+      ],
+      "bbox": [
+        555.21,
+        0,
+        873.54,
+        478.63
+      ],
+      "neighbors": [
+        "NSW",
+        "NT",
+        "SA"
+      ]
+    },
+    {
+      "code": "SA",
+      "name": "South Australia",
+      "nameNative": "South Australia",
+      "type": "state",
+      "capital": "South Australia",
+      "largestCity": "South Australia",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Australia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        507.86,
+        476.34
+      ],
+      "bbox": [
+        370.06,
+        380.67,
+        616.88,
+        665.52
+      ],
+      "neighbors": [
+        "NSW",
+        "NT",
+        "QLD",
+        "VIC",
+        "WA"
+      ]
+    },
+    {
+      "code": "TAS",
+      "name": "Tasmania",
+      "nameNative": "Tasmania",
+      "type": "state",
+      "capital": "Tasmania",
+      "largestCity": "Tasmania",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Australia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        695.31,
+        761.21
+      ],
+      "bbox": [
+        650.2,
+        703.77,
+        732.36,
+        800
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "VIC",
+      "name": "Victoria",
+      "nameNative": "Victoria",
+      "type": "state",
+      "capital": "Victoria",
+      "largestCity": "Victoria",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Australia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        663.99,
+        641.98
+      ],
+      "bbox": [
+        600.89,
+        571.31,
+        767.21,
+        697.87
+      ],
+      "neighbors": [
+        "NSW",
+        "SA"
+      ]
+    },
+    {
+      "code": "WA",
+      "name": "Western Australia",
+      "nameNative": "Western Australia",
+      "type": "state",
+      "capital": "Western Australia",
+      "largestCity": "Western Australia",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Australia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        230.8,
+        376.27
+      ],
+      "bbox": [
+        39.28,
+        99.85,
+        375.28,
+        614.71
+      ],
+      "neighbors": [
+        "NT",
+        "SA"
+      ]
+    },
+    {
+      "code": "X02~",
+      "name": "Jervis Bay Territory",
+      "nameNative": "Jervis Bay Territory",
+      "type": "territory",
+      "capital": "Jervis Bay Territory",
+      "largestCity": "Jervis Bay Territory",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Australia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        787.66,
+        615.5
+      ],
+      "bbox": [
+        785.92,
+        614.67,
+        789.04,
+        616.49
+      ],
+      "neighbors": [
+        "NSW"
+      ]
+    }
+  ]
+}

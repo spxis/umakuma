@@ -1,0 +1,1169 @@
+{
+  "updatedAt": "2026-09-04T06:16:49.108Z",
+  "standard": "Natural Earth admin-1 vector dataset",
+  "country": "CN",
+  "countryName": "China",
+  "divisionTypeName": "Province / municipality",
+  "divisionTypePlural": "Provinces and municipalities",
+  "totalRegions": 31,
+  "regions": [
+    {
+      "code": "AH",
+      "name": "Anhui",
+      "nameNative": "安徽|安徽",
+      "type": "province",
+      "capital": "Ānhuī",
+      "largestCity": "Anhui",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "East China",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        749.32,
+        458.93
+      ],
+      "bbox": [
+        706.43,
+        401.72,
+        792.35,
+        506.87
+      ],
+      "neighbors": [
+        "HA",
+        "HB",
+        "JS",
+        "JX",
+        "SD",
+        "ZJ"
+      ]
+    },
+    {
+      "code": "BJ",
+      "name": "Beijing",
+      "nameNative": "北京|北京",
+      "type": "municipality",
+      "capital": "Běijīng",
+      "largestCity": "Beijing",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "North China",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        715.02,
+        286.64
+      ],
+      "bbox": [
+        700.35,
+        268.07,
+        730.41,
+        301.87
+      ],
+      "neighbors": [
+        "HE",
+        "TJ"
+      ]
+    },
+    {
+      "code": "CQ",
+      "name": "Chongqing",
+      "nameNative": "重慶|重庆",
+      "type": "municipality",
+      "capital": "Chóngqìng",
+      "largestCity": "Chongqing",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Southwest China",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        589.2,
+        507.83
+      ],
+      "bbox": [
+        544.13,
+        462.72,
+        628.85,
+        545.73
+      ],
+      "neighbors": [
+        "GZ",
+        "HB",
+        "HN",
+        "SC",
+        "SN"
+      ]
+    },
+    {
+      "code": "FJ",
+      "name": "Fujian",
+      "nameNative": "福建",
+      "type": "province",
+      "capital": "Fújiàn",
+      "largestCity": "Fujian",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "China",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        777.25,
+        575.49
+      ],
+      "bbox": [
+        740.43,
+        527.42,
+        818.71,
+        628.01
+      ],
+      "neighbors": [
+        "GD",
+        "JX",
+        "ZJ"
+      ]
+    },
+    {
+      "code": "GD",
+      "name": "Guangdong",
+      "nameNative": "廣東|广东",
+      "type": "province",
+      "capital": "Guǎngdōng",
+      "largestCity": "Guangdong",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "South Central China",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        698.37,
+        640.03
+      ],
+      "bbox": [
+        629.87,
+        596.12,
+        769.02,
+        708.01
+      ],
+      "neighbors": [
+        "FJ",
+        "GX",
+        "HN",
+        "JX"
+      ]
+    },
+    {
+      "code": "GS",
+      "name": "Gansu",
+      "nameNative": "甘肅|甘肃",
+      "type": "province",
+      "capital": "Gānsù",
+      "largestCity": "Gansu",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northwest China",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        477.86,
+        345.19
+      ],
+      "bbox": [
+        349.55,
+        237.59,
+        599.43,
+        455.5
+      ],
+      "neighbors": [
+        "NM",
+        "NX",
+        "QH",
+        "SC",
+        "SN",
+        "XJ"
+      ]
+    },
+    {
+      "code": "GX",
+      "name": "Guangxi",
+      "nameNative": "廣西壯族自治區|广西壮族自治区",
+      "type": "autonomous region",
+      "capital": "Guangxi Zhuang",
+      "largestCity": "Guangxi",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "South Central China",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        610.32,
+        635.75
+      ],
+      "bbox": [
+        529.4,
+        581.27,
+        671.41,
+        692.89
+      ],
+      "neighbors": [
+        "GD",
+        "GZ",
+        "HN",
+        "YN"
+      ]
+    },
+    {
+      "code": "GZ",
+      "name": "Guizhou",
+      "nameNative": "貴州|贵州",
+      "type": "province",
+      "capital": "Gùizhōu",
+      "largestCity": "Guizhou",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Southwest China",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        573.14,
+        575.42
+      ],
+      "bbox": [
+        513.51,
+        524.77,
+        621.63,
+        620.77
+      ],
+      "neighbors": [
+        "CQ",
+        "GX",
+        "HN",
+        "SC",
+        "YN"
+      ]
+    },
+    {
+      "code": "HA",
+      "name": "Henan",
+      "nameNative": "河南",
+      "type": "province",
+      "capital": "Hénán",
+      "largestCity": "Henan",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "South Central China",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        683.44,
+        422.41
+      ],
+      "bbox": [
+        627.8,
+        370.04,
+        733.93,
+        471.34
+      ],
+      "neighbors": [
+        "AH",
+        "HB",
+        "HE",
+        "SD",
+        "SN",
+        "SX"
+      ]
+    },
+    {
+      "code": "HB",
+      "name": "Hubei",
+      "nameNative": "湖北",
+      "type": "province",
+      "capital": "Húběi",
+      "largestCity": "Hubei",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "South Central China",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        665.55,
+        484.56
+      ],
+      "bbox": [
+        598.3,
+        438.4,
+        735.41,
+        526.69
+      ],
+      "neighbors": [
+        "AH",
+        "CQ",
+        "HA",
+        "HN",
+        "JX",
+        "SN"
+      ]
+    },
+    {
+      "code": "HE",
+      "name": "Hebei",
+      "nameNative": "河北",
+      "type": "province",
+      "capital": "Héběi",
+      "largestCity": "Hebei",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "North China",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        711.89,
+        300.71
+      ],
+      "bbox": [
+        673.61,
+        233.54,
+        768.42,
+        374.9
+      ],
+      "neighbors": [
+        "BJ",
+        "HA",
+        "LN",
+        "NM",
+        "SD",
+        "SX",
+        "TJ"
+      ]
+    },
+    {
+      "code": "HI",
+      "name": "Hainan",
+      "nameNative": "海南",
+      "type": "province",
+      "capital": "Hǎinán",
+      "largestCity": "Hainan",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "South Central China",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        633.04,
+        729.17
+      ],
+      "bbox": [
+        610.86,
+        708.73,
+        658.18,
+        750
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "HL",
+      "name": "Heilongjiang",
+      "nameNative": "黑龙江省|黑龍江省",
+      "type": "province",
+      "capital": "Hēilóngjiāng",
+      "largestCity": "Heilongjiang",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northeast China",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        853.65,
+        102.46
+      ],
+      "bbox": [
+        746.57,
+        0,
+        946.33,
+        184.02
+      ],
+      "neighbors": [
+        "JL",
+        "NM"
+      ]
+    },
+    {
+      "code": "HN",
+      "name": "Hunan",
+      "nameNative": "湖南",
+      "type": "province",
+      "capital": "Húnán",
+      "largestCity": "Hunan",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "South Central China",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        660.38,
+        555.23
+      ],
+      "bbox": [
+        608.05,
+        504.65,
+        708.44,
+        616.54
+      ],
+      "neighbors": [
+        "CQ",
+        "GD",
+        "GX",
+        "GZ",
+        "HB",
+        "JX"
+      ]
+    },
+    {
+      "code": "JL",
+      "name": "Jilin",
+      "nameNative": "吉林",
+      "type": "province",
+      "capital": "Jílín",
+      "largestCity": "Jilin",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northeast China",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        849.17,
+        190.54
+      ],
+      "bbox": [
+        775.96,
+        143.88,
+        923.21,
+        249.47
+      ],
+      "neighbors": [
+        "HL",
+        "LN",
+        "NM"
+      ]
+    },
+    {
+      "code": "JS",
+      "name": "Jiangsu",
+      "nameNative": "江蘇|江苏",
+      "type": "province",
+      "capital": "Jiāngsū",
+      "largestCity": "Jiangsu",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "East China",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        783.71,
+        429.8
+      ],
+      "bbox": [
+        727.78,
+        385.94,
+        829.59,
+        472.69
+      ],
+      "neighbors": [
+        "AH",
+        "SD",
+        "SH",
+        "ZJ"
+      ]
+    },
+    {
+      "code": "JX",
+      "name": "Jiangxi",
+      "nameNative": "江西",
+      "type": "province",
+      "capital": "Jiāngxī",
+      "largestCity": "Jiangxi",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "East China",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        732.47,
+        548.91
+      ],
+      "bbox": [
+        693.91,
+        496.35,
+        780.3,
+        615.11
+      ],
+      "neighbors": [
+        "AH",
+        "FJ",
+        "GD",
+        "HB",
+        "HN",
+        "ZJ"
+      ]
+    },
+    {
+      "code": "LN",
+      "name": "Liaoning",
+      "nameNative": "遼寧|辽宁",
+      "type": "province",
+      "capital": "Liáoníng",
+      "largestCity": "Liaoning",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northeast China",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        805.72,
+        249.56
+      ],
+      "bbox": [
+        750.54,
+        201.84,
+        853.98,
+        306.42
+      ],
+      "neighbors": [
+        "HE",
+        "JL",
+        "NM"
+      ]
+    },
+    {
+      "code": "NM",
+      "name": "Inner Mongolia",
+      "nameNative": "內蒙古自治區|内蒙古自治区",
+      "type": "autonomous region",
+      "capital": "Nei Mongol",
+      "largestCity": "Inner Mongolia",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "North China",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        659.66,
+        211.58
+      ],
+      "bbox": [
+        422.75,
+        9.7,
+        815.33,
+        355
+      ],
+      "neighbors": [
+        "GS",
+        "HE",
+        "HL",
+        "JL",
+        "LN",
+        "NX",
+        "SN",
+        "SX"
+      ]
+    },
+    {
+      "code": "NX",
+      "name": "Ningxia",
+      "nameNative": "寧夏回族自治區|宁夏回族自治区",
+      "type": "autonomous region",
+      "capital": "Ningxia Hui",
+      "largestCity": "Ningxia",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northwest China",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        557.69,
+        357.75
+      ],
+      "bbox": [
+        528.79,
+        313.26,
+        581.56,
+        399.64
+      ],
+      "neighbors": [
+        "GS",
+        "NM",
+        "SN"
+      ]
+    },
+    {
+      "code": "QH",
+      "name": "Qinghai",
+      "nameNative": "Qinghai",
+      "type": "province",
+      "capital": "Qinghai",
+      "largestCity": "Qinghai",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northwest China",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        391.76,
+        382.68
+      ],
+      "bbox": [
+        282.79,
+        304.87,
+        507.15,
+        470.89
+      ],
+      "neighbors": [
+        "GS",
+        "SC",
+        "XJ",
+        "XZ"
+      ]
+    },
+    {
+      "code": "SC",
+      "name": "Sichuan",
+      "nameNative": "四川",
+      "type": "province",
+      "capital": "Sìchuān",
+      "largestCity": "Sichuan",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Southwest China",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        498.96,
+        496.47
+      ],
+      "bbox": [
+        409.37,
+        419.44,
+        599.81,
+        590.95
+      ],
+      "neighbors": [
+        "CQ",
+        "GS",
+        "GZ",
+        "QH",
+        "SN",
+        "XZ",
+        "YN"
+      ]
+    },
+    {
+      "code": "SD",
+      "name": "Shandong",
+      "nameNative": "山東|山东",
+      "type": "province",
+      "capital": "Shāndōng",
+      "largestCity": "Shandong",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "East China",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        752.15,
+        362.64
+      ],
+      "bbox": [
+        701.52,
+        313.82,
+        821.46,
+        404.77
+      ],
+      "neighbors": [
+        "AH",
+        "HA",
+        "HE",
+        "JS"
+      ]
+    },
+    {
+      "code": "SH",
+      "name": "Shanghai",
+      "nameNative": "上海|上海",
+      "type": "municipality",
+      "capital": "Shànghǎi",
+      "largestCity": "Shanghai",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "East China",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        823.26,
+        461.31
+      ],
+      "bbox": [
+        813.4,
+        448.36,
+        833.28,
+        472
+      ],
+      "neighbors": [
+        "JS",
+        "ZJ"
+      ]
+    },
+    {
+      "code": "SN",
+      "name": "Shaanxi",
+      "nameNative": "陝西|陕西",
+      "type": "province",
+      "capital": "Shǎnxī",
+      "largestCity": "Shaanxi",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northwest China",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        602.48,
+        400.96
+      ],
+      "bbox": [
+        547.55,
+        306.21,
+        640.66,
+        472.44
+      ],
+      "neighbors": [
+        "CQ",
+        "GS",
+        "HA",
+        "HB",
+        "NM",
+        "NX",
+        "SC",
+        "SX"
+      ]
+    },
+    {
+      "code": "SX",
+      "name": "Shanxi",
+      "nameNative": "山西",
+      "type": "province",
+      "capital": "Shānxī",
+      "largestCity": "Shanxi",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "North China",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        655.36,
+        347.55
+      ],
+      "bbox": [
+        625.69,
+        278.38,
+        687.66,
+        411.3
+      ],
+      "neighbors": [
+        "HA",
+        "HE",
+        "NM",
+        "SN"
+      ]
+    },
+    {
+      "code": "TJ",
+      "name": "Tianjin",
+      "nameNative": "天津|天津",
+      "type": "municipality",
+      "capital": "Tiānjīn",
+      "largestCity": "Tianjin",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "North China",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        731.31,
+        303.22
+      ],
+      "bbox": [
+        722.29,
+        283.14,
+        742.26,
+        318.58
+      ],
+      "neighbors": [
+        "BJ",
+        "HE"
+      ]
+    },
+    {
+      "code": "XJ",
+      "name": "Xinjiang",
+      "nameNative": "新疆維吾爾自治區|新疆维吾尔自治区",
+      "type": "autonomous region",
+      "capital": "Xinjiang Uygur",
+      "largestCity": "Xinjiang",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northwest China",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        235.42,
+        248.4
+      ],
+      "bbox": [
+        53.67,
+        89.29,
+        410.38,
+        367.72
+      ],
+      "neighbors": [
+        "GS",
+        "QH",
+        "XZ"
+      ]
+    },
+    {
+      "code": "XZ",
+      "name": "Tibet",
+      "nameNative": "西藏自治區|西藏自治区",
+      "type": "autonomous region",
+      "capital": "Tibet",
+      "largestCity": "Tibet",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Southwest China",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        251.13,
+        448.71
+      ],
+      "bbox": [
+        89.33,
+        343.73,
+        434.47,
+        543.93
+      ],
+      "neighbors": [
+        "QH",
+        "SC",
+        "XJ",
+        "YN"
+      ]
+    },
+    {
+      "code": "YN",
+      "name": "Yunnan",
+      "nameNative": "雲南|云南",
+      "type": "province",
+      "capital": "Yúnnán",
+      "largestCity": "Yunnan",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Southwest China",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        473.41,
+        612.59
+      ],
+      "bbox": [
+        398.02,
+        522.69,
+        561.74,
+        691.18
+      ],
+      "neighbors": [
+        "GX",
+        "GZ",
+        "SC",
+        "XZ"
+      ]
+    },
+    {
+      "code": "ZJ",
+      "name": "Zhejiang",
+      "nameNative": "浙江",
+      "type": "province",
+      "capital": "Zhèjiāng",
+      "largestCity": "Zhejiang",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "East China",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        805.94,
+        506.57
+      ],
+      "bbox": [
+        769.62,
+        465.92,
+        844.37,
+        546.28
+      ],
+      "neighbors": [
+        "AH",
+        "FJ",
+        "JS",
+        "JX",
+        "SH"
+      ]
+    }
+  ]
+}

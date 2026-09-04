@@ -1,6 +1,10 @@
 import { applyInsetTransform, insetFor, insetTransform } from "./geoMapInsets";
 import { GEO_DATASETS, type CountryCode } from "./geoRegion";
-import type { MapBox } from "./japanPrefectures";
+export type MapBox = { x: number; y: number; width: number; height: number };
+
+export function mapBoxToViewBox(box: MapBox): string {
+  return `${box.x} ${box.y} ${box.width} ${box.height}`;
+}
 
 /**
  * Framing a map, for any country.

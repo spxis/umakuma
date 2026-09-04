@@ -1,5 +1,5 @@
 import { GAME_CHOICE_COUNTS, GAME_KINDS, GAME_PRACTICE_LIST_VALUES, gameKindRules } from "@/lib/gameMode";
-import { MAP_COUNTRIES, type MapCountryCode } from "@/lib/mapCountries";
+import { getPlayableMapCountries, type MapCountryCode } from "@/lib/mapCountries";
 import { GAME_DIRECTION_VALUES, gameAnswerModesFor, type GameAnswerMode, type GameChoiceCount, type GameDirection, type GamePracticeList } from "@/lib/gameMode";
 import SegmentedControl from "@/app/shared/SegmentedControl";
 import StudyTagListsButton from "@/app/shared/StudyTagListsButton";
@@ -31,6 +31,7 @@ type Props = {
   onChange: (update: (value: GameSelection) => GameSelection) => void;
   onStart: () => void;
   onBack: () => void;
+  isAdmin?: boolean;
 };
 
 /**
@@ -44,7 +45,7 @@ type Props = {
 const LABEL_CLASS = "mb-1 block truncate text-[10px] font-black uppercase tracking-wide text-foreground/60";
 const FIELD_CLASS = "h-9 w-full rounded-lg border border-line bg-surface px-2.5 text-sm font-bold text-foreground";
 
-export default function GameSetupPanel({ accountId, setup, selection, starting, onChange, onStart, onBack }: Props) {
+export default function GameSetupPanel({ accountId, setup, selection, starting, onChange, onStart, onBack, isAdmin = false }: Props) {
   const rules = gameKindRules(selection.kind);
   const accent = GAME_KIND_ACCENT[selection.kind];
   const available = gameSelectionAvailableCount(setup, selection);
@@ -138,22 +139,28 @@ export default function GameSetupPanel({ accountId, setup, selection, starting, 
         ) : null}
 
         {/* Where you are playing comes before how, so it leads the row. */}
-        {rules.usesMapCountry && MAP_COUNTRIES.length > 1 ? (
-          <label>
-            <span className={LABEL_CLASS}>{GAME_COPY.mapCountry}</span>
-            <select
-              value={selection.mapCountry ?? "JP"}
-              onChange={(event) =>
-                onChange((value) => ({ ...value, mapCountry: event.target.value as MapCountryCode }))
-              }
-              className={FIELD_CLASS}
-            >
-              {MAP_COUNTRIES.map((country) => (
-                <option key={country.code} value={country.code}>{country.label}</option>
-              ))}
-            </select>
-          </label>
-        ) : null}
+        {rules.usesMapCountry ? (() => {
+          const countries = getPlayableMapCountries(isAdmin);
+          if (countries.length <= 1) return null;
+          return (
+            <label>
+              <span className={LABEL_CLASS}>{GAME_COPY.mapCountry}</span>
+              <select
+                value={selection.mapCountry ?? "JP"}
+                onChange={(event) =>
+                  onChange((value) => ({ ...value, mapCountry: event.target.value as MapCountryCode }))
+                }
+                className={FIELD_CLASS}
+              >
+                {countries.map((country) => (
+                  <option key={country.code} value={country.code}>
+                    {country.label}{"adminOnly" in country && country.adminOnly ? " (Admin Pilot)" : ""}
+                  </option>
+                ))}
+              </select>
+            </label>
+          );
+        })() : null}
 
         {supportsDirection ? (
           <label>

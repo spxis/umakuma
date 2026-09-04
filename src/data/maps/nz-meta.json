@@ -1,0 +1,617 @@
+{
+  "updatedAt": "2026-09-04T06:16:50.246Z",
+  "standard": "Natural Earth admin-1 vector dataset",
+  "country": "NZ",
+  "countryName": "New Zealand",
+  "divisionTypeName": "Region",
+  "divisionTypePlural": "Regions",
+  "totalRegions": 17,
+  "regions": [
+    {
+      "code": "AUK",
+      "name": "Auckland",
+      "nameNative": "Auckland",
+      "type": "unitary authority",
+      "capital": "Tāmaki-makau-rau",
+      "largestCity": "Auckland",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "North Island",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        481.11,
+        312.06
+      ],
+      "bbox": [
+        444.46,
+        260.97,
+        534.69,
+        359.43
+      ],
+      "neighbors": [
+        "NTL",
+        "WKO"
+      ]
+    },
+    {
+      "code": "BOP",
+      "name": "Bay of Plenty",
+      "nameNative": "Bay of Plenty",
+      "type": "regional council",
+      "capital": "Te Moana a Toi Te Huatahi",
+      "largestCity": "Bay of Plenty",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "North Island",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        609.99,
+        433.47
+      ],
+      "bbox": [
+        547.68,
+        367.51,
+        692.92,
+        500.26
+      ],
+      "neighbors": [
+        "GIS",
+        "HKB",
+        "WKO"
+      ]
+    },
+    {
+      "code": "CAN",
+      "name": "Canterbury",
+      "nameNative": "Canterbury",
+      "type": "regional council",
+      "capital": "Waitaha",
+      "largestCity": "Canterbury",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "South Island",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        284.34,
+        866.34
+      ],
+      "bbox": [
+        167.6,
+        732.05,
+        432.61,
+        988.28
+      ],
+      "neighbors": [
+        "MBH",
+        "OTA",
+        "TAS",
+        "WTC"
+      ]
+    },
+    {
+      "code": "CIT",
+      "name": "Chatham Islands",
+      "nameNative": "Chatham Islands Territory",
+      "type": "special island authority",
+      "capital": "Wharekauri",
+      "largestCity": "Chatham Islands",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Chatham Islands",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        979.27,
+        934.08
+      ],
+      "bbox": [
+        959.06,
+        914.71,
+        1000,
+        968.99
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "GIS",
+      "name": "Gisborne",
+      "nameNative": "Gisborne District",
+      "type": "unitary authority",
+      "capital": "Tūranga nui a Kiwa",
+      "largestCity": "Gisborne",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "North Island",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        681.12,
+        445.93
+      ],
+      "bbox": [
+        631.24,
+        388.09,
+        723.54,
+        501.47
+      ],
+      "neighbors": [
+        "BOP",
+        "HKB"
+      ]
+    },
+    {
+      "code": "HKB",
+      "name": "Hawke's Bay",
+      "nameNative": "Hawke's Bay",
+      "type": "regional council",
+      "capital": "Te Matau a Māui",
+      "largestCity": "Hawke's Bay",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "North Island",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        603.44,
+        531.84
+      ],
+      "bbox": [
+        559.75,
+        467.56,
+        680.97,
+        618.36
+      ],
+      "neighbors": [
+        "BOP",
+        "GIS",
+        "MWT",
+        "WKO"
+      ]
+    },
+    {
+      "code": "MBH",
+      "name": "Marlborough",
+      "nameNative": "Marlborough District",
+      "type": "unitary authority",
+      "capital": "Marlborough",
+      "largestCity": "Marlborough",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "South Island",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        400.69,
+        713.13
+      ],
+      "bbox": [
+        350.04,
+        634.67,
+        452.9,
+        776.73
+      ],
+      "neighbors": [
+        "CAN",
+        "NSN",
+        "TAS"
+      ]
+    },
+    {
+      "code": "MWT",
+      "name": "Manawatū-Whanganui",
+      "nameNative": "Manawatu-Wanganui",
+      "type": "regional council",
+      "capital": "Manawatu Whanganui",
+      "largestCity": "Manawatū-Whanganui",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "North Island",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        526.81,
+        559.08
+      ],
+      "bbox": [
+        475.31,
+        456.45,
+        590.77,
+        642.5
+      ],
+      "neighbors": [
+        "HKB",
+        "TKI",
+        "WGN",
+        "WKO"
+      ]
+    },
+    {
+      "code": "NSN",
+      "name": "Nelson",
+      "nameNative": "Nelson City",
+      "type": "unitary authority",
+      "capital": "Whakatū",
+      "largestCity": "Nelson",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "South Island",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        390.8,
+        678.15
+      ],
+      "bbox": [
+        378.87,
+        662.49,
+        403.64,
+        689.3
+      ],
+      "neighbors": [
+        "MBH",
+        "TAS"
+      ]
+    },
+    {
+      "code": "NTL",
+      "name": "Northland",
+      "nameNative": "Northland",
+      "type": "regional council",
+      "capital": "Te Tai tokerau",
+      "largestCity": "Northland",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "North Island",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        423.64,
+        214.33
+      ],
+      "bbox": [
+        345.94,
+        124.53,
+        475.7,
+        286.64
+      ],
+      "neighbors": [
+        "AUK"
+      ]
+    },
+    {
+      "code": "OTA",
+      "name": "Otago",
+      "nameNative": "Otago",
+      "type": "regional council",
+      "capital": "Ō Tākou",
+      "largestCity": "Otago",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "South Island",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        171.57,
+        1007.65
+      ],
+      "bbox": [
+        88.57,
+        901.17,
+        263.17,
+        1120.19
+      ],
+      "neighbors": [
+        "CAN",
+        "STL",
+        "WTC"
+      ]
+    },
+    {
+      "code": "STL",
+      "name": "Southland",
+      "nameNative": "Southland",
+      "type": "regional council",
+      "capital": "Murihiku",
+      "largestCity": "Southland",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "South Island",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        82.98,
+        1048.98
+      ],
+      "bbox": [
+        0,
+        929.66,
+        157.81,
+        1175.47
+      ],
+      "neighbors": [
+        "OTA",
+        "WTC"
+      ]
+    },
+    {
+      "code": "TAS",
+      "name": "Tasman",
+      "nameNative": "Tasman District",
+      "type": "unitary authority",
+      "capital": "Tasman",
+      "largestCity": "Tasman",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "South Island",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        346.46,
+        693.67
+      ],
+      "bbox": [
+        311.41,
+        617.67,
+        384.93,
+        764.02
+      ],
+      "neighbors": [
+        "CAN",
+        "MBH",
+        "NSN",
+        "WTC"
+      ]
+    },
+    {
+      "code": "TKI",
+      "name": "Taranaki",
+      "nameNative": "Taranaki",
+      "type": "regional council",
+      "capital": "Taranaki",
+      "largestCity": "Taranaki",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "North Island",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        457.44,
+        523.35
+      ],
+      "bbox": [
+        415.1,
+        473.57,
+        491.76,
+        566.81
+      ],
+      "neighbors": [
+        "MWT",
+        "WKO"
+      ]
+    },
+    {
+      "code": "WGN",
+      "name": "Wellington",
+      "nameNative": "Wellington",
+      "type": "regional council",
+      "capital": "Wellington",
+      "largestCity": "Wellington",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "North Island",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        518.72,
+        667.14
+      ],
+      "bbox": [
+        464.8,
+        633.17,
+        572.71,
+        709.74
+      ],
+      "neighbors": [
+        "MWT"
+      ]
+    },
+    {
+      "code": "WKO",
+      "name": "Waikato",
+      "nameNative": "Waikato",
+      "type": "regional council",
+      "capital": "Waikato",
+      "largestCity": "Waikato",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "North Island",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        527.45,
+        420.48
+      ],
+      "bbox": [
+        469.61,
+        294.33,
+        589.65,
+        523.07
+      ],
+      "neighbors": [
+        "AUK",
+        "BOP",
+        "HKB",
+        "MWT",
+        "TKI"
+      ]
+    },
+    {
+      "code": "WTC",
+      "name": "West Coast",
+      "nameNative": "West Coast",
+      "type": "regional council",
+      "capital": "Te Taihau ā uru",
+      "largestCity": "West Coast",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "South Island",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        246.17,
+        802.24
+      ],
+      "bbox": [
+        84.33,
+        640.11,
+        349.51,
+        947.5
+      ],
+      "neighbors": [
+        "CAN",
+        "OTA",
+        "STL",
+        "TAS"
+      ]
+    }
+  ]
+}

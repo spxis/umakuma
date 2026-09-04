@@ -1,0 +1,597 @@
+{
+  "updatedAt": "2026-09-04T06:16:48.731Z",
+  "standard": "Natural Earth admin-1 vector dataset",
+  "country": "DE",
+  "countryName": "Germany",
+  "divisionTypeName": "State",
+  "divisionTypePlural": "States",
+  "totalRegions": 16,
+  "regions": [
+    {
+      "code": "BB",
+      "name": "Brandenburg",
+      "nameNative": "Brandenburg",
+      "type": "state",
+      "capital": "Brandenburg",
+      "largestCity": "Brandenburg",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Germany",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        754.9,
+        363.85
+      ],
+      "bbox": [
+        571.8,
+        210.75,
+        877.1,
+        519.62
+      ],
+      "neighbors": [
+        "BE",
+        "MV",
+        "NI",
+        "SN",
+        "ST"
+      ]
+    },
+    {
+      "code": "BE",
+      "name": "Berlin",
+      "nameNative": "Berlin",
+      "type": "state",
+      "capital": "Berlin",
+      "largestCity": "Berlin",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Germany",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        755.22,
+        358.91
+      ],
+      "bbox": [
+        728.84,
+        335.7,
+        785.21,
+        380.31
+      ],
+      "neighbors": [
+        "BB"
+      ]
+    },
+    {
+      "code": "BW",
+      "name": "Baden-Württemberg",
+      "nameNative": "Baden-Württemberg",
+      "type": "state",
+      "capital": "Baden-Württemberg",
+      "largestCity": "Baden-Württemberg",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Germany",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        370.94,
+        920.22
+      ],
+      "bbox": [
+        223.02,
+        743.81,
+        505.92,
+        1062.61
+      ],
+      "neighbors": [
+        "BY",
+        "HE",
+        "RP"
+      ]
+    },
+    {
+      "code": "BY",
+      "name": "Bavaria",
+      "nameNative": "Bayern",
+      "type": "state",
+      "capital": "Bavaria",
+      "largestCity": "Bavaria",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Germany",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        591.4,
+        865.62
+      ],
+      "bbox": [
+        368.72,
+        636.39,
+        814.62,
+        1100
+      ],
+      "neighbors": [
+        "BW",
+        "HE",
+        "SN",
+        "TH"
+      ]
+    },
+    {
+      "code": "HB",
+      "name": "Free Hanseatic Bremen",
+      "nameNative": "Bremen",
+      "type": "state",
+      "capital": "Free Hanseatic Bremen",
+      "largestCity": "Free Hanseatic Bremen",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Germany",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        359.04,
+        264.63
+      ],
+      "bbox": [
+        337.44,
+        204.3,
+        378.69,
+        288.54
+      ],
+      "neighbors": [
+        "NI"
+      ]
+    },
+    {
+      "code": "HE",
+      "name": "Hesse",
+      "nameNative": "Hessen",
+      "type": "state",
+      "capital": "Hesse",
+      "largestCity": "Hesse",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Germany",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        375.17,
+        630.33
+      ],
+      "bbox": [
+        259.85,
+        482.14,
+        482.81,
+        798.97
+      ],
+      "neighbors": [
+        "BW",
+        "BY",
+        "NI",
+        "NW",
+        "RP",
+        "TH"
+      ]
+    },
+    {
+      "code": "HH",
+      "name": "Hamburg",
+      "nameNative": "Hamburg",
+      "type": "state",
+      "capital": "Hamburg",
+      "largestCity": "Hamburg",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Germany",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        467.07,
+        216.69
+      ],
+      "bbox": [
+        442.87,
+        190.89,
+        491.94,
+        236.44
+      ],
+      "neighbors": [
+        "NI",
+        "SH"
+      ]
+    },
+    {
+      "code": "MV",
+      "name": "Mecklenburg-Western Pomerania",
+      "nameNative": "Mecklenburg-Vorpommern",
+      "type": "state",
+      "capital": "Mecklenburg-West Pomerania",
+      "largestCity": "Mecklenburg-Western Pomerania",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Germany",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        674.09,
+        185.14
+      ],
+      "bbox": [
+        514.88,
+        50.83,
+        833.49,
+        277.75
+      ],
+      "neighbors": [
+        "BB",
+        "NI",
+        "SH"
+      ]
+    },
+    {
+      "code": "NI",
+      "name": "Lower Saxony",
+      "nameNative": "Niedersachsen",
+      "type": "state",
+      "capital": "Lower Saxony",
+      "largestCity": "Lower Saxony",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Germany",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        391.99,
+        325.88
+      ],
+      "bbox": [
+        178.76,
+        165.82,
+        597.92,
+        533.72
+      ],
+      "neighbors": [
+        "BB",
+        "HB",
+        "HE",
+        "HH",
+        "MV",
+        "NW",
+        "SH",
+        "ST",
+        "TH"
+      ]
+    },
+    {
+      "code": "NW",
+      "name": "North Rhine-Westphalia",
+      "nameNative": "Nordrhein-Westfalen",
+      "type": "state",
+      "capital": "North Rhine-Westphalia",
+      "largestCity": "North Rhine-Westphalia",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Germany",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        247.46,
+        503.39
+      ],
+      "bbox": [
+        95.44,
+        358.42,
+        416.11,
+        659.95
+      ],
+      "neighbors": [
+        "HE",
+        "NI",
+        "RP"
+      ]
+    },
+    {
+      "code": "RP",
+      "name": "Rhineland-Palatinate",
+      "nameNative": "Rheinland-Pfalz",
+      "type": "state",
+      "capital": "Rhineland-Palatinate",
+      "largestCity": "Rhineland-Palatinate",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Germany",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        229.67,
+        723.5
+      ],
+      "bbox": [
+        108.62,
+        580.04,
+        323.7,
+        859.03
+      ],
+      "neighbors": [
+        "BW",
+        "HE",
+        "NW",
+        "SL"
+      ]
+    },
+    {
+      "code": "SH",
+      "name": "Schleswig-Holstein",
+      "nameNative": "Schleswig-Holstein",
+      "type": "state",
+      "capital": "Schleswig-Holstein",
+      "largestCity": "Schleswig-Holstein",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Germany",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        451.58,
+        126.82
+      ],
+      "bbox": [
+        290.37,
+        0,
+        573.17,
+        242.2
+      ],
+      "neighbors": [
+        "HH",
+        "MV",
+        "NI"
+      ]
+    },
+    {
+      "code": "SL",
+      "name": "Saarland",
+      "nameNative": "Saarland",
+      "type": "state",
+      "capital": "Saarland",
+      "largestCity": "Saarland",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Germany",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        180.32,
+        795.54
+      ],
+      "bbox": [
+        126.38,
+        760.23,
+        221.35,
+        835.17
+      ],
+      "neighbors": [
+        "RP"
+      ]
+    },
+    {
+      "code": "SN",
+      "name": "Saxony",
+      "nameNative": "Sachsen",
+      "type": "state",
+      "capital": "Saxony",
+      "largestCity": "Saxony",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Germany",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        757.71,
+        563.75
+      ],
+      "bbox": [
+        631.65,
+        477.27,
+        904.56,
+        691.07
+      ],
+      "neighbors": [
+        "BB",
+        "BY",
+        "ST",
+        "TH"
+      ]
+    },
+    {
+      "code": "ST",
+      "name": "Saxony-Anhalt",
+      "nameNative": "Sachsen-Anhalt",
+      "type": "state",
+      "capital": "Saxony-Anhalt",
+      "largestCity": "Saxony-Anhalt",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Germany",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        610.26,
+        433.82
+      ],
+      "bbox": [
+        512.41,
+        285.64,
+        744.23,
+        583.36
+      ],
+      "neighbors": [
+        "BB",
+        "NI",
+        "SN",
+        "TH"
+      ]
+    },
+    {
+      "code": "TH",
+      "name": "Thuringia",
+      "nameNative": "Thüringen",
+      "type": "state",
+      "capital": "Thuringia",
+      "largestCity": "Thuringia",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Germany",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        553.04,
+        589.4
+      ],
+      "bbox": [
+        450.84,
+        485.24,
+        696.95,
+        686.49
+      ],
+      "neighbors": [
+        "BY",
+        "HE",
+        "NI",
+        "SN",
+        "ST"
+      ]
+    }
+  ]
+}

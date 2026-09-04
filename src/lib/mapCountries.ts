@@ -9,19 +9,23 @@
 import { SOURCE_KEYS, type SourceKey } from "./sourceCredits";
 
 const ALL_MAP_COUNTRIES = [
-  { code: "JP", label: "Japan", playable: true, source: SOURCE_KEYS.jpmap },
-  /*
-   * Offered since their maps became real: built by `pnpm map:build:us` and
-   * `pnpm map:build:canada` from the Census Bureau and Natural Earth rather
-   * than the hand-written pentagons that stood in before.
-   * `geoMapGeometry.test.ts` holds them to it.
-   */
-  { code: "US", label: "United States", playable: true, source: SOURCE_KEYS.usmap },
-  { code: "CA", label: "Canada", playable: true, source: SOURCE_KEYS.camap },
+  { code: "JP", label: "Japan", playable: true, adminOnly: false, source: SOURCE_KEYS.jpmap },
+  { code: "US", label: "United States", playable: true, adminOnly: false, source: SOURCE_KEYS.usmap },
+  { code: "CA", label: "Canada", playable: true, adminOnly: false, source: SOURCE_KEYS.camap },
+  /* Admin mode pilot wave: Thailand, China, Australia, Taiwan */
+  { code: "TH", label: "Thailand", playable: true, adminOnly: true, source: SOURCE_KEYS.camap },
+  { code: "CN", label: "China", playable: true, adminOnly: true, source: SOURCE_KEYS.camap },
+  { code: "AU", label: "Australia", playable: true, adminOnly: true, source: SOURCE_KEYS.camap },
+  { code: "TW", label: "Taiwan", playable: true, adminOnly: true, source: SOURCE_KEYS.camap },
 ] as const;
 
-/** Countries whose maps are real enough to play on. */
-export const MAP_COUNTRIES = ALL_MAP_COUNTRIES.filter((country) => country.playable);
+/** Countries whose maps are public and playable by everyone. */
+export const MAP_COUNTRIES = ALL_MAP_COUNTRIES.filter((country) => country.playable && !country.adminOnly);
+
+/** Returns countries available to the player depending on admin privileges. */
+export function getPlayableMapCountries(isAdmin = false) {
+  return ALL_MAP_COUNTRIES.filter((country) => country.playable && (isAdmin || !country.adminOnly));
+}
 
 /** Every country the engine supports, playable or not. */
 export const MAP_COUNTRIES_ALL = ALL_MAP_COUNTRIES;

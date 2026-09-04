@@ -1,6 +1,10 @@
 import "server-only";
 
 import caMap from "@/data/maps/ca-map.json";
+import thMap from "@/data/maps/th-map.json";
+import cnMap from "@/data/maps/cn-map.json";
+import auMap from "@/data/maps/au-map.json";
+import twMap from "@/data/maps/tw-map.json";
 import jpMap from "@/data/maps/jp-map.json";
 import usMap from "@/data/maps/us-map.json";
 
@@ -76,6 +80,10 @@ const MAP_SOURCES: Record<CountryCode, string> = {
   JP: jpMap.source,
   US: usMap.source,
   CA: caMap.source,
+  TH: thMap.source,
+  CN: cnMap.source,
+  AU: auMap.source,
+  TW: twMap.source,
 };
 
 function countPathCommands(path: string): number {

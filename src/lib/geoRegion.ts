@@ -4,98 +4,38 @@ import usMap from "@/data/maps/us-map.json";
 import usMeta from "@/data/maps/us-meta.json";
 import caMap from "@/data/maps/ca-map.json";
 import caMeta from "@/data/maps/ca-meta.json";
+import thMap from "@/data/maps/th-map.json";
+import thMeta from "@/data/maps/th-meta.json";
+import cnMap from "@/data/maps/cn-map.json";
+import cnMeta from "@/data/maps/cn-meta.json";
+import auMap from "@/data/maps/au-map.json";
+import auMeta from "@/data/maps/au-meta.json";
+import twMap from "@/data/maps/tw-map.json";
+import twMeta from "@/data/maps/tw-meta.json";
 
-export type CountryCode = "JP" | "US" | "CA";
-export type DivisionType = "prefecture" | "state" | "province" | "territory" | "district";
+import type {
+  CountryCode,
+  DivisionType,
+  GeoCountryDataset,
+  GeoRegion,
+  GeoRegionCapital,
+  GeoRegionExtras,
+  GeoRegionFamousFor,
+  GeoRegionMapGeometry,
+  GeoRegionSymbols,
+} from "./geoRegionTypes";
 
-export interface GeoRegionCapital {
-  name: string;
-  nameNative?: string;
-  reading?: string;
-}
-
-export interface GeoRegionFamousFor {
-  foods: string[];
-  landmarks: string[];
-  specialties: string[];
-}
-
-export interface GeoRegionSymbols {
-  flower?: string;
-  tree?: string;
-  bird?: string;
-}
-
-export interface GeoRegionMapGeometry {
-  path: string;
-  centroid: [number, number];
-  bbox: [number, number, number, number];
-  neighbors: (string | number)[];
-  inset?: boolean;
-}
-
-export interface GeoRegionExtras {
-  kanjiTagging?: {
-    prefectureKanji: string[];
-    mextGrade4PrefectureKanji: string[];
-    kanjiGrades?: number[];
-  };
-  historicalProvinces?: string[];
-  emblem?: {
-    description: string;
-    symbolChar?: string;
-  };
-  officialLanguages?: string[];
-  motto?: string;
-  statehoodOrder?: number;
-  admittedYear?: number;
-  enteredConfederationYear?: number;
-}
-
-export interface GeoRegion {
-  /** Global unique composite identifier, e.g. "JP-1", "US-CA", "CA-ON" */
-  id: string;
-  /** Regional code, e.g. 1, "CA", "ON" */
-  code: string | number;
-  country: CountryCode;
-  divisionType: DivisionType;
-  name: string;
-  nameNative?: string;
-  reading?: string;
-  capital: GeoRegionCapital;
-  largestCity?: string;
-  region: string;
-  population: number;
-  areaKm2: number;
-  areaSqMi: number;
-  nicknames: string[];
-  no1Rankings: string[];
-  famousFor: GeoRegionFamousFor;
-  symbols?: GeoRegionSymbols;
-  map: GeoRegionMapGeometry;
-  extras?: GeoRegionExtras;
-}
-
-export interface GeoCountryDataset {
-  country: CountryCode;
-  countryName: string;
-  divisionTypeName: string;
-  /*
-   * The plural, written out rather than derived.
-   *
-   * The heading used to add an "s" to whatever this said, which works for
-   * prefectures and states and gave Canada "All 13 province / territorys".
-   * English plurals are not a suffix and a slashed pair is not one noun, so
-   * the dataset carries both forms and the copy picks one.
-   */
-  divisionTypePlural: string;
-  viewBox: string;
-  width: number;
-  height: number;
-  totalRegions: number;
-  regions: GeoRegion[];
-}
-
+export type {
+  CountryCode,
+  DivisionType,
+  GeoCountryDataset,
+  GeoRegion,
+  GeoRegionCapital,
+  GeoRegionExtras,
+  GeoRegionFamousFor,
+  GeoRegionMapGeometry,
+  GeoRegionSymbols,
+};
 function roundTo(num: number, decimals = 1): number {
   const factor = 10 ** decimals;
   return Math.round(num * factor) / factor;
@@ -320,13 +260,92 @@ function buildCanadaRegions(): GeoRegion[] {
   });
 }
 
+function buildStandardRegions(
+  country: CountryCode,
+  metaData: Record<string, unknown>,
+  mapData: Record<string, unknown>,
+  defaultDivisionType: DivisionType = "province",
+): GeoRegion[] {
+  const metaList = (metaData.regions || []) as unknown as Array<{
+    code: string;
+    name: string;
+    nameNative?: string;
+    type?: string;
+    capital: string;
+    largestCity?: string;
+    region: string;
+    population: number;
+    areaKm2: number;
+    areaSqMi: number;
+    nicknames?: string[];
+    no1Rankings?: string[];
+    famousFor?: GeoRegionFamousFor;
+    symbols?: GeoRegionSymbols;
+  }>;
+  const mapList = (mapData.regions || []) as unknown as Array<{
+    code: string;
+    path: string;
+    centroid: [number, number];
+    bbox: [number, number, number, number];
+    neighbors: string[];
+  }>;
+  const mapByCode = new Map(mapList.map((m) => [m.code, m]));
+
+  return metaList.map((meta) => {
+    const geom = mapByCode.get(meta.code);
+    return {
+      id: `${country}-${meta.code}`,
+      code: meta.code,
+      country,
+      divisionType: (meta.type as DivisionType) || defaultDivisionType,
+      name: meta.name,
+      nameNative: meta.nameNative || meta.name,
+      capital: {
+        name: meta.capital,
+        nameNative: meta.capital,
+      },
+      largestCity: meta.largestCity,
+      region: meta.region,
+      population: meta.population,
+      areaKm2: meta.areaKm2,
+      areaSqMi: meta.areaSqMi,
+      nicknames: meta.nicknames || [],
+      no1Rankings: meta.no1Rankings || [],
+      famousFor: meta.famousFor || { foods: [], landmarks: [], specialties: [] },
+      symbols: meta.symbols,
+      map: {
+        path: geom?.path || "",
+        centroid: geom?.centroid || [0, 0],
+        bbox: geom?.bbox || [0, 0, 0, 0],
+        neighbors: geom?.neighbors || [],
+      },
+    };
+  });
+}
+
 // Datasets
 const JAPAN_REGIONS = buildJapanRegions();
 const US_REGIONS = buildUsRegions();
 const CANADA_REGIONS = buildCanadaRegions();
+const THAILAND_REGIONS = buildStandardRegions("TH", thMeta, thMap, "province");
+const CHINA_REGIONS = buildStandardRegions("CN", cnMeta, cnMap, "province");
+const AUSTRALIA_REGIONS = buildStandardRegions("AU", auMeta, auMap, "state");
+const TAIWAN_REGIONS = buildStandardRegions("TW", twMeta, twMap, "district");
 
-const ALL_REGIONS = [...JAPAN_REGIONS, ...US_REGIONS, ...CANADA_REGIONS];
-const REGIONS_BY_ID = new Map<string, GeoRegion>(ALL_REGIONS.map((r) => [r.id, r]));
+const BASE_REGIONS = [
+  ...JAPAN_REGIONS,
+  ...US_REGIONS,
+  ...CANADA_REGIONS,
+];
+
+const ALL_LOADED_REGIONS = [
+  ...BASE_REGIONS,
+  ...THAILAND_REGIONS,
+  ...CHINA_REGIONS,
+  ...AUSTRALIA_REGIONS,
+  ...TAIWAN_REGIONS,
+];
+const REGIONS_BY_ID = new Map<string, GeoRegion>(ALL_LOADED_REGIONS.map((r) => [r.id, r]));
 
 export const GEO_DATASETS: Record<CountryCode, GeoCountryDataset> = {
   JP: {
@@ -362,6 +381,50 @@ export const GEO_DATASETS: Record<CountryCode, GeoCountryDataset> = {
     totalRegions: CANADA_REGIONS.length,
     regions: CANADA_REGIONS,
   },
+  TH: {
+    country: "TH",
+    countryName: "Thailand",
+    divisionTypeName: "Province",
+    divisionTypePlural: "Provinces",
+    viewBox: thMap.viewBox || "0 0 1000 1400",
+    width: thMap.width || 1000,
+    height: thMap.height || 1400,
+    totalRegions: THAILAND_REGIONS.length,
+    regions: THAILAND_REGIONS,
+  },
+  CN: {
+    country: "CN",
+    countryName: "China",
+    divisionTypeName: "Province / Municipality",
+    divisionTypePlural: "Provinces and municipalities",
+    viewBox: cnMap.viewBox || "0 0 1000 750",
+    width: cnMap.width || 1000,
+    height: cnMap.height || 750,
+    totalRegions: CHINA_REGIONS.length,
+    regions: CHINA_REGIONS,
+  },
+  AU: {
+    country: "AU",
+    countryName: "Australia",
+    divisionTypeName: "State / Territory",
+    divisionTypePlural: "States and territories",
+    viewBox: auMap.viewBox || "0 0 1000 800",
+    width: auMap.width || 1000,
+    height: auMap.height || 800,
+    totalRegions: AUSTRALIA_REGIONS.length,
+    regions: AUSTRALIA_REGIONS,
+  },
+  TW: {
+    country: "TW",
+    countryName: "Taiwan",
+    divisionTypeName: "County / City",
+    divisionTypePlural: "Counties and cities",
+    viewBox: twMap.viewBox || "0 0 1000 1400",
+    width: twMap.width || 1000,
+    height: twMap.height || 1400,
+    totalRegions: TAIWAN_REGIONS.length,
+    regions: TAIWAN_REGIONS,
+  },
 };
 
 /** Query any geographic region by its composite ID (e.g. "JP-13", "US-CA", "CA-QC") */
@@ -374,7 +437,7 @@ export function getGeoRegionsByCountry(country: CountryCode): GeoRegion[] {
   return GEO_DATASETS[country]?.regions || [];
 }
 
-/** Get all regions across all loaded countries */
-export function getAllGeoRegions(): GeoRegion[] {
-  return ALL_REGIONS;
+/** Get all regions across baseline public countries (or all loaded including admin pilot) */
+export function getAllGeoRegions(includeAdminPilot = false): GeoRegion[] {
+  return includeAdminPilot ? ALL_LOADED_REGIONS : BASE_REGIONS;
 }

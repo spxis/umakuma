@@ -1,0 +1,768 @@
+{
+  "updatedAt": "2026-09-04T06:16:49.312Z",
+  "standard": "Natural Earth admin-1 vector dataset",
+  "country": "TW",
+  "countryName": "Taiwan",
+  "divisionTypeName": "County / city",
+  "divisionTypePlural": "Counties and cities",
+  "totalRegions": 21,
+  "regions": [
+    {
+      "code": "CHA",
+      "name": "Changhua",
+      "nameNative": "Changhua",
+      "type": "county",
+      "capital": "Zhanghua",
+      "largestCity": "Changhua",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Taiwan Province",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        591.45,
+        592.7
+      ],
+      "bbox": [
+        527.08,
+        519.58,
+        645.87,
+        647.97
+      ],
+      "neighbors": [
+        "NAN",
+        "TXG",
+        "YUN"
+      ]
+    },
+    {
+      "code": "CYI",
+      "name": "Chiayi",
+      "nameNative": "Chiayi City",
+      "type": "provincial city",
+      "capital": "Chiayi",
+      "largestCity": "Chiayi",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Taiwan Province",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        580.09,
+        733.23
+      ],
+      "bbox": [
+        561.62,
+        723.11,
+        598.23,
+        744.34
+      ],
+      "neighbors": [
+        "CYQ"
+      ]
+    },
+    {
+      "code": "CYQ",
+      "name": "Chiayi",
+      "nameNative": "Chiayi",
+      "type": "county",
+      "capital": "Jiayi",
+      "largestCity": "Chiayi",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Taiwan Province",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        600.99,
+        741.86
+      ],
+      "bbox": [
+        462.47,
+        686.92,
+        720.9,
+        809.4
+      ],
+      "neighbors": [
+        "CYI",
+        "KHH",
+        "NAN",
+        "TNN",
+        "YUN"
+      ]
+    },
+    {
+      "code": "HSQ",
+      "name": "Hsinchu",
+      "nameNative": "Hsinchu",
+      "type": "county",
+      "capital": "Xinzhu",
+      "largestCity": "Hsinchu",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Taiwan Province",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        774.3,
+        378.15
+      ],
+      "bbox": [
+        708.29,
+        300.12,
+        841.74,
+        453.03
+      ],
+      "neighbors": [
+        "HSZ",
+        "ILA",
+        "MIA",
+        "TAO",
+        "TXG"
+      ]
+    },
+    {
+      "code": "HSZ",
+      "name": "Hsinchu",
+      "nameNative": "Hsinchu City",
+      "type": "provincial city",
+      "capital": "Hsinchu",
+      "largestCity": "Hsinchu",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Taiwan Province",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        718.47,
+        350.04
+      ],
+      "bbox": [
+        697.03,
+        329.14,
+        743.44,
+        371.35
+      ],
+      "neighbors": [
+        "HSQ",
+        "MIA"
+      ]
+    },
+    {
+      "code": "HUA",
+      "name": "Hualien",
+      "nameNative": "Hualien",
+      "type": "county",
+      "capital": "Hualian",
+      "largestCity": "Hualien",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Taiwan Province",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        832.76,
+        653.49
+      ],
+      "bbox": [
+        728.08,
+        470.77,
+        938.93,
+        844.56
+      ],
+      "neighbors": [
+        "ILA",
+        "KHH",
+        "NAN",
+        "TTT",
+        "TXG"
+      ]
+    },
+    {
+      "code": "ILA",
+      "name": "Yilan",
+      "nameNative": "Yilan",
+      "type": "county",
+      "capital": "Ilan",
+      "largestCity": "Yilan",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Taiwan Province",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        901.55,
+        410.32
+      ],
+      "bbox": [
+        816.15,
+        285.75,
+        991.19,
+        484.26
+      ],
+      "neighbors": [
+        "HSQ",
+        "HUA",
+        "TAO",
+        "TPQ",
+        "TXG"
+      ]
+    },
+    {
+      "code": "KEE",
+      "name": "Keelung",
+      "nameNative": "Keelung City",
+      "type": "provincial city",
+      "capital": "Keelung",
+      "largestCity": "Keelung",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Taiwan Province",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        920.27,
+        252.15
+      ],
+      "bbox": [
+        900.25,
+        235.42,
+        938.21,
+        268.33
+      ],
+      "neighbors": [
+        "TPQ"
+      ]
+    },
+    {
+      "code": "KHH",
+      "name": "Kaohsiung",
+      "nameNative": "Kaohsiung City",
+      "type": "special municipality",
+      "capital": "Kaohsiung",
+      "largestCity": "Kaohsiung",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Special Municipalities",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        627.02,
+        876.32
+      ],
+      "bbox": [
+        504.9,
+        735.75,
+        744.58,
+        1028.28
+      ],
+      "neighbors": [
+        "CYQ",
+        "HUA",
+        "NAN",
+        "PIF",
+        "TNN",
+        "TTT"
+      ]
+    },
+    {
+      "code": "KIN",
+      "name": "Kinmen",
+      "nameNative": "Kinmen",
+      "type": "county",
+      "capital": "Chinmen",
+      "largestCity": "Kinmen",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Fujian Province",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        26.13,
+        439.11
+      ],
+      "bbox": [
+        0,
+        418.71,
+        50.78,
+        458.75
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "MIA",
+      "name": "Miaoli",
+      "nameNative": "Miaoli",
+      "type": "county",
+      "capital": "Miaoli",
+      "largestCity": "Miaoli",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Taiwan Province",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        708.8,
+        436.75
+      ],
+      "bbox": [
+        629.43,
+        360.3,
+        801.67,
+        494.77
+      ],
+      "neighbors": [
+        "HSQ",
+        "HSZ",
+        "TXG"
+      ]
+    },
+    {
+      "code": "NAN",
+      "name": "Nantou",
+      "nameNative": "Nantou",
+      "type": "county",
+      "capital": "Nantou",
+      "largestCity": "Nantou",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Taiwan Province",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        727.45,
+        625.71
+      ],
+      "bbox": [
+        630.37,
+        509.04,
+        825.23,
+        747.17
+      ],
+      "neighbors": [
+        "CHA",
+        "CYQ",
+        "HUA",
+        "KHH",
+        "TXG",
+        "YUN"
+      ]
+    },
+    {
+      "code": "PEN",
+      "name": "Penghu",
+      "nameNative": "Penghu",
+      "type": "county",
+      "capital": "Penghu",
+      "largestCity": "Penghu",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Taiwan Province",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        345.43,
+        701.02
+      ],
+      "bbox": [
+        309.83,
+        673.67,
+        371.57,
+        721.65
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "PIF",
+      "name": "Pingtung",
+      "nameNative": "Pingtung",
+      "type": "county",
+      "capital": "Pingdong",
+      "largestCity": "Pingtung",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Taiwan Province",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        642.31,
+        1027.05
+      ],
+      "bbox": [
+        570.79,
+        909.1,
+        706.82,
+        1199.2
+      ],
+      "neighbors": [
+        "KHH",
+        "TTT"
+      ]
+    },
+    {
+      "code": "TAO",
+      "name": "Taoyuan",
+      "nameNative": "Taoyuan",
+      "type": "county",
+      "capital": "Taoyuan",
+      "largestCity": "Taoyuan",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Taiwan Province",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        801.59,
+        316
+      ],
+      "bbox": [
+        723.57,
+        249.32,
+        860.72,
+        405.1
+      ],
+      "neighbors": [
+        "HSQ",
+        "ILA",
+        "TPQ"
+      ]
+    },
+    {
+      "code": "TNN",
+      "name": "Tainan",
+      "nameNative": "Tainan City",
+      "type": "special municipality",
+      "capital": "Tainan",
+      "largestCity": "Tainan",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Special Municipalities",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        550.29,
+        830.15
+      ],
+      "bbox": [
+        473.87,
+        753.59,
+        637.17,
+        906.28
+      ],
+      "neighbors": [
+        "CYQ",
+        "KHH"
+      ]
+    },
+    {
+      "code": "TPE",
+      "name": "Taipei",
+      "nameNative": "Taipei City",
+      "type": "special municipality",
+      "capital": "Taipei",
+      "largestCity": "Taipei",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Special Municipalities",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        880.65,
+        261.33
+      ],
+      "bbox": [
+        854.61,
+        224.84,
+        906.33,
+        294.2
+      ],
+      "neighbors": [
+        "TPQ"
+      ]
+    },
+    {
+      "code": "TPQ",
+      "name": "New Taipei",
+      "nameNative": "New Taipei City",
+      "type": "special municipality",
+      "capital": "New Taipei",
+      "largestCity": "New Taipei",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Special Municipalities",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        888.93,
+        289.67
+      ],
+      "bbox": [
+        807.92,
+        200.8,
+        1000,
+        379.77
+      ],
+      "neighbors": [
+        "ILA",
+        "KEE",
+        "TAO",
+        "TPE"
+      ]
+    },
+    {
+      "code": "TTT",
+      "name": "Taitung",
+      "nameNative": "Taitung",
+      "type": "county",
+      "capital": "Taidong",
+      "largestCity": "Taitung",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Taiwan Province",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        741.85,
+        915.71
+      ],
+      "bbox": [
+        662.78,
+        746.36,
+        892.22,
+        1168.5
+      ],
+      "neighbors": [
+        "HUA",
+        "KHH",
+        "PIF"
+      ]
+    },
+    {
+      "code": "TXG",
+      "name": "Taichung City",
+      "nameNative": "Taichung City",
+      "type": "special municipality",
+      "capital": "Taichung City",
+      "largestCity": "Taichung City",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Special Municipalities",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        702.28,
+        508.66
+      ],
+      "bbox": [
+        589.96,
+        446.27,
+        853.89,
+        577.72
+      ],
+      "neighbors": [
+        "CHA",
+        "HSQ",
+        "HUA",
+        "ILA",
+        "MIA",
+        "NAN"
+      ]
+    },
+    {
+      "code": "YUN",
+      "name": "Yunlin",
+      "nameNative": "Yunlin",
+      "type": "county",
+      "capital": "Yüanlin",
+      "largestCity": "Yunlin",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Taiwan Province",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        565.82,
+        672.66
+      ],
+      "bbox": [
+        494.2,
+        628.08,
+        661.03,
+        725.5
+      ],
+      "neighbors": [
+        "CHA",
+        "CYQ",
+        "NAN"
+      ]
+    }
+  ]
+}

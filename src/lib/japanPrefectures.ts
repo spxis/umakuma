@@ -185,7 +185,8 @@ export function prefectureOption(prefecture: JapanPrefecture): GameOption {
   };
 }
 
-export type MapBox = { x: number; y: number; width: number; height: number };
+import { type MapBox, mapBoxToViewBox } from "./geoMapFraming";
+export type { MapBox };
 
 export const JAPAN_MAP_BOX: MapBox = {
   x: 0,
@@ -237,9 +238,7 @@ export function prefectureFocusBox(codes: number[]): MapBox {
   };
 }
 
-export function mapBoxToViewBox(box: MapBox): string {
-  return `${box.x} ${box.y} ${box.width} ${box.height}`;
-}
+export { mapBoxToViewBox };
 
 /** True when the box shows the whole country rather than a zoomed-in window. */
 export function mapBoxIsWholeCountry(box: MapBox): boolean {

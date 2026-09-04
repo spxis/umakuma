@@ -1,0 +1,2905 @@
+{
+  "updatedAt": "2026-09-04T06:16:49.490Z",
+  "standard": "Natural Earth admin-1 vector dataset",
+  "country": "TH",
+  "countryName": "Thailand",
+  "divisionTypeName": "Province",
+  "divisionTypePlural": "Provinces",
+  "totalRegions": 77,
+  "regions": [
+    {
+      "code": "10",
+      "name": "Bangkok",
+      "nameNative": "จังหวัดเชียงใหม่",
+      "type": "province",
+      "capital": "Bangkok",
+      "largestCity": "Bangkok",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        416.84,
+        630.79
+      ],
+      "bbox": [
+        389.95,
+        613.95,
+        444.76,
+        657.4
+      ],
+      "neighbors": [
+        "11",
+        "12",
+        "13",
+        "24",
+        "73",
+        "74"
+      ]
+    },
+    {
+      "code": "11",
+      "name": "Samut Prakan",
+      "nameNative": "จังหวัดสมุทรปราการ",
+      "type": "province",
+      "capital": "Pak Nam",
+      "largestCity": "Samut Prakan",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        424.71,
+        647.18
+      ],
+      "bbox": [
+        402.11,
+        636.21,
+        446.89,
+        658.51
+      ],
+      "neighbors": [
+        "10",
+        "24"
+      ]
+    },
+    {
+      "code": "12",
+      "name": "Nonthaburi",
+      "nameNative": "จังหวัดนนทบุรี",
+      "type": "province",
+      "capital": "Nonthaburi",
+      "largestCity": "Nonthaburi",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        395.69,
+        616.07
+      ],
+      "bbox": [
+        384.19,
+        596.25,
+        410.59,
+        628.54
+      ],
+      "neighbors": [
+        "10",
+        "13",
+        "14",
+        "73"
+      ]
+    },
+    {
+      "code": "13",
+      "name": "Pathum Thani",
+      "nameNative": "จังหวัดปทุมธานี",
+      "type": "province",
+      "capital": "Pathum Thani",
+      "largestCity": "Pathum Thani",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        422.31,
+        603.38
+      ],
+      "bbox": [
+        390.88,
+        584.52,
+        443.87,
+        616.94
+      ],
+      "neighbors": [
+        "10",
+        "12",
+        "14",
+        "19",
+        "24",
+        "26"
+      ]
+    },
+    {
+      "code": "14",
+      "name": "Phra Nakhon Si Ayutthaya",
+      "nameNative": "จังหวัดพระนครศรีอยุธยา",
+      "type": "province",
+      "capital": "Phranakhon Si Ayutthaya",
+      "largestCity": "Phra Nakhon Si Ayutthaya",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        408.49,
+        576.98
+      ],
+      "bbox": [
+        380.35,
+        544.36,
+        435.5,
+        598.68
+      ],
+      "neighbors": [
+        "12",
+        "13",
+        "15",
+        "16",
+        "19",
+        "72",
+        "73"
+      ]
+    },
+    {
+      "code": "15",
+      "name": "Ang Thong",
+      "nameNative": "จังหวัดอ่างทอง",
+      "type": "province",
+      "capital": "Ang Thong",
+      "largestCity": "Ang Thong",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        392.75,
+        550.22
+      ],
+      "bbox": [
+        378.25,
+        533.84,
+        407.52,
+        567.63
+      ],
+      "neighbors": [
+        "14",
+        "16",
+        "17",
+        "72"
+      ]
+    },
+    {
+      "code": "16",
+      "name": "Lopburi",
+      "nameNative": "ลพบุรี",
+      "type": "province",
+      "capital": "Lopburi",
+      "largestCity": "Lopburi",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        443.87,
+        507.7
+      ],
+      "bbox": [
+        400.02,
+        467.71,
+        493.18,
+        547.21
+      ],
+      "neighbors": [
+        "14",
+        "15",
+        "17",
+        "19",
+        "30",
+        "36",
+        "60",
+        "67"
+      ]
+    },
+    {
+      "code": "17",
+      "name": "Sing Buri",
+      "nameNative": "จังหวัดสิงห์บุรี",
+      "type": "province",
+      "capital": "Sing Buri",
+      "largestCity": "Sing Buri",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        392.63,
+        522.09
+      ],
+      "bbox": [
+        378.09,
+        498.81,
+        405.4,
+        540.68
+      ],
+      "neighbors": [
+        "15",
+        "16",
+        "18",
+        "60",
+        "72"
+      ]
+    },
+    {
+      "code": "18",
+      "name": "Chai Nat",
+      "nameNative": "จังหวัดชัยนาท",
+      "type": "province",
+      "capital": "Chainat",
+      "largestCity": "Chai Nat",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        362.81,
+        501.65
+      ],
+      "bbox": [
+        334.83,
+        474.74,
+        388.73,
+        523.11
+      ],
+      "neighbors": [
+        "17",
+        "60",
+        "61",
+        "72"
+      ]
+    },
+    {
+      "code": "19",
+      "name": "Saraburi",
+      "nameNative": "จังหวัดสระบุรี",
+      "type": "province",
+      "capital": "Sara Buri",
+      "largestCity": "Saraburi",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        446.12,
+        554.76
+      ],
+      "bbox": [
+        412.79,
+        525.74,
+        473.93,
+        589
+      ],
+      "neighbors": [
+        "13",
+        "14",
+        "16",
+        "26",
+        "30"
+      ]
+    },
+    {
+      "code": "20",
+      "name": "Chon Buri",
+      "nameNative": "จังหวัดชลบุรี",
+      "type": "province",
+      "capital": "Chon Buri",
+      "largestCity": "Chon Buri",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Eastern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        471.11,
+        685.07
+      ],
+      "bbox": [
+        436.73,
+        647.91,
+        517.73,
+        741.67
+      ],
+      "neighbors": [
+        "21",
+        "22",
+        "24"
+      ]
+    },
+    {
+      "code": "21",
+      "name": "Rayong",
+      "nameNative": "จังหวัดระยอง",
+      "type": "province",
+      "capital": "Rayong",
+      "largestCity": "Rayong",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Eastern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        490.63,
+        717.67
+      ],
+      "bbox": [
+        449.28,
+        689.36,
+        528.18,
+        741.86
+      ],
+      "neighbors": [
+        "20",
+        "22"
+      ]
+    },
+    {
+      "code": "22",
+      "name": "Chanthaburi",
+      "nameNative": "จันทบุรี",
+      "type": "province",
+      "capital": "Chantaburi",
+      "largestCity": "Chanthaburi",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Eastern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        554.88,
+        716.41
+      ],
+      "bbox": [
+        514.93,
+        671.75,
+        590.54,
+        768.96
+      ],
+      "neighbors": [
+        "20",
+        "21",
+        "23",
+        "24",
+        "27"
+      ]
+    },
+    {
+      "code": "23",
+      "name": "Trat",
+      "nameNative": "จังหวัดตราด",
+      "type": "province",
+      "capital": "Trat",
+      "largestCity": "Trat",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Eastern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        591.97,
+        769.16
+      ],
+      "bbox": [
+        567.13,
+        727.29,
+        630.2,
+        839.01
+      ],
+      "neighbors": [
+        "22"
+      ]
+    },
+    {
+      "code": "24",
+      "name": "Chachoengsao",
+      "nameNative": "จังหวัดฉะเชิงเทรา",
+      "type": "province",
+      "capital": "Chaxerngsao",
+      "largestCity": "Chachoengsao",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Eastern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        492.73,
+        646.59
+      ],
+      "bbox": [
+        437.1,
+        611.63,
+        543.23,
+        687.37
+      ],
+      "neighbors": [
+        "10",
+        "11",
+        "13",
+        "20",
+        "22",
+        "25",
+        "26",
+        "27"
+      ]
+    },
+    {
+      "code": "25",
+      "name": "Prachin Buri",
+      "nameNative": "จังหวัดปราจีนบุรี",
+      "type": "province",
+      "capital": "Prachin Buri",
+      "largestCity": "Prachin Buri",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Eastern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        508.99,
+        602.07
+      ],
+      "bbox": [
+        464.07,
+        565.59,
+        548.15,
+        635.84
+      ],
+      "neighbors": [
+        "24",
+        "26",
+        "27",
+        "30"
+      ]
+    },
+    {
+      "code": "26",
+      "name": "Nakhon Nayok",
+      "nameNative": "จังหวัดนครนายก",
+      "type": "province",
+      "capital": "Nakon Nayok",
+      "largestCity": "Nakhon Nayok",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Eastern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        467.71,
+        588.71
+      ],
+      "bbox": [
+        443.03,
+        561.69,
+        498.91,
+        613.43
+      ],
+      "neighbors": [
+        "13",
+        "19",
+        "24",
+        "25",
+        "30"
+      ]
+    },
+    {
+      "code": "27",
+      "name": "Sa Kaeo",
+      "nameNative": "จังหวัดสระแก้ว",
+      "type": "province",
+      "capital": "Srakaeo",
+      "largestCity": "Sa Kaeo",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Eastern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        570.4,
+        629.94
+      ],
+      "bbox": [
+        530.14,
+        591.42,
+        627.07,
+        688.49
+      ],
+      "neighbors": [
+        "22",
+        "24",
+        "25",
+        "30",
+        "31"
+      ]
+    },
+    {
+      "code": "30",
+      "name": "Nakhon Ratchasima",
+      "nameNative": "จังหวัดนครราชสีมา",
+      "type": "province",
+      "capital": "Khorat",
+      "largestCity": "Nakhon Ratchasima",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northeastern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        553.63,
+        518.51
+      ],
+      "bbox": [
+        468.82,
+        438.12,
+        635.55,
+        600.54
+      ],
+      "neighbors": [
+        "16",
+        "19",
+        "25",
+        "26",
+        "27",
+        "31",
+        "36",
+        "40",
+        "67"
+      ]
+    },
+    {
+      "code": "31",
+      "name": "Buri Ram",
+      "nameNative": "จังหวัดบุรีรัมย์",
+      "type": "province",
+      "capital": "Buri Rum",
+      "largestCity": "Buri Ram",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northeastern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        631.8,
+        530.69
+      ],
+      "bbox": [
+        583.44,
+        439.35,
+        679.59,
+        596.16
+      ],
+      "neighbors": [
+        "27",
+        "30",
+        "32",
+        "40",
+        "44"
+      ]
+    },
+    {
+      "code": "32",
+      "name": "Surin",
+      "nameNative": "จังหวัดสุรินทร์",
+      "type": "province",
+      "capital": "Surin",
+      "largestCity": "Surin",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northeastern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        695.45,
+        524.27
+      ],
+      "bbox": [
+        643.01,
+        468.22,
+        732.13,
+        575.91
+      ],
+      "neighbors": [
+        "31",
+        "33",
+        "44",
+        "45"
+      ]
+    },
+    {
+      "code": "33",
+      "name": "Si Sa Ket",
+      "nameNative": "จังหวัดศรีสะเกษ",
+      "type": "province",
+      "capital": "Sisaket",
+      "largestCity": "Si Sa Ket",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northeastern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        760.44,
+        525.95
+      ],
+      "bbox": [
+        718.18,
+        459.31,
+        810.52,
+        573.62
+      ],
+      "neighbors": [
+        "32",
+        "34",
+        "35",
+        "45"
+      ]
+    },
+    {
+      "code": "34",
+      "name": "Ubon Ratchathani",
+      "nameNative": "จังหวัดอุบลราชธานี",
+      "type": "province",
+      "capital": "Ubon Ratchathani",
+      "largestCity": "Ubon Ratchathani",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northeastern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        827.64,
+        494.5
+      ],
+      "bbox": [
+        759.86,
+        407.49,
+        875.27,
+        585.77
+      ],
+      "neighbors": [
+        "33",
+        "35",
+        "37"
+      ]
+    },
+    {
+      "code": "35",
+      "name": "Yasothon",
+      "nameNative": "จังหวัดยโสธร",
+      "type": "province",
+      "capital": "Yasothon",
+      "largestCity": "Yasothon",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northeastern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        755.21,
+        428.27
+      ],
+      "bbox": [
+        724.89,
+        385.07,
+        797.87,
+        485.38
+      ],
+      "neighbors": [
+        "33",
+        "34",
+        "37",
+        "45",
+        "49"
+      ]
+    },
+    {
+      "code": "36",
+      "name": "Chaiyaphum",
+      "nameNative": "จังหวัดชัยนาท",
+      "type": "province",
+      "capital": "Chaiyaphum",
+      "largestCity": "Chaiyaphum",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northeastern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        524.57,
+        419.26
+      ],
+      "bbox": [
+        479.09,
+        353.64,
+        583.47,
+        494.47
+      ],
+      "neighbors": [
+        "16",
+        "30",
+        "40",
+        "67"
+      ]
+    },
+    {
+      "code": "37",
+      "name": "Amnat Charoen",
+      "nameNative": "จังหวัดอำนาจเจริญ",
+      "type": "province",
+      "capital": "Amnat Charoen",
+      "largestCity": "Amnat Charoen",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northeastern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        794.35,
+        429.44
+      ],
+      "bbox": [
+        763.31,
+        388.95,
+        824.79,
+        466.98
+      ],
+      "neighbors": [
+        "34",
+        "35",
+        "49"
+      ]
+    },
+    {
+      "code": "38",
+      "name": "Bueng Kan",
+      "nameNative": "จังหวัดหนองคาย",
+      "type": "province",
+      "capital": "บึงกาฬ",
+      "largestCity": "Bueng Kan",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northeastern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        696.1,
+        215.7
+      ],
+      "bbox": [
+        652.05,
+        188.18,
+        739.63,
+        251.1
+      ],
+      "neighbors": [
+        "43",
+        "47",
+        "48"
+      ]
+    },
+    {
+      "code": "39",
+      "name": "Nong Bua Lam Phu",
+      "nameNative": "จังหวัดหนองบัวลำภู",
+      "type": "province",
+      "capital": "Nong Bua Lamphu",
+      "largestCity": "Nong Bua Lam Phu",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northeastern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        568.84,
+        309.01
+      ],
+      "bbox": [
+        537.13,
+        264.96,
+        603.18,
+        347.78
+      ],
+      "neighbors": [
+        "40",
+        "41",
+        "42"
+      ]
+    },
+    {
+      "code": "40",
+      "name": "Khon Kaen",
+      "nameNative": "จังหวัดขอนแก่น",
+      "type": "province",
+      "capital": "Khon Kaen",
+      "largestCity": "Khon Kaen",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northeastern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        595.65,
+        381.59
+      ],
+      "bbox": [
+        519.72,
+        318.06,
+        650.2,
+        455.34
+      ],
+      "neighbors": [
+        "30",
+        "31",
+        "36",
+        "39",
+        "41",
+        "42",
+        "44",
+        "46",
+        "67"
+      ]
+    },
+    {
+      "code": "41",
+      "name": "Udon Thani",
+      "nameNative": "จังหวัดอุดรธานี",
+      "type": "province",
+      "capital": "Udon Thani",
+      "largestCity": "Udon Thani",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northeastern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        619.07,
+        284.8
+      ],
+      "bbox": [
+        543.7,
+        222.68,
+        691.79,
+        340.71
+      ],
+      "neighbors": [
+        "39",
+        "40",
+        "42",
+        "43",
+        "46",
+        "47"
+      ]
+    },
+    {
+      "code": "42",
+      "name": "Loei",
+      "nameNative": "จังหวัดเลย",
+      "type": "province",
+      "capital": "Loei",
+      "largestCity": "Loei",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northeastern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        508.51,
+        287.08
+      ],
+      "bbox": [
+        441.14,
+        210.82,
+        555.73,
+        348.44
+      ],
+      "neighbors": [
+        "39",
+        "40",
+        "41",
+        "43",
+        "65",
+        "67"
+      ]
+    },
+    {
+      "code": "43",
+      "name": "Nong Khai",
+      "nameNative": "จังหวัดหนองคาย",
+      "type": "province",
+      "capital": "Nong Khai",
+      "largestCity": "Nong Khai",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northeastern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        617.32,
+        236.07
+      ],
+      "bbox": [
+        546.77,
+        202.12,
+        670.63,
+        268.81
+      ],
+      "neighbors": [
+        "38",
+        "41",
+        "42",
+        "47"
+      ]
+    },
+    {
+      "code": "44",
+      "name": "Maha Sarakham",
+      "nameNative": "จังหวัดมหาสารคาม",
+      "type": "province",
+      "capital": "Maha Sarakham",
+      "largestCity": "Maha Sarakham",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northeastern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        649.71,
+        419.87
+      ],
+      "bbox": [
+        619.57,
+        358.41,
+        680.9,
+        475.62
+      ],
+      "neighbors": [
+        "31",
+        "32",
+        "40",
+        "45",
+        "46"
+      ]
+    },
+    {
+      "code": "45",
+      "name": "Roi Et",
+      "nameNative": "ร้อยเอ็ด",
+      "type": "province",
+      "capital": "Roi Et",
+      "largestCity": "Roi Et",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northeastern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        708.55,
+        425.79
+      ],
+      "bbox": [
+        660.79,
+        373.19,
+        756.13,
+        474.09
+      ],
+      "neighbors": [
+        "32",
+        "33",
+        "35",
+        "44",
+        "46",
+        "49"
+      ]
+    },
+    {
+      "code": "46",
+      "name": "Kalasin",
+      "nameNative": "จังหวัดกาฬสินธุ์",
+      "type": "province",
+      "capital": "Kalasin",
+      "largestCity": "Kalasin",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northeastern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        689.72,
+        359.03
+      ],
+      "bbox": [
+        642.75,
+        314.76,
+        745.84,
+        401.03
+      ],
+      "neighbors": [
+        "40",
+        "41",
+        "44",
+        "45",
+        "47",
+        "49"
+      ]
+    },
+    {
+      "code": "47",
+      "name": "Sakon Nakhon",
+      "nameNative": "จังหวัดสกลนคร",
+      "type": "province",
+      "capital": "Sakon Nakhon",
+      "largestCity": "Sakon Nakhon",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northeastern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        706.21,
+        287.21
+      ],
+      "bbox": [
+        654.39,
+        223.71,
+        762.64,
+        344.66
+      ],
+      "neighbors": [
+        "38",
+        "41",
+        "43",
+        "46",
+        "48",
+        "49"
+      ]
+    },
+    {
+      "code": "48",
+      "name": "Nakhon Phanom",
+      "nameNative": "จังหวัดนครพนม",
+      "type": "province",
+      "capital": "Nakhon Phanom",
+      "largestCity": "Nakhon Phanom",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northeastern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        761.63,
+        287.87
+      ],
+      "bbox": [
+        720.52,
+        227.05,
+        796.46,
+        346.28
+      ],
+      "neighbors": [
+        "38",
+        "47",
+        "49"
+      ]
+    },
+    {
+      "code": "49",
+      "name": "Mukdahan",
+      "nameNative": "จังหวัดมุกดาหาร",
+      "type": "province",
+      "capital": "Mukdahan",
+      "largestCity": "Mukdahan",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northeastern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        771.16,
+        364.86
+      ],
+      "bbox": [
+        729.7,
+        333.18,
+        813.6,
+        399.03
+      ],
+      "neighbors": [
+        "35",
+        "37",
+        "45",
+        "46",
+        "47",
+        "48"
+      ]
+    },
+    {
+      "code": "50",
+      "name": "Chiang Mai",
+      "nameNative": "จังหวัดเชียงใหม่",
+      "type": "province",
+      "capital": "Chiang Mai",
+      "largestCity": "Chiang Mai",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        248.84,
+        155.58
+      ],
+      "bbox": [
+        189.56,
+        27.32,
+        326.55,
+        300.67
+      ],
+      "neighbors": [
+        "51",
+        "52",
+        "57",
+        "58",
+        "63"
+      ]
+    },
+    {
+      "code": "51",
+      "name": "Lamphun",
+      "nameNative": "จังหวัดลำพูน",
+      "type": "province",
+      "capital": "Hariphunchai",
+      "largestCity": "Lamphun",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        268.99,
+        216.96
+      ],
+      "bbox": [
+        243.65,
+        163.74,
+        300.73,
+        278.98
+      ],
+      "neighbors": [
+        "50",
+        "52",
+        "63"
+      ]
+    },
+    {
+      "code": "52",
+      "name": "Lampang",
+      "nameNative": "จังหวัดลำปาง",
+      "type": "province",
+      "capital": "Lampang",
+      "largestCity": "Lampang",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        319.39,
+        197.61
+      ],
+      "bbox": [
+        272.52,
+        88.31,
+        373.97,
+        305.87
+      ],
+      "neighbors": [
+        "50",
+        "51",
+        "54",
+        "56",
+        "57",
+        "63",
+        "64"
+      ]
+    },
+    {
+      "code": "53",
+      "name": "Uttaradit",
+      "nameNative": "จังหวัดอุตรดิตถ์",
+      "type": "province",
+      "capital": "Uttaradit",
+      "largestCity": "Uttaradit",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        407.48,
+        255.6
+      ],
+      "bbox": [
+        352.45,
+        196.19,
+        466.55,
+        310.05
+      ],
+      "neighbors": [
+        "54",
+        "55",
+        "64",
+        "65"
+      ]
+    },
+    {
+      "code": "54",
+      "name": "Phrae",
+      "nameNative": "จังหวัดแพร่",
+      "type": "province",
+      "capital": "Phrae",
+      "largestCity": "Phrae",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        367.72,
+        212.72
+      ],
+      "bbox": [
+        299.69,
+        152.63,
+        410.65,
+        261.23
+      ],
+      "neighbors": [
+        "52",
+        "53",
+        "55",
+        "56",
+        "64"
+      ]
+    },
+    {
+      "code": "55",
+      "name": "Nan",
+      "nameNative": "จังหวัดน่าน",
+      "type": "province",
+      "capital": "Nan",
+      "largestCity": "Nan",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        436.07,
+        151.56
+      ],
+      "bbox": [
+        393.41,
+        78.85,
+        480.87,
+        230.17
+      ],
+      "neighbors": [
+        "53",
+        "54",
+        "56"
+      ]
+    },
+    {
+      "code": "56",
+      "name": "Phayao",
+      "nameNative": "จังหวัดพะเยา",
+      "type": "province",
+      "capital": "Phayao",
+      "largestCity": "Phayao",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        379.03,
+        115.12
+      ],
+      "bbox": [
+        334.75,
+        68.29,
+        418.91,
+        154.42
+      ],
+      "neighbors": [
+        "52",
+        "54",
+        "55",
+        "57"
+      ]
+    },
+    {
+      "code": "57",
+      "name": "Chiang Rai",
+      "nameNative": "จังหวัดเชียงราย",
+      "type": "province",
+      "capital": "Chiang Rai",
+      "largestCity": "Chiang Rai",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        350.89,
+        56.77
+      ],
+      "bbox": [
+        296.98,
+        0,
+        411.84,
+        136.32
+      ],
+      "neighbors": [
+        "50",
+        "52",
+        "56"
+      ]
+    },
+    {
+      "code": "58",
+      "name": "Mae Hong Son",
+      "nameNative": "จังหวัดแม่ฮ่องสอน",
+      "type": "province",
+      "capital": "Mae Hong Son",
+      "largestCity": "Mae Hong Son",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        185.55,
+        157.97
+      ],
+      "bbox": [
+        124.73,
+        58.23,
+        242.31,
+        271.09
+      ],
+      "neighbors": [
+        "50",
+        "63"
+      ]
+    },
+    {
+      "code": "60",
+      "name": "Nakhon Sawan",
+      "nameNative": "จังหวัดนครสวรรค์",
+      "type": "province",
+      "capital": "Nakhon Sawan",
+      "largestCity": "Nakhon Sawan",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        372.79,
+        449.14
+      ],
+      "bbox": [
+        277.09,
+        388.11,
+        436.47,
+        508.97
+      ],
+      "neighbors": [
+        "16",
+        "17",
+        "18",
+        "61",
+        "62",
+        "63",
+        "66",
+        "67"
+      ]
+    },
+    {
+      "code": "61",
+      "name": "Uthai Thani",
+      "nameNative": "จังหวัดอุทัยธานี",
+      "type": "province",
+      "capital": "Uthai Thani",
+      "largestCity": "Uthai Thani",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        311.39,
+        482.22
+      ],
+      "bbox": [
+        267.56,
+        440.96,
+        367.36,
+        519.61
+      ],
+      "neighbors": [
+        "18",
+        "60",
+        "63",
+        "71",
+        "72"
+      ]
+    },
+    {
+      "code": "62",
+      "name": "Kamphaeng Phet",
+      "nameNative": "จังหวัดกำแพงเพชร",
+      "type": "province",
+      "capital": "Gampheang Phet",
+      "largestCity": "Kamphaeng Phet",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        315.92,
+        388.66
+      ],
+      "bbox": [
+        269.33,
+        335.75,
+        364.03,
+        440.22
+      ],
+      "neighbors": [
+        "60",
+        "63",
+        "64",
+        "65",
+        "66"
+      ]
+    },
+    {
+      "code": "63",
+      "name": "Tak",
+      "nameNative": "จังหวัดตาก",
+      "type": "province",
+      "capital": "Tak",
+      "largestCity": "Tak",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Western",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        252.29,
+        353.38
+      ],
+      "bbox": [
+        173.08,
+        253.08,
+        302.17,
+        493.04
+      ],
+      "neighbors": [
+        "50",
+        "51",
+        "52",
+        "58",
+        "60",
+        "61",
+        "62",
+        "64",
+        "71"
+      ]
+    },
+    {
+      "code": "64",
+      "name": "Sukhothai",
+      "nameNative": "จังหวัดสุโขทัย",
+      "type": "province",
+      "capital": "Sawankhalokt",
+      "largestCity": "Sukhothai",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        334.29,
+        302
+      ],
+      "bbox": [
+        295.35,
+        248.13,
+        373.26,
+        354.97
+      ],
+      "neighbors": [
+        "52",
+        "53",
+        "54",
+        "62",
+        "63",
+        "65"
+      ]
+    },
+    {
+      "code": "65",
+      "name": "Phitsanulok",
+      "nameNative": "จังหวัดพิษณุโลก",
+      "type": "province",
+      "capital": "Bisnulok",
+      "largestCity": "Phitsanulok",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        409.21,
+        328.52
+      ],
+      "bbox": [
+        351.04,
+        258.91,
+        460.14,
+        387.45
+      ],
+      "neighbors": [
+        "42",
+        "53",
+        "62",
+        "64",
+        "66",
+        "67"
+      ]
+    },
+    {
+      "code": "66",
+      "name": "Phichit",
+      "nameNative": "จังหวัดพิจิตร",
+      "type": "province",
+      "capital": "Phichit",
+      "largestCity": "Phichit",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        393.41,
+        397.81
+      ],
+      "bbox": [
+        359.02,
+        364.05,
+        430.85,
+        428.71
+      ],
+      "neighbors": [
+        "60",
+        "62",
+        "65",
+        "67"
+      ]
+    },
+    {
+      "code": "67",
+      "name": "Phetchabun",
+      "nameNative": "อำเภอเมืองเพชรบูรณ์",
+      "type": "province",
+      "capital": "Phetchabun",
+      "largestCity": "Phetchabun",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        465,
+        394.91
+      ],
+      "bbox": [
+        418.12,
+        314.81,
+        523.23,
+        486.18
+      ],
+      "neighbors": [
+        "16",
+        "30",
+        "36",
+        "40",
+        "42",
+        "60",
+        "65",
+        "66"
+      ]
+    },
+    {
+      "code": "70",
+      "name": "Ratchaburi",
+      "nameNative": "จังหวัดราชบุรี",
+      "type": "province",
+      "capital": "Ratchaburi",
+      "largestCity": "Ratchaburi",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Western",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        320.68,
+        653.07
+      ],
+      "bbox": [
+        281.6,
+        614.21,
+        367.13,
+        689.63
+      ],
+      "neighbors": [
+        "71",
+        "73",
+        "74",
+        "75",
+        "76"
+      ]
+    },
+    {
+      "code": "71",
+      "name": "Kanchanaburi",
+      "nameNative": "อำเภอเมืองกาญจนบุรี",
+      "type": "province",
+      "capital": "Kan Buri",
+      "largestCity": "Kanchanaburi",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Western",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        272.59,
+        553.24
+      ],
+      "bbox": [
+        192.62,
+        449.66,
+        350.26,
+        634.67
+      ],
+      "neighbors": [
+        "61",
+        "63",
+        "70",
+        "72",
+        "73"
+      ]
+    },
+    {
+      "code": "72",
+      "name": "Suphan Buri",
+      "nameNative": "จังหวัดสุพรรณบุรี",
+      "type": "province",
+      "capital": "Suphan Buri",
+      "largestCity": "Suphan Buri",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        350.98,
+        551.55
+      ],
+      "bbox": [
+        294.65,
+        507.31,
+        386.02,
+        603.1
+      ],
+      "neighbors": [
+        "14",
+        "15",
+        "17",
+        "18",
+        "61",
+        "71",
+        "73"
+      ]
+    },
+    {
+      "code": "73",
+      "name": "Nakhon Pathom",
+      "nameNative": "อำเภอเมืองนครปฐม",
+      "type": "province",
+      "capital": "Nakhon Pathom",
+      "largestCity": "Nakhon Pathom",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        370.03,
+        616.24
+      ],
+      "bbox": [
+        342.43,
+        592.36,
+        390.76,
+        641.5
+      ],
+      "neighbors": [
+        "10",
+        "12",
+        "14",
+        "70",
+        "71",
+        "72",
+        "74"
+      ]
+    },
+    {
+      "code": "74",
+      "name": "Samut Sakhon",
+      "nameNative": "จังหวัดสมุทรสาคร",
+      "type": "province",
+      "capital": "Krokkrak Maha Chai",
+      "largestCity": "Samut Sakhon",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        379.69,
+        649.66
+      ],
+      "bbox": [
+        363.32,
+        634.63,
+        397.66,
+        663.29
+      ],
+      "neighbors": [
+        "10",
+        "70",
+        "73",
+        "75"
+      ]
+    },
+    {
+      "code": "75",
+      "name": "Samut Songkhram",
+      "nameNative": "จังหวัดสมุทรสงคราม",
+      "type": "province",
+      "capital": "Mae Klong",
+      "largestCity": "Samut Songkhram",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        355.77,
+        666.28
+      ],
+      "bbox": [
+        346.72,
+        655.17,
+        367.99,
+        680.95
+      ],
+      "neighbors": [
+        "70",
+        "74",
+        "76"
+      ]
+    },
+    {
+      "code": "76",
+      "name": "Phetchaburi",
+      "nameNative": "จังหวัดเพชรบุรี",
+      "type": "province",
+      "capital": "Phetcha Buri",
+      "largestCity": "Phetchaburi",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Western",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        324.01,
+        709.31
+      ],
+      "bbox": [
+        275.74,
+        671.95,
+        369.28,
+        746.35
+      ],
+      "neighbors": [
+        "70",
+        "75",
+        "77"
+      ]
+    },
+    {
+      "code": "77",
+      "name": "Prachuap Khiri Khan",
+      "nameNative": "จังหวัดประจวบคีรีขันธ์",
+      "type": "province",
+      "capital": "Korh Luxk",
+      "largestCity": "Prachuap Khiri Khan",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Western",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        324.69,
+        805.36
+      ],
+      "bbox": [
+        279.29,
+        737.87,
+        361.21,
+        896.46
+      ],
+      "neighbors": [
+        "76",
+        "86"
+      ]
+    },
+    {
+      "code": "80",
+      "name": "Nakhon Si Thammarat",
+      "nameNative": "จังหวัดนครศรีธรรมราช",
+      "type": "province",
+      "capital": "Nakhon Thammarat",
+      "largestCity": "Nakhon Si Thammarat",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Southern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        337.47,
+        1140.71
+      ],
+      "bbox": [
+        287.26,
+        1050.93,
+        390.18,
+        1194.73
+      ],
+      "neighbors": [
+        "81",
+        "84",
+        "90",
+        "92",
+        "93"
+      ]
+    },
+    {
+      "code": "81",
+      "name": "Krabi",
+      "nameNative": "จังหวัดกระบี่",
+      "type": "province",
+      "capital": "Krabi",
+      "largestCity": "Krabi",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Southern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        266.13,
+        1162.84
+      ],
+      "bbox": [
+        229.34,
+        1111.72,
+        296.89,
+        1226.03
+      ],
+      "neighbors": [
+        "80",
+        "82",
+        "84",
+        "92"
+      ]
+    },
+    {
+      "code": "82",
+      "name": "Phang Nga",
+      "nameNative": "จังหวัดพังงา",
+      "type": "province",
+      "capital": "Phang Nga",
+      "largestCity": "Phang Nga",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Southern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        210.6,
+        1111.26
+      ],
+      "bbox": [
+        156.6,
+        1035.6,
+        238.06,
+        1184.53
+      ],
+      "neighbors": [
+        "81",
+        "84",
+        "85"
+      ]
+    },
+    {
+      "code": "83",
+      "name": "Phuket",
+      "nameNative": "จังหวัดภูเก็ต",
+      "type": "province",
+      "capital": "Phuket",
+      "largestCity": "Phuket",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Southern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        202.89,
+        1177.67
+      ],
+      "bbox": [
+        194.68,
+        1157.1,
+        212.09,
+        1197.22
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "84",
+      "name": "Surat Thani",
+      "nameNative": "จังหวัดสุราษฎร์ธานี",
+      "type": "province",
+      "capital": "Surat Thani",
+      "largestCity": "Surat Thani",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Southern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        273.23,
+        1076.83
+      ],
+      "bbox": [
+        214.01,
+        1005.71,
+        366.99,
+        1145.94
+      ],
+      "neighbors": [
+        "80",
+        "81",
+        "82",
+        "85",
+        "86"
+      ]
+    },
+    {
+      "code": "85",
+      "name": "Ranong",
+      "nameNative": "จังหวัดระนอง",
+      "type": "province",
+      "capital": "Ranong",
+      "largestCity": "Ranong",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Southern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        239.31,
+        986.45
+      ],
+      "bbox": [
+        208.12,
+        911.97,
+        263.69,
+        1051.83
+      ],
+      "neighbors": [
+        "82",
+        "84",
+        "86"
+      ]
+    },
+    {
+      "code": "86",
+      "name": "Chumphon",
+      "nameNative": "จังหวัดชุมพร",
+      "type": "province",
+      "capital": "Chumphon",
+      "largestCity": "Chumphon",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Southern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        272.27,
+        952
+      ],
+      "bbox": [
+        231.49,
+        888.39,
+        313.95,
+        1024.12
+      ],
+      "neighbors": [
+        "77",
+        "84",
+        "85"
+      ]
+    },
+    {
+      "code": "90",
+      "name": "Songkhla",
+      "nameNative": "จังหวัดสงขลา",
+      "type": "province",
+      "capital": "Songkhla",
+      "largestCity": "Songkhla",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Southern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        410.1,
+        1280.33
+      ],
+      "bbox": [
+        360.82,
+        1181.81,
+        461.63,
+        1336.89
+      ],
+      "neighbors": [
+        "80",
+        "91",
+        "92",
+        "93",
+        "94",
+        "95"
+      ]
+    },
+    {
+      "code": "91",
+      "name": "Satun",
+      "nameNative": "จังหวัดสตูล",
+      "type": "province",
+      "capital": "Satun",
+      "largestCity": "Satun",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Southern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        352.08,
+        1286.28
+      ],
+      "bbox": [
+        278.83,
+        1256.87,
+        378,
+        1323.18
+      ],
+      "neighbors": [
+        "90",
+        "92"
+      ]
+    },
+    {
+      "code": "92",
+      "name": "Trang",
+      "nameNative": "จังหวัดตรัง",
+      "type": "province",
+      "capital": "Tab Tiang",
+      "largestCity": "Trang",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Southern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        322,
+        1220.66
+      ],
+      "bbox": [
+        287.51,
+        1176.65,
+        362.3,
+        1265.17
+      ],
+      "neighbors": [
+        "80",
+        "81",
+        "90",
+        "91",
+        "93"
+      ]
+    },
+    {
+      "code": "93",
+      "name": "Phatthalung",
+      "nameNative": "จังหวัดพัทลุง",
+      "type": "province",
+      "capital": "Phatthalung",
+      "largestCity": "Phatthalung",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Southern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        361.06,
+        1222
+      ],
+      "bbox": [
+        334.18,
+        1185.05,
+        393.49,
+        1261.79
+      ],
+      "neighbors": [
+        "80",
+        "90",
+        "92"
+      ]
+    },
+    {
+      "code": "94",
+      "name": "Pattani",
+      "nameNative": "จังหวัดปัตตานี",
+      "type": "province",
+      "capital": "Pattani",
+      "largestCity": "Pattani",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Southern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        484.8,
+        1296
+      ],
+      "bbox": [
+        455.25,
+        1274.84,
+        519.62,
+        1313.68
+      ],
+      "neighbors": [
+        "90",
+        "95",
+        "96"
+      ]
+    },
+    {
+      "code": "95",
+      "name": "Yala",
+      "nameNative": "จังหวัดยะลา",
+      "type": "province",
+      "capital": "Yala",
+      "largestCity": "Yala",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Southern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        472.82,
+        1347.72
+      ],
+      "bbox": [
+        434.95,
+        1301.18,
+        509.31,
+        1400
+      ],
+      "neighbors": [
+        "90",
+        "94",
+        "96"
+      ]
+    },
+    {
+      "code": "96",
+      "name": "Narathiwat",
+      "nameNative": "จังหวัดนราธิวาส",
+      "type": "province",
+      "capital": "Narathiwat",
+      "largestCity": "Narathiwat",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Southern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        519.48,
+        1348.75
+      ],
+      "bbox": [
+        487.59,
+        1305.58,
+        552.5,
+        1389.73
+      ],
+      "neighbors": [
+        "94",
+        "95"
+      ]
+    }
+  ]
+}

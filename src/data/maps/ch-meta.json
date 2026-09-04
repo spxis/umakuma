@@ -1,0 +1,983 @@
+{
+  "updatedAt": "2026-09-04T06:16:50.381Z",
+  "standard": "Natural Earth admin-1 vector dataset",
+  "country": "CH",
+  "countryName": "Switzerland",
+  "divisionTypeName": "Canton",
+  "divisionTypePlural": "Cantons",
+  "totalRegions": 26,
+  "regions": [
+    {
+      "code": "AG",
+      "name": "Aargau",
+      "nameNative": "Aargau",
+      "type": "canton",
+      "capital": "Argovia",
+      "largestCity": "Aargau",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Switzerland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        489.42,
+        132.37
+      ],
+      "bbox": [
+        396.9,
+        64.84,
+        552.96,
+        218.98
+      ],
+      "neighbors": [
+        "BE",
+        "BL",
+        "LU",
+        "SO",
+        "ZG",
+        "ZH"
+      ]
+    },
+    {
+      "code": "AI",
+      "name": "Appenzell Innerrhoden",
+      "nameNative": "Appenzell Innerrhoden",
+      "type": "canton",
+      "capital": "Appenzell Inner-Rhoden",
+      "largestCity": "Appenzell Innerrhoden",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Switzerland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        761.43,
+        159.8
+      ],
+      "bbox": [
+        739.82,
+        117.47,
+        805.59,
+        185.82
+      ],
+      "neighbors": [
+        "AR",
+        "SG"
+      ]
+    },
+    {
+      "code": "AR",
+      "name": "Appenzell Ausserrhoden",
+      "nameNative": "Appenzell Ausserrhoden",
+      "type": "canton",
+      "capital": "Appenzell Ausser-Rhoden",
+      "largestCity": "Appenzell Ausserrhoden",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Switzerland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        750.28,
+        144.88
+      ],
+      "bbox": [
+        714.17,
+        111.81,
+        805.59,
+        182.67
+      ],
+      "neighbors": [
+        "AI",
+        "SG"
+      ]
+    },
+    {
+      "code": "BE",
+      "name": "Bern",
+      "nameNative": "Bern",
+      "type": "canton",
+      "capital": "Berna",
+      "largestCity": "Bern",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Switzerland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        373.56,
+        320.91
+      ],
+      "bbox": [
+        204.39,
+        153.62,
+        554.71,
+        478.34
+      ],
+      "neighbors": [
+        "AG",
+        "FR",
+        "JU",
+        "LU",
+        "NE",
+        "NW",
+        "OW",
+        "SO",
+        "UR",
+        "VD",
+        "VS"
+      ]
+    },
+    {
+      "code": "BL",
+      "name": "Basel-Landschaft",
+      "nameNative": "Basel-Landschaft",
+      "type": "canton",
+      "capital": "Basel-Landschaft",
+      "largestCity": "Basel-Landschaft",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Switzerland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        390.42,
+        117.61
+      ],
+      "bbox": [
+        311.78,
+        83.04,
+        446.19,
+        155.74
+      ],
+      "neighbors": [
+        "AG",
+        "BS",
+        "JU",
+        "SO"
+      ]
+    },
+    {
+      "code": "BS",
+      "name": "Basel-Stadt",
+      "nameNative": "Basel-Stadt",
+      "type": "canton",
+      "capital": "Bâle-Ville",
+      "largestCity": "Basel-Stadt",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Switzerland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        369.11,
+        82.88
+      ],
+      "bbox": [
+        352.14,
+        72.61,
+        382.32,
+        94.1
+      ],
+      "neighbors": [
+        "BL"
+      ]
+    },
+    {
+      "code": "FR",
+      "name": "Fribourg",
+      "nameNative": "Fribourg",
+      "type": "canton",
+      "capital": "Freiburg",
+      "largestCity": "Fribourg",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Switzerland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        252.97,
+        353.32
+      ],
+      "bbox": [
+        181.41,
+        262.09,
+        319.25,
+        441.31
+      ],
+      "neighbors": [
+        "BE",
+        "NE",
+        "VD"
+      ]
+    },
+    {
+      "code": "GE",
+      "name": "Geneva",
+      "nameNative": "Genève",
+      "type": "canton",
+      "capital": "Cenevre",
+      "largestCity": "Geneva",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Switzerland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        36.37,
+        508.73
+      ],
+      "bbox": [
+        0,
+        473.46,
+        72.91,
+        537.16
+      ],
+      "neighbors": [
+        "VD"
+      ]
+    },
+    {
+      "code": "GL",
+      "name": "Glarus",
+      "nameNative": "Glarus",
+      "type": "canton",
+      "capital": "Glaris",
+      "largestCity": "Glarus",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Switzerland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        687.39,
+        268.9
+      ],
+      "bbox": [
+        646.79,
+        207.69,
+        728.36,
+        328.22
+      ],
+      "neighbors": [
+        "GR",
+        "SG",
+        "SZ",
+        "UR"
+      ]
+    },
+    {
+      "code": "GR",
+      "name": "Grisons",
+      "nameNative": "Graubünden",
+      "type": "canton",
+      "capital": "Graubünden",
+      "largestCity": "Grisons",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Switzerland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        812.52,
+        372.15
+      ],
+      "bbox": [
+        599.36,
+        241.97,
+        1000,
+        529.29
+      ],
+      "neighbors": [
+        "GL",
+        "SG",
+        "TI",
+        "UR"
+      ]
+    },
+    {
+      "code": "JU",
+      "name": "Jura",
+      "nameNative": "Jura",
+      "type": "canton",
+      "capital": "Giura",
+      "largestCity": "Jura",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Switzerland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        270.77,
+        151.48
+      ],
+      "bbox": [
+        201.85,
+        102.35,
+        359.76,
+        212.81
+      ],
+      "neighbors": [
+        "BE",
+        "BL",
+        "NE",
+        "SO"
+      ]
+    },
+    {
+      "code": "LU",
+      "name": "Lucerne",
+      "nameNative": "Lucerne",
+      "type": "canton",
+      "capital": "Lucerna",
+      "largestCity": "Lucerne",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Switzerland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        479.19,
+        243.11
+      ],
+      "bbox": [
+        420.73,
+        174.04,
+        566.3,
+        336.18
+      ],
+      "neighbors": [
+        "AG",
+        "BE",
+        "NW",
+        "OW",
+        "SZ",
+        "ZG"
+      ]
+    },
+    {
+      "code": "NE",
+      "name": "Neuchâtel",
+      "nameNative": "Neuchâtel",
+      "type": "canton",
+      "capital": "Neuenburg",
+      "largestCity": "Neuchâtel",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Switzerland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        187.97,
+        263.2
+      ],
+      "bbox": [
+        110.32,
+        208.16,
+        257.45,
+        311.64
+      ],
+      "neighbors": [
+        "BE",
+        "FR",
+        "JU",
+        "VD"
+      ]
+    },
+    {
+      "code": "NW",
+      "name": "Nidwalden",
+      "nameNative": "Nidwalden",
+      "type": "canton",
+      "capital": "Nidvaldo",
+      "largestCity": "Nidwalden",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Switzerland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        543.43,
+        288.26
+      ],
+      "bbox": [
+        504.34,
+        261.08,
+        579.1,
+        337.02
+      ],
+      "neighbors": [
+        "BE",
+        "LU",
+        "OW",
+        "SZ",
+        "UR"
+      ]
+    },
+    {
+      "code": "OW",
+      "name": "Obwalden",
+      "nameNative": "Obwalden",
+      "type": "canton",
+      "capital": "Obvaldo",
+      "largestCity": "Obwalden",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Switzerland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        508.11,
+        312.03
+      ],
+      "bbox": [
+        465.06,
+        271.39,
+        565.42,
+        342.31
+      ],
+      "neighbors": [
+        "BE",
+        "LU",
+        "NW",
+        "UR"
+      ]
+    },
+    {
+      "code": "SG",
+      "name": "St. Gallen",
+      "nameNative": "Sankt Gallen",
+      "type": "canton",
+      "capital": "Saint-Gall",
+      "largestCity": "St. Gallen",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Switzerland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        731.94,
+        188.36
+      ],
+      "bbox": [
+        625.06,
+        90.89,
+        814.76,
+        300.62
+      ],
+      "neighbors": [
+        "AI",
+        "AR",
+        "GL",
+        "GR",
+        "SZ",
+        "TG",
+        "ZH"
+      ]
+    },
+    {
+      "code": "SH",
+      "name": "Schaffhausen",
+      "nameNative": "Schaffhausen",
+      "type": "canton",
+      "capital": "Schaffhouse",
+      "largestCity": "Schaffhausen",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Switzerland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        583.62,
+        37.09
+      ],
+      "bbox": [
+        540.78,
+        7.07,
+        641.42,
+        84.44
+      ],
+      "neighbors": [
+        "TG",
+        "ZH"
+      ]
+    },
+    {
+      "code": "SO",
+      "name": "Solothurn",
+      "nameNative": "Solothurn",
+      "type": "canton",
+      "capital": "Solothurn",
+      "largestCity": "Solothurn",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Switzerland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        377.52,
+        166.44
+      ],
+      "bbox": [
+        313.03,
+        103.37,
+        462.25,
+        239.74
+      ],
+      "neighbors": [
+        "AG",
+        "BE",
+        "BL",
+        "JU"
+      ]
+    },
+    {
+      "code": "SZ",
+      "name": "Schwyz",
+      "nameNative": "Schwyz",
+      "type": "canton",
+      "capital": "Schwyz",
+      "largestCity": "Schwyz",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Switzerland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        619.71,
+        243.91
+      ],
+      "bbox": [
+        540.25,
+        193.19,
+        671.01,
+        299.48
+      ],
+      "neighbors": [
+        "GL",
+        "LU",
+        "NW",
+        "SG",
+        "UR",
+        "ZG",
+        "ZH"
+      ]
+    },
+    {
+      "code": "TG",
+      "name": "Thurgau",
+      "nameNative": "Thurgau",
+      "type": "canton",
+      "capital": "Thurgovie",
+      "largestCity": "Thurgau",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Switzerland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        696.61,
+        82.52
+      ],
+      "bbox": [
+        616.26,
+        44.94,
+        793.19,
+        141.91
+      ],
+      "neighbors": [
+        "SG",
+        "SH",
+        "ZH"
+      ]
+    },
+    {
+      "code": "TI",
+      "name": "Ticino",
+      "nameNative": "Ticino",
+      "type": "canton",
+      "capital": "Tesino",
+      "largestCity": "Ticino",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Switzerland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        632.39,
+        491.25
+      ],
+      "bbox": [
+        540.33,
+        382.16,
+        713.98,
+        642.93
+      ],
+      "neighbors": [
+        "GR",
+        "UR",
+        "VS"
+      ]
+    },
+    {
+      "code": "UR",
+      "name": "Uri",
+      "nameNative": "Uri",
+      "type": "canton",
+      "capital": "Uri",
+      "largestCity": "Uri",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Switzerland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        593.02,
+        336.81
+      ],
+      "bbox": [
+        543.92,
+        268.03,
+        663.9,
+        415.15
+      ],
+      "neighbors": [
+        "BE",
+        "GL",
+        "GR",
+        "NW",
+        "OW",
+        "SZ",
+        "TI",
+        "VS"
+      ]
+    },
+    {
+      "code": "VD",
+      "name": "Vaud",
+      "nameNative": "Vaud",
+      "type": "canton",
+      "capital": "Vad",
+      "largestCity": "Vaud",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Switzerland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        158.36,
+        399.35
+      ],
+      "bbox": [
+        24.04,
+        266.17,
+        290.35,
+        523.29
+      ],
+      "neighbors": [
+        "BE",
+        "FR",
+        "GE",
+        "NE",
+        "VS"
+      ]
+    },
+    {
+      "code": "VS",
+      "name": "Valais",
+      "nameNative": "Valais",
+      "type": "canton",
+      "capital": "Vallais",
+      "largestCity": "Valais",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Switzerland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        362.49,
+        518.25
+      ],
+      "bbox": [
+        177.81,
+        375.4,
+        560.69,
+        624.38
+      ],
+      "neighbors": [
+        "BE",
+        "TI",
+        "UR",
+        "VD"
+      ]
+    },
+    {
+      "code": "ZG",
+      "name": "Zug",
+      "nameNative": "Zug",
+      "type": "canton",
+      "capital": "Zoug",
+      "largestCity": "Zug",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Switzerland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        571.77,
+        213.94
+      ],
+      "bbox": [
+        541.59,
+        185.81,
+        609.16,
+        236.55
+      ],
+      "neighbors": [
+        "AG",
+        "LU",
+        "SZ",
+        "ZH"
+      ]
+    },
+    {
+      "code": "ZH",
+      "name": "Zürich",
+      "nameNative": "Zürich",
+      "type": "canton",
+      "capital": "Turitg",
+      "largestCity": "Zürich",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Switzerland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        596.57,
+        130.36
+      ],
+      "bbox": [
+        532.61,
+        40.69,
+        667.06,
+        211.97
+      ],
+      "neighbors": [
+        "AG",
+        "SG",
+        "SH",
+        "SZ",
+        "TG",
+        "ZG"
+      ]
+    }
+  ]
+}

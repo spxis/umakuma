@@ -1,0 +1,977 @@
+{
+  "updatedAt": "2026-09-04T06:16:50.594Z",
+  "standard": "Natural Earth admin-1 vector dataset",
+  "country": "PE",
+  "countryName": "Peru",
+  "divisionTypeName": "Department",
+  "divisionTypePlural": "Departments",
+  "totalRegions": 26,
+  "regions": [
+    {
+      "code": "AMA",
+      "name": "Amazonas",
+      "nameNative": "Amazonas",
+      "type": "department",
+      "capital": "Amazonas",
+      "largestCity": "Amazonas",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Peru",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        289.82,
+        356.78
+      ],
+      "bbox": [
+        239.3,
+        208.24,
+        353.11,
+        495.08
+      ],
+      "neighbors": [
+        "CAJ",
+        "LAL",
+        "LOR",
+        "SAM"
+      ]
+    },
+    {
+      "code": "ANC",
+      "name": "Áncash",
+      "nameNative": "Áncash",
+      "type": "department",
+      "capital": "Ancachs",
+      "largestCity": "Áncash",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Peru",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        317.61,
+        663.01
+      ],
+      "bbox": [
+        249.16,
+        565.62,
+        383.89,
+        759.53
+      ],
+      "neighbors": [
+        "HUC",
+        "LAL",
+        "LIM"
+      ]
+    },
+    {
+      "code": "APU",
+      "name": "Apurímac",
+      "nameNative": "Apurímac",
+      "type": "department",
+      "capital": "Apuromac",
+      "largestCity": "Apurímac",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Peru",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        644.02,
+        991.78
+      ],
+      "bbox": [
+        584.58,
+        932.97,
+        705.9,
+        1047.41
+      ],
+      "neighbors": [
+        "ARE",
+        "AYA",
+        "CUS"
+      ]
+    },
+    {
+      "code": "ARE",
+      "name": "Arequipa",
+      "nameNative": "Arequipa",
+      "type": "department",
+      "capital": "Arequipa",
+      "largestCity": "Arequipa",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Peru",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        678.45,
+        1121.31
+      ],
+      "bbox": [
+        500.21,
+        1036.43,
+        788.96,
+        1226.06
+      ],
+      "neighbors": [
+        "APU",
+        "AYA",
+        "CUS",
+        "ICA",
+        "MOQ",
+        "PUN"
+      ]
+    },
+    {
+      "code": "AYA",
+      "name": "Ayacucho",
+      "nameNative": "Ayacucho",
+      "type": "department",
+      "capital": "Ayacucho",
+      "largestCity": "Ayacucho",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Peru",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        568.06,
+        996.26
+      ],
+      "bbox": [
+        496.33,
+        857.89,
+        653.54,
+        1103
+      ],
+      "neighbors": [
+        "APU",
+        "ARE",
+        "CUS",
+        "HUV",
+        "ICA",
+        "JUN"
+      ]
+    },
+    {
+      "code": "CAJ",
+      "name": "Cajamarca",
+      "nameNative": "Cajamarca",
+      "type": "department",
+      "capital": "Caxamarca",
+      "largestCity": "Cajamarca",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Peru",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        240.46,
+        455.35
+      ],
+      "bbox": [
+        191.02,
+        323.2,
+        311.97,
+        548.73
+      ],
+      "neighbors": [
+        "AMA",
+        "LAL",
+        "LAM",
+        "PIU"
+      ]
+    },
+    {
+      "code": "CAL",
+      "name": "Callao",
+      "nameNative": "Callao",
+      "type": "departamento",
+      "capital": "Region",
+      "largestCity": "Callao",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Peru",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        355.64,
+        852.27
+      ],
+      "bbox": [
+        349.32,
+        847.93,
+        359.43,
+        856.24
+      ],
+      "neighbors": [
+        "LIM_2"
+      ]
+    },
+    {
+      "code": "CUS",
+      "name": "Cusco Departament",
+      "nameNative": "Cusco",
+      "type": "department",
+      "capital": "Cuzco",
+      "largestCity": "Cusco Departament",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Peru",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        699.68,
+        931.26
+      ],
+      "bbox": [
+        577.22,
+        791.24,
+        826,
+        1085.94
+      ],
+      "neighbors": [
+        "APU",
+        "ARE",
+        "AYA",
+        "JUN",
+        "MDD",
+        "PUN",
+        "UCA"
+      ]
+    },
+    {
+      "code": "HUC",
+      "name": "Huanuco",
+      "nameNative": "Huánuco",
+      "type": "department",
+      "capital": "Huknuco",
+      "largestCity": "Huanuco",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Peru",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        433.65,
+        665.26
+      ],
+      "bbox": [
+        342.74,
+        591.3,
+        539.68,
+        737.6
+      ],
+      "neighbors": [
+        "ANC",
+        "LAL",
+        "LIM",
+        "LOR",
+        "PAS",
+        "SAM",
+        "UCA"
+      ]
+    },
+    {
+      "code": "HUV",
+      "name": "Huancavelica",
+      "nameNative": "Huancavelica",
+      "type": "department",
+      "capital": "Huancavelica",
+      "largestCity": "Huancavelica",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Peru",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        504.65,
+        920.82
+      ],
+      "bbox": [
+        450.15,
+        845.86,
+        554.94,
+        999.12
+      ],
+      "neighbors": [
+        "AYA",
+        "ICA",
+        "JUN",
+        "LIM"
+      ]
+    },
+    {
+      "code": "ICA",
+      "name": "Ica",
+      "nameNative": "Ica",
+      "type": "department",
+      "capital": "Ica",
+      "largestCity": "Ica",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Peru",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        465.46,
+        1005.89
+      ],
+      "bbox": [
+        404.31,
+        917,
+        526.54,
+        1090.78
+      ],
+      "neighbors": [
+        "ARE",
+        "AYA",
+        "HUV",
+        "LIM"
+      ]
+    },
+    {
+      "code": "JUN",
+      "name": "Junín",
+      "nameNative": "Junín",
+      "type": "department",
+      "capital": "Junnn",
+      "largestCity": "Junín",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Peru",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        511.83,
+        813.47
+      ],
+      "bbox": [
+        401.66,
+        754.07,
+        614,
+        896.06
+      ],
+      "neighbors": [
+        "AYA",
+        "CUS",
+        "HUV",
+        "LIM",
+        "PAS",
+        "UCA"
+      ]
+    },
+    {
+      "code": "LAL",
+      "name": "La Libertad",
+      "nameNative": "La Libertad",
+      "type": "department",
+      "capital": "Libertad",
+      "largestCity": "La Libertad",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Peru",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        271.61,
+        560.99
+      ],
+      "bbox": [
+        175.12,
+        492.21,
+        375.41,
+        633.76
+      ],
+      "neighbors": [
+        "AMA",
+        "ANC",
+        "CAJ",
+        "HUC",
+        "LAM",
+        "SAM"
+      ]
+    },
+    {
+      "code": "LAM",
+      "name": "Lambayeque",
+      "nameNative": "Lambayeque",
+      "type": "department",
+      "capital": "Lambayeque",
+      "largestCity": "Lambayeque",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Peru",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        165.11,
+        450.69
+      ],
+      "bbox": [
+        108.62,
+        392.1,
+        212.5,
+        506.58
+      ],
+      "neighbors": [
+        "CAJ",
+        "LAL",
+        "PIU"
+      ]
+    },
+    {
+      "code": "LIM",
+      "name": "Lima",
+      "nameNative": "Lima",
+      "type": "department",
+      "capital": "Lima province",
+      "largestCity": "Lima",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Peru",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        394.18,
+        831.45
+      ],
+      "bbox": [
+        304.16,
+        726.55,
+        473.11,
+        941.12
+      ],
+      "neighbors": [
+        "ANC",
+        "HUC",
+        "HUV",
+        "ICA",
+        "JUN",
+        "LIM_2",
+        "PAS"
+      ]
+    },
+    {
+      "code": "LIM_2",
+      "name": "Lima",
+      "nameNative": "Lima Province",
+      "type": "captial district",
+      "capital": "Federal capital",
+      "largestCity": "Lima",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Peru",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        371.92,
+        848.95
+      ],
+      "bbox": [
+        352.99,
+        816.34,
+        391.59,
+        883.91
+      ],
+      "neighbors": [
+        "CAL",
+        "LIM"
+      ]
+    },
+    {
+      "code": "LOR",
+      "name": "Loreto",
+      "nameNative": "Loreto",
+      "type": "department",
+      "capital": "Loreto",
+      "largestCity": "Loreto",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Peru",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        546.17,
+        287.74
+      ],
+      "bbox": [
+        306.62,
+        0,
+        861.44,
+        610.02
+      ],
+      "neighbors": [
+        "AMA",
+        "HUC",
+        "SAM",
+        "UCA"
+      ]
+    },
+    {
+      "code": "MDD",
+      "name": "Madre de Dios",
+      "nameNative": "Madre de Dios",
+      "type": "department",
+      "capital": "Madre de Dios",
+      "largestCity": "Madre de Dios",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Peru",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        813.09,
+        847.27
+      ],
+      "bbox": [
+        686.66,
+        704.73,
+        942.67,
+        946.79
+      ],
+      "neighbors": [
+        "CUS",
+        "PUN",
+        "UCA"
+      ]
+    },
+    {
+      "code": "MOQ",
+      "name": "Moquegua",
+      "nameNative": "Moquegua",
+      "type": "department",
+      "capital": "Moquegua",
+      "largestCity": "Moquegua",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Peru",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        787.03,
+        1193.93
+      ],
+      "bbox": [
+        742.81,
+        1132.4,
+        843.36,
+        1260.17
+      ],
+      "neighbors": [
+        "ARE",
+        "PUN",
+        "TAC"
+      ]
+    },
+    {
+      "code": "PAS",
+      "name": "Pasco",
+      "nameNative": "Pasco",
+      "type": "department",
+      "capital": "Pasco",
+      "largestCity": "Pasco",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Peru",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        478.93,
+        734.28
+      ],
+      "bbox": [
+        383.53,
+        681.08,
+        563.33,
+        784.19
+      ],
+      "neighbors": [
+        "HUC",
+        "JUN",
+        "LIM",
+        "UCA"
+      ]
+    },
+    {
+      "code": "PIU",
+      "name": "Piura",
+      "nameNative": "Piura",
+      "type": "department",
+      "capital": "Piura",
+      "largestCity": "Piura",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Peru",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        127.6,
+        363.34
+      ],
+      "bbox": [
+        57.33,
+        287.04,
+        206.53,
+        458.83
+      ],
+      "neighbors": [
+        "CAJ",
+        "LAM",
+        "TUM"
+      ]
+    },
+    {
+      "code": "PUN",
+      "name": "Puno",
+      "nameNative": "Puno",
+      "type": "department",
+      "capital": "El Callao",
+      "largestCity": "Puno",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Peru",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        851.54,
+        1063.12
+      ],
+      "bbox": [
+        770.84,
+        921.98,
+        927.17,
+        1227.53
+      ],
+      "neighbors": [
+        "ARE",
+        "CUS",
+        "MDD",
+        "MOQ",
+        "TAC"
+      ]
+    },
+    {
+      "code": "SAM",
+      "name": "San Martín",
+      "nameNative": "San Martín",
+      "type": "department",
+      "capital": "San Mart",
+      "largestCity": "San Martín",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Peru",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        387.32,
+        498.63
+      ],
+      "bbox": [
+        309.84,
+        379.52,
+        472.57,
+        616.41
+      ],
+      "neighbors": [
+        "AMA",
+        "HUC",
+        "LAL",
+        "LOR"
+      ]
+    },
+    {
+      "code": "TAC",
+      "name": "Tacna",
+      "nameNative": "Tacna",
+      "type": "department",
+      "capital": "Tacna",
+      "largestCity": "Tacna",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Peru",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        822.5,
+        1251.07
+      ],
+      "bbox": [
+        763.3,
+        1192.07,
+        876.74,
+        1300
+      ],
+      "neighbors": [
+        "MOQ",
+        "PUN"
+      ]
+    },
+    {
+      "code": "TUM",
+      "name": "Tumbes",
+      "nameNative": "Tumbes",
+      "type": "department",
+      "capital": "Tumbez",
+      "largestCity": "Tumbes",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Peru",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        111.13,
+        271.53
+      ],
+      "bbox": [
+        76.51,
+        239.21,
+        140.09,
+        297.55
+      ],
+      "neighbors": [
+        "PIU"
+      ]
+    },
+    {
+      "code": "UCA",
+      "name": "Ucayali",
+      "nameNative": "Ucayali",
+      "type": "department",
+      "capital": "Ucayali",
+      "largestCity": "Ucayali",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Peru",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        613.48,
+        679.76
+      ],
+      "bbox": [
+        437.2,
+        516.17,
+        818.26,
+        807.73
+      ],
+      "neighbors": [
+        "CUS",
+        "HUC",
+        "JUN",
+        "LOR",
+        "MDD",
+        "PAS"
+      ]
+    }
+  ]
+}
