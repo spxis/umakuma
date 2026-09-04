@@ -1,20 +1,5401 @@
 {
   "version": 1,
-  "placeholder": true,
   "ranks": [
     {
       "level": 1,
       "name": "Rookie",
       "equivalents": [
-        { "name": "Novice", "language": "English", "note": "" },
-        { "name": "Beginner", "language": "English", "note": "" },
-        { "name": "Greenhorn", "language": "English", "note": "someone new to the work" },
-        { "name": "Tenderfoot", "language": "English", "note": "a newcomer, from the trail" },
-        { "name": "新人", "reading": "Shinjin", "language": "Japanese", "note": "new person; a first-year at a company" },
-        { "name": "Novato", "language": "Spanish", "note": "" },
-        { "name": "Débutant", "language": "French", "note": "one who is beginning" },
-        { "name": "Neuling", "language": "German", "note": "" },
-        { "name": "Principiante", "language": "Italian", "note": "" }
+        {
+          "name": "Greenhorn",
+          "language": "English",
+          "note": "brand new to the work"
+        },
+        {
+          "name": "Tenderfoot",
+          "language": "English",
+          "note": "a new arrival, from the trail camps"
+        },
+        {
+          "name": "新人",
+          "reading": "Shinjin",
+          "language": "Japanese",
+          "note": "new person, a first-year at a company"
+        },
+        {
+          "name": "Novato",
+          "language": "Spanish",
+          "note": "beginner"
+        },
+        {
+          "name": "Débutant",
+          "language": "French",
+          "note": "one who is just starting"
+        },
+        {
+          "name": "Neuling",
+          "language": "German",
+          "note": "newcomer"
+        },
+        {
+          "name": "Principiante",
+          "language": "Italian",
+          "note": "beginner"
+        },
+        {
+          "name": "新手",
+          "reading": "Xinshou",
+          "language": "Chinese",
+          "note": "new hand, a beginner"
+        },
+        {
+          "name": "신입",
+          "reading": "Sinip",
+          "language": "Korean",
+          "note": "a new entrant"
+        }
+      ]
+    },
+    {
+      "level": 2,
+      "name": "Newcomer",
+      "equivalents": [
+        {
+          "name": "Fresh Face",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "New Arrival",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "新参者",
+          "reading": "Shinzanmono",
+          "language": "Japanese",
+          "note": "one newly arrived in a group"
+        },
+        {
+          "name": "Recién Llegado",
+          "language": "Spanish",
+          "note": "newly arrived"
+        },
+        {
+          "name": "Nouveau Venu",
+          "language": "French",
+          "note": "newcomer"
+        },
+        {
+          "name": "Neuankömmling",
+          "language": "German",
+          "note": "newcomer"
+        },
+        {
+          "name": "Nykomling",
+          "language": "Swedish",
+          "note": "newcomer"
+        },
+        {
+          "name": "Nuovo Arrivato",
+          "language": "Italian",
+          "note": "new arrival"
+        },
+        {
+          "name": "新来者",
+          "reading": "Xinlaizhe",
+          "language": "Chinese",
+          "note": "newcomer"
+        }
+      ]
+    },
+    {
+      "level": 3,
+      "name": "Fledgling",
+      "equivalents": [
+        {
+          "name": "Nestling",
+          "language": "English",
+          "note": "not yet out of the nest"
+        },
+        {
+          "name": "Sapling",
+          "language": "English",
+          "note": "a young tree, still growing"
+        },
+        {
+          "name": "Cub",
+          "language": "English",
+          "note": "as in a cub reporter, brand new to the job"
+        },
+        {
+          "name": "駆け出し",
+          "reading": "Kakedashi",
+          "language": "Japanese",
+          "note": "just starting out, a fledgling"
+        },
+        {
+          "name": "Novellino",
+          "language": "Italian",
+          "note": "little novice"
+        },
+        {
+          "name": "Anfänger",
+          "language": "German",
+          "note": "beginner"
+        },
+        {
+          "name": "Pichón",
+          "language": "Spanish",
+          "note": "young bird, used of a novice"
+        },
+        {
+          "name": "Groentje",
+          "language": "Dutch",
+          "note": "greenhorn"
+        },
+        {
+          "name": "초보자",
+          "reading": "Chobo-ja",
+          "language": "Korean",
+          "note": "beginner"
+        }
+      ]
+    },
+    {
+      "level": 4,
+      "name": "Beginner",
+      "equivalents": [
+        {
+          "name": "Starter",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "First-Timer",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "初心者",
+          "reading": "Shoshinsha",
+          "language": "Japanese",
+          "note": "beginner, one of first intent"
+        },
+        {
+          "name": "Iniciante",
+          "language": "Portuguese",
+          "note": "beginner"
+        },
+        {
+          "name": "Aloittelija",
+          "language": "Finnish",
+          "note": "beginner"
+        },
+        {
+          "name": "Kezdő",
+          "language": "Hungarian",
+          "note": "beginner"
+        },
+        {
+          "name": "Początkujący",
+          "language": "Polish",
+          "note": "beginner"
+        },
+        {
+          "name": "入門者",
+          "reading": "Rumenzhe",
+          "language": "Chinese",
+          "note": "one entering the gate of a study"
+        },
+        {
+          "name": "مبتدئ",
+          "reading": "Mubtadi",
+          "language": "Arabic",
+          "note": "beginner"
+        }
+      ]
+    },
+    {
+      "level": 5,
+      "name": "Aspirant",
+      "equivalents": [
+        {
+          "name": "Hopeful",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Candidate",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Postulant",
+          "language": "English",
+          "note": "one asking to be admitted"
+        },
+        {
+          "name": "Prospect",
+          "language": "English",
+          "note": "a promising newcomer"
+        },
+        {
+          "name": "志願者",
+          "reading": "Shigansha",
+          "language": "Japanese",
+          "note": "one who has applied to join"
+        },
+        {
+          "name": "Aspirante",
+          "language": "Spanish",
+          "note": "aspirant"
+        },
+        {
+          "name": "Anwärter",
+          "language": "German",
+          "note": "candidate for a post or grade"
+        },
+        {
+          "name": "Kandidat",
+          "language": "Swedish",
+          "note": "candidate"
+        },
+        {
+          "name": "지원자",
+          "reading": "Jiwonja",
+          "language": "Korean",
+          "note": "applicant"
+        }
+      ]
+    },
+    {
+      "level": 6,
+      "name": "Pupil",
+      "equivalents": [
+        {
+          "name": "Learner",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Schoolchild",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "生徒",
+          "reading": "Seito",
+          "language": "Japanese",
+          "note": "a pupil at a school"
+        },
+        {
+          "name": "Alumno",
+          "language": "Spanish",
+          "note": "pupil"
+        },
+        {
+          "name": "Élève",
+          "language": "French",
+          "note": "pupil"
+        },
+        {
+          "name": "Schüler",
+          "language": "German",
+          "note": "pupil"
+        },
+        {
+          "name": "Allievo",
+          "language": "Italian",
+          "note": "pupil"
+        },
+        {
+          "name": "Ученик",
+          "reading": "Uchenik",
+          "language": "Russian",
+          "note": "pupil"
+        },
+        {
+          "name": "Leerling",
+          "language": "Dutch",
+          "note": "pupil"
+        }
+      ]
+    },
+    {
+      "level": 7,
+      "name": "Student",
+      "equivalents": [
+        {
+          "name": "Studier",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "学生",
+          "reading": "Gakusei",
+          "language": "Japanese",
+          "note": "student"
+        },
+        {
+          "name": "Estudiante",
+          "language": "Spanish",
+          "note": "student"
+        },
+        {
+          "name": "Étudiant",
+          "language": "French",
+          "note": "student"
+        },
+        {
+          "name": "Studente",
+          "language": "Italian",
+          "note": "student"
+        },
+        {
+          "name": "학생",
+          "reading": "Haksaeng",
+          "language": "Korean",
+          "note": "student"
+        },
+        {
+          "name": "طالب",
+          "reading": "Talib",
+          "language": "Arabic",
+          "note": "student, one who seeks"
+        },
+        {
+          "name": "विद्यार्थी",
+          "reading": "Vidyarthi",
+          "language": "Sanskrit",
+          "note": "student, seeker of knowledge"
+        },
+        {
+          "name": "Öğrenci",
+          "language": "Turkish",
+          "note": "student"
+        }
+      ]
+    },
+    {
+      "level": 8,
+      "name": "Novice",
+      "equivalents": [
+        {
+          "name": "Probationer",
+          "language": "English",
+          "note": "on trial before full admission"
+        },
+        {
+          "name": "Neophyte",
+          "language": "English",
+          "note": "newly planted, a beginner in a practice"
+        },
+        {
+          "name": "Tyro",
+          "language": "English",
+          "note": "a raw recruit"
+        },
+        {
+          "name": "新米",
+          "reading": "Shinmai",
+          "language": "Japanese",
+          "note": "new rice, said of a green newcomer"
+        },
+        {
+          "name": "Novizio",
+          "language": "Italian",
+          "note": "novice"
+        },
+        {
+          "name": "Noviço",
+          "language": "Portuguese",
+          "note": "novice"
+        },
+        {
+          "name": "Novize",
+          "language": "German",
+          "note": "novice"
+        },
+        {
+          "name": "Nybörjare",
+          "language": "Swedish",
+          "note": "beginner"
+        },
+        {
+          "name": "Δόκιμος",
+          "reading": "Dokimos",
+          "language": "Greek",
+          "note": "a novice still under testing"
+        }
+      ]
+    },
+    {
+      "level": 9,
+      "name": "Trainee",
+      "equivalents": [
+        {
+          "name": "In Training",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Recruit",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "研修生",
+          "reading": "Kenshusei",
+          "language": "Japanese",
+          "note": "a trainee on a training programme"
+        },
+        {
+          "name": "见习生",
+          "reading": "Jianxisheng",
+          "language": "Chinese",
+          "note": "trainee on probation"
+        },
+        {
+          "name": "Azubi",
+          "language": "German",
+          "note": "short for Auszubildender, one in formal training"
+        },
+        {
+          "name": "Stagiaire",
+          "language": "French",
+          "note": "trainee"
+        },
+        {
+          "name": "Praktikant",
+          "language": "Dutch",
+          "note": "trainee"
+        },
+        {
+          "name": "Tirocinante",
+          "language": "Italian",
+          "note": "trainee"
+        },
+        {
+          "name": "Recluta",
+          "language": "Spanish",
+          "note": "recruit"
+        }
+      ]
+    },
+    {
+      "level": 10,
+      "name": "Initiate",
+      "equivalents": [
+        {
+          "name": "Inductee",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "First-Year",
+          "language": "English",
+          "note": "one taken in this year"
+        },
+        {
+          "name": "門下生",
+          "reading": "Monkasei",
+          "language": "Japanese",
+          "note": "one admitted under a teacher's gate"
+        },
+        {
+          "name": "Iniciado",
+          "language": "Spanish",
+          "note": "one who has been initiated"
+        },
+        {
+          "name": "Initié",
+          "language": "French",
+          "note": "one who has been initiated"
+        },
+        {
+          "name": "Eingeweihter",
+          "language": "German",
+          "note": "one let into the practice"
+        },
+        {
+          "name": "Μύστης",
+          "reading": "Mystes",
+          "language": "Greek",
+          "note": "one initiated into a mystery"
+        },
+        {
+          "name": "दीक्षित",
+          "reading": "Dikshita",
+          "language": "Sanskrit",
+          "note": "one who has received initiation"
+        },
+        {
+          "name": "입문자",
+          "reading": "Immunja",
+          "language": "Korean",
+          "note": "one entering the gate"
+        }
+      ]
+    },
+    {
+      "level": 11,
+      "name": "Understudy",
+      "equivalents": [
+        {
+          "name": "Second",
+          "language": "English",
+          "note": "the one who stands ready to take over"
+        },
+        {
+          "name": "Stand-In",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Shadow",
+          "language": "English",
+          "note": "one who shadows the master at work"
+        },
+        {
+          "name": "Doublure",
+          "language": "French",
+          "note": "understudy in the theatre"
+        },
+        {
+          "name": "Suplente",
+          "language": "Spanish",
+          "note": "stand-in"
+        },
+        {
+          "name": "Zweitbesetzung",
+          "language": "German",
+          "note": "second casting, the understudy"
+        },
+        {
+          "name": "Sostituto",
+          "language": "Italian",
+          "note": "substitute"
+        },
+        {
+          "name": "Дублёр",
+          "reading": "Dublyor",
+          "language": "Russian",
+          "note": "understudy, stand-in"
+        },
+        {
+          "name": "替补",
+          "reading": "Tibu",
+          "language": "Chinese",
+          "note": "substitute"
+        }
+      ]
+    },
+    {
+      "level": 12,
+      "name": "Disciple",
+      "equivalents": [
+        {
+          "name": "Follower",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Acolyte",
+          "language": "English",
+          "note": "one who attends on a teacher"
+        },
+        {
+          "name": "弟子",
+          "reading": "Deshi",
+          "language": "Japanese",
+          "note": "a master's pupil"
+        },
+        {
+          "name": "Discípulo",
+          "language": "Spanish",
+          "note": "disciple"
+        },
+        {
+          "name": "Jünger",
+          "language": "German",
+          "note": "disciple, follower"
+        },
+        {
+          "name": "Discepolo",
+          "language": "Italian",
+          "note": "disciple"
+        },
+        {
+          "name": "शिष्य",
+          "reading": "Shishya",
+          "language": "Sanskrit",
+          "note": "the disciple of a guru"
+        },
+        {
+          "name": "제자",
+          "reading": "Jeja",
+          "language": "Korean",
+          "note": "disciple"
+        },
+        {
+          "name": "门徒",
+          "reading": "Mentu",
+          "language": "Chinese",
+          "note": "disciple"
+        }
+      ]
+    },
+    {
+      "level": 13,
+      "name": "Apprentice",
+      "equivalents": [
+        {
+          "name": "Prentice",
+          "language": "English",
+          "note": "old short form of apprentice"
+        },
+        {
+          "name": "見習い",
+          "reading": "Minarai",
+          "language": "Japanese",
+          "note": "apprentice learning by watching"
+        },
+        {
+          "name": "Aprendiz",
+          "language": "Spanish",
+          "note": "apprentice"
+        },
+        {
+          "name": "Apprenti",
+          "language": "French",
+          "note": "apprentice"
+        },
+        {
+          "name": "Lehrling",
+          "language": "German",
+          "note": "apprentice"
+        },
+        {
+          "name": "Apprendista",
+          "language": "Italian",
+          "note": "apprentice"
+        },
+        {
+          "name": "Çırak",
+          "language": "Turkish",
+          "note": "apprentice, first stage of the guild ladder"
+        },
+        {
+          "name": "徒弟",
+          "reading": "Tudi",
+          "language": "Chinese",
+          "note": "apprentice"
+        },
+        {
+          "name": "견습생",
+          "reading": "Gyeonseupsaeng",
+          "language": "Korean",
+          "note": "apprentice"
+        }
+      ]
+    },
+    {
+      "level": 14,
+      "name": "Protégé",
+      "equivalents": [
+        {
+          "name": "Ward",
+          "language": "English",
+          "note": "one under a patron's care"
+        },
+        {
+          "name": "Charge",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Mentee",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "秘蔵っ子",
+          "reading": "Hizokko",
+          "language": "Japanese",
+          "note": "a treasured protégé"
+        },
+        {
+          "name": "Pupilo",
+          "language": "Spanish",
+          "note": "ward, one in another's charge"
+        },
+        {
+          "name": "Schützling",
+          "language": "German",
+          "note": "one under protection"
+        },
+        {
+          "name": "Protetto",
+          "language": "Italian",
+          "note": "protégé"
+        },
+        {
+          "name": "Питомец",
+          "reading": "Pitomets",
+          "language": "Russian",
+          "note": "one raised and brought on by another"
+        },
+        {
+          "name": "门生",
+          "reading": "Mensheng",
+          "language": "Chinese",
+          "note": "the protégé of a teacher"
+        }
+      ]
+    },
+    {
+      "level": 15,
+      "name": "Improver",
+      "equivalents": [
+        {
+          "name": "Senior Apprentice",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Advanced Apprentice",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Second-Year",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Third-Year",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Junior Hand",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "半人前",
+          "reading": "Hanninmae",
+          "language": "Japanese",
+          "note": "half a full hand, not yet fully qualified"
+        },
+        {
+          "name": "Подмастерье",
+          "reading": "Podmasterye",
+          "language": "Russian",
+          "note": "past apprentice, not yet master"
+        },
+        {
+          "name": "Angelernter",
+          "language": "German",
+          "note": "a semi-skilled hand past basic training"
+        },
+        {
+          "name": "Medio Oficial",
+          "language": "Spanish",
+          "note": "half-officer, between apprentice and journeyman"
+        }
+      ]
+    },
+    {
+      "level": 16,
+      "name": "Journeyman",
+      "equivalents": [
+        {
+          "name": "Qualified Hand",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "一人前",
+          "reading": "Ichininmae",
+          "language": "Japanese",
+          "note": "a full hand, fully qualified"
+        },
+        {
+          "name": "Geselle",
+          "language": "German",
+          "note": "journeyman"
+        },
+        {
+          "name": "Compagnon",
+          "language": "French",
+          "note": "journeyman of the Compagnons du Devoir"
+        },
+        {
+          "name": "Oficial",
+          "language": "Spanish",
+          "note": "journeyman in the old guilds"
+        },
+        {
+          "name": "Gezel",
+          "language": "Dutch",
+          "note": "journeyman"
+        },
+        {
+          "name": "Gesäll",
+          "language": "Swedish",
+          "note": "journeyman"
+        },
+        {
+          "name": "Lavorante",
+          "language": "Italian",
+          "note": "a shop worker past the apprentice stage"
+        },
+        {
+          "name": "Kalfa",
+          "language": "Turkish",
+          "note": "journeyman, between çırak and usta"
+        }
+      ]
+    },
+    {
+      "level": 17,
+      "name": "Practitioner",
+      "equivalents": [
+        {
+          "name": "Practising Hand",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Full Member",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "実践者",
+          "reading": "Jissensha",
+          "language": "Japanese",
+          "note": "one who practises"
+        },
+        {
+          "name": "Practicante",
+          "language": "Spanish",
+          "note": "practitioner"
+        },
+        {
+          "name": "Praticien",
+          "language": "French",
+          "note": "practitioner"
+        },
+        {
+          "name": "Praktiker",
+          "language": "German",
+          "note": "practitioner"
+        },
+        {
+          "name": "Praticante",
+          "language": "Italian",
+          "note": "practitioner"
+        },
+        {
+          "name": "실무자",
+          "reading": "Silmuja",
+          "language": "Korean",
+          "note": "one who does the actual work"
+        },
+        {
+          "name": "从业者",
+          "reading": "Congyezhe",
+          "language": "Chinese",
+          "note": "practitioner in a trade"
+        }
+      ]
+    },
+    {
+      "level": 18,
+      "name": "Artisan",
+      "equivalents": [
+        {
+          "name": "Maker",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "職人",
+          "reading": "Shokunin",
+          "language": "Japanese",
+          "note": "a craftsman devoted to a trade"
+        },
+        {
+          "name": "Artesano",
+          "language": "Spanish",
+          "note": "artisan"
+        },
+        {
+          "name": "Artigiano",
+          "language": "Italian",
+          "note": "artisan"
+        },
+        {
+          "name": "Handwerker",
+          "language": "German",
+          "note": "handworker"
+        },
+        {
+          "name": "Artesão",
+          "language": "Portuguese",
+          "note": "artisan"
+        },
+        {
+          "name": "Ambachtsman",
+          "language": "Dutch",
+          "note": "artisan"
+        },
+        {
+          "name": "工匠",
+          "reading": "Gongjiang",
+          "language": "Chinese",
+          "note": "artisan"
+        },
+        {
+          "name": "Zanaatkâr",
+          "language": "Turkish",
+          "note": "artisan"
+        }
+      ]
+    },
+    {
+      "level": 19,
+      "name": "Craftsman",
+      "equivalents": [
+        {
+          "name": "Craftsperson",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Tradesperson",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "熟練工",
+          "reading": "Jukurenko",
+          "language": "Japanese",
+          "note": "a skilled worker"
+        },
+        {
+          "name": "匠人",
+          "reading": "Jiangren",
+          "language": "Chinese",
+          "note": "craftsman"
+        },
+        {
+          "name": "Kunsthandwerker",
+          "language": "German",
+          "note": "art-craftsman"
+        },
+        {
+          "name": "Ouvrier Qualifié",
+          "language": "French",
+          "note": "skilled worker"
+        },
+        {
+          "name": "Yrkesman",
+          "language": "Swedish",
+          "note": "tradesman"
+        },
+        {
+          "name": "Vakman",
+          "language": "Dutch",
+          "note": "a man of the trade"
+        },
+        {
+          "name": "Мастеровой",
+          "reading": "Masterovoy",
+          "language": "Russian",
+          "note": "skilled tradesman"
+        }
+      ]
+    },
+    {
+      "level": 20,
+      "name": "Professional",
+      "equivalents": [
+        {
+          "name": "Certified Hand",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Ticketed Tradesman",
+          "language": "English",
+          "note": "holding the trade certificate, in Canadian usage"
+        },
+        {
+          "name": "玄人",
+          "reading": "Kuroto",
+          "language": "Japanese",
+          "note": "a professional, as against an amateur"
+        },
+        {
+          "name": "Profesional",
+          "language": "Spanish",
+          "note": "professional"
+        },
+        {
+          "name": "Professionnel",
+          "language": "French",
+          "note": "professional"
+        },
+        {
+          "name": "Profi",
+          "language": "German",
+          "note": "a pro"
+        },
+        {
+          "name": "Professionista",
+          "language": "Italian",
+          "note": "professional"
+        },
+        {
+          "name": "专业人士",
+          "reading": "Zhuanye Renshi",
+          "language": "Chinese",
+          "note": "professional"
+        },
+        {
+          "name": "프로",
+          "reading": "Peuro",
+          "language": "Korean",
+          "note": "pro"
+        }
+      ]
+    },
+    {
+      "level": 21,
+      "name": "Regular Hand",
+      "equivalents": [
+        {
+          "name": "Standing Member",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Full-Timer",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Fixture",
+          "language": "English",
+          "note": "a permanent presence in the place"
+        },
+        {
+          "name": "常連",
+          "reading": "Joren",
+          "language": "Japanese",
+          "note": "a regular, always there"
+        },
+        {
+          "name": "Habitué",
+          "language": "French",
+          "note": "a regular"
+        },
+        {
+          "name": "Asiduo",
+          "language": "Spanish",
+          "note": "a regular attender"
+        },
+        {
+          "name": "Stammgast",
+          "language": "German",
+          "note": "a regular"
+        },
+        {
+          "name": "常客",
+          "reading": "Changke",
+          "language": "Chinese",
+          "note": "a regular"
+        },
+        {
+          "name": "Завсегдатай",
+          "reading": "Zavsegdatay",
+          "language": "Russian",
+          "note": "a regular"
+        }
+      ]
+    },
+    {
+      "level": 22,
+      "name": "Steady Hand",
+      "equivalents": [
+        {
+          "name": "Reliable Hand",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Sure Hand",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Safe Pair of Hands",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Anchor",
+          "language": "English",
+          "note": "the one the crew steadies on"
+        },
+        {
+          "name": "頼れる人",
+          "reading": "Tayoreru Hito",
+          "language": "Japanese",
+          "note": "a person who can be relied on"
+        },
+        {
+          "name": "Mano Firme",
+          "language": "Spanish",
+          "note": "steady hand"
+        },
+        {
+          "name": "Main Sûre",
+          "language": "French",
+          "note": "sure hand"
+        },
+        {
+          "name": "Sichere Hand",
+          "language": "German",
+          "note": "sure hand"
+        },
+        {
+          "name": "Твёрдая Рука",
+          "reading": "Tvyordaya Ruka",
+          "language": "Russian",
+          "note": "steady hand"
+        }
+      ]
+    },
+    {
+      "level": 23,
+      "name": "Specialist",
+      "equivalents": [
+        {
+          "name": "Subject Specialist",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "専門家",
+          "reading": "Senmonka",
+          "language": "Japanese",
+          "note": "specialist in a field"
+        },
+        {
+          "name": "Especialista",
+          "language": "Spanish",
+          "note": "specialist"
+        },
+        {
+          "name": "Spécialiste",
+          "language": "French",
+          "note": "specialist"
+        },
+        {
+          "name": "Spezialist",
+          "language": "German",
+          "note": "specialist"
+        },
+        {
+          "name": "Specialista",
+          "language": "Italian",
+          "note": "specialist"
+        },
+        {
+          "name": "专家",
+          "reading": "Zhuanjia",
+          "language": "Chinese",
+          "note": "specialist in a field"
+        },
+        {
+          "name": "전문가",
+          "reading": "Jeonmun-ga",
+          "language": "Korean",
+          "note": "specialist"
+        },
+        {
+          "name": "Uzman",
+          "language": "Turkish",
+          "note": "specialist"
+        }
+      ]
+    },
+    {
+      "level": 24,
+      "name": "Campaigner",
+      "equivalents": [
+        {
+          "name": "Seasoned Campaigner",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Time-Served",
+          "language": "English",
+          "note": "one who has served the years"
+        },
+        {
+          "name": "Trooper",
+          "language": "English",
+          "note": "one who keeps going"
+        },
+        {
+          "name": "古参",
+          "reading": "Kosan",
+          "language": "Japanese",
+          "note": "long-serving, senior in service"
+        },
+        {
+          "name": "Curtido",
+          "language": "Spanish",
+          "note": "toughened by experience"
+        },
+        {
+          "name": "Chevronné",
+          "language": "French",
+          "note": "seasoned, with stripes to show for it"
+        },
+        {
+          "name": "Routinier",
+          "language": "German",
+          "note": "an experienced hand"
+        },
+        {
+          "name": "Rutinerad",
+          "language": "Swedish",
+          "note": "seasoned"
+        },
+        {
+          "name": "老兵",
+          "reading": "Laobing",
+          "language": "Chinese",
+          "note": "old soldier"
+        }
+      ]
+    },
+    {
+      "level": 25,
+      "name": "Old Hand",
+      "equivalents": [
+        {
+          "name": "Experienced Hand",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Seasoned Hand",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "古株",
+          "reading": "Furukabu",
+          "language": "Japanese",
+          "note": "an old-timer in a group"
+        },
+        {
+          "name": "老手",
+          "reading": "Laoshou",
+          "language": "Chinese",
+          "note": "old hand"
+        },
+        {
+          "name": "Perro Viejo",
+          "language": "Spanish",
+          "note": "old dog, one with long experience"
+        },
+        {
+          "name": "Vieux Routier",
+          "language": "French",
+          "note": "old road-hand of the trade"
+        },
+        {
+          "name": "Alter Hase",
+          "language": "German",
+          "note": "old hare, an old hand"
+        },
+        {
+          "name": "Vecchia Volpe",
+          "language": "Italian",
+          "note": "old fox, a seasoned one"
+        },
+        {
+          "name": "고참",
+          "reading": "Gocham",
+          "language": "Korean",
+          "note": "an old-timer, senior in service"
+        }
+      ]
+    },
+    {
+      "level": 26,
+      "name": "Stalwart",
+      "equivalents": [
+        {
+          "name": "Staunch Hand",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Diehard",
+          "language": "English",
+          "note": "one who never quits"
+        },
+        {
+          "name": "Rock",
+          "language": "English",
+          "note": "the rock of the crew"
+        },
+        {
+          "name": "古豪",
+          "reading": "Kogo",
+          "language": "Japanese",
+          "note": "a veteran of proven strength"
+        },
+        {
+          "name": "Baluarte",
+          "language": "Spanish",
+          "note": "bulwark"
+        },
+        {
+          "name": "Pilier",
+          "language": "French",
+          "note": "a pillar of the club"
+        },
+        {
+          "name": "Getreuer",
+          "language": "German",
+          "note": "a steadfast, loyal one"
+        },
+        {
+          "name": "Wiarus",
+          "language": "Polish",
+          "note": "an old and faithful soldier"
+        },
+        {
+          "name": "中坚",
+          "reading": "Zhongjian",
+          "language": "Chinese",
+          "note": "the staunch core of a group"
+        }
+      ]
+    },
+    {
+      "level": 27,
+      "name": "Mainstay",
+      "equivalents": [
+        {
+          "name": "Backbone",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Pillar",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Linchpin",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Keystone",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "大黒柱",
+          "reading": "Daikokubashira",
+          "language": "Japanese",
+          "note": "the central pillar of a house"
+        },
+        {
+          "name": "Puntal",
+          "language": "Spanish",
+          "note": "prop, mainstay"
+        },
+        {
+          "name": "Cheville Ouvrière",
+          "language": "French",
+          "note": "the linchpin that makes it work"
+        },
+        {
+          "name": "Stütze",
+          "language": "German",
+          "note": "support, mainstay"
+        },
+        {
+          "name": "台柱",
+          "reading": "Taizhu",
+          "language": "Chinese",
+          "note": "the pillar of the stage"
+        }
+      ]
+    },
+    {
+      "level": 28,
+      "name": "Standard-Bearer",
+      "equivalents": [
+        {
+          "name": "Flag-Bearer",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Colour-Bearer",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Ensign",
+          "language": "English",
+          "note": "the one who carries the colours"
+        },
+        {
+          "name": "旗手",
+          "reading": "Kishu",
+          "language": "Japanese",
+          "note": "standard-bearer"
+        },
+        {
+          "name": "Abanderado",
+          "language": "Spanish",
+          "note": "standard-bearer"
+        },
+        {
+          "name": "Porte-Drapeau",
+          "language": "French",
+          "note": "standard-bearer"
+        },
+        {
+          "name": "Fahnenträger",
+          "language": "German",
+          "note": "standard-bearer"
+        },
+        {
+          "name": "Alfiere",
+          "language": "Italian",
+          "note": "standard-bearer"
+        },
+        {
+          "name": "Знаменосец",
+          "reading": "Znamenosets",
+          "language": "Russian",
+          "note": "standard-bearer"
+        }
+      ]
+    },
+    {
+      "level": 29,
+      "name": "Vanguard",
+      "equivalents": [
+        {
+          "name": "Front-Runner",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Spearhead",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Forerunner",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "先鋒",
+          "reading": "Senpo",
+          "language": "Japanese",
+          "note": "the vanguard, first into the fray"
+        },
+        {
+          "name": "Vanguardia",
+          "language": "Spanish",
+          "note": "vanguard"
+        },
+        {
+          "name": "Avant-Garde",
+          "language": "French",
+          "note": "advance guard"
+        },
+        {
+          "name": "Vorhut",
+          "language": "German",
+          "note": "advance guard"
+        },
+        {
+          "name": "Avanguardia",
+          "language": "Italian",
+          "note": "vanguard"
+        },
+        {
+          "name": "先锋",
+          "reading": "Xianfeng",
+          "language": "Chinese",
+          "note": "vanguard"
+        }
+      ]
+    },
+    {
+      "level": 30,
+      "name": "Veteran",
+      "equivalents": [
+        {
+          "name": "Old Soldier",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Long Server",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "老練者",
+          "reading": "Rorensha",
+          "language": "Japanese",
+          "note": "a person of long practice"
+        },
+        {
+          "name": "Veterano",
+          "language": "Spanish",
+          "note": "veteran"
+        },
+        {
+          "name": "Vétéran",
+          "language": "French",
+          "note": "veteran"
+        },
+        {
+          "name": "Veteraan",
+          "language": "Dutch",
+          "note": "veteran"
+        },
+        {
+          "name": "老将",
+          "reading": "Laojiang",
+          "language": "Chinese",
+          "note": "veteran general, a seasoned hand"
+        },
+        {
+          "name": "베테랑",
+          "reading": "Beteorang",
+          "language": "Korean",
+          "note": "veteran"
+        },
+        {
+          "name": "Ветеран",
+          "reading": "Veteran",
+          "language": "Russian",
+          "note": "veteran"
+        }
+      ]
+    },
+    {
+      "level": 31,
+      "name": "Leading Hand",
+      "equivalents": [
+        {
+          "name": "Lead Hand",
+          "language": "English",
+          "note": "the working hand who leads the crew"
+        },
+        {
+          "name": "Chargehand",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Straw Boss",
+          "language": "English",
+          "note": "a working supervisor"
+        },
+        {
+          "name": "職長",
+          "reading": "Shokucho",
+          "language": "Japanese",
+          "note": "work leader on site"
+        },
+        {
+          "name": "Jefe de Equipo",
+          "language": "Spanish",
+          "note": "team leader"
+        },
+        {
+          "name": "Chef d'Équipe",
+          "language": "French",
+          "note": "team leader"
+        },
+        {
+          "name": "Vorarbeiter",
+          "language": "German",
+          "note": "leading worker"
+        },
+        {
+          "name": "Caposquadra",
+          "language": "Italian",
+          "note": "team leader"
+        },
+        {
+          "name": "组长",
+          "reading": "Zuzhang",
+          "language": "Chinese",
+          "note": "group leader"
+        }
+      ]
+    },
+    {
+      "level": 32,
+      "name": "Foreman",
+      "equivalents": [
+        {
+          "name": "Gaffer",
+          "language": "English",
+          "note": "the boss of a work gang"
+        },
+        {
+          "name": "Overseer",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Ganger",
+          "language": "English",
+          "note": "gang boss"
+        },
+        {
+          "name": "親方",
+          "reading": "Oyakata",
+          "language": "Japanese",
+          "note": "the boss of a trade house or crew"
+        },
+        {
+          "name": "Capataz",
+          "language": "Spanish",
+          "note": "foreman"
+        },
+        {
+          "name": "Contremaître",
+          "language": "French",
+          "note": "foreman"
+        },
+        {
+          "name": "Polier",
+          "language": "German",
+          "note": "construction foreman"
+        },
+        {
+          "name": "Caporeparto",
+          "language": "Italian",
+          "note": "head of a department"
+        },
+        {
+          "name": "工头",
+          "reading": "Gongtou",
+          "language": "Chinese",
+          "note": "work foreman"
+        }
+      ]
+    },
+    {
+      "level": 33,
+      "name": "Demonstrator",
+      "equivalents": [
+        {
+          "name": "Teaching Assistant",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Assistant Teacher",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "助手",
+          "reading": "Joshu",
+          "language": "Japanese",
+          "note": "an academic assistant"
+        },
+        {
+          "name": "Ayudante",
+          "language": "Spanish",
+          "note": "assistant"
+        },
+        {
+          "name": "Moniteur",
+          "language": "French",
+          "note": "an instructor who demonstrates"
+        },
+        {
+          "name": "Assistent",
+          "language": "German",
+          "note": "assistant"
+        },
+        {
+          "name": "Assistente",
+          "language": "Italian",
+          "note": "assistant"
+        },
+        {
+          "name": "조교",
+          "reading": "Jogyo",
+          "language": "Korean",
+          "note": "teaching assistant"
+        },
+        {
+          "name": "助教",
+          "reading": "Zhujiao",
+          "language": "Chinese",
+          "note": "assistant lecturer"
+        }
+      ]
+    },
+    {
+      "level": 34,
+      "name": "Tutor",
+      "equivalents": [
+        {
+          "name": "Private Tutor",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Guide",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Crammer",
+          "language": "English",
+          "note": "a tutor who drills a student through"
+        },
+        {
+          "name": "家庭教師",
+          "reading": "Katei Kyoshi",
+          "language": "Japanese",
+          "note": "private tutor"
+        },
+        {
+          "name": "Répétiteur",
+          "language": "French",
+          "note": "a tutor who drills the lesson"
+        },
+        {
+          "name": "Nachhilfelehrer",
+          "language": "German",
+          "note": "a tutor giving extra lessons"
+        },
+        {
+          "name": "Ripetitore",
+          "language": "Italian",
+          "note": "private tutor"
+        },
+        {
+          "name": "과외 선생",
+          "reading": "Gwaoe Seonsaeng",
+          "language": "Korean",
+          "note": "private tutor"
+        },
+        {
+          "name": "家教",
+          "reading": "Jiajiao",
+          "language": "Chinese",
+          "note": "private tutor"
+        }
+      ]
+    },
+    {
+      "level": 35,
+      "name": "Instructor",
+      "equivalents": [
+        {
+          "name": "Teacher",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Trainer",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "先生",
+          "reading": "Sensei",
+          "language": "Japanese",
+          "note": "teacher, the one who goes before"
+        },
+        {
+          "name": "Formador",
+          "language": "Spanish",
+          "note": "trainer, one who forms others"
+        },
+        {
+          "name": "Instructeur",
+          "language": "French",
+          "note": "instructor"
+        },
+        {
+          "name": "Ausbilder",
+          "language": "German",
+          "note": "instructor"
+        },
+        {
+          "name": "Istruttore",
+          "language": "Italian",
+          "note": "instructor"
+        },
+        {
+          "name": "강사",
+          "reading": "Gangsa",
+          "language": "Korean",
+          "note": "instructor"
+        },
+        {
+          "name": "教员",
+          "reading": "Jiaoyuan",
+          "language": "Chinese",
+          "note": "teaching staff, instructor"
+        }
+      ]
+    },
+    {
+      "level": 36,
+      "name": "Coach",
+      "equivalents": [
+        {
+          "name": "Skills Coach",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "指導者",
+          "reading": "Shidosha",
+          "language": "Japanese",
+          "note": "one who guides others"
+        },
+        {
+          "name": "Entrenador",
+          "language": "Spanish",
+          "note": "coach"
+        },
+        {
+          "name": "Entraîneur",
+          "language": "French",
+          "note": "coach"
+        },
+        {
+          "name": "Übungsleiter",
+          "language": "German",
+          "note": "certified leader of practice sessions"
+        },
+        {
+          "name": "Allenatore",
+          "language": "Italian",
+          "note": "coach"
+        },
+        {
+          "name": "Treinador",
+          "language": "Portuguese",
+          "note": "coach"
+        },
+        {
+          "name": "教练",
+          "reading": "Jiaolian",
+          "language": "Chinese",
+          "note": "coach"
+        },
+        {
+          "name": "코치",
+          "reading": "Kochi",
+          "language": "Korean",
+          "note": "coach"
+        }
+      ]
+    },
+    {
+      "level": 37,
+      "name": "Mentor",
+      "equivalents": [
+        {
+          "name": "Guiding Hand",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Counsellor",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Adviser",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "指南役",
+          "reading": "Shinan'yaku",
+          "language": "Japanese",
+          "note": "the one appointed to guide"
+        },
+        {
+          "name": "Consejero",
+          "language": "Spanish",
+          "note": "adviser"
+        },
+        {
+          "name": "Conseiller",
+          "language": "French",
+          "note": "adviser"
+        },
+        {
+          "name": "Mentore",
+          "language": "Italian",
+          "note": "mentor"
+        },
+        {
+          "name": "Ratgeber",
+          "language": "German",
+          "note": "adviser"
+        },
+        {
+          "name": "导师",
+          "reading": "Daoshi",
+          "language": "Chinese",
+          "note": "mentor, supervising teacher"
+        }
+      ]
+    },
+    {
+      "level": 38,
+      "name": "Preceptor",
+      "equivalents": [
+        {
+          "name": "Head Tutor",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Praeceptor",
+          "language": "Latin",
+          "note": "teacher, one who instructs"
+        },
+        {
+          "name": "Précepteur",
+          "language": "French",
+          "note": "preceptor of a household"
+        },
+        {
+          "name": "Präzeptor",
+          "language": "German",
+          "note": "preceptor"
+        },
+        {
+          "name": "Precettore",
+          "language": "Italian",
+          "note": "preceptor"
+        },
+        {
+          "name": "Ayo",
+          "language": "Spanish",
+          "note": "the tutor-guardian of a young charge"
+        },
+        {
+          "name": "教頭",
+          "reading": "Kyoto",
+          "language": "Japanese",
+          "note": "head teacher, second in a school"
+        },
+        {
+          "name": "훈장",
+          "reading": "Hunjang",
+          "language": "Korean",
+          "note": "master of a village school"
+        },
+        {
+          "name": "塾师",
+          "reading": "Shushi",
+          "language": "Chinese",
+          "note": "teacher of a private school"
+        }
+      ]
+    },
+    {
+      "level": 39,
+      "name": "Lecturer",
+      "equivalents": [
+        {
+          "name": "Course Leader",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "講師",
+          "reading": "Koshi",
+          "language": "Japanese",
+          "note": "lecturer"
+        },
+        {
+          "name": "Lector",
+          "language": "Spanish",
+          "note": "lecturer"
+        },
+        {
+          "name": "Chargé de Cours",
+          "language": "French",
+          "note": "one entrusted with a course"
+        },
+        {
+          "name": "Lehrbeauftragter",
+          "language": "German",
+          "note": "one charged with teaching a course"
+        },
+        {
+          "name": "Lettore",
+          "language": "Italian",
+          "note": "lecturer"
+        },
+        {
+          "name": "讲师",
+          "reading": "Jiangshi",
+          "language": "Chinese",
+          "note": "lecturer"
+        },
+        {
+          "name": "전임강사",
+          "reading": "Jeonim Gangsa",
+          "language": "Korean",
+          "note": "full-time lecturer"
+        },
+        {
+          "name": "Wykładowca",
+          "language": "Polish",
+          "note": "lecturer"
+        }
+      ]
+    },
+    {
+      "level": 40,
+      "name": "Docent",
+      "equivalents": [
+        {
+          "name": "Senior Lecturer",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Reader",
+          "language": "English",
+          "note": "the British rank above senior lecturer"
+        },
+        {
+          "name": "Dozent",
+          "language": "German",
+          "note": "university lecturer of standing"
+        },
+        {
+          "name": "Docente",
+          "language": "Italian",
+          "note": "a member of the teaching body"
+        },
+        {
+          "name": "Doçent",
+          "language": "Turkish",
+          "note": "associate professor"
+        },
+        {
+          "name": "Доцент",
+          "reading": "Dotsent",
+          "language": "Russian",
+          "note": "docent, a senior university teacher"
+        },
+        {
+          "name": "准教授",
+          "reading": "Junkyoju",
+          "language": "Japanese",
+          "note": "associate professor"
+        },
+        {
+          "name": "부교수",
+          "reading": "Bugyosu",
+          "language": "Korean",
+          "note": "associate professor"
+        },
+        {
+          "name": "副教授",
+          "reading": "Fujiaoshou",
+          "language": "Chinese",
+          "note": "associate professor"
+        }
+      ]
+    },
+    {
+      "level": 41,
+      "name": "Fellow",
+      "equivalents": [
+        {
+          "name": "Elected Member",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "College Fellow",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Miembro Numerario",
+          "language": "Spanish",
+          "note": "a full elected member of an academy"
+        },
+        {
+          "name": "Membre Titulaire",
+          "language": "French",
+          "note": "full member"
+        },
+        {
+          "name": "Akademiemitglied",
+          "language": "German",
+          "note": "member of an academy"
+        },
+        {
+          "name": "Socio Ordinario",
+          "language": "Italian",
+          "note": "full member of a learned society"
+        },
+        {
+          "name": "正会員",
+          "reading": "Seikaiin",
+          "language": "Japanese",
+          "note": "full member"
+        },
+        {
+          "name": "会士",
+          "reading": "Huishi",
+          "language": "Chinese",
+          "note": "fellow of a learned body"
+        },
+        {
+          "name": "정회원",
+          "reading": "Jeonghoewon",
+          "language": "Korean",
+          "note": "full member"
+        }
+      ]
+    },
+    {
+      "level": 42,
+      "name": "Senior Fellow",
+      "equivalents": [
+        {
+          "name": "Senior Member",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Principal Fellow",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "上級会員",
+          "reading": "Jokyu Kaiin",
+          "language": "Japanese",
+          "note": "senior member"
+        },
+        {
+          "name": "资深会员",
+          "reading": "Zishen Huiyuan",
+          "language": "Chinese",
+          "note": "senior member"
+        },
+        {
+          "name": "Socio Anziano",
+          "language": "Italian",
+          "note": "senior member"
+        },
+        {
+          "name": "Miembro Sénior",
+          "language": "Spanish",
+          "note": "senior member"
+        },
+        {
+          "name": "Sociétaire",
+          "language": "French",
+          "note": "a full share-holding member, above a pensionnaire"
+        },
+        {
+          "name": "Vollmitglied",
+          "language": "German",
+          "note": "full member"
+        },
+        {
+          "name": "선임회원",
+          "reading": "Seonim Hoewon",
+          "language": "Korean",
+          "note": "senior member"
+        }
+      ]
+    },
+    {
+      "level": 43,
+      "name": "Warden",
+      "equivalents": [
+        {
+          "name": "Guild Warden",
+          "language": "English",
+          "note": "an officer of a guild under its head"
+        },
+        {
+          "name": "Keeper",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Custodian",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "世話役",
+          "reading": "Sewayaku",
+          "language": "Japanese",
+          "note": "the one who looks after the body's affairs"
+        },
+        {
+          "name": "Guardián",
+          "language": "Spanish",
+          "note": "guardian"
+        },
+        {
+          "name": "Gardien",
+          "language": "French",
+          "note": "keeper"
+        },
+        {
+          "name": "Hüter",
+          "language": "German",
+          "note": "keeper, guardian"
+        },
+        {
+          "name": "Guardiano",
+          "language": "Italian",
+          "note": "guardian"
+        },
+        {
+          "name": "管事",
+          "reading": "Guanshi",
+          "language": "Chinese",
+          "note": "the one who manages affairs"
+        }
+      ]
+    },
+    {
+      "level": 44,
+      "name": "Steward",
+      "equivalents": [
+        {
+          "name": "Seneschal",
+          "language": "English",
+          "note": "the steward of a great household"
+        },
+        {
+          "name": "Majordomo",
+          "language": "English",
+          "note": "head of a household"
+        },
+        {
+          "name": "Chamberlain",
+          "language": "English",
+          "note": "officer in charge of a household"
+        },
+        {
+          "name": "執事",
+          "reading": "Shitsuji",
+          "language": "Japanese",
+          "note": "steward of a house"
+        },
+        {
+          "name": "Mayordomo",
+          "language": "Spanish",
+          "note": "steward"
+        },
+        {
+          "name": "Intendant",
+          "language": "French",
+          "note": "steward of an estate"
+        },
+        {
+          "name": "Verwalter",
+          "language": "German",
+          "note": "administrator, steward"
+        },
+        {
+          "name": "Fattore",
+          "language": "Italian",
+          "note": "the steward of an estate"
+        },
+        {
+          "name": "管家",
+          "reading": "Guanjia",
+          "language": "Chinese",
+          "note": "house steward"
+        }
+      ]
+    },
+    {
+      "level": 45,
+      "name": "Marshal",
+      "equivalents": [
+        {
+          "name": "Sergeant-at-Arms",
+          "language": "English",
+          "note": "the officer who keeps order in an assembly"
+        },
+        {
+          "name": "Officer of the Day",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "進行役",
+          "reading": "Shinkoyaku",
+          "language": "Japanese",
+          "note": "the one who runs the proceedings"
+        },
+        {
+          "name": "Maréchal des Logis",
+          "language": "French",
+          "note": "a cavalry rank, marshal of the quarters"
+        },
+        {
+          "name": "Maresciallo",
+          "language": "Italian",
+          "note": "a warrant officer, marshal of a unit"
+        },
+        {
+          "name": "Wachtmeister",
+          "language": "German",
+          "note": "an officer who keeps order"
+        },
+        {
+          "name": "Alguacil",
+          "language": "Spanish",
+          "note": "an officer who keeps order and serves orders"
+        },
+        {
+          "name": "Пристав",
+          "reading": "Pristav",
+          "language": "Russian",
+          "note": "an officer charged with keeping order"
+        },
+        {
+          "name": "纠察长",
+          "reading": "Jiuchazhang",
+          "language": "Chinese",
+          "note": "chief marshal of order"
+        }
+      ]
+    },
+    {
+      "level": 46,
+      "name": "Provost",
+      "equivalents": [
+        {
+          "name": "Head of House",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Vice-Rector",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Deputy Head",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Prévôt",
+          "language": "French",
+          "note": "provost"
+        },
+        {
+          "name": "Preboste",
+          "language": "Spanish",
+          "note": "provost"
+        },
+        {
+          "name": "Prorettore",
+          "language": "Italian",
+          "note": "pro-rector"
+        },
+        {
+          "name": "Prorektor",
+          "language": "Polish",
+          "note": "pro-rector"
+        },
+        {
+          "name": "教務長",
+          "reading": "Kyomucho",
+          "language": "Japanese",
+          "note": "head of academic affairs"
+        },
+        {
+          "name": "교무처장",
+          "reading": "Gyomu Cheojang",
+          "language": "Korean",
+          "note": "head of academic affairs"
+        }
+      ]
+    },
+    {
+      "level": 47,
+      "name": "Dean",
+      "equivalents": [
+        {
+          "name": "Faculty Head",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Doyen",
+          "language": "French",
+          "note": "dean, the senior of a faculty"
+        },
+        {
+          "name": "Decano",
+          "language": "Spanish",
+          "note": "dean"
+        },
+        {
+          "name": "Dekan",
+          "language": "German",
+          "note": "dean"
+        },
+        {
+          "name": "Dziekan",
+          "language": "Polish",
+          "note": "dean"
+        },
+        {
+          "name": "Preside di Facoltà",
+          "language": "Italian",
+          "note": "faculty dean"
+        },
+        {
+          "name": "学部長",
+          "reading": "Gakubucho",
+          "language": "Japanese",
+          "note": "dean of a faculty"
+        },
+        {
+          "name": "학장",
+          "reading": "Hakjang",
+          "language": "Korean",
+          "note": "dean of a college"
+        },
+        {
+          "name": "院长",
+          "reading": "Yuanzhang",
+          "language": "Chinese",
+          "note": "dean of a school"
+        }
+      ]
+    },
+    {
+      "level": 48,
+      "name": "Rector",
+      "equivalents": [
+        {
+          "name": "University Head",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Principal",
+          "language": "English",
+          "note": "head of a college or university"
+        },
+        {
+          "name": "Rettore",
+          "language": "Italian",
+          "note": "rector"
+        },
+        {
+          "name": "Recteur",
+          "language": "French",
+          "note": "rector"
+        },
+        {
+          "name": "Rektor",
+          "language": "German",
+          "note": "rector"
+        },
+        {
+          "name": "Rector Magnífico",
+          "language": "Spanish",
+          "note": "the formal style of a university rector"
+        },
+        {
+          "name": "学長",
+          "reading": "Gakucho",
+          "language": "Japanese",
+          "note": "head of a university"
+        },
+        {
+          "name": "총장",
+          "reading": "Chongjang",
+          "language": "Korean",
+          "note": "university president"
+        },
+        {
+          "name": "校长",
+          "reading": "Xiaozhang",
+          "language": "Chinese",
+          "note": "head of a school or university"
+        }
+      ]
+    },
+    {
+      "level": 49,
+      "name": "Chancellor",
+      "equivalents": [
+        {
+          "name": "Presiding Head",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Titular Head",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Kanclerz",
+          "language": "Polish",
+          "note": "chancellor"
+        },
+        {
+          "name": "Kanzler",
+          "language": "German",
+          "note": "chancellor"
+        },
+        {
+          "name": "Chancelier",
+          "language": "French",
+          "note": "chancellor"
+        },
+        {
+          "name": "Canciller",
+          "language": "Spanish",
+          "note": "chancellor"
+        },
+        {
+          "name": "Cancelliere",
+          "language": "Italian",
+          "note": "chancellor"
+        },
+        {
+          "name": "Kansleri",
+          "language": "Finnish",
+          "note": "chancellor of a university"
+        },
+        {
+          "name": "総長",
+          "reading": "Socho",
+          "language": "Japanese",
+          "note": "chancellor of a university"
+        }
+      ]
+    },
+    {
+      "level": 50,
+      "name": "Elder",
+      "equivalents": [
+        {
+          "name": "Greybeard",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Senior",
+          "language": "English",
+          "note": "the senior of the body"
+        },
+        {
+          "name": "長老",
+          "reading": "Choro",
+          "language": "Japanese",
+          "note": "elder, senior figure"
+        },
+        {
+          "name": "元老",
+          "reading": "Yuanlao",
+          "language": "Chinese",
+          "note": "a senior elder of long standing"
+        },
+        {
+          "name": "Anciano",
+          "language": "Spanish",
+          "note": "elder"
+        },
+        {
+          "name": "Ancien",
+          "language": "French",
+          "note": "the senior member"
+        },
+        {
+          "name": "Ältester",
+          "language": "German",
+          "note": "the eldest, elder of a group"
+        },
+        {
+          "name": "Anziano",
+          "language": "Italian",
+          "note": "elder"
+        },
+        {
+          "name": "원로",
+          "reading": "Wonro",
+          "language": "Korean",
+          "note": "elder, senior figure"
+        }
+      ]
+    },
+    {
+      "level": 51,
+      "name": "Adept",
+      "equivalents": [
+        {
+          "name": "Proficient",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Skilled Hand",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Adeptus Minor",
+          "language": "Latin",
+          "note": "the first adept grade of the Golden Dawn ladder"
+        },
+        {
+          "name": "熟達者",
+          "reading": "Jukutatsusha",
+          "language": "Japanese",
+          "note": "one who has attained skill"
+        },
+        {
+          "name": "高手",
+          "reading": "Gaoshou",
+          "language": "Chinese",
+          "note": "a skilled hand"
+        },
+        {
+          "name": "숙련자",
+          "reading": "Sungnyeonja",
+          "language": "Korean",
+          "note": "a skilled person"
+        },
+        {
+          "name": "Könner",
+          "language": "German",
+          "note": "one who can do it, a skilled one"
+        },
+        {
+          "name": "Provetto",
+          "language": "Italian",
+          "note": "accomplished, well-practised"
+        },
+        {
+          "name": "ماهر",
+          "reading": "Mahir",
+          "language": "Arabic",
+          "note": "skilled"
+        }
+      ]
+    },
+    {
+      "level": 52,
+      "name": "Scholar",
+      "equivalents": [
+        {
+          "name": "Learned One",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Person of Learning",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "学者",
+          "reading": "Gakusha",
+          "language": "Japanese",
+          "note": "scholar"
+        },
+        {
+          "name": "Erudito",
+          "language": "Spanish",
+          "note": "erudite scholar"
+        },
+        {
+          "name": "Érudit",
+          "language": "French",
+          "note": "erudite scholar"
+        },
+        {
+          "name": "Gelehrter",
+          "language": "German",
+          "note": "a learned one"
+        },
+        {
+          "name": "Studioso",
+          "language": "Italian",
+          "note": "scholar"
+        },
+        {
+          "name": "पण्डित",
+          "reading": "Pandit",
+          "language": "Sanskrit",
+          "note": "a learned man"
+        },
+        {
+          "name": "학자",
+          "reading": "Hakja",
+          "language": "Korean",
+          "note": "scholar"
+        }
+      ]
+    },
+    {
+      "level": 53,
+      "name": "Connoisseur",
+      "equivalents": [
+        {
+          "name": "Cognoscente",
+          "language": "English",
+          "note": "one who knows the field"
+        },
+        {
+          "name": "Fine Judge",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "目利き",
+          "reading": "Mekiki",
+          "language": "Japanese",
+          "note": "one with an eye for quality"
+        },
+        {
+          "name": "Kenner",
+          "language": "German",
+          "note": "one who knows"
+        },
+        {
+          "name": "Entendido",
+          "language": "Spanish",
+          "note": "one who understands the subject"
+        },
+        {
+          "name": "Intenditore",
+          "language": "Italian",
+          "note": "connoisseur"
+        },
+        {
+          "name": "Знаток",
+          "reading": "Znatok",
+          "language": "Russian",
+          "note": "connoisseur"
+        },
+        {
+          "name": "鉴赏家",
+          "reading": "Jianshangjia",
+          "language": "Chinese",
+          "note": "one who appraises"
+        },
+        {
+          "name": "감정가",
+          "reading": "Gamjeongga",
+          "language": "Korean",
+          "note": "appraiser, connoisseur"
+        }
+      ]
+    },
+    {
+      "level": 54,
+      "name": "Maven",
+      "equivalents": [
+        {
+          "name": "Boffin",
+          "language": "English",
+          "note": "one with deep knowledge of a subject"
+        },
+        {
+          "name": "Wonk",
+          "language": "English",
+          "note": "one who knows the detail"
+        },
+        {
+          "name": "מבֿין",
+          "reading": "Meyvn",
+          "language": "Yiddish",
+          "note": "one who understands, the root of maven"
+        },
+        {
+          "name": "通",
+          "reading": "Tsu",
+          "language": "Japanese",
+          "note": "one well versed in a field"
+        },
+        {
+          "name": "行家",
+          "reading": "Hangjia",
+          "language": "Chinese",
+          "note": "an insider who knows the trade"
+        },
+        {
+          "name": "Ducho",
+          "language": "Spanish",
+          "note": "well versed"
+        },
+        {
+          "name": "Fachmann",
+          "language": "German",
+          "note": "one who knows the subject"
+        },
+        {
+          "name": "Дока",
+          "reading": "Doka",
+          "language": "Russian",
+          "note": "one who really knows the work"
+        },
+        {
+          "name": "Ehil",
+          "language": "Turkish",
+          "note": "competent, versed in a thing"
+        }
+      ]
+    },
+    {
+      "level": 55,
+      "name": "Academician",
+      "equivalents": [
+        {
+          "name": "Academy Member",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Académicien",
+          "language": "French",
+          "note": "member of the Académie"
+        },
+        {
+          "name": "Académico",
+          "language": "Spanish",
+          "note": "academician"
+        },
+        {
+          "name": "Accademico",
+          "language": "Italian",
+          "note": "academician"
+        },
+        {
+          "name": "Академик",
+          "reading": "Akademik",
+          "language": "Russian",
+          "note": "academician"
+        },
+        {
+          "name": "Akademisyen",
+          "language": "Turkish",
+          "note": "academician"
+        },
+        {
+          "name": "院士",
+          "reading": "Yuanshi",
+          "language": "Chinese",
+          "note": "member of the academy"
+        },
+        {
+          "name": "学士院会員",
+          "reading": "Gakushiin Kaiin",
+          "language": "Japanese",
+          "note": "member of the academy"
+        },
+        {
+          "name": "학술원 회원",
+          "reading": "Haksurwon Hoewon",
+          "language": "Korean",
+          "note": "member of the academy"
+        }
+      ]
+    },
+    {
+      "level": 56,
+      "name": "Professor",
+      "equivalents": [
+        {
+          "name": "Chair Holder",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Full Professor",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "教授",
+          "reading": "Kyoju",
+          "language": "Japanese",
+          "note": "professor"
+        },
+        {
+          "name": "Catedrático",
+          "language": "Spanish",
+          "note": "chair-holding professor"
+        },
+        {
+          "name": "Professeur Titulaire",
+          "language": "French",
+          "note": "tenured professor"
+        },
+        {
+          "name": "Ordinarius",
+          "language": "German",
+          "note": "the professor holding the chair"
+        },
+        {
+          "name": "Cattedratico",
+          "language": "Italian",
+          "note": "chair-holding professor"
+        },
+        {
+          "name": "교수",
+          "reading": "Gyosu",
+          "language": "Korean",
+          "note": "professor"
+        },
+        {
+          "name": "正教授",
+          "reading": "Zhengjiaoshou",
+          "language": "Chinese",
+          "note": "full professor"
+        }
+      ]
+    },
+    {
+      "level": 57,
+      "name": "Authority",
+      "equivalents": [
+        {
+          "name": "Leading Authority",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Last Word",
+          "language": "English",
+          "note": "the one whose word settles it"
+        },
+        {
+          "name": "権威",
+          "reading": "Ken'i",
+          "language": "Japanese",
+          "note": "an authority in a field"
+        },
+        {
+          "name": "Autoridad",
+          "language": "Spanish",
+          "note": "authority"
+        },
+        {
+          "name": "Autorité",
+          "language": "French",
+          "note": "authority"
+        },
+        {
+          "name": "Autorität",
+          "language": "German",
+          "note": "authority"
+        },
+        {
+          "name": "Autorità",
+          "language": "Italian",
+          "note": "authority"
+        },
+        {
+          "name": "权威",
+          "reading": "Quanwei",
+          "language": "Chinese",
+          "note": "authority"
+        },
+        {
+          "name": "권위자",
+          "reading": "Gwonwija",
+          "language": "Korean",
+          "note": "an authority"
+        }
+      ]
+    },
+    {
+      "level": 58,
+      "name": "Savant",
+      "equivalents": [
+        {
+          "name": "Deep Scholar",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Great Scholar",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "碩学",
+          "reading": "Sekigaku",
+          "language": "Japanese",
+          "note": "a scholar of vast learning"
+        },
+        {
+          "name": "Sabio",
+          "language": "Spanish",
+          "note": "one of deep learning"
+        },
+        {
+          "name": "Docte",
+          "language": "French",
+          "note": "learned"
+        },
+        {
+          "name": "Hochgelehrter",
+          "language": "German",
+          "note": "a highly learned one"
+        },
+        {
+          "name": "Dotto",
+          "language": "Italian",
+          "note": "learned one"
+        },
+        {
+          "name": "석학",
+          "reading": "Seokhak",
+          "language": "Korean",
+          "note": "a great scholar"
+        },
+        {
+          "name": "Эрудит",
+          "reading": "Erudit",
+          "language": "Russian",
+          "note": "one of wide learning"
+        }
+      ]
+    },
+    {
+      "level": 59,
+      "name": "Polymath",
+      "equivalents": [
+        {
+          "name": "Universal Scholar",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Renaissance Mind",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Homo Universalis",
+          "language": "Latin",
+          "note": "the universal person"
+        },
+        {
+          "name": "Universalgelehrter",
+          "language": "German",
+          "note": "universal scholar"
+        },
+        {
+          "name": "博学者",
+          "reading": "Hakugakusha",
+          "language": "Japanese",
+          "note": "one of broad learning"
+        },
+        {
+          "name": "博学家",
+          "reading": "Boxuejia",
+          "language": "Chinese",
+          "note": "polymath"
+        },
+        {
+          "name": "Polímata",
+          "language": "Spanish",
+          "note": "polymath"
+        },
+        {
+          "name": "Polymathe",
+          "language": "French",
+          "note": "polymath"
+        },
+        {
+          "name": "박식가",
+          "reading": "Baksikga",
+          "language": "Korean",
+          "note": "one of wide knowledge"
+        }
+      ]
+    },
+    {
+      "level": 60,
+      "name": "Magister",
+      "equivalents": [
+        {
+          "name": "Licentiate",
+          "language": "English",
+          "note": "one licensed to teach or practise"
+        },
+        {
+          "name": "Doctor",
+          "language": "English",
+          "note": "from docere, one qualified to teach"
+        },
+        {
+          "name": "Magister Artium",
+          "language": "Latin",
+          "note": "the medieval degree licensing a man to teach"
+        },
+        {
+          "name": "Habilitierter",
+          "language": "German",
+          "note": "one who has earned the licence to teach"
+        },
+        {
+          "name": "Магистр",
+          "reading": "Magistr",
+          "language": "Russian",
+          "note": "magister, a taught rank"
+        },
+        {
+          "name": "مجاز",
+          "reading": "Mujaz",
+          "language": "Arabic",
+          "note": "one granted the licence to teach by a master"
+        },
+        {
+          "name": "사범",
+          "reading": "Sabeom",
+          "language": "Korean",
+          "note": "one qualified to instruct"
+        },
+        {
+          "name": "教习",
+          "reading": "Jiaoxi",
+          "language": "Chinese",
+          "note": "an instructor of an old academy"
+        },
+        {
+          "name": "有段者",
+          "reading": "Yudansha",
+          "language": "Japanese",
+          "note": "a holder of dan grade, past the kyu ranks"
+        }
+      ]
+    },
+    {
+      "level": 61,
+      "name": "Guru",
+      "equivalents": [
+        {
+          "name": "Teacher of Teachers",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Guiding Light",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "導師",
+          "reading": "Doshi",
+          "language": "Japanese",
+          "note": "the teacher who guides a body of students"
+        },
+        {
+          "name": "Lehrmeister",
+          "language": "German",
+          "note": "a teaching master"
+        },
+        {
+          "name": "Maître à Penser",
+          "language": "French",
+          "note": "a thinker whose teaching others follow"
+        },
+        {
+          "name": "스승",
+          "reading": "Seuseung",
+          "language": "Korean",
+          "note": "one's teacher, the one who forms you"
+        },
+        {
+          "name": "恩师",
+          "reading": "Enshi",
+          "language": "Chinese",
+          "note": "one's revered teacher"
+        },
+        {
+          "name": "Guro",
+          "language": "Tagalog",
+          "note": "teacher, the title of a master in Filipino martial arts"
+        },
+        {
+          "name": "معلم",
+          "reading": "Muallim",
+          "language": "Arabic",
+          "note": "teacher, the one who instructs"
+        }
+      ]
+    },
+    {
+      "level": 62,
+      "name": "Maestro",
+      "equivalents": [
+        {
+          "name": "Conductor",
+          "language": "English",
+          "note": "the one who directs the players"
+        },
+        {
+          "name": "Kapellmeister",
+          "language": "German",
+          "note": "director of a chapel or orchestra"
+        },
+        {
+          "name": "Chef d'Orchestre",
+          "language": "French",
+          "note": "conductor"
+        },
+        {
+          "name": "Direttore",
+          "language": "Italian",
+          "note": "conductor"
+        },
+        {
+          "name": "Dirigent",
+          "language": "Swedish",
+          "note": "conductor"
+        },
+        {
+          "name": "Дирижёр",
+          "reading": "Dirizhyor",
+          "language": "Russian",
+          "note": "conductor"
+        },
+        {
+          "name": "指揮者",
+          "reading": "Shikisha",
+          "language": "Japanese",
+          "note": "conductor"
+        },
+        {
+          "name": "指挥家",
+          "reading": "Zhihuijia",
+          "language": "Chinese",
+          "note": "conductor"
+        },
+        {
+          "name": "지휘자",
+          "reading": "Jihwija",
+          "language": "Korean",
+          "note": "conductor"
+        }
+      ]
+    },
+    {
+      "level": 63,
+      "name": "Sifu",
+      "equivalents": [
+        {
+          "name": "Head of the Hall",
+          "language": "English",
+          "note": "the teacher who heads a training hall"
+        },
+        {
+          "name": "Teacher-Father",
+          "language": "English",
+          "note": "the sense of the word: a teacher who stands as a parent"
+        },
+        {
+          "name": "師父",
+          "reading": "Shifu",
+          "language": "Chinese",
+          "note": "master-father, the teacher of a school"
+        },
+        {
+          "name": "사부",
+          "reading": "Sabu",
+          "language": "Korean",
+          "note": "master-teacher"
+        },
+        {
+          "name": "師匠",
+          "reading": "Shisho",
+          "language": "Japanese",
+          "note": "one's master in an art"
+        },
+        {
+          "name": "ครู",
+          "reading": "Khru",
+          "language": "Thai",
+          "note": "teacher, the kru of a boxing camp"
+        },
+        {
+          "name": "Thầy",
+          "language": "Vietnamese",
+          "note": "teacher, master"
+        },
+        {
+          "name": "Lehrherr",
+          "language": "German",
+          "note": "the master who takes pupils into his house"
+        },
+        {
+          "name": "Caposcuola",
+          "language": "Italian",
+          "note": "the head of a school of an art"
+        }
+      ]
+    },
+    {
+      "level": 64,
+      "name": "Ustad",
+      "equivalents": [
+        {
+          "name": "Court Musician",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Gharana Head",
+          "language": "English",
+          "note": "head of a family school of Indian classical music"
+        },
+        {
+          "name": "أستاذ",
+          "reading": "Ustadh",
+          "language": "Arabic",
+          "note": "master, professor"
+        },
+        {
+          "name": "Üstat",
+          "language": "Turkish",
+          "note": "master of an art"
+        },
+        {
+          "name": "名手",
+          "reading": "Meishu",
+          "language": "Japanese",
+          "note": "a distinguished performer"
+        },
+        {
+          "name": "名家",
+          "reading": "Mingjia",
+          "language": "Chinese",
+          "note": "a distinguished master of an art"
+        },
+        {
+          "name": "명인",
+          "reading": "Myeongin",
+          "language": "Korean",
+          "note": "a master of an art"
+        },
+        {
+          "name": "Nghệ Nhân",
+          "language": "Vietnamese",
+          "note": "a master artist or craftsman"
+        },
+        {
+          "name": "Empu",
+          "language": "Indonesian",
+          "note": "a title of great respect for a master smith or craftsman"
+        }
+      ]
+    },
+    {
+      "level": 65,
+      "name": "Acharya",
+      "equivalents": [
+        {
+          "name": "Head Preceptor",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Keeper of the Way",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "อาจารย์",
+          "reading": "Ajarn",
+          "language": "Thai",
+          "note": "senior teacher, from the same Sanskrit root"
+        },
+        {
+          "name": "Guru Besar",
+          "language": "Indonesian",
+          "note": "great teacher, also the title of a full professor"
+        },
+        {
+          "name": "महागुरु",
+          "reading": "Mahaguru",
+          "language": "Sanskrit",
+          "note": "great teacher"
+        },
+        {
+          "name": "Hoca",
+          "language": "Turkish",
+          "note": "teacher, master of a subject"
+        },
+        {
+          "name": "Mwalimu",
+          "language": "Swahili",
+          "note": "teacher, a title of great respect"
+        },
+        {
+          "name": "宗匠",
+          "reading": "Shosho",
+          "language": "Japanese",
+          "note": "the head teacher of a style in tea or verse"
+        },
+        {
+          "name": "Gurukkal",
+          "language": "Malayalam",
+          "note": "the master of a kalari training hall"
+        }
+      ]
+    },
+    {
+      "level": 66,
+      "name": "Shihan",
+      "equivalents": [
+        {
+          "name": "Head Instructor",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Model Teacher",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Dojo Head",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "관장",
+          "reading": "Gwanjang",
+          "language": "Korean",
+          "note": "the head of a training hall"
+        },
+        {
+          "name": "掌门",
+          "reading": "Zhangmen",
+          "language": "Chinese",
+          "note": "the head of a martial school"
+        },
+        {
+          "name": "Maître d'Armes",
+          "language": "French",
+          "note": "a qualified master of arms"
+        },
+        {
+          "name": "Fechtmeister",
+          "language": "German",
+          "note": "a fencing master"
+        },
+        {
+          "name": "Наставник",
+          "reading": "Nastavnik",
+          "language": "Russian",
+          "note": "a mentor-instructor of standing"
+        },
+        {
+          "name": "教士",
+          "reading": "Kyoshi",
+          "language": "Japanese",
+          "note": "a teaching title above renshi"
+        }
+      ]
+    },
+    {
+      "level": 67,
+      "name": "Exemplar",
+      "equivalents": [
+        {
+          "name": "Model",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Role Model",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "手本",
+          "reading": "Tehon",
+          "language": "Japanese",
+          "note": "the model that others copy from"
+        },
+        {
+          "name": "模范",
+          "reading": "Mofan",
+          "language": "Chinese",
+          "note": "a model, an exemplar"
+        },
+        {
+          "name": "Modelo",
+          "language": "Spanish",
+          "note": "model"
+        },
+        {
+          "name": "Modèle",
+          "language": "French",
+          "note": "model"
+        },
+        {
+          "name": "Vorbild",
+          "language": "German",
+          "note": "the image set before others"
+        },
+        {
+          "name": "Modello",
+          "language": "Italian",
+          "note": "model"
+        },
+        {
+          "name": "귀감",
+          "reading": "Gwigam",
+          "language": "Korean",
+          "note": "a mirror and model for others"
+        }
+      ]
+    },
+    {
+      "level": 68,
+      "name": "Emeritus",
+      "equivalents": [
+        {
+          "name": "Honoured Senior",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Honorary Fellow",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Emérito",
+          "language": "Spanish",
+          "note": "emeritus"
+        },
+        {
+          "name": "Émérite",
+          "language": "French",
+          "note": "emeritus"
+        },
+        {
+          "name": "Emeritierter",
+          "language": "German",
+          "note": "one retired in honour"
+        },
+        {
+          "name": "Emerito",
+          "language": "Italian",
+          "note": "emeritus"
+        },
+        {
+          "name": "名誉教授",
+          "reading": "Meiyo Kyoju",
+          "language": "Japanese",
+          "note": "professor emeritus"
+        },
+        {
+          "name": "명예교수",
+          "reading": "Myeongye Gyosu",
+          "language": "Korean",
+          "note": "professor emeritus"
+        },
+        {
+          "name": "Заслуженный",
+          "reading": "Zasluzhenny",
+          "language": "Russian",
+          "note": "honoured, a title for distinguished service"
+        }
+      ]
+    },
+    {
+      "level": 69,
+      "name": "Torchbearer",
+      "equivalents": [
+        {
+          "name": "Flame Keeper",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Light Bearer",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "松明持ち",
+          "reading": "Taimatsumochi",
+          "language": "Japanese",
+          "note": "torch holder"
+        },
+        {
+          "name": "火炬手",
+          "reading": "Huojushou",
+          "language": "Chinese",
+          "note": "torchbearer"
+        },
+        {
+          "name": "Fackelträger",
+          "language": "German",
+          "note": "torchbearer"
+        },
+        {
+          "name": "Porte-Flambeau",
+          "language": "French",
+          "note": "torchbearer"
+        },
+        {
+          "name": "Tedoforo",
+          "language": "Italian",
+          "note": "torchbearer"
+        },
+        {
+          "name": "Δαδούχος",
+          "reading": "Dadouchos",
+          "language": "Greek",
+          "note": "torchbearer"
+        },
+        {
+          "name": "성화 봉송자",
+          "reading": "Seonghwa Bongsongja",
+          "language": "Korean",
+          "note": "torch runner"
+        }
+      ]
+    },
+    {
+      "level": 70,
+      "name": "Trailblazer",
+      "equivalents": [
+        {
+          "name": "Pathfinder",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Groundbreaker",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "先駆者",
+          "reading": "Senkusha",
+          "language": "Japanese",
+          "note": "one who runs ahead of the rest"
+        },
+        {
+          "name": "开拓者",
+          "reading": "Kaituozhe",
+          "language": "Chinese",
+          "note": "one who opens new ground"
+        },
+        {
+          "name": "Adelantado",
+          "language": "Spanish",
+          "note": "one sent ahead, a historical title"
+        },
+        {
+          "name": "Défricheur",
+          "language": "French",
+          "note": "one who clears new land"
+        },
+        {
+          "name": "Wegbereiter",
+          "language": "German",
+          "note": "one who prepares the way"
+        },
+        {
+          "name": "Apripista",
+          "language": "Italian",
+          "note": "one who opens the track"
+        },
+        {
+          "name": "개척자",
+          "reading": "Gaecheokja",
+          "language": "Korean",
+          "note": "one who opens new ground"
+        }
+      ]
+    },
+    {
+      "level": 71,
+      "name": "Pioneer",
+      "equivalents": [
+        {
+          "name": "First Mover",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Path Opener",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "草分け",
+          "reading": "Kusawake",
+          "language": "Japanese",
+          "note": "the one who parted the grass first"
+        },
+        {
+          "name": "先驱",
+          "reading": "Xianqu",
+          "language": "Chinese",
+          "note": "forerunner"
+        },
+        {
+          "name": "Pionero",
+          "language": "Spanish",
+          "note": "pioneer"
+        },
+        {
+          "name": "Pionnier",
+          "language": "French",
+          "note": "pioneer"
+        },
+        {
+          "name": "Pionier",
+          "language": "German",
+          "note": "pioneer"
+        },
+        {
+          "name": "Pioniere",
+          "language": "Italian",
+          "note": "pioneer"
+        },
+        {
+          "name": "선구자",
+          "reading": "Seonguja",
+          "language": "Korean",
+          "note": "pioneer"
+        }
+      ]
+    },
+    {
+      "level": 72,
+      "name": "Lodestar",
+      "equivalents": [
+        {
+          "name": "Guiding Star",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "North Star",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Polestar",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "道標",
+          "reading": "Michishirube",
+          "language": "Japanese",
+          "note": "the mark that shows the way"
+        },
+        {
+          "name": "Estrella Polar",
+          "language": "Spanish",
+          "note": "pole star"
+        },
+        {
+          "name": "Étoile Polaire",
+          "language": "French",
+          "note": "pole star"
+        },
+        {
+          "name": "Leitstern",
+          "language": "German",
+          "note": "guiding star"
+        },
+        {
+          "name": "Stella Polare",
+          "language": "Italian",
+          "note": "pole star"
+        },
+        {
+          "name": "北极星",
+          "reading": "Beijixing",
+          "language": "Chinese",
+          "note": "the pole star"
+        }
+      ]
+    },
+    {
+      "level": 73,
+      "name": "Luminary",
+      "equivalents": [
+        {
+          "name": "Shining Light",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Leading Light",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Beacon",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "泰斗",
+          "reading": "Taito",
+          "language": "Japanese",
+          "note": "a towering figure of a field"
+        },
+        {
+          "name": "巨擘",
+          "reading": "Jubo",
+          "language": "Chinese",
+          "note": "the thumb, the foremost figure of a field"
+        },
+        {
+          "name": "Lumbrera",
+          "language": "Spanish",
+          "note": "a shining mind"
+        },
+        {
+          "name": "Sommité",
+          "language": "French",
+          "note": "a leading figure of a field"
+        },
+        {
+          "name": "Leuchte",
+          "language": "German",
+          "note": "a shining light of a field"
+        },
+        {
+          "name": "Luminare",
+          "language": "Italian",
+          "note": "luminary"
+        }
+      ]
+    },
+    {
+      "level": 74,
+      "name": "Laureate",
+      "equivalents": [
+        {
+          "name": "Laurel Crowned",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Prizewinner",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Medallist",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "受賞者",
+          "reading": "Jushosha",
+          "language": "Japanese",
+          "note": "one who has received the prize"
+        },
+        {
+          "name": "桂冠",
+          "reading": "Guiguan",
+          "language": "Chinese",
+          "note": "the laurel crown, said of a laureate"
+        },
+        {
+          "name": "Laureado",
+          "language": "Spanish",
+          "note": "laureate"
+        },
+        {
+          "name": "Lauréat",
+          "language": "French",
+          "note": "laureate"
+        },
+        {
+          "name": "Preisträger",
+          "language": "German",
+          "note": "prize-bearer"
+        },
+        {
+          "name": "Laureato",
+          "language": "Italian",
+          "note": "laureate"
+        }
+      ]
+    },
+    {
+      "level": 75,
+      "name": "Elder Statesman",
+      "equivalents": [
+        {
+          "name": "Senior Counsel",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Grand Old Figure",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "重鎮",
+          "reading": "Juchin",
+          "language": "Japanese",
+          "note": "an influential senior figure of a field"
+        },
+        {
+          "name": "耆宿",
+          "reading": "Qisu",
+          "language": "Chinese",
+          "note": "a venerable senior of great standing"
+        },
+        {
+          "name": "Prohombre",
+          "language": "Spanish",
+          "note": "a leading man of a body"
+        },
+        {
+          "name": "Notable",
+          "language": "French",
+          "note": "one of the leading figures"
+        },
+        {
+          "name": "Grandseigneur",
+          "language": "German",
+          "note": "a grand old figure of his field"
+        },
+        {
+          "name": "Notabile",
+          "language": "Italian",
+          "note": "a leading figure"
+        },
+        {
+          "name": "Аксакал",
+          "reading": "Aksakal",
+          "language": "Russian",
+          "note": "white beard, an elder whose word carries"
+        }
+      ]
+    },
+    {
+      "level": 76,
+      "name": "Standard-Setter",
+      "equivalents": [
+        {
+          "name": "Pacesetter",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Gold Standard",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "第一人者",
+          "reading": "Daiichininsha",
+          "language": "Japanese",
+          "note": "the foremost person in a field"
+        },
+        {
+          "name": "标杆",
+          "reading": "Biaogan",
+          "language": "Chinese",
+          "note": "the pole others measure by"
+        },
+        {
+          "name": "Referente",
+          "language": "Spanish",
+          "note": "the reference others measure against"
+        },
+        {
+          "name": "Référence",
+          "language": "French",
+          "note": "the reference of a field"
+        },
+        {
+          "name": "Maßstab",
+          "language": "German",
+          "note": "the measure, the standard"
+        },
+        {
+          "name": "Riferimento",
+          "language": "Italian",
+          "note": "the point of reference"
+        },
+        {
+          "name": "Эталон",
+          "reading": "Etalon",
+          "language": "Russian",
+          "note": "the reference standard itself"
+        }
+      ]
+    },
+    {
+      "level": 77,
+      "name": "Grand Instructor",
+      "equivalents": [
+        {
+          "name": "Chief Instructor",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Trainer of Teachers",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "総師範",
+          "reading": "Soshihan",
+          "language": "Japanese",
+          "note": "the head shihan over all instructors"
+        },
+        {
+          "name": "总教练",
+          "reading": "Zongjiaolian",
+          "language": "Chinese",
+          "note": "head coach over all coaches"
+        },
+        {
+          "name": "Directeur Technique",
+          "language": "French",
+          "note": "the head of instruction in a federation"
+        },
+        {
+          "name": "Cheftrainer",
+          "language": "German",
+          "note": "head trainer"
+        },
+        {
+          "name": "Director Técnico",
+          "language": "Spanish",
+          "note": "technical director"
+        },
+        {
+          "name": "Direttore Tecnico",
+          "language": "Italian",
+          "note": "technical director"
+        },
+        {
+          "name": "총사범",
+          "reading": "Chongsabeom",
+          "language": "Korean",
+          "note": "chief instructor"
+        }
+      ]
+    },
+    {
+      "level": 78,
+      "name": "Grand Preceptor",
+      "equivalents": [
+        {
+          "name": "Head of the Teaching",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Preceptor-General",
+          "language": "English",
+          "note": "the head of a teaching order"
+        },
+        {
+          "name": "太師",
+          "reading": "Taishi",
+          "language": "Chinese",
+          "note": "Grand Preceptor, one of the Three Excellencies"
+        },
+        {
+          "name": "学頭",
+          "reading": "Gakuto",
+          "language": "Japanese",
+          "note": "the head of a school's teaching"
+        },
+        {
+          "name": "Grand Précepteur",
+          "language": "French",
+          "note": "grand preceptor"
+        },
+        {
+          "name": "Gran Precettore",
+          "language": "Italian",
+          "note": "grand preceptor"
+        },
+        {
+          "name": "Preceptor Mayor",
+          "language": "Spanish",
+          "note": "chief preceptor"
+        },
+        {
+          "name": "대사범",
+          "reading": "Daesabeom",
+          "language": "Korean",
+          "note": "grand instructor"
+        },
+        {
+          "name": "Главный Наставник",
+          "reading": "Glavny Nastavnik",
+          "language": "Russian",
+          "note": "chief mentor"
+        }
+      ]
+    },
+    {
+      "level": 79,
+      "name": "Grand Fellow",
+      "equivalents": [
+        {
+          "name": "Eminent Fellow",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Senior Academician",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "名誉会員",
+          "reading": "Meiyo Kaiin",
+          "language": "Japanese",
+          "note": "honorary member"
+        },
+        {
+          "name": "荣誉院士",
+          "reading": "Rongyu Yuanshi",
+          "language": "Chinese",
+          "note": "honorary academician"
+        },
+        {
+          "name": "Miembro de Honor",
+          "language": "Spanish",
+          "note": "member of honour"
+        },
+        {
+          "name": "Membre d'Honneur",
+          "language": "French",
+          "note": "member of honour"
+        },
+        {
+          "name": "Ehrenmitglied",
+          "language": "German",
+          "note": "honorary member"
+        },
+        {
+          "name": "Socio Onorario",
+          "language": "Italian",
+          "note": "honorary member"
+        },
+        {
+          "name": "명예회원",
+          "reading": "Myeongye Hoewon",
+          "language": "Korean",
+          "note": "honorary member"
+        }
+      ]
+    },
+    {
+      "level": 80,
+      "name": "Chief Scholar",
+      "equivalents": [
+        {
+          "name": "First Scholar",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Head Scholar",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "大学者",
+          "reading": "Daigakusha",
+          "language": "Japanese",
+          "note": "a great scholar"
+        },
+        {
+          "name": "大儒",
+          "reading": "Daru",
+          "language": "Chinese",
+          "note": "a great scholar of the first rank"
+        },
+        {
+          "name": "Gran Erudito",
+          "language": "Spanish",
+          "note": "great scholar"
+        },
+        {
+          "name": "Grand Érudit",
+          "language": "French",
+          "note": "great scholar"
+        },
+        {
+          "name": "Großgelehrter",
+          "language": "German",
+          "note": "great scholar"
+        },
+        {
+          "name": "Grande Erudito",
+          "language": "Italian",
+          "note": "great scholar"
+        },
+        {
+          "name": "대학자",
+          "reading": "Daehakja",
+          "language": "Korean",
+          "note": "great scholar"
+        }
+      ]
+    },
+    {
+      "level": 81,
+      "name": "High Savant",
+      "equivalents": [
+        {
+          "name": "Great Mind",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Mind of the Age",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "大碩学",
+          "reading": "Daisekigaku",
+          "language": "Japanese",
+          "note": "a scholar of the greatest learning"
+        },
+        {
+          "name": "鸿儒",
+          "reading": "Hongru",
+          "language": "Chinese",
+          "note": "a great and deeply learned scholar"
+        },
+        {
+          "name": "Gran Sabio",
+          "language": "Spanish",
+          "note": "great sage-scholar"
+        },
+        {
+          "name": "Grand Savant",
+          "language": "French",
+          "note": "great savant"
+        },
+        {
+          "name": "Großer Denker",
+          "language": "German",
+          "note": "a great thinker"
+        },
+        {
+          "name": "Grande Sapiente",
+          "language": "Italian",
+          "note": "one of great knowledge"
+        },
+        {
+          "name": "대석학",
+          "reading": "Daeseokhak",
+          "language": "Korean",
+          "note": "a great scholar"
+        }
+      ]
+    },
+    {
+      "level": 82,
+      "name": "High Magister",
+      "equivalents": [
+        {
+          "name": "Chief Magister",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Head of the Schools",
+          "language": "English",
+          "note": "the officer who licensed other teachers"
+        },
+        {
+          "name": "Magister Scholarum",
+          "language": "Latin",
+          "note": "master of the schools"
+        },
+        {
+          "name": "大学頭",
+          "reading": "Daigaku-no-kami",
+          "language": "Japanese",
+          "note": "head of the state academy"
+        },
+        {
+          "name": "太学博士",
+          "reading": "Taixue Boshi",
+          "language": "Chinese",
+          "note": "erudite of the imperial academy"
+        },
+        {
+          "name": "대사성",
+          "reading": "Daesaseong",
+          "language": "Korean",
+          "note": "head of the Confucian academy"
+        },
+        {
+          "name": "Maestrescuela",
+          "language": "Spanish",
+          "note": "the officer who headed the schools and licensed teachers"
+        },
+        {
+          "name": "Mestre-Escola",
+          "language": "Portuguese",
+          "note": "master of the schools"
+        },
+        {
+          "name": "Écolâtre",
+          "language": "French",
+          "note": "the scholaster who licensed a school's masters"
+        }
+      ]
+    },
+    {
+      "level": 83,
+      "name": "Head of School",
+      "equivalents": [
+        {
+          "name": "Head Teacher",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "School Head",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "校長",
+          "reading": "Kocho",
+          "language": "Japanese",
+          "note": "head of a school"
+        },
+        {
+          "name": "山长",
+          "reading": "Shanzhang",
+          "language": "Chinese",
+          "note": "the head of a traditional academy"
+        },
+        {
+          "name": "교장",
+          "reading": "Gyojang",
+          "language": "Korean",
+          "note": "head of a school"
+        },
+        {
+          "name": "Directeur d'École",
+          "language": "French",
+          "note": "head of a school"
+        },
+        {
+          "name": "Schulleiter",
+          "language": "German",
+          "note": "head of a school"
+        },
+        {
+          "name": "Preside",
+          "language": "Italian",
+          "note": "head of a school"
+        },
+        {
+          "name": "Director de Escuela",
+          "language": "Spanish",
+          "note": "head of a school"
+        }
+      ]
+    },
+    {
+      "level": 84,
+      "name": "Director of Studies",
+      "equivalents": [
+        {
+          "name": "Head of Studies",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Curriculum Head",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "学監",
+          "reading": "Gakkan",
+          "language": "Japanese",
+          "note": "the superintendent of studies"
+        },
+        {
+          "name": "教务主任",
+          "reading": "Jiaowu Zhuren",
+          "language": "Chinese",
+          "note": "director of academic affairs"
+        },
+        {
+          "name": "학감",
+          "reading": "Hakgam",
+          "language": "Korean",
+          "note": "superintendent of studies"
+        },
+        {
+          "name": "Directeur des Études",
+          "language": "French",
+          "note": "director of studies"
+        },
+        {
+          "name": "Studienleiter",
+          "language": "German",
+          "note": "director of studies"
+        },
+        {
+          "name": "Direttore Didattico",
+          "language": "Italian",
+          "note": "director of teaching"
+        },
+        {
+          "name": "Jefe de Estudios",
+          "language": "Spanish",
+          "note": "head of studies"
+        }
+      ]
+    },
+    {
+      "level": 85,
+      "name": "Regent",
+      "equivalents": [
+        {
+          "name": "Governing Head",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Regens",
+          "language": "Latin",
+          "note": "the one governing a school"
+        },
+        {
+          "name": "Regente",
+          "language": "Spanish",
+          "note": "the head set over an institution"
+        },
+        {
+          "name": "Régent",
+          "language": "French",
+          "note": "regent, and formerly a teacher of a collège"
+        },
+        {
+          "name": "Vorsteher",
+          "language": "German",
+          "note": "the one set over an institution"
+        },
+        {
+          "name": "Föreståndare",
+          "language": "Swedish",
+          "note": "the head of an institution"
+        },
+        {
+          "name": "総監",
+          "reading": "Sokan",
+          "language": "Japanese",
+          "note": "superintendent-general"
+        },
+        {
+          "name": "督学",
+          "reading": "Duxue",
+          "language": "Chinese",
+          "note": "superintendent of schools"
+        },
+        {
+          "name": "총감",
+          "reading": "Chonggam",
+          "language": "Korean",
+          "note": "superintendent-general"
+        }
+      ]
+    },
+    {
+      "level": 86,
+      "name": "Chancellor Emeritus",
+      "equivalents": [
+        {
+          "name": "Emeritus Head",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Honorary Chancellor",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "名誉総長",
+          "reading": "Meiyo Socho",
+          "language": "Japanese",
+          "note": "honorary chancellor of a university"
+        },
+        {
+          "name": "名誉校长",
+          "reading": "Mingyu Xiaozhang",
+          "language": "Chinese",
+          "note": "honorary head of a university"
+        },
+        {
+          "name": "명예총장",
+          "reading": "Myeongye Chongjang",
+          "language": "Korean",
+          "note": "honorary chancellor"
+        },
+        {
+          "name": "Canciller Honorario",
+          "language": "Spanish",
+          "note": "honorary chancellor"
+        },
+        {
+          "name": "Chancelier Honoraire",
+          "language": "French",
+          "note": "honorary chancellor"
+        },
+        {
+          "name": "Ehrenpräsident",
+          "language": "German",
+          "note": "honorary president of a body"
+        },
+        {
+          "name": "Rettore Emerito",
+          "language": "Italian",
+          "note": "rector emeritus"
+        }
+      ]
+    },
+    {
+      "level": 87,
+      "name": "Grand Doyen",
+      "equivalents": [
+        {
+          "name": "Doyen of the Field",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Elder of Elders",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "大御所",
+          "reading": "Ogosho",
+          "language": "Japanese",
+          "note": "the retired great one whose word still rules a field"
+        },
+        {
+          "name": "泰山北斗",
+          "reading": "Taishan Beidou",
+          "language": "Chinese",
+          "note": "Mount Tai and the Big Dipper, the supreme figure of a field"
+        },
+        {
+          "name": "Decano Mayor",
+          "language": "Spanish",
+          "note": "chief dean"
+        },
+        {
+          "name": "Doyen d'Âge",
+          "language": "French",
+          "note": "the senior by age who presides"
+        },
+        {
+          "name": "Altmeister",
+          "language": "German",
+          "note": "the old master of a field"
+        },
+        {
+          "name": "Nestore",
+          "language": "Italian",
+          "note": "the Nestor, the wise old head of a field"
+        },
+        {
+          "name": "최고 원로",
+          "reading": "Choego Wonro",
+          "language": "Korean",
+          "note": "the highest elder"
+        }
+      ]
+    },
+    {
+      "level": 88,
+      "name": "Senior Adept",
+      "equivalents": [
+        {
+          "name": "Ranking Adept",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Advanced Adept",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Adeptus Major",
+          "language": "Latin",
+          "note": "the middle adept grade of the Golden Dawn ladder"
+        },
+        {
+          "name": "上級者",
+          "reading": "Jokyusha",
+          "language": "Japanese",
+          "note": "one at the advanced grade"
+        },
+        {
+          "name": "精熟者",
+          "reading": "Jingshuzhe",
+          "language": "Chinese",
+          "note": "one thoroughly practised"
+        },
+        {
+          "name": "상급자",
+          "reading": "Sanggeupja",
+          "language": "Korean",
+          "note": "one of the higher grade"
+        },
+        {
+          "name": "Avezado",
+          "language": "Spanish",
+          "note": "thoroughly practised"
+        },
+        {
+          "name": "Fortgeschrittener",
+          "language": "German",
+          "note": "an advanced one"
+        },
+        {
+          "name": "Confirmé",
+          "language": "French",
+          "note": "confirmed at the advanced level"
+        }
+      ]
+    },
+    {
+      "level": 89,
+      "name": "High Adept",
+      "equivalents": [
+        {
+          "name": "Superior Adept",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Inner Adept",
+          "language": "English",
+          "note": "one admitted to the inner grades"
+        },
+        {
+          "name": "高段者",
+          "reading": "Kodansha",
+          "language": "Japanese",
+          "note": "a holder of the high dan grades"
+        },
+        {
+          "name": "高段位",
+          "reading": "Gaoduanwei",
+          "language": "Chinese",
+          "note": "high dan grade"
+        },
+        {
+          "name": "고단자",
+          "reading": "Godanja",
+          "language": "Korean",
+          "note": "a holder of high dan"
+        },
+        {
+          "name": "Consumado",
+          "language": "Spanish",
+          "note": "consummate"
+        },
+        {
+          "name": "Aguerri",
+          "language": "French",
+          "note": "hardened by long practice"
+        },
+        {
+          "name": "Meisterschüler",
+          "language": "German",
+          "note": "the master's own senior student"
+        },
+        {
+          "name": "Consumato",
+          "language": "Italian",
+          "note": "consummate"
+        }
+      ]
+    },
+    {
+      "level": 90,
+      "name": "Grand Adept",
+      "equivalents": [
+        {
+          "name": "Chief Adept",
+          "language": "English",
+          "note": "the presiding adept of an order"
+        },
+        {
+          "name": "Arch-Adept",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Adeptus Exemptus",
+          "language": "Latin",
+          "note": "the topmost adept grade of the Golden Dawn"
+        },
+        {
+          "name": "Grand Adepte",
+          "language": "French",
+          "note": "grand adept"
+        },
+        {
+          "name": "Vollendeter",
+          "language": "German",
+          "note": "one brought to completion"
+        },
+        {
+          "name": "Exímio",
+          "language": "Portuguese",
+          "note": "outstandingly skilled"
+        },
+        {
+          "name": "練達者",
+          "reading": "Rentatsusha",
+          "language": "Japanese",
+          "note": "one polished by long practice"
+        },
+        {
+          "name": "一流高手",
+          "reading": "Yiliu Gaoshou",
+          "language": "Chinese",
+          "note": "a first-class hand"
+        },
+        {
+          "name": "최고수",
+          "reading": "Choegosu",
+          "language": "Korean",
+          "note": "the highest hand"
+        }
+      ]
+    },
+    {
+      "level": 91,
+      "name": "Expert",
+      "equivalents": [
+        {
+          "name": "Consummate Hand",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Deskundige",
+          "language": "Dutch",
+          "note": "one who has the knowledge"
+        },
+        {
+          "name": "達人",
+          "reading": "Tatsujin",
+          "language": "Japanese",
+          "note": "one who has reached mastery of a way"
+        },
+        {
+          "name": "行家里手",
+          "reading": "Hangjia Lishou",
+          "language": "Chinese",
+          "note": "a true expert hand"
+        },
+        {
+          "name": "고수",
+          "reading": "Gosu",
+          "language": "Korean",
+          "note": "a high hand"
+        },
+        {
+          "name": "Experto",
+          "language": "Spanish",
+          "note": "expert"
+        },
+        {
+          "name": "Experte",
+          "language": "German",
+          "note": "expert"
+        },
+        {
+          "name": "Esperto",
+          "language": "Italian",
+          "note": "expert"
+        },
+        {
+          "name": "خبير",
+          "reading": "Khabir",
+          "language": "Arabic",
+          "note": "expert, one of proven knowledge"
+        }
+      ]
+    },
+    {
+      "level": 92,
+      "name": "Virtuoso",
+      "equivalents": [
+        {
+          "name": "Peerless Hand",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Wizard",
+          "language": "English",
+          "note": "a wizard at the thing"
+        },
+        {
+          "name": "Virtuose",
+          "language": "German",
+          "note": "virtuoso"
+        },
+        {
+          "name": "Виртуоз",
+          "reading": "Virtuoz",
+          "language": "Russian",
+          "note": "virtuoso"
+        },
+        {
+          "name": "Virtüöz",
+          "language": "Turkish",
+          "note": "virtuoso"
+        },
+        {
+          "name": "名演奏家",
+          "reading": "Meiensoka",
+          "language": "Japanese",
+          "note": "a distinguished performer"
+        },
+        {
+          "name": "妙手",
+          "reading": "Miaoshou",
+          "language": "Chinese",
+          "note": "a marvellous hand"
+        },
+        {
+          "name": "명연주자",
+          "reading": "Myeong Yeonjuja",
+          "language": "Korean",
+          "note": "a famed performer"
+        },
+        {
+          "name": "Fenomeno",
+          "language": "Italian",
+          "note": "a phenomenon of skill"
+        }
+      ]
+    },
+    {
+      "level": 93,
+      "name": "Genius",
+      "equivalents": [
+        {
+          "name": "Brilliant Mind",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Prodigy",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Mastermind",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Genio",
+          "language": "Italian",
+          "note": "genius"
+        },
+        {
+          "name": "Génie",
+          "language": "French",
+          "note": "genius"
+        },
+        {
+          "name": "Genie",
+          "language": "German",
+          "note": "genius"
+        },
+        {
+          "name": "天才",
+          "reading": "Tensai",
+          "language": "Japanese",
+          "note": "genius"
+        },
+        {
+          "name": "奇才",
+          "reading": "Qicai",
+          "language": "Chinese",
+          "note": "a rare and extraordinary talent"
+        },
+        {
+          "name": "천재",
+          "reading": "Cheonjae",
+          "language": "Korean",
+          "note": "genius"
+        }
+      ]
+    },
+    {
+      "level": 94,
+      "name": "Master",
+      "equivalents": [
+        {
+          "name": "Master Craftsman",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "免許皆伝",
+          "reading": "Menkyo Kaiden",
+          "language": "Japanese",
+          "note": "the licence of full transmission, nothing of the school held back"
+        },
+        {
+          "name": "名人",
+          "reading": "Meijin",
+          "language": "Japanese",
+          "note": "the master of an art, and the held title in shogi and go"
+        },
+        {
+          "name": "人間国宝",
+          "reading": "Ningen Kokuho",
+          "language": "Japanese",
+          "note": "living national treasure"
+        },
+        {
+          "name": "大师",
+          "reading": "Dashi",
+          "language": "Chinese",
+          "note": "great master"
+        },
+        {
+          "name": "대가",
+          "reading": "Daega",
+          "language": "Korean",
+          "note": "a great master of a field"
+        },
+        {
+          "name": "Meister",
+          "language": "German",
+          "note": "master of a craft"
+        },
+        {
+          "name": "Maître",
+          "language": "French",
+          "note": "master"
+        },
+        {
+          "name": "Usta",
+          "language": "Turkish",
+          "note": "master craftsman, the head of the shop"
+        }
+      ]
+    },
+    {
+      "level": 95,
+      "name": "Grandmaster",
+      "equivalents": [
+        {
+          "name": "Master of Masters",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Lineage Holder",
+          "language": "English",
+          "note": "the one in whom a school's whole transmission rests"
+        },
+        {
+          "name": "宗家",
+          "reading": "Soke",
+          "language": "Japanese",
+          "note": "the head of a school's founding house"
+        },
+        {
+          "name": "家元",
+          "reading": "Iemoto",
+          "language": "Japanese",
+          "note": "the hereditary head of a school of a traditional art"
+        },
+        {
+          "name": "範士",
+          "reading": "Hanshi",
+          "language": "Japanese",
+          "note": "exemplary teacher, the highest of the shogo titles"
+        },
+        {
+          "name": "宗师",
+          "reading": "Zongshi",
+          "language": "Chinese",
+          "note": "the founding master of a school"
+        },
+        {
+          "name": "Großmeister",
+          "language": "German",
+          "note": "grandmaster"
+        },
+        {
+          "name": "Grand Maître",
+          "language": "French",
+          "note": "grandmaster"
+        },
+        {
+          "name": "Гроссмейстер",
+          "reading": "Grossmeyster",
+          "language": "Russian",
+          "note": "grandmaster"
+        }
+      ]
+    },
+    {
+      "level": 96,
+      "name": "Sage",
+      "equivalents": [
+        {
+          "name": "Wise One",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Oracle",
+          "language": "English",
+          "note": "the one whose counsel settles it"
+        },
+        {
+          "name": "Sapiens",
+          "language": "Latin",
+          "note": "the wise one"
+        },
+        {
+          "name": "賢者",
+          "reading": "Kenja",
+          "language": "Japanese",
+          "note": "sage"
+        },
+        {
+          "name": "智者",
+          "reading": "Zhizhe",
+          "language": "Chinese",
+          "note": "the wise one"
+        },
+        {
+          "name": "현자",
+          "reading": "Hyeonja",
+          "language": "Korean",
+          "note": "sage"
+        },
+        {
+          "name": "Weiser",
+          "language": "German",
+          "note": "wise one"
+        },
+        {
+          "name": "Saggio",
+          "language": "Italian",
+          "note": "wise one"
+        },
+        {
+          "name": "حكيم",
+          "reading": "Hakim",
+          "language": "Arabic",
+          "note": "the wise one"
+        }
+      ]
+    },
+    {
+      "level": 97,
+      "name": "Legend",
+      "equivalents": [
+        {
+          "name": "Living Legend",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Icon",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "伝説の人",
+          "reading": "Densetsu no Hito",
+          "language": "Japanese",
+          "note": "a legend of a person"
+        },
+        {
+          "name": "传奇人物",
+          "reading": "Chuanqi Renwu",
+          "language": "Chinese",
+          "note": "a legendary figure"
+        },
+        {
+          "name": "전설",
+          "reading": "Jeonseol",
+          "language": "Korean",
+          "note": "legend"
+        },
+        {
+          "name": "Leyenda",
+          "language": "Spanish",
+          "note": "legend"
+        },
+        {
+          "name": "Légende",
+          "language": "French",
+          "note": "legend"
+        },
+        {
+          "name": "Legende",
+          "language": "German",
+          "note": "legend"
+        },
+        {
+          "name": "Leggenda",
+          "language": "Italian",
+          "note": "legend"
+        }
+      ]
+    },
+    {
+      "level": 98,
+      "name": "Titan",
+      "equivalents": [
+        {
+          "name": "Colossus",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Giant of the Field",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Τιτάν",
+          "reading": "Titan",
+          "language": "Greek",
+          "note": "one of the elder giants of Greek myth"
+        },
+        {
+          "name": "Coloso",
+          "language": "Spanish",
+          "note": "colossus"
+        },
+        {
+          "name": "Colosse",
+          "language": "French",
+          "note": "colossus"
+        },
+        {
+          "name": "Gigant",
+          "language": "German",
+          "note": "giant"
+        },
+        {
+          "name": "Gigante",
+          "language": "Italian",
+          "note": "giant"
+        },
+        {
+          "name": "巨人",
+          "reading": "Kyojin",
+          "language": "Japanese",
+          "note": "a towering figure"
+        },
+        {
+          "name": "巨子",
+          "reading": "Juzi",
+          "language": "Chinese",
+          "note": "a great figure at the head of a school"
+        }
+      ]
+    },
+    {
+      "level": 99,
+      "name": "Paragon",
+      "equivalents": [
+        {
+          "name": "Model of Perfection",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Nonpareil",
+          "language": "English",
+          "note": "without equal"
+        },
+        {
+          "name": "Peerless One",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "完人",
+          "reading": "Wanren",
+          "language": "Chinese",
+          "note": "the complete person"
+        },
+        {
+          "name": "至高の人",
+          "reading": "Shiko no Hito",
+          "language": "Japanese",
+          "note": "the supreme one"
+        },
+        {
+          "name": "Dechado",
+          "language": "Spanish",
+          "note": "a model of perfection"
+        },
+        {
+          "name": "Parangon",
+          "language": "French",
+          "note": "paragon"
+        },
+        {
+          "name": "Inbegriff",
+          "language": "German",
+          "note": "the very embodiment of the thing"
+        },
+        {
+          "name": "Fior Fiore",
+          "language": "Italian",
+          "note": "the flower of the flower, the very best"
+        }
+      ]
+    },
+    {
+      "level": 100,
+      "name": "Immortal",
+      "equivalents": [
+        {
+          "name": "Deathless One",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "Name That Endures",
+          "language": "English",
+          "note": ""
+        },
+        {
+          "name": "仙人",
+          "reading": "Sennin",
+          "language": "Japanese",
+          "note": "an immortal who has passed beyond the ordinary"
+        },
+        {
+          "name": "千古一人",
+          "reading": "Qiangu Yiren",
+          "language": "Chinese",
+          "note": "the one figure of all the ages"
+        },
+        {
+          "name": "불멸자",
+          "reading": "Bulmyeolja",
+          "language": "Korean",
+          "note": "the immortal one"
+        },
+        {
+          "name": "Immortel",
+          "language": "French",
+          "note": "one of the deathless"
+        },
+        {
+          "name": "Inmortal",
+          "language": "Spanish",
+          "note": "immortal"
+        },
+        {
+          "name": "Unsterblicher",
+          "language": "German",
+          "note": "immortal"
+        },
+        {
+          "name": "ἀθάνατος",
+          "reading": "Athanatos",
+          "language": "Greek",
+          "note": "deathless"
+        }
       ]
     }
   ]
