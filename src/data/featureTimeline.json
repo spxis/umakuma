@@ -4400,11 +4400,23 @@
     "id": "map-region-fit-centre",
     "name": "A region view should be centred on the region",
     "area": "platform",
+    "status": "shipped",
     "kind": "bug",
+    "date": "2026-09-03",
+    "summary": "/maps/japan/region/okinawa opens at 3x with Okinawa sitting low in the frame instead of in the middle. The zoom window is clamped to the map's edges so a drag never shows open sea, but a region opened from its address is a fit, not a drag, and the fit should centre what it framed even if that means the window overhangs the map. Okinawa's inset sits at the bottom-left of the canvas, so any clamp pushes it down. Either let a fit overhang, or move the inset. Reported 2026-09-03 by John with a screenshot.",
+    "dateIsEstimate": false,
+    "version": "0.388.0",
+    "releasedAt": "2026-09-04T04:29:22Z"
+  },
+  {
+    "id": "cache-the-accreditation-pages",
+    "name": "Cache the accreditation pages",
+    "area": "platform",
+    "kind": "feature",
     "status": "shipped",
     "date": "2026-09-03",
-    "version": "0.388.0",
-    "releasedAt": "2026-09-04T04:29:22Z",
-    "summary": "/maps/japan/region/okinawa opens at 3x with Okinawa sitting low in the frame instead of in the middle. The zoom window is clamped to the map's edges so a drag never shows open sea, but a region opened from its address is a fit, not a drag, and the fit should centre what it framed even if that means the window overhangs the map. Okinawa's inset sits at the bottom-left of the canvas, so any clamp pushes it down. Either let a fit overhang, or move the inset. Reported 2026-09-03 by John with a screenshot."
+    "version": "0.389.0",
+    "releasedAt": "2026-09-04T04:33:25Z",
+    "summary": "Both /sources pages are force-dynamic and uncached, so every view - including every crawler hit - runs three Prisma reads and rebuilds a border-pair Set per map. Hold each report in process for a few minutes and give the rendered page to the CDN. They stay force-dynamic because three readers need a database and the build has none. Requested 2026-09-03 by John as part of the source accreditation epic."
   }
 ]

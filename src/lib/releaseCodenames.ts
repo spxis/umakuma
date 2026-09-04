@@ -439,6 +439,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Memori no Takasa", ja: "目盛りの高さ", reading: "めもりのたかさ", gloss: "one notch high, held or not" },
   { romaji: "Moto no Homare", ja: "元の誉れ", reading: "もとのほまれ", gloss: "the credit belongs where it came from" },
   { romaji: "Yatto Mannaka", ja: "やっと真ん中", reading: "やっとまんなか", gloss: "in the middle at last" },
+  { romaji: "Yutori no Ichijikan", ja: "ゆとりの一時間", reading: "ゆとりのいちじかん", gloss: "an hour's grace, so one answer serves everybody" },
 ];
 
 /**
