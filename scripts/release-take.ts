@@ -48,7 +48,9 @@ function slugFor(title: string): string {
  */
 const ROOT = process.cwd();
 const BOARD = join(ROOT, "src", "data", "featureTimeline.json");
-const CODENAMES_FILE = join(ROOT, "src", "lib", "releaseCodenames.ts");
+/* The list, not the rules: they were split when the pair crossed the 500-line
+   gate, and release:take writes only the list. */
+const CODENAMES_FILE = join(ROOT, "src", "lib", "releaseCodenameList.ts");
 const VERSION_FILE = join(ROOT, "src", "lib", "appVersion.ts");
 const PACKAGE_FILE = join(ROOT, "package.json");
 
