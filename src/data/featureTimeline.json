@@ -4736,11 +4736,23 @@
     "id": "all-253-radicals-and-the-last-twelve-get-a-level",
     "name": "All 253 radicals, and the last twelve get a level",
     "area": "platform",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "RADKFILE has 253 classical radicals and only 241 are needed: \u65e0, \u66f0, \u97ed, \u9b25, \u9e75, \u9ecd, \u9ef9, \u9f20, \u9f0e, \u9efd, \u9f4a and \u9fa0 appear in no joyo character. They were dropped, which left the set incomplete for anybody who wanted all of it and left forty later levels teaching no radical while the first twenty carried a dozen each. They are now offered one per level from 89 to 100, marked optional because nothing a member learns is built from them. The front-loading of the other 241 cannot be fixed and should not be: a radical is taught before the kanji built from it, and each already sits as late as that allows.",
+    "dateIsEstimate": false,
+    "version": "0.416.0",
+    "releasedAt": "2026-09-04T14:05:48Z"
+  },
+  {
+    "id": "map-all-countries-honest",
+    "name": "Open all thirty countries, with only true facts",
+    "area": "games",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.416.0",
-    "releasedAt": "2026-09-04T14:05:48Z",
-    "summary": "RADKFILE has 253 classical radicals and only 241 are needed: \u65e0, \u66f0, \u97ed, \u9b25, \u9e75, \u9ecd, \u9ef9, \u9f20, \u9f0e, \u9efd, \u9f4a and \u9fa0 appear in no joyo character. They were dropped, which left the set incomplete for anybody who wanted all of it and left forty later levels teaching no radical while the first twenty carried a dozen each. They are now offered one per level from 89 to 100, marked optional because nothing a member learns is built from them. The front-loading of the other 241 cannot be fixed and should not be: a radical is taught before the kanji built from it, and each already sits as late as that allows."
+    "version": "0.417.0",
+    "releasedAt": "2026-09-04T14:07:08Z",
+    "summary": "Every Natural Earth country is readable now, grouped by part of the world behind Japan. What is shown for them is what is true and nothing else, which took work: the generated metadata was not thin but wrong. Natural Earth's boundaries carry no capital, population or area, and the builder filled the gaps anyway - the capital took the division's own name, so Aisne's capital was Aisne and Ain's was Rhone-Alpes, which is a region rather than a city. Japan, the United States and Canada keep the facts a person wrote for them. For the rest the capital comes from Populated Places where it really marks one - silent for ninety-four of France's ninety-six departments, which is the correct answer - and everything the boundaries cannot answer is left out. Reading a map is now separate from playing it: the game reserves subject ids per country and stores them on every run, so a country joins the game when somebody assigns it a range, not when its outlines arrive."
   }
 ]
