@@ -19,6 +19,9 @@
  */
 import { WK_STATUSES, srsBucketFromStage, type WkStatus, REVIEW_RESULTS } from "@/lib/domainConstants";
 
+/** The top stage. An item that reaches it has finished its journey. */
+export const SRS_BURNED_STAGE = 9;
+
 const HOUR_MS = 60 * 60 * 1000;
 const DAY_MS = 24 * HOUR_MS;
 

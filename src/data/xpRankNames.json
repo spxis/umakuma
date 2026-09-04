@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "placeholder": true,
+  "ranks": [
+    {
+      "level": 1,
+      "name": "Rookie",
+      "equivalents": [
+        { "name": "Novice", "language": "English", "note": "" },
+        { "name": "Beginner", "language": "English", "note": "" },
+        { "name": "Greenhorn", "language": "English", "note": "someone new to the work" },
+        { "name": "Tenderfoot", "language": "English", "note": "a newcomer, from the trail" },
+        { "name": "新人", "reading": "Shinjin", "language": "Japanese", "note": "new person; a first-year at a company" },
+        { "name": "Novato", "language": "Spanish", "note": "" },
+        { "name": "Débutant", "language": "French", "note": "one who is beginning" },
+        { "name": "Neuling", "language": "German", "note": "" },
+        { "name": "Principiante", "language": "Italian", "note": "" }
+      ]
+    }
+  ]
+}

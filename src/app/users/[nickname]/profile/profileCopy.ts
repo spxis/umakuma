@@ -80,3 +80,19 @@ export const THEME_PICKER_COPY = {
   ageFirstBlurb:
     "A few of the themes are about organised crime, nightlife and horror. Tell us this and we will only offer the ones that suit — you can change it whenever you like.",
 } as const;
+
+/** Copy for the XP rank panel, in the feature's own module for the locale layer. */
+export const XP_RANK_COPY = {
+  heading: "Your rank",
+  blurb:
+    "The other ladder. Your kanji level is what you have learned; your rank is what you have turned up for \u2014 reviews answered, lessons started, games finished. Neither one can be bought with the other.",
+  standing: "Standing now",
+  rankOf: (level: number, total: number) => `Rank ${level} of ${total}`,
+  progressLabel: "How far through this rank",
+  into: (into: number, span: number) => `${into.toLocaleString()} of ${span.toLocaleString()} XP into this rank`,
+  next: "Next",
+  toNext: (amount: number) => `${amount.toLocaleString()} XP to go`,
+  atTop: "The top of the ladder. There is nothing above this one.",
+  total: (xp: number) => `${xp.toLocaleString()} XP earned in all`,
+  equivalents: "Known elsewhere as",
+} as const;

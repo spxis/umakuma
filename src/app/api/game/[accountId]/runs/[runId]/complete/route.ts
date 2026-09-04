@@ -5,6 +5,8 @@ import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { gameKindRules, type GameKind } from "@/lib/gameMode";
 import { completedRunValues, toGameRunSummary } from "@/lib/gameModeServer";
 import { prisma } from "@/lib/prisma";
+import { awardXpQuietly } from "@/lib/xp/xpServer";
+import { gameXpAwards } from "@/lib/xp/xpStudyAwards";
 
 /**
  * Closes a timed run when the clock runs out without another answer.
@@ -31,12 +33,12 @@ export async function POST(
         const outcome = await prisma.$transaction(async (tx) => {
           const run = await tx.gameRun.findUnique({ where: { id: runId } });
           if (!run || run.accountId !== accountId) throw new Error("Game run not found.");
-          if (run.status === "completed") return run;
+          if (run.status === "completed") return { run, completedNow: false };
           if (!gameKindRules(run.kind as GameKind).usesTimeLimit) {
             throw new Error("This game cannot be finished early.");
           }
 
-          return tx.gameRun.update({
+          const closed = await tx.gameRun.update({
             where: { id: runId },
             data: {
               questionCount: run.answeredCount,
@@ -52,9 +54,16 @@ export async function POST(
               }),
             },
           });
+          return { run: closed, completedNow: true };
         });
 
-        return NextResponse.json({ run: toGameRunSummary(outcome) }, { status: 200 });
+        /* Only the run that this request actually closed. A replayed request
+           finds the run already complete and must not pay for it twice. */
+        if (outcome.completedNow) {
+          await awardXpQuietly({ accountId, requests: gameXpAwards() });
+        }
+
+        return NextResponse.json({ run: toGameRunSummary(outcome.run) }, { status: 200 });
       } catch (error) {
         const message = error instanceof Error ? error.message : "Could not finish the game.";
         const expected = /not found|cannot be finished/.test(message);

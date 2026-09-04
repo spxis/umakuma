@@ -18,6 +18,8 @@ import { accumulateItemScore } from "@/lib/gameScoring";
 import { completedRunValues, hydrateGameQuestions, toGameRunSummary } from "@/lib/gameModeServer";
 import { buildAppendedQuestions } from "@/lib/gameRunAppend";
 import { prisma } from "@/lib/prisma";
+import { awardXpQuietly } from "@/lib/xp/xpServer";
+import { gameXpAwards } from "@/lib/xp/xpStudyAwards";
 
 const bodySchema = z.object({
   questionId: z.string().min(1),
@@ -168,8 +170,23 @@ export async function POST(
                 : {}),
             },
           });
-          return { correct, expired, run, appendedFromPosition: progress.appendCycle ? question.run.questionCount : null };
+          return {
+            correct,
+            expired,
+            run,
+            completedNow: progress.complete,
+            appendedFromPosition: progress.appendCycle ? question.run.questionCount : null,
+          };
         });
+
+        /* A fixed-length game never reaches the complete route - it ends on
+           the answer that finishes it - so the award has to be taken here as
+           well, or only the timed games would ever pay. Quiet either way: a
+           game that scored and could not bank its XP is still a finished
+           game. */
+        if (outcome.completedNow) {
+          await awardXpQuietly({ accountId, requests: gameXpAwards() });
+        }
 
         const appendedQuestions = outcome.appendedFromPosition === null
           ? []

@@ -25,6 +25,7 @@ import { memberTheme } from "@/lib/srs/srsThemeServer";
 
 import ProfileForm from "./ProfileForm";
 import ThemePicker from "./ThemePicker";
+import XpRankPanel from "./XpRankPanel";
 import { JLPT_STATUS_LABELS, PROFILE_COPY } from "./profileCopy";
 
 type PageProps = { params: Promise<{ nickname: string }> };
@@ -68,7 +69,7 @@ export default async function UserProfilePage({ params }: PageProps) {
     where: accountUrlKeyWhere(decodeURIComponent(nickname)),
     select: {
       id: true, nickname: true, slug: true, displayName: true, visibility: true, wkUsername: true, wkLevel: true,
-      jlptStatus: true, srsTheme: true, ageBand: true,
+      jlptStatus: true, srsTheme: true, ageBand: true, xp: true,
       jlptCertificates: { select: { id: true, system: true, level: true, year: true } },
       lastSyncedAt: true, lastActivityAt: true,
       tokenEncrypted: true, tokenIv: true, tokenTag: true,
@@ -142,6 +143,12 @@ export default async function UserProfilePage({ params }: PageProps) {
       <section className="mb-4 rounded-2xl border border-line bg-surface p-5">
         <ProfileForm accountId={account.id} displayName={account.displayName} visibility={account.visibility} />
       </section>
+
+      {/* The XP ladder, beside the curriculum one rather than inside it. It
+          owns its whole card, the way the theme picker below does. */}
+      <div className="mb-4">
+        <XpRankPanel xp={account.xp} />
+      </div>
 
       {/* Themes save on their own too, and the picker owns its whole card. */}
       <div className="mb-4">

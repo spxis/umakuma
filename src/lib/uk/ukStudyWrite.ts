@@ -2,7 +2,9 @@ import "server-only";
 
 import { REVIEW_RESULTS } from "@/lib/domainConstants";
 import { prisma } from "@/lib/prisma";
-import { initialLessonState, nextSrsStage, nextStageAvailableAt } from "@/lib/srs/srsSchedule";
+import { initialLessonState, nextSrsStage, nextStageAvailableAt, SRS_BURNED_STAGE } from "@/lib/srs/srsSchedule";
+import { awardXpQuietly } from "@/lib/xp/xpServer";
+import { lessonXpAwards, reviewXpAwards } from "@/lib/xp/xpStudyAwards";
 
 import { syncAccountUkLevel } from "./ukLevelServer";
 import { UK_LEVEL_PASS_SRS_STAGE } from "./ukLevel";
@@ -17,6 +19,12 @@ import { UK_LEVEL_PASS_SRS_STAGE } from "./ukLevel";
  * State rows are created here and nowhere else in the member-facing paths.
  * "No row" means locked, which is why starting a lesson is a write rather
  * than a read with a flag.
+ *
+ * Both also award XP, and neither can fail because of it. XP is bookkeeping
+ * that sits beside the study rather than a condition of it: an answer that
+ * scores correctly and cannot record its XP is still a completed answer, so
+ * the awarding goes through `awardXpQuietly`, after the transaction that wrote
+ * the state has already committed.
  */
 
 export type UkReviewOutcome = {
@@ -54,6 +62,10 @@ export async function startUkLessons({
     data: open.map((subject) => ({ accountId, subjectId: subject.id, ...state })),
     skipDuplicates: true,
   });
+
+  /* Per item actually started, not per item asked for: `skipDuplicates` means
+     a resent request opens nothing, and it should pay for nothing. */
+  await awardXpQuietly({ accountId, requests: lessonXpAwards(created.count), now });
   return created.count;
 }
 
@@ -84,6 +96,10 @@ export async function recordUkReview({
   const previousSrsStage = state.srsStage;
   const newSrsStage = nextSrsStage({ currentStage: previousSrsStage, result });
   const correct = result === REVIEW_RESULTS.correct;
+  /* The first arrival at the top stage, which is what earns the bonus. An item
+     pulled back down and re-burned keeps its original `burnedAt`, so it cannot
+     be farmed by demoting and re-climbing. */
+  const burnedNow = newSrsStage >= SRS_BURNED_STAGE && state.burnedAt === null;
 
   const before = await prisma.account.findUnique({ where: { id: accountId }, select: { ukLevel: true } });
 
@@ -98,7 +114,7 @@ export async function recordUkReview({
         correctCount: correct ? { increment: 1 } : undefined,
         wrongCount: correct ? undefined : { increment: 1 },
         passedAt: state.passedAt ?? (newSrsStage >= UK_LEVEL_PASS_SRS_STAGE ? now : null),
-        burnedAt: newSrsStage >= 9 ? (state.burnedAt ?? now) : state.burnedAt,
+        burnedAt: burnedNow ? now : state.burnedAt,
       },
     }),
     prisma.ukReviewAttempt.create({
@@ -107,12 +123,20 @@ export async function recordUkReview({
   ]);
 
   const resolved = await syncAccountUkLevel(accountId);
+  const levelBefore = before?.ukLevel ?? 1;
+
+  await awardXpQuietly({
+    accountId,
+    requests: reviewXpAwards({ correct, burnedNow, levelBefore, levelAfter: resolved.level }),
+    now,
+  });
+
   return {
     subjectId,
     previousSrsStage,
     newSrsStage,
     level: resolved.level,
-    levelledUp: resolved.level > (before?.ukLevel ?? 1),
+    levelledUp: resolved.level > levelBefore,
   };
 }
 
