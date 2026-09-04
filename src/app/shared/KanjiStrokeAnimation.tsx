@@ -344,46 +344,62 @@ export default function KanjiStrokeAnimation({
         >
           {STROKE_ANIMATION_COPY.replay}
         </button>
-        <button
-          type="button"
-          onClick={() => setShowOutline((shown) => !shown)}
-          aria-pressed={showOutline}
-          title={STROKE_ANIMATION_COPY.outlineTitle}
-          className={`inline-flex h-8 items-center justify-center rounded-full border px-3 text-[11px] font-black uppercase tracking-[0.08em] transition ${
-            showOutline
-              ? "border-kanji bg-kanji text-white"
-              : "border-line bg-surface text-foreground/75 hover:bg-surface-muted"
-          }`}
+        {/*
+          * The three display switches in one group, the way the sizes already
+          * were. They were four free-standing pills beside a fifth, all lit,
+          * all the same shape - so nothing said which of them were the same
+          * kind of thing, and the column read as five unrelated demands.
+          * Replay is the verb and stays on its own; these three answer one
+          * question, so they share one border.
+          */}
+        <div
+          role="group"
+          aria-label={STROKE_ANIMATION_COPY.showLabel}
+          /*
+            * Wraps rather than overflows. Beside the drawing the column is
+            * narrow, and a third switch appears the moment a stroke is picked
+            * - so on one line it ran off the card. Rounded like a panel rather
+            * than a pill, since at two lines a pill shape is a lie.
+            */
+          className="flex flex-wrap items-center justify-center gap-0.5 rounded-2xl border border-line bg-surface p-0.5"
         >
-          {STROKE_ANIMATION_COPY.outline}
-        </button>
-        {/* Only where it means anything: the whole drawing has nothing to hide. */}
-        {selectedStroke !== null ? (
           <button
             type="button"
-            aria-pressed={soloStroke}
-            title={STROKE_ANIMATION_COPY.soloTitle}
-            onClick={() => setSoloStroke((only) => !only)}
-            className={`inline-flex h-8 items-center justify-center rounded-full border px-3 text-[11px] font-black uppercase tracking-[0.08em] transition ${
-              soloStroke
-                ? "border-kanji bg-kanji text-white"
-                : "border-line bg-surface text-foreground/75 hover:bg-surface-muted"
+            onClick={() => setShowOutline((shown) => !shown)}
+            aria-pressed={showOutline}
+            title={STROKE_ANIMATION_COPY.outlineTitle}
+            className={`inline-flex h-7 items-center justify-center rounded-full px-3 text-[11px] font-black uppercase tracking-[0.08em] transition ${
+              showOutline ? "bg-kanji text-white" : "text-foreground/60 hover:bg-surface-muted"
             }`}
           >
-            {STROKE_ANIMATION_COPY.solo}
+            {STROKE_ANIMATION_COPY.outline}
           </button>
-        ) : null}
-        <button
-          type="button"
-          onClick={() => setShowNumbers((shown) => !shown)}
-          className={`inline-flex h-8 items-center justify-center rounded-full border px-3 text-[11px] font-black uppercase tracking-[0.08em] transition ${
-            showNumbers
-              ? "border-kanji bg-kanji text-white"
-              : "border-line bg-surface text-foreground/75 hover:bg-surface-muted"
-          }`}
-        >
-          {STROKE_ANIMATION_COPY.numbers}
-        </button>
+          <button
+            type="button"
+            onClick={() => setShowNumbers((shown) => !shown)}
+            aria-pressed={showNumbers}
+            title={STROKE_ANIMATION_COPY.numbersTitle}
+            className={`inline-flex h-7 items-center justify-center rounded-full px-3 text-[11px] font-black uppercase tracking-[0.08em] transition ${
+              showNumbers ? "bg-kanji text-white" : "text-foreground/60 hover:bg-surface-muted"
+            }`}
+          >
+            {STROKE_ANIMATION_COPY.numbers}
+          </button>
+          {/* Only where it means anything: the whole drawing has nothing to hide. */}
+          {selectedStroke !== null ? (
+            <button
+              type="button"
+              aria-pressed={soloStroke}
+              title={STROKE_ANIMATION_COPY.soloTitle}
+              onClick={() => setSoloStroke((only) => !only)}
+              className={`inline-flex h-7 items-center justify-center rounded-full px-3 text-[11px] font-black uppercase tracking-[0.08em] transition ${
+                soloStroke ? "bg-kanji text-white" : "text-foreground/60 hover:bg-surface-muted"
+              }`}
+            >
+              {STROKE_ANIMATION_COPY.solo}
+            </button>
+          ) : null}
+        </div>
         {offersSize ? (
           <div
             role="group"

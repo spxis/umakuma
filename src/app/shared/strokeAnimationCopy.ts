@@ -6,6 +6,7 @@ export const STROKE_ANIMATION_COPY = {
   replay: "Replay",
   replayTitle: "Draw it again and again",
   numbers: "Numbers",
+  numbersTitle: "Number each stroke in the order it is drawn",
   /*
    * The faint whole character behind the ink, in either view.
    *
@@ -46,9 +47,18 @@ export const STROKE_ANIMATION_COPY = {
    * it does, rather than naming a feature: a reader wants one stroke, not a
    * picker.
    */
-  pickStroke: "Show one stroke",
-  pickAll: "Show every stroke",
+  /*
+   * The count is the button. It was a badge in the header saying a fact and a
+   * button below saying "Show one stroke", which is two controls for one idea
+   * and neither of them said what the other did. Pressed, the count opens the
+   * numbers - so the thing that tells you there are ten is the thing that
+   * offers you the ten.
+   */
+  pickTitle: "Pick one stroke to study on its own",
+  pickAllTitle: "Back to the whole character",
   chooseStroke: "Choose a stroke",
+  /** The group the three display switches sit in, as a screen reader reads it. */
+  showLabel: "What to show",
   /* Stepping. Marks rather than words: they share a row with the numbers. */
   previousStroke: "Previous stroke",
   nextStroke: "Next stroke",

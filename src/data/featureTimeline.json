@@ -4256,11 +4256,23 @@
     "id": "section-title-links",
     "name": "Every section title links to its own page",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-03",
+    "summary": "The subject page sections have titles now and each title already has a RESTful path behind it. Offer the link: on hover a section title becomes a link to its own view, for example /kanji/X/related, and the main kanji page can be navigated from. Requested 2026-09-03 by John.",
+    "dateIsEstimate": false,
+    "version": "0.376.0",
+    "releasedAt": "2026-09-03T16:18:13Z"
+  },
+  {
+    "id": "stroke-card-rethink",
+    "name": "The stroke order panel asks to be read twice",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-03",
-    "version": "0.376.0",
-    "releasedAt": "2026-09-03T16:18:13Z",
-    "summary": "The subject page sections have titles now and each title already has a RESTful path behind it. Offer the link: on hover a section title becomes a link to its own view, for example /kanji/X/related, and the main kanji page can be navigated from. Requested 2026-09-03 by John."
+    "version": "0.377.0",
+    "releasedAt": "2026-09-04T02:40:26Z",
+    "summary": "John: it looks really good but can someone guess what each thing does? Why is 10 strokes a different badge from the Worksheet button - do those belong together? Question the design and the layout, ask why each thing is where it is. Concise is good, not too busy. One idea of his: the 10 strokes label folds into the Show one stroke button, and pressing that is what reveals the ten numbered buttons. Requested 2026-09-03 by John."
   }
 ]

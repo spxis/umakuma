@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { useState, type ReactNode } from "react";
 
 import KanjiStrokeAnimation, { type StrokeMeta } from "./KanjiStrokeAnimation";
@@ -22,6 +24,14 @@ export type { KanjiSummary as KanjiDetailSummary } from "@/lib/kanjiSummaryLine"
 
 type PanelProps = {
   kanji: string;
+  /**
+   * This panel's own page, where the caller has one.
+   *
+   * The other blocks on a subject page link their titles to the section they
+   * are; this panel is not one of those blocks, so it was the one title on the
+   * page that led nowhere.
+   */
+  titleHref?: string | null;
   grade?: number;
   summary?: KanjiDetailSummary;
   /** Extra pills or rows a surface wants beneath the drawing. */
@@ -152,6 +162,15 @@ function StepButton({
   );
 }
 
+/**
+ * How many strokes, and a way into each of them.
+ *
+ * These were two things: a badge in the header saying "10 strokes" and a
+ * button below saying "Show one stroke". One was a fact and one was an action,
+ * they sat in different parts of the card, and neither said what the other
+ * did. They are the same idea - the count is how many there are to pick from -
+ * so the count is the button, and pressing it opens the numbers it just named.
+ */
 function StrokePicker({
   count,
   selected,
@@ -169,6 +188,7 @@ function StrokePicker({
       <button
         type="button"
         aria-expanded={open}
+        title={open ? STROKE_ANIMATION_COPY.pickAllTitle : STROKE_ANIMATION_COPY.pickTitle}
         /* Opening picks the first stroke, so it opens onto an answer rather than a question. */
         onClick={() => onSelect(open ? null : 1)}
         className={`inline-flex h-7 shrink-0 items-center rounded-full border px-3 text-[10px] font-black uppercase tracking-[0.08em] transition ${
@@ -177,7 +197,7 @@ function StrokePicker({
             : "border-line bg-surface text-foreground/60 hover:bg-surface-muted hover:text-foreground"
         }`}
       >
-        {open ? STROKE_ANIMATION_COPY.pickAll : STROKE_ANIMATION_COPY.pickStroke}
+        {count} {count === 1 ? STROKE_ANIMATION_COPY.stroke : STROKE_ANIMATION_COPY.strokes}
       </button>
 
       {open ? (
@@ -250,6 +270,7 @@ export function KanjiDetailPanel({
   shareHref,
   compact,
   showSummaryLine = true,
+  titleHref,
 }: PanelProps) {
   const [meta, setMeta] = useState<StrokeMeta | null>(null);
   const size = useStrokeSize();
@@ -269,7 +290,16 @@ export function KanjiDetailPanel({
       <header className="flex items-start justify-between gap-3 border-b border-line bg-surface-muted/60 px-5 py-3">
         <div className="min-w-0">
           <p className="text-[11px] font-black uppercase tracking-[0.12em] text-foreground/60">
-            {STROKE_ANIMATION_COPY.title}
+            {titleHref ? (
+              <Link
+                href={titleHref}
+                className="underline decoration-transparent underline-offset-4 transition hover:text-accent hover:decoration-current focus-visible:text-accent focus-visible:decoration-current"
+              >
+                {STROKE_ANIMATION_COPY.title}
+              </Link>
+            ) : (
+              STROKE_ANIMATION_COPY.title
+            )}
           </p>
           {showSummaryLine && line ? (
             <p className="truncate text-sm font-bold text-foreground" title={line}>
@@ -278,12 +308,6 @@ export function KanjiDetailPanel({
           ) : null}
         </div>
         <div className="flex shrink-0 items-center gap-2">
-          {meta ? (
-            <span className="rounded-full border border-line bg-surface px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.12em] text-foreground/60">
-              {meta.strokeCount}{" "}
-              {meta.strokeCount === 1 ? STROKE_ANIMATION_COPY.stroke : STROKE_ANIMATION_COPY.strokes}
-            </span>
-          ) : null}
           {actions}
           {shareHref ? <ShareLink href={shareHref} /> : null}
           {onClose ? (

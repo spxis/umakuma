@@ -77,6 +77,7 @@ export const KANJI_SECTION_BLOCKS: readonly KanjiSectionBlock[] = [
           grade={view.grade}
           summary={view.summary}
           showSummaryLine={view.alone}
+          titleHref={view.sectionHref?.(SUBJECT_SECTIONS.stroke)}
           actions={
             /*
              * Named for where it goes: the same practice sheet a list prints,
