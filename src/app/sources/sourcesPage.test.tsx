@@ -40,6 +40,32 @@ describe("where a credit leads", () => {
     }
   });
 
+  /*
+   * A source can reach the site with copy and no reader, and the page then
+   * says we hold nothing. The switch is the one place that cannot be forgotten,
+   * so every key has to appear in it.
+   */
+  it("has a reader for every source", () => {
+    /* Comments name keys too; strip them before looking for real cases. */
+    const code = read("src/lib/sourcePage.ts")
+      .replace(/\/\*[\s\S]*?\*\//g, "")
+      .replace(/\/\/.*$/gm, "");
+    for (const key of SOURCE_KEY_VALUES) {
+      expect(code, `${key} has no case in loadSourceReport`).toContain(`case SOURCE_KEYS.${key}:`);
+    }
+  });
+
+  /*
+   * Both frequency sources are share-alike, so naming them is a licence
+   * condition rather than a courtesy. This fails if either loses its licence.
+   */
+  it("names the licence on the share-alike sources", () => {
+    for (const key of [SOURCE_KEYS.jmdict, SOURCE_KEYS.jiten]) {
+      expect(SOURCE_CREDITS[key].licence).toBe("CC BY-SA 4.0");
+      expect(SOURCE_CREDITS[key].licenceUrl).toContain("creativecommons.org");
+    }
+  });
+
   /* No caller should still hold a credit object; the key is what a page needs. */
   it("is addressed by key everywhere it is drawn", () => {
     for (const path of [

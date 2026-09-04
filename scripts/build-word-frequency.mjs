@@ -68,6 +68,17 @@ export function parseJmdict(xml) {
   return bySurface;
 }
 
+/**
+ * JMdict's own version. The file stamps no date, but its DTD carries a revision
+ * history and the highest entry is the release we parsed — which is what an
+ * admin needs to tell whether the deployed copy is behind upstream.
+ */
+export function jmdictRevision(xml) {
+  const revisions = [...xml.slice(0, 40_000).matchAll(/Rev (\d+\.\d+)/g)].map((match) => match[1]);
+  if (revisions.length === 0) return null;
+  return revisions.sort((left, right) => Number(right) - Number(left))[0];
+}
+
 /** Turns JMdict's tags into one rank, lower being more common. */
 export function rankFromTags(tags) {
   const band = tags.map((t) => /^nf(\d\d)$/.exec(t)).find(Boolean);
@@ -138,7 +149,9 @@ async function main() {
   const corpora = {};
 
   const jmdictPath = path.join(CACHE_DIR, "JMdict_e");
-  const tagsBySurface = parseJmdict(await fs.readFile(jmdictPath, "utf8"));
+  const jmdictXml = await fs.readFile(jmdictPath, "utf8");
+  const jmdictVersion = jmdictRevision(jmdictXml);
+  const tagsBySurface = parseJmdict(jmdictXml);
   corpora.newspaper = new Map();
   for (const [surface, tags] of tagsBySurface) corpora.newspaper.set(surface, rankFromTags(tags));
 
@@ -190,9 +203,13 @@ async function main() {
           "Jiten frequency lists (jiten.moe), CC BY-SA 4.0",
         ],
         corpora: names,
+        versions: { jmdict: jmdictVersion },
         weights: CORPUS_WEIGHTS,
         words: words.length,
         ranked: blendedCount,
+        /* How many of our words each corpus knows. Recorded here so the source
+           pages can report coverage without counting 6,800 entries per view. */
+        coverage: covered,
         rank,
         detail,
       },
@@ -202,6 +219,7 @@ async function main() {
     "utf8",
   );
   console.log(`Wrote ${OUTPUT_PATH}`);
+  console.log(`  JMdict DTD revision: ${jmdictVersion ?? "unknown"}`);
   console.log(`  words we teach: ${words.length.toLocaleString()}, blended rank: ${blendedCount.toLocaleString()} (${((blendedCount / words.length) * 100).toFixed(1)}%)`);
   for (const name of names) {
     console.log(`  ${name.padEnd(12)} covers ${String(covered[name]).padStart(5)} (${((covered[name] / words.length) * 100).toFixed(0)}%)`);

@@ -35,6 +35,8 @@ export const SOURCE_KEYS = {
   kanjivg: "kanjivg",
   kanjiapi: "kanjiapi",
   tatoeba: "tatoeba",
+  jmdict: "jmdict",
+  jiten: "jiten",
   curriculum: "curriculum",
   jpmap: "jpmap",
   usmap: "usmap",
@@ -81,6 +83,30 @@ export const SOURCE_CREDITS: Record<SourceKey, SourceCredit> = {
     url: "https://tatoeba.org",
     licence: "CC BY 2.0 FR",
     licenceUrl: "https://creativecommons.org/licenses/by/2.0/fr/",
+  },
+  /*
+   * Frequency, not meaning. JMdict's entries carry priority tags drawn from a
+   * newspaper corpus - nf01..nf48 in bands of 500, plus the news, ichi, spec
+   * and gai common-word lists - and those tags are the whole of what we take.
+   * The definitions are theirs and we do not use them.
+   */
+  [SOURCE_KEYS.jmdict]: {
+    source: "JMdict",
+    url: "http://www.edrdg.org/wiki/index.php/JMdict-EDICT_Dictionary_Project",
+    licence: "CC BY-SA 4.0",
+    licenceUrl: "https://creativecommons.org/licenses/by-sa/4.0/",
+  },
+  /*
+   * The other half of the same question. A newspaper corpus knows what is
+   * written and not what is said, so a word everybody speaks and nobody prints
+   * ranks nowhere - which is how 父 and 雨 end up looking rare. Jiten ranks by
+   * medium, and the spoken registers are what stop that happening.
+   */
+  [SOURCE_KEYS.jiten]: {
+    source: "Jiten",
+    url: "https://jiten.moe",
+    licence: "CC BY-SA 4.0",
+    licenceUrl: "https://creativecommons.org/licenses/by-sa/4.0/",
   },
   [SOURCE_KEYS.curriculum]: {
     source: "MEXT and the Agency for Cultural Affairs",
@@ -133,6 +159,7 @@ export const SOURCE_CREDIT_COPY = {
   strokes: "Stroke data from",
   radicals: "Radical breakdowns from",
   dictionary: "Dictionary data from",
+  wordFrequency: "Word frequency from",
   /*
    * "edited" is not decoration. GSI's terms ask that a reader be told the
    * shapes were changed, and every map here is reprojected and simplified.

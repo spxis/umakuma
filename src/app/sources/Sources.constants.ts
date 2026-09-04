@@ -75,6 +75,26 @@ export const SOURCE_DESCRIPTIONS: Record<
     takes: ["Japanese sentences with English translations", "Which kanji each sentence contains, so a character can find its examples"],
     terms: "Creative Commons Attribution 2.0 France. Each sentence links back to its page on Tatoeba, where its contributor is named.",
   },
+  [SOURCE_KEYS.jmdict]: {
+    tab: "JMdict",
+    lede: "The Electronic Dictionary Research and Development Group's Japanese-English dictionary. We take none of its definitions — only the frequency tags it carries, which say how common a word is in a newspaper corpus.",
+    takes: [
+      "Which frequency band a word falls in, in steps of 500",
+      "Whether a word is among the commonest 12,000 or 24,000 in print",
+      "Membership of the standard common-word lists",
+    ],
+    terms: "Creative Commons Attribution-ShareAlike 4.0. The credit is a condition of use, and so is sharing any derived data under the same terms.",
+  },
+  [SOURCE_KEYS.jiten]: {
+    tab: "Jiten",
+    lede: "An open project that counts how often words appear across 16,232 works of Japanese media, and publishes a frequency list for each medium. It answers what a newspaper corpus cannot: what people actually say.",
+    takes: [
+      "How common a word is in anime, drama and film subtitles",
+      "The same for novels, manga, games and visual novels",
+      "A combined rank across every medium at once",
+    ],
+    terms: "Creative Commons Attribution-ShareAlike 4.0. The credit is a condition of use, and so is sharing any derived data under the same terms.",
+  },
   [SOURCE_KEYS.curriculum]: {
     tab: "School grades",
     lede: "Japan's official kanji tables: the elementary and secondary curricula from the Ministry of Education, the joyo list and the name-kanji list from the Agency for Cultural Affairs.",

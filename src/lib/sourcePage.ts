@@ -9,6 +9,7 @@ import { prisma } from "@/lib/prisma";
 import { radicalIndexSummary } from "@/lib/radicalSearchServer";
 import { getSchoolGradeIndex } from "@/lib/schoolGrades";
 import { SOURCE_KEYS, type SourceKey } from "@/lib/sourceCredits";
+import { wordFrequencySummary } from "@/lib/wordFrequency";
 import type { SourceReport } from "@/lib/sourceReport";
 import { strokeOrderSummary } from "@/lib/strokeOrder";
 import { SUBJECT_TYPES, SUBJECT_TYPE_DISPLAY } from "@/lib/domainConstants";
@@ -42,6 +43,9 @@ const REPORT_COPY = {
   names: "Name kanji",
   regionsDrawn: "Regions drawn",
   borders: "Bordering pairs",
+  wordsWithBand: "Words with a frequency band",
+  wordsRanked: "Words ranked",
+  mediaCorpora: "Media corpora",
 } as const;
 
 async function wanikani(): Promise<SourceReport> {
@@ -145,6 +149,39 @@ function radkfile(): SourceReport {
   };
 }
 
+/*
+ * Two sources over one file. `pnpm build:word-frequency` reads both and writes
+ * a single summary, so each reader answers for its own half of it: JMdict for
+ * the newspaper band, Jiten for everything spoken. Reporting them as one source
+ * would credit the wrong holder on half the data.
+ */
+function jmdict(): SourceReport {
+  const summary = wordFrequencySummary();
+  return {
+    key: SOURCE_KEYS.jmdict,
+    counts: [{ label: REPORT_COPY.wordsWithBand, value: summary?.coverage.newspaper ?? 0 }],
+    lastImportedAt: summary?.generatedAt ?? null,
+    version: summary?.versions.jmdict ?? null,
+    generatedAtMs: Date.now(),
+  };
+}
+
+function jiten(): SourceReport {
+  const summary = wordFrequencySummary();
+  /* Newspaper is JMdict's; the rest of the corpora are Jiten's. */
+  const media = (summary?.corpora ?? []).filter((corpus) => corpus !== "newspaper");
+  return {
+    key: SOURCE_KEYS.jiten,
+    counts: [
+      { label: REPORT_COPY.mediaCorpora, value: media.length },
+      { label: REPORT_COPY.wordsRanked, value: summary?.coverage.global ?? 0 },
+    ],
+    lastImportedAt: summary?.generatedAt ?? null,
+    version: null,
+    generatedAtMs: Date.now(),
+  };
+}
+
 function curriculum(): SourceReport {
   const index = getSchoolGradeIndex();
   return {
@@ -214,6 +251,10 @@ export async function loadSourceReport(key: SourceKey): Promise<SourceReport> {
       return kanjivg();
     case SOURCE_KEYS.radkfile:
       return radkfile();
+    case SOURCE_KEYS.jmdict:
+      return jmdict();
+    case SOURCE_KEYS.jiten:
+      return jiten();
     case SOURCE_KEYS.curriculum:
       return curriculum();
     case SOURCE_KEYS.jpmap:

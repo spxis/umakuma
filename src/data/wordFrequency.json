@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-03T17:34:24.823Z",
+  "generatedAt": "2026-09-04T03:07:51.840Z",
   "sources": [
     "JMdict (EDRDG), CC BY-SA 4.0",
     "Jiten frequency lists (jiten.moe), CC BY-SA 4.0"
@@ -18,6 +18,9 @@
     "webNovel",
     "audio"
   ],
+  "versions": {
+    "jmdict": "1.09"
+  },
   "weights": {
     "newspaper": 1,
     "global": 0.8,
@@ -34,6 +37,20 @@
   },
   "words": 6796,
   "ranked": 6637,
+  "coverage": {
+    "newspaper": 6204,
+    "global": 6636,
+    "anime": 6598,
+    "drama": 6607,
+    "movie": 6532,
+    "novel": 6630,
+    "manga": 6617,
+    "visualNovel": 6622,
+    "videoGame": 6551,
+    "nonFiction": 6406,
+    "webNovel": 6380,
+    "audio": 3678
+  },
   "rank": {
     "2467": 1529,
     "2468": 607,

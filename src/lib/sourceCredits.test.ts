@@ -22,6 +22,8 @@ describe("who gets credited", () => {
     expect(Object.keys(SOURCE_CREDITS).sort()).toEqual([
       "camap",
       "curriculum",
+      "jiten",
+      "jmdict",
       "jpmap",
       "kanjiapi",
       "kanjidic2",
