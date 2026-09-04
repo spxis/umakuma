@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 
-import { XP_AWARDS, XP_DAILY_CAPS, XP_TYPE_NOTES } from "../src/lib/xp/xpAwards";
+import { XP_AWARDS, XP_BONUSES, XP_DAILY_CAPS, XP_TYPE_NOTES } from "../src/lib/xp/xpAwards";
 
 /**
  * Writes the XP economy into the database from the constants that define it.
@@ -17,9 +17,16 @@ import { XP_AWARDS, XP_DAILY_CAPS, XP_TYPE_NOTES } from "../src/lib/xp/xpAwards"
 const prisma = new PrismaClient();
 
 async function main(): Promise<void> {
-  /* One map. A streak milestone and a review answered are both just kinds of
-     XP, so there is no second list and nothing to keep in step with. */
-  const all = Object.entries(XP_AWARDS).map(([id, amount]) => ({ id, amount: Number(amount) }));
+  /* Two maps in the code, one table in the database. The split is readability
+     - a reader can see the routine economy without the exceptional one on top
+     of it - but a streak milestone and a review answered are both simply kinds
+     of XP, so nothing downstream is told which map a row came out of. Both are
+     read here so a new bonus cannot land without a row, which is how the first
+     seeding run wrote nine types and silently missed eleven. */
+  const all = [...Object.entries(XP_AWARDS), ...Object.entries(XP_BONUSES)].map(([id, amount]) => ({
+    id,
+    amount: Number(amount),
+  }));
 
   for (const entry of all) {
     const note = XP_TYPE_NOTES[entry.id] ?? "";
@@ -34,6 +41,9 @@ async function main(): Promise<void> {
         label,
         note,
         amount: entry.amount,
+        /* The base allowance. Games widen with the member's rank at award
+           time, so this row is the floor rather than the whole truth - the
+           note says so, and `xpAwardValue` is where the widening happens. */
         dailyCap: (XP_DAILY_CAPS as Record<string, number | undefined>)[entry.id] ?? null,
       },
       update: {

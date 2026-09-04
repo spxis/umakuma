@@ -241,7 +241,7 @@ export const XP_TYPE_NOTES: Record<string, string> = {
   reviewAnswered: "For every review you answer, right or wrong \u2014 attempting it is the habit.",
   reviewCorrect: "On top of answering, for getting it right.",
   lessonLearned: "For each new item you start as a lesson.",
-  gameFinished: "For finishing a game, up to two a day.",
+  gameFinished: "For finishing a game. Two a day to begin with, and more as your rank rises.",
   levelTestWritten: "For sitting a level test, however it goes.",
   levelTestPassed: "For passing a level test.",
   curriculumLevelGained: "For reaching a new level on the kanji ladder.",
