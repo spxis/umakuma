@@ -4748,11 +4748,23 @@
     "id": "map-all-countries-honest",
     "name": "Open all thirty countries, with only true facts",
     "area": "games",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "Every Natural Earth country is readable now, grouped by part of the world behind Japan. What is shown for them is what is true and nothing else, which took work: the generated metadata was not thin but wrong. Natural Earth's boundaries carry no capital, population or area, and the builder filled the gaps anyway - the capital took the division's own name, so Aisne's capital was Aisne and Ain's was Rhone-Alpes, which is a region rather than a city. Japan, the United States and Canada keep the facts a person wrote for them. For the rest the capital comes from Populated Places where it really marks one - silent for ninety-four of France's ninety-six departments, which is the correct answer - and everything the boundaries cannot answer is left out. Reading a map is now separate from playing it: the game reserves subject ids per country and stores them on every run, so a country joins the game when somebody assigns it a range, not when its outlines arrive.",
+    "dateIsEstimate": false,
+    "version": "0.417.0",
+    "releasedAt": "2026-09-04T14:07:08Z"
+  },
+  {
+    "id": "the-ladder-read-a-level-at-a-time",
+    "name": "The ladder, read a level at a time",
+    "area": "admin",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.417.0",
-    "releasedAt": "2026-09-04T14:07:08Z",
-    "summary": "Every Natural Earth country is readable now, grouped by part of the world behind Japan. What is shown for them is what is true and nothing else, which took work: the generated metadata was not thin but wrong. Natural Earth's boundaries carry no capital, population or area, and the builder filled the gaps anyway - the capital took the division's own name, so Aisne's capital was Aisne and Ain's was Rhone-Alpes, which is a region rather than a city. Japan, the United States and Canada keep the facts a person wrote for them. For the rest the capital comes from Populated Places where it really marks one - silent for ninety-four of France's ninety-six departments, which is the correct answer - and everything the boundaries cannot answer is left out. Reading a map is now separate from playing it: the game reserves subject ids per country and stores them on every run, so a country joins the game when somebody assigns it a range, not when its outlines arrive."
+    "version": "0.418.0",
+    "releasedAt": "2026-09-04T14:12:39Z",
+    "summary": "The crosswalk table answers where a kanji is; it does not answer what a level asks of somebody, which is the question anybody judging the curriculum actually has. A Table/Levels toggle now switches the ladder browser between them, remembered per admin. The level view draws one row per level - radicals in cyan, then that level's kanji at reading size, then its words - with the running count of kanji known by the end of each level rather than the count that level added."
   }
 ]

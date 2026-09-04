@@ -468,6 +468,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Tejika na Goi", ja: "手近な語彙", reading: "てぢかなごい", gloss: "the vocabulary closest to hand" },
   { romaji: "Totonoi no Sorezore", ja: "整いのそれぞれ", reading: "ととのいのそれぞれ", gloss: "each one in its place, the set complete" },
   { romaji: "Namiiru", ja: "並み居る", reading: "なみいる", gloss: "all of them gathered, each saying only what it knows" },
+  { romaji: "Nidanme no Mikata", ja: "二段目の見方", reading: "にだんめのみかた", gloss: "another way of looking at the rungs" },
 ];
 
 /**
