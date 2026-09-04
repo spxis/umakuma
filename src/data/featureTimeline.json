@@ -4580,11 +4580,23 @@
     "id": "the-curriculum-gets-a-table-of-its-own",
     "name": "The curriculum gets a table of its own",
     "area": "admin",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "The ladder lived only in a committed JSON file, so nothing at runtime could point at one of its items and no member could have progress on one. UkSubject now holds all 9,271 items with a stable id and a business key; LadderOverride is the append-only log an admin's moves will be written to. pnpm ladder:seed makes the table agree with the committed ladder and is a no-op the second time; pnpm ladder:check exits 2 on drift the way db:drift:check does. Items the ladder stops placing are marked removed rather than deleted, so progress survives an item being pulled and restored.",
+    "dateIsEstimate": false,
+    "version": "0.403.0",
+    "releasedAt": "2026-09-04T12:37:14Z"
+  },
+  {
+    "id": "eighty-nine-names-for-the-same-nine-stages",
+    "name": "Eighty-nine names for the same nine stages",
+    "area": "platform",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.403.0",
-    "releasedAt": "2026-09-04T12:37:14Z",
-    "summary": "The ladder lived only in a committed JSON file, so nothing at runtime could point at one of its items and no member could have progress on one. UkSubject now holds all 9,271 items with a stable id and a business key; LadderOverride is the append-only log an admin's moves will be written to. pnpm ladder:seed makes the table agree with the committed ladder and is a no-op the second time; pnpm ladder:check exits 2 on drift the way db:drift:check does. Items the ladder stops placing are marked removed rather than deleted, so progress survives an item being pulled and restored."
+    "version": "0.404.0",
+    "releasedAt": "2026-09-04T13:01:10Z",
+    "summary": "WaniKani calls its stages Apprentice, Guru, Master, Enlightened and Burned, and that is the only vocabulary a learner ever gets. src/data/srsThemes.json is the committed source for 89 themes, each naming all ten stages from not-started to the top - Judo belts, sumo divisions, the corporate ladder, ghosts, a theme park. Every rung carries a term, a reading, a meaning and a chip-sized short form, plus an age rating so a ten-year-old is never offered the syndicate ladder. Themes are renamed off their trademarks: the rank vocabulary is ordinary Japanese and stays, but no feature ships called Naruto. The stored SRS value never changes, so switching is instant and retroactive."
   }
 ]
