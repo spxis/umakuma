@@ -4628,11 +4628,23 @@
     "id": "an-admin-s-ladder-moves-survive-a-rebuild",
     "name": "An admin's ladder moves survive a rebuild",
     "area": "admin",
+    "status": "shipped",
     "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "build-kanji-ladder recomputes the whole curriculum every run, so any edit an admin made would vanish on the next pnpm ladder:refresh - which made the admin console unbuildable. src/data/kanjiLadderOverrides.json is now replayed over the computed ladder, between the kanji sort and radical/vocabulary placement, so a moved kanji drags its radicals and the words that use it along without that rule being written twice. Ops are refused by name rather than guessed at: a move that would empty a level, overfill one past 29 kanji, or push a kanji outside its JLPT band stops the build. One implementation, imported by the build and the tests; a test fails if the build ever grows its own copy.",
+    "dateIsEstimate": false,
+    "version": "0.407.0",
+    "releasedAt": "2026-09-04T13:18:26Z"
+  },
+  {
+    "id": "radicals-come-first-and-level-one-is-theirs",
+    "name": "Radicals come first, and level one is theirs",
+    "area": "platform",
+    "kind": "bug",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.407.0",
-    "releasedAt": "2026-09-04T13:18:26Z",
-    "summary": "build-kanji-ladder recomputes the whole curriculum every run, so any edit an admin made would vanish on the next pnpm ladder:refresh - which made the admin console unbuildable. src/data/kanjiLadderOverrides.json is now replayed over the computed ladder, between the kanji sort and radical/vocabulary placement, so a moved kanji drags its radicals and the words that use it along without that rule being written twice. Ops are refused by name rather than guessed at: a move that would empty a level, overfill one past 29 kanji, or push a kanji outside its JLPT band stops the build. One implementation, imported by the build and the tests; a test fails if the build ever grows its own copy."
+    "version": "0.408.0",
+    "releasedAt": "2026-09-04T13:25:58Z",
+    "summary": "The ladder promised a radical is taught before the kanji built from it, and that was quietly untrue for every kanji at level 1: placeRadicals puts a radical two levels early and clamps at 1, so all six level-1 kanji had their radicals in the same level as themselves - \u5e74 with four of them. There is nowhere below level 1, so kanji now start at level 2 and level 1 is 17 radicals and 18 kana words with no kanji at all: shapes and \u3053\u308c/\u305d\u308c/\u306f\u3044, nothing to cross-reference. 8,424 radical-to-kanji pairs now checked by test, zero violations. Level 1 falls from 46 subjects to 35, against WaniKani's 80."
   }
 ]
