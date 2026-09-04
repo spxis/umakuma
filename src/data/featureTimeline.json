@@ -1349,7 +1349,7 @@
     "area": "games",
     "status": "shipped",
     "date": "2026-08-30",
-    "summary": "Map mode's setup now offers Japan, the United States or Canada, and the item count follows the choice - forty-seven, fifty-one or thirteen. Only Map shows the control, because only Map plays somewhere. Adding Europe or Asia later is a dataset and a line in one list, not a new game.",
+    "summary": "Every country in one flat row was fine at three and cramped at seven; at thirty it would be a hedge of buttons between the reader and the map, with the one country this site is about lost inside it. Japan stands on its own at the front, always, and everywhere else is reached by naming a part of the world and then the country - two clicks to any of them, and never more than a handful on screen. Whatever country is open stays visible even when it is neither Japan nor in the part being browsed, and empty parts are dropped rather than shown with nothing under them.",
     "dateIsEstimate": false,
     "version": "0.121.0",
     "releasedAt": "2026-08-31T03:53:02Z"
@@ -4676,11 +4676,23 @@
     "id": "map-zoom-at-point",
     "name": "Double-click zooms where you point",
     "area": "games",
+    "status": "shipped",
     "kind": "bug",
+    "date": "2026-09-04",
+    "summary": "Double-clicking the map only worked on a region, and it re-centred on that region's middle - so asking to look closer at a coastline threw the whole country sideways, and a second double-click landed somewhere nobody had chosen. It works anywhere on the map now, the sea between islands included, and the spot under the pointer stays exactly where it was while the map grows around it. Alt, or Option, with a double-click goes back out.",
+    "dateIsEstimate": false,
+    "version": "0.411.0",
+    "releasedAt": "2026-09-04T13:45:12Z"
+  },
+  {
+    "id": "map-country-picker",
+    "name": "Japan first, then a way through to the other countries",
+    "area": "games",
+    "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.411.0",
-    "releasedAt": "2026-09-04T13:45:12Z",
-    "summary": "Double-clicking the map only worked on a region, and it re-centred on that region's middle - so asking to look closer at a coastline threw the whole country sideways, and a second double-click landed somewhere nobody had chosen. It works anywhere on the map now, the sea between islands included, and the spot under the pointer stays exactly where it was while the map grows around it. Alt, or Option, with a double-click goes back out."
+    "version": "0.412.0",
+    "releasedAt": "2026-09-04T13:46:42Z",
+    "summary": "A flat row of every country was fine at three and cramped at seven, and would be a wall at thirty with the one country the site is about lost inside it. Japan stands on its own at the front; everywhere else is reached by naming a part of the world first, then the country, with Done to collapse it again. Whatever is open stays visible even when it is neither Japan nor in the part being browsed. Requested 2026-09-04 by John, twice."
   }
 ]
