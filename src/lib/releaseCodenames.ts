@@ -452,6 +452,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Ubusuna", ja: "産土", reading: "うぶすな", gloss: "the ground you were born on" },
   { romaji: "Eriwake no Me", ja: "選り分けの目", reading: "えりわけのめ", gloss: "an eye for picking out" },
   { romaji: "Oodoori", ja: "大通り", reading: "おおどおり", gloss: "the main street a town is built along" },
+  { romaji: "Kaitei no Zenkei", ja: "階梯の全景", reading: "かいていのぜんけい", gloss: "the whole ladder in view" },
 ];
 
 /**
