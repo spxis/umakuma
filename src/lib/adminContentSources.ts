@@ -1,5 +1,9 @@
 import "server-only";
 
+/* Every country in memory. The browser loads one at a time; the server, which
+   ships no bundle, wants the lot - see geoRegionServer. */
+import "./geoRegionServer";
+
 import caMap from "@/data/maps/ca-map.json";
 import thMap from "@/data/maps/th-map.json";
 import cnMap from "@/data/maps/cn-map.json";

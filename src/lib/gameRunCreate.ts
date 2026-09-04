@@ -2,6 +2,10 @@ import { geoCapitalEntries, geoMapEntries } from "@/lib/geoMapPool";
 import type { CountryCode } from "@/lib/geoRegion";
 import "server-only";
 
+/* Every country in memory. The browser loads one at a time; the server, which
+   ships no bundle, wants the lot - see geoRegionServer. */
+import "./geoRegionServer";
+
 import { GameKind as PrismaGameKind, GameSubjectCategory } from "@prisma/client";
 
 import { getVancouverDateKey } from "@/lib/dailySnapshot";

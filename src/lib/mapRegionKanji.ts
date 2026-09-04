@@ -1,5 +1,9 @@
 import "server-only";
 
+/* Every country in memory. The browser loads one at a time; the server, which
+   ships no bundle, wants the lot - see geoRegionServer. */
+import "./geoRegionServer";
+
 import { GEO_DATASETS, type CountryCode } from "./geoRegion";
 import { getKanjiDictionaryEntry } from "./kanjiDictionary";
 import { regionKanji } from "./mapStudy";

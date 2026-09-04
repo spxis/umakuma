@@ -6,7 +6,8 @@ import { GAME_KEY_LAYOUTS, type GameKind, type GameOptionTile, type GameQuestion
 import { mapBoxIsZoomed } from "@/lib/japanPrefectures";
 import { geoFocusBox } from "@/lib/geoMapFraming";
 import { geoRegionIdFromSubjectId } from "@/lib/geoSubjectIds";
-import { GEO_DATASETS, type CountryCode } from "@/lib/geoRegion";
+import type { CountryCode } from "@/lib/geoRegion";
+import { useGeoDataset } from "@/lib/useGeoDataset";
 
 /**
  * The country and region a place id belongs to.
@@ -162,8 +163,9 @@ function MapBoard({
     promptPlace?.country
     ?? options.map((option) => placeFromSubjectId(option.subjectId)?.country).find(Boolean)
     ?? "JP";
-  // Prefecture, state, or province and territory - the board knows which.
-  const divisionName = GEO_DATASETS[country].divisionTypeName;
+  /* Prefecture, state, or province and territory - the board knows which, once
+     the country's chunk has landed. CountryMap draws its own frame meanwhile. */
+  const divisionName = useGeoDataset(country)?.divisionTypeName ?? "";
 
   const toneFor = (option: GameOptionTile, fallback: MapTone): MapTone => {
     if (feedback?.subjectId !== option.subjectId) return fallback;

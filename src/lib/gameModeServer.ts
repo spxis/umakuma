@@ -1,5 +1,9 @@
 import "server-only";
 
+/* Every country in memory. The browser loads one at a time; the server, which
+   ships no bundle, wants the lot - see geoRegionServer. */
+import "./geoRegionServer";
+
 import { GameAnswerType, GameKind, GameRunStatus, GameSubjectCategory } from "@prisma/client";
 
 import { getVancouverDateKey } from "@/lib/dailySnapshot";

@@ -19,7 +19,7 @@ export const DEFAULT_MAP_COUNTRY: MapCountryCode = "JP";
 export function regionByCode(country: MapCountryCode, raw: string | number | null): GeoRegion | null {
   if (raw === null || raw === "") return null;
   const wanted = String(raw).trim().toUpperCase();
-  return GEO_DATASETS[country].regions.find((region) => String(region.code).toUpperCase() === wanted) ?? null;
+  return (GEO_DATASETS[country]?.regions ?? []).find((region) => String(region.code).toUpperCase() === wanted) ?? null;
 }
 
 /**
@@ -28,7 +28,15 @@ export function regionByCode(country: MapCountryCode, raw: string | number | nul
  * the others by name, which is how their own people look them up.
  */
 export function regionsInOrder(country: MapCountryCode): GeoRegion[] {
-  const regions = [...GEO_DATASETS[country].regions];
+  /*
+   * `?? []` because a country's data arrives when somebody asks for it.
+   *
+   * A client component renders once on the server and once more before its
+   * chunk lands, and both of those run with an empty registry. An unloaded
+   * country genuinely has no regions yet; the surfaces draw a skeleton until it
+   * does. Reading `.regions` off `undefined` was a 500 on every map page.
+   */
+  const regions = [...(GEO_DATASETS[country]?.regions ?? [])];
   if (country === DEFAULT_MAP_COUNTRY) return regions.sort((left, right) => Number(left.code) - Number(right.code));
   return regions.sort((left, right) => left.name.localeCompare(right.name, "en"));
 }

@@ -67,13 +67,13 @@ export function areaSlug(area: string): string {
 export function areaForSlug(country: CountryCode, slug: string | undefined | null): string | null {
   if (!slug) return null;
   const wanted = slug.trim().toLowerCase();
-  return areasOf(GEO_DATASETS[country].regions).find((area) => areaSlug(area) === wanted) ?? null;
+  return areasOf(GEO_DATASETS[country]?.regions ?? []).find((area) => areaSlug(area) === wanted) ?? null;
 }
 
 export function regionForSlug(country: CountryCode, slug: string | undefined | null): GeoRegion | null {
   if (!slug) return null;
   const wanted = slug.trim().toLowerCase();
-  return GEO_DATASETS[country].regions.find((region) => regionSlug(region) === wanted) ?? null;
+  return (GEO_DATASETS[country]?.regions ?? []).find((region) => regionSlug(region) === wanted) ?? null;
 }
 
 export type MapAddress = {
@@ -119,7 +119,7 @@ export function parseMapPath(segments: readonly string[] | undefined): MapAddres
 export function mapHref(country: CountryCode, code: string | number | null, area: string | null = null): string {
   const base = `${MAPS_HREF}/${MAP_COUNTRY_SLUGS[country]}`;
   const region =
-    code === null ? null : GEO_DATASETS[country].regions.find((candidate) => String(candidate.code) === String(code));
+    code === null ? null : (GEO_DATASETS[country]?.regions ?? []).find((candidate) => String(candidate.code) === String(code));
 
   /* A region the province is not in is not an address; drop it rather than lie. */
   const lit = area && (!region || areaNameOf(region) === area) ? area : null;

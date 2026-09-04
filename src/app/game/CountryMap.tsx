@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
 
-import { GEO_DATASETS, type CountryCode } from "@/lib/geoRegion";
+import type { CountryCode } from "@/lib/geoRegion";
+import { useGeoDataset } from "@/lib/useGeoDataset";
 import { MAP_SOURCE_KEYS } from "@/lib/mapCountries";
 import { SOURCE_CREDITS, SOURCE_CREDIT_COPY, SOURCE_KEYS, sourcePath } from "@/lib/sourceCredits";
 import { GEO_INSETS, applyInsetTransform, insetTransform, insetTransformAttribute } from "@/lib/geoMapInsets";
@@ -114,7 +117,19 @@ export default function CountryMap({
   cities,
 }: Props) {
   const choosable = Boolean(onRegionSelect) && !disabled;
-  const dataset = GEO_DATASETS[country];
+  /*
+   * The country's outlines, fetched the first time this draws one.
+   *
+   * Every hook must run before the early return below, and this is the only
+   * one here - the rest of the component is plain maths over `dataset`, all of
+   * which would read `undefined.regions` if it ran a paint too soon.
+   */
+  const dataset = useGeoDataset(country);
+  if (!dataset) {
+    /* The frame the map will fill, so nothing under it moves when it arrives. */
+    return <div className={`h-full w-full ${className ?? ""}`.trim()} aria-busy="true" />;
+  }
+
   const box = framed ?? geoFocusBox(country, focusCodes);
   const { radius, fontSize, stroke } = handleFor(box);
   // Codes are numbers in Japan and letters elsewhere, so key them as text.

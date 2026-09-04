@@ -1,5 +1,6 @@
-import { GEO_DATASETS, type CountryCode } from "./geoRegion";
+import { type CountryCode } from "./geoRegion";
 import { geoRegionIdFromSubjectId } from "./geoSubjectIds";
+import { geoDatasetOrEmpty } from "./geoDatasetRegistry";
 
 /**
  * Where a map's numbered handles go, and what order they are numbered in.
@@ -111,7 +112,7 @@ export function geoCentroidForSubjectId(subjectId: number): readonly [number, nu
   const regionId = geoRegionIdFromSubjectId(subjectId);
   if (!regionId) return null;
   const [country, ...rest] = regionId.split("-");
-  const dataset = GEO_DATASETS[country as CountryCode];
+  const dataset = geoDatasetOrEmpty(country as CountryCode);
   if (!dataset) return null;
   const code = rest.join("-");
   const region = dataset.regions.find((candidate) => String(candidate.code) === code);

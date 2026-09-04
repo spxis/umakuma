@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
 
+/* Registers all seven; nothing is in memory until something loads it. */
+import "./geoDatasetsAll";
+
 import { getAllGeoRegions, getGeoRegionsByCountry, type CountryCode } from "./geoRegion";
 import {
   GEO_REGION_COUNTS,
@@ -9,6 +12,7 @@ import {
   isGeoSubjectId,
 } from "./geoSubjectIds";
 import { isMapSubjectId, mapSubjectId } from "./japanPrefectures";
+
 
 const COUNTRIES: CountryCode[] = ["JP", "US", "CA", "TH", "CN", "AU", "TW"];
 
@@ -35,13 +39,13 @@ describe("backward compatibility with recorded runs", () => {
 
 describe("geoSubjectId", () => {
   it("assigns an id to every region in every country", () => {
-    for (const region of getAllGeoRegions(true)) {
+    for (const region of getAllGeoRegions()) {
       expect(geoSubjectId(region.country, region.code)).not.toBeNull();
     }
   });
 
   it("never collides across the whole pool", () => {
-    const ids = getAllGeoRegions(true).map((region) => geoSubjectId(region.country, region.code));
+    const ids = getAllGeoRegions().map((region) => geoSubjectId(region.country, region.code));
     expect(new Set(ids).size).toBe(ids.length);
   });
 
@@ -53,7 +57,7 @@ describe("geoSubjectId", () => {
 
 describe("geoRegionIdFromSubjectId", () => {
   it("round-trips every region back to its composite id", () => {
-    for (const region of getAllGeoRegions(true)) {
+    for (const region of getAllGeoRegions()) {
       const id = geoSubjectId(region.country, region.code) as number;
       expect(geoRegionIdFromSubjectId(id)).toBe(region.id);
     }

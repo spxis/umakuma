@@ -1,5 +1,9 @@
 import "server-only";
 
+/* Every country in memory. The browser loads one at a time; the server, which
+   ships no bundle, wants the lot - see geoRegionServer. */
+import "./geoRegionServer";
+
 import caMeta from "@/data/maps/ca-meta.json";
 import jpMeta from "@/data/maps/jp-meta.json";
 import usMeta from "@/data/maps/us-meta.json";

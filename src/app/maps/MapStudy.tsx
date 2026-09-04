@@ -7,7 +7,7 @@ import { MAP_TONES } from "@/app/game/GameMode.constants";
 import ModalShell from "@/app/shared/ModalShell";
 import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
 import { MODAL_LAYERS } from "@/app/shared/modalLayers";
-import { GEO_DATASETS } from "@/lib/geoRegion";
+import { useGeoDataset } from "@/lib/useGeoDataset";
 import { getPlayableMapCountries, type MapCountryCode } from "@/lib/mapCountries";
 import { mapHref, parseMapPath } from "@/lib/mapAddress";
 import { regionCodesInArea } from "@/lib/mapDirectory";
@@ -16,11 +16,11 @@ import { regionNameLabel, regionNameLines } from "@/lib/regionNames";
 
 import { MAP_ZOOM_LEVELS } from "@/lib/geoMapFraming";
 import { filterMarks, markFor, markTone, markTotals, type MapMarkLayers } from "@/lib/mapMarks";
-import { CITY_DENSITIES, citiesAtDensity, cityDensityCounts, hasCities, isCityDensity, type CityDensity } from "@/lib/geoCities";
-import { getStoredEnum, getStoredFlagOneIsTrue, setStoredBooleanFlag, setStoredEnum } from "@/lib/clientStorage";
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 
 import MapCityToggle from "./MapCityToggle";
+import MapStudySkeleton from "./MapStudySkeleton";
+import { useMapCities } from "./useMapCities";
 import type { MapKanjiFacts } from "@/lib/mapRegionKanji";
 
 import MapLayerToggles from "./MapLayerToggles";
@@ -78,8 +78,15 @@ export default function MapStudy({
   const [hoveredArea, setHoveredArea] = useState<string | null>(null);
   const [wide, setWide] = useState(true);
 
-  const dataset = GEO_DATASETS[country];
-  const division = dataset.divisionTypeName.toLowerCase();
+  /*
+   * The country's outlines, fetched when this first draws them.
+   *
+   * Null until the chunk lands. Every hook below still has to run - React
+   * counts them - so the fields are read defensively here and the skeleton is
+   * returned further down, after the last one.
+   */
+  const dataset = useGeoDataset(country);
+  const division = dataset?.divisionTypeName.toLowerCase() ?? "";
   const regions = useMemo(() => regionsInOrder(country), [country]);
   const selected = regionByCode(country, code);
   const hoveredRegion = regionByCode(country, hovered);
@@ -141,40 +148,7 @@ export default function MapStudy({
    * the server, and a value read while rendering would make the first client
    * paint disagree with the markup React sent.
    */
-  const cityCountry = hasCities(country);
-  /*
-   * Both read after mount, never during render.
-   *
-   * `usePersistedBoolean` seeds its state from localStorage inside the
-   * useState initialiser, which is fine only while the stored value agrees
-   * with the default - the mark layers default to on and mostly do. Cities
-   * default to off, so the first reader who turns them on and comes back gets
-   * a server paint saying off and a client paint saying on, and React throws a
-   * hydration mismatch. Reading in an effect costs one extra paint and cannot
-   * disagree with the markup that was sent.
-   */
-  const [showCities, setShowCities] = useState(false);
-  const [cityDensity, setCityDensity] = useState<CityDensity>("major");
-  useEffect(() => {
-    setShowCities(getStoredFlagOneIsTrue("maps.cities.shown", false));
-    setCityDensity(getStoredEnum("maps.cities.density", CITY_DENSITIES, "major"));
-  }, []);
-  const toggleCities = useCallback(() => {
-    setShowCities((on) => {
-      setStoredBooleanFlag("maps.cities.shown", !on);
-      return !on;
-    });
-  }, []);
-  const chooseDensity = useCallback((next: CityDensity) => {
-    if (!isCityDensity(next)) return;
-    setCityDensity(next);
-    setStoredEnum("maps.cities.density", next);
-  }, []);
-  const cityCounts = useMemo(() => cityDensityCounts(country), [country]);
-  const cities = useMemo(
-    () => (cityCountry && showCities ? citiesAtDensity(country, cityDensity) : []),
-    [cityCountry, showCities, country, cityDensity],
-  );
+  const city = useMapCities(country);
 
   const toggleLayer = useCallback((layer: keyof MapMarkLayers) => {
     if (layer === "known") setShowKnown((on) => !on);
@@ -293,6 +267,12 @@ export default function MapStudy({
     />
   ) : null;
 
+  /*
+   * Nothing to draw yet. Placed after every hook, never before one: an early
+   * return above `useMemo` would change the hook order between paints.
+   */
+  if (!dataset) return <MapStudySkeleton />;
+
   return (
     <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
       <section className="space-y-3 rounded-3xl border border-line bg-surface p-4 shadow-sm">
@@ -332,18 +312,18 @@ export default function MapStudy({
           </span>
         </div>
 
-        {saidAnything || cityCountry ? (
+        {saidAnything || city.available ? (
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
             {saidAnything ? (
               <MapLayerToggles totals={totals} layers={layers} onToggle={toggleLayer} total={dataset.totalRegions} />
             ) : null}
-            {cityCountry ? (
+            {city.available ? (
               <MapCityToggle
-                shown={showCities}
-                onToggle={toggleCities}
-                density={cityDensity}
-                onDensity={chooseDensity}
-                counts={cityCounts}
+                shown={city.shown}
+                onToggle={city.toggle}
+                density={city.density}
+                onDensity={city.chooseDensity}
+                counts={city.counts}
               />
             ) : null}
           </div>
@@ -358,7 +338,7 @@ export default function MapStudy({
             onRegionDoubleSelect={view.zoomInto}
             onRegionHover={setHovered}
             regionLabel={regionLabel}
-            cities={cities}
+            cities={city.cities}
             svgProps={view.panProps}
           />
           {/*

@@ -1,5 +1,6 @@
 import { applyInsetTransform, insetFor, insetTransform } from "./geoMapInsets";
 import { GEO_DATASETS, type CountryCode } from "./geoRegion";
+import { geoDatasetOrEmpty } from "./geoDatasetRegistry";
 export type MapBox = { x: number; y: number; width: number; height: number };
 
 export function mapBoxToViewBox(box: MapBox): string {
@@ -22,13 +23,13 @@ const FOCUS_PADDING_RATIO = 0.55;
 const MIN_FOCUS_SPAN_RATIO = 0.22;
 
 export function geoWholeCountryBox(country: CountryCode): MapBox {
-  const dataset = GEO_DATASETS[country];
+  const dataset = geoDatasetOrEmpty(country);
   return { x: 0, y: 0, width: dataset.width, height: dataset.height };
 }
 
 /** The window that frames these regions, or the whole country when none are given. */
 export function geoFocusBox(country: CountryCode, codes: ReadonlyArray<string | number>): MapBox {
-  const dataset = GEO_DATASETS[country];
+  const dataset = geoDatasetOrEmpty(country);
   const whole = geoWholeCountryBox(country);
 
   const framed = dataset.regions.filter((region) =>
@@ -60,7 +61,7 @@ export function geoFocusBox(country: CountryCode, codes: ReadonlyArray<string | 
 
 /** True when the box shows the whole country rather than a zoomed-in window. */
 export function geoBoxIsWholeCountry(country: CountryCode, box: MapBox): boolean {
-  const dataset = GEO_DATASETS[country];
+  const dataset = geoDatasetOrEmpty(country);
   return box.width >= dataset.width && box.height >= dataset.height;
 }
 
@@ -150,7 +151,7 @@ export function geoZoomToFit(
   codes: ReadonlyArray<string | number>,
 ): { zoom: MapZoom; centre: { x: number; y: number } } {
   const whole = geoWholeCountryBox(country);
-  const drawn = GEO_DATASETS[country].regions
+  const drawn = (GEO_DATASETS[country]?.regions ?? [])
     .filter((region) => codes.some((code) => String(code) === String(region.code)))
     .map((region) => {
       const seated = insetFor(country, region.code);
@@ -195,7 +196,7 @@ export function geoRegionCentre(
   const seated = insetFor(country, code);
   if (seated) return geoBoxCentre(seated.box);
 
-  const region = GEO_DATASETS[country].regions.find((entry) => String(entry.code) === String(code));
+  const region = (GEO_DATASETS[country]?.regions ?? []).find((entry) => String(entry.code) === String(code));
   if (!region) return null;
   const [minX, minY, maxX, maxY] = region.map.bbox;
   return { x: (minX + maxX) / 2, y: (minY + maxY) / 2 };
@@ -230,7 +231,7 @@ export function geoRegionBox(
   /** How much wider than tall the frame is. Square unless the caller says. */
   aspect = 1,
 ): MapBox {
-  const region = GEO_DATASETS[country].regions.find((entry) => String(entry.code) === String(code));
+  const region = (GEO_DATASETS[country]?.regions ?? []).find((entry) => String(entry.code) === String(code));
   if (!region) return geoWholeCountryBox(country);
 
   /*

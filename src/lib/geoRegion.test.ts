@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
 
+/* Registers all seven; nothing is in memory until something loads it. */
+import "./geoDatasetsAll";
+
 import {
   GEO_DATASETS,
   getAllGeoRegions,
@@ -24,13 +27,20 @@ describe("the geo datasets", () => {
     expect(GEO_DATASETS[country].totalRegions).toBe(EXPECTED_COUNTS[country]);
   });
 
-  it("covers all countries in the combined list", () => {
-    expect(getAllGeoRegions()).toHaveLength(47 + 51 + 13);
-    expect(getAllGeoRegions(true)).toHaveLength(47 + 51 + 13 + 77 + 31 + 10 + 21);
+  /*
+   * "All" means what is in memory, not a fixed list.
+   *
+   * It used to take an `includeAdminPilot` flag and pick between two eagerly
+   * built arrays. There is nothing to pick between now: a country is loaded
+   * because something asked for it, and only an admin ever asks for the four
+   * pilots - so the gate holds at the network as well as at the page.
+   */
+  it("covers every country that has been loaded", () => {
+    expect(getAllGeoRegions()).toHaveLength(47 + 51 + 13 + 77 + 31 + 10 + 21);
   });
 
   it("gives every region a globally unique id", () => {
-    const ids = getAllGeoRegions(true).map((region) => region.id);
+    const ids = getAllGeoRegions().map((region) => region.id);
     expect(new Set(ids).size).toBe(ids.length);
   });
 
@@ -51,15 +61,39 @@ describe("the geo datasets", () => {
 
 describe("the fields the map games ask questions about", () => {
   const regions = getAllGeoRegions();
+  const PUBLIC_REGIONS = (["JP", "US", "CA"] as const).flatMap((code) => getGeoRegionsByCountry(code));
 
   it("names a capital for every region", () => {
     const missing = regions.filter((region) => !region.capital?.name?.trim());
     expect(missing.map((region) => region.id)).toEqual([]);
   });
 
-  it("gives every region a positive population and area", () => {
-    const bad = regions.filter((region) => !(region.population > 0) || !(region.areaKm2 > 0));
+  /*
+   * The public countries answer every question a map game can ask.
+   *
+   * Named explicitly because the pilots do not, and this used to pass only by
+   * accident: `getAllGeoRegions()` defaulted to these three and needed a flag
+   * for the rest, so the gap below was never in the assertion.
+   */
+  it("gives every region of a public country a positive population and area", () => {
+    const bad = PUBLIC_REGIONS.filter((region) => !(region.population > 0) || !(region.areaKm2 > 0));
     expect(bad.map((region) => region.id)).toEqual([]);
+  });
+
+  /*
+   * The pilots do not, and that is what keeps them pilots.
+   *
+   * Thailand, China, Australia and Taiwan were generated from Natural Earth
+   * boundaries alone; nobody has filled in the population and area. The map
+   * draws correctly, but a question about how many people live somewhere would
+   * answer nought. Recorded rather than skipped, so this fails the day the
+   * numbers arrive and somebody has to decide whether the country is ready to
+   * be public.
+   */
+  it("has not had the pilot countries' population and area filled in yet", () => {
+    const pilots = (["TH", "CN", "AU", "TW"] as const).flatMap((code) => getGeoRegionsByCountry(code));
+    const blank = pilots.filter((region) => !(region.population > 0) || !(region.areaKm2 > 0));
+    expect(blank.length).toBe(pilots.length);
   });
 
   it("gives every region a display name", () => {
@@ -67,7 +101,7 @@ describe("the fields the map games ask questions about", () => {
   });
 
   it("gives all pilot regions names, capitals, and valid map paths", () => {
-    const all = getAllGeoRegions(true);
+    const all = getAllGeoRegions();
     expect(all.filter((region) => !region.name?.trim())).toHaveLength(0);
     expect(all.filter((region) => !region.capital?.name?.trim())).toHaveLength(0);
     expect(all.filter((region) => !region.map?.path?.trim())).toHaveLength(0);

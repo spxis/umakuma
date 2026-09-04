@@ -28,7 +28,15 @@ import {
 
 describe("Geographic Datasets & Schema Integrity (Japan, USA, Canada)", () => {
   it("enforces strict count invariants across all 3 countries", () => {
-    const all = getAllGeoRegions();
+    /*
+     * The three public countries, named rather than assumed.
+     *
+     * This read `getAllGeoRegions()` and expected 111, which was right only
+     * while that function defaulted to the public three and took a flag for
+     * the rest. It returns whatever is loaded now, so the countries this file
+     * is about are spelled out.
+     */
+    const all = (["JP", "US", "CA"] as const).flatMap((code) => getGeoRegionsByCountry(code));
     expect(all).toHaveLength(111); // 47 Japan + 51 USA + 13 Canada
 
     const jp = getGeoRegionsByCountry("JP");
@@ -86,10 +94,11 @@ describe("Geographic Datasets & Schema Integrity (Japan, USA, Canada)", () => {
     }
   });
 
-  it("guarantees unique region IDs with zero collisions across all 111 regions", () => {
+  it("guarantees unique region IDs with zero collisions across every loaded country", () => {
+    /* Uniqueness has to hold across all of them, not just the public three:
+       the ids are what the game stores against a run. */
     const all = getAllGeoRegions();
-    const ids = new Set(all.map((r) => r.id));
-    expect(ids.size).toBe(111);
+    expect(new Set(all.map((r) => r.id)).size).toBe(all.length);
   });
 
   it("verifies all 50 US States + District of Columbia exist and contain valid metadata", () => {
