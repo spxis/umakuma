@@ -24,6 +24,8 @@ export const LADDER_SOURCES = {
   kanjidic: "kanjidic",
   /** One of RADKFILE's 253 classical radicals, which WaniKani does not use. */
   radkfile: "radkfile",
+  /** Added by an admin rather than computed, so the row carries its content. */
+  admin: "admin",
 } as const;
 
 export type LadderSource = (typeof LADDER_SOURCES)[keyof typeof LADDER_SOURCES];
@@ -34,6 +36,7 @@ export const LADDER_SOURCE_LABELS: Record<LadderSource, string> = {
   [LADDER_SOURCES.wanikani]: "WaniKani",
   [LADDER_SOURCES.kanjidic]: "KANJIDIC2",
   [LADDER_SOURCES.radkfile]: "RADKFILE",
+  [LADDER_SOURCES.admin]: "Added here",
 };
 
 export type LadderRow = {

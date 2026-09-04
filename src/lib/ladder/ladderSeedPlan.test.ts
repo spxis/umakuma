@@ -1,0 +1,153 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+
+import { describe, expect, it } from "vitest";
+
+import { MAP_SUBJECT_ID_BASE } from "@/lib/japanPrefectures";
+
+import { LADDER_SOURCES, LADDER_SOURCE_VALUES } from "./ladderCrosswalk";
+import { buildLadderSeedPlan, diffLadderSeed, UK_SUBJECT_KINDS, type LadderSeedInput } from "./ladderSeedPlan";
+import { isUkGameSubjectId, toUkGameSubjectId, UK_SUBJECT_ID_BASE, ukSubjectIdFrom } from "./ukSubjectIds";
+
+const input: LadderSeedInput = {
+  kanji: {
+    日: { level: 1, waniKaniLevel: 2, nLevel: 5 },
+    苺: { level: 14, waniKaniLevel: null, nLevel: null },
+  },
+  radicals: { 口: 1, ノ: 1 },
+  vocabulary: { "2467": 3 },
+  dictionary: new Map([
+    ["日", { meanings: ["day", "sun"], onReadings: ["ニチ"], kunReadings: ["ひ"], grade: 1 }],
+    ["苺", { meanings: ["strawberry"], onReadings: ["バイ"], kunReadings: ["いちご"], grade: null }],
+    ["口", { meanings: ["mouth"], onReadings: ["コウ"], kunReadings: ["くち"], grade: 1 }],
+  ]),
+  kanjiSubjectIds: new Map([["日", 476]]),
+};
+
+describe("the rows the curriculum should hold", () => {
+  const rows = buildLadderSeedPlan(input);
+  const byKey = Object.fromEntries(rows.map((row) => [row.key, row]));
+
+  it("keys every item uniquely across the three kinds", () => {
+    expect(new Set(rows.map((row) => row.key)).size).toBe(rows.length);
+    expect(Object.keys(byKey).sort()).toEqual(["kanji:日", "kanji:苺", "radical:ノ", "radical:口", "wk:2467"]);
+  });
+
+  /*
+   * Content travels only for what WaniKani does not teach. Copying their
+   * meanings here would be a second answer going stale beside a catalogue that
+   * syncs on its own, and their mnemonics are not ours to store at all.
+   */
+  it("carries content only for items WaniKani does not teach", () => {
+    expect(byKey["kanji:日"]).toMatchObject({ source: LADDER_SOURCES.wanikani, meanings: [], readings: [] });
+    expect(byKey["kanji:苺"]).toMatchObject({ source: LADDER_SOURCES.kanjidic, meanings: ["strawberry"] });
+    expect(byKey["kanji:苺"].readings).toEqual(["バイ", "いちご"]);
+    /* Radicals are RADKFILE's, which WaniKani does not use, so all of them carry theirs. */
+    expect(byKey["radical:口"]).toMatchObject({ source: LADDER_SOURCES.radkfile, meanings: ["mouth"] });
+  });
+
+  it("links to the WaniKani subject where there is one", () => {
+    expect(byKey["kanji:日"].wkSubjectId).toBe(476);
+    expect(byKey["kanji:苺"].wkSubjectId).toBeNull();
+    expect(byKey["wk:2467"].wkSubjectId).toBe(2467);
+  });
+
+  it("orders a level the way it is met: radicals, kanji, then words", () => {
+    expect(rows.map((row) => row.kind)).toEqual([
+      UK_SUBJECT_KINDS.radical,
+      UK_SUBJECT_KINDS.radical,
+      UK_SUBJECT_KINDS.kanji,
+      UK_SUBJECT_KINDS.vocabulary,
+      UK_SUBJECT_KINDS.kanji,
+    ]);
+  });
+});
+
+describe("what a seed run would change", () => {
+  const rows = buildLadderSeedPlan(input);
+  const stored = (over: Partial<Record<string, unknown>> = {}) => ({
+    key: "kanji:日", kind: "kanji", characters: "日", level: 1, wkSubjectId: 476,
+    source: "wanikani", nLevel: 5, schoolGrade: 1, removedAt: null, ...over,
+  });
+
+  it("creates what is missing and leaves what agrees alone", () => {
+    const diff = diffLadderSeed(rows, [stored()]);
+    expect(diff.unchanged).toBe(1);
+    expect(diff.update).toHaveLength(0);
+    expect(diff.create.map((row) => row.key).sort()).toEqual(["kanji:苺", "radical:ノ", "radical:口", "wk:2467"]);
+  });
+
+  it("updates a row whose level has moved", () => {
+    const diff = diffLadderSeed(rows, [stored({ level: 9 })]);
+    expect(diff.update.map((row) => row.key)).toEqual(["kanji:日"]);
+  });
+
+  /* A restored item comes back rather than staying hidden. */
+  it("revives a row that had been marked removed", () => {
+    const diff = diffLadderSeed(rows, [stored({ removedAt: new Date() })]);
+    expect(diff.update.map((row) => row.key)).toEqual(["kanji:日"]);
+  });
+
+  it("marks what the ladder no longer places, and never twice", () => {
+    const gone = { ...stored(), key: "kanji:朕" };
+    expect(diffLadderSeed(rows, [gone]).remove).toEqual(["kanji:朕"]);
+    expect(diffLadderSeed(rows, [{ ...gone, removedAt: new Date() }]).remove).toEqual([]);
+  });
+
+  it("has nothing to do the second time", () => {
+    const asStored = rows.map((row) => ({ ...row, removedAt: null }));
+    const diff = diffLadderSeed(rows, asStored);
+    expect([diff.create.length, diff.update.length, diff.remove.length]).toEqual([0, 0, 0]);
+    expect(diff.unchanged).toBe(rows.length);
+  });
+});
+
+/*
+ * Three id spaces share `subjectId` columns with no column saying which is
+ * which. They must not touch: tagging a curriculum item would otherwise tag a
+ * WaniKani subject, which is a bug nothing would report.
+ */
+describe("curriculum ids stay clear of everybody else's", () => {
+  it("sits above WaniKani and below the maps", () => {
+    /* WaniKani's catalogue tops out in the low ten-thousands. */
+    expect(UK_SUBJECT_ID_BASE).toBeGreaterThan(100_000);
+    expect(UK_SUBJECT_ID_BASE).toBeLessThan(MAP_SUBJECT_ID_BASE);
+    expect(UK_SUBJECT_ID_BASE + 1_000_000).toBeLessThanOrEqual(MAP_SUBJECT_ID_BASE);
+  });
+
+  it("round-trips a row id and refuses everybody else's", () => {
+    expect(ukSubjectIdFrom(toUkGameSubjectId(42))).toBe(42);
+    expect(isUkGameSubjectId(476)).toBe(false);
+    expect(isUkGameSubjectId(MAP_SUBJECT_ID_BASE + 13)).toBe(false);
+    expect(ukSubjectIdFrom(476)).toBeNull();
+  });
+});
+
+/*
+ * The schema and the code each name the same two sets of domain values. AGENTS
+ * is explicit that a second list drifts from the first and that a unit test
+ * over either one will not notice — so this is the test over both. It reads the
+ * schema as text rather than importing the generated client, because the client
+ * is regenerated from the schema and would agree with itself either way.
+ */
+describe("the schema and the code name the same domain values", () => {
+  const schema = readFileSync(join(process.cwd(), "prisma/schema.prisma"), "utf8");
+
+  const membersOf = (name: string) => {
+    const block = new RegExp(`enum ${name} \\{([^}]*)\\}`).exec(schema);
+    expect(block, `enum ${name} is missing from the schema`).toBeTruthy();
+    return (block?.[1] ?? "")
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line.length > 0 && !line.startsWith("///"))
+      .sort();
+  };
+
+  it("agrees on where an item's facts come from", () => {
+    expect(membersOf("UkSubjectSource")).toEqual([...LADDER_SOURCE_VALUES].sort());
+  });
+
+  it("agrees on the three kinds of item", () => {
+    expect(membersOf("UkSubjectKind")).toEqual(Object.values(UK_SUBJECT_KINDS).sort());
+  });
+});

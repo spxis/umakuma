@@ -945,14 +945,14 @@ model TatoebaSentence {
 /// Filing records the timeline id rather than moving the row, so the wish and
 /// the entry it became stay linked and nothing is lost when the answer is no.
 model Ticket {
-  id          String            @id @default(cuid())
+  id          String       @id @default(cuid())
   title       String
   detail      String?
   /// The area, when whoever asked already knows it. Validated against
   /// FEATURE_AREA_VALUES at the boundary, not by the database, because areas
   /// are a TypeScript union that changes with the code.
   area        String?
-  kind        String            @default("feature")
+  kind        String       @default("feature")
   status      TicketStatus @default(open)
   /// The `featureTimeline.json` id an agent filed this as.
   filedAs     String?
@@ -967,10 +967,12 @@ model Ticket {
   /// true for everybody the instant it is made.
   claimedBy   String?
   claimedAt   DateTime?
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 
-  /*
+  @@index([status, createdAt])
+  @@index([claimedBy])
+  /**
    * The table keeps its old name on purpose. `prisma db push` does not rename
    * a table - it drops the old one and creates the new - so a physical rename
    * here would take every ticket with it. The model is what the code reads and
@@ -978,8 +980,6 @@ model Ticket {
    * deliberate SQL migration, or never, at no cost to anybody.
    */
   @@map("FeatureWish")
-  @@index([status, createdAt])
-  @@index([claimedBy])
 }
 
 /// Where a ticket is in its life.
@@ -1002,4 +1002,101 @@ enum TicketStatus {
   declined
 
   @@map("FeatureWishStatus")
+}
+
+/// The curriculum itself: one row per item on the UmaKuma ladder.
+///
+/// The ladder is built into `src/data/kanjiLadder.json` by a script, and that
+/// file stays the source of truth for what the curriculum *is*. This table is
+/// what the running site reads, so an admin can move an item and have members
+/// see it before the next rebuild — and so a member's SRS state has something
+/// stable to point at. `pnpm ladder:seed` makes the two agree; `ladder:check`
+/// says when they do not.
+///
+/// Not a `CustomStudyLibrary`: that model is owned by one account, deletes
+/// items missing from a re-import, and cascades their progress away with them.
+/// A curriculum everybody shares cannot be rebuilt by deleting people's work.
+model UkSubject {
+  id              Int             @id @default(autoincrement())
+  kind            UkSubjectKind
+  /// Stable business key: `kanji:語`, `radical:口`, `wk:2467`, `word:苺`.
+  key             String          @unique
+  characters      String
+  /// Ours, 1-100.
+  level           Int
+  /// Set where WaniKani teaches the same item, so their content can be reused.
+  wkSubjectId     Int?            @unique
+  source          UkSubjectSource
+  nLevel          Int?
+  schoolGrade     Int?
+  /// Only for items WaniKani does not teach; the rest read from the catalogue.
+  meanings        String[]        @default([])
+  readings        String[]        @default([])
+  /// Ours to write. Never WaniKani's, which is their copyrighted text.
+  meaningMnemonic String?
+  readingMnemonic String?
+  notes           String?
+  /// Soft, so a member's progress survives an item being pulled and restored.
+  removedAt       DateTime?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@index([kind, level])
+  @@index([level])
+  @@index([removedAt])
+}
+
+/// Every add, move and remove an admin has made to the ladder, in order.
+///
+/// Append-only on purpose. A resolved map of "where everything ended up" loses
+/// who moved it, when and why, and cannot say which op a rebuild refused. The
+/// build replays these over the computed ladder, so a move survives
+/// `pnpm ladder:refresh` instead of being silently undone by it.
+model LadderOverride {
+  id               String        @id @default(cuid())
+  op               LadderOpType
+  kind             UkSubjectKind
+  key              String
+  fromLevel        Int?
+  toLevel          Int?
+  /// For an add: the characters, meanings and readings the item ships with.
+  payload          Json?
+  reason           String?
+  /// The admin's email, so the log answers "who".
+  by               String
+  createdAt        DateTime      @default(now())
+  /// Set once the op has been written into the committed overrides file.
+  exportedAt       DateTime?
+  /// Set once a curriculum version has shipped carrying it.
+  appliedInVersion String?
+
+  @@index([createdAt])
+  @@index([exportedAt])
+  @@index([key])
+}
+
+enum UkSubjectKind {
+  radical
+  kanji
+  vocabulary
+}
+
+/// Where an item's facts come from. Must stay equal to `LADDER_SOURCES` in
+/// `src/lib/ladder/ladderCrosswalk.ts`, which a test enforces: two lists of the
+/// same domain values drift, and no test over either one notices.
+enum UkSubjectSource {
+  /// WaniKani teaches it; their catalogue holds the content.
+  wanikani
+  /// Jōyō that WaniKani skips; KANJIDIC2 holds the content.
+  kanjidic
+  /// One of RADKFILE's classical radicals, which WaniKani does not use.
+  radkfile
+  /// Added by an admin, so the content is on the row.
+  admin
+}
+
+enum LadderOpType {
+  move
+  add
+  remove
 }

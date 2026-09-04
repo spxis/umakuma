@@ -59,6 +59,7 @@ export const LADDER_SOURCE_BADGE: Record<LadderSource, string> = {
   [LADDER_SOURCES.wanikani]: "bg-slate-100 text-slate-700",
   [LADDER_SOURCES.kanjidic]: "bg-amber-100 text-amber-800",
   [LADDER_SOURCES.radkfile]: "bg-teal-100 text-teal-800",
+  [LADDER_SOURCES.admin]: "bg-indigo-100 text-indigo-800",
 };
 
 export const LADDER_BAND_LABELS: Record<KanjiGradeBand, string> = {
