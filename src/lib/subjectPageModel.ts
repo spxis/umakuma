@@ -212,3 +212,15 @@ export function assembleKanjiPage(sources: KanjiPageSources): KanjiPageModel {
     wkSubjectId: wanikani?.subjectId ?? null,
   };
 }
+
+/**
+ * A word's page on Jisho.
+ *
+ * We take nothing from them - the dictionary here is KANJIDIC2 and JMdict -
+ * so this is a way out rather than a source: a reader who wants the fuller
+ * entry, the inflections and the sentence bank should be able to get there
+ * without retyping the word into another tab.
+ */
+export function jishoSearchHref(term: string): string {
+  return `https://jisho.org/search/${encodeURIComponent(term)}`;
+}

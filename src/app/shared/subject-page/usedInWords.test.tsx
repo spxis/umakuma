@@ -2,9 +2,10 @@ import { JSDOM } from "jsdom";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
-import type { WordExample } from "@/lib/subjectPageModel";
+import { jishoSearchHref, type WordExample } from "@/lib/subjectPageModel";
 
 import UsedInWordsBlock from "./UsedInWordsBlock";
+import { SUBJECT_PAGE_COPY } from "./SubjectPage.constants";
 
 const growthBusiness: WordExample = {
   written: "成長事業",
@@ -45,4 +46,29 @@ describe("used in words", () => {
     expect(linked.join("")).not.toContain("長");
   });
 
+  /*
+   * The way out to Jisho. Hidden until the row is pointed at or the link takes
+   * focus - `opacity-0`, never `hidden`, so a keyboard can still reach it.
+   */
+  it("offers the word on Jisho, in a new tab", () => {
+    const doc = draw([growthBusiness]);
+    const out = doc.querySelector('a[href^="https://jisho.org"]')!;
+    expect(out.getAttribute("href")).toBe(jishoSearchHref("成長事業"));
+    expect(out.getAttribute("target")).toBe("_blank");
+    expect(out.getAttribute("rel")).toContain("noopener");
+    expect(out.getAttribute("aria-label")).toBe(SUBJECT_PAGE_COPY.lookUpOnJisho("成長事業"));
+  });
+
+  it("keeps that link reachable without a pointer", () => {
+    const doc = draw([growthBusiness]);
+    const cls = doc.querySelector('a[href^="https://jisho.org"]')!.getAttribute("class") ?? "";
+    expect(cls).toContain("opacity-0");
+    expect(cls).toContain("group-hover:opacity-100");
+    expect(cls).toContain("focus-visible:opacity-100");
+    expect(cls).not.toContain("hidden");
+  });
+
+  it("encodes the word rather than pasting it into a URL", () => {
+    expect(jishoSearchHref("成長事業")).toBe("https://jisho.org/search/%E6%88%90%E9%95%B7%E4%BA%8B%E6%A5%AD");
+  });
 });

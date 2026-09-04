@@ -17,6 +17,15 @@ export const SUBJECT_PAGE_COPY = {
   looksLike: "Looks like",
   sharesKanji: "Other words with these kanji",
   usedInWords: "Used in words",
+  /*
+   * The way out to Jisho, on a word's own row.
+   *
+   * Named for what it does rather than what it looks like: a screen reader
+   * reads this and never sees the arrow. Hidden until the row is pointed at or
+   * the link is tabbed to, so it stays out of the way of reading and never out
+   * of reach of a keyboard.
+   */
+  lookUpOnJisho: (word: string) => `Look up ${word} on Jisho`,
   foundIn: "Found in",
   examples: "In use",
   heisig: "Heisig",

@@ -3,7 +3,7 @@ import PillWordsToggle from "@/app/shared/PillWordsToggle";
 import SubjectPill from "@/app/shared/SubjectPill";
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import { SOURCE_KEYS, SOURCE_CREDIT_COPY } from "@/lib/sourceCredits";
-import type { WordExample } from "@/lib/subjectPageModel";
+import { jishoSearchHref, type WordExample } from "@/lib/subjectPageModel";
 
 import SubjectBlock from "./SubjectBlock";
 import { SUBJECT_PAGE_COPY } from "./SubjectPage.constants";
@@ -38,7 +38,7 @@ export default function UsedInWordsBlock({
     >
       <ul className="divide-y divide-line/60">
         {words.map((word) => (
-          <li key={`${word.written}-${word.pronounced}`} className="py-3 first:pt-0 last:pb-0">
+          <li key={`${word.written}-${word.pronounced}`} className="group py-3 first:pt-0 last:pb-0">
             <div className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5">
               <span lang="ja" translate="no" className={`text-xl font-black text-foreground ${JP_TEXT_CLASS}`}>
                 {word.written}
@@ -48,6 +48,27 @@ export default function UsedInWordsBlock({
                   {word.pronounced}
                 </span>
               ) : null}
+              {/*
+                * Out to Jisho, and only when the row is being looked at.
+                *
+                * `opacity-0` rather than `hidden`, so the link keeps its place
+                * in the tab order and appears the moment it takes focus - a
+                * control a keyboard cannot reach is not out of the way, it is
+                * gone. It sits at the end of the row on `ml-auto`, which is
+                * where the eye already is once it has read the word.
+                */}
+              <a
+                href={jishoSearchHref(word.written)}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={SUBJECT_PAGE_COPY.lookUpOnJisho(word.written)}
+                title={SUBJECT_PAGE_COPY.lookUpOnJisho(word.written)}
+                className="ml-auto inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-foreground/60 opacity-0 transition hover:bg-surface-muted hover:text-foreground focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 group-hover:opacity-100"
+              >
+                <svg viewBox="0 0 20 20" aria-hidden="true" className="h-3.5 w-3.5 fill-none stroke-current stroke-2">
+                  <path d="M7 13L13 7M13 7H8M13 7v5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </a>
             </div>
             {word.gloss ? <p className="mt-0.5 text-sm font-semibold text-foreground/80">{word.gloss}</p> : null}
             {word.kanji.length > 0 ? (
