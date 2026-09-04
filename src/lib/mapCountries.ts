@@ -11,12 +11,12 @@ import { SOURCE_KEYS, type SourceKey } from "./sourceCredits";
 const ALL_MAP_COUNTRIES = [
   { code: "JP", label: "Japan", playable: true, adminOnly: false, source: SOURCE_KEYS.jpmap },
   { code: "US", label: "United States", playable: true, adminOnly: false, source: SOURCE_KEYS.usmap },
-  { code: "CA", label: "Canada", playable: true, adminOnly: false, source: SOURCE_KEYS.camap },
+  { code: "CA", label: "Canada", playable: true, adminOnly: false, source: SOURCE_KEYS.worldmap },
   /* Admin mode pilot wave: Thailand, China, Australia, Taiwan */
-  { code: "TH", label: "Thailand", playable: true, adminOnly: true, source: SOURCE_KEYS.camap },
-  { code: "CN", label: "China", playable: true, adminOnly: true, source: SOURCE_KEYS.camap },
-  { code: "AU", label: "Australia", playable: true, adminOnly: true, source: SOURCE_KEYS.camap },
-  { code: "TW", label: "Taiwan", playable: true, adminOnly: true, source: SOURCE_KEYS.camap },
+  { code: "TH", label: "Thailand", playable: true, adminOnly: true, source: SOURCE_KEYS.worldmap },
+  { code: "CN", label: "China", playable: true, adminOnly: true, source: SOURCE_KEYS.worldmap },
+  { code: "AU", label: "Australia", playable: true, adminOnly: true, source: SOURCE_KEYS.worldmap },
+  { code: "TW", label: "Taiwan", playable: true, adminOnly: true, source: SOURCE_KEYS.worldmap },
 ] as const;
 
 /** Countries whose maps are public and playable by everyone. */

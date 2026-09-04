@@ -126,14 +126,15 @@ export const SOURCE_DESCRIPTIONS: Record<
     terms:
       "A work of the United States government, in the public domain, so no licence is named and none was granted — there was nothing to grant. The conversion to TopoJSON is us-atlas, under the ISC licence. Credited because a reader asking where a border came from deserves an answer, not because anyone can compel it.",
   },
-  [SOURCE_KEYS.camap]: {
-    tab: "Canada map",
-    lede: "Natural Earth's admin-1 boundaries, which is where the ten provinces and three territories come from. Canada has no single-purpose TopoJSON on a CDN the way the States does, so neighbours are worked out from shared boundary points instead of from topology.",
+  [SOURCE_KEYS.worldmap]: {
+    tab: "World maps",
+    lede: "Natural Earth's public-domain cultural vector dataset, which is where our Canada and world regional maps come from. While the United States uses Census TopoJSON and Japan uses GSI Global Map data, Natural Earth provides the administrative division boundaries (states, provinces, prefectures, and territories) for Canada, our admin pilot countries (Thailand, China, Australia, and Taiwan), and 25 additional global countries in our world map library. Neighbours are worked out from shared boundary points rather than predefined topology.",
     takes: [
-      "The outline of every province and territory, and which of them border which",
-      "Nothing else: the capitals, populations and official languages are compiled from Statistics Canada and Parks Canada",
+      "The boundary outlines and regional shapes for Canada, Thailand, China, Australia, Taiwan, and 25 additional world countries",
+      "Neighbouring divisions calculated from shared vertex boundaries, determining which regions border each other for quiz questions and plausible distractors",
+      "Nothing else: capitals, native names, readings, flags, and demographic facts are compiled from national statistical agencies, geographic authorities, and reference encyclopedias",
     ],
     terms:
-      "Public domain. Natural Earth's own terms say that no permission is needed and that crediting the authors is unnecessary; they are credited here anyway, for the same reason the American map is.",
+      "Public domain. Natural Earth's own terms state that no permission is needed and that crediting the authors is unnecessary; they are credited here anyway because readers deserve to know where every boundary on our maps originates.",
   },
 };

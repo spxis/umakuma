@@ -20,7 +20,6 @@ const read = (path: string) => readFileSync(join(process.cwd(), path), "utf8");
 describe("who gets credited", () => {
   it("names every borrowed source", () => {
     expect(Object.keys(SOURCE_CREDITS).sort()).toEqual([
-      "camap",
       "curriculum",
       "jiten",
       "jmdict",
@@ -32,6 +31,7 @@ describe("who gets credited", () => {
       "tatoeba",
       "usmap",
       "wanikani",
+      "worldmap",
     ]);
     for (const credit of Object.values(SOURCE_CREDITS)) {
       expect(credit.source.length).toBeGreaterThan(1);
@@ -86,9 +86,9 @@ describe("who gets credited", () => {
    */
   it("claims no licence for the two maps that are public domain", () => {
     expect(SOURCE_CREDITS.usmap).not.toHaveProperty("licence");
-    expect(SOURCE_CREDITS.camap).not.toHaveProperty("licence");
+    expect(SOURCE_CREDITS.worldmap).not.toHaveProperty("licence");
     expect(SOURCE_CREDITS.usmap.url).toContain("census.gov");
-    expect(SOURCE_CREDITS.camap.url).toContain("naturalearthdata.com");
+    expect(SOURCE_CREDITS.worldmap.url).toContain("naturalearthdata.com");
   });
 });
 

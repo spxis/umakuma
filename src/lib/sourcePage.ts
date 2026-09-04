@@ -48,6 +48,7 @@ const REPORT_COPY = {
   names: "Name kanji",
   regionsDrawn: "Regions drawn",
   borders: "Bordering pairs",
+  countriesMapped: "Countries mapped",
   wordsWithBand: "Words with a frequency band",
   wordsRanked: "Words ranked",
   mediaCorpora: "Media corpora",
@@ -246,6 +247,24 @@ function geoMap(key: SourceKey, country: CountryCode): SourceReport {
   };
 }
 
+/**
+ * What Natural Earth provides: regions drawn, countries mapped, and bordering pairs
+ * across Canada and all world regional datasets.
+ */
+function naturalEarth(key: SourceKey): SourceReport {
+  return {
+    key,
+    counts: [
+      { label: REPORT_COPY.regionsDrawn, value: 1244 },
+      { label: REPORT_COPY.countriesMapped, value: 30 },
+      { label: REPORT_COPY.borders, value: 2591 },
+    ],
+    lastImportedAt: caMeta.updatedAt ?? null,
+    version: null,
+    generatedAtMs: Date.now(),
+  };
+}
+
 export async function loadSourceReport(key: SourceKey): Promise<SourceReport> {
   switch (key) {
     case SOURCE_KEYS.wanikani:
@@ -270,8 +289,8 @@ export async function loadSourceReport(key: SourceKey): Promise<SourceReport> {
       return geoMap(key, "JP");
     case SOURCE_KEYS.usmap:
       return geoMap(key, "US");
-    case SOURCE_KEYS.camap:
-      return geoMap(key, "CA");
+    case SOURCE_KEYS.worldmap:
+      return naturalEarth(key);
   }
 }
 

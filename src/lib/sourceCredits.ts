@@ -40,15 +40,30 @@ export const SOURCE_KEYS = {
   curriculum: "curriculum",
   jpmap: "jpmap",
   usmap: "usmap",
-  camap: "camap",
+  worldmap: "worldmap",
+  /** Legacy alias for worldmap */
+  camap: "worldmap",
 } as const;
 
-export type SourceKey = (typeof SOURCE_KEYS)[keyof typeof SOURCE_KEYS];
+export const SOURCE_KEY_VALUES = [
+  SOURCE_KEYS.wanikani,
+  SOURCE_KEYS.kanjidic2,
+  SOURCE_KEYS.radkfile,
+  SOURCE_KEYS.kanjivg,
+  SOURCE_KEYS.kanjiapi,
+  SOURCE_KEYS.tatoeba,
+  SOURCE_KEYS.jmdict,
+  SOURCE_KEYS.jiten,
+  SOURCE_KEYS.curriculum,
+  SOURCE_KEYS.jpmap,
+  SOURCE_KEYS.usmap,
+  SOURCE_KEYS.worldmap,
+] as const;
 
-export const SOURCE_KEY_VALUES = Object.values(SOURCE_KEYS);
+export type SourceKey = (typeof SOURCE_KEY_VALUES)[number];
 
 export function isSourceKey(value: string): value is SourceKey {
-  return (SOURCE_KEY_VALUES as string[]).includes(value);
+  return (SOURCE_KEY_VALUES as readonly string[]).includes(value);
 }
 
 export const SOURCE_CREDITS: Record<SourceKey, SourceCredit> = {
@@ -136,7 +151,7 @@ export const SOURCE_CREDITS: Record<SourceKey, SourceCredit> = {
   /* "No permission is needed to use Natural Earth. Crediting the authors is
    * unnecessary." Credited anyway, because a reader asking where a border came
    * from deserves the answer whether or not somebody can compel it. */
-  [SOURCE_KEYS.camap]: {
+  [SOURCE_KEYS.worldmap]: {
     source: "Natural Earth",
     url: "https://www.naturalearthdata.com",
   },

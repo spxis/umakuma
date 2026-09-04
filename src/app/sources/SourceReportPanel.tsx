@@ -2,6 +2,7 @@ import { SOURCE_CREDITS, type SourceKey } from "@/lib/sourceCredits";
 import { describeFreshness, formatCount, type SourceReport } from "@/lib/sourceReport";
 import { formatDateShort } from "@/lib/timeFormat";
 
+import MappedCountriesSection from "./MappedCountriesSection";
 import { SOURCE_DESCRIPTIONS, SOURCES_COPY } from "./Sources.constants";
 
 const LINK = "underline decoration-dotted underline-offset-2 hover:text-foreground";
@@ -93,6 +94,8 @@ export default function SourceReportPanel({ source, report }: { source: SourceKe
           </div>
         </div>
       </section>
+
+      <MappedCountriesSection source={source} />
     </div>
   );
 }

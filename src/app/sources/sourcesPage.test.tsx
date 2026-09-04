@@ -132,7 +132,7 @@ describe("the map credits its outlines", () => {
   it.each([
     ["JP", SOURCE_KEYS.jpmap],
     ["US", SOURCE_KEYS.usmap],
-    ["CA", SOURCE_KEYS.camap],
+    ["CA", SOURCE_KEYS.worldmap],
   ] as const)("names the holder of the %s outlines, and says they were edited", (country, key) => {
     const text = render(<JapanMap marks={[]} country={country} />).body.textContent ?? "";
     expect(text).toContain(SOURCE_CREDITS[key].source);
@@ -151,5 +151,46 @@ describe("the map credits its outlines", () => {
     const played = render(<JapanMap marks={[]} country="JP" showHandles />);
     expect(played.querySelectorAll("a")).toHaveLength(0);
     expect(played.body.textContent).toContain(SOURCE_CREDITS.jpmap.source);
+  });
+});
+
+describe("mapped country presentation and flags", () => {
+  it("renders national flags for all 30 Natural Earth countries", () => {
+    const doc = render(
+      <SourceReportPanel
+        source={SOURCE_KEYS.worldmap}
+        report={{
+          key: SOURCE_KEYS.worldmap,
+          generatedAtMs: Date.parse("2026-09-03T00:00:00Z"),
+          counts: [
+            { label: "Regions drawn", value: 1244 },
+            { label: "Countries mapped", value: 30 },
+            { label: "Bordering pairs", value: 2591 },
+          ],
+          lastImportedAt: "2026-08-30",
+          version: null,
+        }}
+      />,
+    );
+
+    const text = doc.body.textContent ?? "";
+    expect(text).toContain("Natural Earth");
+    expect(text).toContain("Countries mapped from Natural Earth");
+    expect(text).toContain("30 countries");
+    // Spot check key country flags and names
+    expect(text).toContain("🇨🇦");
+    expect(text).toContain("Canada");
+    expect(text).toContain("🇹🇭");
+    expect(text).toContain("Thailand");
+    expect(text).toContain("🇨🇳");
+    expect(text).toContain("China");
+    expect(text).toContain("🇦🇺");
+    expect(text).toContain("Australia");
+    expect(text).toContain("🇹🇼");
+    expect(text).toContain("Taiwan");
+    expect(text).toContain("🇬🇧");
+    expect(text).toContain("United Kingdom");
+    expect(text).toContain("🇫🇷");
+    expect(text).toContain("France");
   });
 });
