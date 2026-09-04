@@ -12,6 +12,8 @@ export const SOURCES_COPY = {
   terms: "Terms",
   visit: "Visit",
   whatWeTake: "What we take",
+  aFewRows: "A few rows",
+  rowsChosen: "Chosen from the data, not taken off the top.",
   allSources: "All sources",
   notFound: "No source is recorded under that name.",
 } as const;

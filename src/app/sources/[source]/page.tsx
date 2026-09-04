@@ -5,6 +5,7 @@ import PublicPageHeader from "@/app/shared/PublicPageHeader";
 import UmaKumaPageBanner from "@/app/shared/UmaKumaPageBanner";
 import { isSourceKey, SOURCE_CREDITS } from "@/lib/sourceCredits";
 import { loadCachedSourceReport } from "@/lib/sourcePage";
+import { loadCachedShowcase } from "@/lib/sourceShowcaseServer";
 
 import SourceReportPanel from "../SourceReportPanel";
 import SourceTabs from "../SourceTabs";
@@ -50,14 +51,14 @@ export default async function SourcePage({ params }: Props) {
   }
   if (!isSourceKey(source)) notFound();
 
-  const report = await loadCachedSourceReport(source);
+  const [report, showcase] = await Promise.all([loadCachedSourceReport(source), loadCachedShowcase(source)]);
 
   return (
     <main className="mx-auto w-full max-w-3xl space-y-5 px-4 py-8 sm:px-6">
       <PublicPageHeader />
       <UmaKumaPageBanner variant="leaderboard" />
       <SourceTabs current={source} />
-      <SourceReportPanel source={source} report={report} />
+      <SourceReportPanel source={source} report={report} showcase={showcase} />
     </main>
   );
 }

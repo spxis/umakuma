@@ -8,10 +8,11 @@ import { describe, expect, it } from "vitest";
 import JapanMap from "@/app/game/JapanMap";
 import SourceCredit from "@/app/shared/SourceCredit";
 import { SOURCE_CREDITS, SOURCE_KEY_VALUES, SOURCE_KEYS, sourcePath } from "@/lib/sourceCredits";
+import { SHOWCASE_DEFAULTS } from "@/lib/sourceShowcase";
 
 import SourceReportPanel from "./SourceReportPanel";
 import SourceTabs from "./SourceTabs";
-import { SOURCE_DESCRIPTIONS } from "./Sources.constants";
+import { SOURCE_DESCRIPTIONS, SOURCES_COPY } from "./Sources.constants";
 
 const read = (path: string) => readFileSync(join(process.cwd(), path), "utf8");
 
@@ -103,6 +104,7 @@ describe("the sources page", () => {
           lastImportedAt: "2026-09-01",
           version: "2026-244",
         }}
+        showcase={[]}
       />,
     );
     const text = doc.body.textContent ?? "";
@@ -170,6 +172,7 @@ describe("mapped country presentation and flags", () => {
           lastImportedAt: "2026-08-30",
           version: null,
         }}
+        showcase={[]}
       />,
     );
 
@@ -192,5 +195,76 @@ describe("mapped country presentation and flags", () => {
     expect(text).toContain("United Kingdom");
     expect(text).toContain("🇫🇷");
     expect(text).toContain("France");
+  });
+});
+
+/**
+ * A page that says what it holds and never shows any of it asks to be believed.
+ *
+ * The rows are the evidence: a reader told we hold 6,204 words with a frequency
+ * band can see 新聞 sitting in the top 500 instead of taking the figure on
+ * trust. They are chosen rather than sampled, because the first row of any of
+ * these files is an accident of sort order and shows nothing.
+ */
+describe("a few rows of the source", () => {
+  const panel = (source: (typeof SOURCE_KEY_VALUES)[number]) =>
+    render(
+      <SourceReportPanel
+        source={source}
+        report={{
+          key: source,
+          generatedAtMs: Date.parse("2026-09-03T00:00:00Z"),
+          counts: [],
+          lastImportedAt: null,
+          version: null,
+        }}
+        showcase={SHOWCASE_DEFAULTS[source]}
+      />,
+    );
+
+  it("draws every chosen row, specimen and detail", () => {
+    const text = panel(SOURCE_KEYS.radkfile).body.textContent ?? "";
+    for (const row of SHOWCASE_DEFAULTS[SOURCE_KEYS.radkfile]) {
+      expect(text).toContain(row.specimen);
+      expect(text).toContain(row.detail);
+      if (row.note) expect(text).toContain(row.note);
+    }
+  });
+
+  /*
+   * The rows are a mix: 曜 and a whole sentence sit beside Tennessee and Prince
+   * Edward Island. Declaring the lot Japanese would tell a screen reader to
+   * read the provinces in Japanese, and declaring none of it leaves Chrome
+   * offering to translate the kanji away, which is what it did to 私自身.
+   */
+  it("declares the Japanese specimens Japanese and leaves the English alone", () => {
+    const japanese = [...panel(SOURCE_KEYS.wanikani).querySelectorAll('[lang="ja"]')].map((el) => el.textContent);
+    expect(japanese).toEqual(["力", "曜", "鬱"]);
+
+    const english = panel(SOURCE_KEYS.camap);
+    expect([...english.querySelectorAll('[lang="ja"]')]).toHaveLength(0);
+    expect(english.body.textContent).toContain("Prince Edward Island");
+  });
+
+  it("says the rows were chosen, not taken off the top", () => {
+    expect(panel(SOURCE_KEYS.jiten).body.textContent).toContain(SOURCES_COPY.rowsChosen);
+  });
+
+  /* A source with nothing to show draws no empty card. */
+  it("draws no card when there is nothing to show", () => {
+    const doc = render(
+      <SourceReportPanel
+        source={SOURCE_KEYS.tatoeba}
+        report={{
+          key: SOURCE_KEYS.tatoeba,
+          generatedAtMs: Date.now(),
+          counts: [],
+          lastImportedAt: null,
+          version: null,
+        }}
+        showcase={[]}
+      />,
+    );
+    expect(doc.body.textContent).not.toContain(SOURCES_COPY.aFewRows);
   });
 });
