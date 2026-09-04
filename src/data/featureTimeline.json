@@ -4664,11 +4664,23 @@
     "id": "level-sixteen-stops-dipping",
     "name": "Level sixteen stops dipping",
     "area": "platform",
+    "status": "shipped",
     "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "Levels 14-18 teach kanji that unlock few words, and the vocabulary ramp reached full share by level 20 - so the early supply was spent and level 16 came up eleven words short of its target while 17 and 18 overshot repaying it. The ramp now takes 26 levels instead of 20, which banks enough to ride through that stretch. The worst dip on the whole ladder falls from eleven subjects to six, and the number of levels lighter than the one before them falls from forty to twenty-nine. Levels 15-17 read 76/74/80 where they read 84/73/92.",
+    "dateIsEstimate": false,
+    "version": "0.410.0",
+    "releasedAt": "2026-09-04T13:40:02Z"
+  },
+  {
+    "id": "map-zoom-at-point",
+    "name": "Double-click zooms where you point",
+    "area": "games",
+    "kind": "bug",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.410.0",
-    "releasedAt": "2026-09-04T13:40:02Z",
-    "summary": "Levels 14-18 teach kanji that unlock few words, and the vocabulary ramp reached full share by level 20 - so the early supply was spent and level 16 came up eleven words short of its target while 17 and 18 overshot repaying it. The ramp now takes 26 levels instead of 20, which banks enough to ride through that stretch. The worst dip on the whole ladder falls from eleven subjects to six, and the number of levels lighter than the one before them falls from forty to twenty-nine. Levels 15-17 read 76/74/80 where they read 84/73/92."
+    "version": "0.411.0",
+    "releasedAt": "2026-09-04T13:45:12Z",
+    "summary": "Double-clicking the map only worked on a region, and it re-centred on that region's middle - so asking to look closer at a coastline threw the whole country sideways, and a second double-click landed somewhere nobody had chosen. It works anywhere on the map now, the sea between islands included, and the spot under the pointer stays exactly where it was while the map grows around it. Alt, or Option, with a double-click goes back out."
   }
 ]
