@@ -8,6 +8,7 @@ import {
   geoRegionCentre,
   geoWholeCountryBox,
   geoZoomBox,
+  geoZoomToFit,
   stepMapZoom,
   type MapZoom,
 } from "@/lib/geoMapFraming";
@@ -32,17 +33,29 @@ const PAN_STEP_RATIO = 0.15;
  * desktop. Converting through the rendered rectangle keeps the map moving
  * exactly with the finger.
  */
-export function useMapZoom(country: CountryCode, startOn: string | number | null = null) {
-  const [zoom, setZoom] = useState<MapZoom>(MAP_ZOOM_LEVELS[0]);
+export function useMapZoom(
+  country: CountryCode,
+  startOn: string | number | null = null,
+  /** A region opened by its address: framed from the first paint, not after. */
+  startOnCodes: ReadonlyArray<string | number> = [],
+) {
   /*
-   * Centred on whatever the address named, so zooming in on a page opened at
-   * `/maps/japan/kagoshima` goes closer at Kagoshima rather than at the middle
-   * of the country. Only the starting value: after that the centre is the
-   * reader's, and panning must not be overridden.
+   * Where the map starts. A page opened at `/maps/japan/region/tohoku` opens
+   * on Tohoku, already zoomed to it; one opened at `/maps/japan/kagoshima` is
+   * centred on Kagoshima so zooming goes closer there rather than at the
+   * middle of the country. Only the starting values: after that the view is
+   * the reader's, and panning must not be overridden.
    */
-  const [centre, setCentre] = useState(
-    () => geoRegionCentre(country, startOn) ?? geoBoxCentre(geoWholeCountryBox(country)),
+  const [start] = useState(() =>
+    startOnCodes.length > 0
+      ? geoZoomToFit(country, startOnCodes)
+      : {
+          zoom: MAP_ZOOM_LEVELS[0] as MapZoom,
+          centre: geoRegionCentre(country, startOn) ?? geoBoxCentre(geoWholeCountryBox(country)),
+        },
   );
+  const [zoom, setZoom] = useState<MapZoom>(start.zoom);
+  const [centre, setCentre] = useState(start.centre);
   const dragging = useRef<{ pointerId: number; x: number; y: number; scale: number } | null>(null);
 
   const box: MapBox = geoZoomBox(country, zoom, centre);
@@ -68,6 +81,16 @@ export function useMapZoom(country: CountryCode, startOn: string | number | null
     (code: string | number | null) => {
       const found = geoRegionCentre(country, code);
       if (found) setCentre(found);
+    },
+    [country],
+  );
+
+  /** Frame a whole region - Tohoku, the Prairies - opened from its heading. */
+  const focusCodes = useCallback(
+    (codes: ReadonlyArray<string | number>) => {
+      const fit = geoZoomToFit(country, codes);
+      setCentre(fit.centre);
+      setZoom(fit.zoom);
     },
     [country],
   );
@@ -169,6 +192,7 @@ export function useMapZoom(country: CountryCode, startOn: string | number | null
     reset,
     step,
     focusRegion,
+    focusCodes,
     zoomInto,
     /*
      * Spread onto the SVG. `touch-none` is what stops a drag on a phone

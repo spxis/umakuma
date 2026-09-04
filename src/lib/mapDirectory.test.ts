@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { GEO_DATASETS } from "./geoRegion";
-import { groupRegionsByArea } from "./mapDirectory";
+import { areaNameOf, areasOf, groupRegionsByArea, regionCodesInArea } from "./mapDirectory";
 import { regionsInOrder } from "./mapStudy";
 
 const japan = regionsInOrder("JP");
@@ -37,5 +37,32 @@ describe("the country, grouped for reading", () => {
 
   it("groups nothing into nothing", () => {
     expect(groupRegionsByArea([])).toEqual([]);
+  });
+});
+
+/**
+ * The same grouping, asked two more ways.
+ *
+ * The directory reads it as sections; the address and the map read it as a
+ * list of names and the codes under each. All three go through one rule, so a
+ * heading and the shapes it lights can never disagree about what is in Tohoku.
+ */
+describe("the same regions, by name", () => {
+  it("names every region once, in the order the country is read", () => {
+    const names = areasOf(japan);
+    expect(names.slice(0, 3)).toEqual(["Hokkaido", "Tohoku", "Kanto"]);
+    expect(names).toEqual(groupRegionsByArea(japan).map((area) => area.name));
+  });
+
+  it("puts every prefecture in exactly one region", () => {
+    const placed = areasOf(japan).flatMap((name) => regionCodesInArea(japan, name));
+    expect(placed).toHaveLength(japan.length);
+    expect(new Set(placed.map(String)).size).toBe(japan.length);
+    for (const region of japan) expect(regionCodesInArea(japan, areaNameOf(region))).toContain(region.code);
+  });
+
+  it("answers an unknown region with nothing rather than throwing", () => {
+    expect(regionCodesInArea(japan, "Atlantis")).toEqual([]);
+    expect(regionCodesInArea(japan, null)).toEqual([]);
   });
 });

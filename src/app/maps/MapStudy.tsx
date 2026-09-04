@@ -43,11 +43,14 @@ const WIDE = "(min-width: 1024px)";
 export default function MapStudy({
   initialCountry,
   initialCode,
+  initialArea,
   kanjiFacts,
   accountId,
 }: {
   initialCountry: MapCountryCode;
   initialCode: string | number | null;
+  /** A region the address named, lit and framed from the first paint. */
+  initialArea: string | null;
   /** What each kanji in a place name means and reads, resolved on the server. */
   kanjiFacts: MapKanjiFacts;
   /** The reader's own account, or null for a visitor. */
@@ -62,11 +65,12 @@ export default function MapStudy({
    * away, while choosing survives the pointer leaving the heading - which is
    * the whole use for it, reading the map with Tohoku lit.
    */
-  const [area, setArea] = useState<string | null>(null);
+  const [area, setArea] = useState<string | null>(initialArea);
   const [hoveredArea, setHoveredArea] = useState<string | null>(null);
   const [wide, setWide] = useState(true);
 
   const dataset = GEO_DATASETS[country];
+  const division = dataset.divisionTypeName.toLowerCase();
   const regions = useMemo(() => regionsInOrder(country), [country]);
   const selected = regionByCode(country, code);
   const hoveredRegion = regionByCode(country, hovered);
@@ -81,9 +85,9 @@ export default function MapStudy({
 
   /* The address follows the choice, and the back button walks the choices. */
   useEffect(() => {
-    const next = mapHref(country, code);
+    const next = mapHref(country, code, area);
     if (next !== window.location.pathname) window.history.pushState(null, "", next);
-  }, [country, code]);
+  }, [country, code, area]);
 
   useEffect(() => {
     const onPopState = () => {
@@ -91,12 +95,13 @@ export default function MapStudy({
       if (!address) return;
       setCountry(address.country);
       setCode(address.code);
+      setArea(address.area);
     };
     window.addEventListener("popstate", onPopState);
     return () => window.removeEventListener("popstate", onPopState);
   }, []);
 
-  const view = useMapZoom(country, initialCode);
+  const view = useMapZoom(country, initialCode, regionCodesInArea(regions, initialArea));
   const marking = useMapMarks(accountId, country);
 
   /*
@@ -129,13 +134,29 @@ export default function MapStudy({
     (next: string | number) => {
       setCode(next);
       setHovered(null);
-      /* The directory goes when a region is chosen, and the heading that lit
-         the area goes with it, so the highlight must not outlive its switch. */
-      setArea(null);
+      /*
+       * A province chosen inside a lit region stays part of it - that is the
+       * address `/region/prairies/alberta` - and one chosen outside it puts the
+       * region out, because an address claiming Ontario is in the Prairies
+       * would be a lie and `mapHref` refuses to write one.
+       */
+      setArea((held) =>
+        held && regionCodesInArea(regions, held).some((member) => String(member) === String(next)) ? held : null,
+      );
       setHoveredArea(null);
       view.focusRegion(next);
     },
-    [view],
+    [regions, view],
+  );
+
+  /** A region opened from its heading: lit, and the map framed on it. */
+  const openArea = useCallback(
+    (name: string) => {
+      setArea(name);
+      setHoveredArea(null);
+      view.focusCodes(regionCodesInArea(regions, name));
+    },
+    [regions, view],
   );
 
   /*
@@ -228,7 +249,7 @@ export default function MapStudy({
             title={hoveredRegion ? regionLabel(hoveredRegion.code) : undefined}
             aria-live="polite"
           >
-            {hoveredRegion ? regionLabel(hoveredRegion.code) : wide ? MAP_STUDY_COPY.hint : MAP_STUDY_COPY.hintTouch}
+            {hoveredRegion ? regionLabel(hoveredRegion.code) : wide ? MAP_STUDY_COPY.hint(division) : MAP_STUDY_COPY.hintTouch(division)}
           </span>
         </div>
 
@@ -291,7 +312,7 @@ export default function MapStudy({
         </div>
 
         <div className="space-y-1.5">
-          <p className="text-[11px] font-black uppercase tracking-[0.12em] text-foreground/60">{MAP_STUDY_COPY.regionsLabel}</p>
+          <p className="text-[11px] font-black uppercase tracking-[0.12em] text-foreground/60">{dataset.divisionTypePlural}</p>
           <ul className="flex flex-wrap gap-1.5">
             {regions.map((region) => {
               const on = String(region.code) === String(code);
@@ -340,6 +361,7 @@ export default function MapStudy({
             activeArea={area}
             onAreaHover={setHoveredArea}
             onAreaChoose={(next) => setArea((held) => (held === next ? null : next))}
+            onAreaOpen={openArea}
           />
         )}
       </aside>

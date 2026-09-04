@@ -1160,3 +1160,32 @@ test("wanikani connection page renders for a member", async ({ browser, baseURL 
     await expect(page.getByRole("heading", { name: CONNECT_COPY.keepsHeading })).toBeVisible();
   });
 });
+
+/*
+ * A region - Tohoku, the Prairies - has an address of its own, under an
+ * explicit word because Japan has a region and a prefecture both called
+ * Hokkaido. Opening one lights it and frames the map on it; a province named
+ * under a region it is not in is a wrong claim about the map and does not open.
+ */
+test("a map region opens at its own address, lit", async ({ browser, baseURL }) => {
+  await assertPageLoads(browser, `${baseURL}/maps/canada/region/west-coast`, async (page) => {
+    await expect(page.getByRole("heading", { name: "Maps" }).first()).toBeVisible();
+    await expect(page.getByRole("button", { name: "West Coast", pressed: true })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Open West Coast" })).toBeVisible();
+  });
+});
+
+test("a province chosen inside a region keeps the region in its address", async ({ browser, baseURL }) => {
+  await assertPageLoads(browser, `${baseURL}/maps/japan/region/tohoku/aomori`, async (page) => {
+    await expect(page.getByRole("heading", { name: /Aomori/ }).first()).toBeVisible();
+    await expect(page).toHaveURL(/\/maps\/japan\/region\/tohoku\/aomori$/);
+  });
+});
+
+test("a province named under the wrong region is a 404", async ({ browser, baseURL }) => {
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  const response = await page.goto(`${baseURL}/maps/canada/region/prairies/ontario`);
+  expect(response?.status()).toBe(404);
+  await context.close();
+});

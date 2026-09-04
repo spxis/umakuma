@@ -21,7 +21,7 @@ export function groupRegionsByArea(regions: GeoRegion[]): RegionArea[] {
   const byName = new Map<string, RegionArea>();
   for (const region of regions) {
     /* A region with no area of its own is its own heading rather than a gap. */
-    const name = region.region?.trim() || region.name;
+    const name = areaNameOf(region);
     const held = byName.get(name);
     if (held) {
       held.regions.push(region);
@@ -50,7 +50,27 @@ export function regionCodesInArea(
   areaName: string | null,
 ): (string | number)[] {
   if (!areaName) return [];
-  return regions
-    .filter((region) => (region.region?.trim() || region.name) === areaName)
-    .map((region) => region.code);
+  return regions.filter((region) => areaNameOf(region) === areaName).map((region) => region.code);
+}
+
+/**
+ * The name of the area a region sits in: the field, or the region's own name
+ * for one that stands alone. One place for the rule, because the directory,
+ * the address and the map all group by it and must agree.
+ */
+export function areaNameOf(region: GeoRegion): string {
+  return region.region?.trim() || region.name;
+}
+
+/** Every area in the order its first region appears. */
+export function areasOf(regions: GeoRegion[]): string[] {
+  const seen = new Set<string>();
+  const areas: string[] = [];
+  for (const region of regions) {
+    const name = areaNameOf(region);
+    if (seen.has(name)) continue;
+    seen.add(name);
+    areas.push(name);
+  }
+  return areas;
 }

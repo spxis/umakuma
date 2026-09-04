@@ -109,6 +109,56 @@ export function geoZoomBox(
   };
 }
 
+/**
+ * The zoom step and centre that show all of these regions at once.
+ *
+ * For opening a region - Tohoku, the Prairies - from its heading: the reader
+ * wants it filling the view, not the country with six prefectures lit
+ * somewhere in it. The steps are the map's three, so this picks the closest
+ * one whose window still holds everything, with the same room around it that
+ * a focus box leaves; a set that will not fit at 2x is shown at 1x rather
+ * than cut.
+ *
+ * Measured where the regions are *drawn*, like `geoRegionCentre`: Okinawa's
+ * region is its inset box off the south-west, not its true position out at
+ * sea, or opening it would frame water.
+ *
+ * The room around it is a share of *each* side, not of the longest side on
+ * both - the mistake `geoRegionBox` already documents. Tohoku is 143 wide and
+ * 302 tall; padding its width by 55% of its height asked for a window taller
+ * than the 2x one, so every tall or wide region opened at 1x, which is to say
+ * did not open.
+ */
+const FIT_MARGIN_RATIO = 0.15;
+export function geoZoomToFit(
+  country: CountryCode,
+  codes: ReadonlyArray<string | number>,
+): { zoom: MapZoom; centre: { x: number; y: number } } {
+  const whole = geoWholeCountryBox(country);
+  const drawn = GEO_DATASETS[country].regions
+    .filter((region) => codes.some((code) => String(code) === String(region.code)))
+    .map((region) => {
+      const seated = insetFor(country, region.code);
+      if (seated) return [seated.box.x, seated.box.y, seated.box.x + seated.box.width, seated.box.y + seated.box.height];
+      return region.map.bbox;
+    });
+  if (drawn.length === 0) return { zoom: MAP_ZOOM_LEVELS[0], centre: geoBoxCentre(whole) };
+
+  const minX = Math.min(...drawn.map((box) => box[0]));
+  const minY = Math.min(...drawn.map((box) => box[1]));
+  const maxX = Math.max(...drawn.map((box) => box[2]));
+  const maxY = Math.max(...drawn.map((box) => box[3]));
+  const centre = { x: (minX + maxX) / 2, y: (minY + maxY) / 2 };
+
+  const needWidth = (maxX - minX) * (1 + FIT_MARGIN_RATIO * 2);
+  const needHeight = (maxY - minY) * (1 + FIT_MARGIN_RATIO * 2);
+
+  const zoom = [...MAP_ZOOM_LEVELS]
+    .reverse()
+    .find((level) => whole.width / level >= needWidth && whole.height / level >= needHeight);
+  return { zoom: zoom ?? MAP_ZOOM_LEVELS[0], centre };
+}
+
 /** Where a box is looking, which is what a zoom step keeps hold of. */
 export function geoBoxCentre(box: MapBox): { x: number; y: number } {
   return { x: box.x + box.width / 2, y: box.y + box.height / 2 };

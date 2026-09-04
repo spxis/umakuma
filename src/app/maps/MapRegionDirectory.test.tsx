@@ -22,6 +22,7 @@ function draw(marks = {}, hovered: string | number | null = null, activeArea: st
       activeArea={activeArea}
       onAreaHover={() => undefined}
       onAreaChoose={() => undefined}
+      onAreaOpen={() => undefined}
     />,
   );
   return new JSDOM(`<!doctype html><body>${markup}</body>`).window.document;
@@ -133,5 +134,27 @@ describe("choosing a whole area", () => {
     for (const button of draw().querySelectorAll("button")) {
       expect(button.querySelector("button"), button.textContent ?? "").toBeNull();
     }
+  });
+});
+
+/**
+ * Double-tap is unreliable on a phone and fights the browser's own zoom, so a
+ * held region grows an explicit way to open it - and only the held one, or
+ * eight "Open" buttons would be shouting over the list.
+ */
+describe("opening a region", () => {
+  it("offers to open only the region that is held", () => {
+    expect(draw().querySelectorAll('button[aria-label^="Open "]')).toHaveLength(0);
+    const open = [...draw({}, null, "Tohoku").querySelectorAll('button[aria-label^="Open "]')];
+    expect(open.map((button) => button.getAttribute("aria-label"))).toEqual([MAP_DIRECTORY_COPY.regionOpen("Tohoku")]);
+  });
+
+  /* Beside the heading, not inside its button: a control never holds a control. */
+  it("keeps the open control out of the heading's own button", () => {
+    const document = draw({}, null, "Tohoku");
+    for (const button of document.querySelectorAll("h3 button")) {
+      expect(button.querySelector("button")).toBeNull();
+    }
+    expect(document.querySelector('h3 button[aria-label^="Open "]')).toBeNull();
   });
 });

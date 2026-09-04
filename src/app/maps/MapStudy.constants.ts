@@ -3,9 +3,13 @@ export const MAP_STUDY_COPY = {
   title: "Maps",
   subtitle: "Learn a country region by region.",
   countryLabel: "Country",
-  regionsLabel: "Regions",
-  hint: "Point at a region to see its name; choose one to read about it.",
-  hintTouch: "Tap a region to read about it.",
+  /*
+   * "prefecture", "province": the country's own word for a part, never
+   * "region". A region here is Tohoku or the Prairies - a group of them - and
+   * the same word for both left "choose a region" meaning two things.
+   */
+  hint: (division: string) => `Point at a ${division} to see its name; choose one to read about it.`,
+  hintTouch: (division: string) => `Tap a ${division} to read about it.`,
   close: "Close",
   writtenWith: "Written with",
   neighbours: "Borders",
@@ -43,9 +47,12 @@ export const MAP_MARK_COPY = {
 export const MAP_DIRECTORY_COPY = {
   /** "All 47 prefectures" */
   heading: (count: number, plural: string) => `All ${count} ${plural}`,
-  hint: "Point at one to find it on the map; choose one to read about it. Choose an area to light all of it at once.",
+  hint: "Point at one to find it on the map; choose one to read about it. Choose a region to light all of it; double-click to open it.",
   /** "Highlight Tohoku on the map" */
-  areaTitle: (area: string) => `Highlight ${area} on the map`,
+  regionTitle: (region: string) => `Highlight ${region} on the map`,
+  /** "Open Tohoku": frame the map on the region. */
+  regionOpen: (region: string) => `Open ${region}`,
+  open: "Open",
 } as const;
 
 export const MAP_SHAPE_COPY = { caption: (name: string) => `The shape of ${name}, with its neighbours in outline.` } as const;

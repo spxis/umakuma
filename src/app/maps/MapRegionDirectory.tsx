@@ -34,6 +34,7 @@ export default function MapRegionDirectory({
   activeArea,
   onAreaHover,
   onAreaChoose,
+  onAreaOpen,
 }: {
   regions: GeoRegion[];
   marks: MapMarkIndex;
@@ -46,6 +47,8 @@ export default function MapRegionDirectory({
   activeArea: string | null;
   onAreaHover: (area: string | null) => void;
   onAreaChoose: (area: string) => void;
+  /** Frame the map on the region, not only light it. */
+  onAreaOpen: (area: string) => void;
 }) {
   const areas = groupRegionsByArea(regions);
 
@@ -75,25 +78,54 @@ export default function MapRegionDirectory({
                 * nothing here is a control inside a control - the rows are
                 * siblings in the list below, not children of this.
                 */}
-              <h3>
-                <button
-                  type="button"
-                  aria-pressed={area.name === activeArea}
-                  onClick={() => onAreaChoose(area.name)}
-                  onMouseEnter={() => onAreaHover(area.name)}
-                  onMouseLeave={() => onAreaHover(null)}
-                  onFocus={() => onAreaHover(area.name)}
-                  onBlur={() => onAreaHover(null)}
-                  title={MAP_DIRECTORY_COPY.areaTitle(area.name)}
-                  className={`mb-1 block w-full cursor-pointer truncate rounded-lg px-1 py-0.5 text-left text-[11px] font-black uppercase tracking-[0.12em] transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 ${
-                    area.name === activeArea
-                      ? "bg-accent/15 text-accent"
-                      : "text-foreground/60 hover:bg-surface-muted hover:text-foreground"
-                  }`}
-                >
-                  {area.name}
-                </button>
-              </h3>
+              {/*
+                * One click lights the region; a double-click opens it, framing
+                * the map on it the way double-clicking the map itself zooms in.
+                * The first click of a double-click still fires, so the toggle
+                * ignores any click that is part of a run - otherwise the second
+                * click put the region out an instant before the open lit it.
+                *
+                * Double-tap is unreliable on a phone and fights the browser's
+                * own zoom, so once a region is held its heading also grows an
+                * explicit open control - a sibling of the heading button,
+                * never inside it.
+                */}
+              <div className="mb-1 flex items-center gap-1">
+                <h3 className="min-w-0 flex-1">
+                  <button
+                    type="button"
+                    aria-pressed={area.name === activeArea}
+                    onClick={(event) => {
+                      if (event.detail > 1) return;
+                      onAreaChoose(area.name);
+                    }}
+                    onDoubleClick={() => onAreaOpen(area.name)}
+                    onMouseEnter={() => onAreaHover(area.name)}
+                    onMouseLeave={() => onAreaHover(null)}
+                    onFocus={() => onAreaHover(area.name)}
+                    onBlur={() => onAreaHover(null)}
+                    title={MAP_DIRECTORY_COPY.regionTitle(area.name)}
+                    className={`block w-full cursor-pointer truncate rounded-lg px-1 py-0.5 text-left text-[11px] font-black uppercase tracking-[0.12em] transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 ${
+                      area.name === activeArea
+                        ? "bg-accent/15 text-accent"
+                        : "text-foreground/60 hover:bg-surface-muted hover:text-foreground"
+                    }`}
+                  >
+                    {area.name}
+                  </button>
+                </h3>
+                {area.name === activeArea ? (
+                  <button
+                    type="button"
+                    onClick={() => onAreaOpen(area.name)}
+                    aria-label={MAP_DIRECTORY_COPY.regionOpen(area.name)}
+                    title={MAP_DIRECTORY_COPY.regionOpen(area.name)}
+                    className="inline-flex h-6 shrink-0 items-center rounded-lg border border-accent/40 bg-accent/10 px-2 text-[10px] font-black uppercase tracking-[0.08em] text-accent transition hover:bg-accent hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70"
+                  >
+                    {MAP_DIRECTORY_COPY.open}
+                  </button>
+                ) : null}
+              </div>
               <ul className="space-y-0.5">
                 {area.regions.map((region) => {
                   const lit = String(region.code) === String(hovered);

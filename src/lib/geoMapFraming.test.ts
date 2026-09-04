@@ -8,10 +8,13 @@ import {
   geoShapeGlyphBox,
   geoWholeCountryBox,
   geoZoomBox,
+  geoZoomToFit,
   isMapZoom,
   stepMapZoom,
 } from "./geoMapFraming";
+import { insetFor } from "./geoMapInsets";
 import { GEO_DATASETS } from "./geoRegion";
+import { regionCodesInArea } from "./mapDirectory";
 
 const JAPAN = "JP" as const;
 const whole = geoWholeCountryBox(JAPAN);
@@ -188,5 +191,45 @@ describe("one region's outline as an icon", () => {
   /* A region of no width at all would otherwise ask for a box of zero. */
   it("still has a size for a shape with none", () => {
     expect(geoShapeGlyphBox([10, 10, 10, 10]).width).toBeGreaterThan(0);
+  });
+});
+
+/**
+ * Opening a region from its heading: the reader wants Tohoku filling the view,
+ * not the country with six prefectures lit somewhere in it.
+ */
+describe("framing a whole region", () => {
+  it("shows the whole country when given nothing", () => {
+    expect(geoZoomToFit(JAPAN, [])).toEqual({ zoom: 1, centre: geoBoxCentre(whole) });
+  });
+
+  it("goes in on Tohoku and keeps every prefecture inside the window", () => {
+    const codes = regionCodesInArea(GEO_DATASETS.JP.regions, "Tohoku");
+    const fit = geoZoomToFit(JAPAN, codes);
+    expect(fit.zoom).toBeGreaterThan(1);
+    const window = geoZoomBox(JAPAN, fit.zoom, fit.centre);
+    for (const code of codes) {
+      const [minX, minY, maxX, maxY] = GEO_DATASETS.JP.regions.find((r) => r.code === code)!.map.bbox;
+      expect(minX, `${code} left`).toBeGreaterThanOrEqual(window.x - 1);
+      expect(minY, `${code} top`).toBeGreaterThanOrEqual(window.y - 1);
+      expect(maxX, `${code} right`).toBeLessThanOrEqual(window.x + window.width + 1);
+      expect(maxY, `${code} bottom`).toBeLessThanOrEqual(window.y + window.height + 1);
+    }
+  });
+
+  /* Where it is drawn, not where it is: the true position is open sea. */
+  it("frames Okinawa in its inset box rather than out at sea", () => {
+    const seated = insetFor(JAPAN, 47);
+    expect(seated).toBeTruthy();
+    const { centre } = geoZoomToFit(JAPAN, [47]);
+    expect(centre.x).toBeGreaterThanOrEqual(seated!.box.x);
+    expect(centre.x).toBeLessThanOrEqual(seated!.box.x + seated!.box.width);
+    expect(centre.y).toBeGreaterThanOrEqual(seated!.box.y);
+    expect(centre.y).toBeLessThanOrEqual(seated!.box.y + seated!.box.height);
+  });
+
+  it("stays at one for a set that will not fit closer, rather than cutting it", () => {
+    const everything = GEO_DATASETS.JP.regions.map((r) => r.code);
+    expect(geoZoomToFit(JAPAN, everything).zoom).toBe(1);
   });
 });

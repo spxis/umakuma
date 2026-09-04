@@ -54,6 +54,7 @@ export default async function MapStudyPage({ params }: Props) {
         <MapStudy
           initialCountry={address.country}
           initialCode={address.code}
+          initialArea={address.area}
           kanjiFacts={mapRegionKanjiFacts()}
           accountId={viewerMenuInfo?.accountId ?? null}
         />
