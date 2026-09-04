@@ -27,7 +27,7 @@ export const MAP_STUDY_HEIGHT = "h-[52vh] min-h-72 lg:h-[64vh]";
 
 /** The map canvas itself, which is focusable so it can be driven by keyboard. */
 export const MAP_ZOOM_COPY = {
-  canvasLabel: "Map. Arrow keys move around, plus and minus zoom, zero fits the country.",
+  canvasLabel: "Map. Arrow keys move around, plus and minus zoom, zero fits the country. Double-click to zoom in where you point, hold Alt and double-click to zoom back out.",
 } as const;
 
 /** Marking a region, in one map for the locale layer. */

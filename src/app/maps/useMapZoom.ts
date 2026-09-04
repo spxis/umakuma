@@ -121,6 +121,47 @@ export function useMapZoom(
     [country],
   );
 
+  /**
+   * Zoom where the pointer is, keeping that spot under it.
+   *
+   * Double-clicking a region used to re-centre the map on that region's
+   * middle, which threw the map sideways: you asked to look closer at the
+   * coast and the whole country slid so a centroid you cannot see could sit in
+   * the middle. This keeps the point you double-clicked exactly where it was
+   * and grows the map around it, which is what every other map does and the
+   * only thing that makes a second double-click land where you expect.
+   *
+   * Hold Alt (Option) to go the other way, so the gesture reverses without
+   * reaching for the buttons.
+   */
+  const zoomAtPoint = useCallback(
+    (event: React.MouseEvent<SVGSVGElement>) => {
+      const rect = event.currentTarget.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return;
+
+      const towards: 1 | -1 = event.altKey || event.shiftKey ? -1 : 1;
+      const next = stepMapZoom(zoom, towards);
+      if (next === zoom) return;
+
+      /* Where the pointer is in the map's own coordinates, and how far across
+         the drawn window that is - the fraction is what has to stay put. */
+      const fx = (event.clientX - rect.left) / rect.width;
+      const fy = (event.clientY - rect.top) / rect.height;
+      const mapX = box.x + fx * box.width;
+      const mapY = box.y + fy * box.height;
+
+      const whole = geoWholeCountryBox(country);
+      const nextWidth = whole.width / next;
+      const nextHeight = whole.height / next;
+
+      setZoom(next);
+      setCentre({ x: mapX + nextWidth * (0.5 - fx), y: mapY + nextHeight * (0.5 - fy) });
+      /* A deliberate move, so the map is held inside its own edges again. */
+      setClamp(true);
+    },
+    [box.height, box.width, box.x, box.y, country, zoom],
+  );
+
   const onPointerDown = useCallback(
     (event: React.PointerEvent<SVGSVGElement>) => {
       if (!zoomed || event.button !== 0) return;
@@ -207,6 +248,7 @@ export function useMapZoom(
     focusRegion,
     focusCodes,
     zoomInto,
+    zoomAtPoint,
     /*
      * Spread onto the SVG. `touch-none` is what stops a drag on a phone
      * scrolling the page instead of moving the map.
@@ -219,6 +261,9 @@ export function useMapZoom(
       tabIndex: 0,
       onKeyDown,
       "aria-label": MAP_ZOOM_COPY.canvasLabel,
+      /* Anywhere on the map, not only on a region: the sea between islands and
+         the gap between provinces are places a reader points at too. */
+      onDoubleClick: zoomAtPoint,
       ...(zoomed
         ? { onPointerDown, onPointerMove, onPointerUp: endDrag, onPointerCancel: endDrag, className: "cursor-grab touch-none" }
         : {}),

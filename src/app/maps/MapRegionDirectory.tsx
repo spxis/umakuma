@@ -80,7 +80,10 @@ export default function MapRegionDirectory({
                 */}
               {/*
                 * One click lights the region; a double-click opens it, framing
-                * the map on it the way double-clicking the map itself zooms in.
+                * the map on it. Double-clicking the map itself zooms where the
+                * pointer is instead, which is a different gesture on purpose:
+                * a name in a list means that region, a spot on a map means
+                * that spot.
                 * The first click of a double-click still fires, so the toggle
                 * ignores any click that is part of a run - otherwise the second
                 * click put the region out an instant before the open lit it.

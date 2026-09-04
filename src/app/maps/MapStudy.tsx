@@ -348,7 +348,6 @@ export default function MapStudy({
             country={country}
             box={view.box}
             onRegionSelect={choose}
-            onRegionDoubleSelect={view.zoomInto}
             onRegionHover={setHovered}
             regionLabel={regionLabel}
             cities={city.cities}
