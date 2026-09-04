@@ -4940,11 +4940,23 @@
     "id": "uk-study-answer-row",
     "name": "Reuse the established answer row",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "Reuse the established answer row",
+    "dateIsEstimate": false,
+    "version": "0.433.0",
+    "releasedAt": "2026-09-04T16:24:52Z"
+  },
+  {
+    "id": "uk-wanikani-import",
+    "name": "WaniKani import to a starting level",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.433.0",
-    "releasedAt": "2026-09-04T16:24:52Z",
-    "summary": "Reuse the established answer row"
+    "version": "0.434.0",
+    "releasedAt": "2026-09-04T20:39:36Z",
+    "summary": "WaniKani import to a starting level"
   }
 ]
