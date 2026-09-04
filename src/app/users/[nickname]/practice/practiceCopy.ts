@@ -165,6 +165,9 @@ export const SHEET_COLUMNS = 8;
  * Abbreviated because they sit in a line of small print beside the meaning,
  * and a student reading a column of them wants to compare rather than read.
  */
+/** Said on a worksheet row's character, which leads to that character's page. */
+export const OPEN_KANJI_TITLE = (kanji: string) => `Open ${kanji}`;
+
 export const SHEET_FACT_COPY = {
   grade: (year: number) => `G${year}`,
   jlpt: (level: number) => `N${level}`,

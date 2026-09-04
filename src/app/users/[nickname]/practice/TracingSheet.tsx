@@ -1,10 +1,12 @@
+import Link from "next/link";
 import { Fragment } from "react";
 
 import type { KanjiSheetFacts } from "@/lib/kanjiSheetFacts";
 
 import { noTranslateClass } from "@/app/shared/japaneseText";
+import { kanjiPageHref } from "@/app/shared/subject-page/subjectSectionAddress";
 
-import { DEFAULT_SHEET_SIZE, PRACTICE_SHEET_COPY, SHEET_SIZES, type SheetSize } from "./practiceCopy";
+import { DEFAULT_SHEET_SIZE, OPEN_KANJI_TITLE, PRACTICE_SHEET_COPY, SHEET_SIZES, type SheetSize } from "./practiceCopy";
 import { Cell, StrokeStepGlyph, TraceGlyph } from "./sheetCells";
 import { sheetFactLabels } from "./sheetFacts";
 
@@ -152,15 +154,29 @@ export default function TracingSheet({
                 {startIndex + index}
               </span>
             ) : null}
-            {/* The character first: it is what the row is about, and a reader
-              * scanning a printed page finds it faster than the English. */}
-            <span
+            {/*
+              * The character first: it is what the row is about, and a reader
+              * scanning a printed page finds it faster than the English.
+              *
+              * It leads to its own page. On paper a sheet is finished, but on
+              * screen it is a list of characters somebody is working through,
+              * and every one of them was a dead end - the one thing on the row
+              * you would want to ask about was the only thing you could not.
+              * Underlined on hover rather than always, because a sheet of
+              * twenty underlined characters reads as a page of links, and the
+              * underline is dropped entirely on paper.
+              */}
+            <Link
+              href={kanjiPageHref(entry.kanji)}
               lang="ja"
               translate="no"
-              className={noTranslateClass("text-base font-black leading-none text-foreground print:text-neutral-900")}
+              title={OPEN_KANJI_TITLE(entry.kanji)}
+              className={noTranslateClass(
+                "text-base font-black leading-none text-foreground underline decoration-transparent underline-offset-4 transition hover:decoration-current focus-visible:decoration-current print:text-neutral-900 print:no-underline",
+              )}
             >
               {entry.kanji}
-            </span>
+            </Link>
             <span className="font-black text-foreground/85 print:text-neutral-700">{entry.meaning ?? ""}</span>
             {/*
               * What else is known, in the space the line already had. A student

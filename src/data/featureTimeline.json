@@ -4280,11 +4280,23 @@
     "id": "sheet-row-facts",
     "name": "A worksheet row can say more",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-03",
+    "summary": "A worksheet row carries the readings; it has room for more of what is known about that character. Decide what earns the space. Requested 2026-09-03 by John.",
+    "dateIsEstimate": false,
+    "version": "0.378.0",
+    "releasedAt": "2026-09-04T02:49:48Z"
+  },
+  {
+    "id": "sheet-kanji-links",
+    "name": "The worksheet's kanji link nowhere",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-03",
-    "version": "0.378.0",
-    "releasedAt": "2026-09-04T02:49:48Z",
-    "summary": "A worksheet row carries the readings; it has room for more of what is known about that character. Decide what earns the space. Requested 2026-09-03 by John."
+    "version": "0.379.0",
+    "releasedAt": "2026-09-04T02:57:32Z",
+    "summary": "The characters printed on a worksheet are not links. They should go to the character's own page. Reported 2026-09-03 by John."
   }
 ]

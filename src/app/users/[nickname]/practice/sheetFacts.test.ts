@@ -1,3 +1,6 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+
 import { describe, expect, it } from "vitest";
 
 import { SHEET_FACT_COPY } from "./practiceCopy";
@@ -39,5 +42,29 @@ describe("what a worksheet row says about a character", () => {
   /* Three at most, which is what "fill the row, do not fill it up" leaves. */
   it("never crowds the row with more than three", () => {
     expect(sheetFactLabels({ schoolGrade: 1, band: "ELEM", jlpt: 5, wkLevel: 2 })).toHaveLength(3);
+  });
+});
+
+/*
+ * On paper a sheet is finished; on screen it is a list of characters somebody
+ * is working through, and every one of them was a dead end.
+ */
+describe("the character at the head of a row", () => {
+  const source = readFileSync(
+    join(process.cwd(), "src/app/users/[nickname]/practice/TracingSheet.tsx"),
+    "utf8",
+  );
+
+  it("leads to that character's own page", () => {
+    expect(source).toContain("kanjiPageHref(entry.kanji)");
+    expect(source).toContain("OPEN_KANJI_TITLE(entry.kanji)");
+  });
+
+  /* Twenty underlined characters is a page of links; paper gets none at all. */
+  it("shows the underline only when pointed at, and never on paper", () => {
+    const row = source.slice(source.indexOf("<Link"), source.indexOf("</Link>"));
+    expect(row).toContain("decoration-transparent");
+    expect(row).toContain("hover:decoration-current");
+    expect(row).toContain("print:no-underline");
   });
 });
