@@ -100,6 +100,31 @@ describe("kanji ladder shape", () => {
     expect(sizes[KANJI_LADDER_LEVELS - 1]).toBeGreaterThan(sizes[0]);
   });
 
+  /*
+   * The JLPT covers 2,211 characters and we teach 2,235, so 227 have no N
+   * level. Sweeping all of them into the last band was right for the secondary
+   * and name kanji and badly wrong for fourteen: 分 is the 24th commonest
+   * character in Japanese, taught in Japanese schools at grade 2, and it sat
+   * at level 91 because an exam does not list it. Absence from one syllabus is
+   * not evidence of difficulty.
+   */
+  it("teaches a grade-school kanji early even when the JLPT never mentions it", () => {
+    const grades = kanjiLevels as Record<string, { schoolGrade: number }>;
+    const stranded: string[] = [];
+
+    for (const [kanji, grade] of Object.entries(grades)) {
+      if (grade.schoolGrade > 6) continue;
+      const placement = kanjiPlacement(kanji);
+      /* Only the ones the JLPT skips; the rest are already banded by it. */
+      if (!placement || placement.nLevel !== null) continue;
+      if (placement.level > 50) stranded.push(`${kanji} (grade ${grade.schoolGrade}, L${placement.level})`);
+    }
+
+    expect(stranded).toEqual([]);
+    /* 分 in particular, because it is the one that made this visible. */
+    expect(kanjiPlacement("分")?.level).toBeLessThanOrEqual(20);
+  });
+
   it("counts each level's WaniKani and added kanji", () => {
     for (const entry of kanjiLadderLevels()) {
       expect(entry.fromWaniKani + entry.added).toBe(entry.kanji.length);
@@ -196,7 +221,11 @@ describe("radical placement", () => {
   it("orders parts before wholes inside a band", () => {
     /* A radical that is also a kanji reads better taught first — 言 before 語.
        Only within a band, though: across bands the member has the radical
-       already, and forcing the kanji too would drag N1 into level 1. */
+       already, and forcing the kanji too would drag N1 into level 1.
+       Compared on the teaching band rather than the JLPT level, because that
+       is the one that decided the placement — 無 is taught in the N4 band on
+       its school year while 乞 sits in the last band, and neither constrains
+       the other. */
     const wrong: string[] = [];
     for (const entry of radicals) {
       const part = kanjiPlacement(entry.radical);
@@ -204,7 +233,7 @@ describe("radical placement", () => {
       for (const kanji of entry.kanji) {
         if (kanji === entry.radical) continue;
         const whole = kanjiPlacement(kanji);
-        if (whole === null || whole.nLevel !== part.nLevel) continue;
+        if (whole === null || whole.teachingBand !== part.teachingBand) continue;
         if (part.level > whole.level) wrong.push(`${kanji}@${whole.level} before ${entry.radical}@${part.level}`);
       }
     }

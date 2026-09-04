@@ -28,7 +28,15 @@ export type KanjiLadderMilestone = {
 export type KanjiLadderPlacement = {
   level: number;
   waniKaniLevel: number | null;
+  /** What the JLPT says. Null for the 227 characters it does not list. */
   nLevel: JlptNLevel | null;
+  /**
+   * The band that decided where this kanji sits: its JLPT level where it has
+   * one, otherwise the band its Japanese school year maps to. The two differ
+   * for fourteen kanji — 分 is grade 2 and on no JLPT list — and anything
+   * reasoning about placement wants this one, not `nLevel`.
+   */
+  teachingBand: JlptNLevel | null;
 };
 
 export type KanjiLadder = {

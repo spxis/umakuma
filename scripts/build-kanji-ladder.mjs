@@ -134,6 +134,29 @@ const JLPT_BANDS = [
 /** Kanji on no JLPT list sort with N1, at the end. */
 const BAND_ORDER = [5, 4, 3, 2, 1];
 
+/**
+ * Which band a kanji is *taught* in when the JLPT has never heard of it.
+ *
+ * The JLPT covers 2,211 characters and we teach 2,235, so 227 have no N level
+ * at all — and they were all being swept into the final band, which is levels
+ * 51-100. That is right for the 158 secondary-school characters and the 33
+ * name kanji among them. It was badly wrong for fourteen: 分 is the
+ * twenty-fourth commonest character in Japanese, is taught in Japanese schools
+ * at grade 2, and WaniKani teaches it at level 3 — and it was sitting at UK91
+ * for no better reason than that an exam does not list it.
+ *
+ * So a kanji with no JLPT level falls back to the year Japan teaches it in.
+ * Absence from one syllabus is not evidence of difficulty.
+ */
+const GRADE_TO_BAND = new Map([
+  [1, 5],
+  [2, 5],
+  [3, 4],
+  [4, 4],
+  [5, 3],
+  [6, 3],
+]);
+
 /** Reads WaniKani's kanji in teaching order: level, then their own subject id. */
 async function loadWaniKaniOrder() {
   const index = JSON.parse(await fs.readFile(path.join(WK_LEVELS_DIR, "index.json"), "utf8"));
@@ -401,9 +424,22 @@ async function main() {
   );
   /* Everything we teach: WaniKani's kanji plus the joyo it skips. */
   const everything = [...waniKani.map((e) => e.kanji), ...missing.map((e) => e.kanji)];
+  /* What the JLPT says, which is what a milestone is measured against. */
   const nLevelOf = (kanji) => jlpt[kanji]?.nLevel ?? NO_JLPT_LEVEL;
+
+  /*
+   * Where a kanji is taught, which is not the same question. A character the
+   * JLPT skips still has a school year, and that year is a better guide to
+   * when a learner meets it than the fact of the omission.
+   */
+  const teachingBandOf = (kanji) => {
+    const n = nLevelOf(kanji);
+    if (n !== NO_JLPT_LEVEL) return n;
+    return GRADE_TO_BAND.get(entryFor(kanji)?.grade) ?? NO_JLPT_LEVEL;
+  };
+
   const bandRank = (kanji) => {
-    const index = BAND_ORDER.indexOf(nLevelOf(kanji));
+    const index = BAND_ORDER.indexOf(teachingBandOf(kanji));
     return index === -1 ? BAND_ORDER.length : index;
   };
   const entryFor = (kanji) => dictionary.get(kanji);
@@ -437,7 +473,7 @@ async function main() {
   for (const band of JLPT_BANDS) {
     const isFinalBand = band.throughLevel === LADDER_LEVELS;
     const members = sequence.filter((kanji) => {
-      const n = nLevelOf(kanji);
+      const n = teachingBandOf(kanji);
       return isFinalBand ? n === band.nLevel || n === NO_JLPT_LEVEL : n === band.nLevel;
     });
     const finishesAt = isFinalBand
@@ -520,7 +556,20 @@ async function main() {
     ),
     kanjiLevel: Object.fromEntries(
       ladder.flatMap((l) =>
-        l.kanji.map((k) => [k, { level: l.level, waniKaniLevel: wkLevelOf.get(k) ?? null, nLevel: nLevelOf(k) || null }]),
+        l.kanji.map((k) => [
+          k,
+          {
+            level: l.level,
+            waniKaniLevel: wkLevelOf.get(k) ?? null,
+            /* What the JLPT says. Null where it says nothing. */
+            nLevel: nLevelOf(k) || null,
+            /* Which band actually decided where this kanji sits — the JLPT
+               level where there is one, the school year where there is not.
+               Recorded because the two differ for fourteen kanji, and anything
+               reasoning about placement needs the one that placed them. */
+            teachingBand: teachingBandOf(k) || null,
+          },
+        ]),
       ),
     ),
     ladder,
