@@ -1,0 +1,153 @@
+import "server-only";
+
+import { SUBJECT_TYPES } from "@/lib/domainConstants";
+import { prisma } from "@/lib/prisma";
+import { getCatalogSubjectDetails } from "@/lib/subjectCatalogDetails";
+
+/**
+ * What a member has to do on the UmaKuma ladder right now.
+ *
+ * Two questions, and they are not the same one. **Lessons** are items at or
+ * below their level that have no state row at all — nothing has been seen yet.
+ * **Reviews** are items with a row whose `availableAt` has come round. An item
+ * above their level is neither: it is locked, and it stays out of both counts
+ * rather than showing as work they cannot do.
+ *
+ * Content is resolved rather than copied. Where WaniKani teaches the same
+ * item, its meanings and readings come from `WkSubjectCatalog` at read time —
+ * catalogue-first, because asking the API per request cost the JLPT explorer
+ * 650ms before it drew anything. The 134 added jōyō kanji and the 253 RADKFILE
+ * radicals have no WaniKani subject, so their facts sit on the row itself.
+ */
+
+export type UkStudyItem = {
+  subjectId: number;
+  key: string;
+  kind: string;
+  characters: string;
+  level: number;
+  meanings: string[];
+  readings: string[];
+  /** Null for a lesson, which has no state yet. */
+  srsStage: number | null;
+};
+
+export type UkStudyCounts = {
+  lessons: number;
+  reviews: number;
+  /** Due later today, so a member knows whether to wait. */
+  upcoming: number;
+};
+
+/** The ladder rows a member may work on: everything at or below their level. */
+async function unlockedSubjects(accountId: string) {
+  const account = await prisma.account.findUnique({
+    where: { id: accountId },
+    select: { ukLevel: true },
+  });
+  const level = account?.ukLevel ?? 1;
+  return prisma.ukSubject.findMany({
+    where: { removedAt: null, level: { lte: level } },
+    select: {
+      id: true, key: true, kind: true, characters: true, level: true,
+      meanings: true, readings: true, wkSubjectId: true,
+    },
+    orderBy: [{ level: "asc" }, { kind: "asc" }, { id: "asc" }],
+  });
+}
+
+type LadderRow = Awaited<ReturnType<typeof unlockedSubjects>>[number];
+
+/**
+ * Fills in meanings and readings for the items WaniKani teaches, in one pass.
+ *
+ * Never their mnemonics: that is WaniKani's copyrighted text, and it is shown
+ * only to members who have connected their own account.
+ */
+async function withContent(rows: LadderRow[]): Promise<Map<number, { meanings: string[]; readings: string[] }>> {
+  const filled = new Map<number, { meanings: string[]; readings: string[] }>();
+  const wanted = rows.filter((row) => row.wkSubjectId !== null);
+  if (wanted.length === 0) return filled;
+
+  const details = await getCatalogSubjectDetails(wanted.map((row) => row.wkSubjectId as number)).catch(
+    () => new Map(),
+  );
+  for (const row of wanted) {
+    const detail = details.get(row.wkSubjectId as number);
+    if (!detail) continue;
+    filled.set(row.id, { meanings: detail.meanings, readings: detail.readings });
+  }
+  return filled;
+}
+
+function toItem(row: LadderRow, content: Map<number, { meanings: string[]; readings: string[] }>, srsStage: number | null): UkStudyItem {
+  const resolved = content.get(row.id);
+  return {
+    subjectId: row.id,
+    key: row.key,
+    kind: row.kind,
+    characters: row.characters,
+    level: row.level,
+    /* The row's own facts win where it has them: those are the items
+       WaniKani never taught, and the catalogue has nothing to say. */
+    meanings: row.meanings.length > 0 ? row.meanings : (resolved?.meanings ?? []),
+    readings: row.readings.length > 0 ? row.readings : (resolved?.readings ?? []),
+    srsStage,
+  };
+}
+
+/** Items with no state row: never seen, and open. */
+export async function ukLessons(accountId: string, limit = 50): Promise<UkStudyItem[]> {
+  const [rows, states] = await Promise.all([
+    unlockedSubjects(accountId),
+    prisma.ukSrsState.findMany({ where: { accountId }, select: { subjectId: true } }),
+  ]);
+  const seen = new Set(states.map((state) => state.subjectId));
+  /* Radicals first, then kanji, then words — the order a level is met, so a
+     member is never asked for a character before its parts. */
+  const order = [SUBJECT_TYPES.radical, SUBJECT_TYPES.kanji, SUBJECT_TYPES.vocabulary];
+  const fresh = rows
+    .filter((row) => !seen.has(row.id))
+    .sort((a, b) => a.level - b.level || order.indexOf(a.kind) - order.indexOf(b.kind))
+    .slice(0, limit);
+  const content = await withContent(fresh);
+  return fresh.map((row) => toItem(row, content, null));
+}
+
+/** Items whose next review has come round. */
+export async function ukReviews(accountId: string, now = new Date(), limit = 100): Promise<UkStudyItem[]> {
+  const due = await prisma.ukSrsState.findMany({
+    where: { accountId, availableAt: { not: null, lte: now } },
+    select: { subjectId: true, srsStage: true },
+    orderBy: { availableAt: "asc" },
+    take: limit,
+  });
+  if (due.length === 0) return [];
+
+  const rows = await prisma.ukSubject.findMany({
+    where: { id: { in: due.map((state) => state.subjectId) } },
+    select: {
+      id: true, key: true, kind: true, characters: true, level: true,
+      meanings: true, readings: true, wkSubjectId: true,
+    },
+  });
+  const stageById = new Map(due.map((state) => [state.subjectId, state.srsStage]));
+  const content = await withContent(rows);
+  return rows.map((row) => toItem(row, content, stageById.get(row.id) ?? 0));
+}
+
+export async function ukStudyCounts(accountId: string, now = new Date()): Promise<UkStudyCounts> {
+  const [rows, states] = await Promise.all([
+    unlockedSubjects(accountId),
+    prisma.ukSrsState.findMany({ where: { accountId }, select: { subjectId: true, availableAt: true } }),
+  ]);
+  const seen = new Set(states.map((state) => state.subjectId));
+  const endOfDay = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+  return {
+    lessons: rows.filter((row) => !seen.has(row.id)).length,
+    reviews: states.filter((state) => state.availableAt !== null && state.availableAt <= now).length,
+    upcoming: states.filter(
+      (state) => state.availableAt !== null && state.availableAt > now && state.availableAt <= endOfDay,
+    ).length,
+  };
+}

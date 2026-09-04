@@ -6,7 +6,7 @@ import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { getOwnedCustomLibrary } from "@/lib/customStudy/customLibraryAccess";
 import { customItemSupportsWkLevel, resolveCustomItemLevel } from "@/lib/customStudy/customItemLevel";
 import { isCustomLevelUnlocked, resolveCurrentCustomLevel } from "@/lib/customStudy/customLevelUnlock";
-import { initialCustomLessonState } from "@/lib/customStudy/customSrs";
+import { initialLessonState } from "@/lib/srs/srsSchedule";
 import { prisma } from "@/lib/prisma";
 
 type RouteContext = {
@@ -106,7 +106,7 @@ export async function POST(request: Request, context: RouteContext) {
         }
 
         const now = new Date();
-        const nextState = initialCustomLessonState(now);
+        const nextState = initialLessonState(now);
 
         await prisma.customStudyState.update({
           where: { id: state.id },

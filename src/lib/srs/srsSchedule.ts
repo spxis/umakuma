@@ -1,3 +1,22 @@
+/**
+ * WaniKani's stage schedule, which both of our ladders use.
+ *
+ * Nine stages, four hours to four months, and a wrong answer drops you back
+ * rather than to zero. It lived in `customStudy/` because a member's uploaded
+ * library was the first thing here that needed its own scheduler; the UmaKuma
+ * curriculum is the second, and two copies of an interval table is how they
+ * start disagreeing.
+ *
+ * The intervals are WaniKani's because our stages are: a member arriving with
+ * forty levels of their progress keeps every interval rather than restarting,
+ * and that only works if the two scales mean the same thing.
+ *
+ * Its companion, `customLevelUnlock.ts`, deliberately did *not* move. The two
+ * ladders gate levels differently — an uploaded library counts every item in a
+ * level, ours counts the level's kanji, or its radicals on level 1 where there
+ * are none — so `resolveUkLevel` in `uk/ukLevel.ts` is a separate rule rather
+ * than a shared one wearing two hats.
+ */
 import { WK_STATUSES, srsBucketFromStage, type WkStatus, REVIEW_RESULTS } from "@/lib/domainConstants";
 
 const HOUR_MS = 60 * 60 * 1000;
@@ -37,7 +56,7 @@ function clampStage(value: number): number {
   return Math.min(9, Math.max(0, Math.trunc(value)));
 }
 
-export function toCustomSrsGrouping(stage: number): WkStatus {
+export function srsGroupingFromStage(stage: number): WkStatus {
   const bucket = srsBucketFromStage(clampStage(stage));
   switch (bucket) {
     case WK_STATUSES.locked:
@@ -57,7 +76,7 @@ export function toCustomSrsGrouping(stage: number): WkStatus {
   }
 }
 
-export function nextCustomSrsStage(params: {
+export function nextSrsStage(params: {
   currentStage: number;
   result: "correct" | "wrong";
 }): number {
@@ -69,7 +88,7 @@ export function nextCustomSrsStage(params: {
   return DEMOTION_MAP[stage] ?? 1;
 }
 
-export function nextCustomStageAvailableAt(stage: number, now: Date = new Date()): Date | null {
+export function nextStageAvailableAt(stage: number, now: Date = new Date()): Date | null {
   const clampedStage = clampStage(stage);
   const intervalMs = STAGE_INTERVAL_MS[clampedStage];
   if (intervalMs === null || intervalMs <= 0) {
@@ -79,7 +98,7 @@ export function nextCustomStageAvailableAt(stage: number, now: Date = new Date()
   return new Date(now.getTime() + intervalMs);
 }
 
-export function initialCustomLessonState(now: Date = new Date()): {
+export function initialLessonState(now: Date = new Date()): {
   srsStage: number;
   availableAt: Date | null;
   startedAt: Date;
@@ -87,7 +106,7 @@ export function initialCustomLessonState(now: Date = new Date()): {
 } {
   return {
     srsStage: 1,
-    availableAt: nextCustomStageAvailableAt(1, now),
+    availableAt: nextStageAvailableAt(1, now),
     startedAt: now,
     unlockedAt: now,
   };

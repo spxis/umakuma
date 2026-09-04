@@ -7,7 +7,7 @@ import { getOwnedCustomLibrary } from "@/lib/customStudy/customLibraryAccess";
 import { customItemSupportsWkLevel, resolveCustomItemLevel } from "@/lib/customStudy/customItemLevel";
 import { readCustomItemRelationships } from "@/lib/customStudy/customItemMetadata";
 import { customItemTypeToSubjectType } from "@/lib/customStudy/customStudyQueue";
-import { toCustomSrsGrouping } from "@/lib/customStudy/customSrs";
+import { srsGroupingFromStage } from "@/lib/srs/srsSchedule";
 import { SUBJECT_TYPES, WK_STATUSES } from "@/lib/domainConstants";
 import { prisma } from "@/lib/prisma";
 
@@ -109,7 +109,7 @@ export async function GET(request: Request, context: RouteContext) {
             jlptLevel: null,
             jlptMeta: null,
             srsStage: row.srsStage,
-            status: toCustomSrsGrouping(row.srsStage),
+            status: srsGroupingFromStage(row.srsStage),
             startedAt: row.startedAt?.toISOString() ?? null,
             passedAt: row.passedAt?.toISOString() ?? null,
             availableAt: row.availableAt?.toISOString() ?? null,

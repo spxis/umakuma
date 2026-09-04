@@ -10,10 +10,10 @@ import {
   isCustomReviewReady,
 } from "@/lib/customStudy/customStudyQueue";
 import {
-  nextCustomSrsStage,
-  nextCustomStageAvailableAt,
-  toCustomSrsGrouping,
-} from "@/lib/customStudy/customSrs";
+  nextSrsStage,
+  nextStageAvailableAt,
+  srsGroupingFromStage,
+} from "@/lib/srs/srsSchedule";
 import { prisma } from "@/lib/prisma";
 import { REVIEW_RESULTS } from "@/lib/domainConstants";
 
@@ -119,19 +119,19 @@ export async function POST(request: Request, context: RouteContext) {
         }
 
         const previousSrsStage = state.srsStage;
-        const newSrsStage = nextCustomSrsStage({
+        const newSrsStage = nextSrsStage({
           currentStage: state.srsStage,
           result: parsed.data.result,
         });
-        const previousGrouping = toCustomSrsGrouping(previousSrsStage);
-        const newGrouping = toCustomSrsGrouping(newSrsStage);
+        const previousGrouping = srsGroupingFromStage(previousSrsStage);
+        const newGrouping = srsGroupingFromStage(newSrsStage);
 
         await prisma.$transaction([
           prisma.customStudyState.update({
             where: { id: state.id },
             data: {
               srsStage: newSrsStage,
-              availableAt: nextCustomStageAvailableAt(newSrsStage, now),
+              availableAt: nextStageAvailableAt(newSrsStage, now),
               lastReviewedAt: now,
               startedAt: state.startedAt ?? now,
               passedAt: state.passedAt ?? (newSrsStage >= 5 ? now : null),

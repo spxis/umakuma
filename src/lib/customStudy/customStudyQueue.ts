@@ -3,7 +3,7 @@ import type { CustomStudyItemType } from "@prisma/client";
 import { QUEUE_TYPES, type QueueType, type SubjectType } from "@/lib/domainConstants";
 
 import { readCustomItemRelationships, resolveCustomItemSubjectType } from "./customItemMetadata";
-import { toCustomSrsGrouping } from "./customSrs";
+import { srsGroupingFromStage } from "@/lib/srs/srsSchedule";
 
 export type CustomStateQueueRow = {
   id: number;
@@ -90,7 +90,7 @@ export function mapCustomQueueItem(row: CustomStateQueueRow, now: Date) {
     meaningExplanation: row.item.meaningMnemonic ?? "",
     readingExplanation: row.item.readingMnemonic ?? "",
     srsStage: row.srsStage,
-    status: toCustomSrsGrouping(row.srsStage),
+    status: srsGroupingFromStage(row.srsStage),
     startedAt: row.startedAt?.toISOString() ?? null,
     passedAt: row.passedAt?.toISOString() ?? null,
     availableAt: row.availableAt?.toISOString() ?? null,

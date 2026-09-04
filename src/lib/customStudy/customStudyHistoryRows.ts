@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import type { StudyHistoryRow } from "@/lib/studyHistoryView";
 
 import { readCustomItemRelationships } from "./customItemMetadata";
-import { toCustomSrsGrouping } from "./customSrs";
+import { srsGroupingFromStage } from "@/lib/srs/srsSchedule";
 import { customItemTypeToSubjectType } from "./customStudyQueue";
 
 type Args = {
@@ -44,7 +44,7 @@ function customBucketForStage(stage: number | null): SrsBucket {
     return SRS_BUCKETS.unknown;
   }
 
-  return toCustomSrsGrouping(stage);
+  return srsGroupingFromStage(stage);
 }
 
 function customStatusForStage(stage: number | null) {
@@ -52,7 +52,7 @@ function customStatusForStage(stage: number | null) {
     return undefined;
   }
 
-  return toCustomSrsGrouping(stage);
+  return srsGroupingFromStage(stage);
 }
 
 export async function getCustomStudyHistoryRows(args: Args): Promise<StudyHistoryRow[]> {
