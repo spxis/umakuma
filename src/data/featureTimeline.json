@@ -4688,11 +4688,23 @@
     "id": "map-country-picker-groups",
     "name": "Japan first, then a way through to the other countries",
     "area": "games",
+    "status": "shipped",
     "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "A flat row of every country was fine at three and cramped at seven, and would be a wall at thirty with the one country the site is about lost inside it. Japan stands on its own at the front; everywhere else is reached by naming a part of the world first, then the country, with Done to collapse it again. Whatever is open stays visible even when it is neither Japan nor in the part being browsed. Requested 2026-09-04 by John, twice.",
+    "dateIsEstimate": false,
+    "version": "0.412.0",
+    "releasedAt": "2026-09-04T13:46:42Z"
+  },
+  {
+    "id": "a-kanji-the-jlpt-skips-is-not-therefore-hard",
+    "name": "A kanji the JLPT skips is not therefore hard",
+    "area": "platform",
+    "kind": "bug",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.412.0",
-    "releasedAt": "2026-09-04T13:46:42Z",
-    "summary": "A flat row of every country was fine at three and cramped at seven, and would be a wall at thirty with the one country the site is about lost inside it. Japan stands on its own at the front; everywhere else is reached by naming a part of the world first, then the country, with Done to collapse it again. Whatever is open stays visible even when it is neither Japan nor in the part being browsed. Requested 2026-09-04 by John, twice."
+    "version": "0.413.0",
+    "releasedAt": "2026-09-04T13:49:54Z",
+    "summary": "The JLPT lists 2,211 characters and we teach 2,235, so 227 have no N level - and all of them were swept into the final band, levels 51-100. Right for the 158 secondary-school and 33 name kanji among them; badly wrong for fourteen. The worst was the 24th commonest character in Japanese, taught in Japanese schools at grade 2 and by WaniKani at level 3, sitting at UK91 because an exam does not list it. A kanji with no JLPT level now falls back to the year Japan teaches it in. It moves to UK8, and no grade-school kanji is stranded past level 50. The ladder also now records which band decided each placement, since for these fourteen it is not the JLPT one."
   }
 ]

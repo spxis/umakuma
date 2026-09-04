@@ -463,6 +463,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Seichi no Narashi", ja: "整地のならし", reading: "せいちのならし", gloss: "levelling the ground flat" },
   { romaji: "Sokohe", ja: "其処へ", reading: "そこへ", gloss: "to that very spot, and no other" },
   { romaji: "Tachiyori", ja: "立ち寄り", reading: "たちより", gloss: "a stop along the way, then on to the country you wanted" },
+  { romaji: "Chitsujo no Gakunen", ja: "秩序の学年", reading: "ちつじょのがくねん", gloss: "the school year sets the order" },
 ];
 
 /**
