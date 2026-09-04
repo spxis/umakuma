@@ -8,7 +8,7 @@ import ModalShell from "@/app/shared/ModalShell";
 import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
 import { MODAL_LAYERS } from "@/app/shared/modalLayers";
 import { useGeoDataset } from "@/lib/useGeoDataset";
-import { getPlayableMapCountries, type MapCountryCode } from "@/lib/mapCountries";
+import type { MapCountryCode } from "@/lib/mapCountries";
 import { mapHref, parseMapPath } from "@/lib/mapAddress";
 import { regionCodesInArea } from "@/lib/mapDirectory";
 import { mapViewTitle, regionByCode, regionsInOrder } from "@/lib/mapStudy";
@@ -19,6 +19,7 @@ import { filterMarks, markFor, markTone, markTotals, type MapMarkLayers } from "
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
 
 import MapCityToggle from "./MapCityToggle";
+import MapCountryPicker from "./MapCountryPicker";
 import { citiesOfRegion } from "@/lib/geoCities";
 
 import MapStudySkeleton from "./MapStudySkeleton";
@@ -44,8 +45,6 @@ import { MAP_STUDY_COPY, MAP_STUDY_HEIGHT } from "./MapStudy.constants";
 const ZOOM_BUTTON =
   "inline-flex h-7 w-7 items-center justify-center rounded-full text-sm font-black text-foreground/70 transition hover:bg-surface-muted disabled:cursor-not-allowed disabled:opacity-35";
 
-const CHIP =
-  "inline-flex h-8 items-center rounded-full border px-3 text-[11px] font-black uppercase tracking-[0.08em] transition";
 const WIDE = "(min-width: 1024px)";
 
 export default function MapStudy({
@@ -128,13 +127,6 @@ export default function MapStudy({
     window.addEventListener("popstate", onPopState);
     return () => window.removeEventListener("popstate", onPopState);
   }, []);
-
-  /*
-   * The pilot countries only exist for an admin. The page has already refused
-   * their addresses to everyone else, so this is the same answer given twice
-   * on purpose: the switcher must not offer a button that leads to a 404.
-   */
-  const countries = useMemo(() => getPlayableMapCountries(isAdmin), [isAdmin]);
 
   const view = useMapZoom(country, initialCode, regionCodesInArea(regions, initialArea));
   const marking = useMapMarks(accountId, country);
@@ -293,25 +285,17 @@ export default function MapStudy({
           <span className="text-[11px] font-black uppercase tracking-[0.12em] text-foreground/60">
             {MAP_STUDY_COPY.countryLabel}
           </span>
-          {countries.map((entry) => (
-            <button
-              key={entry.code}
-              type="button"
-              aria-pressed={entry.code === country}
-              onClick={() => {
-                setCountry(entry.code);
-                setCode(null);
-                setHovered(null);
-                setArea(null);
-                setHoveredArea(null);
-              }}
-              className={`${CHIP} ${
-                entry.code === country ? "border-accent bg-accent text-white" : "border-line bg-surface text-foreground/70 hover:bg-surface-muted"
-              }`}
-            >
-              {entry.label}
-            </button>
-          ))}
+          <MapCountryPicker
+            country={country}
+            isAdmin={isAdmin}
+            onChoose={(next) => {
+              setCountry(next);
+              setCode(null);
+              setHovered(null);
+              setArea(null);
+              setHoveredArea(null);
+            }}
+          />
           {/*
             * One line, always. Pointing at a long name used to wrap this and
             * push the map down, so the whole board moved under the pointer.

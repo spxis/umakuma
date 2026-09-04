@@ -30,6 +30,18 @@ export const MAP_ZOOM_COPY = {
   canvasLabel: "Map. Arrow keys move around, plus and minus zoom, zero fits the country. Double-click to zoom in where you point, hold Alt and double-click to zoom back out.",
 } as const;
 
+/**
+ * The country picker, in one map for the locale layer.
+ *
+ * The part-of-the-world names themselves come from the country registry rather
+ * than here: they are the grouping the data is filed under, not prose.
+ */
+export const MAP_COUNTRY_PICKER_COPY = {
+  elsewhere: "Other countries",
+  done: "Done",
+  pilot: "Pilot",
+} as const;
+
 /** Marking a region, in one map for the locale layer. */
 export const MAP_MARK_COPY = {
   heading: "What do you make of it?",

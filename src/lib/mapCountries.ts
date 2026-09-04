@@ -15,16 +15,30 @@
  */
 import { SOURCE_KEYS, type SourceKey } from "./sourceCredits";
 
+/**
+ * Where in the world each country is, for the picker to group by.
+ *
+ * A flat row of buttons was fine for three and unreadable by seven; it would
+ * be unusable at thirty. Japan stands on its own outside these groups - it is
+ * what the site is for - and everywhere else is reached through the part of
+ * the world it is in.
+ */
+export const WORLD_PARTS = ["Asia", "Oceania", "North America", "South America", "Europe"] as const;
+export type WorldPart = (typeof WORLD_PARTS)[number];
+
 const ALL_MAP_COUNTRIES = [
-  { code: "JP", label: "Japan", playable: true, adminOnly: false, source: SOURCE_KEYS.jpmap },
-  { code: "US", label: "United States", playable: true, adminOnly: false, source: SOURCE_KEYS.usmap },
-  { code: "CA", label: "Canada", playable: true, adminOnly: false, source: SOURCE_KEYS.worldmap },
+  { code: "JP", label: "Japan", part: "Asia", playable: true, adminOnly: false, source: SOURCE_KEYS.jpmap },
+  { code: "US", label: "United States", part: "North America", playable: true, adminOnly: false, source: SOURCE_KEYS.usmap },
+  { code: "CA", label: "Canada", part: "North America", playable: true, adminOnly: false, source: SOURCE_KEYS.worldmap },
   /* Admin mode pilot wave: Thailand, China, Australia, Taiwan */
-  { code: "TH", label: "Thailand", playable: true, adminOnly: true, source: SOURCE_KEYS.worldmap },
-  { code: "CN", label: "China", playable: true, adminOnly: true, source: SOURCE_KEYS.worldmap },
-  { code: "AU", label: "Australia", playable: true, adminOnly: true, source: SOURCE_KEYS.worldmap },
-  { code: "TW", label: "Taiwan", playable: true, adminOnly: true, source: SOURCE_KEYS.worldmap },
+  { code: "TH", label: "Thailand", part: "Asia", playable: true, adminOnly: true, source: SOURCE_KEYS.worldmap },
+  { code: "CN", label: "China", part: "Asia", playable: true, adminOnly: true, source: SOURCE_KEYS.worldmap },
+  { code: "AU", label: "Australia", part: "Oceania", playable: true, adminOnly: true, source: SOURCE_KEYS.worldmap },
+  { code: "TW", label: "Taiwan", part: "Asia", playable: true, adminOnly: true, source: SOURCE_KEYS.worldmap },
 ] as const;
+
+/** The country the site is about, always offered on its own. */
+export const HOME_MAP_COUNTRY = "JP";
 
 /** Countries whose maps are public and playable by everyone. */
 export const MAP_COUNTRIES = ALL_MAP_COUNTRIES.filter((country) => country.playable && !country.adminOnly);
@@ -71,3 +85,23 @@ export function isMapCountry(value: string): value is MapCountryCode {
 export const MAP_SOURCE_KEYS: Record<MapCountryCode, SourceKey> = Object.fromEntries(
   ALL_MAP_COUNTRIES.map((country) => [country.code, country.source]),
 ) as Record<MapCountryCode, SourceKey>;
+
+export type MapCountryEntry = (typeof ALL_MAP_COUNTRIES)[number];
+
+/**
+ * The countries a viewer may open, split into Japan and everywhere else.
+ *
+ * Everywhere else is grouped by part of the world and each group is dropped
+ * when it is empty, so a viewer who may see only the public maps is offered
+ * "North America" and nothing else rather than four headings with one country
+ * between them.
+ */
+export function mapCountryGroups(isAdmin = false): { home: MapCountryEntry; parts: { part: WorldPart; countries: MapCountryEntry[] }[] } {
+  const available = getPlayableMapCountries(isAdmin);
+  const home = available.find((country) => country.code === HOME_MAP_COUNTRY) ?? available[0]!;
+  const parts = WORLD_PARTS.map((part) => ({
+    part,
+    countries: available.filter((country) => country.part === part && country.code !== home.code),
+  })).filter((group) => group.countries.length > 0);
+  return { home, parts };
+}
