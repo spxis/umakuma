@@ -4964,11 +4964,23 @@
     "id": "uk-subject-badges",
     "name": "UK level on subject pages",
     "area": "platform",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "UK level on subject pages",
+    "dateIsEstimate": false,
+    "version": "0.435.0",
+    "releasedAt": "2026-09-04T20:42:58Z"
+  },
+  {
+    "id": "uk-game-pool",
+    "name": "Games on the UmaKuma ladder",
+    "area": "games",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.435.0",
-    "releasedAt": "2026-09-04T20:42:58Z",
-    "summary": "UK level on subject pages"
+    "version": "0.436.0",
+    "releasedAt": "2026-09-04T21:00:11Z",
+    "summary": "Games on the UmaKuma ladder"
   }
 ]
