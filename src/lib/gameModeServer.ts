@@ -29,6 +29,8 @@ import { parseMeanings, parseReadings, type GameCatalogItem } from "@/lib/gameQu
 import { geoMapEntries, geoMapOption } from "@/lib/geoMapPool";
 import { geoRegionIdFromSubjectId, isGeoSubjectId } from "@/lib/geoSubjectIds";
 import { prisma } from "@/lib/prisma";
+import { isUkGameSubjectId } from "@/lib/ladder/ukSubjectIds";
+import { ukGameOptions } from "@/lib/uk/ukGamePool";
 import { parseAssignmentCacheRows } from "@/lib/wanikani/helpers";
 
 export {
@@ -292,10 +294,14 @@ export async function hydrateGameQuestions(
       ? row.optionSubjectIds
       : [row.leftSubjectId, row.middleSubjectId, row.rightSubjectId].filter((id): id is number => id !== null);
   const subjectIds = Array.from(new Set(questions.flatMap(optionIdsFor)));
-  // Map mode's prefectures are not WaniKani subjects and live in a reserved id
-  // range, so they resolve from the static map rather than the catalog.
+  // Three sources, told apart by the id alone. Map mode's prefectures and the
+  // UmaKuma curriculum both live in reserved ranges above WaniKani's, so a run
+  // does not have to record which ladder it came from - the questions say.
+  const ukOptions = await ukGameOptions(subjectIds.filter((id) => isUkGameSubjectId(id)));
   const rows = await prisma.wkSubjectCatalog.findMany({
-    where: { wkSubjectId: { in: subjectIds.filter((id) => !isGeoSubjectId(id)) } },
+    where: {
+      wkSubjectId: { in: subjectIds.filter((id) => !isGeoSubjectId(id) && !isUkGameSubjectId(id)) },
+    },
     select: { wkSubjectId: true, subjectType: true, level: true, characters: true, slug: true, meanings: true, readings: true },
   });
   const optionById = new Map(subjectIds.flatMap((id) => {
@@ -313,6 +319,7 @@ export async function hydrateGameQuestions(
     );
     return entry ? [[id, geoMapOption(entry)] as const] : [];
   }));
+  for (const [id, option] of ukOptions) optionById.set(id, option);
   for (const [id, option] of rows.flatMap((row) => {
     if (!isSubjectType(row.subjectType)) return [];
     const meanings = parseMeanings(row.meanings);

@@ -29,6 +29,7 @@ import {
   planGameRun,
   type GameRunRequest,
 } from "@/lib/gameRunCreate";
+import { GAME_LADDERS } from "@/lib/gameRunCreate";
 
 const bodySchema = z.object({
   kind: z.string().refine(isGameKind).default(GAME_KINDS.match),
@@ -58,6 +59,8 @@ const bodySchema = z.object({
    * at nothing.
    */
   mapCountry: z.string().refine(isPlayableMapCountry).optional(),
+  /* Our hundred levels, or WaniKani's sixty. */
+  ladder: z.enum([GAME_LADDERS.wanikani, GAME_LADDERS.umakuma]).optional(),
 })
   // Only the games that offer Ultra have to satisfy it. A stale `ultraMode` from
   // a previous Match round would otherwise reject a Map or Practice start
@@ -122,6 +125,7 @@ export async function POST(request: Request, context: { params: Promise<{ accoun
           timeLimitMs: rules.usesTimeLimit ? parsed.data.timeLimitMs : null,
           // Ignored by every game but Map, where it chooses the country.
           mapCountry: parsed.data.mapCountry,
+          ladder: parsed.data.ladder,
         };
 
         if (rules.oncePerDay) {

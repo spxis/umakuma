@@ -1,6 +1,15 @@
 import { GAME_KINDS, type GameKind } from "@/lib/gameMode";
 
 /**
+ * The scale the level bonus is measured against, which is WaniKani's sixty.
+ *
+ * Not a hundred, even though our ladder is: the divisor is baked into every
+ * score already recorded, so widening it would quietly re-rank the whole
+ * leaderboard downward.
+ */
+export const GAME_MAX_LEVEL_BONUS_SCALE = 60;
+
+/**
  * Per-item scoring for timed games, in tenths of a point.
  *
  * A flat score per answer ignored how fast the answer came, which made a
@@ -31,11 +40,18 @@ export function calculateGameScore(correctCount: number, questionCount: number, 
   const boundedCorrect = Math.max(0, Math.min(Math.trunc(correctCount), boundedQuestionCount));
   const accuracy = boundedCorrect / boundedQuestionCount;
   const accuracyScoreUnits = Math.round(10_000 * accuracy);
-  const boundedLevel = level === null || !Number.isFinite(level) ? 0 : Math.max(1, Math.min(60, Math.trunc(level)));
+  /* Sixty is WaniKani's ceiling, and it stays the scale even though our own
+     ladder runs to a hundred. Rescaling to 100 was tried and reverted: it
+     silently reduces the level bonus on every WaniKani run ever recorded,
+     which is a worse outcome than a UmaKuma level 80 player sharing the
+     maximum bonus with a level 60 one. The clamp already handles levels above
+     sixty gracefully - they take the top of the scale - and the bonus is a
+     fraction of one correct answer either way, so accuracy still outranks it. */
+  const boundedLevel = level === null || !Number.isFinite(level) ? 0 : Math.max(1, Math.min(GAME_MAX_LEVEL_BONUS_SCALE, Math.trunc(level)));
   const maximumModifierUnits = Math.max(0, Math.floor(10_000 / boundedQuestionCount) - 1);
   const maximumLevelBonusUnits = Math.round(maximumModifierUnits * 0.3);
   const maximumSpeedBonusUnits = maximumModifierUnits - maximumLevelBonusUnits;
-  const levelBonusUnits = Math.round(maximumLevelBonusUnits * (boundedLevel / 60));
+  const levelBonusUnits = Math.round(maximumLevelBonusUnits * (boundedLevel / GAME_MAX_LEVEL_BONUS_SCALE));
   const elapsedTenths = Math.floor(Math.max(0, durationMs) / 100);
   const speedBonusUnits = Math.max(0, maximumSpeedBonusUnits - elapsedTenths);
   const modifierUnits = Math.round((levelBonusUnits + speedBonusUnits) * accuracy);

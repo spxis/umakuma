@@ -26,6 +26,8 @@ import {
 import { buildMapQuestions } from "@/lib/gameMapQuestions";
 import { loadDailyPool, loadPracticePool, loadShiritoriPool } from "@/lib/gameModePools";
 import { loadGamePool } from "@/lib/gameModeServer";
+import { KANJI_LADDER_LEVELS } from "@/lib/kanjiLadder";
+import { loadUmakumaGamePool } from "@/lib/uk/ukGamePool";
 import { seededRandom, shuffleWith } from "@/lib/gameRandom";
 import {
   buildGameQuestions,
@@ -40,6 +42,9 @@ import { prisma } from "@/lib/prisma";
 export const DAILY_ALREADY_PLAYED = "You already played today's Daily Challenge.";
 
 export class GameRunConflictError extends Error {}
+
+export const GAME_LADDERS = { wanikani: "wanikani", umakuma: "umakuma" } as const;
+export type GameLadder = (typeof GAME_LADDERS)[keyof typeof GAME_LADDERS];
 
 export type GameRunRequest = {
   kind: GameKind;
@@ -61,6 +66,14 @@ export type GameRunRequest = {
    * resolve as Japan.
    */
   mapCountry?: CountryCode;
+  /**
+   * Which ladder the run draws from. WaniKani unless asked otherwise.
+   *
+   * Not persisted, for the same reason `mapCountry` is not: every question's
+   * subject id carries its own range, so a run replayed from the database
+   * resolves its items without anything having recorded where they came from.
+   */
+  ladder?: GameLadder;
 };
 
 export type GameRunPlan = {
@@ -84,8 +97,22 @@ function resolveBatchSize(request: GameRunRequest, poolSize: number): number {
   return request.batchSize;
 }
 
-async function planMatchRun(accountId: string, request: GameRunRequest): Promise<GameRunPlan> {
+/** The pool a request asks for: WaniKani's, or our own hundred levels. */
+async function poolFor(accountId: string, request: GameRunRequest) {
+  if (request.ladder === GAME_LADDERS.umakuma) {
+    return loadUmakumaGamePool({
+      accountId,
+      level: request.level,
+      category: request.category,
+      maxLevel: KANJI_LADDER_LEVELS,
+    });
+  }
   const { items } = await loadGamePool(accountId, request.level, request.category);
+  return items;
+}
+
+async function planMatchRun(accountId: string, request: GameRunRequest): Promise<GameRunPlan> {
+  const items = await poolFor(accountId, request);
   const questionCount = resolveBatchSize(request, items.length);
   return {
     questions: buildGameQuestions(items, questionCount, request.choiceCount, Math.random, request.direction, request.answerMode),
