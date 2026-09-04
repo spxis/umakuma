@@ -186,3 +186,69 @@ export function shipEntry(
     return shipped;
   });
 }
+
+/**
+ * A file the release is about to rewrite, worked out before anything is written.
+ *
+ * The script used to write its four files one after another with no rollback,
+ * so a failure part way through left the first two applied and the last two
+ * not: the tree looked like a release had been taken when none had, and the
+ * re-run refused because the codename it had just appended was "already used
+ * by an earlier codename". Recovery was a `git checkout` of two files, which
+ * is only obvious to somebody who knows what the script does.
+ *
+ * It happened twice on 2026-09-03, both times because another session shipped
+ * mid-flight: the published version is read from `origin/main`, so the local
+ * files no longer held the version the edit expected.
+ *
+ * Every edit is now computed first and written only once all of them are
+ * possible. The checks are the same ones as before - they simply happen while
+ * nothing has been touched.
+ */
+export type PlannedEdit = { file: string; contents: string };
+
+/** The text with one occurrence swapped, or an error naming what was missing. */
+export function editReplacingOnce(file: string, text: string, from: string, to: string): PlannedEdit {
+  if (!text.includes(from)) {
+    throw new Error(`${file} does not contain ${from} - has somebody else shipped since you started?`);
+  }
+  return { file, contents: text.replace(from, to) };
+}
+
+/** The footer constant and the day it shipped, which move together. */
+export function editAppVersion(
+  file: string,
+  text: string,
+  published: string,
+  version: string,
+  day: string,
+): PlannedEdit {
+  const from = `export const APP_VERSION = "${published}";`;
+  if (!text.includes(from)) {
+    throw new Error(`${file} does not hold ${published} - has somebody else shipped since you started?`);
+  }
+
+  return {
+    file,
+    contents: text
+      .replace(from, `export const APP_VERSION = "${version}";`)
+      .replace(/export const APP_VERSION_DATE = "[\d-]+";/, `export const APP_VERSION_DATE = "${day}";`),
+  };
+}
+
+/** The codename appended, one per line, in release order. */
+export function editAppendingCodename(
+  file: string,
+  source: string,
+  codename: ReleaseCodename,
+): PlannedEdit {
+  const anchor = source.lastIndexOf("  { romaji:");
+  if (anchor < 0) throw new Error(`Could not find the end of the codename list in ${file}.`);
+
+  const lineEnd = source.indexOf("\n", anchor) + 1;
+  const line =
+    `  { romaji: ${JSON.stringify(codename.romaji)}, ja: ${JSON.stringify(codename.ja)}, ` +
+    `reading: ${JSON.stringify(codename.reading)}, gloss: ${JSON.stringify(codename.gloss)} },\n`;
+
+  return { file, contents: source.slice(0, lineEnd) + line + source.slice(lineEnd) };
+}

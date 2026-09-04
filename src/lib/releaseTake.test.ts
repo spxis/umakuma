@@ -9,6 +9,9 @@ import {
   parseVersion,
   shipEntry,
   usedCodenameWords,
+  editAppVersion,
+  editAppendingCodename,
+  editReplacingOnce,
 } from "./releaseTake";
 
 const entry = (over: Partial<FeatureTimelineEntry> = {}): FeatureTimelineEntry => ({
@@ -109,5 +112,71 @@ describe("shipping the entry", () => {
       shipEntry([entry({ status: FEATURE_STATUSES.shipped, version: "0.200.0" })], "thing", stamp),
     ).toThrow(/already shipped/);
     expect(() => shipEntry([entry()], "missing", stamp)).toThrow(/No entry/);
+  });
+});
+
+/*
+ * A release that refuses has to leave the tree exactly as it found it.
+ *
+ * The script wrote its four files one after another with no rollback, so a
+ * failure part way through left the timeline entry and the codename applied
+ * and the two version files not: the tree looked like a release had been taken
+ * when none had, and the re-run refused because the codename it had just
+ * written was "already used by an earlier codename". It happened twice on
+ * 2026-09-03, both times because another session shipped mid-flight.
+ */
+describe("working out the edits before writing any of them", () => {
+  const CODENAMES_SOURCE = [
+    "export const CODENAMES: ReleaseCodename[] = [",
+    '  { romaji: "Aoi Ame", ja: "青い雨", reading: "あおいあめ", gloss: "blue rain" },',
+    "];",
+    "",
+  ].join("\n");
+
+  it("plans the codename onto the end of the list", () => {
+    const edit = editAppendingCodename("codenames.ts", CODENAMES_SOURCE, {
+      romaji: "Ii Hi",
+      ja: "良い日",
+      reading: "いいひ",
+      gloss: "a good day",
+    });
+    expect(edit.file).toBe("codenames.ts");
+    expect(edit.contents).toContain('romaji: "Ii Hi"');
+    /* After the last one, not before it: the list is in release order. */
+    expect(edit.contents.indexOf("Ii Hi")).toBeGreaterThan(edit.contents.indexOf("Aoi Ame"));
+  });
+
+  it("moves the version and the day it shipped together", () => {
+    const text = [
+      'export const APP_VERSION = "0.10.0";',
+      'export const APP_VERSION_DATE = "2026-01-01";',
+    ].join("\n");
+    const edit = editAppVersion("appVersion.ts", text, "0.10.0", "0.11.0", "2026-09-03");
+    expect(edit.contents).toContain('APP_VERSION = "0.11.0"');
+    expect(edit.contents).toContain('APP_VERSION_DATE = "2026-09-03"');
+  });
+
+  /*
+   * The failure that started this. Another session shipped, so the local file
+   * no longer holds the version the edit expected - and the refusal has to
+   * come before anything is written, which is what returning an edit rather
+   * than performing one buys.
+   */
+  it("refuses when somebody else has shipped since you started", () => {
+    const text = 'export const APP_VERSION = "0.12.0";';
+    expect(() => editAppVersion("appVersion.ts", text, "0.10.0", "0.11.0", "2026-09-03")).toThrow(
+      /does not hold 0\.10\.0/,
+    );
+  });
+
+  it("says which file refused, and asks the question worth asking", () => {
+    expect(() => editReplacingOnce("package.json", "{}", '"version": "0.10.0"', "x")).toThrow(
+      /package\.json does not contain/,
+    );
+  });
+
+  it("swaps exactly one occurrence", () => {
+    const edit = editReplacingOnce("package.json", 'a "v": "1" b "v": "1"', '"v": "1"', '"v": "2"');
+    expect(edit.contents).toBe('a "v": "2" b "v": "1"');
   });
 });

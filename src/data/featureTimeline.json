@@ -4448,11 +4448,23 @@
     "id": "world-maps-accreditation",
     "name": "World maps accreditation and country flags",
     "area": "games",
-    "kind": "feature",
     "status": "shipped",
+    "kind": "feature",
     "date": "2026-09-03",
+    "summary": "Update Canada map accreditation to World maps, describe Natural Earth datasets across Canada, admin pilots (TH, CN, AU, TW) and 25 catalog countries, and present national flags for all 30 countries.",
+    "dateIsEstimate": false,
     "version": "0.392.0",
-    "releasedAt": "2026-09-04T06:56:57Z",
-    "summary": "Update Canada map accreditation to World maps, describe Natural Earth datasets across Canada, admin pilots (TH, CN, AU, TW) and 25 catalog countries, and present national flags for all 30 countries."
+    "releasedAt": "2026-09-04T06:56:57Z"
+  },
+  {
+    "id": "release-take-atomic",
+    "name": "A release that refuses changes nothing",
+    "area": "platform",
+    "kind": "bug",
+    "status": "shipped",
+    "date": "2026-09-04",
+    "version": "0.393.0",
+    "releasedAt": "2026-09-04T07:39:30Z",
+    "summary": "Taking a release number wrote four files one after another with no rollback - the timeline entry, the codename, APP_VERSION and package.json - so a failure part way through left the first two applied and the last two not. The tree looked like a release had been taken when none had, and the re-run refused because the codename it had just written was already used. It happened twice on 2026-09-03, both times because another session shipped mid-flight. Every edit is worked out first now and written only once all of them are possible, the refusal names the file it could not change, and the board row is closed after the files land rather than before - a refusal used to leave the ticket shipped and the tree unreleased."
   }
 ]

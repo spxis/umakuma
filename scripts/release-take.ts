@@ -8,7 +8,17 @@ import { loadFeatureTimeline } from "../src/lib/featureTimeline";
 import { CODENAMES, codenameKanaForMinor, type ReleaseCodename } from "../src/lib/releaseCodenames";
 import { PrismaClient } from "@prisma/client";
 
-import { codenameProblems, entryFromTicket, minorOf, nextVersion, shipEntry } from "../src/lib/releaseTake";
+import {
+  codenameProblems,
+  editAppVersion,
+  editAppendingCodename,
+  editReplacingOnce,
+  entryFromTicket,
+  minorOf,
+  nextVersion,
+  shipEntry,
+  type PlannedEdit,
+} from "../src/lib/releaseTake";
 
 /** A title as a timeline id, for a ticket that was never filed under one. */
 function slugFor(title: string): string {
@@ -55,35 +65,9 @@ function publishedVersion(): string {
   return version;
 }
 
-function replaceOnce(file: string, from: string, to: string): void {
-  const text = readFileSync(file, "utf8");
-  if (!text.includes(from)) throw new Error(`${file} does not contain ${from}`);
-  writeFileSync(file, text.replace(from, to));
-}
-
-/** The footer constant and the day it shipped, which move together. */
-function writeAppVersion(published: string, version: string, day: string): void {
-  const text = readFileSync(VERSION_FILE, "utf8");
-  const from = `export const APP_VERSION = "${published}";`;
-  if (!text.includes(from)) throw new Error(`${VERSION_FILE} does not hold ${published}.`);
-  writeFileSync(
-    VERSION_FILE,
-    text
-      .replace(from, `export const APP_VERSION = "${version}";`)
-      .replace(/export const APP_VERSION_DATE = "[\d-]+";/, `export const APP_VERSION_DATE = "${day}";`),
-  );
-}
-
-/** Appends the codename, keeping one per line in release order. */
-function appendCodename(codename: ReleaseCodename): void {
-  const source = readFileSync(CODENAMES_FILE, "utf8");
-  const anchor = source.lastIndexOf("  { romaji:");
-  if (anchor < 0) throw new Error("Could not find the end of the codename list.");
-  const lineEnd = source.indexOf("\n", anchor) + 1;
-  const line =
-    `  { romaji: ${JSON.stringify(codename.romaji)}, ja: ${JSON.stringify(codename.ja)}, ` +
-    `reading: ${JSON.stringify(codename.reading)}, gloss: ${JSON.stringify(codename.gloss)} },\n`;
-  writeFileSync(CODENAMES_FILE, source.slice(0, lineEnd) + line + source.slice(lineEnd));
+/** Everything the release rewrites, written only once all of them are possible. */
+function applyEdits(edits: readonly PlannedEdit[]): void {
+  for (const edit of edits) writeFileSync(edit.file, edit.contents);
 }
 
 async function main(): Promise<void> {
@@ -142,29 +126,70 @@ async function main(): Promise<void> {
 
   let entries;
   let shippedId: string;
+  /*
+   * The board row is marked shipped after the files are written, not before.
+   * A release that refuses half way used to leave the ticket closed and the
+   * tree unreleased, which is the same half-state one level up.
+   */
+  let markTicketShipped: () => Promise<void> = async () => {};
+
   if (ticketId) {
     const client = new PrismaClient({ log: ["error"] });
+    let ticket;
     try {
-      const ticket = await client.ticket.findUnique({ where: { id: ticketId } });
-      if (!ticket) throw new Error(`No ticket ${ticketId} on the board.`);
-      shippedId = flag("as") ?? ticket.filedAs ?? slugFor(ticket.title);
-      entries = [...loadFeatureTimeline(), entryFromTicket({ ...ticket, id: shippedId }, stamp)];
-      await client.ticket.update({
-        where: { id: ticketId },
-        data: { status: "shipped", filedAs: shippedId, claimedBy: null, claimedAt: null },
-      });
+      ticket = await client.ticket.findUnique({ where: { id: ticketId } });
     } finally {
       await client.$disconnect();
     }
+
+    if (!ticket) throw new Error(`No ticket ${ticketId} on the board.`);
+    shippedId = flag("as") ?? ticket.filedAs ?? slugFor(ticket.title);
+    entries = [...loadFeatureTimeline(), entryFromTicket({ ...ticket, id: shippedId }, stamp)];
+
+    const closing = shippedId;
+    markTicketShipped = async () => {
+      const writer = new PrismaClient({ log: ["error"] });
+      try {
+        await writer.ticket.update({
+          where: { id: ticketId },
+          data: { status: "shipped", filedAs: closing, claimedBy: null, claimedAt: null },
+        });
+      } finally {
+        await writer.$disconnect();
+      }
+    };
   } else {
     shippedId = id as string;
     entries = shipEntry(loadFeatureTimeline(), shippedId, stamp);
   }
 
-  writeFileSync(BOARD, stringifyTimeline(entries));
-  if (!planned) appendCodename(codename);
-  writeAppVersion(published, version, getVancouverDateKey(now));
-  replaceOnce(PACKAGE_FILE, `"version": "${published}"`, `"version": "${version}"`);
+  /*
+   * Worked out first, written second. Any of these can refuse - most often
+   * because another session shipped while this one was choosing a codename -
+   * and a refusal has to leave the tree exactly as it found it.
+   */
+  const edits: PlannedEdit[] = [
+    { file: BOARD, contents: stringifyTimeline(entries) },
+    ...(planned
+      ? []
+      : [editAppendingCodename(CODENAMES_FILE, readFileSync(CODENAMES_FILE, "utf8"), codename)]),
+    editAppVersion(
+      VERSION_FILE,
+      readFileSync(VERSION_FILE, "utf8"),
+      published,
+      version,
+      getVancouverDateKey(now),
+    ),
+    editReplacingOnce(
+      PACKAGE_FILE,
+      readFileSync(PACKAGE_FILE, "utf8"),
+      `"version": "${published}"`,
+      `"version": "${version}"`,
+    ),
+  ];
+
+  applyEdits(edits);
+  await markTicketShipped();
 
   console.log(
     `${shippedId} is ${version} 「${codename.reading}」${codename.ja} (${codename.romaji}).\n` +
