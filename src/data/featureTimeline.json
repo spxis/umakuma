@@ -4760,11 +4760,23 @@
     "id": "the-ladder-read-a-level-at-a-time",
     "name": "The ladder, read a level at a time",
     "area": "admin",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "The crosswalk table answers where a kanji is; it does not answer what a level asks of somebody, which is the question anybody judging the curriculum actually has. A Table/Levels toggle now switches the ladder browser between them, remembered per admin. The level view draws one row per level - radicals in cyan, then that level's kanji at reading size, then its words - with the running count of kanji known by the end of each level rather than the count that level added.",
+    "dateIsEstimate": false,
+    "version": "0.418.0",
+    "releasedAt": "2026-09-04T14:12:39Z"
+  },
+  {
+    "id": "every-theme-every-rung-on-one-screen",
+    "name": "Every theme, every rung, on one screen",
+    "area": "admin",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.418.0",
-    "releasedAt": "2026-09-04T14:12:39Z",
-    "summary": "The crosswalk table answers where a kanji is; it does not answer what a level asks of somebody, which is the question anybody judging the curriculum actually has. A Table/Levels toggle now switches the ladder browser between them, remembered per admin. The level view draws one row per level - radicals in cyan, then that level's kanji at reading size, then its words - with the running count of kanji known by the end of each level rather than the count that level added."
+    "version": "0.419.0",
+    "releasedAt": "2026-09-04T14:17:13Z",
+    "summary": "The 89 themes shipped as committed data with no surface at all. /admin/data now has a Themes dataset showing each one as its full ladder - all ten stages from not-started to the top, coloured by SRS bucket, with the reading under each rung. Search matches a theme name, a rung or a meaning. The age rating is shown beside every theme because the set includes organised crime and the sex trade and a ten-year-old must never be offered those; this is where the filtering gets checked. Themes renamed off a trademark carry a badge naming what they were."
   }
 ]
