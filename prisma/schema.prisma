@@ -127,6 +127,23 @@ model Account {
   /// the youngest: guessing upward is the mistake that reaches a child.
   ageBand String?
 
+  /// Where this member stands on our hundred, materialised.
+  ///
+  /// Derived from `UkSrsState` by `resolveUkLevel` and written by exactly one
+  /// function, `syncAccountUkLevel`. It is a copy on purpose: deriving it per
+  /// render would mean reading thousands of state rows for every badge.
+  ukLevel             Int                @default(1)
+  /// The floor a member can never fall below. Placement, a WaniKani import, a
+  /// bump-up test and an admin raise it; nothing lowers it. This is the only
+  /// stored input to the level — everything else is derived, so a curriculum
+  /// rebuild that moves a kanji cannot cost anybody a level.
+  ukLevelFloor        Int                @default(1)
+  ukPlacedAt          DateTime?
+  ukPlacementSource   UkPlacementSource?
+  /// Which curriculum version this member was last reconciled against.
+  ukCurriculumVersion String?
+  ukLevelUpdatedAt    DateTime?
+
   internal               Boolean                 @default(false)
   jlptCertificates       JlptCertificate[]
   studyLists             StudyList[]
@@ -134,6 +151,8 @@ model Account {
   studyListSubscriptions StudyListSubscription[]
   studyListProposals     StudyListProposal[]
   gameRuns               GameRun[]
+  ukSrsStates            UkSrsState[]
+  ukReviewAttempts       UkReviewAttempt[]
 }
 
 /// One JLPT certificate a member reports holding.
@@ -1051,6 +1070,8 @@ model UkSubject {
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt
 
+  states          UkSrsState[]
+
   @@index([kind, level])
   @@index([level])
   @@index([removedAt])
@@ -1109,4 +1130,81 @@ enum LadderOpType {
   move
   add
   remove
+}
+
+
+/// How a member arrived at the level they start on.
+enum UkPlacementSource {
+  placement_test
+  wanikani
+  self
+  admin
+}
+
+/// Why a state row exists. A row seeded by a placement test is not the same
+/// evidence as one a member earned by answering, and the profile says so.
+enum UkStateOrigin {
+  lesson
+  placement
+  wanikani
+  bump
+  admin
+}
+
+/// One member's progress on one curriculum item.
+///
+/// Rows are created lazily — at a lesson, a placement seed or a WaniKani
+/// import — so "no row" means locked. The custom-study stack creates every row
+/// at import; at 9,271 items per member that is the wrong default here.
+///
+/// `srsStage` is the same 0-9 scale WaniKani uses, deliberately, so a member
+/// arriving with forty levels of their progress keeps every interval rather
+/// than restarting at zero.
+model UkSrsState {
+  id             Int           @id @default(autoincrement())
+  accountId      String
+  subjectId      Int
+  srsStage       Int           @default(0)
+  availableAt    DateTime?
+  unlockedAt     DateTime?
+  startedAt      DateTime?
+  passedAt       DateTime?
+  /// Not terminal. A member may pull a burned item back down when they want
+  /// more review, which is why our top rung is named for mastery rather than
+  /// for retirement.
+  burnedAt       DateTime?
+  lastReviewedAt DateTime?
+  reviewCount    Int           @default(0)
+  correctCount   Int           @default(0)
+  wrongCount     Int           @default(0)
+  origin         UkStateOrigin @default(lesson)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  account  Account           @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  subject  UkSubject         @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  attempts UkReviewAttempt[]
+
+  @@unique([accountId, subjectId])
+  @@index([accountId, srsStage, availableAt])
+  @@index([accountId, updatedAt])
+}
+
+/// One answer, kept. The state row holds where a member is; this holds how
+/// they got there, which is what a history page and a trouble list read.
+model UkReviewAttempt {
+  id               String            @id @default(cuid())
+  accountId        String
+  stateId          Int
+  subjectId        Int
+  result           StudyReviewResult
+  previousSrsStage Int?
+  newSrsStage      Int?
+  submittedAt      DateTime          @default(now())
+
+  account Account    @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  state   UkSrsState @relation(fields: [stateId], references: [id], onDelete: Cascade)
+
+  @@index([accountId, submittedAt])
+  @@index([accountId, subjectId, submittedAt])
 }

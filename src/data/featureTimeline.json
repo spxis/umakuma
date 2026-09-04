@@ -4880,11 +4880,23 @@
     "id": "explorer-search",
     "name": "Explorer search and jump to level",
     "area": "platform",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "Search the whole ladder; jump straight to any of the hundred levels.",
+    "dateIsEstimate": false,
+    "version": "0.428.0",
+    "releasedAt": "2026-09-04T15:34:06Z"
+  },
+  {
+    "id": "uk-member-level",
+    "name": "Where a member stands on our hundred",
+    "area": "platform",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.428.0",
-    "releasedAt": "2026-09-04T15:34:06Z",
-    "summary": "Search the whole ladder; jump straight to any of the hundred levels."
+    "version": "0.429.0",
+    "releasedAt": "2026-09-04T15:44:16Z",
+    "summary": "Account.ukLevel and ukLevelFloor, UkSrsState, UkReviewAttempt, and resolveUkLevel."
   }
 ]
