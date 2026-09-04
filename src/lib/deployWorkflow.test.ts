@@ -46,9 +46,23 @@ describe("the production deploy", () => {
     expect(drift).toMatch(/--exit-code/);
   });
 
+  /*
+   * The audit asks the registry a question and twice got a socket timeout
+   * three times running. A timeout is no answer, not a finding; a real
+   * vulnerability fails every attempt identically, so the gate is unchanged.
+   */
+  it("retries the audit, which asks the network a question", () => {
+    const start = WORKFLOW.indexOf("Audit production dependencies");
+    const audit = WORKFLOW.slice(start, WORKFLOW.indexOf("- name:", start + 10));
+    expect(audit).toMatch(/for attempt in/);
+    expect(audit).toMatch(/pnpm security:check/);
+    expect(audit).toMatch(/::error::Audit failed three times/);
+  });
+
   /* Three tries and it is not the network. Say so rather than retry forever. */
   it("gives up rather than looping, and says the failure is real", () => {
     expect(WORKFLOW).toMatch(/::error::Deploy failed three times/);
-    expect(WORKFLOW.match(/for attempt in 1 2 3/g)).toHaveLength(1);
+    /* Exactly the two network calls, and nothing else, get a second chance. */
+    expect(WORKFLOW.match(/for attempt in 1 2 3/g)).toHaveLength(2);
   });
 });

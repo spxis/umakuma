@@ -34,8 +34,26 @@ jobs:
       - name: Run quality checks
         run: pnpm quality:check
 
+      # The audit asks registry.npmjs.org a question, and twice on 2026-09-03
+      # the answer was a socket timeout, three times in a row - once in a local
+      # preflight, once here, where it failed the deploy with every quality
+      # check already green. A timeout is not a finding; it is no answer. A
+      # real vulnerability fails all three attempts the same way, so the gate
+      # is exactly as strict as before; only the network gets a second chance.
       - name: Audit production dependencies
-        run: pnpm security:check
+        run: |
+          for attempt in 1 2 3; do
+            if pnpm security:check; then
+              echo "Audit clean on attempt $attempt."
+              exit 0
+            fi
+            if [ "$attempt" -lt 3 ]; then
+              echo "::warning::Audit attempt $attempt failed; retrying in 20s."
+              sleep 20
+            fi
+          done
+          echo "::error::Audit failed three times. Read the output above: a repeated finding is real, a repeated timeout means the registry is down."
+          exit 1
 
       - name: Build app
         run: pnpm build
@@ -118,8 +136,10 @@ jobs:
       # cannot finish late and re-alias production to an older commit. If the
       # cancellation ever goes, this retry has to go with it.
       #
-      # Only the upload is wrapped. The schema drift check above stays
-      # single-shot - it is the gate, and a gate that retries is not a gate.
+      # Only the two network calls - the audit and this upload - are wrapped.
+      # The schema drift check above stays single-shot: it reads our own
+      # database and either matches or does not, and a gate that retries is
+      # not a gate.
       - name: Deploy prebuilt output to production
         run: |
           for attempt in 1 2 3; do

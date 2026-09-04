@@ -4340,11 +4340,23 @@
     "id": "pill-words-both",
     "name": "Both, on the chip words control",
     "area": "study",
+    "status": "shipped",
     "kind": "feature",
+    "date": "2026-09-03",
+    "summary": "The control over what an item chip says offered Off, kana and English - one question at a time, which was the point of it. The objection to printing both was never to seeing the pair though, it was to having no say in it, so Both is back as a fourth choice: a chip reads \u3057\u3085\u304f / Lodging for anyone who asks for that, and the other three modes are untouched for anyone who does not. It draws through the same function the hover title has always used, so what you see when you ask for the pair and what you get on a hover cannot drift into two formats, and it falls back the way the other modes do - to whichever half the chip actually has - rather than printing a joiner with nothing on one side of it. Requested 2026-09-03 by John.",
+    "dateIsEstimate": false,
+    "version": "0.383.0",
+    "releasedAt": "2026-09-04T03:55:27Z"
+  },
+  {
+    "id": "deploy-audit-retry",
+    "name": "The audit times out and takes the deploy with it",
+    "area": "platform",
+    "kind": "bug",
     "status": "shipped",
     "date": "2026-09-03",
-    "version": "0.383.0",
-    "releasedAt": "2026-09-04T03:55:27Z",
-    "summary": "The control over what an item chip says offered Off, kana and English - one question at a time, which was the point of it. The objection to printing both was never to seeing the pair though, it was to having no say in it, so Both is back as a fourth choice: a chip reads \u3057\u3085\u304f / Lodging for anyone who asks for that, and the other three modes are untouched for anyone who does not. It draws through the same function the hover title has always used, so what you see when you ask for the pair and what you get on a hover cannot drift into two formats, and it falls back the way the other modes do - to whichever half the chip actually has - rather than printing a joiner with nothing on one side of it. Requested 2026-09-03 by John."
+    "version": "0.384.0",
+    "releasedAt": "2026-09-04T03:59:54Z",
+    "summary": "pnpm security:check runs pnpm audit against registry.npmjs.org, and that endpoint socket-timed out three times in a row twice on 2026-09-03/04 - once in a local preflight, once in the CI verify job, which failed the whole deploy while every quality check had passed. A timeout is not a finding; it is no answer. Wrap the step in the same three-attempt retry the upload has, still red after three, and keep the schema drift check single-shot."
   }
 ]
