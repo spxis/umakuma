@@ -4976,11 +4976,23 @@
     "id": "uk-game-pool",
     "name": "Games on the UmaKuma ladder",
     "area": "games",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "Games on the UmaKuma ladder",
+    "dateIsEstimate": false,
+    "version": "0.436.0",
+    "releasedAt": "2026-09-04T21:00:11Z"
+  },
+  {
+    "id": "uk-radical-links",
+    "name": "Link our radicals to WaniKani's",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.436.0",
-    "releasedAt": "2026-09-04T21:00:11Z",
-    "summary": "Games on the UmaKuma ladder"
+    "version": "0.437.0",
+    "releasedAt": "2026-09-04T21:00:24Z",
+    "summary": "Link our radicals to WaniKani's"
   }
 ]
