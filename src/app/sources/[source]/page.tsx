@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import PublicPageHeader from "@/app/shared/PublicPageHeader";
 import UmaKumaPageBanner from "@/app/shared/UmaKumaPageBanner";
 import { isSourceKey, SOURCE_CREDITS } from "@/lib/sourceCredits";
-import { loadSourceReport } from "@/lib/sourcePage";
+import { loadCachedSourceReport } from "@/lib/sourcePage";
 
 import SourceReportPanel from "../SourceReportPanel";
 import SourceTabs from "../SourceTabs";
@@ -15,10 +15,13 @@ type Props = { params: Promise<{ source: string }> };
 /*
  * Rendered on request, never at build time.
  *
- * Three of the six reports read the database. Listing the sources as static
+ * Three of the twelve reports read the database. Listing the sources as static
  * params asked the build to prerender every page, and the build runs where
  * there is no database - so the release that added this page failed in CI
  * after passing a local build that happened to have one.
+ *
+ * The reports are cached for a few minutes instead, and the CDN is given the
+ * rendered page, so a crawler sweeping all twelve costs one set of reads.
  */
 export const dynamic = "force-dynamic";
 
@@ -43,7 +46,7 @@ export default async function SourcePage({ params }: Props) {
   const { source } = await params;
   if (!isSourceKey(source)) notFound();
 
-  const report = await loadSourceReport(source);
+  const report = await loadCachedSourceReport(source);
 
   return (
     <main className="mx-auto w-full max-w-3xl space-y-5 px-4 py-8 sm:px-6">

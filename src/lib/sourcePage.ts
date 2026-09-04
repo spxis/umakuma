@@ -9,6 +9,7 @@ import { prisma } from "@/lib/prisma";
 import { radicalIndexSummary } from "@/lib/radicalSearchServer";
 import { getSchoolGradeIndex } from "@/lib/schoolGrades";
 import { SOURCE_KEYS, type SourceKey } from "@/lib/sourceCredits";
+import { cachedSourceReport } from "@/lib/sourceReportCache";
 import { wordFrequencySummary } from "@/lib/wordFrequency";
 import type { SourceReport } from "@/lib/sourceReport";
 import { strokeOrderSummary } from "@/lib/strokeOrder";
@@ -264,4 +265,15 @@ export async function loadSourceReport(key: SourceKey): Promise<SourceReport> {
     case SOURCE_KEYS.camap:
       return geoMap(key, "CA");
   }
+}
+
+/**
+ * The same report, held for a few minutes.
+ *
+ * What every page should call. `loadSourceReport` stays uncached so the admin
+ * can ask for the truth after triggering an import, and so a test can read a
+ * source without a cache in the way.
+ */
+export function loadCachedSourceReport(key: SourceKey): Promise<SourceReport> {
+  return cachedSourceReport(key, loadSourceReport);
 }

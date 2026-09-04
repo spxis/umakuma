@@ -4,8 +4,8 @@ import Link from "next/link";
 import PublicPageHeader from "@/app/shared/PublicPageHeader";
 import UmaKumaPageBanner from "@/app/shared/UmaKumaPageBanner";
 import { SOURCE_CREDITS, SOURCE_KEY_VALUES, sourcePath } from "@/lib/sourceCredits";
-import { loadSourceReport } from "@/lib/sourcePage";
-import { describeFreshness, formatCount } from "@/lib/sourceReport";
+import { loadCachedSourceReport } from "@/lib/sourcePage";
+import { describeFreshness, formatCount, type SourceReport } from "@/lib/sourceReport";
 
 import SourceTabs from "./SourceTabs";
 import { SOURCE_DESCRIPTIONS, SOURCES_COPY } from "./Sources.constants";
@@ -26,7 +26,16 @@ export const metadata: Metadata = {
  * to the rest.
  */
 export default async function SourcesPage() {
-  const reports = await Promise.all(SOURCE_KEY_VALUES.map((key) => loadSourceReport(key)));
+  /*
+   * Settled, not all. Each reader answers for its own source, but one of them
+   * rejecting used to take the whole index down with it - a table missing on
+   * an environment would hide eleven healthy sources to report the twelfth.
+   * A source that cannot answer simply loses its card.
+   */
+  const settled = await Promise.allSettled(SOURCE_KEY_VALUES.map((key) => loadCachedSourceReport(key)));
+  const reports = settled
+    .filter((result): result is PromiseFulfilledResult<SourceReport> => result.status === "fulfilled")
+    .map((result) => result.value);
 
   return (
     <main className="mx-auto w-full max-w-3xl space-y-5 px-4 py-8 sm:px-6">
