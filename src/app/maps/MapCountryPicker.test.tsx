@@ -38,17 +38,18 @@ describe("the country picker", () => {
     expect(publicParts).toEqual(["Asia", "Oceania", "North America", "South America", "Europe"]);
   });
 
-  it("shows an admin the pilot countries and everyone else only the open ones", () => {
+  /*
+   * Nothing is hidden any more. Thailand, China, Australia and Taiwan were
+   * admin-only while they were the only generated countries; they are the same
+   * Natural Earth data as the other twenty-five now open, so the four had
+   * stopped being a category.
+   */
+  it("offers every country to everyone", () => {
     const asAdmin = mapCountryGroups(true).parts.flatMap((g) => g.countries.map((c) => c.code));
     const asReader = mapCountryGroups(false).parts.flatMap((g) => g.countries.map((c) => c.code));
-    for (const pilot of ["TH", "CN", "AU", "TW"]) {
-      expect(asAdmin).toContain(pilot);
-      expect(asReader).not.toContain(pilot);
-    }
-    /* And the twenty-five opened for reading are there for both. */
-    for (const open of ["FR", "BR", "KR"]) {
-      expect(asReader).toContain(open);
-      expect(asAdmin).toContain(open);
+    expect(asReader).toEqual(asAdmin);
+    for (const code of ["TH", "CN", "AU", "TW", "FR", "BR", "KR"]) {
+      expect(asReader).toContain(code);
     }
   });
 

@@ -21,7 +21,7 @@ import {
   isGameTimeLimitMs,
 } from "@/lib/gameMode";
 import { hydrateGameQuestions, toGameRunSummary } from "@/lib/gameModeServer";
-import { isAdminOnlyMapCountry, isMapCountry } from "@/lib/mapCountries";
+import { isAdminOnlyMapCountry, isPlayableMapCountry } from "@/lib/mapCountries";
 import {
   findResumableDailyRun,
   GameRunConflictError,
@@ -51,7 +51,13 @@ const bodySchema = z.object({
    * and no way to tell why - the same shape of failure the refine below this
    * object exists to prevent.
    */
-  mapCountry: z.string().refine(isMapCountry).optional(),
+  /*
+   * Playable, not merely real. Thirty countries have maps and three have the
+   * reserved subject-id ranges a run is stored with, so parsing "is this a
+   * country" would let a request start a run on France whose questions point
+   * at nothing.
+   */
+  mapCountry: z.string().refine(isPlayableMapCountry).optional(),
 })
   // Only the games that offer Ultra have to satisfy it. A stale `ultraMode` from
   // a previous Match round would otherwise reject a Map or Practice start

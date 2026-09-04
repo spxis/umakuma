@@ -6,62 +6,55 @@ import { describe, expect, it } from "vitest";
 import { MAP_COUNTRY_SLUGS } from "./mapAddress";
 import {
   MAP_COUNTRIES,
+  isPlayableMapCountry,
   MAP_COUNTRIES_ALL,
   MAP_SOURCE_KEYS,
   canUseMapCountry,
-  getPlayableMapCountries,
-  isAdminOnlyMapCountry,
   isMapCountry,
 } from "./mapCountries";
 import { SOURCE_CREDITS } from "./sourceCredits";
 
 const read = (path: string) => readFileSync(join(process.cwd(), path), "utf8");
 
-const PILOTS = ["TH", "CN", "AU", "TW"];
-const PUBLIC = ["JP", "US", "CA"];
+const PLAYABLE = ["JP", "US", "CA"];
 
 /*
- * A pilot country is admin-only at every entrance, or it is not a pilot.
+ * Three countries are playable and thirty are readable.
  *
- * It shipped as a label on one dropdown. That left the four pilot maps readable
- * by anyone who typed /maps/thailand, and unplayable by the admin they were
- * for: the runs route still carried a literal ["JP","US","CA"], so every pilot
- * start came back "Could not start the game". Three entrances, three different
- * answers to one question - hence one predicate, asked by all three.
+ * They are different questions and they used to be one. The game reserves a
+ * range of subject ids per country and writes them into every run it stores,
+ * so a country joins the game when somebody assigns it a range - not when its
+ * outlines arrive. Thailand, China, Australia and Taiwan were admin-only
+ * pilots while they were the only generated countries; they are the same
+ * Natural Earth data as the other twenty-five now open, so the four stopped
+ * being a category.
  */
-describe("the pilot countries", () => {
-  it("are the four the lobby marks as a pilot", () => {
-    expect(MAP_COUNTRIES_ALL.filter((country) => country.adminOnly).map((country) => country.code).sort()).toEqual(
-      [...PILOTS].sort(),
-    );
+describe("playable and readable", () => {
+  it("lets the game run on exactly Japan, the United States and Canada", () => {
+    expect(MAP_COUNTRIES.map((country) => country.code)).toEqual(PLAYABLE);
+    for (const code of PLAYABLE) expect(isPlayableMapCountry(code)).toBe(true);
   });
 
-  it("are kept out of the public list", () => {
-    expect(MAP_COUNTRIES.map((country) => country.code)).toEqual(PUBLIC);
-    for (const code of PILOTS) expect(isAdminOnlyMapCountry(code)).toBe(true);
-    for (const code of PUBLIC) expect(isAdminOnlyMapCountry(code)).toBe(false);
-  });
-
-  it("are offered to an admin and to nobody else", () => {
-    expect(getPlayableMapCountries(false).map((country) => country.code)).toEqual(PUBLIC);
-    expect(getPlayableMapCountries(true).map((country) => country.code)).toEqual([...PUBLIC, ...PILOTS]);
-  });
-
-  it("answer canUseMapCountry the same way the lobby lists them", () => {
-    for (const code of PILOTS) {
-      expect(canUseMapCountry(code, true)).toBe(true);
-      expect(canUseMapCountry(code, false)).toBe(false);
+  it("refuses the game to a country with no reserved id range", () => {
+    for (const code of ["FR", "TH", "BR", "TW"]) {
+      expect(isPlayableMapCountry(code)).toBe(false);
     }
-    for (const code of PUBLIC) {
+  });
+
+  it("still lets anyone read those maps", () => {
+    for (const code of ["FR", "TH", "BR", "TW"]) {
       expect(canUseMapCountry(code, false)).toBe(true);
-      expect(canUseMapCountry(code, true)).toBe(true);
     }
   });
 
-  it("say no to a country that is not on the map at all", () => {
+  it("keeps nobody admin-only, now that the pilots are open", () => {
+    expect(MAP_COUNTRIES_ALL.filter((country) => country.adminOnly)).toEqual([]);
+  });
+
+  it("says no to a country that is not on the map at all", () => {
     expect(isMapCountry("ZZ")).toBe(false);
     expect(canUseMapCountry("ZZ", true)).toBe(false);
-    expect(isAdminOnlyMapCountry("ZZ")).toBe(false);
+    expect(isPlayableMapCountry("ZZ")).toBe(false);
   });
 });
 
@@ -75,8 +68,8 @@ describe("the pilot countries", () => {
 describe("the runs route", () => {
   const source = read("src/app/api/game/[accountId]/runs/route.ts");
 
-  it("validates mapCountry against the registry, not a literal list", () => {
-    expect(source).toContain("mapCountry: z.string().refine(isMapCountry)");
+  it("validates mapCountry against playability, not merely against being real", () => {
+    expect(source).toContain("mapCountry: z.string().refine(isPlayableMapCountry)");
     expect(source).not.toMatch(/mapCountry:\s*z\.enum\(/);
   });
 

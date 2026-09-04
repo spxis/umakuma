@@ -6,12 +6,18 @@
  * not a code path - which is why the country rides in the request rather than
  * being a separate game.
  *
- * `adminOnly` is a pilot, not a decoration. A country wearing it is one being
- * tried out before anyone else sees it, so every way in has to agree: the
- * lobby offers it only to an admin, the runs route refuses it for anyone else,
- * and /maps/<slug> is a 404 rather than a public page. It shipped as a label
- * on the lobby dropdown alone, which left the four pilot maps readable by
- * anybody who guessed the address and unplayable by the admin they were for.
+ * `playable` is the narrow one, and it is about data that outlives the code:
+ * the map game reserves a range of subject ids per country and writes them
+ * into every run it stores, so a country joins the game when somebody assigns
+ * it a range. Japan, the United States and Canada have one. Reading a map asks
+ * nothing of the sort, so every country here can be opened and only three can
+ * be played.
+ *
+ * `adminOnly` is still honoured everywhere - the lobby, the runs route and the
+ * map page all ask - but nothing wears it now. Thailand, China, Australia and
+ * Taiwan were pilots while they were the only generated countries; they are
+ * the same Natural Earth data as the other twenty-five, so hiding four of the
+ * thirty had stopped meaning anything.
  */
 import { SOURCE_KEYS, type SourceKey } from "./sourceCredits";
 
@@ -30,11 +36,10 @@ const ALL_MAP_COUNTRIES = [
   { code: "JP", label: "Japan", part: "Asia", curated: true, playable: true, adminOnly: false, source: SOURCE_KEYS.jpmap },
   { code: "US", label: "United States", part: "North America", curated: true, playable: true, adminOnly: false, source: SOURCE_KEYS.usmap },
   { code: "CA", label: "Canada", part: "North America", curated: true, playable: true, adminOnly: false, source: SOURCE_KEYS.worldmap },
-  /* Admin mode pilot wave: Thailand, China, Australia, Taiwan */
-  { code: "TH", curated: false, label: "Thailand", part: "Asia", playable: true, adminOnly: true, source: SOURCE_KEYS.worldmap },
-  { code: "CN", curated: false, label: "China", part: "Asia", playable: true, adminOnly: true, source: SOURCE_KEYS.worldmap },
-  { code: "AU", curated: false, label: "Australia", part: "Oceania", playable: true, adminOnly: true, source: SOURCE_KEYS.worldmap },
-  { code: "TW", curated: false, label: "Taiwan", part: "Asia", playable: true, adminOnly: true, source: SOURCE_KEYS.worldmap },
+  { code: "TH", label: "Thailand", part: "Asia", curated: false, playable: false, adminOnly: false, source: SOURCE_KEYS.worldmap },
+  { code: "CN", label: "China", part: "Asia", curated: false, playable: false, adminOnly: false, source: SOURCE_KEYS.worldmap },
+  { code: "AU", label: "Australia", part: "Oceania", curated: false, playable: false, adminOnly: false, source: SOURCE_KEYS.worldmap },
+  { code: "TW", label: "Taiwan", part: "Asia", curated: false, playable: false, adminOnly: false, source: SOURCE_KEYS.worldmap },
   /*
    * The rest of Natural Earth's thirty, public.
    *
@@ -168,4 +173,16 @@ export function mapCountryGroups(isAdmin = false): { home: MapCountryEntry; part
  */
 export function isCuratedMapCountry(code: string): boolean {
   return ALL_MAP_COUNTRIES.some((country) => country.code === code && country.curated);
+}
+
+/**
+ * Whether the map game may be played on this country.
+ *
+ * Narrower than "is a country we draw", and the runs route has to ask it: the
+ * body carries a country code, and every one of the thirty parses as real.
+ * Starting a run on a country with no reserved id range would write questions
+ * whose targets resolve to nothing.
+ */
+export function isPlayableMapCountry(code: string): code is MapCountryCode {
+  return ALL_MAP_COUNTRIES.some((country) => country.code === code && country.playable);
 }

@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 
 import { GEO_DATASETS, type CountryCode } from "./geoRegion";
-import { getPlayableMapCountries } from "./mapCountries";
 import { GEO_REGION_COUNTS, type GameMapCountry } from "./geoSubjectIds";
 
 /**
@@ -23,7 +22,6 @@ const COUNTRIES: CountryCode[] = ["JP", "US", "CA", "TH", "CN", "AU", "TW"];
  * back precisely because they are not, and this pairing is the thing that must
  * not drift: offering a country whose map is a set of blobs is the bug.
  */
-const PLAYABLE = new Set<string>(getPlayableMapCountries(true).map((country) => country.code));
 
 /** Drawing commands in a path, which is the crudest measure of detail there is. */
 function vertexCount(path: string): number {
@@ -57,7 +55,18 @@ describe("map geometry", () => {
     }
   });
 
-  it.each(COUNTRIES)("%s is only offered when it draws real boundaries", (country) => {
+  /*
+   * Every country we draw is drawn from real geodata.
+   *
+   * This used to say the opposite for anything not `playable`: that flag meant
+   * "the outlines are still blobs", and the test held it in place by failing
+   * once a map got good enough to offer. `playable` means something else now -
+   * whether the map game has a reserved range of subject ids for the country,
+   * which is about persisted run data and not about geometry - so there is no
+   * longer a class of country whose shapes are allowed to be placeholders.
+   * Thirty countries, all from Natural Earth, all real.
+   */
+  it.each(COUNTRIES)("%s draws real boundaries, not blobs", (country) => {
     const tooSimple = GEO_DATASETS[country].regions
       .filter((region) => {
         const [minX, minY, maxX, maxY] = region.map.bbox;
@@ -67,18 +76,10 @@ describe("map geometry", () => {
       })
       .map((region) => `${region.code} (${vertexCount(region.map.path)} points)`);
 
-    if (PLAYABLE.has(country)) {
-      expect(
-        tooSimple,
-        `${country} is offered in the lobby but its outlines are blobs. Regenerate the map from real geodata, or take it out of MAP_COUNTRIES.`,
-      ).toEqual([]);
-    } else {
-      // Held back on purpose. If this fails, the map got better - offer it.
-      expect(
-        tooSimple.length,
-        `${country} now has real outlines. Set playable: true in mapCountries.ts.`,
-      ).toBeGreaterThan(0);
-    }
+    expect(
+      tooSimple,
+      `${country} is offered on the map but its outlines are blobs. Regenerate it from real geodata, or take it out of the registry.`,
+    ).toEqual([]);
   });
 
   it.each(COUNTRIES)("%s keeps every region inside its own canvas", (country) => {
