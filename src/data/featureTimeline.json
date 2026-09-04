@@ -4868,11 +4868,23 @@
     "id": "level-prefixes",
     "name": "No more L17: WaniKani reads WK17, ours reads UK17",
     "area": "platform",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "John: 'WK levels should now read WK17... umakuma is UK17. No more L17 anywhere.' Site-wide sweep, not a local fix - SubjectPill draws a bare L{n}, and so do the explorer cards, list rows, subject columns, the identity block, the glyph metadata badges and the game tiles. Every one of them means WaniKani's level and none of them says so, which only became visible once a second ladder existed. This is Phase B2 of the levels plan brought forward.",
+    "dateIsEstimate": false,
+    "version": "0.427.0",
+    "releasedAt": "2026-09-04T15:21:32Z"
+  },
+  {
+    "id": "explorer-search",
+    "name": "Explorer search and jump to level",
+    "area": "platform",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.427.0",
-    "releasedAt": "2026-09-04T15:21:32Z",
-    "summary": "John: 'WK levels should now read WK17... umakuma is UK17. No more L17 anywhere.' Site-wide sweep, not a local fix - SubjectPill draws a bare L{n}, and so do the explorer cards, list rows, subject columns, the identity block, the glyph metadata badges and the game tiles. Every one of them means WaniKani's level and none of them says so, which only became visible once a second ladder existed. This is Phase B2 of the levels plan brought forward."
+    "version": "0.428.0",
+    "releasedAt": "2026-09-04T15:34:06Z",
+    "summary": "Search the whole ladder; jump straight to any of the hundred levels."
   }
 ]

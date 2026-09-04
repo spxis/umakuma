@@ -63,3 +63,35 @@ describe("UmaKuma Explorer", () => {
     expect(source).toContain("UmakumaExplorer.constants");
   });
 });
+
+describe("searching the ladder", () => {
+  it("asks the rows view, which spans all hundred levels", () => {
+    /* The level view is paged ten at a time. A search that used it would only
+       ever find what is on the open page, which is the bug this asserts
+       against — a member looking for 語 must be told level 10, not "not on
+       this page". */
+    const source = readFileSync(`${HERE}/UmakumaExplorer.tsx`, "utf8");
+    expect(source).toContain('view: "rows"');
+    expect(source).toContain("search: needle");
+  });
+
+  it("groups hits by the level that teaches them", () => {
+    /* A search result that showed only the character has told a member
+       nothing the kanji's own page would not. The level is the answer. */
+    const source = readFileSync(`${HERE}/UmakumaSearchResults.tsx`, "utf8");
+    expect(source).toContain("row.ukLevel");
+    expect(source).toContain("copy.levelLabel");
+  });
+
+  it("clears on Escape before it closes, per the repo's rule", () => {
+    const source = readFileSync(`${HERE}/UmakumaExplorer.tsx`, "utf8");
+    expect(source).toContain('if (event.key !== "Escape") return;');
+    expect(source).toContain("if (search) setSearch(\"\");");
+  });
+
+  it("jumps to the page holding a level, for all hundred of them", () => {
+    const source = readFileSync(`${HERE}/UmakumaExplorer.tsx`, "utf8");
+    expect(source).toContain("LEVELS_PER_PAGE) + 1");
+    expect(source).toContain("max={initial.ladderLevels}");
+  });
+});

@@ -4,9 +4,11 @@ import { useEffect, useState } from "react";
 
 import PillWordsToggle from "@/app/shared/PillWordsToggle";
 import { SUBJECT_TYPE_DISPLAY, SUBJECT_TYPES, type SubjectType } from "@/lib/domainConstants";
-import type { LadderLevelGroup } from "@/lib/ladder/ladderQuery";
+import type { LadderRow } from "@/lib/ladder/ladderCrosswalk";
+import { LADDER_LEVELS_PER_PAGE as LEVELS_PER_PAGE, type LadderLevelGroup } from "@/lib/ladder/ladderQuery";
 
 import UmakumaLevelCard from "./UmakumaLevelCard";
+import UmakumaSearchResults from "./UmakumaSearchResults";
 import { UK_EXPLORER_COPY as copy } from "./UmakumaExplorer.constants";
 
 const CHIP = "inline-flex h-8 items-center rounded-full border px-3 text-[11px] font-bold transition";
@@ -14,6 +16,7 @@ const ACTIVE = "border-accent bg-accent text-white";
 const IDLE = "border-line bg-surface text-foreground/70 hover:bg-surface-muted";
 
 type Payload = { groups: LadderLevelGroup[]; page: number; pageCount: number; ladderLevels: number };
+type Hits = { rows: LadderRow[]; total: number };
 
 /**
  * The UmaKuma curriculum, browsable.
@@ -38,6 +41,9 @@ export default function UmakumaExplorer({ initial }: { initial: Payload }) {
      an effect is pointing at a real cascading render. */
   const [pages, setPages] = useState<Record<number, Payload>>({ [initial.page]: initial });
   const [failed, setFailed] = useState(false);
+  const [search, setSearch] = useState("");
+  const [hits, setHits] = useState<Hits | null>(null);
+  const searching = search.trim().length > 0;
 
   const data = pages[page] ?? null;
   const loading = data === null && !failed;
@@ -59,6 +65,29 @@ export default function UmakumaExplorer({ initial }: { initial: Payload }) {
     };
   }, [page, pages]);
 
+  useEffect(() => {
+    const needle = search.trim();
+    if (!needle) return;
+    let live = true;
+    /* Debounced, because this is a query over nine thousand rows and a member
+       types faster than the ladder can be filtered. */
+    const timer = setTimeout(() => {
+      const params = new URLSearchParams({ search: needle, view: "rows" });
+      fetch(`/api/uk-ladder?${params}`)
+        .then((response) => (response.ok ? response.json() : Promise.reject(new Error("failed"))))
+        .then((payload: Hits) => {
+          if (live) setHits(payload);
+        })
+        .catch(() => {
+          if (live) setFailed(true);
+        });
+    }, 250);
+    return () => {
+      live = false;
+      clearTimeout(timer);
+    };
+  }, [search]);
+
   const groups = data?.groups ?? [];
   const shown = kind
     ? groups.map((group) => ({
@@ -76,6 +105,35 @@ export default function UmakumaExplorer({ initial }: { initial: Payload }) {
         <p className="mt-1 max-w-3xl text-sm font-semibold leading-relaxed text-foreground/70">{copy.blurb}</p>
 
         <div className="mt-3 flex flex-wrap items-center gap-2">
+          <input
+            type="search"
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            onKeyDown={(event) => {
+              /* Escape clears, then puts the box away — the repo's rule. */
+              if (event.key !== "Escape") return;
+              if (search) setSearch("");
+              else event.currentTarget.blur();
+            }}
+            placeholder={copy.search}
+            className="h-8 min-w-64 flex-1 rounded-full border border-line bg-surface px-4 text-sm"
+          />
+          <label className="inline-flex items-center gap-1.5 text-[11px] font-black uppercase tracking-[0.06em] text-foreground/60">
+            {copy.jump}
+            <input
+              type="number"
+              min={1}
+              max={initial.ladderLevels}
+              onChange={(event) => {
+                const wanted = Number(event.target.value);
+                if (!Number.isFinite(wanted) || wanted < 1 || wanted > initial.ladderLevels) return;
+                /* A hundred levels ten to a page is ten clicks to reach the
+                   nineties; this is the way in that a page count is not. */
+                setPage(Math.floor((wanted - 1) / LEVELS_PER_PAGE) + 1);
+              }}
+              className="h-8 w-20 rounded-full border border-line bg-surface px-3 text-sm font-bold tabular-nums"
+            />
+          </label>
           <button type="button" onClick={() => setKind(null)} className={`${CHIP} ${kind === null ? ACTIVE : IDLE}`}>
             {copy.allKinds}
           </button>
@@ -98,13 +156,17 @@ export default function UmakumaExplorer({ initial }: { initial: Payload }) {
       {failed ? <p className="text-sm font-semibold text-rose-600">{copy.failed}</p> : null}
       {loading ? <p className="text-sm font-semibold text-foreground/60">{copy.loading}</p> : null}
 
-      <ol className="space-y-3">
-        {shown.map((group) => (
-          <UmakumaLevelCard key={group.level} group={group} />
-        ))}
-      </ol>
+      {searching ? (
+        <UmakumaSearchResults hits={hits} kind={kind} />
+      ) : (
+        <ol className="space-y-3">
+          {shown.map((group) => (
+            <UmakumaLevelCard key={group.level} group={group} />
+          ))}
+        </ol>
+      )}
 
-      <div className="flex items-center justify-center gap-3">
+      <div className={`flex items-center justify-center gap-3 ${searching ? "hidden" : ""}`}>
         <button
           type="button"
           disabled={page <= 1 || loading}
