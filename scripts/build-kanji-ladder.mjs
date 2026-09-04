@@ -100,7 +100,17 @@ const RADICAL_LEAD_LEVELS = 2;
  * way every other level gates on its kanji.
  */
 const KANJI_START_LEVEL = 2;
-const VOCABULARY_RAMP_LEVELS = 20;
+/*
+ * How many levels the word share takes to reach full.
+ *
+ * Was 20, which spent the early supply too fast: levels 14-18 teach kanji that
+ * unlock few words, and with nothing banked level 16 came up eleven words short
+ * of its target while 17 and 18 overshot repaying it. Twenty-six holds enough
+ * back to ride through that stretch — the worst dip on the whole ladder falls
+ * from eleven subjects to six, and the number of levels lighter than the one
+ * before them falls from forty to twenty-nine.
+ */
+const VOCABULARY_RAMP_LEVELS = 26;
 const VOCABULARY_START_SHARE = 0.25;
 const CJK_RANGES = [
   [0x4e00, 0x9fff],
