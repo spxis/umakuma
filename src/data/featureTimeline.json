@@ -4952,11 +4952,23 @@
     "id": "uk-wanikani-import",
     "name": "WaniKani import to a starting level",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "WaniKani import to a starting level",
+    "dateIsEstimate": false,
+    "version": "0.434.0",
+    "releasedAt": "2026-09-04T20:39:36Z"
+  },
+  {
+    "id": "uk-subject-badges",
+    "name": "UK level on subject pages",
+    "area": "platform",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.434.0",
-    "releasedAt": "2026-09-04T20:39:36Z",
-    "summary": "WaniKani import to a starting level"
+    "version": "0.435.0",
+    "releasedAt": "2026-09-04T20:42:58Z",
+    "summary": "UK level on subject pages"
   }
 ]
