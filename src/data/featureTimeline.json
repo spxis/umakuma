@@ -4568,11 +4568,23 @@
     "id": "the-ladder-beside-every-other-scale",
     "name": "The ladder beside every other scale",
     "area": "admin",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "Our 100-level ladder had no surface at all: it was a 351 KB JSON file with a reader and a test suite, and nothing on the site imported it. /admin/data now has a Ladder dataset showing all 9,271 items - radicals, kanji and words - with our level beside WaniKani's, the JLPT band, the school year, print frequency and which source the facts come from. A stacked bar per level shows the shape of the curriculum, so a level that has grown heavy is visible rather than findable. Read-only; moving things comes next.",
+    "dateIsEstimate": false,
+    "version": "0.402.0",
+    "releasedAt": "2026-09-04T10:20:16Z"
+  },
+  {
+    "id": "the-curriculum-gets-a-table-of-its-own",
+    "name": "The curriculum gets a table of its own",
+    "area": "admin",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.402.0",
-    "releasedAt": "2026-09-04T10:20:16Z",
-    "summary": "Our 100-level ladder had no surface at all: it was a 351 KB JSON file with a reader and a test suite, and nothing on the site imported it. /admin/data now has a Ladder dataset showing all 9,271 items - radicals, kanji and words - with our level beside WaniKani's, the JLPT band, the school year, print frequency and which source the facts come from. A stacked bar per level shows the shape of the curriculum, so a level that has grown heavy is visible rather than findable. Read-only; moving things comes next."
+    "version": "0.403.0",
+    "releasedAt": "2026-09-04T12:37:14Z",
+    "summary": "The ladder lived only in a committed JSON file, so nothing at runtime could point at one of its items and no member could have progress on one. UkSubject now holds all 9,271 items with a stable id and a business key; LadderOverride is the append-only log an admin's moves will be written to. pnpm ladder:seed makes the table agree with the committed ladder and is a no-op the second time; pnpm ladder:check exits 2 on drift the way db:drift:check does. Items the ladder stops placing are marked removed rather than deleted, so progress survives an item being pulled and restored."
   }
 ]
