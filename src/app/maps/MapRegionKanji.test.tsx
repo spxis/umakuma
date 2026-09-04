@@ -46,7 +46,7 @@ describe("the characters of a place name", () => {
     expect(document.querySelector("ul")?.getAttribute("class")).not.toContain("grid");
     /* One of the two, by the standing choice; the pair stays on the title. */
     expect(links[0]?.textContent).toContain("tall");
-    expect(links[0]?.getAttribute("title")).toBe("コウ · tall");
+    expect(links[0]?.getAttribute("title")).toBe("コウ / tall");
   });
 
   it("carries the one words control every row of pills has", () => {

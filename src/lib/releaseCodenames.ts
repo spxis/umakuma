@@ -433,6 +433,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Fukumu Chihou", ja: "含む地方", reading: "ふくむちほう", gloss: "the region that holds the place, in its address" },
   { romaji: "Heizen to Nazashi", ja: "平然と名指し", reading: "へいぜんとなざし", gloss: "the sheet plainly named after what is on it" },
   { romaji: "Honyaku Nashi Hikaku", ja: "翻訳なし比較", reading: "ほんやくなしひかく", gloss: "two books on one question, side by side" },
+  { romaji: "Matomete Narabete", ja: "まとめて並べて", reading: "まとめてならべて", gloss: "the reading and the English together, when you ask for them" },
 ];
 
 /**

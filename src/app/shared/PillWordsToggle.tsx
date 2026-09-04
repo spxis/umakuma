@@ -12,10 +12,11 @@ import { usePillWords } from "./usePillWords";
  * member likes to read, not about the section they happen to be looking at,
  * so wherever it is pressed every chip on every page follows.
  *
- * Three segments rather than a button that cycles, because a cycling button
- * cannot say what the other choices are - you press it until the page looks
- * right. `あ` and `EN` are the labels a reader of this site already knows,
- * with the words themselves on the hover title.
+ * Segments rather than a button that cycles, because a cycling button cannot
+ * say what the other choices are - you press it until the page looks right,
+ * and with four states that is three presses of guessing. `あ` and `EN` are
+ * the labels a reader of this site already knows, with the words themselves
+ * on the hover title.
  */
 const OPTIONS: { value: PillWordMode; label: string; title: string }[] = [
   { value: PILL_WORD_MODES.off, label: SUBJECT_PAGE_COPY.pillWordsOff, title: SUBJECT_PAGE_COPY.pillWordsOffTitle },
@@ -28,6 +29,11 @@ const OPTIONS: { value: PillWordMode; label: string; title: string }[] = [
     value: PILL_WORD_MODES.english,
     label: SUBJECT_PAGE_COPY.pillWordsEnglish,
     title: SUBJECT_PAGE_COPY.pillWordsEnglishTitle,
+  },
+  {
+    value: PILL_WORD_MODES.both,
+    label: SUBJECT_PAGE_COPY.pillWordsBoth,
+    title: SUBJECT_PAGE_COPY.pillWordsBothTitle,
   },
 ];
 

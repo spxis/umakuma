@@ -32,7 +32,7 @@ describe("the pill, as an element", () => {
 
   it("puts both words in the title, so the other half costs a hover", () => {
     const link = draw(<SubjectPill glyph="山" reading="やま" meaning="mountain" href="/kanji/x" />).querySelector("a");
-    expect(link?.getAttribute("title")).toBe("やま · mountain");
+    expect(link?.getAttribute("title")).toBe("やま / mountain");
     /* Drawn, it carries one of them - which one is the member's standing choice. */
     expect(link?.textContent).toContain("mountain");
     expect(link?.textContent).not.toContain("やま");

@@ -34,6 +34,22 @@ describe("the words on a chip", () => {
     expect(pillWords(PILL_WORD_MODES.reading, "  ", "Leaf")).toBe("Leaf");
   });
 
+  /* The state John asked for a release after both was taken away. */
+  it("puts the pair together when both is asked for", () => {
+    expect(pillWords(PILL_WORD_MODES.both, "しゅく", "Lodging")).toBe("しゅく / Lodging");
+  });
+
+  /* No joiner with nothing on one side of it. */
+  it("shows the half it has when both is asked for and only one exists", () => {
+    expect(pillWords(PILL_WORD_MODES.both, null, "Leaf")).toBe("Leaf");
+    expect(pillWords(PILL_WORD_MODES.both, "しゅく", "  ")).toBe("しゅく");
+  });
+
+  /* One function, so the hover and the drawn pair cannot drift into two formats. */
+  it("draws both the same way the title does", () => {
+    expect(pillWords(PILL_WORD_MODES.both, "やま", "mountain")).toBe(pillWordsTitle("やま", "mountain"));
+  });
+
   it("has nothing to say about a chip that knows neither", () => {
     for (const mode of PILL_WORD_MODE_VALUES) {
       expect(pillWords(mode, null, null)).toBeNull();
@@ -45,7 +61,7 @@ describe("the words on a chip", () => {
 /* Hiding a word costs a hover, not the fact. */
 describe("what the title carries", () => {
   it("keeps both halves whatever is drawn", () => {
-    expect(pillWordsTitle("やま", "mountain")).toBe("やま · mountain");
+    expect(pillWordsTitle("やま", "mountain")).toBe("やま / mountain");
   });
 
   it("carries the half it has, and nothing for neither", () => {
@@ -60,10 +76,9 @@ describe("the stored choice", () => {
     expect(DEFAULT_PILL_WORD_MODE).toBe(PILL_WORD_MODES.english);
   });
 
-  /* Three states, not four: "both" is the thing being retired. */
-  it("offers three and only three", () => {
-    expect(PILL_WORD_MODE_VALUES).toEqual(["off", "reading", "english"]);
-    expect(isPillWordMode("both")).toBe(false);
-    expect(isPillWordMode("english")).toBe(true);
+  it("offers four, in the order the control reads left to right", () => {
+    expect(PILL_WORD_MODE_VALUES).toEqual(["off", "reading", "english", "both"]);
+    expect(isPillWordMode("both")).toBe(true);
+    expect(isPillWordMode("everything")).toBe(false);
   });
 });

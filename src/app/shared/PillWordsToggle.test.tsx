@@ -17,11 +17,12 @@ describe("the control over every chip's words", () => {
   const doc = draw();
   const buttons = [...doc.querySelectorAll("button")];
 
-  it("shows all three choices at once", () => {
+  it("shows all four choices at once", () => {
     expect(buttons.map((button) => button.textContent)).toEqual([
       SUBJECT_PAGE_COPY.pillWordsOff,
       SUBJECT_PAGE_COPY.pillWordsReading,
       SUBJECT_PAGE_COPY.pillWordsEnglish,
+      SUBJECT_PAGE_COPY.pillWordsBoth,
     ]);
   });
 
@@ -31,6 +32,7 @@ describe("the control over every chip's words", () => {
       SUBJECT_PAGE_COPY.pillWordsOffTitle,
       SUBJECT_PAGE_COPY.pillWordsReadingTitle,
       SUBJECT_PAGE_COPY.pillWordsEnglishTitle,
+      SUBJECT_PAGE_COPY.pillWordsBothTitle,
     ]);
   });
 

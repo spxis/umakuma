@@ -25,9 +25,11 @@ export const SUBJECT_PAGE_COPY = {
   pillWordsOff: "Off",
   pillWordsReading: "\u3042",
   pillWordsEnglish: "EN",
+  pillWordsBoth: "Both",
   pillWordsOffTitle: "Glyphs only",
   pillWordsReadingTitle: "Readings",
   pillWordsEnglishTitle: "English",
+  pillWordsBothTitle: "Reading and English",
   /* The strip under the card, for a reader with no account to file into. */
   filingSignedOut: (label: string) => `Keep ${label} on a list of your own`,
   filingJoin: "Join UmaKuma",
