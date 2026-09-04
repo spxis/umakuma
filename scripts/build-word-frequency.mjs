@@ -37,18 +37,27 @@ export const UNRANKED = 500_000;
  * feel worth knowing, so together they outweigh it.
  */
 export const CORPUS_WEIGHTS = {
-  newspaper: 1.0,
-  global: 0.8,
-  anime: 0.7,
-  drama: 0.4,
-  movie: 0.3,
-  novel: 0.3,
-  manga: 0.3,
-  visualNovel: 0.15,
-  videoGame: 0.15,
-  nonFiction: 0.15,
-  webNovel: 0.1,
-  audio: 0.1,
+  /* Every medium, blended by Jiten. The best single answer to "would somebody
+     meet this word", so it leads. */
+  global: 1.0,
+  /* What people actually watch. Weighted above print because most learners
+     will hear a word long before they read one. */
+  anime: 1.0,
+  drama: 0.8,
+  movie: 0.7,
+  manga: 0.7,
+  /* Read for pleasure, which is still reading somebody chose to do. */
+  novel: 0.5,
+  visualNovel: 0.5,
+  webNovel: 0.4,
+  videoGame: 0.4,
+  audio: 0.3,
+  /* Print, and the register a learner reaches last. It was 1.0, which was a
+     bet that the widest written vocabulary is the most useful one — true only
+     for somebody who gets far enough to read a newspaper, and most people will
+     not. It still counts for more than any single leisure medium. */
+  newspaper: 0.5,
+  nonFiction: 0.2,
 };
 
 /** Pulls surface form -> priority tags out of JMdict's XML. */
