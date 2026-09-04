@@ -470,6 +470,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Namiiru", ja: "並み居る", reading: "なみいる", gloss: "all of them gathered, each saying only what it knows" },
   { romaji: "Nidanme no Mikata", ja: "二段目の見方", reading: "にだんめのみかた", gloss: "another way of looking at the rungs" },
   { romaji: "Nurie no Erabi", ja: "塗り絵の選び", reading: "ぬりえのえらび", gloss: "choosing how to colour the same ladder" },
+  { romaji: "Nezashi no Meimei", ja: "根ざしの命名", reading: "ねざしのめいめい", gloss: "naming what you are rooted in" },
 ];
 
 /**
