@@ -5000,11 +5000,23 @@
     "id": "uk-radical-link-table",
     "name": "An official relation between our radicals and theirs",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "An official relation between our radicals and theirs",
+    "dateIsEstimate": false,
+    "version": "0.438.0",
+    "releasedAt": "2026-09-04T21:06:14Z"
+  },
+  {
+    "id": "ladder-ops",
+    "name": "Admin: move a kanji between levels",
+    "area": "admin",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.438.0",
-    "releasedAt": "2026-09-04T21:06:14Z",
-    "summary": "An official relation between our radicals and theirs"
+    "version": "0.439.0",
+    "releasedAt": "2026-09-04T21:24:59Z",
+    "summary": "Admin: move a kanji between levels"
   }
 ]
