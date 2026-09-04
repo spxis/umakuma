@@ -4712,11 +4712,23 @@
     "id": "wanikani-s-order-joins-the-ordering",
     "name": "WaniKani's order joins the ordering",
     "area": "platform",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "Within a JLPT band the ladder sorted by school grade then raw frequency, ignoring the one signal that encodes which characters build on which: WaniKani's own teaching sequence. It now sorts band, then grade, then WaniKani level, then frequency, then strokes. Grade inversions fall in every band - N4 from 18 to 8, N3 from 645 to 619, N2 from 424 to 400 - and the opening reads better: level 2 is now the numbers and simple shapes clustered together rather than scattered.",
+    "dateIsEstimate": false,
+    "version": "0.414.0",
+    "releasedAt": "2026-09-04T13:53:46Z"
+  },
+  {
+    "id": "weight-the-words-people-actually-meet",
+    "name": "Weight the words people actually meet",
+    "area": "platform",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.414.0",
-    "releasedAt": "2026-09-04T13:53:46Z",
-    "summary": "Within a JLPT band the ladder sorted by school grade then raw frequency, ignoring the one signal that encodes which characters build on which: WaniKani's own teaching sequence. It now sorts band, then grade, then WaniKani level, then frequency, then strokes. Grade inversions fall in every band - N4 from 18 to 8, N3 from 645 to 619, N2 from 424 to 400 - and the opening reads better: level 2 is now the numbers and simple shapes clustered together rather than scattered."
+    "version": "0.415.0",
+    "releasedAt": "2026-09-04T14:00:25Z",
+    "summary": "The blend weighted a newspaper corpus at 1.0 against anime at 0.7, on the reasoning that print carries the widest written vocabulary. True, but it pays off only for somebody who gets far enough to read a newspaper, and most learners will not - they will watch. Media now leads: global and anime at 1.0, drama 0.8, movie and manga 0.7, newspaper down to 0.5. Levels 1-10 barely move, because the commonest words are common everywhere. Levels 11-30 gain uriKire, yomikata, oujo, giniro and lose kougyou, koukyou, shiten, shinrigaku to later levels - drama vocabulary up, business register down."
   }
 ]
