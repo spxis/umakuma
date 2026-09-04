@@ -4484,11 +4484,23 @@
     "id": "catalog-gap-visible",
     "name": "The catalogue says what it is missing",
     "area": "admin",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "The catalogue gap reopens every time WaniKani adds subjects and nothing says so. The admin catalogue panel already reports drift - missing levels, duplicate rows - and the count belongs beside them, but findCatalogGap reads every account's assignment cache and all 9,400 rows' relation arrays, so it cannot ride the status endpoint the panel polls. A button that measures on demand and reports the ids, next to the sync controls. Raised 2026-09-02.",
+    "dateIsEstimate": false,
+    "version": "0.395.0",
+    "releasedAt": "2026-09-04T08:04:01Z"
+  },
+  {
+    "id": "map-admin-cleanup",
+    "name": "Map cleanup and admin features",
+    "area": "games",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.395.0",
-    "releasedAt": "2026-09-04T08:04:01Z",
-    "summary": "The catalogue gap reopens every time WaniKani adds subjects and nothing says so. The admin catalogue panel already reports drift - missing levels, duplicate rows - and the count belongs beside them, but findCatalogGap reads every account's assignment cache and all 9,400 rows' relation arrays, so it cannot ride the status endpoint the panel polls. A button that measures on demand and reports the ids, next to the sync controls. Raised 2026-09-02."
+    "version": "0.396.0",
+    "releasedAt": "2026-09-04T08:12:14Z",
+    "summary": "The four pilot countries become the admin's at every entrance and actually work: the runs route took its countries from a literal [\"JP\",\"US\",\"CA\"], so every pilot start returned 400, while /maps/thailand was a public page anyone could open. One predicate answers for the lobby, the route and the page. JapanMap.tsx goes with its eight callers moved to CountryMap, and the /sources/camap redirect and alias go with it. map:build:all no longer runs the retired Canada builder over ca-map.json, and the accreditation page counts from the manifest and dates itself from the newest dataset it loads rather than the one file the builder skips. The 25 catalogue countries stay built and unloaded."
   }
 ]
