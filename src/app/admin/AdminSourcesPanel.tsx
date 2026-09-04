@@ -10,6 +10,7 @@ import { formatDateShort } from "@/lib/timeFormat";
 
 import { ADMIN_SOURCES_COPY as copy } from "./AdminSources.constants";
 import AdminPanelHeader from "./AdminPanelHeader";
+import AdminSourceShowcasePicker from "./AdminSourceShowcasePicker";
 import { useAdminFeedback } from "./AdminFeedbackProvider";
 
 type SourcesPayload = { sources: SourceReport[]; failed: SourceKey[] };
@@ -34,6 +35,7 @@ export default function AdminSourcesPanel({
 }) {
   const { showToast, confirmAction } = useAdminFeedback();
   const [running, setRunning] = useState<SourceKey | null>(null);
+  const [picking, setPicking] = useState<SourceKey | null>(null);
 
   const { data, error, isLoading, mutate } = useSWR<SourcesPayload>(
     sessionAuthorized && !checkingSession ? "/api/admin/sources" : null,
@@ -93,7 +95,9 @@ export default function AdminSourcesPanel({
             key={report.key}
             report={report}
             busy={running === report.key}
+            picking={picking === report.key}
             onRefresh={() => refresh(report.key)}
+            onTogglePicker={() => setPicking((open) => (open === report.key ? null : report.key))}
           />
         ))}
         {data.failed.map((key) => (
@@ -111,11 +115,15 @@ export default function AdminSourcesPanel({
 function SourceRow({
   report,
   busy,
+  picking,
   onRefresh,
+  onTogglePicker,
 }: {
   report: SourceReport;
   busy: boolean;
+  picking: boolean;
   onRefresh: () => void;
+  onTogglePicker: () => void;
 }) {
   const operation = SOURCE_OPERATIONS[report.key];
   const credit = SOURCE_CREDITS[report.key];
@@ -162,6 +170,14 @@ function SourceRow({
           ) : null}
         </p>
 
+        <div className="flex items-center gap-2">
+        <button
+          type="button"
+          onClick={onTogglePicker}
+          className="inline-flex h-8 items-center rounded-full border border-line bg-surface px-3 text-[11px] font-black uppercase tracking-[0.08em] text-foreground/70 transition hover:bg-surface-muted"
+        >
+          {picking ? copy.hidePicker : copy.pick}
+        </button>
         {operation.endpoint ? (
           <button
             type="button"
@@ -179,7 +195,10 @@ function SourceRow({
             {operation.command}
           </code>
         )}
+        </div>
       </div>
+
+      {picking ? <AdminSourceShowcasePicker source={report.key} onClose={onTogglePicker} /> : null}
     </li>
   );
 }
