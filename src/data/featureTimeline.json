@@ -4328,11 +4328,23 @@
     "id": "written-with-beside-related",
     "name": "Written with belongs beside Related",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-03",
+    "summary": "Written with holds radicals only, so it is the same kind of fact as the Built from group in Related and should sit next to it rather than in its own block further up. Requested 2026-09-03 by John.",
+    "dateIsEstimate": false,
+    "version": "0.382.0",
+    "releasedAt": "2026-09-04T03:14:25Z"
+  },
+  {
+    "id": "parallel-level-ladder",
+    "name": "Parallel level ladder",
+    "area": "jlpt",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-03",
-    "version": "0.382.0",
-    "releasedAt": "2026-09-04T03:14:25Z",
-    "summary": "Written with holds radicals only, so it is the same kind of fact as the Built from group in Related and should sit next to it rather than in its own block further up. Requested 2026-09-03 by John."
+    "version": "0.383.0",
+    "releasedAt": "2026-09-04T03:52:31Z",
+    "summary": "A WaniKani-parallel progression over roughly 100 levels, covering the kanji WaniKani leaves out."
   }
 ]
