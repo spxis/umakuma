@@ -4700,11 +4700,23 @@
     "id": "a-kanji-the-jlpt-skips-is-not-therefore-hard",
     "name": "A kanji the JLPT skips is not therefore hard",
     "area": "platform",
+    "status": "shipped",
     "kind": "bug",
+    "date": "2026-09-04",
+    "summary": "The JLPT lists 2,211 characters and we teach 2,235, so 227 have no N level - and all of them were swept into the final band, levels 51-100. Right for the 158 secondary-school and 33 name kanji among them; badly wrong for fourteen. The worst was the 24th commonest character in Japanese, taught in Japanese schools at grade 2 and by WaniKani at level 3, sitting at UK91 because an exam does not list it. A kanji with no JLPT level now falls back to the year Japan teaches it in. It moves to UK8, and no grade-school kanji is stranded past level 50. The ladder also now records which band decided each placement, since for these fourteen it is not the JLPT one.",
+    "dateIsEstimate": false,
+    "version": "0.413.0",
+    "releasedAt": "2026-09-04T13:49:54Z"
+  },
+  {
+    "id": "wanikani-s-order-joins-the-ordering",
+    "name": "WaniKani's order joins the ordering",
+    "area": "platform",
+    "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.413.0",
-    "releasedAt": "2026-09-04T13:49:54Z",
-    "summary": "The JLPT lists 2,211 characters and we teach 2,235, so 227 have no N level - and all of them were swept into the final band, levels 51-100. Right for the 158 secondary-school and 33 name kanji among them; badly wrong for fourteen. The worst was the 24th commonest character in Japanese, taught in Japanese schools at grade 2 and by WaniKani at level 3, sitting at UK91 because an exam does not list it. A kanji with no JLPT level now falls back to the year Japan teaches it in. It moves to UK8, and no grade-school kanji is stranded past level 50. The ladder also now records which band decided each placement, since for these fourteen it is not the JLPT one."
+    "version": "0.414.0",
+    "releasedAt": "2026-09-04T13:53:46Z",
+    "summary": "Within a JLPT band the ladder sorted by school grade then raw frequency, ignoring the one signal that encodes which characters build on which: WaniKani's own teaching sequence. It now sorts band, then grade, then WaniKani level, then frequency, then strokes. Grade inversions fall in every band - N4 from 18 to 8, N3 from 645 to 619, N2 from 424 to 400 - and the opening reads better: level 2 is now the numbers and simple shapes clustered together rather than scattered."
   }
 ]
