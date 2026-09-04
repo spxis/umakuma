@@ -444,6 +444,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Rakuna Irodori", ja: "楽な彩り", reading: "らくないろどり", gloss: "colouring that is easy to switch off" },
   { romaji: "Ryouchi no Kokki", ja: "領地の国旗", reading: "りょうちのこっき", gloss: "flags of every land" },
   { romaji: "Rusu no Tsukue", ja: "留守の机", reading: "るすのつくえ", gloss: "the desk left exactly as it was found" },
+  { romaji: "Rei no Hitotsumami", ja: "例のひとつまみ", reading: "れいのひとつまみ", gloss: "a pinch of examples" },
 ];
 
 /**

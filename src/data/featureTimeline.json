@@ -4460,11 +4460,23 @@
     "id": "release-take-atomic",
     "name": "A release that refuses changes nothing",
     "area": "platform",
+    "status": "shipped",
     "kind": "bug",
+    "date": "2026-09-04",
+    "summary": "Taking a release number wrote four files one after another with no rollback - the timeline entry, the codename, APP_VERSION and package.json - so a failure part way through left the first two applied and the last two not. The tree looked like a release had been taken when none had, and the re-run refused because the codename it had just written was already used. It happened twice on 2026-09-03, both times because another session shipped mid-flight. Every edit is worked out first now and written only once all of them are possible, the refusal names the file it could not change, and the board row is closed after the files land rather than before - a refusal used to leave the ticket shipped and the tree unreleased.",
+    "dateIsEstimate": false,
+    "version": "0.393.0",
+    "releasedAt": "2026-09-04T07:39:30Z"
+  },
+  {
+    "id": "a-few-rows-of-every-source",
+    "name": "A few rows of every source",
+    "area": "platform",
+    "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.393.0",
-    "releasedAt": "2026-09-04T07:39:30Z",
-    "summary": "Taking a release number wrote four files one after another with no rollback - the timeline entry, the codename, APP_VERSION and package.json - so a failure part way through left the first two applied and the last two not. The tree looked like a release had been taken when none had, and the re-run refused because the codename it had just written was already used. It happened twice on 2026-09-03, both times because another session shipped mid-flight. Every edit is worked out first now and written only once all of them are possible, the refusal names the file it could not change, and the board row is closed after the files land rather than before - a refusal used to leave the ticket shipped and the tree unreleased."
+    "version": "0.394.0",
+    "releasedAt": "2026-09-04T07:59:20Z",
+    "summary": "The accreditation pages said what we hold from a source and never showed any of it. Each page gets a handful of chosen specimens - the component written into 1,337 characters, the pronoun ranked 67 in anime and band 12 of 48 in print - with an admin able to override the picks per source. Chosen, never the first row of the file."
   }
 ]
