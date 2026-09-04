@@ -5048,11 +5048,23 @@
     "id": "xp-wiring",
     "name": "XP where the work happens",
     "area": "platform",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "XP where the work happens",
+    "dateIsEstimate": false,
+    "version": "0.442.0",
+    "releasedAt": "2026-09-04T22:47:01Z"
+  },
+  {
+    "id": "xp-rank-names",
+    "name": "XP rank names",
+    "area": "platform",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.442.0",
-    "releasedAt": "2026-09-04T22:47:01Z",
-    "summary": "XP where the work happens"
+    "version": "0.443.0",
+    "releasedAt": "2026-09-04T23:06:15Z",
+    "summary": "XP rank names"
   }
 ]
