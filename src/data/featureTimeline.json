@@ -4268,11 +4268,23 @@
     "id": "stroke-card-rethink",
     "name": "The stroke order panel asks to be read twice",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-03",
+    "summary": "John: it looks really good but can someone guess what each thing does? Why is 10 strokes a different badge from the Worksheet button - do those belong together? Question the design and the layout, ask why each thing is where it is. Concise is good, not too busy. One idea of his: the 10 strokes label folds into the Show one stroke button, and pressing that is what reveals the ten numbered buttons. Requested 2026-09-03 by John.",
+    "dateIsEstimate": false,
+    "version": "0.377.0",
+    "releasedAt": "2026-09-04T02:40:26Z"
+  },
+  {
+    "id": "sheet-row-facts",
+    "name": "A worksheet row can say more",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-03",
-    "version": "0.377.0",
-    "releasedAt": "2026-09-04T02:40:26Z",
-    "summary": "John: it looks really good but can someone guess what each thing does? Why is 10 strokes a different badge from the Worksheet button - do those belong together? Question the design and the layout, ask why each thing is where it is. Concise is good, not too busy. One idea of his: the 10 strokes label folds into the Show one stroke button, and pressing that is what reveals the ten numbered buttons. Requested 2026-09-03 by John."
+    "version": "0.378.0",
+    "releasedAt": "2026-09-04T02:49:48Z",
+    "summary": "A worksheet row carries the readings; it has room for more of what is known about that character. Decide what earns the space. Requested 2026-09-03 by John."
   }
 ]

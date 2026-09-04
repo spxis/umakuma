@@ -1,9 +1,12 @@
 import { Fragment } from "react";
 
+import type { KanjiSheetFacts } from "@/lib/kanjiSheetFacts";
+
 import { noTranslateClass } from "@/app/shared/japaneseText";
 
 import { DEFAULT_SHEET_SIZE, PRACTICE_SHEET_COPY, SHEET_SIZES, type SheetSize } from "./practiceCopy";
 import { Cell, StrokeStepGlyph, TraceGlyph } from "./sheetCells";
+import { sheetFactLabels } from "./sheetFacts";
 
 /**
  * Squares left for strokes, once the model has taken the first column.
@@ -29,6 +32,8 @@ export type TraceEntry = {
   strokes: string[];
   strokeCount: number;
   viewBox: string;
+  /** Grade, JLPT and WaniKani, where each is known. */
+  facts?: KanjiSheetFacts;
 };
 
 /**
@@ -157,6 +162,22 @@ export default function TracingSheet({
               {entry.kanji}
             </span>
             <span className="font-black text-foreground/85 print:text-neutral-700">{entry.meaning ?? ""}</span>
+            {/*
+              * What else is known, in the space the line already had. A student
+              * looking at a sheet wants to know where the character sits - the
+              * school year it is taught in, the test that asks for it, the
+              * WaniKani level that teaches it - and the row was mostly white
+              * paper after the meaning. Only what is known is printed, so a
+              * character none of the three has stays a short line.
+              */}
+            {sheetFactLabels(entry.facts).map((label) => (
+              <span
+                key={label}
+                className="shrink-0 rounded-full border border-line px-1.5 text-[10px] font-bold text-foreground/70 print:border-neutral-300 print:text-neutral-500"
+              >
+                {label}
+              </span>
+            ))}
             {showReadings && (entry.on.length > 0 || entry.kun.length > 0) ? (
               <span
                 lang="ja"

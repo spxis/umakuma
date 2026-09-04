@@ -3,6 +3,7 @@ import { getSchoolGradeIndex } from "@/lib/schoolGrades";
 import "server-only";
 
 import { accountUrlKeyWhere } from "./accountLookup";
+import { kanjiSheetFacts, type KanjiSheetFacts } from "./kanjiSheetFacts";
 import { prisma } from "./prisma";
 import { canViewList, listKanji } from "./studyListRules";
 import { findListBySlug } from "./studyLists";
@@ -33,6 +34,14 @@ export type PracticeEntry = {
   strokes: string[];
   strokeCount: number;
   viewBox: string;
+  /**
+   * What else is known about the character, for the line above its squares.
+   *
+   * Filled in once for the page rather than per source: every source builds
+   * its own candidates, and three of them would have had to learn the same
+   * three lookups.
+   */
+  facts?: KanjiSheetFacts;
 };
 
 type Candidate = {
@@ -258,13 +267,12 @@ async function savedListEntries(
  * learner's own ladders and live in the database; a picked sheet is whatever
  * they chose by hand.
  */
-export async function practiceEntriesFor(
+async function buildPracticeSheet(
   source: PracticeSource,
   level: number,
   page: number,
   pageSize: number,
-  /** Who is asking, and which list or characters they asked for. */
-  request: PracticeRequest = {},
+  request: PracticeRequest,
 ): Promise<PracticeSheet> {
   const accountId = request.accountId ?? null;
 
@@ -378,4 +386,25 @@ export async function practiceLevelCounts(source: PracticeSource): Promise<Recor
 
   // The tagged lists have no levels to count.
   return {};
+}
+
+/**
+ * A page of characters to practise, with what else is known about each.
+ *
+ * The facts are attached here rather than in each source: there are six ways
+ * to build a sheet - a grade, a WaniKani level, a JLPT level, a saved list, a
+ * tag, a hand-picked set - and every one of them would otherwise have had to
+ * learn the same three lookups and remember to do them.
+ */
+export async function practiceEntriesFor(
+  source: PracticeSource,
+  level: number,
+  page: number,
+  pageSize: number,
+  /** Who is asking, and which list or characters they asked for. */
+  request: PracticeRequest = {},
+): Promise<PracticeSheet> {
+  const sheet = await buildPracticeSheet(source, level, page, pageSize, request);
+  const facts = await kanjiSheetFacts(sheet.entries.map((entry) => entry.kanji));
+  return { ...sheet, entries: sheet.entries.map((entry) => ({ ...entry, facts: facts.get(entry.kanji) })) };
 }

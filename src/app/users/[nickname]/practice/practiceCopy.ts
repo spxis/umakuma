@@ -159,6 +159,18 @@ export const SHEET_COLUMNS = 8;
  * on it. Squares divide the width, so a smaller square is also a shorter
  * row and more of them fit down the page.
  */
+/**
+ * The short facts on a worksheet row: "G3", "N1", "WK 17".
+ *
+ * Abbreviated because they sit in a line of small print beside the meaning,
+ * and a student reading a column of them wants to compare rather than read.
+ */
+export const SHEET_FACT_COPY = {
+  grade: (year: number) => `G${year}`,
+  jlpt: (level: number) => `N${level}`,
+  wanikani: (level: number) => `WK ${level}`,
+} as const;
+
 export const SHEET_SIZES = {
   large: { columns: 6, traceCells: 3, perPage: 17, rowsPerPage: 7 },
   medium: { columns: SHEET_COLUMNS, traceCells: TRACE_CELLS_PER_ROW, perPage: 22, rowsPerPage: 9 },
