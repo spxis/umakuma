@@ -1,0 +1,764 @@
+{
+  "updatedAt": "2026-09-04T06:16:50.503Z",
+  "standard": "Natural Earth admin-1 vector dataset",
+  "country": "NO",
+  "countryName": "Norway",
+  "divisionTypeName": "County",
+  "divisionTypePlural": "Counties",
+  "totalRegions": 21,
+  "regions": [
+    {
+      "code": "01",
+      "name": "Østfold",
+      "nameNative": "Østfold",
+      "type": "county",
+      "capital": "Oestfold fylke",
+      "largestCity": "Østfold",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Norway",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        492.08,
+        220.37
+      ],
+      "bbox": [
+        488.38,
+        216.14,
+        495.41,
+        225.54
+      ],
+      "neighbors": [
+        "02"
+      ]
+    },
+    {
+      "code": "02",
+      "name": "Akershus",
+      "nameNative": "Akershus",
+      "type": "county",
+      "capital": "Akershus fylke",
+      "largestCity": "Akershus",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Norway",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        491.98,
+        213.56
+      ],
+      "bbox": [
+        488.42,
+        207.53,
+        495.33,
+        219.11
+      ],
+      "neighbors": [
+        "01",
+        "03",
+        "04",
+        "05"
+      ]
+    },
+    {
+      "code": "03",
+      "name": "Oslo",
+      "nameNative": "Oslo",
+      "type": "county",
+      "capital": "Oslo fylke",
+      "largestCity": "Oslo",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Norway",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        489.06,
+        214.1
+      ],
+      "bbox": [
+        487.41,
+        212.18,
+        490.52,
+        215.75
+      ],
+      "neighbors": [
+        "02",
+        "05",
+        "06"
+      ]
+    },
+    {
+      "code": "04",
+      "name": "Hedmark",
+      "nameNative": "Hedmark",
+      "type": "county",
+      "capital": "Hedmark fylke",
+      "largestCity": "Hedmark",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Norway",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        493.94,
+        199.04
+      ],
+      "bbox": [
+        485.8,
+        185.8,
+        501.04,
+        215.32
+      ],
+      "neighbors": [
+        "02",
+        "05",
+        "16"
+      ]
+    },
+    {
+      "code": "05",
+      "name": "Oppland",
+      "nameNative": "Oppland",
+      "type": "county",
+      "capital": "Oppland fylke",
+      "largestCity": "Oppland",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Norway",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        483.71,
+        198.63
+      ],
+      "bbox": [
+        474.48,
+        188.39,
+        492.09,
+        212.21
+      ],
+      "neighbors": [
+        "02",
+        "03",
+        "04",
+        "06",
+        "14",
+        "15",
+        "16"
+      ]
+    },
+    {
+      "code": "06",
+      "name": "Buskerud",
+      "nameNative": "Buskerud",
+      "type": "county",
+      "capital": "Buskerud fylke",
+      "largestCity": "Buskerud",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Norway",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        481.39,
+        209.9
+      ],
+      "bbox": [
+        472.85,
+        201.28,
+        489.04,
+        219.3
+      ],
+      "neighbors": [
+        "03",
+        "05",
+        "07",
+        "08",
+        "12",
+        "14"
+      ]
+    },
+    {
+      "code": "07",
+      "name": "Vestfold",
+      "nameNative": "Vestfold",
+      "type": "county",
+      "capital": "Vestfold fylke",
+      "largestCity": "Vestfold",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Norway",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        485.81,
+        220.41
+      ],
+      "bbox": [
+        483.93,
+        216.74,
+        487.88,
+        224.26
+      ],
+      "neighbors": [
+        "06",
+        "08"
+      ]
+    },
+    {
+      "code": "08",
+      "name": "Telemark",
+      "nameNative": "Telemark",
+      "type": "county",
+      "capital": "Telemark fylke",
+      "largestCity": "Telemark",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Norway",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        477.72,
+        217.67
+      ],
+      "bbox": [
+        470.53,
+        210.67,
+        484.5,
+        225.78
+      ],
+      "neighbors": [
+        "06",
+        "07",
+        "09",
+        "11",
+        "12"
+      ]
+    },
+    {
+      "code": "09",
+      "name": "Aust-Agder",
+      "nameNative": "Aust-Agder",
+      "type": "county",
+      "capital": "Aust-Agder fylke",
+      "largestCity": "Aust-Agder",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Norway",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        474.15,
+        223.98
+      ],
+      "bbox": [
+        468.44,
+        215.34,
+        481.51,
+        231.66
+      ],
+      "neighbors": [
+        "08",
+        "10",
+        "11"
+      ]
+    },
+    {
+      "code": "10",
+      "name": "Vest-Agder",
+      "nameNative": "Vest-Agder",
+      "type": "county",
+      "capital": "Vest-Agder fylke",
+      "largestCity": "Vest-Agder",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Norway",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        469.54,
+        227.57
+      ],
+      "bbox": [
+        464.93,
+        220.1,
+        474.79,
+        232.72
+      ],
+      "neighbors": [
+        "09",
+        "11"
+      ]
+    },
+    {
+      "code": "11",
+      "name": "Rogaland",
+      "nameNative": "Rogaland",
+      "type": "county",
+      "capital": "Rogaland fylke",
+      "largestCity": "Rogaland",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Norway",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        465.11,
+        220.65
+      ],
+      "bbox": [
+        459.69,
+        213.17,
+        471.19,
+        229.33
+      ],
+      "neighbors": [
+        "08",
+        "09",
+        "10",
+        "12"
+      ]
+    },
+    {
+      "code": "12",
+      "name": "Hordaland",
+      "nameNative": "Hordaland",
+      "type": "county",
+      "capital": "Hordaland fylke",
+      "largestCity": "Hordaland",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Norway",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        467.23,
+        208.06
+      ],
+      "bbox": [
+        459.91,
+        200.79,
+        474.39,
+        216.08
+      ],
+      "neighbors": [
+        "06",
+        "08",
+        "11",
+        "14"
+      ]
+    },
+    {
+      "code": "14",
+      "name": "Sogn og Fjordane",
+      "nameNative": "Sogn og Fjordane",
+      "type": "county",
+      "capital": "Sogn og Fjordane fyl",
+      "largestCity": "Sogn og Fjordane",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Norway",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        470.04,
+        197.15
+      ],
+      "bbox": [
+        459.95,
+        188.11,
+        478.56,
+        205.1
+      ],
+      "neighbors": [
+        "05",
+        "06",
+        "12",
+        "15"
+      ]
+    },
+    {
+      "code": "15",
+      "name": "Møre og Romsdal",
+      "nameNative": "Møre og Romsdal",
+      "type": "county",
+      "capital": "Moere og Romsdal fylk",
+      "largestCity": "Møre og Romsdal",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Norway",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        476.81,
+        185.73
+      ],
+      "bbox": [
+        465.29,
+        176.96,
+        486.16,
+        191.67
+      ],
+      "neighbors": [
+        "05",
+        "14",
+        "16"
+      ]
+    },
+    {
+      "code": "16",
+      "name": "Sør-Trøndelag",
+      "nameNative": "Sør-Trøndelag",
+      "type": "county",
+      "capital": "Soer-Troendelag fylke",
+      "largestCity": "Sør-Trøndelag",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Norway",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        490.16,
+        181.53
+      ],
+      "bbox": [
+        480.57,
+        168.14,
+        498.48,
+        190.18
+      ],
+      "neighbors": [
+        "04",
+        "05",
+        "15",
+        "17"
+      ]
+    },
+    {
+      "code": "17",
+      "name": "Nord-Trøndelag",
+      "nameNative": "Nord-Trøndelag",
+      "type": "county",
+      "capital": "Nord-Troendelag fylke",
+      "largestCity": "Nord-Trøndelag",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Norway",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        499.31,
+        170.17
+      ],
+      "bbox": [
+        489.32,
+        161.38,
+        508.58,
+        181.17
+      ],
+      "neighbors": [
+        "16",
+        "18"
+      ]
+    },
+    {
+      "code": "18",
+      "name": "Nordland",
+      "nameNative": "Nordland",
+      "type": "county",
+      "capital": "Nordland fylke",
+      "largestCity": "Nordland",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Norway",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        509.39,
+        142.94
+      ],
+      "bbox": [
+        431.81,
+        84.7,
+        523.68,
+        163.33
+      ],
+      "neighbors": [
+        "17",
+        "19"
+      ]
+    },
+    {
+      "code": "19",
+      "name": "Troms",
+      "nameNative": "Troms",
+      "type": "county",
+      "capital": "Troms fylke",
+      "largestCity": "Troms",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Norway",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        528.21,
+        118.3
+      ],
+      "bbox": [
+        513.89,
+        107.83,
+        539.86,
+        127.71
+      ],
+      "neighbors": [
+        "18",
+        "20"
+      ]
+    },
+    {
+      "code": "20",
+      "name": "Finnmark",
+      "nameNative": "Finnmark",
+      "type": "county",
+      "capital": "Finnmark fylke",
+      "largestCity": "Finnmark",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Norway",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        549.64,
+        108.68
+      ],
+      "bbox": [
+        533.18,
+        95.44,
+        568.19,
+        123.64
+      ],
+      "neighbors": [
+        "19"
+      ]
+    },
+    {
+      "code": "21",
+      "name": "Svalbard",
+      "nameNative": "Svalbard",
+      "type": "territory",
+      "capital": "Svalbard",
+      "largestCity": "Svalbard",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Norway",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        518.09,
+        20.4
+      ],
+      "bbox": [
+        502.52,
+        0,
+        543.57,
+        66.26
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "X01~",
+      "name": "Bouvet Island",
+      "nameNative": "Bouvet Island",
+      "type": "county",
+      "capital": "Bouvet Island",
+      "largestCity": "Bouvet Island",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Norway",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        442.15,
+        1399.51
+      ],
+      "bbox": [
+        441.74,
+        1399.1,
+        442.56,
+        1400
+      ],
+      "neighbors": []
+    }
+  ]
+}

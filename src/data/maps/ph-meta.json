@@ -1,0 +1,2861 @@
+{
+  "updatedAt": "2026-09-04T06:16:49.367Z",
+  "standard": "Natural Earth admin-1 vector dataset",
+  "country": "PH",
+  "countryName": "Philippines",
+  "divisionTypeName": "Province",
+  "divisionTypePlural": "Provinces",
+  "totalRegions": 80,
+  "regions": [
+    {
+      "code": "ABR",
+      "name": "Abra",
+      "nameNative": "Abra",
+      "type": "province",
+      "capital": "Abra",
+      "largestCity": "Abra",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Cordillera Administrative Region (CAR)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        421,
+        301.04
+      ],
+      "bbox": [
+        393.43,
+        268.09,
+        447.12,
+        337.01
+      ],
+      "neighbors": [
+        "APA",
+        "ILN",
+        "ILS",
+        "KAL",
+        "MOU"
+      ]
+    },
+    {
+      "code": "AGN",
+      "name": "Agusan del Norte",
+      "nameNative": "Agusan del Norte",
+      "type": "province",
+      "capital": "Agusan del Norte",
+      "largestCity": "Agusan del Norte",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Dinagat Islands (Region XIII)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        814.04,
+        1027.76
+      ],
+      "bbox": [
+        786.93,
+        989.93,
+        834.21,
+        1064.69
+      ],
+      "neighbors": [
+        "AGS",
+        "BUK",
+        "MSR",
+        "SUN",
+        "SUR"
+      ]
+    },
+    {
+      "code": "AGS",
+      "name": "Agusan del Sur",
+      "nameNative": "Agusan del Sur",
+      "type": "province",
+      "capital": "Agusan del Sur",
+      "largestCity": "Agusan del Sur",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Dinagat Islands (Region XIII)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        833.99,
+        1081.69
+      ],
+      "bbox": [
+        795.86,
+        1011.17,
+        879.48,
+        1115
+      ],
+      "neighbors": [
+        "AGN",
+        "BUK",
+        "COM",
+        "DAO",
+        "DAV",
+        "MSR",
+        "SUR"
+      ]
+    },
+    {
+      "code": "AKL",
+      "name": "Aklan",
+      "nameNative": "Aklan",
+      "type": "province",
+      "capital": "Aklan",
+      "largestCity": "Aklan",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Western Visayas (Region VI)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        539.96,
+        809.93
+      ],
+      "bbox": [
+        505.6,
+        781.42,
+        567.11,
+        833.57
+      ],
+      "neighbors": [
+        "ANT",
+        "CAP"
+      ]
+    },
+    {
+      "code": "ALB",
+      "name": "Albay",
+      "nameNative": "Albay",
+      "type": "province",
+      "capital": "Albay",
+      "largestCity": "Albay",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Bicol (Region V)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        650.93,
+        672.06
+      ],
+      "bbox": [
+        623.7,
+        645.26,
+        700.76,
+        692.57
+      ],
+      "neighbors": [
+        "CAS",
+        "SOR"
+      ]
+    },
+    {
+      "code": "ANT",
+      "name": "Antique",
+      "nameNative": "Antique",
+      "type": "province",
+      "capital": "Antique",
+      "largestCity": "Antique",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Western Visayas (Region VI)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        524.51,
+        850.97
+      ],
+      "bbox": [
+        464.18,
+        765.99,
+        545.38,
+        909.3
+      ],
+      "neighbors": [
+        "AKL",
+        "CAP",
+        "ILI"
+      ]
+    },
+    {
+      "code": "APA",
+      "name": "Apayao",
+      "nameNative": "Apayao",
+      "type": "province",
+      "capital": "Apayao",
+      "largestCity": "Apayao",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Cordillera Administrative Region (CAR)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        452.43,
+        256.32
+      ],
+      "bbox": [
+        429.66,
+        219.74,
+        476.31,
+        292.42
+      ],
+      "neighbors": [
+        "ABR",
+        "CAG",
+        "ILN",
+        "KAL"
+      ]
+    },
+    {
+      "code": "AUR",
+      "name": "Aurora",
+      "nameNative": "Aurora",
+      "type": "province",
+      "capital": "Aurora",
+      "largestCity": "Aurora",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central Luzon (Region III)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        492.05,
+        442.81
+      ],
+      "bbox": [
+        457.8,
+        392.19,
+        537.71,
+        518.16
+      ],
+      "neighbors": [
+        "BUL",
+        "ISA",
+        "NUE",
+        "NUV",
+        "QUE",
+        "QUI"
+      ]
+    },
+    {
+      "code": "BAN",
+      "name": "Bataan",
+      "nameNative": "Bataan",
+      "type": "province",
+      "capital": "Bataan",
+      "largestCity": "Bataan",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central Luzon (Region III)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        389.55,
+        548.84
+      ],
+      "bbox": [
+        373.18,
+        525.21,
+        402.32,
+        569.49
+      ],
+      "neighbors": [
+        "PAM",
+        "ZMB"
+      ]
+    },
+    {
+      "code": "BAS",
+      "name": "Basilan",
+      "nameNative": "Basilan",
+      "type": "province",
+      "capital": "Basilan",
+      "largestCity": "Basilan",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Autonomous Region in Muslim Mindanao (ARMM)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        521.71,
+        1237.99
+      ],
+      "bbox": [
+        482.5,
+        1223.07,
+        546.08,
+        1251.63
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "BEN",
+      "name": "Benguet",
+      "nameNative": "Benguet",
+      "type": "province",
+      "capital": "Benguet",
+      "largestCity": "Benguet",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Cordillera Administrative Region (CAR)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        412.39,
+        389.96
+      ],
+      "bbox": [
+        393.13,
+        356.99,
+        428.57,
+        419.38
+      ],
+      "neighbors": [
+        "IFU",
+        "ILS",
+        "LUN",
+        "MOU",
+        "NUV",
+        "PAN"
+      ]
+    },
+    {
+      "code": "BIL",
+      "name": "Biliran",
+      "nameNative": "Biliran",
+      "type": "province",
+      "capital": "Biliran",
+      "largestCity": "Biliran",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Eastern Visayas (Region VIII)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        725.62,
+        809.98
+      ],
+      "bbox": [
+        713.46,
+        800.84,
+        736.57,
+        819.65
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "BOH",
+      "name": "Bohol",
+      "nameNative": "Bohol",
+      "type": "province",
+      "capital": "Bohol",
+      "largestCity": "Bohol",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central Visayas (Region VII)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        703.56,
+        957.88
+      ],
+      "bbox": [
+        662.55,
+        931.45,
+        737.74,
+        983.79
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "BTG",
+      "name": "Batangas",
+      "nameNative": "Batangas",
+      "type": "province",
+      "capital": "Batangas",
+      "largestCity": "Batangas",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "CALABARZON (Region IV-A)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        438.07,
+        614.03
+      ],
+      "bbox": [
+        400.13,
+        586.76,
+        473.49,
+        645.52
+      ],
+      "neighbors": [
+        "CAV",
+        "LAG",
+        "QUE"
+      ]
+    },
+    {
+      "code": "BTN",
+      "name": "Batanes",
+      "nameNative": "Batanes",
+      "type": "province",
+      "capital": "Batanes",
+      "largestCity": "Batanes",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Cagayan Valley (Region II)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        509.07,
+        47.73
+      ],
+      "bbox": [
+        500.77,
+        0,
+        520.37,
+        72.19
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "BUK",
+      "name": "Bukidnon",
+      "nameNative": "Bukidnon",
+      "type": "province",
+      "capital": "Bukidnon",
+      "largestCity": "Bukidnon",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northern Mindanao (Region X)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        771.51,
+        1111.97
+      ],
+      "bbox": [
+        733.34,
+        1064.32,
+        808.14,
+        1167.01
+      ],
+      "neighbors": [
+        "AGN",
+        "AGS",
+        "DAV",
+        "LAS",
+        "MSR",
+        "NCO"
+      ]
+    },
+    {
+      "code": "BUL",
+      "name": "Bulacan",
+      "nameNative": "Bulacan",
+      "type": "province",
+      "capital": "Bulacan",
+      "largestCity": "Bulacan",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central Luzon (Region III)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        439.8,
+        523.21
+      ],
+      "bbox": [
+        407.88,
+        498.41,
+        463.69,
+        547.76
+      ],
+      "neighbors": [
+        "AUR",
+        "NUE",
+        "PAM",
+        "QUE",
+        "RIZ"
+      ]
+    },
+    {
+      "code": "CAG",
+      "name": "Cagayan",
+      "nameNative": "Cagayan",
+      "type": "province",
+      "capital": "Cagayan",
+      "largestCity": "Cagayan",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Cagayan Valley (Region II)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        498.02,
+        257.03
+      ],
+      "bbox": [
+        433.63,
+        131.39,
+        544,
+        306.49
+      ],
+      "neighbors": [
+        "APA",
+        "ILN",
+        "ISA",
+        "KAL"
+      ]
+    },
+    {
+      "code": "CAM",
+      "name": "Camiguin",
+      "nameNative": "Camiguin",
+      "type": "province",
+      "capital": "Camiguin",
+      "largestCity": "Camiguin",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northern Mindanao (Region X)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        746.64,
+        1015.84
+      ],
+      "bbox": [
+        739.18,
+        1008.79,
+        753.65,
+        1023.46
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "CAN",
+      "name": "Camarines Norte",
+      "nameNative": "Camarines Norte",
+      "type": "province",
+      "capital": "Camarines Norte",
+      "largestCity": "Camarines Norte",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Bicol (Region V)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        577.78,
+        593.18
+      ],
+      "bbox": [
+        543.29,
+        575.82,
+        607.62,
+        620.67
+      ],
+      "neighbors": [
+        "CAS",
+        "QUE"
+      ]
+    },
+    {
+      "code": "CAP",
+      "name": "Capiz",
+      "nameNative": "Capiz",
+      "type": "province",
+      "capital": "Capiz",
+      "largestCity": "Capiz",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Western Visayas (Region VI)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        571.29,
+        829.73
+      ],
+      "bbox": [
+        532.76,
+        808.56,
+        608.57,
+        847.5
+      ],
+      "neighbors": [
+        "AKL",
+        "ANT",
+        "ILI"
+      ]
+    },
+    {
+      "code": "CAS",
+      "name": "Camarines Sur",
+      "nameNative": "Camarines Sur",
+      "type": "province",
+      "capital": "Camarines Sur",
+      "largestCity": "Camarines Sur",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Bicol (Region V)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        622.26,
+        630.92
+      ],
+      "bbox": [
+        563.82,
+        596.94,
+        680.76,
+        669.67
+      ],
+      "neighbors": [
+        "ALB",
+        "CAN",
+        "QUE"
+      ]
+    },
+    {
+      "code": "CAT",
+      "name": "Catanduanes",
+      "nameNative": "Catanduanes",
+      "type": "province",
+      "capital": "Catanduanes",
+      "largestCity": "Catanduanes",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Bicol (Region V)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        702.04,
+        622.96
+      ],
+      "bbox": [
+        685.22,
+        597.02,
+        717.52,
+        645.48
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "CAV",
+      "name": "Cavite",
+      "nameNative": "Cavite",
+      "type": "province",
+      "capital": "Cavite",
+      "largestCity": "Cavite",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "CALABARZON (Region IV-A)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        424.87,
+        583.35
+      ],
+      "bbox": [
+        402.07,
+        563.4,
+        441.52,
+        599.02
+      ],
+      "neighbors": [
+        "BTG",
+        "LAG"
+      ]
+    },
+    {
+      "code": "CEB",
+      "name": "Cebu",
+      "nameNative": "Cebu",
+      "type": "province",
+      "capital": "Cebu",
+      "largestCity": "Cebu",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central Visayas (Region VII)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        661.9,
+        917.41
+      ],
+      "bbox": [
+        628.01,
+        835.54,
+        690.84,
+        996.12
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "COM",
+      "name": "Davao de Oro",
+      "nameNative": "Compostela Valley",
+      "type": "province",
+      "capital": "Davao de Oro",
+      "largestCity": "Davao de Oro",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Davao (Region XI)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        855.98,
+        1150.13
+      ],
+      "bbox": [
+        827.5,
+        1114.61,
+        880.28,
+        1195.57
+      ],
+      "neighbors": [
+        "AGS",
+        "DAO",
+        "DAV"
+      ]
+    },
+    {
+      "code": "DAO",
+      "name": "Davao Oriental",
+      "nameNative": "Davao Oriental",
+      "type": "province",
+      "capital": "Davao Oriental",
+      "largestCity": "Davao Oriental",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Davao (Region XI)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        881.37,
+        1177.43
+      ],
+      "bbox": [
+        851.77,
+        1114.44,
+        907.72,
+        1260.55
+      ],
+      "neighbors": [
+        "AGS",
+        "COM",
+        "SUR"
+      ]
+    },
+    {
+      "code": "DAS",
+      "name": "Davao del Sur",
+      "nameNative": "Davao del Sur",
+      "type": "province",
+      "capital": "Davao del Sur",
+      "largestCity": "Davao del Sur",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Davao (Region XI)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        806.97,
+        1251.41
+      ],
+      "bbox": [
+        783.23,
+        1198.56,
+        831.75,
+        1339.1
+      ],
+      "neighbors": [
+        "NCO",
+        "SAR",
+        "SCO",
+        "SUK"
+      ]
+    },
+    {
+      "code": "DAV",
+      "name": "Davao del Norte",
+      "nameNative": "Davao del Norte",
+      "type": "province",
+      "capital": "Davao",
+      "largestCity": "Davao del Norte",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Davao (Region XI)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        824.69,
+        1149.75
+      ],
+      "bbox": [
+        795.16,
+        1114.87,
+        850.35,
+        1208.77
+      ],
+      "neighbors": [
+        "AGS",
+        "BUK",
+        "COM"
+      ]
+    },
+    {
+      "code": "EAS",
+      "name": "Eastern Samar",
+      "nameNative": "Eastern Samar",
+      "type": "province",
+      "capital": "Eastern Samar",
+      "largestCity": "Eastern Samar",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Eastern Visayas (Region VIII)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        800.43,
+        799.75
+      ],
+      "bbox": [
+        776.18,
+        742.19,
+        838.17,
+        884.49
+      ],
+      "neighbors": [
+        "NSA",
+        "WSA"
+      ]
+    },
+    {
+      "code": "GUI",
+      "name": "Guimaras",
+      "nameNative": "Guimaras",
+      "type": "province",
+      "capital": "Guimaras",
+      "largestCity": "Guimaras",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Western Visayas (Region VI)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        570.16,
+        896.34
+      ],
+      "bbox": [
+        558.11,
+        881.02,
+        579.44,
+        910.18
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "IFU",
+      "name": "Ifugao",
+      "nameNative": "Ifugao",
+      "type": "province",
+      "capital": "Ifugao",
+      "largestCity": "Ifugao",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Cordillera Administrative Region (CAR)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        453.45,
+        362.92
+      ],
+      "bbox": [
+        424.23,
+        342.89,
+        483.32,
+        384.58
+      ],
+      "neighbors": [
+        "BEN",
+        "ISA",
+        "MOU",
+        "NUV"
+      ]
+    },
+    {
+      "code": "ILI",
+      "name": "Iloilo",
+      "nameNative": "Iloilo",
+      "type": "province",
+      "capital": "Iloilo",
+      "largestCity": "Iloilo",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Western Visayas (Region VI)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        567.41,
+        860.47
+      ],
+      "bbox": [
+        518.27,
+        809.78,
+        615.69,
+        906.69
+      ],
+      "neighbors": [
+        "ANT",
+        "CAP"
+      ]
+    },
+    {
+      "code": "ILN",
+      "name": "Ilocos Norte",
+      "nameNative": "Ilocos Norte",
+      "type": "province",
+      "capital": "Ilocos Norte",
+      "largestCity": "Ilocos Norte",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Ilocos (Region I)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        414.9,
+        248.12
+      ],
+      "bbox": [
+        390.32,
+        210.3,
+        436.77,
+        290.28
+      ],
+      "neighbors": [
+        "ABR",
+        "APA",
+        "CAG",
+        "ILS"
+      ]
+    },
+    {
+      "code": "ILS",
+      "name": "Ilocos Sur",
+      "nameNative": "Ilocos Sur",
+      "type": "province",
+      "capital": "Ilocos Sur",
+      "largestCity": "Ilocos Sur",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Ilocos (Region I)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        399.95,
+        330.66
+      ],
+      "bbox": [
+        382.65,
+        273.7,
+        426.26,
+        379.72
+      ],
+      "neighbors": [
+        "ABR",
+        "BEN",
+        "ILN",
+        "LUN",
+        "MOU"
+      ]
+    },
+    {
+      "code": "ISA",
+      "name": "Isabela",
+      "nameNative": "Isabela",
+      "type": "province",
+      "capital": "Isabela",
+      "largestCity": "Isabela",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Cagayan Valley (Region II)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        516.03,
+        351.29
+      ],
+      "bbox": [
+        468.08,
+        304.43,
+        560.78,
+        401.96
+      ],
+      "neighbors": [
+        "AUR",
+        "CAG",
+        "IFU",
+        "KAL",
+        "MOU",
+        "NUV",
+        "QUI"
+      ]
+    },
+    {
+      "code": "KAL",
+      "name": "Kalinga",
+      "nameNative": "Kalinga",
+      "type": "province",
+      "capital": "Kalinga",
+      "largestCity": "Kalinga",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Cordillera Administrative Region (CAR)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        460.13,
+        313.28
+      ],
+      "bbox": [
+        429.62,
+        289.48,
+        491.01,
+        336.15
+      ],
+      "neighbors": [
+        "ABR",
+        "APA",
+        "CAG",
+        "ISA",
+        "MOU"
+      ]
+    },
+    {
+      "code": "LAG",
+      "name": "Laguna",
+      "nameNative": "Laguna",
+      "type": "province",
+      "capital": "Laguna",
+      "largestCity": "Laguna",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "CALABARZON (Region IV-A)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        462.42,
+        582.87
+      ],
+      "bbox": [
+        436.54,
+        557.06,
+        484.83,
+        608.89
+      ],
+      "neighbors": [
+        "BTG",
+        "CAV",
+        "QUE",
+        "RIZ"
+      ]
+    },
+    {
+      "code": "LAN",
+      "name": "Lanao del Norte",
+      "nameNative": "Lanao del Norte",
+      "type": "province",
+      "capital": "Lanao del Norte",
+      "largestCity": "Lanao del Norte",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northern Mindanao (Region X)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        683.1,
+        1118.56
+      ],
+      "bbox": [
+        653.82,
+        1097.09,
+        711.33,
+        1140.94
+      ],
+      "neighbors": [
+        "LAS",
+        "ZAS"
+      ]
+    },
+    {
+      "code": "LAS",
+      "name": "Lanao del Sur",
+      "nameNative": "Lanao del Sur",
+      "type": "province",
+      "capital": "Lanao del Sur",
+      "largestCity": "Lanao del Sur",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Autonomous Region in Muslim Mindanao (ARMM)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        715.56,
+        1131.02
+      ],
+      "bbox": [
+        674.7,
+        1096.17,
+        754.61,
+        1163.85
+      ],
+      "neighbors": [
+        "BUK",
+        "LAN",
+        "MAG",
+        "NCO"
+      ]
+    },
+    {
+      "code": "LEY",
+      "name": "Leyte",
+      "nameNative": "Leyte",
+      "type": "province",
+      "capital": "Leyte",
+      "largestCity": "Leyte",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Eastern Visayas (Region VIII)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        748.19,
+        863.03
+      ],
+      "bbox": [
+        708.77,
+        812.68,
+        782.68,
+        929.13
+      ],
+      "neighbors": [
+        "SLE"
+      ]
+    },
+    {
+      "code": "LUN",
+      "name": "La Union",
+      "nameNative": "La Union",
+      "type": "province",
+      "capital": "La Union",
+      "largestCity": "La Union",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Ilocos (Region I)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        389.2,
+        385.53
+      ],
+      "bbox": [
+        377.26,
+        356.93,
+        403.28,
+        417.85
+      ],
+      "neighbors": [
+        "BEN",
+        "ILS",
+        "PAN"
+      ]
+    },
+    {
+      "code": "MAD",
+      "name": "Marinduque",
+      "nameNative": "Marinduque",
+      "type": "province",
+      "capital": "Marinduque",
+      "largestCity": "Marinduque",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "MIMAROPA (Region IV-B)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        514.57,
+        657.48
+      ],
+      "bbox": [
+        502.35,
+        642.41,
+        528.43,
+        673.61
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "MAG",
+      "name": "Maguindanao",
+      "nameNative": "Maguindanao",
+      "type": "province",
+      "capital": "Maguindanao",
+      "largestCity": "Maguindanao",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Autonomous Region in Muslim Mindanao (ARMM)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        718.76,
+        1197.63
+      ],
+      "bbox": [
+        683.74,
+        1143.48,
+        763.57,
+        1231.25
+      ],
+      "neighbors": [
+        "LAS",
+        "NCO",
+        "SUK"
+      ]
+    },
+    {
+      "code": "MAS",
+      "name": "Masbate",
+      "nameNative": "Masbate",
+      "type": "province",
+      "capital": "Masbate",
+      "largestCity": "Masbate",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Bicol (Region V)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        646.95,
+        750.53
+      ],
+      "bbox": [
+        595.97,
+        677.54,
+        690.37,
+        798.52
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "MDC",
+      "name": "Occidental Mindoro",
+      "nameNative": "Mindoro Occidental",
+      "type": "province",
+      "capital": "Occidental Mindoro",
+      "largestCity": "Occidental Mindoro",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "MIMAROPA (Region IV-B)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        426.34,
+        693.61
+      ],
+      "bbox": [
+        359.19,
+        616.47,
+        455.42,
+        762.24
+      ],
+      "neighbors": [
+        "MDR"
+      ]
+    },
+    {
+      "code": "MDR",
+      "name": "Oriental Mindoro",
+      "nameNative": "Mindoro Oriental",
+      "type": "province",
+      "capital": "Oriental Mindoro",
+      "largestCity": "Oriental Mindoro",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "MIMAROPA (Region IV-B)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        456.05,
+        692.69
+      ],
+      "bbox": [
+        416.71,
+        645.47,
+        480.74,
+        757.01
+      ],
+      "neighbors": [
+        "MDC"
+      ]
+    },
+    {
+      "code": "MNL",
+      "name": "Mandaluyong",
+      "nameNative": "Mandaluyong City",
+      "type": "province",
+      "capital": "Mandaluyong",
+      "largestCity": "Mandaluyong",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "National Capital Region",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        439.78,
+        556.45
+      ],
+      "bbox": [
+        437.64,
+        555.01,
+        441.44,
+        557.72
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "MOU",
+      "name": "Mountain",
+      "nameNative": "Mountain Province",
+      "type": "province",
+      "capital": "Mountain",
+      "largestCity": "Mountain",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Cordillera Administrative Region (CAR)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        447.2,
+        342.13
+      ],
+      "bbox": [
+        417.97,
+        325.14,
+        482.89,
+        363.65
+      ],
+      "neighbors": [
+        "ABR",
+        "BEN",
+        "IFU",
+        "ILS",
+        "ISA",
+        "KAL"
+      ]
+    },
+    {
+      "code": "MSC",
+      "name": "Misamis Occidental",
+      "nameNative": "Misamis Occidental",
+      "type": "province",
+      "capital": "Misamis Occidental",
+      "largestCity": "Misamis Occidental",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northern Mindanao (Region X)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        660.52,
+        1088.06
+      ],
+      "bbox": [
+        648.03,
+        1058.65,
+        676.45,
+        1115.01
+      ],
+      "neighbors": [
+        "ZAN",
+        "ZAS"
+      ]
+    },
+    {
+      "code": "MSR",
+      "name": "Misamis Oriental",
+      "nameNative": "Misamis Oriental",
+      "type": "province",
+      "capital": "Misamis Oriental",
+      "largestCity": "Misamis Oriental",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northern Mindanao (Region X)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        761.71,
+        1054.91
+      ],
+      "bbox": [
+        708.13,
+        1022.78,
+        797.15,
+        1087.86
+      ],
+      "neighbors": [
+        "AGN",
+        "AGS",
+        "BUK"
+      ]
+    },
+    {
+      "code": "NCO",
+      "name": "Cotabato",
+      "nameNative": "Cotabato",
+      "type": "province",
+      "capital": "North Cotabato",
+      "largestCity": "Cotabato",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "SOCCSKSARGEN (Region XII)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        759.44,
+        1181.82
+      ],
+      "bbox": [
+        714.05,
+        1141.65,
+        797.72,
+        1223.35
+      ],
+      "neighbors": [
+        "BUK",
+        "DAS",
+        "LAS",
+        "MAG",
+        "SUK"
+      ]
+    },
+    {
+      "code": "NEC",
+      "name": "Negros Occidental",
+      "nameNative": "Negros Occidental",
+      "type": "province",
+      "capital": "Negros Occidental",
+      "largestCity": "Negros Occidental",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Western Visayas (Region VI)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        601.27,
+        919.6
+      ],
+      "bbox": [
+        550.88,
+        860.95,
+        649.39,
+        993.67
+      ],
+      "neighbors": [
+        "NER"
+      ]
+    },
+    {
+      "code": "NER",
+      "name": "Negros Oriental",
+      "nameNative": "Negros Oriental",
+      "type": "province",
+      "capital": "Negros Oriental",
+      "largestCity": "Negros Oriental",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central Visayas (Region VII)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        605.67,
+        978.2
+      ],
+      "bbox": [
+        567.86,
+        907.84,
+        632.02,
+        1027.81
+      ],
+      "neighbors": [
+        "NEC"
+      ]
+    },
+    {
+      "code": "NSA",
+      "name": "Northern Samar",
+      "nameNative": "Northern Samar",
+      "type": "province",
+      "capital": "Northern Samar",
+      "largestCity": "Northern Samar",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Eastern Visayas (Region VIII)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        750.97,
+        739.6
+      ],
+      "bbox": [
+        694.97,
+        724.21,
+        796.13,
+        755.34
+      ],
+      "neighbors": [
+        "EAS",
+        "WSA"
+      ]
+    },
+    {
+      "code": "NUE",
+      "name": "Nueva Ecija",
+      "nameNative": "Nueva Ecija",
+      "type": "province",
+      "capital": "Nueva Ecija",
+      "largestCity": "Nueva Ecija",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central Luzon (Region III)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        437.78,
+        468.28
+      ],
+      "bbox": [
+        405.44,
+        423.78,
+        466,
+        506.39
+      ],
+      "neighbors": [
+        "AUR",
+        "BUL",
+        "NUV",
+        "PAM",
+        "PAN",
+        "TAR"
+      ]
+    },
+    {
+      "code": "NUV",
+      "name": "Nueva Vizcaya",
+      "nameNative": "Nueva Vizcaya",
+      "type": "province",
+      "capital": "Nueva Vizcaya",
+      "largestCity": "Nueva Vizcaya",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Cagayan Valley (Region II)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        448.33,
+        409.04
+      ],
+      "bbox": [
+        416.06,
+        370.54,
+        472.6,
+        454.44
+      ],
+      "neighbors": [
+        "AUR",
+        "BEN",
+        "IFU",
+        "ISA",
+        "NUE",
+        "PAN",
+        "QUI"
+      ]
+    },
+    {
+      "code": "PAM",
+      "name": "Pampanga",
+      "nameNative": "Pampanga",
+      "type": "province",
+      "capital": "Pampanga",
+      "largestCity": "Pampanga",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central Luzon (Region III)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        407.02,
+        515.35
+      ],
+      "bbox": [
+        383.11,
+        497.1,
+        430.89,
+        539.14
+      ],
+      "neighbors": [
+        "BAN",
+        "BUL",
+        "NUE",
+        "TAR",
+        "ZMB"
+      ]
+    },
+    {
+      "code": "PAN",
+      "name": "Pangasinan",
+      "nameNative": "Pangasinan",
+      "type": "province",
+      "capital": "Pangasinan",
+      "largestCity": "Pangasinan",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Ilocos (Region I)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        380.24,
+        435.44
+      ],
+      "bbox": [
+        334.22,
+        401.79,
+        429.95,
+        467.86
+      ],
+      "neighbors": [
+        "BEN",
+        "LUN",
+        "NUE",
+        "NUV",
+        "TAR",
+        "ZMB"
+      ]
+    },
+    {
+      "code": "PLW",
+      "name": "Palawan",
+      "nameNative": "Palawan",
+      "type": "province",
+      "capital": "Paragua",
+      "largestCity": "Palawan",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "MIMAROPA (Region IV-B)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        241.73,
+        950.09
+      ],
+      "bbox": [
+        92.28,
+        747.6,
+        455.61,
+        1202.41
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "QUE",
+      "name": "Quezon",
+      "nameNative": "Quezon",
+      "type": "province",
+      "capital": "Quezon",
+      "largestCity": "Quezon",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "CALABARZON (Region IV-A)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        515.87,
+        591.92
+      ],
+      "bbox": [
+        457.06,
+        502.91,
+        585.1,
+        675.9
+      ],
+      "neighbors": [
+        "AUR",
+        "BTG",
+        "BUL",
+        "CAN",
+        "CAS",
+        "LAG",
+        "RIZ"
+      ]
+    },
+    {
+      "code": "QUI",
+      "name": "Quirino",
+      "nameNative": "Quirino",
+      "type": "province",
+      "capital": "Quirino",
+      "largestCity": "Quirino",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Cagayan Valley (Region II)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        482.71,
+        410.07
+      ],
+      "bbox": [
+        459.6,
+        380.17,
+        520.83,
+        442.01
+      ],
+      "neighbors": [
+        "AUR",
+        "ISA",
+        "NUV"
+      ]
+    },
+    {
+      "code": "RIZ",
+      "name": "Rizal",
+      "nameNative": "Rizal",
+      "type": "province",
+      "capital": "Rizal",
+      "largestCity": "Rizal",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "CALABARZON (Region IV-A)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        457.99,
+        552.91
+      ],
+      "bbox": [
+        445.19,
+        529.9,
+        473.36,
+        580.92
+      ],
+      "neighbors": [
+        "BUL",
+        "LAG",
+        "QUE"
+      ]
+    },
+    {
+      "code": "ROM",
+      "name": "Romblon",
+      "nameNative": "Romblon",
+      "type": "province",
+      "capital": "Romblon",
+      "largestCity": "Romblon",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "MIMAROPA (Region IV-B)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        537.23,
+        739.66
+      ],
+      "bbox": [
+        491.39,
+        694.98,
+        574.87,
+        766.91
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "SAR",
+      "name": "Sarangani",
+      "nameNative": "Sarangani",
+      "type": "province",
+      "capital": "Sarangani",
+      "largestCity": "Sarangani",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "SOCCSKSARGEN (Region XII)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        785.57,
+        1283.76
+      ],
+      "bbox": [
+        718.25,
+        1248.27,
+        816.44,
+        1320.69
+      ],
+      "neighbors": [
+        "DAS",
+        "SCO",
+        "SUK"
+      ]
+    },
+    {
+      "code": "SCO",
+      "name": "South Cotabato",
+      "nameNative": "South Cotabato",
+      "type": "province",
+      "capital": "South Cotabato",
+      "largestCity": "South Cotabato",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "SOCCSKSARGEN (Region XII)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        755.65,
+        1259.64
+      ],
+      "bbox": [
+        707.95,
+        1231.09,
+        786.27,
+        1285.28
+      ],
+      "neighbors": [
+        "DAS",
+        "SAR",
+        "SUK"
+      ]
+    },
+    {
+      "code": "SIG",
+      "name": "Siquijor",
+      "nameNative": "Siquijor",
+      "type": "province",
+      "capital": "Siquijor",
+      "largestCity": "Siquijor",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central Visayas (Region VII)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        652.7,
+        1014.84
+      ],
+      "bbox": [
+        641.29,
+        1005.62,
+        662.4,
+        1022.26
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "SLE",
+      "name": "Southern Leyte",
+      "nameNative": "Southern Leyte",
+      "type": "province",
+      "capital": "Southern Leyte",
+      "largestCity": "Southern Leyte",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Eastern Visayas (Region VIII)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        773.77,
+        918.83
+      ],
+      "bbox": [
+        749.37,
+        891.63,
+        794.86,
+        951.59
+      ],
+      "neighbors": [
+        "LEY"
+      ]
+    },
+    {
+      "code": "SLU",
+      "name": "Sulu",
+      "nameNative": "Sulu",
+      "type": "province",
+      "capital": "Sulu",
+      "largestCity": "Sulu",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Autonomous Region in Muslim Mindanao (ARMM)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        441.04,
+        1288.77
+      ],
+      "bbox": [
+        389.98,
+        1253.52,
+        512.96,
+        1328.86
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "SOR",
+      "name": "Sorsogon",
+      "nameNative": "Sorsogon",
+      "type": "province",
+      "capital": "Sorsogon",
+      "largestCity": "Sorsogon",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Bicol (Region V)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        677.01,
+        702.09
+      ],
+      "bbox": [
+        641.77,
+        680.07,
+        699.1,
+        729.58
+      ],
+      "neighbors": [
+        "ALB"
+      ]
+    },
+    {
+      "code": "SUK",
+      "name": "Sultan Kudarat",
+      "nameNative": "Sultan Kudarat",
+      "type": "province",
+      "capital": "Sultan Kudarat",
+      "largestCity": "Sultan Kudarat",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "SOCCSKSARGEN (Region XII)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        728.13,
+        1238.61
+      ],
+      "bbox": [
+        689.57,
+        1212.29,
+        787.66,
+        1274.34
+      ],
+      "neighbors": [
+        "DAS",
+        "MAG",
+        "NCO",
+        "SAR",
+        "SCO"
+      ]
+    },
+    {
+      "code": "SUN",
+      "name": "Dinagat Islands",
+      "nameNative": "Surigao del Norte",
+      "type": "province",
+      "capital": "Dinagat Islands",
+      "largestCity": "Dinagat Islands",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Dinagat Islands (Region XIII)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        828.4,
+        961.14
+      ],
+      "bbox": [
+        802.73,
+        904.84,
+        868.37,
+        1002.64
+      ],
+      "neighbors": [
+        "AGN",
+        "SUR"
+      ]
+    },
+    {
+      "code": "SUR",
+      "name": "Surigao del Sur",
+      "nameNative": "Surigao del Sur",
+      "type": "province",
+      "capital": "Surigao del Sur",
+      "largestCity": "Surigao del Sur",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Dinagat Islands (Region XIII)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        863.49,
+        1047.55
+      ],
+      "bbox": [
+        830.77,
+        987.19,
+        894.17,
+        1122.57
+      ],
+      "neighbors": [
+        "AGN",
+        "AGS",
+        "DAO",
+        "SUN"
+      ]
+    },
+    {
+      "code": "TAR",
+      "name": "Tarlac",
+      "nameNative": "Tarlac",
+      "type": "province",
+      "capital": "Tarlac",
+      "largestCity": "Tarlac",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central Luzon (Region III)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        392.9,
+        479.8
+      ],
+      "bbox": [
+        365.56,
+        446.32,
+        417.86,
+        505.81
+      ],
+      "neighbors": [
+        "NUE",
+        "PAM",
+        "PAN",
+        "ZMB"
+      ]
+    },
+    {
+      "code": "TAW",
+      "name": "Tawi-Tawi",
+      "nameNative": "Tawi-Tawi",
+      "type": "province",
+      "capital": "Tawi-Tawi",
+      "largestCity": "Tawi-Tawi",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Autonomous Region in Muslim Mindanao (ARMM)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        344.84,
+        1360.57
+      ],
+      "bbox": [
+        300.39,
+        1341.15,
+        369.79,
+        1400
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "WSA",
+      "name": "Samar",
+      "nameNative": "Samar",
+      "type": "province",
+      "capital": "Western Samar",
+      "largestCity": "Samar",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Eastern Visayas (Region VIII)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        765.21,
+        788.68
+      ],
+      "bbox": [
+        696.31,
+        746.71,
+        797.11,
+        851.34
+      ],
+      "neighbors": [
+        "EAS",
+        "NSA"
+      ]
+    },
+    {
+      "code": "ZAN",
+      "name": "Zamboanga del Norte",
+      "nameNative": "Zamboanga del Norte",
+      "type": "province",
+      "capital": "Zamboanga del Norte",
+      "largestCity": "Zamboanga del Norte",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Zamboanga Peninsula (Region IX)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        582.68,
+        1114.47
+      ],
+      "bbox": [
+        509.69,
+        1053.93,
+        648.75,
+        1189.13
+      ],
+      "neighbors": [
+        "MSC",
+        "ZAS",
+        "ZSI"
+      ]
+    },
+    {
+      "code": "ZAS",
+      "name": "Zamboanga del Sur",
+      "nameNative": "Zamboanga del Sur",
+      "type": "province",
+      "capital": "Zamboanga del Sur",
+      "largestCity": "Zamboanga del Sur",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Zamboanga Peninsula (Region IX)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        629.35,
+        1126.18
+      ],
+      "bbox": [
+        594.76,
+        1096,
+        661.34,
+        1169.47
+      ],
+      "neighbors": [
+        "LAN",
+        "MSC",
+        "ZAN",
+        "ZSI"
+      ]
+    },
+    {
+      "code": "ZMB",
+      "name": "Zambales",
+      "nameNative": "Zambales",
+      "type": "province",
+      "capital": "Zambales",
+      "largestCity": "Zambales",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central Luzon (Region III)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        364.58,
+        493.66
+      ],
+      "bbox": [
+        343.15,
+        447.4,
+        391.22,
+        540.77
+      ],
+      "neighbors": [
+        "BAN",
+        "PAM",
+        "PAN",
+        "TAR"
+      ]
+    },
+    {
+      "code": "ZSI",
+      "name": "Zamboanga Sibugay",
+      "nameNative": "Zamboanga Sibugay",
+      "type": "province",
+      "capital": "Zamboanga Sibugay",
+      "largestCity": "Zamboanga Sibugay",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Zamboanga Peninsula (Region IX)",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        581.05,
+        1142.86
+      ],
+      "bbox": [
+        539.75,
+        1120.56,
+        610.17,
+        1176.18
+      ],
+      "neighbors": [
+        "ZAN",
+        "ZAS"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,334 @@
+{
+  "updatedAt": "2026-09-04T06:16:50.390Z",
+  "standard": "Natural Earth admin-1 vector dataset",
+  "country": "AT",
+  "countryName": "Austria",
+  "divisionTypeName": "State",
+  "divisionTypePlural": "States",
+  "totalRegions": 9,
+  "regions": [
+    {
+      "code": "1",
+      "name": "Burgenland",
+      "nameNative": "Burgenland",
+      "type": "state",
+      "capital": "Burgenlândia",
+      "largestCity": "Burgenland",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Austria",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        920.44,
+        322.78
+      ],
+      "bbox": [
+        857.02,
+        209.27,
+        1000,
+        462.69
+      ],
+      "neighbors": [
+        "3",
+        "6"
+      ]
+    },
+    {
+      "code": "2",
+      "name": "Carinthia",
+      "nameNative": "Kärnten",
+      "type": "state",
+      "capital": "Carinthia",
+      "largestCity": "Carinthia",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Austria",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        580.17,
+        480.42
+      ],
+      "bbox": [
+        410.5,
+        409.32,
+        739.73,
+        556.47
+      ],
+      "neighbors": [
+        "5",
+        "6",
+        "7"
+      ]
+    },
+    {
+      "code": "3",
+      "name": "Lower Austria",
+      "nameNative": "Niederösterreich",
+      "type": "state",
+      "capital": "Lower Austria",
+      "largestCity": "Lower Austria",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Austria",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        815.93,
+        184.5
+      ],
+      "bbox": [
+        645.79,
+        43.53,
+        987.87,
+        344.28
+      ],
+      "neighbors": [
+        "1",
+        "4",
+        "6",
+        "9"
+      ]
+    },
+    {
+      "code": "4",
+      "name": "Upper Austria",
+      "nameNative": "Oberösterreich",
+      "type": "state",
+      "capital": "Upper Austria",
+      "largestCity": "Upper Austria",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Austria",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        584.36,
+        214.21
+      ],
+      "bbox": [
+        426.06,
+        92.67,
+        716.06,
+        344.17
+      ],
+      "neighbors": [
+        "3",
+        "5",
+        "6"
+      ]
+    },
+    {
+      "code": "5",
+      "name": "Salzburg",
+      "nameNative": "Salzburg",
+      "type": "state",
+      "capital": "Salzburgo",
+      "largestCity": "Salzburg",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Austria",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        470.92,
+        360.1
+      ],
+      "bbox": [
+        337.68,
+        235.22,
+        583.35,
+        445.33
+      ],
+      "neighbors": [
+        "2",
+        "4",
+        "6",
+        "7"
+      ]
+    },
+    {
+      "code": "6",
+      "name": "Styria",
+      "nameNative": "Steiermark",
+      "type": "state",
+      "capital": "Styria",
+      "largestCity": "Styria",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Austria",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        723.81,
+        381.19
+      ],
+      "bbox": [
+        533.79,
+        273.01,
+        874.97,
+        508.14
+      ],
+      "neighbors": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+      ]
+    },
+    {
+      "code": "7",
+      "name": "Tyrol",
+      "nameNative": "Tirol",
+      "type": "state",
+      "capital": "Tyrol",
+      "largestCity": "Tyrol",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Austria",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        260.46,
+        395.7
+      ],
+      "bbox": [
+        70.89,
+        292.69,
+        452.05,
+        503.6
+      ],
+      "neighbors": [
+        "2",
+        "5",
+        "8"
+      ]
+    },
+    {
+      "code": "8",
+      "name": "Vorarlberg",
+      "nameNative": "Vorarlberg",
+      "type": "state",
+      "capital": "Vorarlberg",
+      "largestCity": "Vorarlberg",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Austria",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        47.25,
+        379.22
+      ],
+      "bbox": [
+        0,
+        310.22,
+        91.68,
+        456.47
+      ],
+      "neighbors": [
+        "7"
+      ]
+    },
+    {
+      "code": "9",
+      "name": "Vienna",
+      "nameNative": "Wien",
+      "type": "state",
+      "capital": "Vienna",
+      "largestCity": "Vienna",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Austria",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        899.01,
+        191.47
+      ],
+      "bbox": [
+        873.57,
+        170.52,
+        923.81,
+        208.46
+      ],
+      "neighbors": [
+        "3"
+      ]
+    }
+  ]
+}

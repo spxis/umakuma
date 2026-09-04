@@ -1,0 +1,571 @@
+{
+  "updatedAt": "2026-09-04T06:16:50.563Z",
+  "standard": "Natural Earth admin-1 vector dataset",
+  "country": "CL",
+  "countryName": "Chile",
+  "divisionTypeName": "Region",
+  "divisionTypePlural": "Regions",
+  "totalRegions": 16,
+  "regions": [
+    {
+      "code": "AI",
+      "name": "Aysén",
+      "nameNative": "Aisén del General Carlos Ibáñez del Campo",
+      "type": "region",
+      "capital": "Aisén",
+      "largestCity": "Aysén",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Chile",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        867.52,
+        1046.39
+      ],
+      "bbox": [
+        824.66,
+        973.92,
+        904.53,
+        1118.19
+      ],
+      "neighbors": [
+        "LL",
+        "MA"
+      ]
+    },
+    {
+      "code": "AN",
+      "name": "Antofagasta",
+      "nameNative": "Antofagasta",
+      "type": "region",
+      "capital": "Antofagasta",
+      "largestCity": "Antofagasta",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Chile",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        950.73,
+        462.9
+      ],
+      "bbox": [
+        912.69,
+        398.7,
+        1000,
+        527.83
+      ],
+      "neighbors": [
+        "AT",
+        "TA"
+      ]
+    },
+    {
+      "code": "AP",
+      "name": "Arica y Parinacota",
+      "nameNative": "Arica y Parinacota",
+      "type": "region",
+      "capital": "Arica y Parinacota",
+      "largestCity": "Arica y Parinacota",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Chile",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        939.55,
+        336.36
+      ],
+      "bbox": [
+        921.34,
+        311.49,
+        956,
+        353.67
+      ],
+      "neighbors": [
+        "TA"
+      ]
+    },
+    {
+      "code": "AR",
+      "name": "Araucanía",
+      "nameNative": "La Araucanía",
+      "type": "region",
+      "capital": "IX",
+      "largestCity": "Araucanía",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Chile",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        881.32,
+        850.05
+      ],
+      "bbox": [
+        847.86,
+        822.94,
+        910.04,
+        876.43
+      ],
+      "neighbors": [
+        "BI",
+        "LR"
+      ]
+    },
+    {
+      "code": "AT",
+      "name": "Atacama",
+      "nameNative": "Atacama",
+      "type": "region",
+      "capital": "Atacama",
+      "largestCity": "Atacama",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Chile",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        931.03,
+        562.07
+      ],
+      "bbox": [
+        895.15,
+        509.6,
+        967.86,
+        622.38
+      ],
+      "neighbors": [
+        "AN",
+        "CO"
+      ]
+    },
+    {
+      "code": "BI",
+      "name": "Biobío",
+      "nameNative": "Bío-Bío",
+      "type": "region",
+      "capital": "Bíobío",
+      "largestCity": "Biobío",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Chile",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        878.39,
+        819.34
+      ],
+      "bbox": [
+        852.62,
+        792.6,
+        906.62,
+        844.78
+      ],
+      "neighbors": [
+        "AR",
+        "NB"
+      ]
+    },
+    {
+      "code": "CO",
+      "name": "Coquimbo",
+      "nameNative": "Coquimbo",
+      "type": "region",
+      "capital": "Coquimbo",
+      "largestCity": "Coquimbo",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Chile",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        909.25,
+        644.7
+      ],
+      "bbox": [
+        891.15,
+        605.05,
+        932.32,
+        685.13
+      ],
+      "neighbors": [
+        "AT",
+        "VS"
+      ]
+    },
+    {
+      "code": "LI",
+      "name": "O'Higgins",
+      "nameNative": "Libertador General Bernardo O'Higgins",
+      "type": "region",
+      "capital": "Libertador",
+      "largestCity": "O'Higgins",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Chile",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        905.15,
+        742.15
+      ],
+      "bbox": [
+        883.73,
+        727.75,
+        926.73,
+        756.43
+      ],
+      "neighbors": [
+        "ML",
+        "RM",
+        "VS"
+      ]
+    },
+    {
+      "code": "LL",
+      "name": "Los Lagos",
+      "nameNative": "Los Lagos",
+      "type": "region",
+      "capital": "X",
+      "largestCity": "Los Lagos",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Chile",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        870.92,
+        934.26
+      ],
+      "bbox": [
+        843.7,
+        890.46,
+        894.69,
+        985.51
+      ],
+      "neighbors": [
+        "AI",
+        "LR"
+      ]
+    },
+    {
+      "code": "LR",
+      "name": "Los Ríos",
+      "nameNative": "Los Ríos",
+      "type": "region",
+      "capital": "XIV",
+      "largestCity": "Los Ríos",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Chile",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        875.47,
+        884.69
+      ],
+      "bbox": [
+        853.48,
+        867,
+        894.73,
+        900.07
+      ],
+      "neighbors": [
+        "AR",
+        "LL"
+      ]
+    },
+    {
+      "code": "MA",
+      "name": "Magellan and the Chilean Antarctic",
+      "nameNative": "Magallanes y Antártica Chilena",
+      "type": "region",
+      "capital": "Magalhães",
+      "largestCity": "Magellan and the Chilean Antarctic",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Chile",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        892,
+        1198.18
+      ],
+      "bbox": [
+        829.02,
+        1103.86,
+        973.11,
+        1288.51
+      ],
+      "neighbors": [
+        "AI"
+      ]
+    },
+    {
+      "code": "ML",
+      "name": "Maule",
+      "nameNative": "Maule",
+      "type": "region",
+      "capital": "VII",
+      "largestCity": "Maule",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Chile",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        897.34,
+        771.62
+      ],
+      "bbox": [
+        869.66,
+        749.75,
+        919.99,
+        793.43
+      ],
+      "neighbors": [
+        "LI",
+        "NB"
+      ]
+    },
+    {
+      "code": "NB",
+      "name": "Ñuble",
+      "nameNative": "Ñuble",
+      "type": "region",
+      "capital": "Ñuble",
+      "largestCity": "Ñuble",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Chile",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        886.71,
+        797.17
+      ],
+      "bbox": [
+        868,
+        781.72,
+        906.18,
+        811.69
+      ],
+      "neighbors": [
+        "BI",
+        "ML"
+      ]
+    },
+    {
+      "code": "RM",
+      "name": "Santiago",
+      "nameNative": "Región Metropolitana de Santiago",
+      "type": "region",
+      "capital": "Región Metropolitana",
+      "largestCity": "Santiago",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Chile",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        913.98,
+        720.24
+      ],
+      "bbox": [
+        891.62,
+        703.83,
+        932.48,
+        737.64
+      ],
+      "neighbors": [
+        "LI",
+        "VS"
+      ]
+    },
+    {
+      "code": "TA",
+      "name": "Tarapacá",
+      "nameNative": "Tarapacá",
+      "type": "region",
+      "capital": "Tarapaca",
+      "largestCity": "Tarapacá",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Chile",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        944.63,
+        379.76
+      ],
+      "bbox": [
+        923.81,
+        348.2,
+        967.9,
+        411.69
+      ],
+      "neighbors": [
+        "AN",
+        "AP"
+      ]
+    },
+    {
+      "code": "VS",
+      "name": "Valparaíso",
+      "nameNative": "Valparaíso",
+      "type": "region",
+      "capital": "Aconcagua",
+      "largestCity": "Valparaíso",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Chile",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        892.19,
+        698.84
+      ],
+      "bbox": [
+        0,
+        541.18,
+        928.08,
+        734.36
+      ],
+      "neighbors": [
+        "CO",
+        "LI",
+        "RM"
+      ]
+    }
+  ]
+}

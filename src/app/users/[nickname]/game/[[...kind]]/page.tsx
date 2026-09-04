@@ -69,6 +69,7 @@ export default async function GamePage({ params }: Props) {
         nickname={account.nickname}
         member={decodeURIComponent(nickname)}
         initialKind={initialKind}
+        isAdmin={isAdminEmail(viewerEmail)}
       />
     </div>
   );

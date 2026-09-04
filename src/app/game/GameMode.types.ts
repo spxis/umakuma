@@ -71,6 +71,7 @@ export type GameModeClientProps = {
   member: string;
   /** The game the address names, or null for the hub. */
   initialKind: GameKind | null;
+  isAdmin?: boolean;
 };
 
 export type GamePhase = "hub" | "lobby" | "playing" | "results";

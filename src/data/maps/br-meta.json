@@ -1,0 +1,1004 @@
+{
+  "updatedAt": "2026-09-04T06:16:49.259Z",
+  "standard": "Natural Earth admin-1 vector dataset",
+  "country": "BR",
+  "countryName": "Brazil",
+  "divisionTypeName": "State",
+  "divisionTypePlural": "States",
+  "totalRegions": 27,
+  "regions": [
+    {
+      "code": "AC",
+      "name": "Acre",
+      "nameNative": "Acre",
+      "type": "state",
+      "capital": "Acre",
+      "largestCity": "Acre",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Brazil",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        80.74,
+        402.4
+      ],
+      "bbox": [
+        0,
+        359.89,
+        165.07,
+        441.85
+      ],
+      "neighbors": [
+        "AM",
+        "RO"
+      ]
+    },
+    {
+      "code": "AL",
+      "name": "Alagoas",
+      "nameNative": "Alagoas",
+      "type": "state",
+      "capital": "Alagoas",
+      "largestCity": "Alagoas",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Brazil",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        818.59,
+        402.04
+      ],
+      "bbox": [
+        783.82,
+        385.65,
+        851.73,
+        424.61
+      ],
+      "neighbors": [
+        "BA",
+        "PE",
+        "SE"
+      ]
+    },
+    {
+      "code": "AM",
+      "name": "Amazonas",
+      "nameNative": "Amazonas",
+      "type": "state",
+      "capital": "Amazone",
+      "largestCity": "Amazonas",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Brazil",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        199.92,
+        279.84
+      ],
+      "bbox": [
+        3.55,
+        136.2,
+        386.51,
+        408.52
+      ],
+      "neighbors": [
+        "AC",
+        "MT",
+        "PA",
+        "RO",
+        "RR"
+      ]
+    },
+    {
+      "code": "AP",
+      "name": "Amapá",
+      "nameNative": "Amapá",
+      "type": "state",
+      "capital": "Amapá",
+      "largestCity": "Amapá",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Brazil",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        484.4,
+        146.67
+      ],
+      "bbox": [
+        419.45,
+        81.98,
+        532.3,
+        205.21
+      ],
+      "neighbors": [
+        "PA"
+      ]
+    },
+    {
+      "code": "BA",
+      "name": "Bahia",
+      "nameNative": "Bahia",
+      "type": "state",
+      "capital": "Ba¡a",
+      "largestCity": "Bahia",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Brazil",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        705.01,
+        462.52
+      ],
+      "bbox": [
+        600.99,
+        376.09,
+        799.74,
+        597.21
+      ],
+      "neighbors": [
+        "AL",
+        "ES",
+        "GO",
+        "MG",
+        "PE",
+        "PI",
+        "SE",
+        "TO"
+      ]
+    },
+    {
+      "code": "CE",
+      "name": "Ceará",
+      "nameNative": "Ceará",
+      "type": "state",
+      "capital": "Ceará",
+      "largestCity": "Ceará",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Brazil",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        758.73,
+        298.95
+      ],
+      "bbox": [
+        719.98,
+        246.47,
+        812.21,
+        361.36
+      ],
+      "neighbors": [
+        "PB",
+        "PE",
+        "PI",
+        "RN"
+      ]
+    },
+    {
+      "code": "DF",
+      "name": "Federal",
+      "nameNative": "Distrito Federal",
+      "type": "federal district",
+      "capital": "Federal",
+      "largestCity": "Federal",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Brazil",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        572.82,
+        533.12
+      ],
+      "bbox": [
+        562.42,
+        526.59,
+        583.1,
+        539.42
+      ],
+      "neighbors": [
+        "GO",
+        "MG"
+      ]
+    },
+    {
+      "code": "ES",
+      "name": "Espírito Santo",
+      "nameNative": "Espírito Santo",
+      "type": "state",
+      "capital": "Espiritu Santo",
+      "largestCity": "Espírito Santo",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Brazil",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        719.25,
+        624.16
+      ],
+      "bbox": [
+        692.72,
+        586.19,
+        961.32,
+        664.89
+      ],
+      "neighbors": [
+        "BA",
+        "MG",
+        "RJ"
+      ]
+    },
+    {
+      "code": "GO",
+      "name": "Goiás",
+      "nameNative": "Goiás",
+      "type": "state",
+      "capital": "Goiáz",
+      "largestCity": "Goiás",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Brazil",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        534.56,
+        538.15
+      ],
+      "bbox": [
+        457.52,
+        456,
+        613.23,
+        616.52
+      ],
+      "neighbors": [
+        "BA",
+        "DF",
+        "MG",
+        "MS",
+        "MT",
+        "TO"
+      ]
+    },
+    {
+      "code": "MA",
+      "name": "Maranhão",
+      "nameNative": "Maranhão",
+      "type": "state",
+      "capital": "São Luíz de Maranhão",
+      "largestCity": "Maranhão",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Brazil",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        633.01,
+        293.48
+      ],
+      "bbox": [
+        556,
+        203.41,
+        712.37,
+        410.48
+      ],
+      "neighbors": [
+        "PA",
+        "PI",
+        "TO"
+      ]
+    },
+    {
+      "code": "MG",
+      "name": "Minas Gerais",
+      "nameNative": "Minas Gerais",
+      "type": "state",
+      "capital": "Minas",
+      "largestCity": "Minas Gerais",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Brazil",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        636.96,
+        595.19
+      ],
+      "bbox": [
+        503.84,
+        500.4,
+        740.1,
+        694.87
+      ],
+      "neighbors": [
+        "BA",
+        "DF",
+        "ES",
+        "GO",
+        "MS",
+        "RJ",
+        "SP"
+      ]
+    },
+    {
+      "code": "MS",
+      "name": "Mato Grosso do Sul",
+      "nameNative": "Mato Grosso do Sul",
+      "type": "state",
+      "capital": "Mato Grosso do Sul",
+      "largestCity": "Mato Grosso do Sul",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Brazil",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        424.68,
+        635.71
+      ],
+      "bbox": [
+        355.96,
+        565.19,
+        505.74,
+        719.5
+      ],
+      "neighbors": [
+        "GO",
+        "MG",
+        "MT",
+        "PR",
+        "SP"
+      ]
+    },
+    {
+      "code": "MT",
+      "name": "Mato Grosso",
+      "nameNative": "Mato Grosso",
+      "type": "state",
+      "capital": "Matto Grosso",
+      "largestCity": "Mato Grosso",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Brazil",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        399.26,
+        469.22
+      ],
+      "bbox": [
+        273.43,
+        343.41,
+        522.05,
+        583.59
+      ],
+      "neighbors": [
+        "AM",
+        "GO",
+        "MS",
+        "PA",
+        "RO",
+        "TO"
+      ]
+    },
+    {
+      "code": "PA",
+      "name": "Pará",
+      "nameNative": "Pará",
+      "type": "state",
+      "capital": "Pará",
+      "largestCity": "Pará",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Brazil",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        458.27,
+        268.41
+      ],
+      "bbox": [
+        324.19,
+        121.94,
+        617.97,
+        398.16
+      ],
+      "neighbors": [
+        "AM",
+        "AP",
+        "MA",
+        "MT",
+        "RR",
+        "TO"
+      ]
+    },
+    {
+      "code": "PB",
+      "name": "Paraíba",
+      "nameNative": "Paraíba",
+      "type": "state",
+      "capital": "Parahyba",
+      "largestCity": "Paraíba",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Brazil",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        817.89,
+        347.94
+      ],
+      "bbox": [
+        775.85,
+        322.74,
+        862.45,
+        373.84
+      ],
+      "neighbors": [
+        "CE",
+        "PE",
+        "RN"
+      ]
+    },
+    {
+      "code": "PE",
+      "name": "Pernambuco",
+      "nameNative": "Pernambuco",
+      "type": "state",
+      "capital": "Pernambouc",
+      "largestCity": "Pernambuco",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Brazil",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        790.49,
+        373.58
+      ],
+      "bbox": [
+        716.16,
+        349.02,
+        861.43,
+        397.99
+      ],
+      "neighbors": [
+        "AL",
+        "BA",
+        "CE",
+        "PB",
+        "PI"
+      ]
+    },
+    {
+      "code": "PI",
+      "name": "Piauí",
+      "nameNative": "Piauí",
+      "type": "state",
+      "capital": "Piauhy",
+      "largestCity": "Piauí",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Brazil",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        682.21,
+        347.18
+      ],
+      "bbox": [
+        615.04,
+        244.13,
+        739.27,
+        424.12
+      ],
+      "neighbors": [
+        "BA",
+        "CE",
+        "MA",
+        "PE",
+        "TO"
+      ]
+    },
+    {
+      "code": "PR",
+      "name": "Paraná",
+      "nameNative": "Paraná",
+      "type": "state",
+      "capital": "Paraná",
+      "largestCity": "Paraná",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Brazil",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        491.11,
+        732.2
+      ],
+      "bbox": [
+        430.87,
+        684.95,
+        563.87,
+        778.5
+      ],
+      "neighbors": [
+        "MS",
+        "SC",
+        "SP"
+      ]
+    },
+    {
+      "code": "RJ",
+      "name": "Rio de Janeiro",
+      "nameNative": "Rio de Janeiro",
+      "type": "state",
+      "capital": "Rio de Janeiro",
+      "largestCity": "Rio de Janeiro",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Brazil",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        675.34,
+        681.47
+      ],
+      "bbox": [
+        629.33,
+        650.35,
+        711.16,
+        706.13
+      ],
+      "neighbors": [
+        "ES",
+        "MG",
+        "SP"
+      ]
+    },
+    {
+      "code": "RN",
+      "name": "Rio Grande do Norte",
+      "nameNative": "Rio Grande do Norte",
+      "type": "state",
+      "capital": "Rio Grande do Norte",
+      "largestCity": "Rio Grande do Norte",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Brazil",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        823.21,
+        319.41
+      ],
+      "bbox": [
+        779.62,
+        184.83,
+        1000,
+        344.89
+      ],
+      "neighbors": [
+        "CE",
+        "PB"
+      ]
+    },
+    {
+      "code": "RO",
+      "name": "Rondônia",
+      "nameNative": "Rondônia",
+      "type": "state",
+      "capital": "Guaporé",
+      "largestCity": "Rondônia",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Brazil",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        248.7,
+        427.92
+      ],
+      "bbox": [
+        161.01,
+        362.42,
+        315.4,
+        488.08
+      ],
+      "neighbors": [
+        "AC",
+        "AM",
+        "MT"
+      ]
+    },
+    {
+      "code": "RR",
+      "name": "Roraima",
+      "nameNative": "Roraima",
+      "type": "state",
+      "capital": "Rio Branco",
+      "largestCity": "Roraima",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Brazil",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        267.86,
+        138.02
+      ],
+      "bbox": [
+        187.05,
+        67.76,
+        327.23,
+        214.23
+      ],
+      "neighbors": [
+        "AM",
+        "PA"
+      ]
+    },
+    {
+      "code": "RS",
+      "name": "Rio Grande do Sul",
+      "nameNative": "Rio Grande do Sul",
+      "type": "state",
+      "capital": "Rio Grande do Sul",
+      "largestCity": "Rio Grande do Sul",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Brazil",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        457.55,
+        845.05
+      ],
+      "bbox": [
+        372.9,
+        786.72,
+        529.4,
+        932.24
+      ],
+      "neighbors": [
+        "SC"
+      ]
+    },
+    {
+      "code": "SC",
+      "name": "Santa Catarina",
+      "nameNative": "Santa Catarina",
+      "type": "state",
+      "capital": "Santa Catharina",
+      "largestCity": "Santa Catarina",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Brazil",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        513.87,
+        790.6
+      ],
+      "bbox": [
+        446.74,
+        762.69,
+        556.1,
+        837.19
+      ],
+      "neighbors": [
+        "PR",
+        "RS"
+      ]
+    },
+    {
+      "code": "SE",
+      "name": "Sergipe",
+      "nameNative": "Sergipe",
+      "type": "state",
+      "capital": "Sergipe",
+      "largestCity": "Sergipe",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Brazil",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        799.26,
+        424.81
+      ],
+      "bbox": [
+        781.51,
+        400.35,
+        821.77,
+        446.87
+      ],
+      "neighbors": [
+        "AL",
+        "BA"
+      ]
+    },
+    {
+      "code": "SP",
+      "name": "São Paulo",
+      "nameNative": "São Paulo",
+      "type": "state",
+      "capital": "São Paulo",
+      "largestCity": "São Paulo",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Brazil",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        550.63,
+        679.47
+      ],
+      "bbox": [
+        459.73,
+        623.23,
+        644.11,
+        748.07
+      ],
+      "neighbors": [
+        "MG",
+        "MS",
+        "PR",
+        "RJ"
+      ]
+    },
+    {
+      "code": "TO",
+      "name": "Tocantins",
+      "nameNative": "Tocantins",
+      "type": "state",
+      "capital": "Tocantins",
+      "largestCity": "Tocantins",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Brazil",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        563.52,
+        405.24
+      ],
+      "bbox": [
+        510.8,
+        293.47,
+        619.21,
+        478.67
+      ],
+      "neighbors": [
+        "BA",
+        "GO",
+        "MA",
+        "MT",
+        "PA",
+        "PI"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,3659 @@
+{
+  "updatedAt": "2026-09-04T06:16:48.690Z",
+  "standard": "Natural Earth admin-1 vector dataset",
+  "country": "FR",
+  "countryName": "France",
+  "divisionTypeName": "Department",
+  "divisionTypePlural": "Departments",
+  "totalRegions": 96,
+  "regions": [
+    {
+      "code": "01",
+      "name": "Ain",
+      "nameNative": "Ain",
+      "type": "metropolitan department",
+      "capital": "Rhone-Alpes",
+      "largestCity": "Ain",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Auvergne-Rhône-Alpes",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        684.02,
+        493.63
+      ],
+      "bbox": [
+        643.41,
+        454.2,
+        736.05,
+        537.78
+      ],
+      "neighbors": [
+        "38",
+        "39",
+        "69",
+        "71",
+        "73",
+        "74"
+      ]
+    },
+    {
+      "code": "02",
+      "name": "Aisne",
+      "nameNative": "Aisne",
+      "type": "metropolitan department",
+      "capital": "Aisne",
+      "largestCity": "Aisne",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Hauts-de-France",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        560.56,
+        159.15
+      ],
+      "bbox": [
+        522.84,
+        109.82,
+        603.8,
+        228.35
+      ],
+      "neighbors": [
+        "08",
+        "51",
+        "59",
+        "60",
+        "77",
+        "80"
+      ]
+    },
+    {
+      "code": "03",
+      "name": "Allier",
+      "nameNative": "Allier",
+      "type": "metropolitan department",
+      "capital": "Allier",
+      "largestCity": "Allier",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Auvergne-Rhône-Alpes",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        537.47,
+        467.85
+      ],
+      "bbox": [
+        474.98,
+        428.69,
+        592.52,
+        510
+      ],
+      "neighbors": [
+        "18",
+        "23",
+        "42",
+        "58",
+        "63",
+        "71"
+      ]
+    },
+    {
+      "code": "04",
+      "name": "Alpes-de-Haute-Provence",
+      "nameNative": "Alpes-de-Haute-Provence",
+      "type": "metropolitan department",
+      "capital": "Provenza-Alpes-Costa de Azul",
+      "largestCity": "Alpes-de-Haute-Provence",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Provence-Alpes-Côte-d'Azur",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        751.99,
+        686.3
+      ],
+      "bbox": [
+        700.54,
+        629.83,
+        802.2,
+        728.99
+      ],
+      "neighbors": [
+        "05",
+        "06",
+        "13",
+        "26",
+        "83",
+        "84"
+      ]
+    },
+    {
+      "code": "05",
+      "name": "Hautes-Alpes",
+      "nameNative": "Hautes-Alpes",
+      "type": "metropolitan department",
+      "capital": "Provenza-Alpes-Costa de Azul",
+      "largestCity": "Hautes-Alpes",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Provence-Alpes-Côte-d'Azur",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        751.33,
+        631.83
+      ],
+      "bbox": [
+        694.15,
+        585.72,
+        806.18,
+        679.39
+      ],
+      "neighbors": [
+        "04",
+        "26",
+        "38",
+        "73"
+      ]
+    },
+    {
+      "code": "06",
+      "name": "Alpes-Maritimes",
+      "nameNative": "Alpes-Maritimes",
+      "type": "metropolitan department",
+      "capital": "Provenza-Alpes-Costa de Azul",
+      "largestCity": "Alpes-Maritimes",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Provence-Alpes-Côte-d'Azur",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        813.69,
+        699.75
+      ],
+      "bbox": [
+        781.2,
+        659.8,
+        853.74,
+        744.82
+      ],
+      "neighbors": [
+        "04",
+        "83"
+      ]
+    },
+    {
+      "code": "07",
+      "name": "Ardèche",
+      "nameNative": "Ardèche",
+      "type": "metropolitan department",
+      "capital": "Rhone-Alpes",
+      "largestCity": "Ardèche",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Auvergne-Rhône-Alpes",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        624.06,
+        626.53
+      ],
+      "bbox": [
+        585.29,
+        566.49,
+        655.72,
+        672.86
+      ],
+      "neighbors": [
+        "26",
+        "30",
+        "38",
+        "42",
+        "43",
+        "48",
+        "84"
+      ]
+    },
+    {
+      "code": "08",
+      "name": "Ardennes",
+      "nameNative": "Ardennes",
+      "type": "metropolitan department",
+      "capital": "Champaña-Ardenne",
+      "largestCity": "Ardennes",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Grand Est",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        628.87,
+        152.73
+      ],
+      "bbox": [
+        590.75,
+        98.82,
+        676.36,
+        189.48
+      ],
+      "neighbors": [
+        "02",
+        "51",
+        "55"
+      ]
+    },
+    {
+      "code": "09",
+      "name": "Ariège",
+      "nameNative": "Ariège",
+      "type": "metropolitan department",
+      "capital": "Ariège",
+      "largestCity": "Ariège",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Occitanie",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        417.75,
+        805.98
+      ],
+      "bbox": [
+        370.01,
+        767.28,
+        465.41,
+        840.25
+      ],
+      "neighbors": [
+        "11",
+        "31",
+        "66"
+      ]
+    },
+    {
+      "code": "10",
+      "name": "Aube",
+      "nameNative": "Aube",
+      "type": "metropolitan department",
+      "capital": "Champaña-Ardenne",
+      "largestCity": "Aube",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Grand Est",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        600.29,
+        280.94
+      ],
+      "bbox": [
+        550.3,
+        241.13,
+        646.17,
+        318.17
+      ],
+      "neighbors": [
+        "21",
+        "51",
+        "52",
+        "77",
+        "89"
+      ]
+    },
+    {
+      "code": "11",
+      "name": "Aude",
+      "nameNative": "Aude",
+      "type": "metropolitan department",
+      "capital": "Languedoc-Rosellon",
+      "largestCity": "Aude",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Occitanie",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        483.46,
+        788.64
+      ],
+      "bbox": [
+        432.41,
+        755.23,
+        542.5,
+        832.33
+      ],
+      "neighbors": [
+        "09",
+        "31",
+        "34",
+        "66",
+        "81"
+      ]
+    },
+    {
+      "code": "12",
+      "name": "Aveyron",
+      "nameNative": "Aveyron",
+      "type": "metropolitan department",
+      "capital": "Aveyron",
+      "largestCity": "Aveyron",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Occitanie",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        502.45,
+        673.58
+      ],
+      "bbox": [
+        443.98,
+        609.78,
+        556.52,
+        731.25
+      ],
+      "neighbors": [
+        "15",
+        "30",
+        "34",
+        "46",
+        "48",
+        "81",
+        "82"
+      ]
+    },
+    {
+      "code": "13",
+      "name": "Bouches-du-Rhône",
+      "nameNative": "Bouches-du-Rhône",
+      "type": "metropolitan department",
+      "capital": "Provenza-Alpes-Costa de Azul",
+      "largestCity": "Bouches-du-Rhône",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Provence-Alpes-Côte-d'Azur",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        673.02,
+        743.04
+      ],
+      "bbox": [
+        610.55,
+        706.2,
+        723.6,
+        779.91
+      ],
+      "neighbors": [
+        "04",
+        "30",
+        "83",
+        "84"
+      ]
+    },
+    {
+      "code": "14",
+      "name": "Calvados",
+      "nameNative": "Calvados",
+      "type": "metropolitan department",
+      "capital": "Baja Normand¡a",
+      "largestCity": "Calvados",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Normandie",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        310.19,
+        198.99
+      ],
+      "bbox": [
+        258.87,
+        168.11,
+        360.73,
+        231.66
+      ],
+      "neighbors": [
+        "27",
+        "50",
+        "61"
+      ]
+    },
+    {
+      "code": "15",
+      "name": "Cantal",
+      "nameNative": "Cantal",
+      "type": "metropolitan department",
+      "capital": "Cantal",
+      "largestCity": "Cantal",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Auvergne-Rhône-Alpes",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        502.24,
+        598.32
+      ],
+      "bbox": [
+        460.18,
+        556.61,
+        550.63,
+        640.06
+      ],
+      "neighbors": [
+        "12",
+        "19",
+        "43",
+        "46",
+        "48",
+        "63"
+      ]
+    },
+    {
+      "code": "16",
+      "name": "Charente",
+      "nameNative": "Charente",
+      "type": "metropolitan department",
+      "capital": "Charente",
+      "largestCity": "Charente",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Nouvelle-Aquitaine",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        334.23,
+        530.31
+      ],
+      "bbox": [
+        289.83,
+        490.28,
+        384.49,
+        580.87
+      ],
+      "neighbors": [
+        "17",
+        "24",
+        "79",
+        "86",
+        "87"
+      ]
+    },
+    {
+      "code": "17",
+      "name": "Charente-Maritime",
+      "nameNative": "Charente-Maritime",
+      "type": "metropolitan department",
+      "capital": "Charente-Maritime",
+      "largestCity": "Charente-Maritime",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Nouvelle-Aquitaine",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        275.59,
+        521.39
+      ],
+      "bbox": [
+        218.16,
+        463.97,
+        319.04,
+        589.25
+      ],
+      "neighbors": [
+        "16",
+        "24",
+        "33",
+        "79",
+        "85"
+      ]
+    },
+    {
+      "code": "18",
+      "name": "Cher",
+      "nameNative": "Cher",
+      "type": "metropolitan department",
+      "capital": "Cher",
+      "largestCity": "Cher",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Centre-Val de Loire",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        491.53,
+        402.26
+      ],
+      "bbox": [
+        443.83,
+        347.44,
+        530.14,
+        464.85
+      ],
+      "neighbors": [
+        "03",
+        "23",
+        "36",
+        "41",
+        "45",
+        "58"
+      ]
+    },
+    {
+      "code": "19",
+      "name": "Corrèze",
+      "nameNative": "Corrèze",
+      "type": "metropolitan department",
+      "capital": "Lemosin",
+      "largestCity": "Corrèze",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Nouvelle-Aquitaine",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        447.95,
+        568.09
+      ],
+      "bbox": [
+        404.16,
+        528.94,
+        492.8,
+        609.42
+      ],
+      "neighbors": [
+        "15",
+        "23",
+        "24",
+        "46",
+        "63",
+        "87"
+      ]
+    },
+    {
+      "code": "21",
+      "name": "Côte-d’Or",
+      "nameNative": "Côte-d'Or",
+      "type": "metropolitan department",
+      "capital": "Borgoña",
+      "largestCity": "Côte-d’Or",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Bourgogne-Franche-Comté",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        642.41,
+        366.05
+      ],
+      "bbox": [
+        595.37,
+        307.7,
+        691.83,
+        416.82
+      ],
+      "neighbors": [
+        "10",
+        "39",
+        "52",
+        "58",
+        "70",
+        "71",
+        "89"
+      ]
+    },
+    {
+      "code": "22",
+      "name": "Côtes-d'Armor",
+      "nameNative": "Côtes-d'Armor",
+      "type": "metropolitan department",
+      "capital": "Bretaña",
+      "largestCity": "Côtes-d'Armor",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Bretagne",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        146.68,
+        253.64
+      ],
+      "bbox": [
+        97.3,
+        210.2,
+        207.99,
+        294.56
+      ],
+      "neighbors": [
+        "29",
+        "35",
+        "56"
+      ]
+    },
+    {
+      "code": "23",
+      "name": "Creuse",
+      "nameNative": "Creuse",
+      "type": "metropolitan department",
+      "capital": "Lemosin",
+      "largestCity": "Creuse",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Nouvelle-Aquitaine",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        458.65,
+        497.04
+      ],
+      "bbox": [
+        416.24,
+        461.31,
+        497.88,
+        537.59
+      ],
+      "neighbors": [
+        "03",
+        "18",
+        "19",
+        "36",
+        "63",
+        "87"
+      ]
+    },
+    {
+      "code": "24",
+      "name": "Dordogne",
+      "nameNative": "Dordogne",
+      "type": "metropolitan department",
+      "capital": "Dordogne",
+      "largestCity": "Dordogne",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Nouvelle-Aquitaine",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        370.1,
+        591.01
+      ],
+      "bbox": [
+        316.45,
+        531.84,
+        418.87,
+        643.37
+      ],
+      "neighbors": [
+        "16",
+        "17",
+        "19",
+        "33",
+        "46",
+        "47",
+        "87"
+      ]
+    },
+    {
+      "code": "25",
+      "name": "Doubs",
+      "nameNative": "Doubs",
+      "type": "metropolitan department",
+      "capital": "Franco-Condado",
+      "largestCity": "Doubs",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Bourgogne-Franche-Comté",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        747.45,
+        387.6
+      ],
+      "bbox": [
+        703.62,
+        347.62,
+        792.17,
+        447.48
+      ],
+      "neighbors": [
+        "39",
+        "70",
+        "90"
+      ]
+    },
+    {
+      "code": "26",
+      "name": "Drôme",
+      "nameNative": "Drôme",
+      "type": "metropolitan department",
+      "capital": "Rhone-Alpes",
+      "largestCity": "Drôme",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Auvergne-Rhône-Alpes",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        675.89,
+        632.4
+      ],
+      "bbox": [
+        640.77,
+        568.25,
+        721.33,
+        686.38
+      ],
+      "neighbors": [
+        "04",
+        "05",
+        "07",
+        "38",
+        "84"
+      ]
+    },
+    {
+      "code": "27",
+      "name": "Eure",
+      "nameNative": "Eure",
+      "type": "metropolitan department",
+      "capital": "Alta Normand¡a",
+      "largestCity": "Eure",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Normandie",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        396.65,
+        200.97
+      ],
+      "bbox": [
+        353.4,
+        162.8,
+        447.62,
+        244.23
+      ],
+      "neighbors": [
+        "14",
+        "28",
+        "60",
+        "61",
+        "76",
+        "78",
+        "95"
+      ]
+    },
+    {
+      "code": "28",
+      "name": "Eure-et-Loir",
+      "nameNative": "Eure-et-Loir",
+      "type": "metropolitan department",
+      "capital": "Eure-et-Loir",
+      "largestCity": "Eure-et-Loir",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Centre-Val de Loire",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        419.45,
+        272.55
+      ],
+      "bbox": [
+        380.82,
+        218.47,
+        460.25,
+        314.69
+      ],
+      "neighbors": [
+        "27",
+        "41",
+        "45",
+        "61",
+        "72",
+        "78",
+        "91"
+      ]
+    },
+    {
+      "code": "29",
+      "name": "Finistère",
+      "nameNative": "Finistère",
+      "type": "metropolitan department",
+      "capital": "Bretaña",
+      "largestCity": "Finistère",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Bretagne",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        67.59,
+        264.39
+      ],
+      "bbox": [
+        0,
+        219.76,
+        108.31,
+        315.36
+      ],
+      "neighbors": [
+        "22",
+        "56"
+      ]
+    },
+    {
+      "code": "2A",
+      "name": "Corse-du-Sud",
+      "nameNative": "Corse-du-Sud",
+      "type": "metropolitan department",
+      "capital": "C¢rcega",
+      "largestCity": "Corse-du-Sud",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Corse",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        960.65,
+        892.78
+      ],
+      "bbox": [
+        925.39,
+        844.49,
+        992.07,
+        940.49
+      ],
+      "neighbors": [
+        "2B"
+      ]
+    },
+    {
+      "code": "2B",
+      "name": "Haute-Corse",
+      "nameNative": "Haute-Corse",
+      "type": "metropolitan department",
+      "capital": "C¢rcega",
+      "largestCity": "Haute-Corse",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Corse",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        972.37,
+        840.06
+      ],
+      "bbox": [
+        926.9,
+        778.32,
+        1000,
+        894.22
+      ],
+      "neighbors": [
+        "2A"
+      ]
+    },
+    {
+      "code": "30",
+      "name": "Gard",
+      "nameNative": "Gard",
+      "type": "metropolitan department",
+      "capital": "Languedoc-Rosellon",
+      "largestCity": "Gard",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Occitanie",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        608.21,
+        701.01
+      ],
+      "bbox": [
+        545.17,
+        655.94,
+        654.91,
+        753.1
+      ],
+      "neighbors": [
+        "07",
+        "12",
+        "13",
+        "34",
+        "48",
+        "84"
+      ]
+    },
+    {
+      "code": "31",
+      "name": "Haute-Garonne",
+      "nameNative": "Haute-Garonne",
+      "type": "metropolitan department",
+      "capital": "Haute-Garonne",
+      "largestCity": "Haute-Garonne",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Occitanie",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        395.58,
+        762.28
+      ],
+      "bbox": [
+        342.69,
+        708.08,
+        458.06,
+        826.95
+      ],
+      "neighbors": [
+        "09",
+        "11",
+        "32",
+        "65",
+        "81",
+        "82"
+      ]
+    },
+    {
+      "code": "32",
+      "name": "Gers",
+      "nameNative": "Gers",
+      "type": "metropolitan department",
+      "capital": "Gers",
+      "largestCity": "Gers",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Occitanie",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        345.89,
+        728.3
+      ],
+      "bbox": [
+        294.32,
+        691.37,
+        397.35,
+        765.72
+      ],
+      "neighbors": [
+        "31",
+        "40",
+        "47",
+        "64",
+        "65",
+        "82"
+      ]
+    },
+    {
+      "code": "33",
+      "name": "Gironde",
+      "nameNative": "Gironde",
+      "type": "metropolitan department",
+      "capital": "Gironde",
+      "largestCity": "Gironde",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Nouvelle-Aquitaine",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        277.99,
+        614.98
+      ],
+      "bbox": [
+        229.26,
+        540.45,
+        340.03,
+        677.08
+      ],
+      "neighbors": [
+        "17",
+        "24",
+        "40",
+        "47"
+      ]
+    },
+    {
+      "code": "34",
+      "name": "Hérault",
+      "nameNative": "Hérault",
+      "type": "metropolitan department",
+      "capital": "Languedoc-Rosellon",
+      "largestCity": "Hérault",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Occitanie",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        551.37,
+        741.88
+      ],
+      "bbox": [
+        493.55,
+        703.68,
+        608.5,
+        777.2
+      ],
+      "neighbors": [
+        "11",
+        "12",
+        "30",
+        "81"
+      ]
+    },
+    {
+      "code": "35",
+      "name": "Ille-et-Vilaine",
+      "nameNative": "Ille-et-Vilaine",
+      "type": "metropolitan department",
+      "capital": "Bretaña",
+      "largestCity": "Ille-et-Vilaine",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Bretagne",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        223.39,
+        287.33
+      ],
+      "bbox": [
+        181.26,
+        232.02,
+        261.82,
+        336.09
+      ],
+      "neighbors": [
+        "22",
+        "44",
+        "49",
+        "50",
+        "53",
+        "56"
+      ]
+    },
+    {
+      "code": "36",
+      "name": "Indre",
+      "nameNative": "Indre",
+      "type": "metropolitan department",
+      "capital": "Indre",
+      "largestCity": "Indre",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Centre-Val de Loire",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        430.08,
+        429.25
+      ],
+      "bbox": [
+        383.59,
+        379.65,
+        471.07,
+        470.73
+      ],
+      "neighbors": [
+        "18",
+        "23",
+        "37",
+        "41",
+        "86",
+        "87"
+      ]
+    },
+    {
+      "code": "37",
+      "name": "Indre-et-Loire",
+      "nameNative": "Indre-et-Loire",
+      "type": "metropolitan department",
+      "capital": "Indre-et-Loire",
+      "largestCity": "Indre-et-Loire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Centre-Val de Loire",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        372.6,
+        381.27
+      ],
+      "bbox": [
+        330.71,
+        337.38,
+        416.51,
+        431.77
+      ],
+      "neighbors": [
+        "36",
+        "41",
+        "49",
+        "72",
+        "86"
+      ]
+    },
+    {
+      "code": "38",
+      "name": "Isère",
+      "nameNative": "Isère",
+      "type": "metropolitan department",
+      "capital": "Rhone-Alpes",
+      "largestCity": "Isère",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Auvergne-Rhône-Alpes",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        702.08,
+        574.75
+      ],
+      "bbox": [
+        645.27,
+        515.3,
+        757.76,
+        628.51
+      ],
+      "neighbors": [
+        "01",
+        "05",
+        "07",
+        "26",
+        "42",
+        "69",
+        "73"
+      ]
+    },
+    {
+      "code": "39",
+      "name": "Jura",
+      "nameNative": "Jura",
+      "type": "metropolitan department",
+      "capital": "Franco-Condado",
+      "largestCity": "Jura",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Bourgogne-Franche-Comté",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        705.4,
+        432.06
+      ],
+      "bbox": [
+        674.74,
+        377.37,
+        739.17,
+        477.91
+      ],
+      "neighbors": [
+        "01",
+        "21",
+        "25",
+        "70",
+        "71"
+      ]
+    },
+    {
+      "code": "40",
+      "name": "Landes",
+      "nameNative": "Landes",
+      "type": "metropolitan department",
+      "capital": "Landes",
+      "largestCity": "Landes",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Nouvelle-Aquitaine",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        259.66,
+        698.07
+      ],
+      "bbox": [
+        205.89,
+        642.04,
+        324.52,
+        743.08
+      ],
+      "neighbors": [
+        "32",
+        "33",
+        "47",
+        "64"
+      ]
+    },
+    {
+      "code": "41",
+      "name": "Loir-et-Cher",
+      "nameNative": "Loir-et-Cher",
+      "type": "metropolitan department",
+      "capital": "Loir-et-Cher",
+      "largestCity": "Loir-et-Cher",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Centre-Val de Loire",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        422.3,
+        347.51
+      ],
+      "bbox": [
+        367.79,
+        296.65,
+        476.23,
+        389.2
+      ],
+      "neighbors": [
+        "18",
+        "28",
+        "36",
+        "37",
+        "45",
+        "72"
+      ]
+    },
+    {
+      "code": "42",
+      "name": "Loire",
+      "nameNative": "Loire",
+      "type": "metropolitan department",
+      "capital": "Rhone-Alpes",
+      "largestCity": "Loire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Auvergne-Rhône-Alpes",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        604.11,
+        531.89
+      ],
+      "bbox": [
+        570.84,
+        478.75,
+        646.34,
+        579.51
+      ],
+      "neighbors": [
+        "03",
+        "07",
+        "38",
+        "43",
+        "63",
+        "69",
+        "71"
+      ]
+    },
+    {
+      "code": "43",
+      "name": "Haute-Loire",
+      "nameNative": "Haute-Loire",
+      "type": "metropolitan department",
+      "capital": "Haute-Loire",
+      "largestCity": "Haute-Loire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Auvergne-Rhône-Alpes",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        580.42,
+        590.81
+      ],
+      "bbox": [
+        532.21,
+        562.32,
+        626.63,
+        627.46
+      ],
+      "neighbors": [
+        "07",
+        "15",
+        "42",
+        "48",
+        "63"
+      ]
+    },
+    {
+      "code": "44",
+      "name": "Loire-Atlantique",
+      "nameNative": "Loire-Atlantique",
+      "type": "metropolitan department",
+      "capital": "Loire-Atlantique",
+      "largestCity": "Loire-Atlantique",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Pays de la Loire",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        216.48,
+        364.04
+      ],
+      "bbox": [
+        158.64,
+        319.94,
+        266.27,
+        413.45
+      ],
+      "neighbors": [
+        "35",
+        "49",
+        "56",
+        "85"
+      ]
+    },
+    {
+      "code": "45",
+      "name": "Loiret",
+      "nameNative": "Loiret",
+      "type": "metropolitan department",
+      "capital": "Loiret",
+      "largestCity": "Loiret",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Centre-Val de Loire",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        481.86,
+        319.54
+      ],
+      "bbox": [
+        428.32,
+        277.71,
+        532.81,
+        361.21
+      ],
+      "neighbors": [
+        "18",
+        "28",
+        "41",
+        "58",
+        "77",
+        "89",
+        "91"
+      ]
+    },
+    {
+      "code": "46",
+      "name": "Lot",
+      "nameNative": "Lot",
+      "type": "metropolitan department",
+      "capital": "Lot",
+      "largestCity": "Lot",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Occitanie",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        428.14,
+        639.52
+      ],
+      "bbox": [
+        385.95,
+        598.16,
+        469.95,
+        678.35
+      ],
+      "neighbors": [
+        "12",
+        "15",
+        "19",
+        "24",
+        "47",
+        "82"
+      ]
+    },
+    {
+      "code": "47",
+      "name": "Lot-et-Garonne",
+      "nameNative": "Lot-et-Garonne",
+      "type": "metropolitan department",
+      "capital": "Lot-et-Garonne",
+      "largestCity": "Lot-et-Garonne",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Nouvelle-Aquitaine",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        348.14,
+        662.43
+      ],
+      "bbox": [
+        305.62,
+        623.48,
+        391.54,
+        700.58
+      ],
+      "neighbors": [
+        "24",
+        "32",
+        "33",
+        "40",
+        "46",
+        "82"
+      ]
+    },
+    {
+      "code": "48",
+      "name": "Lozère",
+      "nameNative": "Lozère",
+      "type": "metropolitan department",
+      "capital": "Languedoc-Rosellon",
+      "largestCity": "Lozère",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Occitanie",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        559.75,
+        650.65
+      ],
+      "bbox": [
+        523.73,
+        607.65,
+        594.32,
+        689.86
+      ],
+      "neighbors": [
+        "07",
+        "12",
+        "15",
+        "30",
+        "43"
+      ]
+    },
+    {
+      "code": "49",
+      "name": "Maine-et-Loire",
+      "nameNative": "Maine-et-Loire",
+      "type": "metropolitan department",
+      "capital": "Maine-et-Loire",
+      "largestCity": "Maine-et-Loire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Pays de la Loire",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        290.01,
+        365
+      ],
+      "bbox": [
+        238.39,
+        322.14,
+        343.83,
+        403.94
+      ],
+      "neighbors": [
+        "35",
+        "37",
+        "44",
+        "53",
+        "72",
+        "79",
+        "85",
+        "86"
+      ]
+    },
+    {
+      "code": "50",
+      "name": "Manche",
+      "nameNative": "Manche",
+      "type": "metropolitan department",
+      "capital": "Baja Normand¡a",
+      "largestCity": "Manche",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Normandie",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        248.69,
+        198.22
+      ],
+      "bbox": [
+        212.88,
+        132.98,
+        284.55,
+        257.9
+      ],
+      "neighbors": [
+        "14",
+        "35",
+        "53",
+        "61"
+      ]
+    },
+    {
+      "code": "51",
+      "name": "Marne",
+      "nameNative": "Marne",
+      "type": "metropolitan department",
+      "capital": "Champaña-Ardenne",
+      "largestCity": "Marne",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Grand Est",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        604.44,
+        217.91
+      ],
+      "bbox": [
+        550.51,
+        173.3,
+        655.29,
+        259.46
+      ],
+      "neighbors": [
+        "02",
+        "08",
+        "10",
+        "52",
+        "55",
+        "77"
+      ]
+    },
+    {
+      "code": "52",
+      "name": "Haute-Marne",
+      "nameNative": "Haute-Marne",
+      "type": "metropolitan department",
+      "capital": "Champaña-Ardenne",
+      "largestCity": "Haute-Marne",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Grand Est",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        670.34,
+        298.39
+      ],
+      "bbox": [
+        631,
+        241.84,
+        714.44,
+        349.01
+      ],
+      "neighbors": [
+        "10",
+        "21",
+        "51",
+        "55",
+        "70",
+        "88"
+      ]
+    },
+    {
+      "code": "53",
+      "name": "Mayenne",
+      "nameNative": "Mayenne",
+      "type": "metropolitan department",
+      "capital": "Mayenne",
+      "largestCity": "Mayenne",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Pays de la Loire",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        286.96,
+        291.27
+      ],
+      "bbox": [
+        247.41,
+        252.02,
+        327.41,
+        331.41
+      ],
+      "neighbors": [
+        "35",
+        "49",
+        "50",
+        "61",
+        "72"
+      ]
+    },
+    {
+      "code": "54",
+      "name": "Meurthe-et-Moselle",
+      "nameNative": "Meurthe-et-Moselle",
+      "type": "metropolitan department",
+      "capital": "Lorena",
+      "largestCity": "Meurthe-et-Moselle",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Grand Est",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        728.35,
+        230.48
+      ],
+      "bbox": [
+        681.41,
+        156.85,
+        789.13,
+        272.54
+      ],
+      "neighbors": [
+        "55",
+        "57",
+        "67",
+        "88"
+      ]
+    },
+    {
+      "code": "55",
+      "name": "Meuse",
+      "nameNative": "Meuse",
+      "type": "metropolitan department",
+      "capital": "Lorena",
+      "largestCity": "Meuse",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Grand Est",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        677.68,
+        212.53
+      ],
+      "bbox": [
+        647.63,
+        151.79,
+        707.65,
+        268.35
+      ],
+      "neighbors": [
+        "08",
+        "51",
+        "52",
+        "54",
+        "88"
+      ]
+    },
+    {
+      "code": "56",
+      "name": "Morbihan",
+      "nameNative": "Morbihan",
+      "type": "metropolitan department",
+      "capital": "Bretaña",
+      "largestCity": "Morbihan",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Bretagne",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        145.59,
+        311.52
+      ],
+      "bbox": [
+        87.31,
+        275.19,
+        194.71,
+        364.08
+      ],
+      "neighbors": [
+        "22",
+        "29",
+        "35",
+        "44"
+      ]
+    },
+    {
+      "code": "57",
+      "name": "Moselle",
+      "nameNative": "Moselle",
+      "type": "metropolitan department",
+      "capital": "Lorena",
+      "largestCity": "Moselle",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Grand Est",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        759.6,
+        205.57
+      ],
+      "bbox": [
+        710.76,
+        160.67,
+        822.07,
+        253.15
+      ],
+      "neighbors": [
+        "54",
+        "67",
+        "88"
+      ]
+    },
+    {
+      "code": "58",
+      "name": "Nièvre",
+      "nameNative": "Nièvre",
+      "type": "metropolitan department",
+      "capital": "Borgoña",
+      "largestCity": "Nièvre",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Bourgogne-Franche-Comté",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        558.66,
+        397.26
+      ],
+      "bbox": [
+        515.63,
+        352.1,
+        606.19,
+        442.56
+      ],
+      "neighbors": [
+        "03",
+        "18",
+        "21",
+        "45",
+        "71",
+        "89"
+      ]
+    },
+    {
+      "code": "59",
+      "name": "Nord",
+      "nameNative": "Nord",
+      "type": "metropolitan department",
+      "capital": "Nord",
+      "largestCity": "Nord",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Hauts-de-France",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        538.25,
+        72.42
+      ],
+      "bbox": [
+        467.49,
+        9.51,
+        600.99,
+        118.43
+      ],
+      "neighbors": [
+        "02",
+        "62",
+        "80"
+      ]
+    },
+    {
+      "code": "60",
+      "name": "Oise",
+      "nameNative": "Oise",
+      "type": "metropolitan department",
+      "capital": "Oise",
+      "largestCity": "Oise",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Hauts-de-France",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        488.23,
+        173.12
+      ],
+      "bbox": [
+        441.71,
+        138.15,
+        535.87,
+        206.86
+      ],
+      "neighbors": [
+        "02",
+        "27",
+        "76",
+        "77",
+        "80",
+        "95"
+      ]
+    },
+    {
+      "code": "61",
+      "name": "Orne",
+      "nameNative": "Orne",
+      "type": "metropolitan department",
+      "capital": "Baja Normand¡a",
+      "largestCity": "Orne",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Normandie",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        339.92,
+        247.13
+      ],
+      "bbox": [
+        275.57,
+        213.38,
+        394.4,
+        291.36
+      ],
+      "neighbors": [
+        "14",
+        "27",
+        "28",
+        "50",
+        "53",
+        "72"
+      ]
+    },
+    {
+      "code": "62",
+      "name": "Pas-de-Calais",
+      "nameNative": "Pas-de-Calais",
+      "type": "metropolitan department",
+      "capital": "Pas-de-Calais",
+      "largestCity": "Pas-de-Calais",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Hauts-de-France",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        480.67,
+        67.37
+      ],
+      "bbox": [
+        435.14,
+        16.42,
+        535.7,
+        114.11
+      ],
+      "neighbors": [
+        "59",
+        "80"
+      ]
+    },
+    {
+      "code": "63",
+      "name": "Puy-de-Dôme",
+      "nameNative": "Puy-de-Dôme",
+      "type": "metropolitan department",
+      "capital": "Puy-de-Dôme",
+      "largestCity": "Puy-de-Dôme",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Auvergne-Rhône-Alpes",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        534.36,
+        532.89
+      ],
+      "bbox": [
+        484.23,
+        480.4,
+        591.35,
+        575.36
+      ],
+      "neighbors": [
+        "03",
+        "15",
+        "19",
+        "23",
+        "42",
+        "43"
+      ]
+    },
+    {
+      "code": "64",
+      "name": "Pyrenees-Atlantics",
+      "nameNative": "Pyrénées-Atlantiques",
+      "type": "metropolitan department",
+      "capital": "Pyrenees-Atlantics",
+      "largestCity": "Pyrenees-Atlantics",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Nouvelle-Aquitaine",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        257.19,
+        767.63
+      ],
+      "bbox": [
+        184.74,
+        735.49,
+        313.8,
+        815.08
+      ],
+      "neighbors": [
+        "32",
+        "40",
+        "65"
+      ]
+    },
+    {
+      "code": "65",
+      "name": "Hautes-Pyrénées",
+      "nameNative": "Hautes-Pyrénées",
+      "type": "metropolitan department",
+      "capital": "Hautes-Pyrénées",
+      "largestCity": "Hautes-Pyrénées",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Occitanie",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        322.77,
+        790.33
+      ],
+      "bbox": [
+        287.81,
+        734.81,
+        356.81,
+        827.64
+      ],
+      "neighbors": [
+        "31",
+        "32",
+        "64"
+      ]
+    },
+    {
+      "code": "66",
+      "name": "Pyrénées-Orientales",
+      "nameNative": "Pyrénées-Orientales",
+      "type": "metropolitan department",
+      "capital": "Languedoc-Rosellon",
+      "largestCity": "Pyrénées-Orientales",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Occitanie",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        490.85,
+        838.04
+      ],
+      "bbox": [
+        431.97,
+        807.07,
+        538.21,
+        864.43
+      ],
+      "neighbors": [
+        "09",
+        "11"
+      ]
+    },
+    {
+      "code": "67",
+      "name": "Bas-Rhin",
+      "nameNative": "Bas-Rhin",
+      "type": "metropolitan department",
+      "capital": "Alsacia",
+      "largestCity": "Bas-Rhin",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Grand Est",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        818.25,
+        237.65
+      ],
+      "bbox": [
+        779.99,
+        199.58,
+        858.02,
+        290.55
+      ],
+      "neighbors": [
+        "54",
+        "57",
+        "68",
+        "88"
+      ]
+    },
+    {
+      "code": "68",
+      "name": "Haut-Rhin",
+      "nameNative": "Haute-Rhin",
+      "type": "metropolitan department",
+      "capital": "Alsacia",
+      "largestCity": "Haut-Rhin",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Grand Est",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        805.05,
+        317.42
+      ],
+      "bbox": [
+        778.32,
+        274.17,
+        826.87,
+        360.4
+      ],
+      "neighbors": [
+        "67",
+        "88",
+        "90"
+      ]
+    },
+    {
+      "code": "69",
+      "name": "Rhône",
+      "nameNative": "Rhône",
+      "type": "metropolitan department",
+      "capital": "Rhone-Alpes",
+      "largestCity": "Rhône",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Auvergne-Rhône-Alpes",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        636.63,
+        517.79
+      ],
+      "bbox": [
+        609.86,
+        475.7,
+        671.91,
+        558.83
+      ],
+      "neighbors": [
+        "01",
+        "38",
+        "42",
+        "71"
+      ]
+    },
+    {
+      "code": "70",
+      "name": "Haute-Saône",
+      "nameNative": "Haute-Saône",
+      "type": "metropolitan department",
+      "capital": "Franco-Condado",
+      "largestCity": "Haute-Saône",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Bourgogne-Franche-Comté",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        728.32,
+        342.02
+      ],
+      "bbox": [
+        681.2,
+        306.22,
+        776.14,
+        380.27
+      ],
+      "neighbors": [
+        "21",
+        "25",
+        "39",
+        "52",
+        "88",
+        "90"
+      ]
+    },
+    {
+      "code": "71",
+      "name": "Saône-et-Loire",
+      "nameNative": "Saône-et-Loire",
+      "type": "metropolitan department",
+      "capital": "Borgoña",
+      "largestCity": "Saône-et-Loire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Bourgogne-Franche-Comté",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        628.44,
+        442.16
+      ],
+      "bbox": [
+        566.86,
+        392.77,
+        689.01,
+        488.47
+      ],
+      "neighbors": [
+        "01",
+        "03",
+        "21",
+        "39",
+        "42",
+        "58",
+        "69"
+      ]
+    },
+    {
+      "code": "72",
+      "name": "Sarthe",
+      "nameNative": "Sarthe",
+      "type": "metropolitan department",
+      "capital": "Sarthe",
+      "largestCity": "Sarthe",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Pays de la Loire",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        344.1,
+        308.7
+      ],
+      "bbox": [
+        299.71,
+        261.77,
+        389.33,
+        349.09
+      ],
+      "neighbors": [
+        "28",
+        "37",
+        "41",
+        "49",
+        "53",
+        "61"
+      ]
+    },
+    {
+      "code": "73",
+      "name": "Savoie",
+      "nameNative": "Savoie",
+      "type": "metropolitan department",
+      "capital": "Rhone-Alpes",
+      "largestCity": "Savoie",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Auvergne-Rhône-Alpes",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        759.49,
+        551.7
+      ],
+      "bbox": [
+        702.28,
+        508.52,
+        809.76,
+        593.06
+      ],
+      "neighbors": [
+        "01",
+        "05",
+        "38",
+        "74"
+      ]
+    },
+    {
+      "code": "74",
+      "name": "Haute-Savoie",
+      "nameNative": "Haute-Savoie",
+      "type": "metropolitan department",
+      "capital": "Rhone-Alpes",
+      "largestCity": "Haute-Savoie",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Auvergne-Rhône-Alpes",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        756.48,
+        495.98
+      ],
+      "bbox": [
+        716.05,
+        456.02,
+        797.73,
+        532.29
+      ],
+      "neighbors": [
+        "01",
+        "73"
+      ]
+    },
+    {
+      "code": "75",
+      "name": "Paris",
+      "nameNative": "Paris",
+      "type": "metropolitan department",
+      "capital": "Ville de Paris",
+      "largestCity": "Paris",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Île-de-France",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        483.2,
+        227.24
+      ],
+      "bbox": [
+        475.48,
+        222.92,
+        491.31,
+        231.34
+      ],
+      "neighbors": [
+        "92",
+        "93",
+        "94"
+      ]
+    },
+    {
+      "code": "76",
+      "name": "Seine-Maritime",
+      "nameNative": "Seine-Maritime",
+      "type": "metropolitan department",
+      "capital": "Alta Normand¡a",
+      "largestCity": "Seine-Maritime",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Normandie",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        400.14,
+        147.89
+      ],
+      "bbox": [
+        339.84,
+        108.41,
+        447.11,
+        186.91
+      ],
+      "neighbors": [
+        "27",
+        "60",
+        "80"
+      ]
+    },
+    {
+      "code": "77",
+      "name": "Seine-et-Marne",
+      "nameNative": "Seien-et-Marne",
+      "type": "metropolitan department",
+      "capital": "Seine-et-Marne",
+      "largestCity": "Seine-et-Marne",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Île-de-France",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        520.36,
+        250.14
+      ],
+      "bbox": [
+        485.59,
+        203.13,
+        559.8,
+        299.06
+      ],
+      "neighbors": [
+        "02",
+        "10",
+        "45",
+        "51",
+        "60",
+        "89",
+        "91",
+        "93",
+        "94",
+        "95"
+      ]
+    },
+    {
+      "code": "78",
+      "name": "Yvelines",
+      "nameNative": "Yvelines",
+      "type": "metropolitan department",
+      "capital": "Yvelines",
+      "largestCity": "Yvelines",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Île-de-France",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        449.72,
+        231.57
+      ],
+      "bbox": [
+        425.55,
+        204.67,
+        475.39,
+        267.21
+      ],
+      "neighbors": [
+        "27",
+        "28",
+        "91",
+        "92",
+        "95"
+      ]
+    },
+    {
+      "code": "79",
+      "name": "Deux-Sèvres",
+      "nameNative": "Deux-Sèvres",
+      "type": "metropolitan department",
+      "capital": "Deux-Sèvres",
+      "largestCity": "Deux-Sèvres",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Nouvelle-Aquitaine",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        302.54,
+        447.06
+      ],
+      "bbox": [
+        262.89,
+        394.47,
+        336.34,
+        504.83
+      ],
+      "neighbors": [
+        "16",
+        "17",
+        "49",
+        "85",
+        "86"
+      ]
+    },
+    {
+      "code": "80",
+      "name": "Somme",
+      "nameNative": "Somme",
+      "type": "metropolitan department",
+      "capital": "Somme",
+      "largestCity": "Somme",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Hauts-de-France",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        479.28,
+        119.85
+      ],
+      "bbox": [
+        423.12,
+        78.38,
+        537.24,
+        157.33
+      ],
+      "neighbors": [
+        "02",
+        "59",
+        "60",
+        "62",
+        "76"
+      ]
+    },
+    {
+      "code": "81",
+      "name": "Tarn",
+      "nameNative": "Tarn",
+      "type": "metropolitan department",
+      "capital": "Tarn",
+      "largestCity": "Tarn",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Occitanie",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        466.36,
+        721.75
+      ],
+      "bbox": [
+        423.07,
+        681.73,
+        520.49,
+        760.96
+      ],
+      "neighbors": [
+        "11",
+        "12",
+        "31",
+        "34",
+        "82"
+      ]
+    },
+    {
+      "code": "82",
+      "name": "Tarn-et-Garonne",
+      "nameNative": "Tarn-et-Garonne",
+      "type": "metropolitan department",
+      "capital": "Tarn-et-Garonne",
+      "largestCity": "Tarn-et-Garonne",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Occitanie",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        404.57,
+        691.34
+      ],
+      "bbox": [
+        366.82,
+        661.17,
+        453.56,
+        721.71
+      ],
+      "neighbors": [
+        "12",
+        "31",
+        "32",
+        "46",
+        "47",
+        "81"
+      ]
+    },
+    {
+      "code": "83",
+      "name": "Var",
+      "nameNative": "Var",
+      "type": "metropolitan department",
+      "capital": "Provenza-Alpes-Costa de Azul",
+      "largestCity": "Var",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Provence-Alpes-Côte-d'Azur",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        755.04,
+        750.81
+      ],
+      "bbox": [
+        714.53,
+        714.09,
+        803.58,
+        795.27
+      ],
+      "neighbors": [
+        "04",
+        "06",
+        "13",
+        "84"
+      ]
+    },
+    {
+      "code": "84",
+      "name": "Vaucluse",
+      "nameNative": "Vaucluse",
+      "type": "metropolitan department",
+      "capital": "Provenza-Alpes-Costa de Azul",
+      "largestCity": "Vaucluse",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Provence-Alpes-Côte-d'Azur",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        678.14,
+        697.84
+      ],
+      "bbox": [
+        640.77,
+        657.5,
+        719.27,
+        730.65
+      ],
+      "neighbors": [
+        "04",
+        "07",
+        "13",
+        "26",
+        "30",
+        "83"
+      ]
+    },
+    {
+      "code": "85",
+      "name": "Vendée",
+      "nameNative": "Vendée",
+      "type": "metropolitan department",
+      "capital": "Vendée",
+      "largestCity": "Vendée",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Pays de la Loire",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        238.26,
+        432.04
+      ],
+      "bbox": [
+        165.68,
+        393.43,
+        286.06,
+        471.23
+      ],
+      "neighbors": [
+        "17",
+        "44",
+        "49",
+        "79"
+      ]
+    },
+    {
+      "code": "86",
+      "name": "Vienne",
+      "nameNative": "Vienne",
+      "type": "metropolitan department",
+      "capital": "Vienne",
+      "largestCity": "Vienne",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Nouvelle-Aquitaine",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        354.9,
+        448.35
+      ],
+      "bbox": [
+        318.74,
+        389.13,
+        403.83,
+        497.99
+      ],
+      "neighbors": [
+        "16",
+        "36",
+        "37",
+        "49",
+        "79",
+        "87"
+      ]
+    },
+    {
+      "code": "87",
+      "name": "Haute-Vienne",
+      "nameNative": "Haute-Vienne",
+      "type": "metropolitan department",
+      "capital": "Lemosin",
+      "largestCity": "Haute-Vienne",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Nouvelle-Aquitaine",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        404.98,
+        514.72
+      ],
+      "bbox": [
+        364.2,
+        466.12,
+        450.83,
+        558.65
+      ],
+      "neighbors": [
+        "16",
+        "19",
+        "23",
+        "24",
+        "36",
+        "86"
+      ]
+    },
+    {
+      "code": "88",
+      "name": "Vosges",
+      "nameNative": "Vosges",
+      "type": "metropolitan department",
+      "capital": "Lorena",
+      "largestCity": "Vosges",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Grand Est",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        745.77,
+        287.05
+      ],
+      "bbox": [
+        682.01,
+        253.15,
+        798.02,
+        322.48
+      ],
+      "neighbors": [
+        "52",
+        "54",
+        "55",
+        "57",
+        "67",
+        "68",
+        "70",
+        "90"
+      ]
+    },
+    {
+      "code": "89",
+      "name": "Yonne",
+      "nameNative": "Yonne",
+      "type": "metropolitan department",
+      "capital": "Borgoña",
+      "largestCity": "Yonne",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Bourgogne-Franche-Comté",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        561.49,
+        326.45
+      ],
+      "bbox": [
+        514.02,
+        270.82,
+        612.99,
+        377.66
+      ],
+      "neighbors": [
+        "10",
+        "21",
+        "45",
+        "58",
+        "77"
+      ]
+    },
+    {
+      "code": "90",
+      "name": "Territoire de Belfort",
+      "nameNative": "Territoire de Belfort",
+      "type": "metropolitan department",
+      "capital": "Franco-Condado",
+      "largestCity": "Territoire de Belfort",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Bourgogne-Franche-Comté",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        783.47,
+        340.38
+      ],
+      "bbox": [
+        771.58,
+        322.08,
+        798.35,
+        360.44
+      ],
+      "neighbors": [
+        "25",
+        "68",
+        "70",
+        "88"
+      ]
+    },
+    {
+      "code": "91",
+      "name": "Essonne",
+      "nameNative": "Essonne",
+      "type": "metropolitan department",
+      "capital": "Essonne",
+      "largestCity": "Essonne",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Île-de-France",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        475.88,
+        259.79
+      ],
+      "bbox": [
+        455.2,
+        235.1,
+        497.8,
+        283.63
+      ],
+      "neighbors": [
+        "28",
+        "45",
+        "77",
+        "78",
+        "92",
+        "94"
+      ]
+    },
+    {
+      "code": "92",
+      "name": "Hauts-de-Seine",
+      "nameNative": "Hauts-de-Seine",
+      "type": "metropolitan department",
+      "capital": "Hauts-de-Seine",
+      "largestCity": "Hauts-de-Seine",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Île-de-France",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        476.55,
+        228.31
+      ],
+      "bbox": [
+        470.68,
+        217.39,
+        482.2,
+        239.63
+      ],
+      "neighbors": [
+        "75",
+        "78",
+        "91",
+        "93",
+        "94",
+        "95"
+      ]
+    },
+    {
+      "code": "93",
+      "name": "Seine-Saint-Denis",
+      "nameNative": "Seine-Saint-Denis",
+      "type": "metropolitan department",
+      "capital": "Seine-Saint-Denis",
+      "largestCity": "Seine-Saint-Denis",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Île-de-France",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        491.46,
+        221.3
+      ],
+      "bbox": [
+        478.08,
+        212.46,
+        498.98,
+        232.21
+      ],
+      "neighbors": [
+        "75",
+        "77",
+        "92",
+        "94",
+        "95"
+      ]
+    },
+    {
+      "code": "94",
+      "name": "Val-de-Marne",
+      "nameNative": "Val-de-Marne",
+      "type": "metropolitan department",
+      "capital": "Val-de-Marne",
+      "largestCity": "Val-de-Marne",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Île-de-France",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        491.09,
+        235.34
+      ],
+      "bbox": [
+        481.16,
+        227.12,
+        499.32,
+        243.71
+      ],
+      "neighbors": [
+        "75",
+        "77",
+        "91",
+        "92",
+        "93"
+      ]
+    },
+    {
+      "code": "95",
+      "name": "Val-d'Oise",
+      "nameNative": "Val-d'Oise",
+      "type": "metropolitan department",
+      "capital": "Val-d'Oise",
+      "largestCity": "Val-d'Oise",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Île-de-France",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        469.22,
+        205.63
+      ],
+      "bbox": [
+        436.91,
+        190.3,
+        498.49,
+        224.63
+      ],
+      "neighbors": [
+        "27",
+        "60",
+        "77",
+        "78",
+        "92",
+        "93"
+      ]
+    }
+  ]
+}

@@ -26,7 +26,7 @@ export const GAME_COPY = {
   title: "Game Mode",
   subtitle: "Fast rounds. Family bragging rights.",
   hubTitle: "Games",
-  hubSubtitle: "Six ways to play, from your review pile to the map of Japan.",
+  hubSubtitle: "Six ways to play, from your review pile to Japan and regional home maps.",
   activityNeverPlayed: "Not played yet",
   activityPlayingNow: "playing now",
   activityAndOthers: "and {count} more",
@@ -120,7 +120,7 @@ export const GAME_KIND_TAGLINES: Record<GameKind, string> = {
   [GAME_KINDS.revenge]: "Drill the lists you built yourself.",
   [GAME_KINDS.timeAttack]: "Beat the clock, not the question count.",
   [GAME_KINDS.shiritori]: "Chain words by their last kana.",
-  [GAME_KINDS.map]: "Forty-seven prefectures. Know them all?",
+  [GAME_KINDS.map]: "Forty-seven prefectures, plus your home regions. Know them all?",
 };
 
 export const GAME_KIND_RULE_COPY: Record<GameKind, string> = {
@@ -129,7 +129,7 @@ export const GAME_KIND_RULE_COPY: Record<GameKind, string> = {
   [GAME_KINDS.revenge]: "Drills one list at a time: the items you tagged as trouble, the ones you tagged as favourites, or the ones your review history says are toughest.",
   [GAME_KINDS.timeAttack]: "Answer as many as you can before the clock runs out. Wrong answers cost you, but they do not end the run.",
   [GAME_KINDS.shiritori]: "Each word has to start with the kana the last one ended on. One wrong link ends the chain.",
-  [GAME_KINDS.map]: "Name the prefecture lit up on the map, or take a name and pick it out yourself. The wrong answers are its neighbours, so a rough idea will not save you.",
+  [GAME_KINDS.map]: "Name the region or prefecture lit up on the map, or find it by name. The wrong answers are neighbouring regions, so a rough idea will not save you.",
 };
 
 export const GAME_KIND_EMOJI: Record<GameKind, string> = {
@@ -181,8 +181,8 @@ export const GAME_DIRECTION_HINTS: Record<string, string> = {
 
 /** Map mode swaps the glyph for a prefecture, so its directions need their own words. */
 export const GAME_MAP_DIRECTION_HINTS: Record<string, string> = {
-  read: "See the prefecture on the map, choose its name.",
-  find: "See the name, pick the prefecture out on the map.",
+  read: "See the region or prefecture on the map, choose its name.",
+  find: "See the name, pick the region out on the map.",
 };
 
 export const GAME_PRACTICE_LIST_LABELS: Record<GamePracticeList, string> = {

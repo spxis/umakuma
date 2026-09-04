@@ -1,0 +1,578 @@
+{
+  "updatedAt": "2026-09-04T06:16:49.508Z",
+  "standard": "Natural Earth admin-1 vector dataset",
+  "country": "MY",
+  "countryName": "Malaysia",
+  "divisionTypeName": "State / territory",
+  "divisionTypePlural": "States and federal territories",
+  "totalRegions": 16,
+  "regions": [
+    {
+      "code": "01",
+      "name": "Johor",
+      "nameNative": "Johor",
+      "type": "state",
+      "capital": "Johor Darul Takzim",
+      "largestCity": "Johor",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Malaysia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        188.97,
+        355.04
+      ],
+      "bbox": [
+        142.48,
+        312.44,
+        235.09,
+        395.23
+      ],
+      "neighbors": [
+        "04",
+        "05",
+        "06"
+      ]
+    },
+    {
+      "code": "02",
+      "name": "Kedah",
+      "nameNative": "Kedah",
+      "type": "state",
+      "capital": "Kedah Darul Aman",
+      "largestCity": "Kedah",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Malaysia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        49.15,
+        155.01
+      ],
+      "bbox": [
+        0,
+        124.64,
+        73.57,
+        198.77
+      ],
+      "neighbors": [
+        "07",
+        "08",
+        "09"
+      ]
+    },
+    {
+      "code": "03",
+      "name": "Kelantan",
+      "nameNative": "Kelantan",
+      "type": "state",
+      "capital": "Kelantan",
+      "largestCity": "Kelantan",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Malaysia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        121.01,
+        189.03
+      ],
+      "bbox": [
+        85.54,
+        139.3,
+        153.07,
+        226.22
+      ],
+      "neighbors": [
+        "06",
+        "08",
+        "11"
+      ]
+    },
+    {
+      "code": "04",
+      "name": "Melaka",
+      "nameNative": "Melaka",
+      "type": "state",
+      "capital": "Malacca",
+      "largestCity": "Melaka",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Malaysia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        133.85,
+        340.78
+      ],
+      "bbox": [
+        117.3,
+        332.09,
+        148.65,
+        352.68
+      ],
+      "neighbors": [
+        "01",
+        "05"
+      ]
+    },
+    {
+      "code": "05",
+      "name": "Negeri Sembilan",
+      "nameNative": "Negeri Sembilan",
+      "type": "state",
+      "capital": "Negeri Sembilan Darul Khusus",
+      "largestCity": "Negeri Sembilan",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Malaysia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        128.86,
+        317.61
+      ],
+      "bbox": [
+        103.81,
+        291.48,
+        154.21,
+        337.18
+      ],
+      "neighbors": [
+        "01",
+        "04",
+        "06",
+        "10"
+      ]
+    },
+    {
+      "code": "06",
+      "name": "Pahang",
+      "nameNative": "Pahang",
+      "type": "state",
+      "capital": "Pahang Darul Makmur",
+      "largestCity": "Pahang",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Malaysia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        146.56,
+        268.66
+      ],
+      "bbox": [
+        85.34,
+        215.11,
+        202,
+        335.05
+      ],
+      "neighbors": [
+        "01",
+        "03",
+        "05",
+        "08",
+        "10",
+        "11"
+      ]
+    },
+    {
+      "code": "07",
+      "name": "Penang",
+      "nameNative": "Pulau Pinang",
+      "type": "state",
+      "capital": "Penang and Province Wellesley",
+      "largestCity": "Penang",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Malaysia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        38.06,
+        184.38
+      ],
+      "bbox": [
+        26.49,
+        173.67,
+        45.79,
+        196.68
+      ],
+      "neighbors": [
+        "02",
+        "08"
+      ]
+    },
+    {
+      "code": "08",
+      "name": "Perak",
+      "nameNative": "Perak",
+      "type": "state",
+      "capital": "Perak Darul Ridzuan",
+      "largestCity": "Perak",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Malaysia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        73.83,
+        215.06
+      ],
+      "bbox": [
+        35.84,
+        156.78,
+        106.84,
+        271.45
+      ],
+      "neighbors": [
+        "02",
+        "03",
+        "06",
+        "07",
+        "10"
+      ]
+    },
+    {
+      "code": "09",
+      "name": "Perlis",
+      "nameNative": "Perlis",
+      "type": "state",
+      "capital": "Perlis Indra Kayangan",
+      "largestCity": "Perlis",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Malaysia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        30.08,
+        125.95
+      ],
+      "bbox": [
+        24.54,
+        115.25,
+        37.33,
+        138.17
+      ],
+      "neighbors": [
+        "02"
+      ]
+    },
+    {
+      "code": "10",
+      "name": "Selangor",
+      "nameNative": "Selangor",
+      "type": "state",
+      "capital": "Selangor Darul Ehsan",
+      "largestCity": "Selangor",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Malaysia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        93.06,
+        291.69
+      ],
+      "bbox": [
+        57.96,
+        261.38,
+        116.46,
+        326.58
+      ],
+      "neighbors": [
+        "05",
+        "06",
+        "08",
+        "14",
+        "16"
+      ]
+    },
+    {
+      "code": "11",
+      "name": "Terengganu",
+      "nameNative": "Terengganu",
+      "type": "state",
+      "capital": "Terengganu Darul Iman",
+      "largestCity": "Terengganu",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Malaysia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        167.97,
+        207.73
+      ],
+      "bbox": [
+        139.18,
+        160.13,
+        195.24,
+        261.76
+      ],
+      "neighbors": [
+        "03",
+        "06"
+      ]
+    },
+    {
+      "code": "12",
+      "name": "Sabah",
+      "nameNative": "Sabah",
+      "type": "state",
+      "capital": "North Borneo",
+      "largestCity": "Sabah",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Malaysia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        890.6,
+        185.36
+      ],
+      "bbox": [
+        800.3,
+        82.37,
+        1000,
+        247.52
+      ],
+      "neighbors": [
+        "13"
+      ]
+    },
+    {
+      "code": "13",
+      "name": "Sarawak",
+      "nameNative": "Sarawak",
+      "type": "state",
+      "capital": "Sarawak",
+      "largestCity": "Sarawak",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Malaysia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        694.91,
+        328.15
+      ],
+      "bbox": [
+        503.19,
+        205.83,
+        816.84,
+        417.63
+      ],
+      "neighbors": [
+        "12"
+      ]
+    },
+    {
+      "code": "14",
+      "name": "Kuala Lumpur",
+      "nameNative": "Kuala Lumpur",
+      "type": "federal territory",
+      "capital": "Kuala Lumpur",
+      "largestCity": "Kuala Lumpur",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Malaysia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        102.72,
+        298.98
+      ],
+      "bbox": [
+        99,
+        293.97,
+        106.23,
+        304.51
+      ],
+      "neighbors": [
+        "10"
+      ]
+    },
+    {
+      "code": "15",
+      "name": "Labuan",
+      "nameNative": "Labuan",
+      "type": "federal territory",
+      "capital": "North Borneo",
+      "largestCity": "Labuan",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Malaysia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        793,
+        187.71
+      ],
+      "bbox": [
+        790.11,
+        184.15,
+        795.21,
+        191.1
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "16",
+      "name": "Putrajaya",
+      "nameNative": "Putrajaya",
+      "type": "federal territory",
+      "capital": "Putrajaya",
+      "largestCity": "Putrajaya",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Malaysia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        102.74,
+        309.53
+      ],
+      "bbox": [
+        101.17,
+        306.84,
+        104.48,
+        312.3
+      ],
+      "neighbors": [
+        "10"
+      ]
+    }
+  ]
+}

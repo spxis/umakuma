@@ -1,0 +1,1944 @@
+{
+  "updatedAt": "2026-09-04T06:16:48.887Z",
+  "standard": "Natural Earth admin-1 vector dataset",
+  "country": "ES",
+  "countryName": "Spain",
+  "divisionTypeName": "Province",
+  "divisionTypePlural": "Provinces",
+  "totalRegions": 52,
+  "regions": [
+    {
+      "code": "A",
+      "name": "Alicante",
+      "nameNative": "Alicante",
+      "type": "autonomous community",
+      "capital": "Alicante",
+      "largestCity": "Alicante",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Valenciana",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        806.53,
+        300.53
+      ],
+      "bbox": [
+        785.6,
+        278.66,
+        838.72,
+        333.87
+      ],
+      "neighbors": [
+        "AB",
+        "MU",
+        "V"
+      ]
+    },
+    {
+      "code": "AB",
+      "name": "Albacete",
+      "nameNative": "Albacete",
+      "type": "autonomous community",
+      "capital": "Albacete",
+      "largestCity": "Albacete",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Castilla-La Mancha",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        748.7,
+        283.81
+      ],
+      "bbox": [
+        712.03,
+        252.38,
+        792.58,
+        325.84
+      ],
+      "neighbors": [
+        "A",
+        "CR",
+        "CU",
+        "GR",
+        "J",
+        "MU",
+        "V"
+      ]
+    },
+    {
+      "code": "AL",
+      "name": "Almería",
+      "nameNative": "Almería",
+      "type": "autonomous community",
+      "capital": "Almería",
+      "largestCity": "Almería",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Andalucía",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        734.89,
+        369.01
+      ],
+      "bbox": [
+        702.01,
+        331.39,
+        763.97,
+        396.05
+      ],
+      "neighbors": [
+        "GR",
+        "MU"
+      ]
+    },
+    {
+      "code": "AV",
+      "name": "Ávila",
+      "nameNative": "Ávila",
+      "type": "autonomous community",
+      "capital": "Ávila",
+      "largestCity": "Ávila",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Castilla y León",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        629.86,
+        192.97
+      ],
+      "bbox": [
+        598.46,
+        162.18,
+        660.85,
+        217.92
+      ],
+      "neighbors": [
+        "CC",
+        "M",
+        "SA",
+        "SG",
+        "TO",
+        "VA"
+      ]
+    },
+    {
+      "code": "B",
+      "name": "Barcelona",
+      "nameNative": "Barcelona",
+      "type": "autonomous community",
+      "capital": "Barcelona",
+      "largestCity": "Barcelona",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Cataluña",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        900.27,
+        126.59
+      ],
+      "bbox": [
+        876.75,
+        96.03,
+        931.4,
+        155.31
+      ],
+      "neighbors": [
+        "GI",
+        "L",
+        "T"
+      ]
+    },
+    {
+      "code": "BA",
+      "name": "Badajoz",
+      "nameNative": "Badajoz",
+      "type": "autonomous community",
+      "capital": "Badajoz",
+      "largestCity": "Badajoz",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Extremadura",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        579.09,
+        288.86
+      ],
+      "bbox": [
+        529.53,
+        249.69,
+        640.2,
+        328.91
+      ],
+      "neighbors": [
+        "CC",
+        "CO",
+        "CR",
+        "H",
+        "SE",
+        "TO"
+      ]
+    },
+    {
+      "code": "BI",
+      "name": "Biscay",
+      "nameNative": "Bizkaia",
+      "type": "autonomous community",
+      "capital": "Biscay",
+      "largestCity": "Biscay",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "País Vasco",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        711.78,
+        53.94
+      ],
+      "bbox": [
+        689.08,
+        43,
+        728.51,
+        65.53
+      ],
+      "neighbors": [
+        "BU",
+        "S",
+        "SS",
+        "VI"
+      ]
+    },
+    {
+      "code": "BU",
+      "name": "Burgos",
+      "nameNative": "Burgos",
+      "type": "autonomous community",
+      "capital": "Burgos",
+      "largestCity": "Burgos",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Castilla y León",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        683.86,
+        99.45
+      ],
+      "bbox": [
+        654.98,
+        56.23,
+        724.87,
+        147.18
+      ],
+      "neighbors": [
+        "BI",
+        "LO",
+        "P",
+        "S",
+        "SG",
+        "SO",
+        "VA",
+        "VI"
+      ]
+    },
+    {
+      "code": "C",
+      "name": "A Coruña",
+      "nameNative": "La Coruña",
+      "type": "autonomous community",
+      "capital": "A Coruña",
+      "largestCity": "A Coruña",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Galicia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        497.96,
+        54.86
+      ],
+      "bbox": [
+        465.76,
+        21.63,
+        529.78,
+        84.75
+      ],
+      "neighbors": [
+        "LU",
+        "PO"
+      ]
+    },
+    {
+      "code": "CA",
+      "name": "Cádiz",
+      "nameNative": "Cádiz",
+      "type": "autonomous community",
+      "capital": "Cádiz",
+      "largestCity": "Cádiz",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Andalucía",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        592.25,
+        401.67
+      ],
+      "bbox": [
+        564.19,
+        376.23,
+        620.92,
+        430.3
+      ],
+      "neighbors": [
+        "MA",
+        "SE"
+      ]
+    },
+    {
+      "code": "CC",
+      "name": "Cáceres",
+      "nameNative": "Cáceres",
+      "type": "autonomous community",
+      "capital": "Cáceres",
+      "largestCity": "Cáceres",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Extremadura",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        579.84,
+        236.65
+      ],
+      "bbox": [
+        524.35,
+        196.5,
+        628.83,
+        272.05
+      ],
+      "neighbors": [
+        "AV",
+        "BA",
+        "CR",
+        "SA",
+        "TO"
+      ]
+    },
+    {
+      "code": "CE",
+      "name": "Ceuta",
+      "nameNative": "Ceuta",
+      "type": "autonomous city",
+      "capital": "Ceuta",
+      "largestCity": "Ceuta",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Ceuta",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        608.86,
+        436.49
+      ],
+      "bbox": [
+        606.72,
+        434.7,
+        611.6,
+        438.85
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "CO",
+      "name": "Córdoba",
+      "nameNative": "Córdoba",
+      "type": "autonomous community",
+      "capital": "Córdoba",
+      "largestCity": "Córdoba",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Andalucía",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        633.29,
+        327.44
+      ],
+      "bbox": [
+        601.63,
+        288.88,
+        666.24,
+        369.62
+      ],
+      "neighbors": [
+        "BA",
+        "CR",
+        "GR",
+        "J",
+        "MA",
+        "SE"
+      ]
+    },
+    {
+      "code": "CR",
+      "name": "Ciudad Real",
+      "nameNative": "Ciudad Real",
+      "type": "autonomous community",
+      "capital": "Ciudad Real",
+      "largestCity": "Ciudad Real",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Castilla-La Mancha",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        673.63,
+        279
+      ],
+      "bbox": [
+        624.53,
+        245.11,
+        721.79,
+        309.05
+      ],
+      "neighbors": [
+        "AB",
+        "BA",
+        "CC",
+        "CO",
+        "CU",
+        "J",
+        "TO"
+      ]
+    },
+    {
+      "code": "CS",
+      "name": "Castellón",
+      "nameNative": "Castellón",
+      "type": "autonomous community",
+      "capital": "Castellón",
+      "largestCity": "Castellón",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Valenciana",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        820.52,
+        208.14
+      ],
+      "bbox": [
+        793.26,
+        180.08,
+        846.31,
+        235.55
+      ],
+      "neighbors": [
+        "T",
+        "TE",
+        "V"
+      ]
+    },
+    {
+      "code": "CU",
+      "name": "Cuenca",
+      "nameNative": "Cuenca",
+      "type": "autonomous community",
+      "capital": "Cuenca",
+      "largestCity": "Cuenca",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Castilla-La Mancha",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        739.13,
+        228.21
+      ],
+      "bbox": [
+        700.15,
+        188.38,
+        780.99,
+        263.12
+      ],
+      "neighbors": [
+        "AB",
+        "CR",
+        "GU",
+        "M",
+        "TE",
+        "TO",
+        "V"
+      ]
+    },
+    {
+      "code": "GC",
+      "name": "Las Palmas",
+      "nameNative": "Las Palmas",
+      "type": "autonomous community",
+      "capital": "Las Palmas",
+      "largestCity": "Las Palmas",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Canary Is.",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        172.19,
+        801.19
+      ],
+      "bbox": [
+        110.32,
+        758.32,
+        229.8,
+        828.37
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "GI",
+      "name": "Girona",
+      "nameNative": "Gerona",
+      "type": "autonomous community",
+      "capital": "Girona",
+      "largestCity": "Girona",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Cataluña",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        925.85,
+        104.29
+      ],
+      "bbox": [
+        887.38,
+        85.45,
+        949.68,
+        128.87
+      ],
+      "neighbors": [
+        "B",
+        "L"
+      ]
+    },
+    {
+      "code": "GR",
+      "name": "Granada",
+      "nameNative": "Granada",
+      "type": "autonomous community",
+      "capital": "Granada",
+      "largestCity": "Granada",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Andalucía",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        696.56,
+        363.16
+      ],
+      "bbox": [
+        652.91,
+        322.96,
+        740.04,
+        395.39
+      ],
+      "neighbors": [
+        "AB",
+        "AL",
+        "CO",
+        "J",
+        "MA",
+        "MU"
+      ]
+    },
+    {
+      "code": "GU",
+      "name": "Guadalajara",
+      "nameNative": "Guadalajara",
+      "type": "autonomous community",
+      "capital": "Guadalajara",
+      "largestCity": "Guadalajara",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Castilla-La Mancha",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        721.58,
+        180.55
+      ],
+      "bbox": [
+        685.19,
+        154.18,
+        764.56,
+        215.01
+      ],
+      "neighbors": [
+        "CU",
+        "M",
+        "SG",
+        "SO",
+        "TE",
+        "Z"
+      ]
+    },
+    {
+      "code": "H",
+      "name": "Huelva",
+      "nameNative": "Huelva",
+      "type": "autonomous community",
+      "capital": "Huelva",
+      "largestCity": "Huelva",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Andalucía",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        549.34,
+        346.71
+      ],
+      "bbox": [
+        520.52,
+        313.78,
+        578.96,
+        387.6
+      ],
+      "neighbors": [
+        "BA",
+        "SE"
+      ]
+    },
+    {
+      "code": "HU",
+      "name": "Huesca",
+      "nameNative": "Huesca",
+      "type": "autonomous community",
+      "capital": "Huesca",
+      "largestCity": "Huesca",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Aragón",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        819.52,
+        106.08
+      ],
+      "bbox": [
+        785.81,
+        69.37,
+        850.91,
+        149.93
+      ],
+      "neighbors": [
+        "L",
+        "NA",
+        "Z"
+      ]
+    },
+    {
+      "code": "J",
+      "name": "Jaén",
+      "nameNative": "Jaén",
+      "type": "autonomous community",
+      "capital": "Jaén",
+      "largestCity": "Jaén",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Andalucía",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        689.34,
+        326.35
+      ],
+      "bbox": [
+        654.71,
+        299.46,
+        730.76,
+        359.73
+      ],
+      "neighbors": [
+        "AB",
+        "CO",
+        "CR",
+        "GR"
+      ]
+    },
+    {
+      "code": "L",
+      "name": "Lleida",
+      "nameNative": "Lérida",
+      "type": "autonomous community",
+      "capital": "Lleida",
+      "largestCity": "Lleida",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Cataluña",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        862.97,
+        112.56
+      ],
+      "bbox": [
+        836.03,
+        70.99,
+        892.97,
+        155.67
+      ],
+      "neighbors": [
+        "B",
+        "GI",
+        "HU",
+        "T",
+        "Z"
+      ]
+    },
+    {
+      "code": "LE",
+      "name": "León",
+      "nameNative": "León",
+      "type": "autonomous community",
+      "capital": "León",
+      "largestCity": "León",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Castilla y León",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        597.1,
+        85.27
+      ],
+      "bbox": [
+        549.66,
+        53.87,
+        640.16,
+        116.52
+      ],
+      "neighbors": [
+        "LU",
+        "O",
+        "OR",
+        "P",
+        "S",
+        "VA",
+        "ZA"
+      ]
+    },
+    {
+      "code": "LO",
+      "name": "La Rioja",
+      "nameNative": "La Rioja",
+      "type": "autonomous community",
+      "capital": "La Rioja",
+      "largestCity": "La Rioja",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "La Rioja",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        725.77,
+        104.06
+      ],
+      "bbox": [
+        701.63,
+        85.22,
+        757.14,
+        122.66
+      ],
+      "neighbors": [
+        "BU",
+        "NA",
+        "SO",
+        "VI",
+        "Z"
+      ]
+    },
+    {
+      "code": "LU",
+      "name": "Lugo",
+      "nameNative": "Lugo",
+      "type": "autonomous community",
+      "capital": "Lugo",
+      "largestCity": "Lugo",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Galicia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        536.42,
+        62.75
+      ],
+      "bbox": [
+        514.88,
+        23.84,
+        560.15,
+        99
+      ],
+      "neighbors": [
+        "C",
+        "LE",
+        "O",
+        "OR",
+        "PO"
+      ]
+    },
+    {
+      "code": "M",
+      "name": "Community of Madrid",
+      "nameNative": "Madrid",
+      "type": "autonomous community",
+      "capital": "Community of Madrid",
+      "largestCity": "Community of Madrid",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Madrid",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        678.39,
+        197.38
+      ],
+      "bbox": [
+        644.33,
+        162.62,
+        704.43,
+        228.68
+      ],
+      "neighbors": [
+        "AV",
+        "CU",
+        "GU",
+        "SG",
+        "TO"
+      ]
+    },
+    {
+      "code": "MA",
+      "name": "Málaga",
+      "nameNative": "Málaga",
+      "type": "autonomous community",
+      "capital": "Málaga",
+      "largestCity": "Málaga",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Andalucía",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        635.55,
+        388.9
+      ],
+      "bbox": [
+        598.61,
+        364.83,
+        675.78,
+        415.46
+      ],
+      "neighbors": [
+        "CA",
+        "CO",
+        "GR",
+        "SE"
+      ]
+    },
+    {
+      "code": "ML",
+      "name": "Melilla",
+      "nameNative": "Melilla",
+      "type": "autonomous city",
+      "capital": "Melilla",
+      "largestCity": "Melilla",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Melilla",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        710.67,
+        468.41
+      ],
+      "bbox": [
+        709.71,
+        466.61,
+        712.02,
+        469.84
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "MU",
+      "name": "Murcia",
+      "nameNative": "Murcia",
+      "type": "autonomous community",
+      "capital": "Murcia",
+      "largestCity": "Murcia",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Murcia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        769.79,
+        326.28
+      ],
+      "bbox": [
+        734.67,
+        286.85,
+        802.51,
+        358.84
+      ],
+      "neighbors": [
+        "A",
+        "AB",
+        "AL",
+        "GR"
+      ]
+    },
+    {
+      "code": "NA",
+      "name": "Navarre",
+      "nameNative": "Navarra",
+      "type": "autonomous community",
+      "capital": "Navarre",
+      "largestCity": "Navarre",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Foral de Navarra",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        758.24,
+        83.33
+      ],
+      "bbox": [
+        725.6,
+        50.12,
+        792.27,
+        122.75
+      ],
+      "neighbors": [
+        "HU",
+        "LO",
+        "SS",
+        "VI",
+        "Z"
+      ]
+    },
+    {
+      "code": "O",
+      "name": "Asturias",
+      "nameNative": "Asturias",
+      "type": "autonomous community",
+      "capital": "Asturias",
+      "largestCity": "Asturias",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Asturias",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        592.41,
+        49.86
+      ],
+      "bbox": [
+        547.7,
+        30.96,
+        648.53,
+        70.07
+      ],
+      "neighbors": [
+        "LE",
+        "LU",
+        "S"
+      ]
+    },
+    {
+      "code": "OR",
+      "name": "Ourense",
+      "nameNative": "Orense",
+      "type": "autonomous community",
+      "capital": "Ourense",
+      "largestCity": "Ourense",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Galicia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        528.68,
+        105.2
+      ],
+      "bbox": [
+        500.62,
+        84.42,
+        562.25,
+        125.68
+      ],
+      "neighbors": [
+        "LE",
+        "LU",
+        "PO",
+        "ZA"
+      ]
+    },
+    {
+      "code": "P",
+      "name": "Palencia",
+      "nameNative": "Palencia",
+      "type": "autonomous community",
+      "capital": "Palencia",
+      "largestCity": "Palencia",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Castilla y León",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        647.02,
+        99.53
+      ],
+      "bbox": [
+        627.95,
+        63.89,
+        671.77,
+        131.07
+      ],
+      "neighbors": [
+        "BU",
+        "LE",
+        "S",
+        "VA"
+      ]
+    },
+    {
+      "code": "PM",
+      "name": "Balearic Islands",
+      "nameNative": "Baleares",
+      "type": "autonomous community",
+      "capital": "Balearic Islands",
+      "largestCity": "Balearic Islands",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Islas Baleares",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        943.7,
+        236.32
+      ],
+      "bbox": [
+        877.97,
+        206.22,
+        1000,
+        288.67
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "PO",
+      "name": "Pontevedra",
+      "nameNative": "Pontevedra",
+      "type": "autonomous community",
+      "capital": "Pontevedra",
+      "largestCity": "Pontevedra",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Galicia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        496.05,
+        90.7
+      ],
+      "bbox": [
+        477.66,
+        69.77,
+        519.57,
+        118.5
+      ],
+      "neighbors": [
+        "C",
+        "LU",
+        "OR"
+      ]
+    },
+    {
+      "code": "S",
+      "name": "Cantabria",
+      "nameNative": "Cantabria",
+      "type": "autonomous community",
+      "capital": "Cantabria",
+      "largestCity": "Cantabria",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Cantabria",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        666.64,
+        56.26
+      ],
+      "bbox": [
+        636.09,
+        39.68,
+        700.3,
+        79.09
+      ],
+      "neighbors": [
+        "BI",
+        "BU",
+        "LE",
+        "O",
+        "P"
+      ]
+    },
+    {
+      "code": "SA",
+      "name": "Salamanca",
+      "nameNative": "Salamanca",
+      "type": "autonomous community",
+      "capital": "Salamanca",
+      "largestCity": "Salamanca",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Castilla y León",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        585.31,
+        179.69
+      ],
+      "bbox": [
+        551.64,
+        153.32,
+        624.22,
+        208.06
+      ],
+      "neighbors": [
+        "AV",
+        "CC",
+        "VA",
+        "ZA"
+      ]
+    },
+    {
+      "code": "SE",
+      "name": "Seville",
+      "nameNative": "Sevilla",
+      "type": "autonomous community",
+      "capital": "Seville",
+      "largestCity": "Seville",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Andalucía",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        596.64,
+        355.7
+      ],
+      "bbox": [
+        561.86,
+        316.32,
+        639.12,
+        386.42
+      ],
+      "neighbors": [
+        "BA",
+        "CA",
+        "CO",
+        "H",
+        "MA"
+      ]
+    },
+    {
+      "code": "SG",
+      "name": "Segovia",
+      "nameNative": "Segovia",
+      "type": "autonomous community",
+      "capital": "Segovia",
+      "largestCity": "Segovia",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Castilla y León",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        665.22,
+        162.06
+      ],
+      "bbox": [
+        639.3,
+        140.6,
+        698.78,
+        189.97
+      ],
+      "neighbors": [
+        "AV",
+        "BU",
+        "GU",
+        "M",
+        "SO",
+        "VA"
+      ]
+    },
+    {
+      "code": "SO",
+      "name": "Soria",
+      "nameNative": "Soria",
+      "type": "autonomous community",
+      "capital": "Soria",
+      "largestCity": "Soria",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Castilla y León",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        722.46,
+        138.53
+      ],
+      "bbox": [
+        685.31,
+        111.21,
+        753.71,
+        167.42
+      ],
+      "neighbors": [
+        "BU",
+        "GU",
+        "LO",
+        "SG",
+        "Z"
+      ]
+    },
+    {
+      "code": "SS",
+      "name": "Gipuzkoa",
+      "nameNative": "Gipuzkoa",
+      "type": "autonomous community",
+      "capital": "Gipuzkoa",
+      "largestCity": "Gipuzkoa",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "País Vasco",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        736.55,
+        58.75
+      ],
+      "bbox": [
+        721.25,
+        45.51,
+        753.5,
+        71.63
+      ],
+      "neighbors": [
+        "BI",
+        "NA",
+        "VI"
+      ]
+    },
+    {
+      "code": "T",
+      "name": "Tarragona",
+      "nameNative": "Tarragona",
+      "type": "autonomous community",
+      "capital": "Tarragona",
+      "largestCity": "Tarragona",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Cataluña",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        856.43,
+        162.39
+      ],
+      "bbox": [
+        831.75,
+        135.78,
+        887.93,
+        192.18
+      ],
+      "neighbors": [
+        "B",
+        "CS",
+        "L",
+        "TE",
+        "Z"
+      ]
+    },
+    {
+      "code": "TE",
+      "name": "Teruel",
+      "nameNative": "Teruel",
+      "type": "autonomous community",
+      "capital": "Teruel",
+      "largestCity": "Teruel",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Aragón",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        793.07,
+        187.23
+      ],
+      "bbox": [
+        754.11,
+        150.61,
+        836.05,
+        229.33
+      ],
+      "neighbors": [
+        "CS",
+        "CU",
+        "GU",
+        "T",
+        "V",
+        "Z"
+      ]
+    },
+    {
+      "code": "TF",
+      "name": "Santa Cruz de Tenerife",
+      "nameNative": "Santa Cruz de Tenerife",
+      "type": "autonomous community",
+      "capital": "Santa Cruz de Tenerife",
+      "largestCity": "Santa Cruz de Tenerife",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Canary Is.",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        57.1,
+        788.64
+      ],
+      "bbox": [
+        0,
+        753.52,
+        101.35,
+        816.58
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "TO",
+      "name": "Toledo",
+      "nameNative": "Toledo",
+      "type": "autonomous community",
+      "capital": "Toledo",
+      "largestCity": "Toledo",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Castilla-La Mancha",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        661.11,
+        233.79
+      ],
+      "bbox": [
+        611.41,
+        206.87,
+        710.73,
+        261.71
+      ],
+      "neighbors": [
+        "AV",
+        "BA",
+        "CC",
+        "CR",
+        "CU",
+        "M"
+      ]
+    },
+    {
+      "code": "V",
+      "name": "Valencia",
+      "nameNative": "Valencia",
+      "type": "autonomous community",
+      "capital": "Valencia",
+      "largestCity": "Valencia",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Valenciana",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        795.72,
+        254.38
+      ],
+      "bbox": [
+        766.71,
+        211.5,
+        827.65,
+        289.33
+      ],
+      "neighbors": [
+        "A",
+        "AB",
+        "CS",
+        "CU",
+        "TE"
+      ]
+    },
+    {
+      "code": "VA",
+      "name": "Valladolid",
+      "nameNative": "Valladolid",
+      "type": "autonomous community",
+      "capital": "Valladolid",
+      "largestCity": "Valladolid",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Castilla y León",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        634.47,
+        137.57
+      ],
+      "bbox": [
+        608.79,
+        102.23,
+        668.24,
+        165.56
+      ],
+      "neighbors": [
+        "AV",
+        "BU",
+        "LE",
+        "P",
+        "SA",
+        "SG",
+        "ZA"
+      ]
+    },
+    {
+      "code": "VI",
+      "name": "Araba / Álava",
+      "nameNative": "Álava",
+      "type": "autonomous community",
+      "capital": "Araba / Álava",
+      "largestCity": "Araba / Álava",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "País Vasco",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        716.94,
+        74.73
+      ],
+      "bbox": [
+        695.4,
+        55.99,
+        735.22,
+        92.83
+      ],
+      "neighbors": [
+        "BI",
+        "BU",
+        "LO",
+        "NA",
+        "SS"
+      ]
+    },
+    {
+      "code": "Z",
+      "name": "Zaragoza",
+      "nameNative": "Zaragoza",
+      "type": "autonomous community",
+      "capital": "Zaragoza",
+      "largestCity": "Zaragoza",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Aragón",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        781.93,
+        137.45
+      ],
+      "bbox": [
+        738.94,
+        78.74,
+        838.73,
+        173.15
+      ],
+      "neighbors": [
+        "GU",
+        "HU",
+        "L",
+        "LO",
+        "NA",
+        "SO",
+        "T",
+        "TE"
+      ]
+    },
+    {
+      "code": "ZA",
+      "name": "Zamora",
+      "nameNative": "Zamora",
+      "type": "autonomous community",
+      "capital": "Zamora",
+      "largestCity": "Zamora",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Castilla y León",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        590.36,
+        131.86
+      ],
+      "bbox": [
+        550.42,
+        103.41,
+        619.52,
+        164.27
+      ],
+      "neighbors": [
+        "LE",
+        "OR",
+        "SA",
+        "VA"
+      ]
+    }
+  ]
+}

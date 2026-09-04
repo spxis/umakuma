@@ -1,0 +1,8767 @@
+{
+  "updatedAt": "2026-09-04T06:16:48.584Z",
+  "standard": "Natural Earth admin-1 vector dataset",
+  "country": "GB",
+  "countryName": "United Kingdom",
+  "divisionTypeName": "Administrative division",
+  "divisionTypePlural": "Administrative divisions",
+  "totalRegions": 232,
+  "regions": [
+    {
+      "code": "ABD",
+      "name": "Aberdeenshire",
+      "nameNative": "Aberdeenshire",
+      "type": "unitary district",
+      "capital": "Aberdeenshire",
+      "largestCity": "Aberdeenshire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Scotland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        665.55,
+        365.18
+      ],
+      "bbox": [
+        600.75,
+        318.7,
+        713.09,
+        416.34
+      ],
+      "neighbors": [
+        "ABE",
+        "ANS",
+        "HLD",
+        "MRY",
+        "PKN"
+      ]
+    },
+    {
+      "code": "ABE",
+      "name": "Aberdeen",
+      "nameNative": "Aberdeen",
+      "type": "unitary district (city)",
+      "capital": "Aberdeen City",
+      "largestCity": "Aberdeen",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Scotland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        689.48,
+        373.59
+      ],
+      "bbox": [
+        680.49,
+        365.72,
+        697.54,
+        381.73
+      ],
+      "neighbors": [
+        "ABD"
+      ]
+    },
+    {
+      "code": "AGB",
+      "name": "Argyll and Bute",
+      "nameNative": "Argyll and Bute",
+      "type": "unitary district",
+      "capital": "Earra-Ghaidheal agus Bòd",
+      "largestCity": "Argyll and Bute",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Scotland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        505.03,
+        475.65
+      ],
+      "bbox": [
+        421.29,
+        413.31,
+        557.3,
+        556.81
+      ],
+      "neighbors": [
+        "HLD",
+        "PKN",
+        "STG",
+        "WDU"
+      ]
+    },
+    {
+      "code": "AGY",
+      "name": "Anglesey",
+      "nameNative": "Anglesey",
+      "type": "unitary authority (wales)",
+      "capital": "Anglesey",
+      "largestCity": "Anglesey",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Wales",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        556.36,
+        763.79
+      ],
+      "bbox": [
+        537,
+        749.44,
+        576.39,
+        779.63
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "ANS",
+      "name": "Angus",
+      "nameNative": "Angus",
+      "type": "unitary district",
+      "capital": "Forfar",
+      "largestCity": "Angus",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Scotland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        649.08,
+        417.15
+      ],
+      "bbox": [
+        622.81,
+        391.38,
+        675.78,
+        443.87
+      ],
+      "neighbors": [
+        "ABD",
+        "DND",
+        "PKN"
+      ]
+    },
+    {
+      "code": "ANT",
+      "name": "Antrim",
+      "nameNative": "Antrim",
+      "type": "district",
+      "capital": "Antrim",
+      "largestCity": "Antrim",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northern Ireland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        450.79,
+        615.73
+      ],
+      "bbox": [
+        436.91,
+        604.98,
+        464.48,
+        628.23
+      ],
+      "neighbors": [
+        "BFS",
+        "BLA",
+        "CGV",
+        "CKT",
+        "LSB",
+        "MFT",
+        "NTA"
+      ]
+    },
+    {
+      "code": "ARD",
+      "name": "Ards",
+      "nameNative": "Ards",
+      "type": "district",
+      "capital": "Ards",
+      "largestCity": "Ards",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northern Ireland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        487.96,
+        635.93
+      ],
+      "bbox": [
+        475.38,
+        620.51,
+        498.23,
+        654.48
+      ],
+      "neighbors": [
+        "CSR",
+        "DOW",
+        "NDN"
+      ]
+    },
+    {
+      "code": "ARM",
+      "name": "Armagh",
+      "nameNative": "Armagh",
+      "type": "district",
+      "capital": "Armagh",
+      "largestCity": "Armagh",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northern Ireland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        426.67,
+        652.48
+      ],
+      "bbox": [
+        411.48,
+        637.82,
+        442.31,
+        667.23
+      ],
+      "neighbors": [
+        "BNB",
+        "CGV",
+        "DGN",
+        "NYM"
+      ]
+    },
+    {
+      "code": "BAS",
+      "name": "Bath and North East Somerset",
+      "nameNative": "Bath and North East Somerset",
+      "type": "unitary authority",
+      "capital": "Bath and North East Somerset",
+      "largestCity": "Bath and North East Somerset",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        669.89,
+        962.5
+      ],
+      "bbox": [
+        654.77,
+        955.05,
+        682.49,
+        969.91
+      ],
+      "neighbors": [
+        "BST",
+        "NSM",
+        "SGC",
+        "SOM",
+        "WIL"
+      ]
+    },
+    {
+      "code": "BBD",
+      "name": "Blackburn with Darwen",
+      "nameNative": "Blackburn with Darwen",
+      "type": "unitary authority",
+      "capital": "Blackburn, Blackburn and Darwen",
+      "largestCity": "Blackburn with Darwen",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        672.88,
+        724.7
+      ],
+      "bbox": [
+        668.26,
+        716.83,
+        678.59,
+        731.85
+      ],
+      "neighbors": [
+        "BOL",
+        "BUR",
+        "LAN"
+      ]
+    },
+    {
+      "code": "BDF",
+      "name": "Bedford",
+      "nameNative": "Bedford",
+      "type": "unitary authority",
+      "capital": "Bedford",
+      "largestCity": "Bedford",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        794.78,
+        876.91
+      ],
+      "bbox": [
+        783.5,
+        864.11,
+        808.42,
+        888.55
+      ],
+      "neighbors": [
+        "CAM",
+        "CBF",
+        "MIK",
+        "NTH"
+      ]
+    },
+    {
+      "code": "BDG",
+      "name": "Barking and Dagenham",
+      "nameNative": "Barking and Dagenham",
+      "type": "london borough",
+      "capital": "Barking and Dagenham",
+      "largestCity": "Barking and Dagenham",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        834.57,
+        941.23
+      ],
+      "bbox": [
+        830.62,
+        935.01,
+        838.07,
+        945.35
+      ],
+      "neighbors": [
+        "BEX",
+        "GRE",
+        "HAV",
+        "NWM",
+        "RDB"
+      ]
+    },
+    {
+      "code": "BEN",
+      "name": "Brent",
+      "nameNative": "Brent",
+      "type": "london borough",
+      "capital": "Brent",
+      "largestCity": "Brent",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        809.65,
+        940.27
+      ],
+      "bbox": [
+        805.41,
+        935.5,
+        814.69,
+        943.4
+      ],
+      "neighbors": [
+        "BNE",
+        "CMD",
+        "EAL",
+        "HMF",
+        "HRW",
+        "KEC",
+        "WSM"
+      ]
+    },
+    {
+      "code": "BEX",
+      "name": "Bexley",
+      "nameNative": "Bexley",
+      "type": "london borough",
+      "capital": "Bexley",
+      "largestCity": "Bexley",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        835.42,
+        949.48
+      ],
+      "bbox": [
+        831.3,
+        944.5,
+        840.24,
+        955.27
+      ],
+      "neighbors": [
+        "BDG",
+        "BRY",
+        "GRE",
+        "HAV",
+        "KEN",
+        "THR"
+      ]
+    },
+    {
+      "code": "BFS",
+      "name": "Belfast",
+      "nameNative": "Belfast",
+      "type": "district",
+      "capital": "Belfast",
+      "largestCity": "Belfast",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northern Ireland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        467.98,
+        625.7
+      ],
+      "bbox": [
+        461.71,
+        620.06,
+        476.78,
+        632.61
+      ],
+      "neighbors": [
+        "ANT",
+        "CSR",
+        "LSB",
+        "NDN",
+        "NTA"
+      ]
+    },
+    {
+      "code": "BGE",
+      "name": "Bridgend",
+      "nameNative": "Bridgend",
+      "type": "unitary authority (wales)",
+      "capital": "Bridgend",
+      "largestCity": "Bridgend",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Wales",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        600.04,
+        941.89
+      ],
+      "bbox": [
+        589.65,
+        931.63,
+        608.03,
+        954
+      ],
+      "neighbors": [
+        "NTL",
+        "RCT",
+        "VGL"
+      ]
+    },
+    {
+      "code": "BGW",
+      "name": "Blaenau Gwent",
+      "nameNative": "Blaenau Gwent",
+      "type": "unitary authority (wales)",
+      "capital": "Blaenau Gwent",
+      "largestCity": "Blaenau Gwent",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Wales",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        625.66,
+        919.36
+      ],
+      "bbox": [
+        619.04,
+        914.46,
+        630.61,
+        926.19
+      ],
+      "neighbors": [
+        "CAY",
+        "MON",
+        "POW",
+        "TOF"
+      ]
+    },
+    {
+      "code": "BIR",
+      "name": "Birmingham",
+      "nameNative": "Birmingham",
+      "type": "metropolitan borough",
+      "capital": "Birmingham",
+      "largestCity": "Birmingham",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        708.01,
+        848.34
+      ],
+      "bbox": [
+        698.1,
+        836.55,
+        716.42,
+        858.17
+      ],
+      "neighbors": [
+        "DUD",
+        "SAW",
+        "SOL",
+        "STS",
+        "WAR",
+        "WLL",
+        "WOR"
+      ]
+    },
+    {
+      "code": "BKM",
+      "name": "Buckinghamshire",
+      "nameNative": "Buckinghamshire",
+      "type": "administrative county",
+      "capital": "Buckinghamshire",
+      "largestCity": "Buckinghamshire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        775,
+        918.41
+      ],
+      "bbox": [
+        753.47,
+        888.44,
+        796.23,
+        948.52
+      ],
+      "neighbors": [
+        "CBF",
+        "HIL",
+        "HRT",
+        "MIK",
+        "NTH",
+        "OXF",
+        "SLG",
+        "SRY",
+        "WNM",
+        "WOK"
+      ]
+    },
+    {
+      "code": "BLA",
+      "name": "Ballymena",
+      "nameNative": "Ballymena",
+      "type": "district",
+      "capital": "Ballymena",
+      "largestCity": "Ballymena",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northern Ireland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        452.85,
+        596.53
+      ],
+      "bbox": [
+        437.53,
+        582.47,
+        470,
+        607.33
+      ],
+      "neighbors": [
+        "ANT",
+        "BLY",
+        "LRN",
+        "MFT",
+        "MYL",
+        "NTA"
+      ]
+    },
+    {
+      "code": "BLY",
+      "name": "Ballymoney",
+      "nameNative": "Ballymoney",
+      "type": "district",
+      "capital": "Ballymoney",
+      "largestCity": "Ballymoney",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northern Ireland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        443.37,
+        579.86
+      ],
+      "bbox": [
+        432.65,
+        569.08,
+        456.75,
+        593.49
+      ],
+      "neighbors": [
+        "BLA",
+        "CLR",
+        "MFT",
+        "MYL"
+      ]
+    },
+    {
+      "code": "BMH",
+      "name": "Bournemouth",
+      "nameNative": "Bournemouth",
+      "type": "unitary authority",
+      "capital": "Bournemouth",
+      "largestCity": "Bournemouth",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        707.83,
+        1024.39
+      ],
+      "bbox": [
+        704.57,
+        1022.63,
+        712.97,
+        1026.39
+      ],
+      "neighbors": [
+        "DOR",
+        "POL"
+      ]
+    },
+    {
+      "code": "BNB",
+      "name": "Banbridge",
+      "nameNative": "Banbridge",
+      "type": "district",
+      "capital": "Banbridge",
+      "largestCity": "Banbridge",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northern Ireland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        453.97,
+        652.92
+      ],
+      "bbox": [
+        440.38,
+        641.66,
+        467.76,
+        662.39
+      ],
+      "neighbors": [
+        "ARM",
+        "CGV",
+        "DOW",
+        "LSB",
+        "NYM"
+      ]
+    },
+    {
+      "code": "BNE",
+      "name": "Barnet",
+      "nameNative": "Barnet",
+      "type": "london borough",
+      "capital": "Barnet",
+      "largestCity": "Barnet",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        812.88,
+        934.07
+      ],
+      "bbox": [
+        807.21,
+        928.22,
+        818.15,
+        940.42
+      ],
+      "neighbors": [
+        "BEN",
+        "CMD",
+        "ENF",
+        "HRT",
+        "HRW",
+        "HRY"
+      ]
+    },
+    {
+      "code": "BNH",
+      "name": "Brighton and Hove",
+      "nameNative": "Brighton and Hove",
+      "type": "unitary authority",
+      "capital": "Brighton and Hove",
+      "largestCity": "Brighton and Hove",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        820.56,
+        1012.3
+      ],
+      "bbox": [
+        813.05,
+        1007.17,
+        829.14,
+        1017.66
+      ],
+      "neighbors": [
+        "ESX",
+        "WSX"
+      ]
+    },
+    {
+      "code": "BNS",
+      "name": "Barnsley",
+      "nameNative": "Barnsley",
+      "type": "metropolitan borough",
+      "capital": "Barnsley",
+      "largestCity": "Barnsley",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        730.07,
+        741.74
+      ],
+      "bbox": [
+        711.06,
+        733.63,
+        742.45,
+        753.38
+      ],
+      "neighbors": [
+        "DBY",
+        "DNC",
+        "KIR",
+        "ROT",
+        "SHF",
+        "WKF"
+      ]
+    },
+    {
+      "code": "BOL",
+      "name": "Bolton",
+      "nameNative": "Bolton",
+      "type": "metropolitan borough",
+      "capital": "Bolton",
+      "largestCity": "Bolton",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        673.42,
+        735.65
+      ],
+      "bbox": [
+        666.41,
+        729.84,
+        679.8,
+        740.99
+      ],
+      "neighbors": [
+        "BBD",
+        "BUR",
+        "LAN",
+        "SLF",
+        "WGN"
+      ]
+    },
+    {
+      "code": "BPL",
+      "name": "Blackpool",
+      "nameNative": "Blackpool",
+      "type": "unitary authority",
+      "capital": "Blackpool",
+      "largestCity": "Blackpool",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        639.82,
+        709.5
+      ],
+      "bbox": [
+        636.82,
+        700.34,
+        643.53,
+        719.18
+      ],
+      "neighbors": [
+        "LAN"
+      ]
+    },
+    {
+      "code": "BRC",
+      "name": "Bracknell Forest",
+      "nameNative": "Bracknell Forest",
+      "type": "unitary authority",
+      "capital": "Bracknell Forest",
+      "largestCity": "Bracknell Forest",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        778.03,
+        956.31
+      ],
+      "bbox": [
+        772.53,
+        949.49,
+        783.4,
+        963.43
+      ],
+      "neighbors": [
+        "HAM",
+        "SRY",
+        "WNM",
+        "WOK"
+      ]
+    },
+    {
+      "code": "BRD",
+      "name": "Bradford",
+      "nameNative": "Bradford",
+      "type": "metropolitan borough",
+      "capital": "Bradford",
+      "largestCity": "Bradford",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        711.23,
+        708.48
+      ],
+      "bbox": [
+        701.31,
+        697.66,
+        722.37,
+        720.31
+      ],
+      "neighbors": [
+        "CLD",
+        "KIR",
+        "LDS",
+        "NYK"
+      ]
+    },
+    {
+      "code": "BRY",
+      "name": "Bromley",
+      "nameNative": "Bromley",
+      "type": "london borough",
+      "capital": "Bromley",
+      "largestCity": "Bromley",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        830.11,
+        958.55
+      ],
+      "bbox": [
+        821.46,
+        951.38,
+        837.04,
+        967.2
+      ],
+      "neighbors": [
+        "BEX",
+        "CRY",
+        "GRE",
+        "KEN",
+        "LBH",
+        "LEW",
+        "SRY",
+        "SWK"
+      ]
+    },
+    {
+      "code": "BST",
+      "name": "Bristol",
+      "nameNative": "Bristol",
+      "type": "unitary authority",
+      "capital": "Bristol",
+      "largestCity": "Bristol",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        661.91,
+        951.7
+      ],
+      "bbox": [
+        654.01,
+        943.65,
+        667.31,
+        959.02
+      ],
+      "neighbors": [
+        "BAS",
+        "NSM",
+        "SGC"
+      ]
+    },
+    {
+      "code": "BUR",
+      "name": "Bury",
+      "nameNative": "Bury",
+      "type": "metropolitan borough",
+      "capital": "Bury",
+      "largestCity": "Bury",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        681.33,
+        734.97
+      ],
+      "bbox": [
+        677.39,
+        727.56,
+        684.87,
+        744.05
+      ],
+      "neighbors": [
+        "BBD",
+        "BOL",
+        "LAN",
+        "MAN",
+        "RCH",
+        "SLF"
+      ]
+    },
+    {
+      "code": "CAM",
+      "name": "Cambridgeshire",
+      "nameNative": "Cambridgeshire",
+      "type": "administrative county",
+      "capital": "Cambridgeshire",
+      "largestCity": "Cambridgeshire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        826.21,
+        860.86
+      ],
+      "bbox": [
+        793.65,
+        820.99,
+        856.15,
+        894.29
+      ],
+      "neighbors": [
+        "BDF",
+        "CBF",
+        "ESS",
+        "HRT",
+        "LIN",
+        "NFK",
+        "NTH",
+        "PTE",
+        "SFK"
+      ]
+    },
+    {
+      "code": "CAY",
+      "name": "Caerphilly",
+      "nameNative": "Caerphilly",
+      "type": "unitary authority (wales)",
+      "capital": "Caerphilly",
+      "largestCity": "Caerphilly",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Wales",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        625.02,
+        930.88
+      ],
+      "bbox": [
+        616.45,
+        916.61,
+        635.1,
+        942.13
+      ],
+      "neighbors": [
+        "BGW",
+        "CRF",
+        "MTY",
+        "NWP",
+        "POW",
+        "RCT",
+        "TOF"
+      ]
+    },
+    {
+      "code": "CBF",
+      "name": "Central Bedfordshire",
+      "nameNative": "Central Bedfordshire",
+      "type": "unitary authority",
+      "capital": "Central Bedfordshire",
+      "largestCity": "Central Bedfordshire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        798.07,
+        894.29
+      ],
+      "bbox": [
+        781.95,
+        875.65,
+        816.2,
+        915.52
+      ],
+      "neighbors": [
+        "BDF",
+        "BKM",
+        "CAM",
+        "HRT",
+        "LUT",
+        "MIK"
+      ]
+    },
+    {
+      "code": "CGN",
+      "name": "Ceredigion",
+      "nameNative": "Ceredigion",
+      "type": "principality",
+      "capital": "Cardiganshire",
+      "largestCity": "Ceredigion",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Wales",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        571.46,
+        869.35
+      ],
+      "bbox": [
+        532.09,
+        838.6,
+        597.81,
+        891.13
+      ],
+      "neighbors": [
+        "CMN",
+        "GWN",
+        "PEM",
+        "POW"
+      ]
+    },
+    {
+      "code": "CGV",
+      "name": "Craigavon",
+      "nameNative": "Craigavon",
+      "type": "district",
+      "capital": "Craigavon",
+      "largestCity": "Craigavon",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northern Ireland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        441.99,
+        636.96
+      ],
+      "bbox": [
+        430.63,
+        624.37,
+        452.09,
+        647.46
+      ],
+      "neighbors": [
+        "ANT",
+        "ARM",
+        "BNB",
+        "CKT",
+        "DGN",
+        "LSB"
+      ]
+    },
+    {
+      "code": "CHE",
+      "name": "Cheshire East",
+      "nameNative": "Cheshire East",
+      "type": "unitary authority",
+      "capital": "Cheshire East",
+      "largestCity": "Cheshire East",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        680.54,
+        776.52
+      ],
+      "bbox": [
+        659.36,
+        756.55,
+        701.75,
+        800.37
+      ],
+      "neighbors": [
+        "CHW",
+        "DBY",
+        "MAN",
+        "SHR",
+        "SKP",
+        "STE",
+        "STS",
+        "TRF",
+        "WRT"
+      ]
+    },
+    {
+      "code": "CHW",
+      "name": "Cheshire West and Chester",
+      "nameNative": "Cheshire West and Chester",
+      "type": "unitary authority",
+      "capital": "Cheshire West and Chester",
+      "largestCity": "Cheshire West and Chester",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        655.76,
+        777.13
+      ],
+      "bbox": [
+        633.65,
+        761.53,
+        675.12,
+        798.3
+      ],
+      "neighbors": [
+        "CHE",
+        "FLN",
+        "HAL",
+        "SHR",
+        "WRL",
+        "WRT",
+        "WRX"
+      ]
+    },
+    {
+      "code": "CKF",
+      "name": "Carrickfergus",
+      "nameNative": "Carrickfergus",
+      "type": "district",
+      "capital": "Carrickfergus",
+      "largestCity": "Carrickfergus",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northern Ireland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        477,
+        612.91
+      ],
+      "bbox": [
+        471.59,
+        609.25,
+        484.39,
+        618.53
+      ],
+      "neighbors": [
+        "LRN",
+        "NTA"
+      ]
+    },
+    {
+      "code": "CKT",
+      "name": "Mid Ulster",
+      "nameNative": "Mid Ulster",
+      "type": "province",
+      "capital": "Cookstown",
+      "largestCity": "Mid Ulster",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northern Ireland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        424.14,
+        619.69
+      ],
+      "bbox": [
+        407.37,
+        608.5,
+        441.19,
+        630.76
+      ],
+      "neighbors": [
+        "ANT",
+        "CGV",
+        "DGN",
+        "MFT",
+        "OMH"
+      ]
+    },
+    {
+      "code": "CLD",
+      "name": "Calderdale",
+      "nameNative": "Calderdale",
+      "type": "metropolitan borough",
+      "capital": "Calderdale",
+      "largestCity": "Calderdale",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        702.49,
+        719.89
+      ],
+      "bbox": [
+        690.42,
+        707.05,
+        715.64,
+        730.4
+      ],
+      "neighbors": [
+        "BRD",
+        "KIR",
+        "LAN",
+        "NYK",
+        "RCH"
+      ]
+    },
+    {
+      "code": "CLK",
+      "name": "Clackmannanshire",
+      "nameNative": "Clackmannanshire",
+      "type": "unitary district",
+      "capital": "Clackmannanshire",
+      "largestCity": "Clackmannanshire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Scotland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        602.41,
+        475.13
+      ],
+      "bbox": [
+        594.96,
+        468.27,
+        612.41,
+        482.76
+      ],
+      "neighbors": [
+        "FIF",
+        "PKN",
+        "STG"
+      ]
+    },
+    {
+      "code": "CLR",
+      "name": "Coleraine",
+      "nameNative": "Coleraine",
+      "type": "district",
+      "capital": "Coleraine",
+      "largestCity": "Coleraine",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northern Ireland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        428.48,
+        576.7
+      ],
+      "bbox": [
+        418.61,
+        561.27,
+        438.83,
+        592.21
+      ],
+      "neighbors": [
+        "BLY",
+        "LMV",
+        "MFT",
+        "MYL"
+      ]
+    },
+    {
+      "code": "CMA",
+      "name": "Cumbria",
+      "nameNative": "Cumbria",
+      "type": "administrative county",
+      "capital": "Cumbria",
+      "largestCity": "Cumbria",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        647.54,
+        633.72
+      ],
+      "bbox": [
+        603.94,
+        573.12,
+        691.14,
+        686.87
+      ],
+      "neighbors": [
+        "DGY",
+        "DUR",
+        "LAN",
+        "NBL",
+        "NYK",
+        "SCB"
+      ]
+    },
+    {
+      "code": "CMD",
+      "name": "Camden",
+      "nameNative": "Camden",
+      "type": "london borough",
+      "capital": "Camden",
+      "largestCity": "Camden",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        816.78,
+        941.48
+      ],
+      "bbox": [
+        813.01,
+        938.76,
+        819.93,
+        945.23
+      ],
+      "neighbors": [
+        "BEN",
+        "BNE",
+        "HRY",
+        "ISL",
+        "LBH",
+        "LND",
+        "SWK",
+        "WSM"
+      ]
+    },
+    {
+      "code": "CMN",
+      "name": "Carmarthenshire",
+      "nameNative": "Carmarthenshire",
+      "type": "unitary authority (wales)",
+      "capital": "Carmarthenshire",
+      "largestCity": "Carmarthenshire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Wales",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        565.34,
+        904.49
+      ],
+      "bbox": [
+        526.82,
+        882.32,
+        597.73,
+        928.48
+      ],
+      "neighbors": [
+        "CGN",
+        "NTL",
+        "PEM",
+        "POW",
+        "SWA"
+      ]
+    },
+    {
+      "code": "CON",
+      "name": "Cornwall",
+      "nameNative": "Cornwall",
+      "type": "unitary single-tier county",
+      "capital": "Cornouailles",
+      "largestCity": "Cornwall",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        517.37,
+        1054.5
+      ],
+      "bbox": [
+        458.61,
+        1002.63,
+        559.47,
+        1098.6
+      ],
+      "neighbors": [
+        "DEV"
+      ]
+    },
+    {
+      "code": "COV",
+      "name": "Coventry",
+      "nameNative": "Coventry",
+      "type": "metropolitan borough",
+      "capital": "Coventry",
+      "largestCity": "Coventry",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        728.63,
+        855.57
+      ],
+      "bbox": [
+        722.25,
+        851.33,
+        735.11,
+        860.82
+      ],
+      "neighbors": [
+        "SOL",
+        "WAR"
+      ]
+    },
+    {
+      "code": "CRF",
+      "name": "Cardiff",
+      "nameNative": "Cardiff",
+      "type": "unitary authority (wales)",
+      "capital": "Cardiff",
+      "largestCity": "Cardiff",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Wales",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        625.45,
+        945.66
+      ],
+      "bbox": [
+        618.59,
+        941.07,
+        632.86,
+        951.17
+      ],
+      "neighbors": [
+        "CAY",
+        "NWP",
+        "RCT",
+        "VGL"
+      ]
+    },
+    {
+      "code": "CRY",
+      "name": "Croydon",
+      "nameNative": "Croydon",
+      "type": "london borough",
+      "capital": "Croydon",
+      "largestCity": "Croydon",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        821.34,
+        960.5
+      ],
+      "bbox": [
+        816.19,
+        953.87,
+        827.37,
+        966.86
+      ],
+      "neighbors": [
+        "BRY",
+        "LBH",
+        "MRT",
+        "SRY",
+        "STN"
+      ]
+    },
+    {
+      "code": "CSR",
+      "name": "Castlereagh",
+      "nameNative": "Castlereagh",
+      "type": "district",
+      "capital": "Castlereagh",
+      "largestCity": "Castlereagh",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northern Ireland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        474.06,
+        631.82
+      ],
+      "bbox": [
+        467.83,
+        625.17,
+        479.82,
+        639.12
+      ],
+      "neighbors": [
+        "ARD",
+        "BFS",
+        "DOW",
+        "LSB",
+        "NDN"
+      ]
+    },
+    {
+      "code": "CWY",
+      "name": "Conwy",
+      "nameNative": "Conwy",
+      "type": "unitary authority (wales)",
+      "capital": "Aberconwy and Colwyn",
+      "largestCity": "Conwy",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Wales",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        594.79,
+        780.49
+      ],
+      "bbox": [
+        577.91,
+        759.46,
+        610.88,
+        800.19
+      ],
+      "neighbors": [
+        "DEN",
+        "GWN"
+      ]
+    },
+    {
+      "code": "DAL",
+      "name": "Darlington",
+      "nameNative": "Darlington",
+      "type": "unitary authority",
+      "capital": "Darlington",
+      "largestCity": "Darlington",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        727.23,
+        639.61
+      ],
+      "bbox": [
+        718.67,
+        632.99,
+        735.37,
+        649.05
+      ],
+      "neighbors": [
+        "DUR",
+        "NYK",
+        "STT"
+      ]
+    },
+    {
+      "code": "DBY",
+      "name": "Derbyshire",
+      "nameNative": "Derbyshire",
+      "type": "administrative county",
+      "capital": "Derbyshire",
+      "largestCity": "Derbyshire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        724.05,
+        782.16
+      ],
+      "bbox": [
+        698.86,
+        741.16,
+        750.85,
+        827.12
+      ],
+      "neighbors": [
+        "BNS",
+        "CHE",
+        "DER",
+        "KIR",
+        "LEC",
+        "NTT",
+        "OLD",
+        "ROT",
+        "SHF",
+        "SKP",
+        "STS",
+        "TAM"
+      ]
+    },
+    {
+      "code": "DEN",
+      "name": "Denbighshire",
+      "nameNative": "Denbighshire",
+      "type": "unitary authority (wales)",
+      "capital": "Denbighshire",
+      "largestCity": "Denbighshire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Wales",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        617.9,
+        785.72
+      ],
+      "bbox": [
+        603.57,
+        758.8,
+        633.22,
+        808.78
+      ],
+      "neighbors": [
+        "CWY",
+        "FLN",
+        "GWN",
+        "POW",
+        "WRX"
+      ]
+    },
+    {
+      "code": "DER",
+      "name": "Derby",
+      "nameNative": "Derby",
+      "type": "unitary authority",
+      "capital": "Derby",
+      "largestCity": "Derby",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        732.48,
+        806.26
+      ],
+      "bbox": [
+        727.73,
+        801.32,
+        736.82,
+        811.01
+      ],
+      "neighbors": [
+        "DBY"
+      ]
+    },
+    {
+      "code": "DEV",
+      "name": "Devon",
+      "nameNative": "Devon",
+      "type": "administrative county",
+      "capital": "Devon",
+      "largestCity": "Devon",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        584,
+        1019.79
+      ],
+      "bbox": [
+        529.91,
+        971.21,
+        643.53,
+        1076.11
+      ],
+      "neighbors": [
+        "CON",
+        "DOR",
+        "PLY",
+        "SOM",
+        "TOB"
+      ]
+    },
+    {
+      "code": "DGN",
+      "name": "Dungannon and South Tyrone",
+      "nameNative": "Dungannon",
+      "type": "district",
+      "capital": "Dungannon and South Tyrone",
+      "largestCity": "Dungannon and South Tyrone",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northern Ireland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        409.85,
+        637.47
+      ],
+      "bbox": [
+        384.18,
+        625.22,
+        434.12,
+        650.94
+      ],
+      "neighbors": [
+        "ARM",
+        "CGV",
+        "CKT",
+        "FER",
+        "OMH"
+      ]
+    },
+    {
+      "code": "DGY",
+      "name": "Dumfries and Galloway",
+      "nameNative": "Dumfries and Galloway",
+      "type": "unitary district",
+      "capital": "Dumfries and Galloway",
+      "largestCity": "Dumfries and Galloway",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Scotland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        586.67,
+        583.19
+      ],
+      "bbox": [
+        515.09,
+        544.2,
+        650.75,
+        626.39
+      ],
+      "neighbors": [
+        "CMA",
+        "EAY",
+        "SAY",
+        "SCB",
+        "SLK"
+      ]
+    },
+    {
+      "code": "DNC",
+      "name": "Doncaster",
+      "nameNative": "Doncaster",
+      "type": "metropolitan borough",
+      "capital": "Doncaster",
+      "largestCity": "Doncaster",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        754.56,
+        740.73
+      ],
+      "bbox": [
+        739.39,
+        727.89,
+        768.77,
+        756.48
+      ],
+      "neighbors": [
+        "BNS",
+        "ERY",
+        "NLN",
+        "NTT",
+        "NYK",
+        "ROT",
+        "WKF"
+      ]
+    },
+    {
+      "code": "DND",
+      "name": "Dundee",
+      "nameNative": "Dundee",
+      "type": "unitary district (city)",
+      "capital": "Dundee City",
+      "largestCity": "Dundee",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Scotland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        646.89,
+        441.79
+      ],
+      "bbox": [
+        639.63,
+        438.6,
+        654.17,
+        445.15
+      ],
+      "neighbors": [
+        "ANS",
+        "PKN"
+      ]
+    },
+    {
+      "code": "DOR",
+      "name": "Dorset",
+      "nameNative": "Dorset",
+      "type": "administrative county",
+      "capital": "Dorset",
+      "largestCity": "Dorset",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        679.87,
+        1016.86
+      ],
+      "bbox": [
+        639.16,
+        989.16,
+        720.95,
+        1045.38
+      ],
+      "neighbors": [
+        "BMH",
+        "DEV",
+        "HAM",
+        "POL",
+        "SOM",
+        "WIL"
+      ]
+    },
+    {
+      "code": "DOW",
+      "name": "Down",
+      "nameNative": "Down",
+      "type": "district",
+      "capital": "Down",
+      "largestCity": "Down",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northern Ireland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        475.75,
+        654.51
+      ],
+      "bbox": [
+        458.7,
+        637.96,
+        490.97,
+        669.9
+      ],
+      "neighbors": [
+        "ARD",
+        "BNB",
+        "CSR",
+        "LSB",
+        "NYM"
+      ]
+    },
+    {
+      "code": "DRY",
+      "name": "Derry",
+      "nameNative": "Derry",
+      "type": "london borough (city)",
+      "capital": "Londonderry",
+      "largestCity": "Derry",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northern Ireland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        396.88,
+        586.84
+      ],
+      "bbox": [
+        385.19,
+        574.19,
+        407.8,
+        601.6
+      ],
+      "neighbors": [
+        "LMV",
+        "STB"
+      ]
+    },
+    {
+      "code": "DUD",
+      "name": "Dudley",
+      "nameNative": "Dudley",
+      "type": "metropolitan borough",
+      "capital": "Dudley",
+      "largestCity": "Dudley",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        693.59,
+        847.63
+      ],
+      "bbox": [
+        689.05,
+        839.22,
+        698.38,
+        853.64
+      ],
+      "neighbors": [
+        "BIR",
+        "SAW",
+        "STS",
+        "WLV",
+        "WOR"
+      ]
+    },
+    {
+      "code": "DUR",
+      "name": "Durham",
+      "nameNative": "Durham",
+      "type": "unitary single-tier county",
+      "capital": "County Durham",
+      "largestCity": "Durham",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        710.04,
+        624.06
+      ],
+      "bbox": [
+        679.28,
+        602.27,
+        744.12,
+        648.35
+      ],
+      "neighbors": [
+        "CMA",
+        "DAL",
+        "GAT",
+        "HPL",
+        "NBL",
+        "NYK",
+        "SND",
+        "STT"
+      ]
+    },
+    {
+      "code": "EAL",
+      "name": "Ealing",
+      "nameNative": "Ealing",
+      "type": "london borough",
+      "capital": "Ealing",
+      "largestCity": "Ealing",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        805.78,
+        944.08
+      ],
+      "bbox": [
+        800.33,
+        940.82,
+        811.18,
+        947.05
+      ],
+      "neighbors": [
+        "BEN",
+        "HIL",
+        "HMF",
+        "HNS",
+        "HRW"
+      ]
+    },
+    {
+      "code": "EAY",
+      "name": "East Ayrshire",
+      "nameNative": "East Ayrshire",
+      "type": "unitary district",
+      "capital": "East Ayrshire",
+      "largestCity": "East Ayrshire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Scotland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        567.59,
+        541.49
+      ],
+      "bbox": [
+        550.05,
+        513.15,
+        587.66,
+        575.8
+      ],
+      "neighbors": [
+        "DGY",
+        "ERW",
+        "NAY",
+        "SAY",
+        "SLK"
+      ]
+    },
+    {
+      "code": "EDH",
+      "name": "Edinburgh",
+      "nameNative": "Edinburgh",
+      "type": "unitary district (city)",
+      "capital": "Édimbourg",
+      "largestCity": "Edinburgh",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Scotland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        627.06,
+        498.97
+      ],
+      "bbox": [
+        617.72,
+        490.85,
+        638.86,
+        509.69
+      ],
+      "neighbors": [
+        "MLN",
+        "SCB",
+        "WLN"
+      ]
+    },
+    {
+      "code": "EDU",
+      "name": "East Dunbartonshire",
+      "nameNative": "East Dunbartonshire",
+      "type": "unitary district",
+      "capital": "East Dunbartonshire",
+      "largestCity": "East Dunbartonshire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Scotland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        574.81,
+        494.39
+      ],
+      "bbox": [
+        565.97,
+        486.61,
+        584.38,
+        500.68
+      ],
+      "neighbors": [
+        "GLG",
+        "NLK",
+        "STG",
+        "WDU"
+      ]
+    },
+    {
+      "code": "ELN",
+      "name": "East Lothian",
+      "nameNative": "East Lothian",
+      "type": "unitary district",
+      "capital": "Haddington",
+      "largestCity": "East Lothian",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Scotland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        660.2,
+        497.48
+      ],
+      "bbox": [
+        639.82,
+        484.55,
+        679.56,
+        509.16
+      ],
+      "neighbors": [
+        "MLN",
+        "SCB"
+      ]
+    },
+    {
+      "code": "ELS",
+      "name": "Outer Hebrides",
+      "nameNative": "Eilean Siar",
+      "type": "island area",
+      "capital": "Western Isles",
+      "largestCity": "Outer Hebrides",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Scotland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        439.92,
+        285.52
+      ],
+      "bbox": [
+        67.53,
+        229.86,
+        479.13,
+        383.89
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "ENF",
+      "name": "Enfield",
+      "nameNative": "Enfield",
+      "type": "london borough",
+      "capital": "Enfield",
+      "largestCity": "Enfield",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        820.47,
+        930.51
+      ],
+      "bbox": [
+        815.19,
+        926.39,
+        825.48,
+        935.11
+      ],
+      "neighbors": [
+        "BNE",
+        "ESS",
+        "HRT",
+        "HRY",
+        "WFT"
+      ]
+    },
+    {
+      "code": "ERW",
+      "name": "East Renfrewshire",
+      "nameNative": "East Renfrewshire",
+      "type": "unitary district",
+      "capital": "East Renfrewshire",
+      "largestCity": "East Renfrewshire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Scotland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        566.4,
+        514.23
+      ],
+      "bbox": [
+        556.55,
+        507.41,
+        573.46,
+        521.13
+      ],
+      "neighbors": [
+        "EAY",
+        "GLG",
+        "NAY",
+        "RFW",
+        "SLK"
+      ]
+    },
+    {
+      "code": "ERY",
+      "name": "East Riding of Yorkshire",
+      "nameNative": "East Riding of Yorkshire",
+      "type": "unitary authority",
+      "capital": "East Riding, East Yorkshire",
+      "largestCity": "East Riding of Yorkshire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        790.24,
+        706.28
+      ],
+      "bbox": [
+        753.38,
+        675.6,
+        829.09,
+        736.26
+      ],
+      "neighbors": [
+        "DNC",
+        "KHL",
+        "NLN",
+        "NYK",
+        "YOR"
+      ]
+    },
+    {
+      "code": "ESS",
+      "name": "Essex",
+      "nameNative": "Essex",
+      "type": "administrative county",
+      "capital": "Essex",
+      "largestCity": "Essex",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        860.31,
+        913.12
+      ],
+      "bbox": [
+        824.82,
+        885.5,
+        905.58,
+        943.33
+      ],
+      "neighbors": [
+        "CAM",
+        "ENF",
+        "HAV",
+        "HRT",
+        "RDB",
+        "SFK",
+        "SOS",
+        "THR",
+        "WFT"
+      ]
+    },
+    {
+      "code": "ESX",
+      "name": "East Sussex",
+      "nameNative": "East Sussex",
+      "type": "administrative county",
+      "capital": "East Sussex",
+      "largestCity": "East Sussex",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        845.47,
+        1001.23
+      ],
+      "bbox": [
+        819.53,
+        981.09,
+        883.3,
+        1021.09
+      ],
+      "neighbors": [
+        "BNH",
+        "KEN",
+        "SRY",
+        "WSX"
+      ]
+    },
+    {
+      "code": "FAL",
+      "name": "Falkirk",
+      "nameNative": "Falkirk",
+      "type": "unitary district",
+      "capital": "Falkirk",
+      "largestCity": "Falkirk",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Scotland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        599.02,
+        491.58
+      ],
+      "bbox": [
+        586.16,
+        484.87,
+        614.77,
+        500.65
+      ],
+      "neighbors": [
+        "NLK",
+        "STG",
+        "WLN"
+      ]
+    },
+    {
+      "code": "FER",
+      "name": "Fermanagh",
+      "nameNative": "Fermanagh",
+      "type": "district",
+      "capital": "Fermanagh",
+      "largestCity": "Fermanagh",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northern Ireland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        367.02,
+        645.24
+      ],
+      "bbox": [
+        336.87,
+        619.05,
+        395.72,
+        670.47
+      ],
+      "neighbors": [
+        "DGN",
+        "OMH",
+        "STB"
+      ]
+    },
+    {
+      "code": "FIF",
+      "name": "Fife",
+      "nameNative": "Fife",
+      "type": "unitary district",
+      "capital": "Fife",
+      "largestCity": "Fife",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Scotland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        637.36,
+        467.69
+      ],
+      "bbox": [
+        601.3,
+        444.69,
+        667.57,
+        488.23
+      ],
+      "neighbors": [
+        "CLK",
+        "PKN"
+      ]
+    },
+    {
+      "code": "FLN",
+      "name": "Flintshire",
+      "nameNative": "Flintshire",
+      "type": "unitary authority (wales)",
+      "capital": "Flintshire",
+      "largestCity": "Flintshire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Wales",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        629.51,
+        773.23
+      ],
+      "bbox": [
+        616.35,
+        758.77,
+        644.68,
+        787.88
+      ],
+      "neighbors": [
+        "CHW",
+        "DEN",
+        "WRX"
+      ]
+    },
+    {
+      "code": "GAT",
+      "name": "Gateshead",
+      "nameNative": "Gateshead",
+      "type": "metropolitan borough",
+      "capital": "Gateshead",
+      "largestCity": "Gateshead",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        718.19,
+        598.84
+      ],
+      "bbox": [
+        708.68,
+        592.33,
+        727.95,
+        604.1
+      ],
+      "neighbors": [
+        "DUR",
+        "NBL",
+        "NET",
+        "SND",
+        "STY"
+      ]
+    },
+    {
+      "code": "GLG",
+      "name": "Glasgow",
+      "nameNative": "Glasgow",
+      "type": "unitary district (city)",
+      "capital": "Glasgow City",
+      "largestCity": "Glasgow",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Scotland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        572.6,
+        504.64
+      ],
+      "bbox": [
+        565.89,
+        497.77,
+        582.38,
+        511.21
+      ],
+      "neighbors": [
+        "EDU",
+        "ERW",
+        "NLK",
+        "RFW",
+        "SLK",
+        "WDU"
+      ]
+    },
+    {
+      "code": "GLS",
+      "name": "Gloucestershire",
+      "nameNative": "Gloucestershire",
+      "type": "administrative county",
+      "capital": "Gloucestershire",
+      "largestCity": "Gloucestershire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        692.83,
+        914.26
+      ],
+      "bbox": [
+        657.03,
+        885.65,
+        724.18,
+        939.17
+      ],
+      "neighbors": [
+        "HEF",
+        "MON",
+        "OXF",
+        "SGC",
+        "SWD",
+        "WAR",
+        "WIL",
+        "WOR"
+      ]
+    },
+    {
+      "code": "GRE",
+      "name": "Greenwich",
+      "nameNative": "Greenwich",
+      "type": "london borough (royal)",
+      "capital": "Greenwich",
+      "largestCity": "Greenwich",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        829.55,
+        948.31
+      ],
+      "bbox": [
+        824.41,
+        944.8,
+        833.76,
+        953.01
+      ],
+      "neighbors": [
+        "BDG",
+        "BEX",
+        "BRY",
+        "LEW",
+        "NWM",
+        "SWK",
+        "TWH"
+      ]
+    },
+    {
+      "code": "GWN",
+      "name": "Gwynedd",
+      "nameNative": "Gwynedd",
+      "type": "unitary authority (wales)",
+      "capital": "Caernarfonshire and Merionethshire",
+      "largestCity": "Gwynedd",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Wales",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        576.98,
+        804.45
+      ],
+      "bbox": [
+        530.83,
+        768.26,
+        613.2,
+        839.67
+      ],
+      "neighbors": [
+        "CGN",
+        "CWY",
+        "DEN",
+        "POW"
+      ]
+    },
+    {
+      "code": "HAL",
+      "name": "Halton",
+      "nameNative": "Halton",
+      "type": "unitary authority",
+      "capital": "Halton",
+      "largestCity": "Halton",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        658.13,
+        761.22
+      ],
+      "bbox": [
+        650.98,
+        755.59,
+        665.54,
+        765.4
+      ],
+      "neighbors": [
+        "CHW",
+        "KWL",
+        "SHN",
+        "WRT"
+      ]
+    },
+    {
+      "code": "HAM",
+      "name": "Hampshire",
+      "nameNative": "Hampshire",
+      "type": "administrative county",
+      "capital": "Southampton",
+      "largestCity": "Hampshire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        745.36,
+        990.23
+      ],
+      "bbox": [
+        703.17,
+        959.17,
+        780.74,
+        1026.01
+      ],
+      "neighbors": [
+        "BRC",
+        "DOR",
+        "POR",
+        "SRY",
+        "STH",
+        "WBK",
+        "WIL",
+        "WOK",
+        "WSX"
+      ]
+    },
+    {
+      "code": "HAV",
+      "name": "Havering",
+      "nameNative": "Havering",
+      "type": "london borough",
+      "capital": "Havering",
+      "largestCity": "Havering",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        840.21,
+        938.84
+      ],
+      "bbox": [
+        835.05,
+        931.8,
+        847.1,
+        946.7
+      ],
+      "neighbors": [
+        "BDG",
+        "BEX",
+        "ESS",
+        "RDB",
+        "THR"
+      ]
+    },
+    {
+      "code": "HCK",
+      "name": "Hackney",
+      "nameNative": "Hackney",
+      "type": "london borough",
+      "capital": "Hackney",
+      "largestCity": "Hackney",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        822.41,
+        940.39
+      ],
+      "bbox": [
+        819.95,
+        937.93,
+        825.25,
+        943.8
+      ],
+      "neighbors": [
+        "HRY",
+        "ISL",
+        "LND",
+        "NWM",
+        "TWH",
+        "WFT"
+      ]
+    },
+    {
+      "code": "HEF",
+      "name": "Herefordshire",
+      "nameNative": "Herefordshire",
+      "type": "unitary authority",
+      "capital": "Herefordshire",
+      "largestCity": "Herefordshire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        653.96,
+        886.26
+      ],
+      "bbox": [
+        630.06,
+        856.47,
+        678.31,
+        914.66
+      ],
+      "neighbors": [
+        "GLS",
+        "MON",
+        "POW",
+        "SHR",
+        "WOR"
+      ]
+    },
+    {
+      "code": "HIL",
+      "name": "Hillingdon",
+      "nameNative": "Hillingdon",
+      "type": "london borough",
+      "capital": "Hillingdon",
+      "largestCity": "Hillingdon",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        798.52,
+        942.15
+      ],
+      "bbox": [
+        794.76,
+        934.12,
+        802.76,
+        950.79
+      ],
+      "neighbors": [
+        "BKM",
+        "EAL",
+        "HNS",
+        "HRT",
+        "HRW",
+        "SRY"
+      ]
+    },
+    {
+      "code": "HLD",
+      "name": "Highland",
+      "nameNative": "Highland",
+      "type": "unitary district",
+      "capital": "Highland",
+      "largestCity": "Highland",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Scotland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        550.37,
+        327.95
+      ],
+      "bbox": [
+        439.55,
+        219.58,
+        646.29,
+        435.58
+      ],
+      "neighbors": [
+        "ABD",
+        "AGB",
+        "MRY",
+        "PKN"
+      ]
+    },
+    {
+      "code": "HMF",
+      "name": "Hammersmith and Fulham",
+      "nameNative": "Hammersmith and Fulham",
+      "type": "london borough",
+      "capital": "Hammersmith and Fulham",
+      "largestCity": "Hammersmith and Fulham",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        812.58,
+        946.25
+      ],
+      "bbox": [
+        810.65,
+        943,
+        815.33,
+        948.92
+      ],
+      "neighbors": [
+        "BEN",
+        "EAL",
+        "HNS",
+        "KEC",
+        "RIC",
+        "WND",
+        "WSM"
+      ]
+    },
+    {
+      "code": "HNS",
+      "name": "Hounslow",
+      "nameNative": "Hounslow",
+      "type": "london borough",
+      "capital": "Hounslow",
+      "largestCity": "Hounslow",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        803.53,
+        949.49
+      ],
+      "bbox": [
+        798.32,
+        946.1,
+        811.16,
+        954.63
+      ],
+      "neighbors": [
+        "EAL",
+        "HIL",
+        "HMF",
+        "RIC",
+        "SRY"
+      ]
+    },
+    {
+      "code": "HPL",
+      "name": "Hartlepool",
+      "nameNative": "Hartlepool",
+      "type": "unitary authority",
+      "capital": "Hartlepool",
+      "largestCity": "Hartlepool",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        743.18,
+        627
+      ],
+      "bbox": [
+        735.83,
+        620.2,
+        748.92,
+        632.2
+      ],
+      "neighbors": [
+        "DUR",
+        "RCC",
+        "STT"
+      ]
+    },
+    {
+      "code": "HRT",
+      "name": "Hertfordshire",
+      "nameNative": "Hertfordshire",
+      "type": "administrative county",
+      "capital": "Hertfordshire",
+      "largestCity": "Hertfordshire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        812.19,
+        912.59
+      ],
+      "bbox": [
+        779.46,
+        887.86,
+        837.48,
+        936.83
+      ],
+      "neighbors": [
+        "BKM",
+        "BNE",
+        "CAM",
+        "CBF",
+        "ENF",
+        "ESS",
+        "HIL",
+        "HRW",
+        "LUT"
+      ]
+    },
+    {
+      "code": "HRW",
+      "name": "Harrow",
+      "nameNative": "Harrow",
+      "type": "london borough",
+      "capital": "Harrow",
+      "largestCity": "Harrow",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        804.71,
+        936.29
+      ],
+      "bbox": [
+        800.59,
+        931.75,
+        808.99,
+        940.97
+      ],
+      "neighbors": [
+        "BEN",
+        "BNE",
+        "EAL",
+        "HIL",
+        "HRT"
+      ]
+    },
+    {
+      "code": "HRY",
+      "name": "Haringey",
+      "nameNative": "Haringey",
+      "type": "london borough",
+      "capital": "Haringey",
+      "largestCity": "Haringey",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        819.52,
+        936.71
+      ],
+      "bbox": [
+        815.62,
+        934.6,
+        823.88,
+        939.37
+      ],
+      "neighbors": [
+        "BNE",
+        "CMD",
+        "ENF",
+        "HCK",
+        "ISL",
+        "WFT"
+      ]
+    },
+    {
+      "code": "IOS",
+      "name": "Isles of Scilly",
+      "nameNative": "Isles of Scilly",
+      "type": "unitary single-tier county",
+      "capital": "Isles of Scilly",
+      "largestCity": "Isles of Scilly",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        418.86,
+        1097.36
+      ],
+      "bbox": [
+        416.78,
+        1094.27,
+        420.76,
+        1100
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "IOW",
+      "name": "Isle of Wight",
+      "nameNative": "Isle of Wight",
+      "type": "unitary authority",
+      "capital": "Isle of Wight",
+      "largestCity": "Isle of Wight",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        745.45,
+        1029.81
+      ],
+      "bbox": [
+        727.62,
+        1020.39,
+        760.14,
+        1039.69
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "ISL",
+      "name": "Islington",
+      "nameNative": "Islington",
+      "type": "london borough",
+      "capital": "Islington",
+      "largestCity": "Islington",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        819.49,
+        940.62
+      ],
+      "bbox": [
+        817.63,
+        938.3,
+        821.5,
+        943.09
+      ],
+      "neighbors": [
+        "CMD",
+        "HCK",
+        "HRY",
+        "LND"
+      ]
+    },
+    {
+      "code": "IVC",
+      "name": "Inverclyde",
+      "nameNative": "Inverclyde",
+      "type": "unitary district",
+      "capital": "Inverclyde",
+      "largestCity": "Inverclyde",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Scotland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        544.5,
+        498.63
+      ],
+      "bbox": [
+        535.78,
+        492.43,
+        553.17,
+        504.55
+      ],
+      "neighbors": [
+        "NAY",
+        "RFW"
+      ]
+    },
+    {
+      "code": "KEC",
+      "name": "Kensington and Chelsea",
+      "nameNative": "Kensington and Chelsea",
+      "type": "london borough (royal)",
+      "capital": "Kensington and Chelsea",
+      "largestCity": "Kensington and Chelsea",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        814.58,
+        946.04
+      ],
+      "bbox": [
+        812.38,
+        943.4,
+        817.08,
+        948.34
+      ],
+      "neighbors": [
+        "BEN",
+        "HMF",
+        "WND",
+        "WSM"
+      ]
+    },
+    {
+      "code": "KEN",
+      "name": "Kent",
+      "nameNative": "Kent",
+      "type": "administrative county",
+      "capital": "Kent",
+      "largestCity": "Kent",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        873.41,
+        972.05
+      ],
+      "bbox": [
+        829.66,
+        945.55,
+        917.86,
+        1003.07
+      ],
+      "neighbors": [
+        "BEX",
+        "BRY",
+        "ESX",
+        "MDW",
+        "SRY",
+        "THR"
+      ]
+    },
+    {
+      "code": "KHL",
+      "name": "Kingston upon Hull",
+      "nameNative": "Kingston upon Hull",
+      "type": "unitary authority",
+      "capital": "Hull",
+      "largestCity": "Kingston upon Hull",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        797.07,
+        717.8
+      ],
+      "bbox": [
+        792.88,
+        714.03,
+        802.05,
+        721.8
+      ],
+      "neighbors": [
+        "ERY"
+      ]
+    },
+    {
+      "code": "KIR",
+      "name": "Kirklees",
+      "nameNative": "Kirklees",
+      "type": "metropolitan borough",
+      "capital": "Kirklees",
+      "largestCity": "Kirklees",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        714.01,
+        731.33
+      ],
+      "bbox": [
+        698.55,
+        717.71,
+        725.11,
+        742.87
+      ],
+      "neighbors": [
+        "BNS",
+        "BRD",
+        "CLD",
+        "DBY",
+        "LDS",
+        "OLD",
+        "RCH",
+        "SHF",
+        "WKF"
+      ]
+    },
+    {
+      "code": "KTT",
+      "name": "Kingston upon Thames",
+      "nameNative": "Kingston upon Thames",
+      "type": "london borough (royal)",
+      "capital": "Kingston upon Thames",
+      "largestCity": "Kingston upon Thames",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        809,
+        957.31
+      ],
+      "bbox": [
+        806.55,
+        952.43,
+        812.16,
+        963.6
+      ],
+      "neighbors": [
+        "MRT",
+        "RIC",
+        "SRY",
+        "STN",
+        "WND"
+      ]
+    },
+    {
+      "code": "KWL",
+      "name": "Knowsley",
+      "nameNative": "Knowsley",
+      "type": "metropolitan borough",
+      "capital": "Knowsley",
+      "largestCity": "Knowsley",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        649.09,
+        752.26
+      ],
+      "bbox": [
+        643.8,
+        741.9,
+        654.41,
+        762.28
+      ],
+      "neighbors": [
+        "HAL",
+        "LAN",
+        "LIV",
+        "SFT",
+        "SHN"
+      ]
+    },
+    {
+      "code": "LAN",
+      "name": "Lancashire",
+      "nameNative": "Lancashire",
+      "type": "administrative county",
+      "capital": "Lancashire",
+      "largestCity": "Lancashire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        664.11,
+        709.11
+      ],
+      "bbox": [
+        637.92,
+        669.67,
+        698.04,
+        745.14
+      ],
+      "neighbors": [
+        "BBD",
+        "BOL",
+        "BPL",
+        "BUR",
+        "CLD",
+        "CMA",
+        "KWL",
+        "NYK",
+        "RCH",
+        "SFT",
+        "SHN",
+        "WGN"
+      ]
+    },
+    {
+      "code": "LBH",
+      "name": "Lambeth",
+      "nameNative": "Lambeth",
+      "type": "london borough",
+      "capital": "Lambeth",
+      "largestCity": "Lambeth",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        819.23,
+        950.37
+      ],
+      "bbox": [
+        817.16,
+        944.94,
+        821.56,
+        954.82
+      ],
+      "neighbors": [
+        "BRY",
+        "CMD",
+        "CRY",
+        "MRT",
+        "SWK",
+        "WND",
+        "WSM"
+      ]
+    },
+    {
+      "code": "LCE",
+      "name": "Leicester",
+      "nameNative": "Leicester",
+      "type": "unitary authority",
+      "capital": "Leicester",
+      "largestCity": "Leicester",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        753.96,
+        833.85
+      ],
+      "bbox": [
+        750.38,
+        829.65,
+        757.97,
+        838.83
+      ],
+      "neighbors": [
+        "LEC"
+      ]
+    },
+    {
+      "code": "LDS",
+      "name": "Leeds",
+      "nameNative": "Leeds",
+      "type": "metropolitan borough",
+      "capital": "Leeds",
+      "largestCity": "Leeds",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        731.1,
+        712.13
+      ],
+      "bbox": [
+        716.18,
+        699.27,
+        742.65,
+        724.73
+      ],
+      "neighbors": [
+        "BRD",
+        "KIR",
+        "NYK",
+        "WKF"
+      ]
+    },
+    {
+      "code": "LEC",
+      "name": "Leicestershire",
+      "nameNative": "Leicestershire",
+      "type": "kingdom",
+      "capital": "Leicestershire",
+      "largestCity": "Leicestershire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        755,
+        829.63
+      ],
+      "bbox": [
+        725.58,
+        798.42,
+        782.66,
+        857.79
+      ],
+      "neighbors": [
+        "DBY",
+        "LCE",
+        "LIN",
+        "NTH",
+        "NTT",
+        "RUT",
+        "STS",
+        "WAR"
+      ]
+    },
+    {
+      "code": "LEW",
+      "name": "Lewisham",
+      "nameNative": "Lewisham",
+      "type": "london borough",
+      "capital": "Lewisham",
+      "largestCity": "Lewisham",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        825.33,
+        951.04
+      ],
+      "bbox": [
+        822.05,
+        946.39,
+        829.05,
+        954.28
+      ],
+      "neighbors": [
+        "BRY",
+        "GRE",
+        "SWK",
+        "TWH"
+      ]
+    },
+    {
+      "code": "LIN",
+      "name": "Lincolnshire",
+      "nameNative": "Lincolnshire",
+      "type": "administrative county",
+      "capital": "Lincolnshire",
+      "largestCity": "Lincolnshire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        806.74,
+        783.1
+      ],
+      "bbox": [
+        772.27,
+        732.34,
+        843.09,
+        830.97
+      ],
+      "neighbors": [
+        "CAM",
+        "LEC",
+        "NEL",
+        "NFK",
+        "NLN",
+        "NTH",
+        "NTT",
+        "PTE",
+        "RUT"
+      ]
+    },
+    {
+      "code": "LIV",
+      "name": "Liverpool",
+      "nameNative": "Liverpool",
+      "type": "metropolitan borough",
+      "capital": "Liverpool",
+      "largestCity": "Liverpool",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        642.93,
+        751.85
+      ],
+      "bbox": [
+        636.83,
+        744.83,
+        647.25,
+        761.28
+      ],
+      "neighbors": [
+        "KWL",
+        "SFT"
+      ]
+    },
+    {
+      "code": "LMV",
+      "name": "Limavady",
+      "nameNative": "Limavady",
+      "type": "district",
+      "capital": "Limavady",
+      "largestCity": "Limavady",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northern Ireland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        413.2,
+        583.65
+      ],
+      "bbox": [
+        399.87,
+        562.71,
+        422.48,
+        601.21
+      ],
+      "neighbors": [
+        "CLR",
+        "DRY",
+        "MFT",
+        "STB"
+      ]
+    },
+    {
+      "code": "LND",
+      "name": "London",
+      "nameNative": "City",
+      "type": "city corporation",
+      "capital": "The City",
+      "largestCity": "London",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        820.61,
+        943.67
+      ],
+      "bbox": [
+        819.52,
+        942.71,
+        821.92,
+        944.61
+      ],
+      "neighbors": [
+        "CMD",
+        "HCK",
+        "ISL",
+        "SWK",
+        "TWH"
+      ]
+    },
+    {
+      "code": "LRN",
+      "name": "Larne",
+      "nameNative": "Larne",
+      "type": "district",
+      "capital": "Larne",
+      "largestCity": "Larne",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northern Ireland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        472.25,
+        598.93
+      ],
+      "bbox": [
+        461.76,
+        580.42,
+        484.64,
+        611.8
+      ],
+      "neighbors": [
+        "BLA",
+        "CKF",
+        "MYL",
+        "NTA"
+      ]
+    },
+    {
+      "code": "LSB",
+      "name": "Lisburn",
+      "nameNative": "Lisburn",
+      "type": "district",
+      "capital": "Lisburn",
+      "largestCity": "Lisburn",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northern Ireland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        460.14,
+        635.89
+      ],
+      "bbox": [
+        447.88,
+        623.94,
+        472.49,
+        649.05
+      ],
+      "neighbors": [
+        "ANT",
+        "BFS",
+        "BNB",
+        "CGV",
+        "CSR",
+        "DOW"
+      ]
+    },
+    {
+      "code": "LUT",
+      "name": "Luton",
+      "nameNative": "Luton",
+      "type": "unitary authority",
+      "capital": "Luton",
+      "largestCity": "Luton",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        799.5,
+        908.02
+      ],
+      "bbox": [
+        795.15,
+        903.26,
+        804.1,
+        913.04
+      ],
+      "neighbors": [
+        "CBF",
+        "HRT"
+      ]
+    },
+    {
+      "code": "MAN",
+      "name": "Manchester",
+      "nameNative": "Manchester",
+      "type": "metropolitan borough",
+      "capital": "Manchester",
+      "largestCity": "Manchester",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        684.15,
+        749.25
+      ],
+      "bbox": [
+        679.99,
+        739.48,
+        689.02,
+        760.46
+      ],
+      "neighbors": [
+        "BUR",
+        "CHE",
+        "OLD",
+        "RCH",
+        "SKP",
+        "SLF",
+        "TAM",
+        "TRF"
+      ]
+    },
+    {
+      "code": "MDB",
+      "name": "Middlesbrough",
+      "nameNative": "Middlesbrough",
+      "type": "unitary authority",
+      "capital": "Middlesbrough",
+      "largestCity": "Middlesbrough",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        744.13,
+        639.82
+      ],
+      "bbox": [
+        741.14,
+        635.17,
+        748.23,
+        644.38
+      ],
+      "neighbors": [
+        "NYK",
+        "RCC",
+        "STT"
+      ]
+    },
+    {
+      "code": "MDW",
+      "name": "Medway",
+      "nameNative": "Medway",
+      "type": "unitary authority",
+      "capital": "Medway Towns",
+      "largestCity": "Medway",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        862.58,
+        953.33
+      ],
+      "bbox": [
+        854.64,
+        945.09,
+        871.82,
+        963.14
+      ],
+      "neighbors": [
+        "KEN"
+      ]
+    },
+    {
+      "code": "MFT",
+      "name": "Magherafelt",
+      "nameNative": "Magherafelt",
+      "type": "district",
+      "capital": "Magherafelt",
+      "largestCity": "Magherafelt",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northern Ireland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        427.32,
+        602.61
+      ],
+      "bbox": [
+        409.63,
+        589.7,
+        439.3,
+        614.29
+      ],
+      "neighbors": [
+        "ANT",
+        "BLA",
+        "BLY",
+        "CKT",
+        "CLR",
+        "LMV",
+        "OMH",
+        "STB"
+      ]
+    },
+    {
+      "code": "MIK",
+      "name": "Milton Keynes",
+      "nameNative": "Milton Keynes",
+      "type": "unitary authority",
+      "capital": "Milton Keynes",
+      "largestCity": "Milton Keynes",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        779.39,
+        888.65
+      ],
+      "bbox": [
+        769.73,
+        876.13,
+        788.71,
+        900.92
+      ],
+      "neighbors": [
+        "BDF",
+        "BKM",
+        "CBF",
+        "NTH"
+      ]
+    },
+    {
+      "code": "MLN",
+      "name": "Midlothian",
+      "nameNative": "Midlothian",
+      "type": "unitary district",
+      "capital": "Edinburgh",
+      "largestCity": "Midlothian",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Scotland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        637.94,
+        508.4
+      ],
+      "bbox": [
+        622.6,
+        496.2,
+        653.3,
+        520.03
+      ],
+      "neighbors": [
+        "EDH",
+        "ELN",
+        "SCB"
+      ]
+    },
+    {
+      "code": "MON",
+      "name": "Monmouthshire",
+      "nameNative": "Monmouthshire",
+      "type": "unitary authority (wales)",
+      "capital": "Monmouthshire",
+      "largestCity": "Monmouthshire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Wales",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        645.68,
+        919.72
+      ],
+      "bbox": [
+        627.57,
+        897.59,
+        659.49,
+        940.31
+      ],
+      "neighbors": [
+        "BGW",
+        "GLS",
+        "HEF",
+        "NWP",
+        "POW",
+        "TOF"
+      ]
+    },
+    {
+      "code": "MRT",
+      "name": "Merton",
+      "nameNative": "Merton",
+      "type": "london borough",
+      "capital": "Merton",
+      "largestCity": "Merton",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        814.46,
+        954.99
+      ],
+      "bbox": [
+        810.81,
+        952.05,
+        818.84,
+        957.88
+      ],
+      "neighbors": [
+        "CRY",
+        "KTT",
+        "LBH",
+        "RIC",
+        "STN",
+        "WND"
+      ]
+    },
+    {
+      "code": "MRY",
+      "name": "Moray",
+      "nameNative": "Moray",
+      "type": "unitary district",
+      "capital": "Elgin",
+      "largestCity": "Moray",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Scotland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        630.83,
+        341.95
+      ],
+      "bbox": [
+        604.87,
+        316.1,
+        661.63,
+        381
+      ],
+      "neighbors": [
+        "ABD",
+        "HLD"
+      ]
+    },
+    {
+      "code": "MTY",
+      "name": "Merthyr Tydfil",
+      "nameNative": "Merthyr Tydfil",
+      "type": "unitary authority (wales)",
+      "capital": "Merthyr Tydfil",
+      "largestCity": "Merthyr Tydfil",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Wales",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        614.87,
+        922
+      ],
+      "bbox": [
+        609.84,
+        912.99,
+        619.92,
+        931.24
+      ],
+      "neighbors": [
+        "CAY",
+        "POW",
+        "RCT"
+      ]
+    },
+    {
+      "code": "MYL",
+      "name": "Moyle",
+      "nameNative": "Moyle",
+      "type": "district",
+      "capital": "Moyle",
+      "largestCity": "Moyle",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northern Ireland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        454.66,
+        570.55
+      ],
+      "bbox": [
+        437.55,
+        553.68,
+        469.17,
+        587.32
+      ],
+      "neighbors": [
+        "BLA",
+        "BLY",
+        "CLR",
+        "LRN"
+      ]
+    },
+    {
+      "code": "NAY",
+      "name": "North Ayrshire",
+      "nameNative": "North Ayshire",
+      "type": "unitary district",
+      "capital": "North Ayrshire",
+      "largestCity": "North Ayrshire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Scotland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        544.81,
+        516.9
+      ],
+      "bbox": [
+        533.41,
+        501.12,
+        557.1,
+        532.82
+      ],
+      "neighbors": [
+        "EAY",
+        "ERW",
+        "IVC",
+        "RFW",
+        "SAY"
+      ]
+    },
+    {
+      "code": "NBL",
+      "name": "Northumberland",
+      "nameNative": "Northumberland",
+      "type": "unitary single-tier county",
+      "capital": "Northumberland",
+      "largestCity": "Northumberland",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        696.38,
+        568.58
+      ],
+      "bbox": [
+        660.4,
+        511.07,
+        731.55,
+        615.03
+      ],
+      "neighbors": [
+        "CMA",
+        "DUR",
+        "GAT",
+        "NET",
+        "NTY",
+        "SCB"
+      ]
+    },
+    {
+      "code": "NDN",
+      "name": "North Down",
+      "nameNative": "North Down",
+      "type": "district",
+      "capital": "North Down",
+      "largestCity": "North Down",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northern Ireland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        482.33,
+        622.67
+      ],
+      "bbox": [
+        473.16,
+        619.13,
+        491.31,
+        625.67
+      ],
+      "neighbors": [
+        "ARD",
+        "BFS",
+        "CSR"
+      ]
+    },
+    {
+      "code": "NEL",
+      "name": "North East Lincolnshire",
+      "nameNative": "North East Lincolnshire",
+      "type": "unitary authority",
+      "capital": "North East Lincolnshire",
+      "largestCity": "North East Lincolnshire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        812.46,
+        739.39
+      ],
+      "bbox": [
+        803.19,
+        730.02,
+        821.68,
+        750.41
+      ],
+      "neighbors": [
+        "LIN",
+        "NLN"
+      ]
+    },
+    {
+      "code": "NET",
+      "name": "Newcastle upon Tyne",
+      "nameNative": "Newcastle upon Tyne",
+      "type": "metropolitan borough",
+      "capital": "Newcastle upon Tyne",
+      "largestCity": "Newcastle upon Tyne",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        721.73,
+        591.93
+      ],
+      "bbox": [
+        714.54,
+        585.29,
+        729.62,
+        597.21
+      ],
+      "neighbors": [
+        "GAT",
+        "NBL",
+        "NTY",
+        "STY"
+      ]
+    },
+    {
+      "code": "NFK",
+      "name": "Norfolk",
+      "nameNative": "Norfolk",
+      "type": "administrative county",
+      "capital": "Norfolk",
+      "largestCity": "Norfolk",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        881.94,
+        825.39
+      ],
+      "bbox": [
+        832.42,
+        793.45,
+        930.77,
+        856.18
+      ],
+      "neighbors": [
+        "CAM",
+        "LIN",
+        "SFK"
+      ]
+    },
+    {
+      "code": "NGM",
+      "name": "Nottingham",
+      "nameNative": "Nottingham",
+      "type": "unitary authority",
+      "capital": "Nottingham",
+      "largestCity": "Nottingham",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        750.66,
+        801.39
+      ],
+      "bbox": [
+        747.07,
+        795.34,
+        754.72,
+        807.78
+      ],
+      "neighbors": [
+        "NTT"
+      ]
+    },
+    {
+      "code": "NLK",
+      "name": "North Lanarkshire",
+      "nameNative": "North Lanarkshire",
+      "type": "unitary district",
+      "capital": "North Lanarkshire",
+      "largestCity": "North Lanarkshire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Scotland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        589.91,
+        503.01
+      ],
+      "bbox": [
+        576.72,
+        486.99,
+        603.07,
+        516.99
+      ],
+      "neighbors": [
+        "EDU",
+        "FAL",
+        "GLG",
+        "SLK",
+        "STG",
+        "WLN"
+      ]
+    },
+    {
+      "code": "NLN",
+      "name": "North Lincolnshire",
+      "nameNative": "North Lincolnshire",
+      "type": "unitary authority",
+      "capital": "North Lincolnshire",
+      "largestCity": "North Lincolnshire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        785.17,
+        734.67
+      ],
+      "bbox": [
+        763.6,
+        721.61,
+        808.15,
+        748.73
+      ],
+      "neighbors": [
+        "DNC",
+        "ERY",
+        "LIN",
+        "NEL",
+        "NTT"
+      ]
+    },
+    {
+      "code": "NSM",
+      "name": "North Somerset",
+      "nameNative": "North Somerset",
+      "type": "unitary authority",
+      "capital": "North West Somerset",
+      "largestCity": "North Somerset",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        649.48,
+        958.33
+      ],
+      "bbox": [
+        637.21,
+        947.17,
+        660.19,
+        968.31
+      ],
+      "neighbors": [
+        "BAS",
+        "BST",
+        "SOM"
+      ]
+    },
+    {
+      "code": "NTA",
+      "name": "Newtownabbey",
+      "nameNative": "Newtownabbey",
+      "type": "district",
+      "capital": "Newtownabbey",
+      "largestCity": "Newtownabbey",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northern Ireland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        467.58,
+        614.38
+      ],
+      "bbox": [
+        461.63,
+        606.34,
+        473.05,
+        622
+      ],
+      "neighbors": [
+        "ANT",
+        "BFS",
+        "BLA",
+        "CKF",
+        "LRN"
+      ]
+    },
+    {
+      "code": "NTH",
+      "name": "Northamptonshire",
+      "nameNative": "Northamptonshire",
+      "type": "administrative county",
+      "capital": "Northamptonshire",
+      "largestCity": "Northamptonshire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        770.95,
+        865.45
+      ],
+      "bbox": [
+        742.15,
+        830.97,
+        802.68,
+        898.55
+      ],
+      "neighbors": [
+        "BDF",
+        "BKM",
+        "CAM",
+        "LEC",
+        "LIN",
+        "MIK",
+        "OXF",
+        "PTE",
+        "RUT",
+        "WAR"
+      ]
+    },
+    {
+      "code": "NTL",
+      "name": "Neath Port Talbot",
+      "nameNative": "Neath Port Talbot",
+      "type": "unitary authority (wales)",
+      "capital": "Neath and Port Talbot",
+      "largestCity": "Neath Port Talbot",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Wales",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        591.33,
+        927.73
+      ],
+      "bbox": [
+        578.85,
+        915.12,
+        602.88,
+        943.17
+      ],
+      "neighbors": [
+        "BGE",
+        "CMN",
+        "POW",
+        "RCT",
+        "SWA"
+      ]
+    },
+    {
+      "code": "NTT",
+      "name": "Nottinghamshire",
+      "nameNative": "Nottinghamshire",
+      "type": "administrative county",
+      "capital": "Nottinghamshire",
+      "largestCity": "Nottinghamshire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        761.07,
+        782.56
+      ],
+      "bbox": [
+        740.78,
+        745.29,
+        782.61,
+        817.92
+      ],
+      "neighbors": [
+        "DBY",
+        "DNC",
+        "LEC",
+        "LIN",
+        "NGM",
+        "NLN",
+        "ROT"
+      ]
+    },
+    {
+      "code": "NTY",
+      "name": "North Tyneside",
+      "nameNative": "North Tyneside",
+      "type": "metropolitan borough",
+      "capital": "North Tyneside",
+      "largestCity": "North Tyneside",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        728.31,
+        589.71
+      ],
+      "bbox": [
+        720.32,
+        585.45,
+        734.08,
+        594.23
+      ],
+      "neighbors": [
+        "NBL",
+        "NET",
+        "STY"
+      ]
+    },
+    {
+      "code": "NWM",
+      "name": "Newham",
+      "nameNative": "Newham",
+      "type": "london borough",
+      "capital": "Newham",
+      "largestCity": "Newham",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        828.77,
+        942.64
+      ],
+      "bbox": [
+        825.23,
+        938.78,
+        832.27,
+        946.11
+      ],
+      "neighbors": [
+        "BDG",
+        "GRE",
+        "HCK",
+        "RDB",
+        "TWH",
+        "WFT"
+      ]
+    },
+    {
+      "code": "NWP",
+      "name": "Newport",
+      "nameNative": "Newport",
+      "type": "unitary authority (wales)",
+      "capital": "Newport",
+      "largestCity": "Newport",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Wales",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        640.23,
+        938.22
+      ],
+      "bbox": [
+        630.16,
+        931.57,
+        650.35,
+        945.73
+      ],
+      "neighbors": [
+        "CAY",
+        "CRF",
+        "MON",
+        "TOF"
+      ]
+    },
+    {
+      "code": "NYK",
+      "name": "North Yorkshire",
+      "nameNative": "North Yorkshire",
+      "type": "administrative county",
+      "capital": "North Yorkshire",
+      "largestCity": "North Yorkshire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        734.78,
+        674.38
+      ],
+      "bbox": [
+        667.27,
+        636.82,
+        806.72,
+        732.11
+      ],
+      "neighbors": [
+        "BRD",
+        "CLD",
+        "CMA",
+        "DAL",
+        "DNC",
+        "DUR",
+        "ERY",
+        "LAN",
+        "LDS",
+        "MDB",
+        "RCC",
+        "STT",
+        "WKF",
+        "YOR"
+      ]
+    },
+    {
+      "code": "NYM",
+      "name": "Newry and Mourne",
+      "nameNative": "Newry and Mourne",
+      "type": "district",
+      "capital": "Mourne",
+      "largestCity": "Newry and Mourne",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northern Ireland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        445.68,
+        670.68
+      ],
+      "bbox": [
+        422.46,
+        657.79,
+        470.98,
+        683.39
+      ],
+      "neighbors": [
+        "ARM",
+        "BNB",
+        "DOW"
+      ]
+    },
+    {
+      "code": "OLD",
+      "name": "Oldham",
+      "nameNative": "Oldham",
+      "type": "metropolitan borough",
+      "capital": "Oldham",
+      "largestCity": "Oldham",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        697.4,
+        740.61
+      ],
+      "bbox": [
+        687.7,
+        732.9,
+        706.17,
+        747.67
+      ],
+      "neighbors": [
+        "DBY",
+        "KIR",
+        "MAN",
+        "RCH",
+        "TAM"
+      ]
+    },
+    {
+      "code": "OMH",
+      "name": "Omagh",
+      "nameNative": "Omagh",
+      "type": "district",
+      "capital": "Omagh",
+      "largestCity": "Omagh",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northern Ireland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        390.74,
+        622.67
+      ],
+      "bbox": [
+        366.24,
+        604.78,
+        412.15,
+        640.18
+      ],
+      "neighbors": [
+        "CKT",
+        "DGN",
+        "FER",
+        "MFT",
+        "STB"
+      ]
+    },
+    {
+      "code": "ORK",
+      "name": "Orkney Islands",
+      "nameNative": "Orkney",
+      "type": "unitary district",
+      "capital": "Elgin",
+      "largestCity": "Orkney Islands",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Scotland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        645.5,
+        184.45
+      ],
+      "bbox": [
+        625,
+        150.72,
+        679.69,
+        214.54
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "OXF",
+      "name": "Oxfordshire",
+      "nameNative": "Oxfordshire",
+      "type": "administrative county",
+      "capital": "Oxfordshire",
+      "largestCity": "Oxfordshire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        743.1,
+        920.46
+      ],
+      "bbox": [
+        718.21,
+        879.84,
+        771,
+        951.32
+      ],
+      "neighbors": [
+        "BKM",
+        "GLS",
+        "NTH",
+        "RDG",
+        "SWD",
+        "WAR",
+        "WBK",
+        "WOK"
+      ]
+    },
+    {
+      "code": "PEM",
+      "name": "Pembrokeshire",
+      "nameNative": "Pembrokeshire",
+      "type": "unitary authority (wales)",
+      "capital": "Pembrokeshire",
+      "largestCity": "Pembrokeshire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Wales",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        519.62,
+        907.31
+      ],
+      "bbox": [
+        493,
+        881.74,
+        544.38,
+        933.52
+      ],
+      "neighbors": [
+        "CGN",
+        "CMN"
+      ]
+    },
+    {
+      "code": "PKN",
+      "name": "Perth and Kinross",
+      "nameNative": "Perthshire and Kinross",
+      "type": "unitary district",
+      "capital": "Perth and Kinross",
+      "largestCity": "Perth and Kinross",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Scotland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        598.86,
+        432.8
+      ],
+      "bbox": [
+        549.2,
+        393.93,
+        640.92,
+        477.31
+      ],
+      "neighbors": [
+        "ABD",
+        "AGB",
+        "ANS",
+        "CLK",
+        "DND",
+        "FIF",
+        "HLD",
+        "STG"
+      ]
+    },
+    {
+      "code": "PLY",
+      "name": "Plymouth",
+      "nameNative": "Plymouth",
+      "type": "unitary authority",
+      "capital": "Plymouth",
+      "largestCity": "Plymouth",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        563.38,
+        1056.65
+      ],
+      "bbox": [
+        558.61,
+        1052.79,
+        568.52,
+        1061.73
+      ],
+      "neighbors": [
+        "DEV"
+      ]
+    },
+    {
+      "code": "POL",
+      "name": "Poole",
+      "nameNative": "Poole",
+      "type": "unitary authority",
+      "capital": "Poole",
+      "largestCity": "Poole",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        702.26,
+        1024.3
+      ],
+      "bbox": [
+        698.31,
+        1020.94,
+        706.6,
+        1028.94
+      ],
+      "neighbors": [
+        "BMH",
+        "DOR"
+      ]
+    },
+    {
+      "code": "POR",
+      "name": "Portsmouth",
+      "nameNative": "Portsmouth",
+      "type": "unitary authority",
+      "capital": "Portsmouth",
+      "largestCity": "Portsmouth",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        762.02,
+        1015.95
+      ],
+      "bbox": [
+        757.4,
+        1011.65,
+        767.92,
+        1019.46
+      ],
+      "neighbors": [
+        "HAM"
+      ]
+    },
+    {
+      "code": "POW",
+      "name": "Powys",
+      "nameNative": "Powys",
+      "type": "unitary authority (wales)",
+      "capital": "Powys",
+      "largestCity": "Powys",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Wales",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        613.05,
+        864.59
+      ],
+      "bbox": [
+        581.33,
+        807.47,
+        641.13,
+        920.5
+      ],
+      "neighbors": [
+        "BGW",
+        "CAY",
+        "CGN",
+        "CMN",
+        "DEN",
+        "GWN",
+        "HEF",
+        "MON",
+        "MTY",
+        "NTL",
+        "RCT",
+        "SHR",
+        "WRX"
+      ]
+    },
+    {
+      "code": "PTE",
+      "name": "Peterborough",
+      "nameNative": "Peterborough",
+      "type": "unitary authority",
+      "capital": "Peterborough",
+      "largestCity": "Peterborough",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        806.18,
+        834.74
+      ],
+      "bbox": [
+        792.73,
+        827.99,
+        819.94,
+        844.09
+      ],
+      "neighbors": [
+        "CAM",
+        "LIN",
+        "NTH",
+        "RUT"
+      ]
+    },
+    {
+      "code": "RCC",
+      "name": "Redcar and Cleveland",
+      "nameNative": "Redcar and Cleveland",
+      "type": "unitary authority",
+      "capital": "Redcar and Cleveland",
+      "largestCity": "Redcar and Cleveland",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        756.97,
+        637.48
+      ],
+      "bbox": [
+        745.79,
+        628.11,
+        771.69,
+        644.14
+      ],
+      "neighbors": [
+        "HPL",
+        "MDB",
+        "NYK",
+        "STT"
+      ]
+    },
+    {
+      "code": "RCH",
+      "name": "Rochdale",
+      "nameNative": "Rochdale",
+      "type": "metropolitan borough",
+      "capital": "Rochdale",
+      "largestCity": "Rochdale",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        690.89,
+        732.35
+      ],
+      "bbox": [
+        684.49,
+        724.6,
+        700.7,
+        741.89
+      ],
+      "neighbors": [
+        "BUR",
+        "CLD",
+        "KIR",
+        "LAN",
+        "MAN",
+        "OLD"
+      ]
+    },
+    {
+      "code": "RCT",
+      "name": "Rhondda Cynon Taf",
+      "nameNative": "Rhondda, Cynon, Taff",
+      "type": "unitary authority (wales)",
+      "capital": "Rhondda Cynon Taf",
+      "largestCity": "Rhondda Cynon Taf",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Wales",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        610.93,
+        931.97
+      ],
+      "bbox": [
+        600.17,
+        913.55,
+        622.69,
+        946.58
+      ],
+      "neighbors": [
+        "BGE",
+        "CAY",
+        "CRF",
+        "MTY",
+        "NTL",
+        "POW",
+        "VGL"
+      ]
+    },
+    {
+      "code": "RDB",
+      "name": "Redbridge",
+      "nameNative": "Redbridge",
+      "type": "london borough",
+      "capital": "Redbridge",
+      "largestCity": "Redbridge",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        830.97,
+        936.64
+      ],
+      "bbox": [
+        826.85,
+        932.44,
+        835.35,
+        940.9
+      ],
+      "neighbors": [
+        "BDG",
+        "ESS",
+        "HAV",
+        "NWM",
+        "WFT"
+      ]
+    },
+    {
+      "code": "RDG",
+      "name": "Reading",
+      "nameNative": "Reading",
+      "type": "unitary authority",
+      "capital": "Reading",
+      "largestCity": "Reading",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        760.84,
+        952.01
+      ],
+      "bbox": [
+        757.82,
+        947.75,
+        765.32,
+        955.55
+      ],
+      "neighbors": [
+        "OXF",
+        "WBK",
+        "WOK"
+      ]
+    },
+    {
+      "code": "RFW",
+      "name": "Renfrewshire",
+      "nameNative": "Renfrewshire",
+      "type": "unitary district",
+      "capital": "Renfrewshire",
+      "largestCity": "Renfrewshire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Scotland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        556.11,
+        505.03
+      ],
+      "bbox": [
+        543.64,
+        495.66,
+        566.15,
+        512.79
+      ],
+      "neighbors": [
+        "ERW",
+        "GLG",
+        "IVC",
+        "NAY",
+        "WDU"
+      ]
+    },
+    {
+      "code": "RIC",
+      "name": "Richmond upon Thames",
+      "nameNative": "Richmond upon Thames",
+      "type": "london borough",
+      "capital": "Richmond upon Thames",
+      "largestCity": "Richmond upon Thames",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        807.12,
+        951.85
+      ],
+      "bbox": [
+        802.01,
+        946.97,
+        812.71,
+        957.49
+      ],
+      "neighbors": [
+        "HMF",
+        "HNS",
+        "KTT",
+        "MRT",
+        "SRY",
+        "WND"
+      ]
+    },
+    {
+      "code": "ROT",
+      "name": "Rotherham",
+      "nameNative": "Rotherham",
+      "type": "metropolitan borough",
+      "capital": "Rotherham",
+      "largestCity": "Rotherham",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        743.56,
+        756.73
+      ],
+      "bbox": [
+        735.81,
+        746.57,
+        753.53,
+        765.45
+      ],
+      "neighbors": [
+        "BNS",
+        "DBY",
+        "DNC",
+        "NTT",
+        "SHF"
+      ]
+    },
+    {
+      "code": "RUT",
+      "name": "Rutland",
+      "nameNative": "Rutland",
+      "type": "unitary authority",
+      "capital": "Rutland",
+      "largestCity": "Rutland",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        782.79,
+        830.37
+      ],
+      "bbox": [
+        773.29,
+        819.92,
+        797.25,
+        844.4
+      ],
+      "neighbors": [
+        "LEC",
+        "LIN",
+        "NTH",
+        "PTE"
+      ]
+    },
+    {
+      "code": "SAW",
+      "name": "Sandwell",
+      "nameNative": "Sandwell",
+      "type": "metropolitan borough",
+      "capital": "Sandwell",
+      "largestCity": "Sandwell",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        699.81,
+        843.96
+      ],
+      "bbox": [
+        694.44,
+        838.87,
+        705.97,
+        849.91
+      ],
+      "neighbors": [
+        "BIR",
+        "DUD",
+        "WLL",
+        "WLV"
+      ]
+    },
+    {
+      "code": "SAY",
+      "name": "South Ayrshire",
+      "nameNative": "South Ayrshire",
+      "type": "unitary district",
+      "capital": "South Ayrshire",
+      "largestCity": "South Ayrshire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Scotland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        544.34,
+        563.7
+      ],
+      "bbox": [
+        522.99,
+        530.01,
+        560.9,
+        589.45
+      ],
+      "neighbors": [
+        "DGY",
+        "EAY",
+        "NAY"
+      ]
+    },
+    {
+      "code": "SCB",
+      "name": "Scottish Borders",
+      "nameNative": "Scottish Borders",
+      "type": "unitary district",
+      "capital": "The Borders",
+      "largestCity": "Scottish Borders",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Scotland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        654.97,
+        534.34
+      ],
+      "bbox": [
+        611.84,
+        496.12,
+        698.69,
+        581.06
+      ],
+      "neighbors": [
+        "CMA",
+        "DGY",
+        "EDH",
+        "ELN",
+        "MLN",
+        "NBL",
+        "SLK",
+        "WLN"
+      ]
+    },
+    {
+      "code": "SFK",
+      "name": "Suffolk",
+      "nameNative": "Suffolk",
+      "type": "administrative county",
+      "capital": "Suffolk",
+      "largestCity": "Suffolk",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        890.16,
+        870.71
+      ],
+      "bbox": [
+        845.61,
+        835.68,
+        932.47,
+        897.69
+      ],
+      "neighbors": [
+        "CAM",
+        "ESS",
+        "NFK"
+      ]
+    },
+    {
+      "code": "SFT",
+      "name": "Sefton",
+      "nameNative": "Sefton",
+      "type": "metropolitan borough",
+      "capital": "Sefton",
+      "largestCity": "Sefton",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        639.27,
+        736.81
+      ],
+      "bbox": [
+        633.72,
+        722.92,
+        646.05,
+        745.97
+      ],
+      "neighbors": [
+        "KWL",
+        "LAN",
+        "LIV"
+      ]
+    },
+    {
+      "code": "SGC",
+      "name": "South Gloucestershire",
+      "nameNative": "South Gloucestershire",
+      "type": "unitary authority",
+      "capital": "South Gloucestershire",
+      "largestCity": "South Gloucestershire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        671.8,
+        943.67
+      ],
+      "bbox": [
+        657.24,
+        929.38,
+        684.53,
+        956.78
+      ],
+      "neighbors": [
+        "BAS",
+        "BST",
+        "GLS",
+        "WIL"
+      ]
+    },
+    {
+      "code": "SHF",
+      "name": "Sheffield",
+      "nameNative": "Sheffield",
+      "type": "metropolitan borough",
+      "capital": "Sheffield",
+      "largestCity": "Sheffield",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        725.48,
+        753.73
+      ],
+      "bbox": [
+        711.06,
+        742.87,
+        736.66,
+        765.71
+      ],
+      "neighbors": [
+        "BNS",
+        "DBY",
+        "KIR",
+        "ROT"
+      ]
+    },
+    {
+      "code": "SHN",
+      "name": "Merseyside",
+      "nameNative": "Merseyside",
+      "type": "metropolitan borough",
+      "capital": "Merseyside",
+      "largestCity": "Merseyside",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        656.62,
+        749.75
+      ],
+      "bbox": [
+        650.86,
+        741.34,
+        665.82,
+        756.61
+      ],
+      "neighbors": [
+        "HAL",
+        "KWL",
+        "LAN",
+        "WGN",
+        "WRT"
+      ]
+    },
+    {
+      "code": "SHR",
+      "name": "Shropshire",
+      "nameNative": "Shropshire",
+      "type": "unitary single-tier county",
+      "capital": "Salop",
+      "largestCity": "Shropshire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        655.47,
+        832.53
+      ],
+      "bbox": [
+        624.99,
+        796.13,
+        686.04,
+        865.45
+      ],
+      "neighbors": [
+        "CHE",
+        "CHW",
+        "HEF",
+        "POW",
+        "STS",
+        "TFW",
+        "WOR",
+        "WRX"
+      ]
+    },
+    {
+      "code": "SKP",
+      "name": "Stockport",
+      "nameNative": "Stockport",
+      "type": "metropolitan borough",
+      "capital": "Stockport",
+      "largestCity": "Stockport",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        691.63,
+        756.3
+      ],
+      "bbox": [
+        683.89,
+        750.84,
+        701.11,
+        762.59
+      ],
+      "neighbors": [
+        "CHE",
+        "DBY",
+        "MAN",
+        "TAM"
+      ]
+    },
+    {
+      "code": "SLF",
+      "name": "Salford",
+      "nameNative": "Salford",
+      "type": "metropolitan borough",
+      "capital": "Salford",
+      "largestCity": "Salford",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        675.32,
+        744.96
+      ],
+      "bbox": [
+        669.22,
+        738.99,
+        681.98,
+        752.65
+      ],
+      "neighbors": [
+        "BOL",
+        "BUR",
+        "MAN",
+        "TRF",
+        "WGN",
+        "WRT"
+      ]
+    },
+    {
+      "code": "SLG",
+      "name": "Slough",
+      "nameNative": "Slough",
+      "type": "unitary authority",
+      "capital": "Slough",
+      "largestCity": "Slough",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        790.1,
+        947.39
+      ],
+      "bbox": [
+        785.06,
+        943.13,
+        793.78,
+        952.8
+      ],
+      "neighbors": [
+        "BKM",
+        "SRY",
+        "WNM"
+      ]
+    },
+    {
+      "code": "SLK",
+      "name": "South Lanarkshire",
+      "nameNative": "South Lanarkshire",
+      "type": "unitary district",
+      "capital": "South Lanarkshire",
+      "largestCity": "South Lanarkshire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Scotland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        596.88,
+        529.5
+      ],
+      "bbox": [
+        571.37,
+        506.57,
+        620.44,
+        562.19
+      ],
+      "neighbors": [
+        "DGY",
+        "EAY",
+        "ERW",
+        "GLG",
+        "NLK",
+        "SCB",
+        "WLN"
+      ]
+    },
+    {
+      "code": "SND",
+      "name": "Sunderland",
+      "nameNative": "Sunderland",
+      "type": "metropolitan borough",
+      "capital": "Sunderland",
+      "largestCity": "Sunderland",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        731.36,
+        606.06
+      ],
+      "bbox": [
+        724.61,
+        600.5,
+        738.39,
+        613.07
+      ],
+      "neighbors": [
+        "DUR",
+        "GAT",
+        "STY"
+      ]
+    },
+    {
+      "code": "SOL",
+      "name": "Solihull",
+      "nameNative": "Solihull",
+      "type": "metropolitan borough",
+      "capital": "Solihull",
+      "largestCity": "Solihull",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        716.98,
+        855.26
+      ],
+      "bbox": [
+        710.17,
+        845.99,
+        723.47,
+        862.22
+      ],
+      "neighbors": [
+        "BIR",
+        "COV",
+        "WAR"
+      ]
+    },
+    {
+      "code": "SOM",
+      "name": "Somerset",
+      "nameNative": "Somerset",
+      "type": "administrative county",
+      "capital": "Somerset",
+      "largestCity": "Somerset",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        640.73,
+        987.14
+      ],
+      "bbox": [
+        583.99,
+        964.2,
+        685.03,
+        1015.23
+      ],
+      "neighbors": [
+        "BAS",
+        "DEV",
+        "DOR",
+        "NSM",
+        "WIL"
+      ]
+    },
+    {
+      "code": "SOS",
+      "name": "Southend-on-Sea",
+      "nameNative": "Southend-on-Sea",
+      "type": "unitary authority",
+      "capital": "Southend",
+      "largestCity": "Southend-on-Sea",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        871.28,
+        938.74
+      ],
+      "bbox": [
+        865.88,
+        936.09,
+        878.08,
+        940.85
+      ],
+      "neighbors": [
+        "ESS"
+      ]
+    },
+    {
+      "code": "SRY",
+      "name": "Surrey",
+      "nameNative": "Surrey",
+      "type": "administrative county",
+      "capital": "Surrey",
+      "largestCity": "Surrey",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        800.51,
+        971.84
+      ],
+      "bbox": [
+        773.58,
+        948.29,
+        831.04,
+        989.73
+      ],
+      "neighbors": [
+        "BKM",
+        "BRC",
+        "BRY",
+        "CRY",
+        "ESX",
+        "HAM",
+        "HIL",
+        "HNS",
+        "KEN",
+        "KTT",
+        "RIC",
+        "SLG",
+        "STN",
+        "WNM",
+        "WSX"
+      ]
+    },
+    {
+      "code": "STB",
+      "name": "Strabane",
+      "nameNative": "Strabane",
+      "type": "district",
+      "capital": "Strabane",
+      "largestCity": "Strabane",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northern Ireland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        382.81,
+        604.72
+      ],
+      "bbox": [
+        353.23,
+        586.07,
+        414.2,
+        619.52
+      ],
+      "neighbors": [
+        "DRY",
+        "FER",
+        "LMV",
+        "MFT",
+        "OMH"
+      ]
+    },
+    {
+      "code": "STE",
+      "name": "Stoke-on-Trent",
+      "nameNative": "Stoke-on-Trent",
+      "type": "unitary authority",
+      "capital": "Stoke-on-Trent",
+      "largestCity": "Stoke-on-Trent",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        689.7,
+        793.98
+      ],
+      "bbox": [
+        685.17,
+        783.62,
+        694.48,
+        801.37
+      ],
+      "neighbors": [
+        "CHE",
+        "STS"
+      ]
+    },
+    {
+      "code": "STG",
+      "name": "Stirling",
+      "nameNative": "Stirling",
+      "type": "unitary district",
+      "capital": "Stirling",
+      "largestCity": "Stirling",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Scotland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        569.18,
+        464.74
+      ],
+      "bbox": [
+        540.93,
+        434.38,
+        601.66,
+        493.55
+      ],
+      "neighbors": [
+        "AGB",
+        "CLK",
+        "EDU",
+        "FAL",
+        "NLK",
+        "PKN",
+        "WDU"
+      ]
+    },
+    {
+      "code": "STH",
+      "name": "Southampton",
+      "nameNative": "Southampton",
+      "type": "unitary authority",
+      "capital": "Southampton",
+      "largestCity": "Southampton",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        740.27,
+        1006.47
+      ],
+      "bbox": [
+        735.15,
+        1003.01,
+        744.3,
+        1011.93
+      ],
+      "neighbors": [
+        "HAM"
+      ]
+    },
+    {
+      "code": "STN",
+      "name": "Sutton",
+      "nameNative": "Sutton",
+      "type": "london borough",
+      "capital": "Sutton",
+      "largestCity": "Sutton",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        815.65,
+        959.91
+      ],
+      "bbox": [
+        811.03,
+        956.84,
+        819.5,
+        963.83
+      ],
+      "neighbors": [
+        "CRY",
+        "KTT",
+        "MRT",
+        "SRY"
+      ]
+    },
+    {
+      "code": "STS",
+      "name": "Staffordshire",
+      "nameNative": "Staffordshire",
+      "type": "administrative county",
+      "capital": "Staffordshire",
+      "largestCity": "Staffordshire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        698.61,
+        810.94
+      ],
+      "bbox": [
+        672.48,
+        773.49,
+        725.77,
+        853.69
+      ],
+      "neighbors": [
+        "BIR",
+        "CHE",
+        "DBY",
+        "DUD",
+        "LEC",
+        "SHR",
+        "STE",
+        "TFW",
+        "WAR",
+        "WLL",
+        "WLV",
+        "WOR"
+      ]
+    },
+    {
+      "code": "STT",
+      "name": "Stockton-on-Tees",
+      "nameNative": "Stockton-on-Tees",
+      "type": "unitary authority",
+      "capital": "Stockton",
+      "largestCity": "Stockton-on-Tees",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        738.84,
+        638.18
+      ],
+      "bbox": [
+        733.21,
+        630.27,
+        746.22,
+        646.9
+      ],
+      "neighbors": [
+        "DAL",
+        "DUR",
+        "HPL",
+        "MDB",
+        "NYK",
+        "RCC"
+      ]
+    },
+    {
+      "code": "STY",
+      "name": "South Tyneside",
+      "nameNative": "South Tyneside",
+      "type": "metropolitan borough",
+      "capital": "South Tyneside",
+      "largestCity": "South Tyneside",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        732.45,
+        597.39
+      ],
+      "bbox": [
+        727.19,
+        592.46,
+        737.21,
+        601.68
+      ],
+      "neighbors": [
+        "GAT",
+        "NET",
+        "NTY",
+        "SND"
+      ]
+    },
+    {
+      "code": "SWA",
+      "name": "Swansea",
+      "nameNative": "Swansea",
+      "type": "unitary authority (wales)",
+      "capital": "Swansea",
+      "largestCity": "Swansea",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Wales",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        571.43,
+        930.98
+      ],
+      "bbox": [
+        555.41,
+        918.34,
+        585.13,
+        941.01
+      ],
+      "neighbors": [
+        "CMN",
+        "NTL"
+      ]
+    },
+    {
+      "code": "SWD",
+      "name": "Swindon",
+      "nameNative": "Swindon",
+      "type": "unitary authority",
+      "capital": "Thamesdown",
+      "largestCity": "Swindon",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        717.37,
+        941.96
+      ],
+      "bbox": [
+        710.07,
+        928.65,
+        726.43,
+        951.03
+      ],
+      "neighbors": [
+        "GLS",
+        "OXF",
+        "WBK",
+        "WIL"
+      ]
+    },
+    {
+      "code": "SWK",
+      "name": "Southwark",
+      "nameNative": "Southwark",
+      "type": "london borough",
+      "capital": "Southwark",
+      "largestCity": "Southwark",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        821.86,
+        948.29
+      ],
+      "bbox": [
+        819.23,
+        944.26,
+        824.62,
+        953.6
+      ],
+      "neighbors": [
+        "BRY",
+        "CMD",
+        "GRE",
+        "LBH",
+        "LEW",
+        "LND",
+        "TWH"
+      ]
+    },
+    {
+      "code": "TAM",
+      "name": "Tameside",
+      "nameNative": "Tameside",
+      "type": "metropolitan borough",
+      "capital": "Tameside",
+      "largestCity": "Tameside",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        694.17,
+        749.13
+      ],
+      "bbox": [
+        686.39,
+        743.65,
+        701.33,
+        753.7
+      ],
+      "neighbors": [
+        "DBY",
+        "MAN",
+        "OLD",
+        "SKP"
+      ]
+    },
+    {
+      "code": "TFW",
+      "name": "Telford and Wrekin",
+      "nameNative": "Telford and Wrekin",
+      "type": "unitary authority",
+      "capital": "The Wrekin, Wrekin",
+      "largestCity": "Telford and Wrekin",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        670.97,
+        823.17
+      ],
+      "bbox": [
+        659.34,
+        813.13,
+        680.13,
+        834.85
+      ],
+      "neighbors": [
+        "SHR",
+        "STS"
+      ]
+    },
+    {
+      "code": "THR",
+      "name": "Thurrock",
+      "nameNative": "Thurrock",
+      "type": "unitary authority",
+      "capital": "Thurrock",
+      "largestCity": "Thurrock",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        849.23,
+        944.15
+      ],
+      "bbox": [
+        839.77,
+        938.83,
+        860.47,
+        950.05
+      ],
+      "neighbors": [
+        "BEX",
+        "ESS",
+        "HAV",
+        "KEN"
+      ]
+    },
+    {
+      "code": "TOB",
+      "name": "Torbay",
+      "nameNative": "Torbay",
+      "type": "unitary authority",
+      "capital": "Torbay",
+      "largestCity": "Torbay",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        598.87,
+        1052.31
+      ],
+      "bbox": [
+        593.66,
+        1046.26,
+        604.11,
+        1059.8
+      ],
+      "neighbors": [
+        "DEV"
+      ]
+    },
+    {
+      "code": "TOF",
+      "name": "Torfaen",
+      "nameNative": "Torfaen",
+      "type": "unitary authority (wales)",
+      "capital": "Torfaen",
+      "largestCity": "Torfaen",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Wales",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        634.43,
+        926.48
+      ],
+      "bbox": [
+        629.32,
+        916.64,
+        639.57,
+        935.85
+      ],
+      "neighbors": [
+        "BGW",
+        "CAY",
+        "MON",
+        "NWP"
+      ]
+    },
+    {
+      "code": "TRF",
+      "name": "Trafford",
+      "nameNative": "Trafford",
+      "type": "metropolitan borough",
+      "capital": "Trafford",
+      "largestCity": "Trafford",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        677.33,
+        753.47
+      ],
+      "bbox": [
+        672.18,
+        748.62,
+        681.7,
+        758.65
+      ],
+      "neighbors": [
+        "CHE",
+        "MAN",
+        "SLF",
+        "WRT"
+      ]
+    },
+    {
+      "code": "TWH",
+      "name": "Tower Hamlets",
+      "nameNative": "Tower Hamlets",
+      "type": "london borough",
+      "capital": "Tower Hamlets",
+      "largestCity": "Tower Hamlets",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        824.42,
+        944.16
+      ],
+      "bbox": [
+        821.46,
+        940.91,
+        827.26,
+        947.37
+      ],
+      "neighbors": [
+        "GRE",
+        "HCK",
+        "LEW",
+        "LND",
+        "NWM",
+        "SWK"
+      ]
+    },
+    {
+      "code": "VGL",
+      "name": "Vale of Glamorgan",
+      "nameNative": "Vale of Glamorgan",
+      "type": "unitary authority (wales)",
+      "capital": "Vale of Glamorgan",
+      "largestCity": "Vale of Glamorgan",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Wales",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        613.64,
+        951.92
+      ],
+      "bbox": [
+        600.53,
+        944.52,
+        626.76,
+        958.02
+      ],
+      "neighbors": [
+        "BGE",
+        "CRF",
+        "RCT"
+      ]
+    },
+    {
+      "code": "WAR",
+      "name": "Warwickshire",
+      "nameNative": "Warwickshire",
+      "type": "administrative county",
+      "capital": "Warwickshire",
+      "largestCity": "Warwickshire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        727.94,
+        866.64
+      ],
+      "bbox": [
+        703.44,
+        827.78,
+        751.62,
+        900.89
+      ],
+      "neighbors": [
+        "BIR",
+        "COV",
+        "GLS",
+        "LEC",
+        "NTH",
+        "OXF",
+        "SOL",
+        "STS",
+        "WOR"
+      ]
+    },
+    {
+      "code": "WBK",
+      "name": "West Berkshire",
+      "nameNative": "West Berkshire",
+      "type": "unitary authority",
+      "capital": "West Berkshire",
+      "largestCity": "West Berkshire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        742.62,
+        952
+      ],
+      "bbox": [
+        726.17,
+        941.41,
+        761.2,
+        963.87
+      ],
+      "neighbors": [
+        "HAM",
+        "OXF",
+        "RDG",
+        "SWD",
+        "WIL",
+        "WOK"
+      ]
+    },
+    {
+      "code": "WDU",
+      "name": "West Dunbartonshire",
+      "nameNative": "West Dunbartonshire",
+      "type": "unitary district",
+      "capital": "Dumbarton and Clydebank",
+      "largestCity": "West Dunbartonshire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Scotland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        559.04,
+        490.88
+      ],
+      "bbox": [
+        552.73,
+        480.74,
+        566.53,
+        502.87
+      ],
+      "neighbors": [
+        "AGB",
+        "EDU",
+        "GLG",
+        "RFW",
+        "STG"
+      ]
+    },
+    {
+      "code": "WFT",
+      "name": "Waltham Forest",
+      "nameNative": "Waltham Forest",
+      "type": "london borough",
+      "capital": "Waltham Forest",
+      "largestCity": "Waltham Forest",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        825.4,
+        935.9
+      ],
+      "bbox": [
+        822.52,
+        930.45,
+        827.45,
+        940
+      ],
+      "neighbors": [
+        "ENF",
+        "ESS",
+        "HCK",
+        "HRY",
+        "NWM",
+        "RDB"
+      ]
+    },
+    {
+      "code": "WGN",
+      "name": "Wigan",
+      "nameNative": "Wigan",
+      "type": "metropolitan borough",
+      "capital": "Wigan",
+      "largestCity": "Wigan",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        663.45,
+        741.69
+      ],
+      "bbox": [
+        654.71,
+        732.92,
+        670.75,
+        750.9
+      ],
+      "neighbors": [
+        "BOL",
+        "LAN",
+        "SHN",
+        "SLF",
+        "WRT"
+      ]
+    },
+    {
+      "code": "WIL",
+      "name": "Wiltshire",
+      "nameNative": "Wiltshire",
+      "type": "unitary single-tier county",
+      "capital": "Wiltshire",
+      "largestCity": "Wiltshire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        703.61,
+        967.61
+      ],
+      "bbox": [
+        677.61,
+        926.95,
+        732.51,
+        1002.63
+      ],
+      "neighbors": [
+        "BAS",
+        "DOR",
+        "GLS",
+        "HAM",
+        "SGC",
+        "SOM",
+        "SWD",
+        "WBK"
+      ]
+    },
+    {
+      "code": "WKF",
+      "name": "Wakefield",
+      "nameNative": "Wakefield",
+      "type": "metropolitan borough",
+      "capital": "Wakefield",
+      "largestCity": "Wakefield",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        735.39,
+        729.02
+      ],
+      "bbox": [
+        722.8,
+        720.21,
+        747.26,
+        736.94
+      ],
+      "neighbors": [
+        "BNS",
+        "DNC",
+        "KIR",
+        "LDS",
+        "NYK"
+      ]
+    },
+    {
+      "code": "WLL",
+      "name": "Walsall",
+      "nameNative": "Walsall",
+      "type": "metropolitan borough",
+      "capital": "Walsall",
+      "largestCity": "Walsall",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        702.9,
+        835.89
+      ],
+      "bbox": [
+        696.56,
+        829.03,
+        708.87,
+        841.02
+      ],
+      "neighbors": [
+        "BIR",
+        "SAW",
+        "STS",
+        "WLV"
+      ]
+    },
+    {
+      "code": "WLN",
+      "name": "West Lothian",
+      "nameNative": "West Lothian",
+      "type": "unitary district",
+      "capital": "Linlithgow",
+      "largestCity": "West Lothian",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Scotland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        610.81,
+        502.4
+      ],
+      "bbox": [
+        596.62,
+        489.89,
+        621.03,
+        513.83
+      ],
+      "neighbors": [
+        "EDH",
+        "FAL",
+        "NLK",
+        "SCB",
+        "SLK"
+      ]
+    },
+    {
+      "code": "WLV",
+      "name": "Wolverhampton",
+      "nameNative": "Wolverhampton",
+      "type": "metropolitan borough",
+      "capital": "Wolverhampton",
+      "largestCity": "Wolverhampton",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        692.93,
+        836.77
+      ],
+      "bbox": [
+        687.65,
+        832.18,
+        697.88,
+        841.26
+      ],
+      "neighbors": [
+        "DUD",
+        "SAW",
+        "STS",
+        "WLL"
+      ]
+    },
+    {
+      "code": "WND",
+      "name": "Wandsworth",
+      "nameNative": "Wandsworth",
+      "type": "london borough",
+      "capital": "Wandsworth",
+      "largestCity": "Wandsworth",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        814.94,
+        950.54
+      ],
+      "bbox": [
+        810.65,
+        946.31,
+        818.4,
+        953.84
+      ],
+      "neighbors": [
+        "HMF",
+        "KEC",
+        "KTT",
+        "LBH",
+        "MRT",
+        "RIC",
+        "WSM"
+      ]
+    },
+    {
+      "code": "WNM",
+      "name": "Windsor and Maidenhead",
+      "nameNative": "Royal Borough of Windsor and Maidenhead",
+      "type": "unitary authority",
+      "capital": "Windsor and Maidenhead",
+      "largestCity": "Windsor and Maidenhead",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        781.67,
+        948.65
+      ],
+      "bbox": [
+        772.64,
+        939.9,
+        789.87,
+        959.76
+      ],
+      "neighbors": [
+        "BKM",
+        "BRC",
+        "SLG",
+        "SRY",
+        "WOK"
+      ]
+    },
+    {
+      "code": "WOK",
+      "name": "Wokingham",
+      "nameNative": "Wokingham",
+      "type": "unitary authority",
+      "capital": "Wokingham",
+      "largestCity": "Wokingham",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        768.95,
+        954.21
+      ],
+      "bbox": [
+        759.76,
+        941.31,
+        775,
+        961.63
+      ],
+      "neighbors": [
+        "BKM",
+        "BRC",
+        "HAM",
+        "OXF",
+        "RDG",
+        "WBK",
+        "WNM"
+      ]
+    },
+    {
+      "code": "WOR",
+      "name": "Worcestershire",
+      "nameNative": "Worcestershire",
+      "type": "administrative county",
+      "capital": "Worcestershire",
+      "largestCity": "Worcestershire",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        689.82,
+        874.37
+      ],
+      "bbox": [
+        660.2,
+        851.34,
+        715.05,
+        900.14
+      ],
+      "neighbors": [
+        "BIR",
+        "DUD",
+        "GLS",
+        "HEF",
+        "SHR",
+        "STS",
+        "WAR"
+      ]
+    },
+    {
+      "code": "WRL",
+      "name": "Halton",
+      "nameNative": "Halton",
+      "type": "metropolitan borough",
+      "capital": "Halton",
+      "largestCity": "Halton",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        635.88,
+        758.44
+      ],
+      "bbox": [
+        628.36,
+        750.64,
+        643.94,
+        765.55
+      ],
+      "neighbors": [
+        "CHW"
+      ]
+    },
+    {
+      "code": "WRT",
+      "name": "Warrington",
+      "nameNative": "Warrington",
+      "type": "unitary authority",
+      "capital": "Warrington",
+      "largestCity": "Warrington",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        666.69,
+        755.73
+      ],
+      "bbox": [
+        658.88,
+        748.2,
+        674.09,
+        763.38
+      ],
+      "neighbors": [
+        "CHE",
+        "CHW",
+        "HAL",
+        "SHN",
+        "SLF",
+        "TRF",
+        "WGN"
+      ]
+    },
+    {
+      "code": "WRX",
+      "name": "Wrexham",
+      "nameNative": "Wrexham",
+      "type": "unitary authority (wales)",
+      "capital": "Wrexham",
+      "largestCity": "Wrexham",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Wales",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        635.52,
+        798.53
+      ],
+      "bbox": [
+        614.99,
+        780.11,
+        656.29,
+        816.85
+      ],
+      "neighbors": [
+        "CHW",
+        "DEN",
+        "FLN",
+        "POW",
+        "SHR"
+      ]
+    },
+    {
+      "code": "WSM",
+      "name": "Westminster",
+      "nameNative": "Westminster",
+      "type": "london borough (city)",
+      "capital": "Westminster",
+      "largestCity": "Westminster",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        816.19,
+        944.48
+      ],
+      "bbox": [
+        812.69,
+        942.35,
+        818.97,
+        947.18
+      ],
+      "neighbors": [
+        "BEN",
+        "CMD",
+        "HMF",
+        "KEC",
+        "LBH",
+        "WND"
+      ]
+    },
+    {
+      "code": "WSX",
+      "name": "West Sussex",
+      "nameNative": "West Sussex",
+      "type": "administrative county",
+      "capital": "West Sussex",
+      "largestCity": "West Sussex",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        796.62,
+        1001.11
+      ],
+      "bbox": [
+        766.89,
+        979.88,
+        829.45,
+        1024.34
+      ],
+      "neighbors": [
+        "BNH",
+        "ESX",
+        "HAM",
+        "SRY"
+      ]
+    },
+    {
+      "code": "YOR",
+      "name": "York",
+      "nameNative": "York",
+      "type": "unitary authority",
+      "capital": "York",
+      "largestCity": "York",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "England",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        755.07,
+        699.48
+      ],
+      "bbox": [
+        745.59,
+        689.42,
+        764.3,
+        707.98
+      ],
+      "neighbors": [
+        "ERY",
+        "NYK"
+      ]
+    },
+    {
+      "code": "ZET",
+      "name": "Shetland Islands",
+      "nameNative": "Shetland Islands",
+      "type": "unitary district (city)",
+      "capital": "Aberdeen City",
+      "largestCity": "Shetland Islands",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Scotland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        737.92,
+        48.09
+      ],
+      "bbox": [
+        694.33,
+        0,
+        761.88,
+        135.52
+      ],
+      "neighbors": []
+    }
+  ]
+}

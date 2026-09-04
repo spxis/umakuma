@@ -3,6 +3,10 @@ import "server-only";
 import caMeta from "@/data/maps/ca-meta.json";
 import jpMeta from "@/data/maps/jp-meta.json";
 import usMeta from "@/data/maps/us-meta.json";
+import thMeta from "@/data/maps/th-meta.json";
+import cnMeta from "@/data/maps/cn-meta.json";
+import auMeta from "@/data/maps/au-meta.json";
+import twMeta from "@/data/maps/tw-meta.json";
 import { GEO_DATASETS, type CountryCode } from "@/lib/geoRegion";
 import { getKanjiDictionarySummary } from "@/lib/kanjiDictionary";
 import { prisma } from "@/lib/prisma";
@@ -207,6 +211,10 @@ const MAP_BUILD_DATES: Record<CountryCode, string> = {
   JP: jpMeta.updatedAt,
   US: usMeta.updatedAt,
   CA: caMeta.updatedAt,
+  TH: thMeta.updatedAt,
+  CN: cnMeta.updatedAt,
+  AU: auMeta.updatedAt,
+  TW: twMeta.updatedAt,
 };
 
 /**

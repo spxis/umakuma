@@ -1,0 +1,414 @@
+{
+  "updatedAt": "2026-09-04T06:16:50.397Z",
+  "standard": "Natural Earth admin-1 vector dataset",
+  "country": "BE",
+  "countryName": "Belgium",
+  "divisionTypeName": "Province",
+  "divisionTypePlural": "Provinces",
+  "totalRegions": 11,
+  "regions": [
+    {
+      "code": "BRU",
+      "name": "Brussels Capital",
+      "nameNative": "Brussels",
+      "type": "capital region",
+      "capital": "Bruselas",
+      "largestCity": "Brussels Capital",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Capital Region",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        475.79,
+        311.11
+      ],
+      "bbox": [
+        443.45,
+        279.1,
+        504.09,
+        340.65
+      ],
+      "neighbors": [
+        "VBR"
+      ]
+    },
+    {
+      "code": "VAN",
+      "name": "Antwerp",
+      "nameNative": "Antwerp",
+      "type": "province",
+      "capital": "Antwerpen",
+      "largestCity": "Antwerp",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Flemish",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        565.02,
+        151.76
+      ],
+      "bbox": [
+        427.48,
+        40.65,
+        704.88,
+        247.41
+      ],
+      "neighbors": [
+        "VBR",
+        "VLI",
+        "VOV"
+      ]
+    },
+    {
+      "code": "VBR",
+      "name": "Flemish Brabant",
+      "nameNative": "Flemish Brabant",
+      "type": "province",
+      "capital": "Vlaams Brabant",
+      "largestCity": "Flemish Brabant",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Flemish",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        532.48,
+        295.68
+      ],
+      "bbox": [
+        350.49,
+        222.28,
+        686.72,
+        371.33
+      ],
+      "neighbors": [
+        "BRU",
+        "VAN",
+        "VLI",
+        "VOV",
+        "WBR",
+        "WHT",
+        "WLG"
+      ]
+    },
+    {
+      "code": "VLI",
+      "name": "Limburg",
+      "nameNative": "Limburg",
+      "type": "province",
+      "capital": "Limburg",
+      "largestCity": "Limburg",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Flemish",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        747.85,
+        246.79
+      ],
+      "bbox": [
+        633.31,
+        124.45,
+        875.18,
+        367.51
+      ],
+      "neighbors": [
+        "VAN",
+        "VBR",
+        "WLG"
+      ]
+    },
+    {
+      "code": "VOV",
+      "name": "East Flanders",
+      "nameNative": "East Flanders",
+      "type": "province",
+      "capital": "Oost-Vlaanderen",
+      "largestCity": "East Flanders",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Flemish",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        333.26,
+        228.81
+      ],
+      "bbox": [
+        208.34,
+        93.21,
+        466.43,
+        356.9
+      ],
+      "neighbors": [
+        "VAN",
+        "VBR",
+        "VWV",
+        "WHT"
+      ]
+    },
+    {
+      "code": "VWV",
+      "name": "West Flanders",
+      "nameNative": "West Flanders",
+      "type": "province",
+      "capital": "West-Vlaanderen",
+      "largestCity": "West Flanders",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Flemish",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        133.85,
+        235.7
+      ],
+      "bbox": [
+        0,
+        88.07,
+        256.12,
+        362.46
+      ],
+      "neighbors": [
+        "VOV",
+        "WHT"
+      ]
+    },
+    {
+      "code": "WBR",
+      "name": "Walloon Brabant",
+      "nameNative": "Walloon Brabant",
+      "type": "province",
+      "capital": "Waals-Brabant",
+      "largestCity": "Walloon Brabant",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Walloon",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        530.73,
+        379.16
+      ],
+      "bbox": [
+        402.92,
+        322.52,
+        643.97,
+        438.02
+      ],
+      "neighbors": [
+        "VBR",
+        "WHT",
+        "WLG",
+        "WNA"
+      ]
+    },
+    {
+      "code": "WHT",
+      "name": "Hainaut",
+      "nameNative": "Hainaut",
+      "type": "province",
+      "capital": "Henegouwen",
+      "largestCity": "Hainaut",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Walloon",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        366.47,
+        462.8
+      ],
+      "bbox": [
+        79.39,
+        317.47,
+        539.63,
+        681.34
+      ],
+      "neighbors": [
+        "VBR",
+        "VOV",
+        "VWV",
+        "WBR",
+        "WNA"
+      ]
+    },
+    {
+      "code": "WLG",
+      "name": "Liège",
+      "nameNative": "Liege",
+      "type": "province",
+      "capital": "Luik",
+      "largestCity": "Liège",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Walloon",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        828.26,
+        438.34
+      ],
+      "bbox": [
+        633.95,
+        320.7,
+        1000,
+        600.13
+      ],
+      "neighbors": [
+        "VBR",
+        "VLI",
+        "WBR",
+        "WLX",
+        "WNA"
+      ]
+    },
+    {
+      "code": "WLX",
+      "name": "Luxembourg",
+      "nameNative": "Luxembourg",
+      "type": "province",
+      "capital": "Luxemburg",
+      "largestCity": "Luxembourg",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Walloon",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        774.34,
+        668.5
+      ],
+      "bbox": [
+        633.27,
+        476.03,
+        911.76,
+        859.35
+      ],
+      "neighbors": [
+        "WLG",
+        "WNA"
+      ]
+    },
+    {
+      "code": "WNA",
+      "name": "Namur",
+      "nameNative": "Namur",
+      "type": "province",
+      "capital": "Namen",
+      "largestCity": "Namur",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Walloon",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        601.43,
+        550.38
+      ],
+      "bbox": [
+        453.25,
+        388.14,
+        744.98,
+        742.34
+      ],
+      "neighbors": [
+        "WBR",
+        "WHT",
+        "WLG",
+        "WLX"
+      ]
+    }
+  ]
+}

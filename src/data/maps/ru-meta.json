@@ -1,0 +1,3226 @@
+{
+  "updatedAt": "2026-09-04T06:16:50.224Z",
+  "standard": "Natural Earth admin-1 vector dataset",
+  "country": "RU",
+  "countryName": "Russia",
+  "divisionTypeName": "Federal subject",
+  "divisionTypePlural": "Federal subjects",
+  "totalRegions": 86,
+  "regions": [
+    {
+      "code": "AD",
+      "name": "Republic of Adygea",
+      "nameNative": "Республика Адыгея",
+      "type": "republic",
+      "capital": "Adygea",
+      "largestCity": "Republic of Adygea",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Volga",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        38,
+        362.24
+      ],
+      "bbox": [
+        29.53,
+        348.26,
+        45.33,
+        371.81
+      ],
+      "neighbors": [
+        "KDA"
+      ]
+    },
+    {
+      "code": "AL",
+      "name": "Altai Republic",
+      "nameNative": "Республика Алтай",
+      "type": "republic",
+      "capital": "Gorno-Altayskaya A.Obl.",
+      "largestCity": "Altai Republic",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Siberian",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        442.98,
+        517.55
+      ],
+      "bbox": [
+        417.93,
+        491.39,
+        466.62,
+        540.26
+      ],
+      "neighbors": [
+        "ALT",
+        "KEM",
+        "KK",
+        "TY"
+      ]
+    },
+    {
+      "code": "ALT",
+      "name": "Altai Republic",
+      "nameNative": "Алтайский край",
+      "type": "territory",
+      "capital": "Altayskiy Kray",
+      "largestCity": "Altai Republic",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Siberian",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        412.45,
+        483.96
+      ],
+      "bbox": [
+        377.74,
+        456.85,
+        450.21,
+        513.37
+      ],
+      "neighbors": [
+        "AL",
+        "KEM",
+        "NVS"
+      ]
+    },
+    {
+      "code": "AMU",
+      "name": "Amur",
+      "nameNative": "Амурская область",
+      "type": "region",
+      "capital": "Amurskaya Oblast",
+      "largestCity": "Amur",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Far Eastern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        773.05,
+        445.81
+      ],
+      "bbox": [
+        697.25,
+        401.39,
+        827.96,
+        492.97
+      ],
+      "neighbors": [
+        "KHA",
+        "SA",
+        "YEV",
+        "ZAB"
+      ]
+    },
+    {
+      "code": "ARK",
+      "name": "Arkhangelsk",
+      "nameNative": "Вологодская область",
+      "type": "region",
+      "capital": "Vologodskaya Oblast",
+      "largestCity": "Arkhangelsk",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northwestern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        290.68,
+        200.39
+      ],
+      "bbox": [
+        205.67,
+        66.63,
+        475.81,
+        266.44
+      ],
+      "neighbors": [
+        "KIR",
+        "KO",
+        "KR",
+        "NEN",
+        "VLG"
+      ]
+    },
+    {
+      "code": "AST",
+      "name": "Astrakhan",
+      "nameNative": "Астраханская область",
+      "type": "region",
+      "capital": "Astrachan",
+      "largestCity": "Astrakhan",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Volga",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        110.98,
+        391.73
+      ],
+      "bbox": [
+        92.96,
+        364.74,
+        122.2,
+        414.38
+      ],
+      "neighbors": [
+        "KL",
+        "VGG"
+      ]
+    },
+    {
+      "code": "BA",
+      "name": "Bashkortostan",
+      "nameNative": "Республика Башкортостан",
+      "type": "republic",
+      "capital": "Bashkir",
+      "largestCity": "Bashkortostan",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Volga",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        234.64,
+        371.98
+      ],
+      "bbox": [
+        212.41,
+        338.05,
+        267.02,
+        408.87
+      ],
+      "neighbors": [
+        "CHE",
+        "ORE",
+        "PER",
+        "SVE",
+        "TA",
+        "UD"
+      ]
+    },
+    {
+      "code": "BEL",
+      "name": "Belgorod",
+      "nameNative": "Белгородская область",
+      "type": "region",
+      "capital": "Belgorodskaya Oblast",
+      "largestCity": "Belgorod",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        90.3,
+        293.46
+      ],
+      "bbox": [
+        77.45,
+        275.7,
+        101.79,
+        311.95
+      ],
+      "neighbors": [
+        "KRS",
+        "VOR"
+      ]
+    },
+    {
+      "code": "BRY",
+      "name": "Bryansk",
+      "nameNative": "Брянская область",
+      "type": "region",
+      "capital": "Bryanskaya Oblast",
+      "largestCity": "Bryansk",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        96.18,
+        247.94
+      ],
+      "bbox": [
+        79.51,
+        231.94,
+        110.98,
+        263.2
+      ],
+      "neighbors": [
+        "KLU",
+        "KRS",
+        "ORL",
+        "SMO"
+      ]
+    },
+    {
+      "code": "BU",
+      "name": "Republic of Buryatia",
+      "nameNative": "Республика Бурятия",
+      "type": "republic",
+      "capital": "Buryatiya",
+      "largestCity": "Republic of Buryatia",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Siberian",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        628.05,
+        484.81
+      ],
+      "bbox": [
+        542.79,
+        425.25,
+        684.45,
+        535.56
+      ],
+      "neighbors": [
+        "IRK",
+        "TY",
+        "ZAB"
+      ]
+    },
+    {
+      "code": "CE",
+      "name": "Chechen Republic",
+      "nameNative": "Республика Чечено-Ингушская",
+      "type": "republic",
+      "capital": "Cecenia",
+      "largestCity": "Chechen Republic",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Volga",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        62.63,
+        417.23
+      ],
+      "bbox": [
+        51.92,
+        406.26,
+        74.31,
+        426.49
+      ],
+      "neighbors": [
+        "DA",
+        "IN",
+        "SE",
+        "STA"
+      ]
+    },
+    {
+      "code": "CHE",
+      "name": "Chelyabinsk",
+      "nameNative": "Челябинская область",
+      "type": "region",
+      "capital": "Chelyabinskaya",
+      "largestCity": "Chelyabinsk",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Urals",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        260.69,
+        387.72
+      ],
+      "bbox": [
+        234.72,
+        360.93,
+        284.7,
+        414.85
+      ],
+      "neighbors": [
+        "BA",
+        "KGN",
+        "ORE",
+        "SVE"
+      ]
+    },
+    {
+      "code": "CHU",
+      "name": "Chukotka Autonomous Okrug",
+      "nameNative": "Chukchi Autonomous Okrug",
+      "type": "autonomous province",
+      "capital": "Chukotskiy Avtonomnyy Okrug",
+      "largestCity": "Chukotka Autonomous Okrug",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Far Eastern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        872.4,
+        118.01
+      ],
+      "bbox": [
+        808.14,
+        28.69,
+        939.89,
+        187.94
+      ],
+      "neighbors": [
+        "KAM",
+        "MAG",
+        "SA"
+      ]
+    },
+    {
+      "code": "CU",
+      "name": "Chuvash Republic",
+      "nameNative": "Чувашская Республика",
+      "type": "republic",
+      "capital": "Chuvashskaya A.S.S.R.",
+      "largestCity": "Chuvash Republic",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Volga",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        190.95,
+        310.64
+      ],
+      "bbox": [
+        180.43,
+        300.59,
+        201.37,
+        321.3
+      ],
+      "neighbors": [
+        "ME",
+        "MO",
+        "NIZ",
+        "TA",
+        "ULY"
+      ]
+    },
+    {
+      "code": "DA",
+      "name": "Republic of Dagestan",
+      "nameNative": "Республика Дагестан",
+      "type": "republic",
+      "capital": "Dagestanskaya A.S.S.R.",
+      "largestCity": "Republic of Dagestan",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Volga",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        67.72,
+        428.52
+      ],
+      "bbox": [
+        50.92,
+        401.3,
+        85.16,
+        453.04
+      ],
+      "neighbors": [
+        "CE",
+        "KL",
+        "STA"
+      ]
+    },
+    {
+      "code": "IN",
+      "name": "Republic of Ingushetia",
+      "nameNative": "Респу́блика Ингуше́тия",
+      "type": "republic",
+      "capital": "Ingouchie",
+      "largestCity": "Republic of Ingushetia",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Volga",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        55.38,
+        411.93
+      ],
+      "bbox": [
+        48.99,
+        405.57,
+        59.77,
+        417.92
+      ],
+      "neighbors": [
+        "CE",
+        "SE"
+      ]
+    },
+    {
+      "code": "IRK",
+      "name": "Irkutsk",
+      "nameNative": "Иркутская область",
+      "type": "region",
+      "capital": "Irkutskaya Oblast",
+      "largestCity": "Irkutsk",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Siberian",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        598.04,
+        440.73
+      ],
+      "bbox": [
+        519.84,
+        340.01,
+        687.66,
+        521.85
+      ],
+      "neighbors": [
+        "BU",
+        "KYA",
+        "SA",
+        "TY",
+        "ZAB"
+      ]
+    },
+    {
+      "code": "IVA",
+      "name": "Ivanovo",
+      "nameNative": "Ивановская область",
+      "type": "region",
+      "capital": "Ivanovskaya Oblast",
+      "largestCity": "Ivanovo",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        179.38,
+        266.79
+      ],
+      "bbox": [
+        165.53,
+        254.24,
+        194.87,
+        278.25
+      ],
+      "neighbors": [
+        "KOS",
+        "NIZ",
+        "VLA",
+        "YAR"
+      ]
+    },
+    {
+      "code": "KAM",
+      "name": "Kamchatka Krai",
+      "nameNative": "Kamchatka",
+      "type": "region",
+      "capital": "Kamçatka",
+      "largestCity": "Kamchatka Krai",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Far Eastern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        928.87,
+        231.02
+      ],
+      "bbox": [
+        864.01,
+        137.24,
+        1000,
+        331.15
+      ],
+      "neighbors": [
+        "CHU",
+        "MAG"
+      ]
+    },
+    {
+      "code": "KB",
+      "name": "Kabardino-Balkaria",
+      "nameNative": "Кабардино-Балкарская Республика",
+      "type": "republic",
+      "capital": "Kabardin A.S.S.R.",
+      "largestCity": "Kabardino-Balkaria",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Volga",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        48.54,
+        397.94
+      ],
+      "bbox": [
+        39.1,
+        389.63,
+        60.61,
+        406.08
+      ],
+      "neighbors": [
+        "KC",
+        "SE",
+        "STA"
+      ]
+    },
+    {
+      "code": "KC",
+      "name": "Karachay-Cherkess Republic",
+      "nameNative": "Карачаево-Черкессия Республика",
+      "type": "republic",
+      "capital": "Karaçay-Çerkes",
+      "largestCity": "Karachay-Cherkess Republic",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Volga",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        40.51,
+        382.81
+      ],
+      "bbox": [
+        31.33,
+        372.85,
+        51.32,
+        392.24
+      ],
+      "neighbors": [
+        "KB",
+        "KDA",
+        "STA"
+      ]
+    },
+    {
+      "code": "KDA",
+      "name": "Krasnodar Krai",
+      "nameNative": "Краснодарский край",
+      "type": "territory",
+      "capital": "Cossacks of the Black Sea",
+      "largestCity": "Krasnodar Krai",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Volga",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        42.35,
+        352.55
+      ],
+      "bbox": [
+        24.29,
+        327.55,
+        62.61,
+        378.83
+      ],
+      "neighbors": [
+        "AD",
+        "KC",
+        "ROS",
+        "STA"
+      ]
+    },
+    {
+      "code": "KEM",
+      "name": "Kemerovo",
+      "nameNative": "Кемеровская область",
+      "type": "region",
+      "capital": "Kemerovskaya Oblast",
+      "largestCity": "Kemerovo",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Siberian",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        455.26,
+        463.66
+      ],
+      "bbox": [
+        437.32,
+        437.28,
+        474.61,
+        500.26
+      ],
+      "neighbors": [
+        "AL",
+        "ALT",
+        "KK",
+        "KYA",
+        "NVS",
+        "TOM"
+      ]
+    },
+    {
+      "code": "KGD",
+      "name": "Kaliningrad",
+      "nameNative": "Калининградская область",
+      "type": "region",
+      "capital": "Kaliningradskaya Oblast",
+      "largestCity": "Kaliningrad",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northwestern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        73.9,
+        151.48
+      ],
+      "bbox": [
+        65.38,
+        139.86,
+        81.83,
+        163.4
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "KGN",
+      "name": "Kurgan",
+      "nameNative": "Курганская область",
+      "type": "region",
+      "capital": "Kurganskaya Oblast",
+      "largestCity": "Kurgan",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Urals",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        297.17,
+        394.24
+      ],
+      "bbox": [
+        273.6,
+        372.2,
+        322.96,
+        412.62
+      ],
+      "neighbors": [
+        "CHE",
+        "SVE",
+        "TYU"
+      ]
+    },
+    {
+      "code": "KHA",
+      "name": "Khabarovsk Krai",
+      "nameNative": "Хабаровский край",
+      "type": "territory",
+      "capital": "Khabarovskiy Kray",
+      "largestCity": "Khabarovsk Krai",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Far Eastern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        830.4,
+        399.37
+      ],
+      "bbox": [
+        769.22,
+        278.1,
+        897.47,
+        503.71
+      ],
+      "neighbors": [
+        "AMU",
+        "MAG",
+        "PRI",
+        "SA",
+        "YEV"
+      ]
+    },
+    {
+      "code": "KHM",
+      "name": "Khanty-Mansi Autonomous Okrug",
+      "nameNative": "Ханты-Мансийский АОк",
+      "type": "autonomous province",
+      "capital": "Khanty-Mansiysk",
+      "largestCity": "Khanty-Mansi Autonomous Okrug",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Urals",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        373.52,
+        334.4
+      ],
+      "bbox": [
+        313.96,
+        264.94,
+        464.94,
+        388.09
+      ],
+      "neighbors": [
+        "KO",
+        "KYA",
+        "SVE",
+        "TOM",
+        "TYU",
+        "YAN"
+      ]
+    },
+    {
+      "code": "KIR",
+      "name": "Kirov",
+      "nameNative": "Кировская область",
+      "type": "region",
+      "capital": "Vyatka",
+      "largestCity": "Kirov",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Volga",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        235.6,
+        293.73
+      ],
+      "bbox": [
+        203.15,
+        258.08,
+        268.32,
+        327.11
+      ],
+      "neighbors": [
+        "ARK",
+        "KO",
+        "KOS",
+        "ME",
+        "NIZ",
+        "PER",
+        "TA",
+        "UD",
+        "VLG"
+      ]
+    },
+    {
+      "code": "KK",
+      "name": "Republic of Khakassia",
+      "nameNative": "Республика Хакасия",
+      "type": "republic",
+      "capital": "Khakassiya",
+      "largestCity": "Republic of Khakassia",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Siberian",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        472.33,
+        486.35
+      ],
+      "bbox": [
+        452.08,
+        456.46,
+        488.38,
+        511.85
+      ],
+      "neighbors": [
+        "AL",
+        "KEM",
+        "KYA",
+        "TY"
+      ]
+    },
+    {
+      "code": "KL",
+      "name": "Republic of Kalmykia",
+      "nameNative": "Республика Калмыкия",
+      "type": "republic",
+      "capital": "Kalmykiya",
+      "largestCity": "Republic of Kalmykia",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Volga",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        91.13,
+        385.02
+      ],
+      "bbox": [
+        63.81,
+        360.58,
+        111.97,
+        412.83
+      ],
+      "neighbors": [
+        "AST",
+        "DA",
+        "ROS",
+        "STA",
+        "VGG"
+      ]
+    },
+    {
+      "code": "KLU",
+      "name": "Kaluga",
+      "nameNative": "Калужская область",
+      "type": "region",
+      "capital": "Kaluzhskaya Oblast",
+      "largestCity": "Kaluga",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        121.76,
+        250.52
+      ],
+      "bbox": [
+        107.02,
+        237.91,
+        138.04,
+        260.75
+      ],
+      "neighbors": [
+        "BRY",
+        "MOS",
+        "MOW",
+        "ORL",
+        "SMO",
+        "TUL"
+      ]
+    },
+    {
+      "code": "KO",
+      "name": "Komi Republic",
+      "nameNative": "Республика Коми",
+      "type": "republic",
+      "capital": "Komi A.S.S.R.",
+      "largestCity": "Komi Republic",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northwestern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        306.56,
+        258.27
+      ],
+      "bbox": [
+        238.89,
+        216.53,
+        389.52,
+        302.28
+      ],
+      "neighbors": [
+        "ARK",
+        "KHM",
+        "KIR",
+        "NEN",
+        "PER",
+        "SVE",
+        "YAN"
+      ]
+    },
+    {
+      "code": "KOS",
+      "name": "Kostroma",
+      "nameNative": "Костромская область",
+      "type": "region",
+      "capital": "Kostromskaya",
+      "largestCity": "Kostroma",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        204,
+        265.16
+      ],
+      "bbox": [
+        176.29,
+        246.99,
+        231.24,
+        282.17
+      ],
+      "neighbors": [
+        "IVA",
+        "KIR",
+        "NIZ",
+        "VLG",
+        "YAR"
+      ]
+    },
+    {
+      "code": "KR",
+      "name": "Karelia",
+      "nameNative": "Республика Карелия",
+      "type": "republic",
+      "capital": "Karelian A.S.S.R.",
+      "largestCity": "Karelia",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northwestern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        216.99,
+        169.08
+      ],
+      "bbox": [
+        178.44,
+        128.43,
+        253.06,
+        207.64
+      ],
+      "neighbors": [
+        "ARK",
+        "LEN",
+        "MUR",
+        "VLG"
+      ]
+    },
+    {
+      "code": "KRS",
+      "name": "Kursk",
+      "nameNative": "Курская область",
+      "type": "region",
+      "capital": "Kurskaya Oblast",
+      "largestCity": "Kursk",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        94.59,
+        275.71
+      ],
+      "bbox": [
+        80.77,
+        261.52,
+        108.82,
+        293.99
+      ],
+      "neighbors": [
+        "BEL",
+        "BRY",
+        "LIP",
+        "ORL",
+        "VOR"
+      ]
+    },
+    {
+      "code": "KYA",
+      "name": "Krasnoyarsk Krai",
+      "nameNative": "Красноярский край",
+      "type": "territory",
+      "capital": "Krasnoyarskiy Kray",
+      "largestCity": "Krasnoyarsk Krai",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Siberian",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        528.76,
+        318.7
+      ],
+      "bbox": [
+        451.04,
+        107.88,
+        609.88,
+        510.37
+      ],
+      "neighbors": [
+        "IRK",
+        "KEM",
+        "KHM",
+        "KK",
+        "SA",
+        "TOM",
+        "TY",
+        "YAN"
+      ]
+    },
+    {
+      "code": "LEN",
+      "name": "Leningrad",
+      "nameNative": "Ленинградская область",
+      "type": "region",
+      "capital": "Saint Petersburg",
+      "largestCity": "Leningrad",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northwestern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        171.8,
+        185.89
+      ],
+      "bbox": [
+        146.12,
+        157.54,
+        199.4,
+        212.24
+      ],
+      "neighbors": [
+        "KR",
+        "NGR",
+        "PSK",
+        "SPE",
+        "VLG"
+      ]
+    },
+    {
+      "code": "LIP",
+      "name": "Lipetsk",
+      "nameNative": "Липецкая область",
+      "type": "region",
+      "capital": "Lipetskaya Oblast",
+      "largestCity": "Lipetsk",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        120.29,
+        288.47
+      ],
+      "bbox": [
+        105.73,
+        276.93,
+        133.49,
+        303.22
+      ],
+      "neighbors": [
+        "KRS",
+        "ORL",
+        "RYA",
+        "TAM",
+        "TUL",
+        "VOR"
+      ]
+    },
+    {
+      "code": "MAG",
+      "name": "Magadan",
+      "nameNative": "Магаданская область",
+      "type": "region",
+      "capital": "Magadanskaya Oblast",
+      "largestCity": "Magadan",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Far Eastern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        850.96,
+        238.02
+      ],
+      "bbox": [
+        803.82,
+        176.93,
+        900.33,
+        301.8
+      ],
+      "neighbors": [
+        "CHU",
+        "KAM",
+        "KHA",
+        "SA"
+      ]
+    },
+    {
+      "code": "ME",
+      "name": "Mari El Republic",
+      "nameNative": "Республика Марий Эл",
+      "type": "republic",
+      "capital": "Mari",
+      "largestCity": "Mari El Republic",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Volga",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        206.04,
+        304.68
+      ],
+      "bbox": [
+        191.25,
+        291.48,
+        220.05,
+        316.72
+      ],
+      "neighbors": [
+        "CU",
+        "KIR",
+        "NIZ",
+        "TA"
+      ]
+    },
+    {
+      "code": "MO",
+      "name": "Republic of Mordovia",
+      "nameNative": "Республика Мордовия",
+      "type": "republic",
+      "capital": "Mordov",
+      "largestCity": "Republic of Mordovia",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Volga",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        165.76,
+        306.15
+      ],
+      "bbox": [
+        149.14,
+        290.06,
+        182.24,
+        319.67
+      ],
+      "neighbors": [
+        "CU",
+        "NIZ",
+        "PNZ",
+        "RYA",
+        "ULY"
+      ]
+    },
+    {
+      "code": "MOS",
+      "name": "Moscow",
+      "nameNative": "Московская область",
+      "type": "federal city",
+      "capital": "Mosca",
+      "largestCity": "Moscow",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        143.04,
+        253.86
+      ],
+      "bbox": [
+        136.35,
+        248.39,
+        148.8,
+        256.79
+      ],
+      "neighbors": [
+        "KLU",
+        "MOW"
+      ]
+    },
+    {
+      "code": "MOW",
+      "name": "Moscow",
+      "nameNative": "Московская область",
+      "type": "region",
+      "capital": "Moskovskaya Oblast",
+      "largestCity": "Moscow",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        146.33,
+        254.48
+      ],
+      "bbox": [
+        131.36,
+        234.6,
+        161.05,
+        273.03
+      ],
+      "neighbors": [
+        "KLU",
+        "MOS",
+        "RYA",
+        "SMO",
+        "TUL",
+        "TVE",
+        "VLA",
+        "YAR"
+      ]
+    },
+    {
+      "code": "MUR",
+      "name": "Murmansk",
+      "nameNative": "Мурманская область",
+      "type": "region",
+      "capital": "Murmanskaya Oblast",
+      "largestCity": "Murmansk",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northwestern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        271.17,
+        143.8
+      ],
+      "bbox": [
+        242.8,
+        54.29,
+        414.39,
+        179.63
+      ],
+      "neighbors": [
+        "KR"
+      ]
+    },
+    {
+      "code": "NEN",
+      "name": "Nenets Autonomous Okrug",
+      "nameNative": "Ненецкий АОк",
+      "type": "autonomous province",
+      "capital": "Nenetskiy A.Okr.",
+      "largestCity": "Nenets Autonomous Okrug",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northwestern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        341.11,
+        217.62
+      ],
+      "bbox": [
+        286.76,
+        171.06,
+        393.45,
+        249.24
+      ],
+      "neighbors": [
+        "ARK",
+        "KO",
+        "YAN"
+      ]
+    },
+    {
+      "code": "NGR",
+      "name": "Novgorod",
+      "nameNative": "Новгородская область",
+      "type": "region",
+      "capital": "Novgorodskaya Oblast",
+      "largestCity": "Novgorod",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northwestern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        154.71,
+        202.63
+      ],
+      "bbox": [
+        132.33,
+        185.37,
+        173.35,
+        222.83
+      ],
+      "neighbors": [
+        "LEN",
+        "PSK",
+        "TVE",
+        "VLG"
+      ]
+    },
+    {
+      "code": "NIZ",
+      "name": "Nizhny Novgorod",
+      "nameNative": "Нижегородская область",
+      "type": "region",
+      "capital": "Gor'kiy",
+      "largestCity": "Nizhny Novgorod",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Volga",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        185.83,
+        289.68
+      ],
+      "bbox": [
+        159.51,
+        273.99,
+        218.09,
+        309.24
+      ],
+      "neighbors": [
+        "CU",
+        "IVA",
+        "KIR",
+        "KOS",
+        "ME",
+        "MO",
+        "RYA",
+        "VLA"
+      ]
+    },
+    {
+      "code": "NVS",
+      "name": "Novosibirsk",
+      "nameNative": "Новосибирская область",
+      "type": "region",
+      "capital": "Novosibirskaya Oblast",
+      "largestCity": "Novosibirsk",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Siberian",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        401.07,
+        442.6
+      ],
+      "bbox": [
+        365.67,
+        408.35,
+        439.18,
+        472.41
+      ],
+      "neighbors": [
+        "ALT",
+        "KEM",
+        "OMS",
+        "TOM"
+      ]
+    },
+    {
+      "code": "OMS",
+      "name": "Omsk",
+      "nameNative": "Омская область",
+      "type": "region",
+      "capital": "Omskaya Oblast",
+      "largestCity": "Omsk",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Siberian",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        358.87,
+        415.67
+      ],
+      "bbox": [
+        332.16,
+        377.6,
+        384.46,
+        451.71
+      ],
+      "neighbors": [
+        "NVS",
+        "TOM",
+        "TYU"
+      ]
+    },
+    {
+      "code": "ORE",
+      "name": "Orenburg",
+      "nameNative": "Оренбургская область",
+      "type": "region",
+      "capital": "Chkalov",
+      "largestCity": "Orenburg",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Volga",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        210.51,
+        391.86
+      ],
+      "bbox": [
+        176.82,
+        349.74,
+        245.51,
+        433.62
+      ],
+      "neighbors": [
+        "BA",
+        "CHE",
+        "SAM",
+        "SAR",
+        "TA"
+      ]
+    },
+    {
+      "code": "ORL",
+      "name": "Oryol",
+      "nameNative": "Орловская область",
+      "type": "region",
+      "capital": "Orlovskaya",
+      "largestCity": "Oryol",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        108.79,
+        269.76
+      ],
+      "bbox": [
+        96.57,
+        256.47,
+        119.7,
+        284.45
+      ],
+      "neighbors": [
+        "BRY",
+        "KLU",
+        "KRS",
+        "LIP",
+        "TUL"
+      ]
+    },
+    {
+      "code": "PER",
+      "name": "Perm Krai",
+      "nameNative": "Пермская область",
+      "type": "territory",
+      "capital": "Molotov",
+      "largestCity": "Perm Krai",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Volga",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        272.94,
+        318.4
+      ],
+      "bbox": [
+        238.86,
+        280.83,
+        310.83,
+        354.11
+      ],
+      "neighbors": [
+        "BA",
+        "KIR",
+        "KO",
+        "SVE",
+        "UD"
+      ]
+    },
+    {
+      "code": "PNZ",
+      "name": "Penza",
+      "nameNative": "Пензенская область",
+      "type": "region",
+      "capital": "Penzenskaya Oblast",
+      "largestCity": "Penza",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Volga",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        154.93,
+        318.14
+      ],
+      "bbox": [
+        138.34,
+        297.41,
+        170.74,
+        336.59
+      ],
+      "neighbors": [
+        "MO",
+        "RYA",
+        "SAR",
+        "TAM",
+        "ULY"
+      ]
+    },
+    {
+      "code": "PRI",
+      "name": "Primorsky Krai",
+      "nameNative": "Приморский край",
+      "type": "territory",
+      "capital": "Küsten-Gebiet",
+      "largestCity": "Primorsky Krai",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Far Eastern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        877.24,
+        518.36
+      ],
+      "bbox": [
+        847.4,
+        461.44,
+        898.29,
+        571.31
+      ],
+      "neighbors": [
+        "KHA"
+      ]
+    },
+    {
+      "code": "PSK",
+      "name": "Pskov",
+      "nameNative": "Псковская область",
+      "type": "region",
+      "capital": "Pskovskaya Oblast",
+      "largestCity": "Pskov",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northwestern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        130.17,
+        190.37
+      ],
+      "bbox": [
+        112.76,
+        168.4,
+        148.34,
+        214.68
+      ],
+      "neighbors": [
+        "LEN",
+        "NGR",
+        "SMO",
+        "TVE"
+      ]
+    },
+    {
+      "code": "ROS",
+      "name": "Rostov",
+      "nameNative": "Ростовская область",
+      "type": "region",
+      "capital": "Province of the Don Cossacks",
+      "largestCity": "Rostov",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Volga",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        79.71,
+        345.09
+      ],
+      "bbox": [
+        53.18,
+        320.75,
+        106.23,
+        376.34
+      ],
+      "neighbors": [
+        "KDA",
+        "KL",
+        "STA",
+        "VGG",
+        "VOR"
+      ]
+    },
+    {
+      "code": "RYA",
+      "name": "Ryazan",
+      "nameNative": "Рязанская область",
+      "type": "region",
+      "capital": "Ryazanskaya Oblast",
+      "largestCity": "Ryazan",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        145.71,
+        283.64
+      ],
+      "bbox": [
+        128.52,
+        270.22,
+        162.1,
+        298.16
+      ],
+      "neighbors": [
+        "LIP",
+        "MO",
+        "MOW",
+        "NIZ",
+        "PNZ",
+        "TAM",
+        "TUL",
+        "VLA"
+      ]
+    },
+    {
+      "code": "SA",
+      "name": "Sakha Republic",
+      "nameNative": "Чукотский АОк",
+      "type": "autonomous province",
+      "capital": "Chukotka",
+      "largestCity": "Sakha Republic",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Far Eastern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        709.55,
+        285.43
+      ],
+      "bbox": [
+        583.34,
+        95.36,
+        834.1,
+        424.28
+      ],
+      "neighbors": [
+        "AMU",
+        "CHU",
+        "IRK",
+        "KHA",
+        "KYA",
+        "MAG",
+        "ZAB"
+      ]
+    },
+    {
+      "code": "SAK",
+      "name": "Sakhalin",
+      "nameNative": "Сахалинская область",
+      "type": "region",
+      "capital": "Sakhalinskaya Oblast",
+      "largestCity": "Sakhalin",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Far Eastern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        911.83,
+        418.24
+      ],
+      "bbox": [
+        865.68,
+        332.41,
+        995.14,
+        473.99
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "SAM",
+      "name": "Samara",
+      "nameNative": "Самарская область",
+      "type": "region",
+      "capital": "Kuybyshev",
+      "largestCity": "Samara",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Volga",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        188.94,
+        350.84
+      ],
+      "bbox": [
+        170.75,
+        334.92,
+        211.82,
+        368.02
+      ],
+      "neighbors": [
+        "ORE",
+        "SAR",
+        "TA",
+        "ULY"
+      ]
+    },
+    {
+      "code": "SAR",
+      "name": "Saratov",
+      "nameNative": "Саратовская область",
+      "type": "region",
+      "capital": "Saratovskaya Oblast",
+      "largestCity": "Saratov",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Volga",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        151.26,
+        346.14
+      ],
+      "bbox": [
+        125.12,
+        315.05,
+        178.1,
+        374.25
+      ],
+      "neighbors": [
+        "ORE",
+        "PNZ",
+        "SAM",
+        "TAM",
+        "ULY",
+        "VGG",
+        "VOR"
+      ]
+    },
+    {
+      "code": "SE",
+      "name": "Republic of North Ossetia-Alania",
+      "nameNative": "Республика Северная Осетия-Алания",
+      "type": "republic",
+      "capital": "Kuzey Osetya",
+      "largestCity": "Republic of North Ossetia-Alania",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Volga",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        50.38,
+        408.04
+      ],
+      "bbox": [
+        41.85,
+        401.61,
+        61.22,
+        414.89
+      ],
+      "neighbors": [
+        "CE",
+        "IN",
+        "KB",
+        "STA"
+      ]
+    },
+    {
+      "code": "SMO",
+      "name": "Smolensk",
+      "nameNative": "Смоленская область",
+      "type": "region",
+      "capital": "Smolenskaya Oblast",
+      "largestCity": "Smolensk",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        117.92,
+        230.18
+      ],
+      "bbox": [
+        99.27,
+        211.67,
+        138.54,
+        244.11
+      ],
+      "neighbors": [
+        "BRY",
+        "KLU",
+        "MOW",
+        "PSK",
+        "TVE"
+      ]
+    },
+    {
+      "code": "SPE",
+      "name": "Saint Petersburg",
+      "nameNative": "Санкт-Петербург (горсовет)",
+      "type": "federal city",
+      "capital": "Sankt-Peterburg gorsovet",
+      "largestCity": "Saint Petersburg",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northwestern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        165.33,
+        177.97
+      ],
+      "bbox": [
+        162.16,
+        171.55,
+        168.67,
+        182.43
+      ],
+      "neighbors": [
+        "LEN"
+      ]
+    },
+    {
+      "code": "STA",
+      "name": "Stavropol Krai",
+      "nameNative": "Ставропольский край",
+      "type": "territory",
+      "capital": "Stavropol'skiy Kray",
+      "largestCity": "Stavropol Krai",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Volga",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        63.37,
+        384.5
+      ],
+      "bbox": [
+        46.86,
+        359.36,
+        80.06,
+        409.64
+      ],
+      "neighbors": [
+        "CE",
+        "DA",
+        "KB",
+        "KC",
+        "KDA",
+        "KL",
+        "ROS",
+        "SE"
+      ]
+    },
+    {
+      "code": "SVE",
+      "name": "Sverdlovsk",
+      "nameNative": "Свердловская область",
+      "type": "region",
+      "capital": "Yekaterinburg",
+      "largestCity": "Sverdlovsk",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Urals",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        298.94,
+        345.63
+      ],
+      "bbox": [
+        255.79,
+        299.04,
+        325.82,
+        379.92
+      ],
+      "neighbors": [
+        "BA",
+        "CHE",
+        "KGN",
+        "KHM",
+        "KO",
+        "PER",
+        "TYU"
+      ]
+    },
+    {
+      "code": "TA",
+      "name": "Republic of Tatarstan",
+      "nameNative": "Республика Татарстан",
+      "type": "republic",
+      "capital": "Kazan",
+      "largestCity": "Republic of Tatarstan",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Volga",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        210.84,
+        332.25
+      ],
+      "bbox": [
+        182.98,
+        312.57,
+        233.77,
+        359.24
+      ],
+      "neighbors": [
+        "BA",
+        "CU",
+        "KIR",
+        "ME",
+        "ORE",
+        "SAM",
+        "UD",
+        "ULY"
+      ]
+    },
+    {
+      "code": "TAM",
+      "name": "Tambov",
+      "nameNative": "Тамбовская область",
+      "type": "region",
+      "capital": "Tambovskaya Oblast",
+      "largestCity": "Tambov",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        133.27,
+        303.89
+      ],
+      "bbox": [
+        119.7,
+        289.19,
+        147.96,
+        319.12
+      ],
+      "neighbors": [
+        "LIP",
+        "PNZ",
+        "RYA",
+        "SAR",
+        "VOR"
+      ]
+    },
+    {
+      "code": "TOM",
+      "name": "Tomsk",
+      "nameNative": "Томская область",
+      "type": "region",
+      "capital": "Tomskaya",
+      "largestCity": "Tomsk",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Siberian",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        430.46,
+        405.51
+      ],
+      "bbox": [
+        381.16,
+        364.57,
+        478.54,
+        445.25
+      ],
+      "neighbors": [
+        "KEM",
+        "KHM",
+        "KYA",
+        "NVS",
+        "OMS",
+        "TYU"
+      ]
+    },
+    {
+      "code": "TUL",
+      "name": "Tula",
+      "nameNative": "Тульская область",
+      "type": "region",
+      "capital": "Tul'skaya",
+      "largestCity": "Tula",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        126.24,
+        268.04
+      ],
+      "bbox": [
+        115.65,
+        255.78,
+        138.72,
+        281.6
+      ],
+      "neighbors": [
+        "KLU",
+        "LIP",
+        "MOW",
+        "ORL",
+        "RYA"
+      ]
+    },
+    {
+      "code": "TVE",
+      "name": "Tver",
+      "nameNative": "Тверская область",
+      "type": "region",
+      "capital": "Kalinin",
+      "largestCity": "Tver",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        149.38,
+        224.96
+      ],
+      "bbox": [
+        120.9,
+        202.87,
+        179.25,
+        248.97
+      ],
+      "neighbors": [
+        "MOW",
+        "NGR",
+        "PSK",
+        "SMO",
+        "VLG",
+        "YAR"
+      ]
+    },
+    {
+      "code": "TY",
+      "name": "Tuva Republic",
+      "nameNative": "Республика Тыва",
+      "type": "republic",
+      "capital": "Respublika Tyva",
+      "largestCity": "Tuva Republic",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Siberian",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        509.86,
+        514.8
+      ],
+      "bbox": [
+        459.38,
+        486.75,
+        548.01,
+        541.5
+      ],
+      "neighbors": [
+        "AL",
+        "BU",
+        "IRK",
+        "KK",
+        "KYA"
+      ]
+    },
+    {
+      "code": "TYU",
+      "name": "Tyumen",
+      "nameNative": "Тюменская область",
+      "type": "region",
+      "capital": "Tobol'sk",
+      "largestCity": "Tyumen",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Urals",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        339.48,
+        382.84
+      ],
+      "bbox": [
+        305.2,
+        355.1,
+        384.33,
+        417.55
+      ],
+      "neighbors": [
+        "KGN",
+        "KHM",
+        "OMS",
+        "SVE",
+        "TOM"
+      ]
+    },
+    {
+      "code": "UA-40",
+      "name": "Sevastopol",
+      "nameNative": "Sevastopol",
+      "type": "federal city",
+      "capital": "Sevastopol",
+      "largestCity": "Sevastopol",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Volga",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        1.74,
+        311.01
+      ],
+      "bbox": [
+        0,
+        308.49,
+        4.5,
+        314.03
+      ],
+      "neighbors": [
+        "UA-43"
+      ]
+    },
+    {
+      "code": "UA-43",
+      "name": "Autonomous Republic of Crimea",
+      "nameNative": "Crimea",
+      "type": "autonomous republic",
+      "capital": "Crimée",
+      "largestCity": "Autonomous Republic of Crimea",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Volga",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        14.18,
+        311.58
+      ],
+      "bbox": [
+        0.14,
+        295.45,
+        27.5,
+        330.3
+      ],
+      "neighbors": [
+        "UA-40"
+      ]
+    },
+    {
+      "code": "UD",
+      "name": "Udmurt Republic",
+      "nameNative": "Удмуртская Республика",
+      "type": "republic",
+      "capital": "Udmurtiya",
+      "largestCity": "Udmurt Republic",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Volga",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        237.61,
+        323.1
+      ],
+      "bbox": [
+        218.95,
+        305.9,
+        254.33,
+        340.79
+      ],
+      "neighbors": [
+        "BA",
+        "KIR",
+        "PER",
+        "TA"
+      ]
+    },
+    {
+      "code": "ULY",
+      "name": "Ulyanovsk",
+      "nameNative": "Ульяновская область",
+      "type": "region",
+      "capital": "Simbirsk",
+      "largestCity": "Ulyanovsk",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Volga",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        180.16,
+        330.79
+      ],
+      "bbox": [
+        161.44,
+        313.9,
+        198.23,
+        344.47
+      ],
+      "neighbors": [
+        "CU",
+        "MO",
+        "PNZ",
+        "SAM",
+        "SAR",
+        "TA"
+      ]
+    },
+    {
+      "code": "VGG",
+      "name": "Volgograd",
+      "nameNative": "Волгоградская область",
+      "type": "region",
+      "capital": "Stalingrad",
+      "largestCity": "Volgograd",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Volga",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        115.8,
+        347.87
+      ],
+      "bbox": [
+        87,
+        317.68,
+        143.2,
+        372.77
+      ],
+      "neighbors": [
+        "AST",
+        "KL",
+        "ROS",
+        "SAR",
+        "VOR"
+      ]
+    },
+    {
+      "code": "VLA",
+      "name": "Vladimir",
+      "nameNative": "Владимирская область",
+      "type": "region",
+      "capital": "Vladimirskaya",
+      "largestCity": "Vladimir",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        163.89,
+        269.52
+      ],
+      "bbox": [
+        153.73,
+        250.17,
+        177.36,
+        284.01
+      ],
+      "neighbors": [
+        "IVA",
+        "MOW",
+        "NIZ",
+        "RYA",
+        "YAR"
+      ]
+    },
+    {
+      "code": "VLG",
+      "name": "Vologda",
+      "nameNative": "Вологодская область",
+      "type": "region",
+      "capital": "Vologodskaya Oblast",
+      "largestCity": "Vologda",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Northwestern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        205.46,
+        234.44
+      ],
+      "bbox": [
+        170.69,
+        198.89,
+        243.02,
+        271.43
+      ],
+      "neighbors": [
+        "ARK",
+        "KIR",
+        "KOS",
+        "KR",
+        "LEN",
+        "NGR",
+        "TVE",
+        "YAR"
+      ]
+    },
+    {
+      "code": "VOR",
+      "name": "Voronezh",
+      "nameNative": "Воронежская область",
+      "type": "region",
+      "capital": "Voronezhskaya Oblast",
+      "largestCity": "Voronezh",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        107.85,
+        309.75
+      ],
+      "bbox": [
+        89.6,
+        288.57,
+        126.93,
+        325.26
+      ],
+      "neighbors": [
+        "BEL",
+        "KRS",
+        "LIP",
+        "ROS",
+        "SAR",
+        "TAM",
+        "VGG"
+      ]
+    },
+    {
+      "code": "X01~",
+      "name": "X01~",
+      "nameNative": "X01~",
+      "type": "federal subject",
+      "capital": "X01~",
+      "largestCity": "X01~",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Urals",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        399.72,
+        242.99
+      ],
+      "bbox": [
+        399.03,
+        242.47,
+        400.15,
+        243.66
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "YAN",
+      "name": "Yamalo-Nenets Autonomous Okrug",
+      "nameNative": "Ямало-Ненецкий АОк",
+      "type": "autonomous province",
+      "capital": "Yamalo-Nenetskiy A.Okr",
+      "largestCity": "Yamalo-Nenets Autonomous Okrug",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Urals",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        423.81,
+        281.67
+      ],
+      "bbox": [
+        348.67,
+        192.05,
+        473.52,
+        360.66
+      ],
+      "neighbors": [
+        "KHM",
+        "KO",
+        "KYA",
+        "NEN"
+      ]
+    },
+    {
+      "code": "YAR",
+      "name": "Yaroslavl",
+      "nameNative": "Ярославская область",
+      "type": "region",
+      "capital": "Yaroslavskaya Oblast",
+      "largestCity": "Yaroslavl",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Central",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        176.74,
+        245.03
+      ],
+      "bbox": [
+        159.87,
+        230.79,
+        192.29,
+        257.43
+      ],
+      "neighbors": [
+        "IVA",
+        "KOS",
+        "MOW",
+        "TVE",
+        "VLA",
+        "VLG"
+      ]
+    },
+    {
+      "code": "YEV",
+      "name": "Jewish",
+      "nameNative": "Eврейская АОб",
+      "type": "autonomous region",
+      "capital": "Den jødiske autonome oblasten",
+      "largestCity": "Jewish",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Far Eastern",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        835.6,
+        488.78
+      ],
+      "bbox": [
+        820.18,
+        475.79,
+        857.25,
+        504.14
+      ],
+      "neighbors": [
+        "AMU",
+        "KHA"
+      ]
+    },
+    {
+      "code": "ZAB",
+      "name": "Zabaykalsky Krai",
+      "nameNative": "Читинская область",
+      "type": "region",
+      "capital": "Transbaikalia",
+      "largestCity": "Zabaykalsky Krai",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Siberian",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        683.89,
+        484.84
+      ],
+      "bbox": [
+        621.9,
+        406.41,
+        728.62,
+        542.71
+      ],
+      "neighbors": [
+        "AMU",
+        "BU",
+        "IRK",
+        "SA"
+      ]
+    }
+  ]
+}

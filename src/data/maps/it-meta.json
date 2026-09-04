@@ -1,0 +1,4135 @@
+{
+  "updatedAt": "2026-09-04T06:16:48.835Z",
+  "standard": "Natural Earth admin-1 vector dataset",
+  "country": "IT",
+  "countryName": "Italy",
+  "divisionTypeName": "Province",
+  "divisionTypePlural": "Provinces",
+  "totalRegions": 110,
+  "regions": [
+    {
+      "code": "AG",
+      "name": "Agrigento",
+      "nameNative": "Agrigento",
+      "type": "province",
+      "capital": "Sicilia",
+      "largestCity": "Agrigento",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Sicily",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        557.3,
+        956.86
+      ],
+      "bbox": [
+        480.25,
+        926.42,
+        599.87,
+        1150
+      ],
+      "neighbors": [
+        "CL",
+        "PA",
+        "TP"
+      ]
+    },
+    {
+      "code": "AL",
+      "name": "Alessandria",
+      "nameNative": "Alessandria",
+      "type": "province",
+      "capital": "Piemont",
+      "largestCity": "Alessandria",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Piemonte",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        208.28,
+        217.2
+      ],
+      "bbox": [
+        170.86,
+        179.29,
+        246.02,
+        250.89
+      ],
+      "neighbors": [
+        "AT",
+        "GE",
+        "PC",
+        "PV",
+        "SV",
+        "TO",
+        "VC"
+      ]
+    },
+    {
+      "code": "AN",
+      "name": "Ancona",
+      "nameNative": "Ancona",
+      "type": "province",
+      "capital": "Marches",
+      "largestCity": "Ancona",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Marche",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        525.17,
+        354.93
+      ],
+      "bbox": [
+        495.91,
+        330.45,
+        560.68,
+        384.68
+      ],
+      "neighbors": [
+        "MC",
+        "PG",
+        "PU"
+      ]
+    },
+    {
+      "code": "AO",
+      "name": "Aosta",
+      "nameNative": "Aoste",
+      "type": "province",
+      "capital": "Aosta",
+      "largestCity": "Aosta",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Valle d'Aosta",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        123.08,
+        123.01
+      ],
+      "bbox": [
+        82.67,
+        98.59,
+        160.84,
+        147.84
+      ],
+      "neighbors": [
+        "BI",
+        "TO",
+        "VB",
+        "VC"
+      ]
+    },
+    {
+      "code": "AP",
+      "name": "Ascoli Piceno",
+      "nameNative": "Ascoli Piceno",
+      "type": "province",
+      "capital": "Marches",
+      "largestCity": "Ascoli Piceno",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Marche",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        554.55,
+        415.72
+      ],
+      "bbox": [
+        528.71,
+        396.88,
+        580.24,
+        435.84
+      ],
+      "neighbors": [
+        "FM",
+        "MC",
+        "PG",
+        "RI",
+        "TE"
+      ]
+    },
+    {
+      "code": "AQ",
+      "name": "L'Aquila",
+      "nameNative": "L'Aquila",
+      "type": "province",
+      "capital": "Abruzos",
+      "largestCity": "L'Aquila",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Abruzzo",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        558.74,
+        493.33
+      ],
+      "bbox": [
+        515.81,
+        444.13,
+        605.84,
+        534.43
+      ],
+      "neighbors": [
+        "CH",
+        "FR",
+        "IS",
+        "PE",
+        "RI",
+        "RM",
+        "TE"
+      ]
+    },
+    {
+      "code": "AR",
+      "name": "Arezzo",
+      "nameNative": "Arezzo",
+      "type": "province",
+      "capital": "Tuscany",
+      "largestCity": "Arezzo",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Toscana",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        431.83,
+        351.88
+      ],
+      "bbox": [
+        398.89,
+        317.72,
+        467.93,
+        389.11
+      ],
+      "neighbors": [
+        "FC",
+        "FI",
+        "PG",
+        "PU",
+        "RN",
+        "SI"
+      ]
+    },
+    {
+      "code": "AT",
+      "name": "Asti",
+      "nameNative": "Asti",
+      "type": "province",
+      "capital": "Piemont",
+      "largestCity": "Asti",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Piemonte",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        174.87,
+        210.92
+      ],
+      "bbox": [
+        154.13,
+        185.02,
+        196.49,
+        246.5
+      ],
+      "neighbors": [
+        "AL",
+        "CN",
+        "SV",
+        "TO"
+      ]
+    },
+    {
+      "code": "AV",
+      "name": "Avellino",
+      "nameNative": "Avellino",
+      "type": "province",
+      "capital": "Campanha",
+      "largestCity": "Avellino",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Campania",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        671.24,
+        602.84
+      ],
+      "bbox": [
+        633.19,
+        571.76,
+        708.48,
+        629.07
+      ],
+      "neighbors": [
+        "BN",
+        "FG",
+        "NA",
+        "PZ",
+        "SA"
+      ]
+    },
+    {
+      "code": "BA",
+      "name": "Bari",
+      "nameNative": "Bari",
+      "type": "province",
+      "capital": "Apulien",
+      "largestCity": "Bari",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Apulia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        797.15,
+        602.46
+      ],
+      "bbox": [
+        755.21,
+        573.16,
+        846.1,
+        626.36
+      ],
+      "neighbors": [
+        "BR",
+        "BT",
+        "MT",
+        "PZ",
+        "TA"
+      ]
+    },
+    {
+      "code": "BG",
+      "name": "Bergamo",
+      "nameNative": "Bergamo",
+      "type": "province",
+      "capital": "Lombardy",
+      "largestCity": "Bergamo",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Lombardia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        290.53,
+        124.84
+      ],
+      "bbox": [
+        266.93,
+        96.15,
+        323.97,
+        161.6
+      ],
+      "neighbors": [
+        "BS",
+        "CR",
+        "LC",
+        "MB",
+        "MI",
+        "SO"
+      ]
+    },
+    {
+      "code": "BI",
+      "name": "Biella",
+      "nameNative": "Biella",
+      "type": "province",
+      "capital": "Piemont",
+      "largestCity": "Biella",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Piemonte",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        172.03,
+        140.62
+      ],
+      "bbox": [
+        157.36,
+        123.49,
+        186.25,
+        160.99
+      ],
+      "neighbors": [
+        "AO",
+        "TO",
+        "VC"
+      ]
+    },
+    {
+      "code": "BL",
+      "name": "Belluno",
+      "nameNative": "Belluno",
+      "type": "province",
+      "capital": "Venecia",
+      "largestCity": "Belluno",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Veneto",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        456.21,
+        76.76
+      ],
+      "bbox": [
+        421.71,
+        40.65,
+        495.99,
+        119.3
+      ],
+      "neighbors": [
+        "BZ",
+        "PN",
+        "TN",
+        "TV",
+        "UD",
+        "VI"
+      ]
+    },
+    {
+      "code": "BN",
+      "name": "Benevento",
+      "nameNative": "Benevento",
+      "type": "province",
+      "capital": "Campanha",
+      "largestCity": "Benevento",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Campania",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        645.99,
+        577.52
+      ],
+      "bbox": [
+        616.78,
+        553.03,
+        675.17,
+        604.16
+      ],
+      "neighbors": [
+        "AV",
+        "CB",
+        "CE",
+        "FG",
+        "NA"
+      ]
+    },
+    {
+      "code": "BO",
+      "name": "Bologna",
+      "nameNative": "Bologna",
+      "type": "province",
+      "capital": "Emilia Romagna",
+      "largestCity": "Bologna",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Emilia-Romagna",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        396.21,
+        262.69
+      ],
+      "bbox": [
+        357.73,
+        225.59,
+        430.28,
+        298.2
+      ],
+      "neighbors": [
+        "FE",
+        "FI",
+        "MO",
+        "PO",
+        "PT",
+        "RA"
+      ]
+    },
+    {
+      "code": "BR",
+      "name": "Brindisi",
+      "nameNative": "Brindisi",
+      "type": "province",
+      "capital": "Apulien",
+      "largestCity": "Brindisi",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Apulia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        869.17,
+        630.6
+      ],
+      "bbox": [
+        839.58,
+        603.79,
+        900.34,
+        653.02
+      ],
+      "neighbors": [
+        "BA",
+        "LE",
+        "TA"
+      ]
+    },
+    {
+      "code": "BS",
+      "name": "Brescia",
+      "nameNative": "Brescia",
+      "type": "province",
+      "capital": "Lombardy",
+      "largestCity": "Brescia",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Lombardia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        327,
+        134.67
+      ],
+      "bbox": [
+        294.67,
+        70.72,
+        363.78,
+        184.66
+      ],
+      "neighbors": [
+        "BG",
+        "CR",
+        "MN",
+        "SO",
+        "TN",
+        "VR"
+      ]
+    },
+    {
+      "code": "BT",
+      "name": "Barletta-Andria-Trani",
+      "nameNative": "Barletta-Andria Trani",
+      "type": "province",
+      "capital": "Apulien",
+      "largestCity": "Barletta-Andria-Trani",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Apulia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        751.87,
+        580.55
+      ],
+      "bbox": [
+        728.99,
+        553.32,
+        779.77,
+        607.46
+      ],
+      "neighbors": [
+        "BA",
+        "FG",
+        "PZ"
+      ]
+    },
+    {
+      "code": "BZ",
+      "name": "Trentino-South Tyrol",
+      "nameNative": "Bozen",
+      "type": "province",
+      "capital": "Bolzano",
+      "largestCity": "Trentino-South Tyrol",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Trentino-Alto Adige",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        403.62,
+        38.29
+      ],
+      "bbox": [
+        333.14,
+        0,
+        476.07,
+        84.75
+      ],
+      "neighbors": [
+        "BL",
+        "SO",
+        "TN"
+      ]
+    },
+    {
+      "code": "CA",
+      "name": "Cagliari",
+      "nameNative": "Cagliari",
+      "type": "province",
+      "capital": "Cerdeña",
+      "largestCity": "Cagliari",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Sardegna",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        222.49,
+        759.61
+      ],
+      "bbox": [
+        177.08,
+        706.46,
+        259.91,
+        809
+      ],
+      "neighbors": [
+        "CI",
+        "NU",
+        "OG",
+        "OR",
+        "VS"
+      ]
+    },
+    {
+      "code": "CB",
+      "name": "Campobasso",
+      "nameNative": "Campobasso",
+      "type": "province",
+      "capital": "Molisa",
+      "largestCity": "Campobasso",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Molise",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        646.61,
+        531.1
+      ],
+      "bbox": [
+        617.81,
+        494.4,
+        675,
+        564.93
+      ],
+      "neighbors": [
+        "BN",
+        "CE",
+        "CH",
+        "FG",
+        "IS"
+      ]
+    },
+    {
+      "code": "CE",
+      "name": "Caserta",
+      "nameNative": "Caserta",
+      "type": "province",
+      "capital": "Campanha",
+      "largestCity": "Caserta",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Campania",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        601.78,
+        580.76
+      ],
+      "bbox": [
+        570.88,
+        553.16,
+        630.14,
+        608.8
+      ],
+      "neighbors": [
+        "BN",
+        "CB",
+        "FR",
+        "IS",
+        "LT",
+        "NA"
+      ]
+    },
+    {
+      "code": "CH",
+      "name": "Chieti",
+      "nameNative": "Chieti",
+      "type": "province",
+      "capital": "Abruzos",
+      "largestCity": "Chieti",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Abruzzo",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        616.33,
+        492.67
+      ],
+      "bbox": [
+        593.53,
+        458.77,
+        644.78,
+        525.93
+      ],
+      "neighbors": [
+        "AQ",
+        "CB",
+        "IS",
+        "PE"
+      ]
+    },
+    {
+      "code": "CI",
+      "name": "Carbonia-Iglesias",
+      "nameNative": "Carbonia-Iglesias",
+      "type": "province",
+      "capital": "Cerdeña",
+      "largestCity": "Carbonia-Iglesias",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Sardegna",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        175.52,
+        774.42
+      ],
+      "bbox": [
+        149.31,
+        747.19,
+        197.07,
+        799.91
+      ],
+      "neighbors": [
+        "CA",
+        "VS"
+      ]
+    },
+    {
+      "code": "CL",
+      "name": "Caltanissetta",
+      "nameNative": "Caltanissetta",
+      "type": "province",
+      "capital": "Sicilia",
+      "largestCity": "Caltanissetta",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Sicily",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        601.83,
+        963.65
+      ],
+      "bbox": [
+        567.99,
+        926.73,
+        634.08,
+        998.73
+      ],
+      "neighbors": [
+        "AG",
+        "CT",
+        "EN",
+        "PA",
+        "RG"
+      ]
+    },
+    {
+      "code": "CN",
+      "name": "Cuneo",
+      "nameNative": "Cuneo",
+      "type": "province",
+      "capital": "Piemont",
+      "largestCity": "Cuneo",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Piemonte",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        129.55,
+        248.05
+      ],
+      "bbox": [
+        77.72,
+        212.27,
+        179.75,
+        286.99
+      ],
+      "neighbors": [
+        "AT",
+        "IM",
+        "SV",
+        "TO"
+      ]
+    },
+    {
+      "code": "CO",
+      "name": "Como",
+      "nameNative": "Como",
+      "type": "province",
+      "capital": "Lombardy",
+      "largestCity": "Como",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Lombardia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        247.07,
+        109.47
+      ],
+      "bbox": [
+        229.19,
+        79.73,
+        268.22,
+        137.25
+      ],
+      "neighbors": [
+        "LC",
+        "MB",
+        "SO",
+        "VA"
+      ]
+    },
+    {
+      "code": "CR",
+      "name": "Cremona",
+      "nameNative": "Cremona",
+      "type": "province",
+      "capital": "Lombardy",
+      "largestCity": "Cremona",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Lombardia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        303.66,
+        182.08
+      ],
+      "bbox": [
+        266.69,
+        152.19,
+        342.52,
+        213.09
+      ],
+      "neighbors": [
+        "BG",
+        "BS",
+        "LO",
+        "MI",
+        "MN",
+        "PC",
+        "PR",
+        "RE"
+      ]
+    },
+    {
+      "code": "CS",
+      "name": "Cosenza",
+      "nameNative": "Cosenza",
+      "type": "province",
+      "capital": "Calabre",
+      "largestCity": "Cosenza",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Calabria",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        770.37,
+        739.66
+      ],
+      "bbox": [
+        725.01,
+        682.51,
+        824.13,
+        791.36
+      ],
+      "neighbors": [
+        "CZ",
+        "KR",
+        "MT",
+        "PZ"
+      ]
+    },
+    {
+      "code": "CT",
+      "name": "Catania",
+      "nameNative": "Catania",
+      "type": "province",
+      "capital": "Sicilia",
+      "largestCity": "Catania",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Sicily",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        661.24,
+        946.98
+      ],
+      "bbox": [
+        624.27,
+        902.38,
+        694.4,
+        993.46
+      ],
+      "neighbors": [
+        "CL",
+        "EN",
+        "ME",
+        "RG",
+        "SR"
+      ]
+    },
+    {
+      "code": "CZ",
+      "name": "Catanzaro",
+      "nameNative": "Catanzaro",
+      "type": "province",
+      "capital": "Calabre",
+      "largestCity": "Catanzaro",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Calabria",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        786.07,
+        805.37
+      ],
+      "bbox": [
+        755.19,
+        775.4,
+        817.74,
+        848.02
+      ],
+      "neighbors": [
+        "CS",
+        "KR",
+        "RC",
+        "VV"
+      ]
+    },
+    {
+      "code": "EN",
+      "name": "Enna",
+      "nameNative": "Enna",
+      "type": "province",
+      "capital": "Sicilia",
+      "largestCity": "Enna",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Sicily",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        629.72,
+        941.07
+      ],
+      "bbox": [
+        601.76,
+        911.53,
+        661.67,
+        969.57
+      ],
+      "neighbors": [
+        "CL",
+        "CT",
+        "ME",
+        "PA"
+      ]
+    },
+    {
+      "code": "FC",
+      "name": "Forlì-Cesena",
+      "nameNative": "Forlì-Cesena",
+      "type": "province",
+      "capital": "Emilia Romagna",
+      "largestCity": "Forlì-Cesena",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Emilia-Romagna",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        445.16,
+        302.1
+      ],
+      "bbox": [
+        417.5,
+        273.15,
+        475.15,
+        330.3
+      ],
+      "neighbors": [
+        "AR",
+        "FI",
+        "RA",
+        "RN"
+      ]
+    },
+    {
+      "code": "FE",
+      "name": "Ferrara",
+      "nameNative": "Ferrara",
+      "type": "province",
+      "capital": "Emilia Romagna",
+      "largestCity": "Ferrara",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Emilia-Romagna",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        432.18,
+        227.56
+      ],
+      "bbox": [
+        389.28,
+        208.11,
+        470.64,
+        251.3
+      ],
+      "neighbors": [
+        "BO",
+        "MN",
+        "MO",
+        "RA",
+        "RO"
+      ]
+    },
+    {
+      "code": "FG",
+      "name": "Foggia",
+      "nameNative": "Foggia",
+      "type": "province",
+      "capital": "Apulien",
+      "largestCity": "Foggia",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Apulia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        705.07,
+        545.81
+      ],
+      "bbox": [
+        658.47,
+        504.53,
+        751.21,
+        594.03
+      ],
+      "neighbors": [
+        "AV",
+        "BN",
+        "BT",
+        "CB",
+        "PZ"
+      ]
+    },
+    {
+      "code": "FI",
+      "name": "Florence",
+      "nameNative": "Firenze",
+      "type": "province",
+      "capital": "Florence",
+      "largestCity": "Florence",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Toscana",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        391.69,
+        323.23
+      ],
+      "bbox": [
+        350.07,
+        282.18,
+        424.56,
+        359.29
+      ],
+      "neighbors": [
+        "AR",
+        "BO",
+        "FC",
+        "LU",
+        "PI",
+        "PO",
+        "PT",
+        "RA",
+        "SI"
+      ]
+    },
+    {
+      "code": "FM",
+      "name": "Fermo",
+      "nameNative": "Fermo",
+      "type": "province",
+      "capital": "Marches",
+      "largestCity": "Fermo",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Marche",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        555.85,
+        395.01
+      ],
+      "bbox": [
+        530.13,
+        375.52,
+        576.2,
+        415.81
+      ],
+      "neighbors": [
+        "AP",
+        "MC"
+      ]
+    },
+    {
+      "code": "FR",
+      "name": "Frosinone",
+      "nameNative": "Frosinone",
+      "type": "province",
+      "capital": "Lacio",
+      "largestCity": "Frosinone",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Lazio",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        554.7,
+        542.08
+      ],
+      "bbox": [
+        514.9,
+        509.32,
+        590.25,
+        572.2
+      ],
+      "neighbors": [
+        "AQ",
+        "CE",
+        "IS",
+        "LT",
+        "RM"
+      ]
+    },
+    {
+      "code": "GE",
+      "name": "Liguria",
+      "nameNative": "Genova",
+      "type": "province",
+      "capital": "Lacio",
+      "largestCity": "Liguria",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Liguria",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        238.73,
+        254.44
+      ],
+      "bbox": [
+        199.82,
+        232.62,
+        270.12,
+        280.79
+      ],
+      "neighbors": [
+        "AL",
+        "PC",
+        "PR",
+        "SP",
+        "SV"
+      ]
+    },
+    {
+      "code": "GO",
+      "name": "Gorizia",
+      "nameNative": "Gorizia",
+      "type": "province",
+      "capital": "Friuli Venezia Giulia",
+      "largestCity": "Gorizia",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Friuli-Venezia Giulia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        547.03,
+        121.4
+      ],
+      "bbox": [
+        538.88,
+        106.63,
+        555.53,
+        139.5
+      ],
+      "neighbors": [
+        "TS",
+        "UD"
+      ]
+    },
+    {
+      "code": "GR",
+      "name": "Grosseto",
+      "nameNative": "Grosseto",
+      "type": "province",
+      "capital": "Tuscany",
+      "largestCity": "Grosseto",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Toscana",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        386.77,
+        425.43
+      ],
+      "bbox": [
+        347.83,
+        385.15,
+        427.73,
+        471.66
+      ],
+      "neighbors": [
+        "LI",
+        "PI",
+        "SI",
+        "VT"
+      ]
+    },
+    {
+      "code": "IM",
+      "name": "Imperia",
+      "nameNative": "Imperia",
+      "type": "province",
+      "capital": "Lacio",
+      "largestCity": "Imperia",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Liguria",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        142.22,
+        301.27
+      ],
+      "bbox": [
+        119.05,
+        282,
+        166.09,
+        316.74
+      ],
+      "neighbors": [
+        "CN",
+        "SV"
+      ]
+    },
+    {
+      "code": "IS",
+      "name": "Isernia",
+      "nameNative": "Isernia",
+      "type": "province",
+      "capital": "Molisa",
+      "largestCity": "Isernia",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Molise",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        607.3,
+        538.14
+      ],
+      "bbox": [
+        585.2,
+        512.27,
+        627.62,
+        563.87
+      ],
+      "neighbors": [
+        "AQ",
+        "CB",
+        "CE",
+        "CH",
+        "FR"
+      ]
+    },
+    {
+      "code": "KR",
+      "name": "Crotone",
+      "nameNative": "Crotene",
+      "type": "province",
+      "capital": "Calabre",
+      "largestCity": "Crotone",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Calabria",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        820.28,
+        775.86
+      ],
+      "bbox": [
+        794.32,
+        745.64,
+        840.79,
+        802.88
+      ],
+      "neighbors": [
+        "CS",
+        "CZ"
+      ]
+    },
+    {
+      "code": "LC",
+      "name": "Lecco",
+      "nameNative": "Lecco",
+      "type": "province",
+      "capital": "Lombardy",
+      "largestCity": "Lecco",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Lombardia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        263.3,
+        112.9
+      ],
+      "bbox": [
+        253.02,
+        87.44,
+        274.04,
+        138.19
+      ],
+      "neighbors": [
+        "BG",
+        "CO",
+        "MB",
+        "SO"
+      ]
+    },
+    {
+      "code": "LE",
+      "name": "Lecce",
+      "nameNative": "Lecce",
+      "type": "province",
+      "capital": "Apulien",
+      "largestCity": "Lecce",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Apulia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        908.54,
+        671.51
+      ],
+      "bbox": [
+        876.4,
+        637.89,
+        934.65,
+        708.16
+      ],
+      "neighbors": [
+        "BR",
+        "TA"
+      ]
+    },
+    {
+      "code": "LI",
+      "name": "Livorno",
+      "nameNative": "Livorno",
+      "type": "province",
+      "capital": "Tuscany",
+      "largestCity": "Livorno",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Toscana",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        331.76,
+        388.98
+      ],
+      "bbox": [
+        281.28,
+        340.28,
+        354.21,
+        470.16
+      ],
+      "neighbors": [
+        "GR",
+        "PI"
+      ]
+    },
+    {
+      "code": "LO",
+      "name": "Lodi",
+      "nameNative": "Lodi",
+      "type": "province",
+      "capital": "Lombardy",
+      "largestCity": "Lodi",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Lombardia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        274.29,
+        180.01
+      ],
+      "bbox": [
+        255.55,
+        156.17,
+        296.11,
+        196.99
+      ],
+      "neighbors": [
+        "CR",
+        "MI",
+        "PC",
+        "PV"
+      ]
+    },
+    {
+      "code": "LT",
+      "name": "Latina",
+      "nameNative": "Latina",
+      "type": "province",
+      "capital": "Lacio",
+      "largestCity": "Latina",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Lazio",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        526.11,
+        560.63
+      ],
+      "bbox": [
+        482.59,
+        532.75,
+        580.34,
+        624.39
+      ],
+      "neighbors": [
+        "CE",
+        "FR",
+        "RM"
+      ]
+    },
+    {
+      "code": "LU",
+      "name": "Lucca",
+      "nameNative": "Lucca",
+      "type": "province",
+      "capital": "Tuscany",
+      "largestCity": "Lucca",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Toscana",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        330.97,
+        303.8
+      ],
+      "bbox": [
+        309.95,
+        275.88,
+        352.36,
+        328.49
+      ],
+      "neighbors": [
+        "FI",
+        "MO",
+        "MS",
+        "PI",
+        "PT",
+        "RE"
+      ]
+    },
+    {
+      "code": "MB",
+      "name": "Monza and Brianza",
+      "nameNative": "Monza e Brianza",
+      "type": "province",
+      "capital": "Lombardy",
+      "largestCity": "Monza and Brianza",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Lombardia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        254.07,
+        139.61
+      ],
+      "bbox": [
+        239.07,
+        128.61,
+        269.91,
+        149.01
+      ],
+      "neighbors": [
+        "BG",
+        "CO",
+        "LC",
+        "MI",
+        "VA"
+      ]
+    },
+    {
+      "code": "MC",
+      "name": "Macerata",
+      "nameNative": "Macerata",
+      "type": "province",
+      "capital": "Marches",
+      "largestCity": "Macerata",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Marche",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        531.63,
+        386.08
+      ],
+      "bbox": [
+        502.3,
+        357.47,
+        568,
+        422.48
+      ],
+      "neighbors": [
+        "AN",
+        "AP",
+        "FM",
+        "PG"
+      ]
+    },
+    {
+      "code": "ME",
+      "name": "Messina",
+      "nameNative": "Messina",
+      "type": "province",
+      "capital": "Sicilia",
+      "largestCity": "Messina",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Sicily",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        668.83,
+        894.71
+      ],
+      "bbox": [
+        609.35,
+        817.37,
+        723.53,
+        919.12
+      ],
+      "neighbors": [
+        "CT",
+        "EN",
+        "PA"
+      ]
+    },
+    {
+      "code": "MI",
+      "name": "Milan",
+      "nameNative": "Milano",
+      "type": "province",
+      "capital": "Lombardy",
+      "largestCity": "Milan",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Lombardia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        242.96,
+        155.91
+      ],
+      "bbox": [
+        214.64,
+        138.94,
+        272.19,
+        175.2
+      ],
+      "neighbors": [
+        "BG",
+        "CR",
+        "LO",
+        "MB",
+        "NO",
+        "PV",
+        "VA"
+      ]
+    },
+    {
+      "code": "MN",
+      "name": "Mantua",
+      "nameNative": "Mantova",
+      "type": "province",
+      "capital": "Mantua",
+      "largestCity": "Mantua",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Lombardia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        357.28,
+        193.18
+      ],
+      "bbox": [
+        325.66,
+        163.38,
+        402.44,
+        214.29
+      ],
+      "neighbors": [
+        "BS",
+        "CR",
+        "FE",
+        "MO",
+        "PR",
+        "RE",
+        "RO",
+        "VR"
+      ]
+    },
+    {
+      "code": "MO",
+      "name": "Modena",
+      "nameNative": "Modena",
+      "type": "province",
+      "capital": "Emilia Romagna",
+      "largestCity": "Modena",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Emilia-Romagna",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        364.21,
+        251.92
+      ],
+      "bbox": [
+        333.96,
+        209.74,
+        398.59,
+        293.52
+      ],
+      "neighbors": [
+        "BO",
+        "FE",
+        "LU",
+        "MN",
+        "PT",
+        "RE"
+      ]
+    },
+    {
+      "code": "MS",
+      "name": "Massa-Carrara",
+      "nameNative": "Massa-Carrara",
+      "type": "province",
+      "capital": "Tuscany",
+      "largestCity": "Massa-Carrara",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Toscana",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        300.78,
+        277.73
+      ],
+      "bbox": [
+        278.7,
+        255.09,
+        318.64,
+        306.07
+      ],
+      "neighbors": [
+        "LU",
+        "PR",
+        "RE",
+        "SP"
+      ]
+    },
+    {
+      "code": "MT",
+      "name": "Matera",
+      "nameNative": "Matera",
+      "type": "province",
+      "capital": "Basilicate",
+      "largestCity": "Matera",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Basilicata",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        775.97,
+        649.55
+      ],
+      "bbox": [
+        737.02,
+        613.61,
+        807.75,
+        690.68
+      ],
+      "neighbors": [
+        "BA",
+        "CS",
+        "PZ",
+        "TA"
+      ]
+    },
+    {
+      "code": "NA",
+      "name": "Naples",
+      "nameNative": "Napoli",
+      "type": "province",
+      "capital": "Campanha",
+      "largestCity": "Naples",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Campania",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        616.47,
+        616.9
+      ],
+      "bbox": [
+        579.55,
+        599.97,
+        640.73,
+        644.64
+      ],
+      "neighbors": [
+        "AV",
+        "BN",
+        "CE",
+        "SA"
+      ]
+    },
+    {
+      "code": "NO",
+      "name": "Novara",
+      "nameNative": "Novara",
+      "type": "province",
+      "capital": "Piemont",
+      "largestCity": "Novara",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Piemonte",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        203.96,
+        143.4
+      ],
+      "bbox": [
+        187.96,
+        113.6,
+        222.77,
+        170.42
+      ],
+      "neighbors": [
+        "MI",
+        "PV",
+        "VA",
+        "VB",
+        "VC"
+      ]
+    },
+    {
+      "code": "NU",
+      "name": "Nuoro",
+      "nameNative": "Nuoro",
+      "type": "province",
+      "capital": "Cerdeña",
+      "largestCity": "Nuoro",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Sardegna",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        236.19,
+        668.21
+      ],
+      "bbox": [
+        183.95,
+        629.8,
+        276.61,
+        715.27
+      ],
+      "neighbors": [
+        "CA",
+        "OG",
+        "OR",
+        "OT",
+        "SS"
+      ]
+    },
+    {
+      "code": "OG",
+      "name": "Ogliastra",
+      "nameNative": "Ogliastra",
+      "type": "province",
+      "capital": "Cerdeña",
+      "largestCity": "Ogliastra",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Sardegna",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        251,
+        709.23
+      ],
+      "bbox": [
+        232.43,
+        676.89,
+        268.12,
+        743.93
+      ],
+      "neighbors": [
+        "CA",
+        "NU"
+      ]
+    },
+    {
+      "code": "OR",
+      "name": "Oristano",
+      "nameNative": "Oristrano",
+      "type": "province",
+      "capital": "Cerdeña",
+      "largestCity": "Oristano",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Sardegna",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        191.01,
+        697.77
+      ],
+      "bbox": [
+        165.05,
+        653.73,
+        223.74,
+        733.16
+      ],
+      "neighbors": [
+        "CA",
+        "NU",
+        "SS",
+        "VS"
+      ]
+    },
+    {
+      "code": "OT",
+      "name": "Olbia-Tempio",
+      "nameNative": "Olbia-Tempio",
+      "type": "province",
+      "capital": "Cerdeña",
+      "largestCity": "Olbia-Tempio",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Sardegna",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        237.76,
+        609.44
+      ],
+      "bbox": [
+        201.78,
+        572.87,
+        271.16,
+        644.76
+      ],
+      "neighbors": [
+        "NU",
+        "SS"
+      ]
+    },
+    {
+      "code": "PA",
+      "name": "Palermo",
+      "nameNative": "Palermo",
+      "type": "province",
+      "capital": "Sicilia",
+      "largestCity": "Palermo",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Sicily",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        563.28,
+        913.37
+      ],
+      "bbox": [
+        512.19,
+        829.66,
+        618.7,
+        946.4
+      ],
+      "neighbors": [
+        "AG",
+        "CL",
+        "EN",
+        "ME",
+        "TP"
+      ]
+    },
+    {
+      "code": "PC",
+      "name": "Piacenza",
+      "nameNative": "Piacenza",
+      "type": "province",
+      "capital": "Emilia Romagna",
+      "largestCity": "Piacenza",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Emilia-Romagna",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        276.01,
+        216.17
+      ],
+      "bbox": [
+        245.4,
+        189.7,
+        307.98,
+        247.44
+      ],
+      "neighbors": [
+        "AL",
+        "CR",
+        "GE",
+        "LO",
+        "PR",
+        "PV"
+      ]
+    },
+    {
+      "code": "PD",
+      "name": "Padua",
+      "nameNative": "Padova",
+      "type": "province",
+      "capital": "Padua",
+      "largestCity": "Padua",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Veneto",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        430.04,
+        171.47
+      ],
+      "bbox": [
+        401.37,
+        138.49,
+        457.32,
+        196.8
+      ],
+      "neighbors": [
+        "RO",
+        "TV",
+        "VE",
+        "VI",
+        "VR"
+      ]
+    },
+    {
+      "code": "PE",
+      "name": "Pescara",
+      "nameNative": "Pescara",
+      "type": "province",
+      "capital": "Abruzos",
+      "largestCity": "Pescara",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Abruzzo",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        586.96,
+        470.53
+      ],
+      "bbox": [
+        570.78,
+        449.15,
+        606.73,
+        495.9
+      ],
+      "neighbors": [
+        "AQ",
+        "CH",
+        "TE"
+      ]
+    },
+    {
+      "code": "PG",
+      "name": "Perugia",
+      "nameNative": "Perugia",
+      "type": "province",
+      "capital": "Ombrie",
+      "largestCity": "Perugia",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Umbria",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        480.2,
+        398.63
+      ],
+      "bbox": [
+        435.99,
+        342.55,
+        533.18,
+        445.06
+      ],
+      "neighbors": [
+        "AN",
+        "AP",
+        "AR",
+        "MC",
+        "PU",
+        "RI",
+        "SI",
+        "TR"
+      ]
+    },
+    {
+      "code": "PI",
+      "name": "Pisa",
+      "nameNative": "Pisa",
+      "type": "province",
+      "capital": "Tuscany",
+      "largestCity": "Pisa",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Toscana",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        346.33,
+        353.77
+      ],
+      "bbox": [
+        317.98,
+        321.49,
+        370.5,
+        393.04
+      ],
+      "neighbors": [
+        "FI",
+        "GR",
+        "LI",
+        "LU",
+        "SI"
+      ]
+    },
+    {
+      "code": "PN",
+      "name": "Pordenone",
+      "nameNative": "Pordenone",
+      "type": "province",
+      "capital": "Friuli Venezia Giulia",
+      "largestCity": "Pordenone",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Friuli-Venezia Giulia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        491.39,
+        96.97
+      ],
+      "bbox": [
+        466.89,
+        67.58,
+        510.91,
+        127.43
+      ],
+      "neighbors": [
+        "BL",
+        "TV",
+        "UD",
+        "VE"
+      ]
+    },
+    {
+      "code": "PO",
+      "name": "Prato",
+      "nameNative": "Prato",
+      "type": "province",
+      "capital": "Tuscany",
+      "largestCity": "Prato",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Toscana",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        377.61,
+        309.98
+      ],
+      "bbox": [
+        368.23,
+        294.85,
+        386.06,
+        329
+      ],
+      "neighbors": [
+        "BO",
+        "FI",
+        "PT"
+      ]
+    },
+    {
+      "code": "PR",
+      "name": "Parma",
+      "nameNative": "Parma",
+      "type": "province",
+      "capital": "Emilia Romagna",
+      "largestCity": "Parma",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Emilia-Romagna",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        305.08,
+        236.86
+      ],
+      "bbox": [
+        261.12,
+        199.89,
+        337.8,
+        269.69
+      ],
+      "neighbors": [
+        "CR",
+        "GE",
+        "MN",
+        "MS",
+        "PC",
+        "RE",
+        "SP"
+      ]
+    },
+    {
+      "code": "PT",
+      "name": "Pistoia",
+      "nameNative": "Pistoia",
+      "type": "province",
+      "capital": "Tuscany",
+      "largestCity": "Pistoia",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Toscana",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        360.26,
+        307.97
+      ],
+      "bbox": [
+        343.64,
+        288.55,
+        375.56,
+        325.06
+      ],
+      "neighbors": [
+        "BO",
+        "FI",
+        "LU",
+        "MO",
+        "PO"
+      ]
+    },
+    {
+      "code": "PU",
+      "name": "Pesaro and Urbino",
+      "nameNative": "Pesaro e Urbino",
+      "type": "province",
+      "capital": "Marches",
+      "largestCity": "Pesaro and Urbino",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Marche",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        490.51,
+        335.27
+      ],
+      "bbox": [
+        456.14,
+        308.71,
+        526.65,
+        362.63
+      ],
+      "neighbors": [
+        "AN",
+        "AR",
+        "PG",
+        "RN"
+      ]
+    },
+    {
+      "code": "PV",
+      "name": "Pavia",
+      "nameNative": "Pavia",
+      "type": "province",
+      "capital": "Lombardy",
+      "largestCity": "Pavia",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Lombardia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        235.48,
+        190.71
+      ],
+      "bbox": [
+        198.97,
+        160.53,
+        271.48,
+        234.06
+      ],
+      "neighbors": [
+        "AL",
+        "LO",
+        "MI",
+        "NO",
+        "PC",
+        "VC"
+      ]
+    },
+    {
+      "code": "PZ",
+      "name": "Potenza",
+      "nameNative": "Potenza",
+      "type": "province",
+      "capital": "Basilicate",
+      "largestCity": "Potenza",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Basilicata",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        733.29,
+        646.6
+      ],
+      "bbox": [
+        691.6,
+        585.1,
+        774.12,
+        706.56
+      ],
+      "neighbors": [
+        "AV",
+        "BA",
+        "BT",
+        "CS",
+        "FG",
+        "MT",
+        "SA"
+      ]
+    },
+    {
+      "code": "RA",
+      "name": "Ravenna",
+      "nameNative": "Ravenna",
+      "type": "province",
+      "capital": "Emilia Romagna",
+      "largestCity": "Ravenna",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Emilia-Romagna",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        442.3,
+        269.01
+      ],
+      "bbox": [
+        408.87,
+        243.53,
+        470.01,
+        294.04
+      ],
+      "neighbors": [
+        "BO",
+        "FC",
+        "FE",
+        "FI"
+      ]
+    },
+    {
+      "code": "RC",
+      "name": "Reggio Calabria",
+      "nameNative": "Reggio Calabria",
+      "type": "province",
+      "capital": "Calabre",
+      "largestCity": "Reggio Calabria",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Calabria",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        752.8,
+        871.93
+      ],
+      "bbox": [
+        721.99,
+        838.31,
+        794.49,
+        903.96
+      ],
+      "neighbors": [
+        "CZ",
+        "VV"
+      ]
+    },
+    {
+      "code": "RE",
+      "name": "Reggio Emilia",
+      "nameNative": "Reggio Emilia",
+      "type": "province",
+      "capital": "Emilia Romagna",
+      "largestCity": "Reggio Emilia",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Emilia-Romagna",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        340.48,
+        244.27
+      ],
+      "bbox": [
+        310.45,
+        206.37,
+        364.92,
+        281.95
+      ],
+      "neighbors": [
+        "CR",
+        "LU",
+        "MN",
+        "MO",
+        "MS",
+        "PR"
+      ]
+    },
+    {
+      "code": "RG",
+      "name": "Ragusa",
+      "nameNative": "Ragusa",
+      "type": "province",
+      "capital": "Sicilia",
+      "largestCity": "Ragusa",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Sicily",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        651.19,
+        1007.28
+      ],
+      "bbox": [
+        623.44,
+        984.63,
+        676.95,
+        1028.48
+      ],
+      "neighbors": [
+        "CL",
+        "CT",
+        "SR"
+      ]
+    },
+    {
+      "code": "RI",
+      "name": "Rieti",
+      "nameNative": "Rieti",
+      "type": "province",
+      "capital": "Lacio",
+      "largestCity": "Rieti",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Lazio",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        511.29,
+        467.18
+      ],
+      "bbox": [
+        474.72,
+        430.24,
+        542.83,
+        494.5
+      ],
+      "neighbors": [
+        "AP",
+        "AQ",
+        "PG",
+        "RM",
+        "TE",
+        "TR",
+        "VT"
+      ]
+    },
+    {
+      "code": "RM",
+      "name": "Rome",
+      "nameNative": "Roma",
+      "type": "province",
+      "capital": "Lacio",
+      "largestCity": "Rome",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Lazio",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        483.35,
+        512.22
+      ],
+      "bbox": [
+        422.26,
+        475.01,
+        536.99,
+        561.73
+      ],
+      "neighbors": [
+        "AQ",
+        "FR",
+        "LT",
+        "RI",
+        "VT"
+      ]
+    },
+    {
+      "code": "RN",
+      "name": "Rimini",
+      "nameNative": "Rimini",
+      "type": "province",
+      "capital": "Emilia Romagna",
+      "largestCity": "Rimini",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Emilia-Romagna",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        474.07,
+        312.04
+      ],
+      "bbox": [
+        449.65,
+        289.5,
+        496.25,
+        331.46
+      ],
+      "neighbors": [
+        "AR",
+        "FC",
+        "PU"
+      ]
+    },
+    {
+      "code": "RO",
+      "name": "Rovigo",
+      "nameNative": "Rovigo",
+      "type": "province",
+      "capital": "Venecia",
+      "largestCity": "Rovigo",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Veneto",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        437.3,
+        205.09
+      ],
+      "bbox": [
+        386.48,
+        190.48,
+        480.51,
+        227.31
+      ],
+      "neighbors": [
+        "FE",
+        "MN",
+        "PD",
+        "VE",
+        "VR"
+      ]
+    },
+    {
+      "code": "SA",
+      "name": "Salerno",
+      "nameNative": "Salerno",
+      "type": "province",
+      "capital": "Campanha",
+      "largestCity": "Salerno",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Campania",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        683.75,
+        655.82
+      ],
+      "bbox": [
+        626.52,
+        616.09,
+        727.21,
+        699.67
+      ],
+      "neighbors": [
+        "AV",
+        "NA",
+        "PZ"
+      ]
+    },
+    {
+      "code": "SI",
+      "name": "Siena",
+      "nameNative": "Siena",
+      "type": "province",
+      "capital": "Tuscany",
+      "largestCity": "Siena",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Toscana",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        402.54,
+        385.54
+      ],
+      "bbox": [
+        363.24,
+        350.28,
+        440.29,
+        425.16
+      ],
+      "neighbors": [
+        "AR",
+        "FI",
+        "GR",
+        "PG",
+        "PI",
+        "TR",
+        "VT"
+      ]
+    },
+    {
+      "code": "SO",
+      "name": "Sondrio",
+      "nameNative": "Sondrio",
+      "type": "province",
+      "capital": "Lombardy",
+      "largestCity": "Sondrio",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Lombardia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        300.97,
+        75.18
+      ],
+      "bbox": [
+        253.47,
+        43.2,
+        350.88,
+        102.71
+      ],
+      "neighbors": [
+        "BG",
+        "BS",
+        "BZ",
+        "CO",
+        "LC",
+        "TN"
+      ]
+    },
+    {
+      "code": "SP",
+      "name": "La Spezia",
+      "nameNative": "La Spezia",
+      "type": "province",
+      "capital": "Lacio",
+      "largestCity": "La Spezia",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Liguria",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        281.03,
+        280.22
+      ],
+      "bbox": [
+        263.71,
+        259.6,
+        304.13,
+        298.86
+      ],
+      "neighbors": [
+        "GE",
+        "MS",
+        "PR"
+      ]
+    },
+    {
+      "code": "SR",
+      "name": "Syracuse",
+      "nameNative": "Siracusa",
+      "type": "province",
+      "capital": "Sicilia",
+      "largestCity": "Syracuse",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Sicily",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        678.38,
+        989.88
+      ],
+      "bbox": [
+        657.97,
+        956.91,
+        702.45,
+        1031.61
+      ],
+      "neighbors": [
+        "CT",
+        "RG"
+      ]
+    },
+    {
+      "code": "SS",
+      "name": "Sassari",
+      "nameNative": "Sassari",
+      "type": "province",
+      "capital": "Cerdeña",
+      "largestCity": "Sassari",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Sardegna",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        191.97,
+        634.17
+      ],
+      "bbox": [
+        149.94,
+        583.52,
+        235.29,
+        667.25
+      ],
+      "neighbors": [
+        "NU",
+        "OR",
+        "OT"
+      ]
+    },
+    {
+      "code": "SV",
+      "name": "Savona",
+      "nameNative": "Savona",
+      "type": "province",
+      "capital": "Lacio",
+      "largestCity": "Savona",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Liguria",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        178.91,
+        269.99
+      ],
+      "bbox": [
+        156.59,
+        245.16,
+        206.9,
+        303.65
+      ],
+      "neighbors": [
+        "AL",
+        "AT",
+        "CN",
+        "GE",
+        "IM"
+      ]
+    },
+    {
+      "code": "TA",
+      "name": "Taranto",
+      "nameNative": "Taranto",
+      "type": "province",
+      "capital": "Apulien",
+      "largestCity": "Taranto",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Apulia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        832.49,
+        639.52
+      ],
+      "bbox": [
+        793.71,
+        617.12,
+        878.5,
+        661.82
+      ],
+      "neighbors": [
+        "BA",
+        "BR",
+        "LE",
+        "MT"
+      ]
+    },
+    {
+      "code": "TE",
+      "name": "Teramo",
+      "nameNative": "Teramo",
+      "type": "province",
+      "capital": "Abruzos",
+      "largestCity": "Teramo",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Abruzzo",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        567.43,
+        439.58
+      ],
+      "bbox": [
+        539.03,
+        414.08,
+        598.81,
+        461.99
+      ],
+      "neighbors": [
+        "AP",
+        "AQ",
+        "PE",
+        "RI"
+      ]
+    },
+    {
+      "code": "TN",
+      "name": "Trentino",
+      "nameNative": "Trento",
+      "type": "province",
+      "capital": "Trentino - Alto Adige",
+      "largestCity": "Trentino",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Trentino-Alto Adige",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        383.98,
+        93.14
+      ],
+      "bbox": [
+        337.51,
+        54.87,
+        441.84,
+        138.18
+      ],
+      "neighbors": [
+        "BL",
+        "BS",
+        "BZ",
+        "SO",
+        "VI",
+        "VR"
+      ]
+    },
+    {
+      "code": "TO",
+      "name": "Turin",
+      "nameNative": "Turin",
+      "type": "province",
+      "capital": "Torino",
+      "largestCity": "Turin",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Piemonte",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        123.52,
+        181.31
+      ],
+      "bbox": [
+        65.35,
+        137.71,
+        174.14,
+        222.46
+      ],
+      "neighbors": [
+        "AL",
+        "AO",
+        "AT",
+        "BI",
+        "CN",
+        "VC"
+      ]
+    },
+    {
+      "code": "TP",
+      "name": "Trapani",
+      "nameNative": "Trapani",
+      "type": "province",
+      "capital": "Sicilia",
+      "largestCity": "Trapani",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Sicily",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        494.31,
+        919.82
+      ],
+      "bbox": [
+        432.27,
+        881.88,
+        524.43,
+        1025.74
+      ],
+      "neighbors": [
+        "AG",
+        "PA"
+      ]
+    },
+    {
+      "code": "TR",
+      "name": "Terni",
+      "nameNative": "Terni",
+      "type": "province",
+      "capital": "Ombrie",
+      "largestCity": "Terni",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Umbria",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        468.77,
+        438.85
+      ],
+      "bbox": [
+        433.72,
+        411.19,
+        507.48,
+        467.8
+      ],
+      "neighbors": [
+        "PG",
+        "RI",
+        "SI",
+        "VT"
+      ]
+    },
+    {
+      "code": "TS",
+      "name": "Trieste",
+      "nameNative": "Trieste",
+      "type": "province",
+      "capital": "Friuli Venezia Giulia",
+      "largestCity": "Trieste",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Friuli-Venezia Giulia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        565.78,
+        138.35
+      ],
+      "bbox": [
+        553.05,
+        126.34,
+        574.85,
+        148.46
+      ],
+      "neighbors": [
+        "GO"
+      ]
+    },
+    {
+      "code": "TV",
+      "name": "Treviso",
+      "nameNative": "Treviso",
+      "type": "province",
+      "capital": "Venecia",
+      "largestCity": "Treviso",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Veneto",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        458.94,
+        127.73
+      ],
+      "bbox": [
+        425.73,
+        99.5,
+        490.09,
+        153.95
+      ],
+      "neighbors": [
+        "BL",
+        "PD",
+        "PN",
+        "VE",
+        "VI"
+      ]
+    },
+    {
+      "code": "UD",
+      "name": "Udine",
+      "nameNative": "Udine",
+      "type": "province",
+      "capital": "Friuli Venezia Giulia",
+      "largestCity": "Udine",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Friuli-Venezia Giulia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        523.26,
+        85.1
+      ],
+      "bbox": [
+        478.14,
+        44.07,
+        560.11,
+        141.99
+      ],
+      "neighbors": [
+        "BL",
+        "GO",
+        "PN",
+        "VE"
+      ]
+    },
+    {
+      "code": "VA",
+      "name": "Varese",
+      "nameNative": "Varese",
+      "type": "province",
+      "capital": "Lombardy",
+      "largestCity": "Varese",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Lombardia",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        220.91,
+        122.44
+      ],
+      "bbox": [
+        206.11,
+        90.78,
+        239.68,
+        145.38
+      ],
+      "neighbors": [
+        "CO",
+        "MB",
+        "MI",
+        "NO",
+        "VB"
+      ]
+    },
+    {
+      "code": "VB",
+      "name": "Verbano-Cusio-Ossola",
+      "nameNative": "Verbano-Cusio-Ossola",
+      "type": "province",
+      "capital": "Piemont",
+      "largestCity": "Verbano-Cusio-Ossola",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Piemonte",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        191.75,
+        91.69
+      ],
+      "bbox": [
+        157.44,
+        55.55,
+        218.95,
+        122.96
+      ],
+      "neighbors": [
+        "AO",
+        "NO",
+        "VA",
+        "VC"
+      ]
+    },
+    {
+      "code": "VC",
+      "name": "Vercelli",
+      "nameNative": "Vercelli",
+      "type": "province",
+      "capital": "Piemont",
+      "largestCity": "Vercelli",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Piemonte",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        180.04,
+        146.53
+      ],
+      "bbox": [
+        157.13,
+        104.8,
+        202.72,
+        183.76
+      ],
+      "neighbors": [
+        "AL",
+        "AO",
+        "BI",
+        "NO",
+        "PV",
+        "TO",
+        "VB"
+      ]
+    },
+    {
+      "code": "VE",
+      "name": "Venice",
+      "nameNative": "Venezia",
+      "type": "province",
+      "capital": "Venice",
+      "largestCity": "Venice",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Veneto",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        476.67,
+        154.44
+      ],
+      "bbox": [
+        440.5,
+        121.89,
+        519.43,
+        201
+      ],
+      "neighbors": [
+        "PD",
+        "PN",
+        "RO",
+        "TV",
+        "UD"
+      ]
+    },
+    {
+      "code": "VI",
+      "name": "Vicenza",
+      "nameNative": "Vicenza",
+      "type": "province",
+      "capital": "Venecia",
+      "largestCity": "Vicenza",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Veneto",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        408.32,
+        139.7
+      ],
+      "bbox": [
+        383.3,
+        105.68,
+        431.84,
+        182.3
+      ],
+      "neighbors": [
+        "BL",
+        "PD",
+        "TN",
+        "TV",
+        "VR"
+      ]
+    },
+    {
+      "code": "VR",
+      "name": "Verona",
+      "nameNative": "Verona",
+      "type": "province",
+      "capital": "Venecia",
+      "largestCity": "Verona",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Veneto",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        376.39,
+        164.32
+      ],
+      "bbox": [
+        348.94,
+        122.94,
+        407.45,
+        201.04
+      ],
+      "neighbors": [
+        "BS",
+        "MN",
+        "PD",
+        "RO",
+        "TN",
+        "VI"
+      ]
+    },
+    {
+      "code": "VS",
+      "name": "Medio Campidano",
+      "nameNative": "Medio Campidano",
+      "type": "province",
+      "capital": "Cerdeña",
+      "largestCity": "Medio Campidano",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Sardegna",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        191.46,
+        740.05
+      ],
+      "bbox": [
+        163.12,
+        718.54,
+        216.8,
+        758.54
+      ],
+      "neighbors": [
+        "CA",
+        "CI",
+        "OR"
+      ]
+    },
+    {
+      "code": "VT",
+      "name": "Viterbo",
+      "nameNative": "Viterbo",
+      "type": "province",
+      "capital": "Lacio",
+      "largestCity": "Viterbo",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Lazio",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        441.02,
+        462.07
+      ],
+      "bbox": [
+        401.32,
+        419.85,
+        479.63,
+        489.55
+      ],
+      "neighbors": [
+        "GR",
+        "RI",
+        "RM",
+        "SI",
+        "TR"
+      ]
+    },
+    {
+      "code": "VV",
+      "name": "Vibo Valentia",
+      "nameNative": "Vibo Valentia",
+      "type": "province",
+      "capital": "Calabre",
+      "largestCity": "Vibo Valentia",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Calabria",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        761.97,
+        833.34
+      ],
+      "bbox": [
+        736.42,
+        813.12,
+        783.29,
+        851.99
+      ],
+      "neighbors": [
+        "CZ",
+        "RC"
+      ]
+    }
+  ]
+}

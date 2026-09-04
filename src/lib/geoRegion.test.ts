@@ -15,7 +15,7 @@ import {
  * generators produce.
  */
 
-const EXPECTED_COUNTS: Record<CountryCode, number> = { JP: 47, US: 51, CA: 13 };
+const EXPECTED_COUNTS: Record<CountryCode, number> = { JP: 47, US: 51, CA: 13, TH: 77, CN: 31, AU: 10, TW: 21 };
 
 describe("the geo datasets", () => {
   it.each(Object.keys(EXPECTED_COUNTS) as CountryCode[])("loads every region for %s", (country) => {
@@ -24,12 +24,13 @@ describe("the geo datasets", () => {
     expect(GEO_DATASETS[country].totalRegions).toBe(EXPECTED_COUNTS[country]);
   });
 
-  it("covers all three countries in the combined list", () => {
+  it("covers all countries in the combined list", () => {
     expect(getAllGeoRegions()).toHaveLength(47 + 51 + 13);
+    expect(getAllGeoRegions(true)).toHaveLength(47 + 51 + 13 + 77 + 31 + 10 + 21);
   });
 
   it("gives every region a globally unique id", () => {
-    const ids = getAllGeoRegions().map((region) => region.id);
+    const ids = getAllGeoRegions(true).map((region) => region.id);
     expect(new Set(ids).size).toBe(ids.length);
   });
 
@@ -37,6 +38,10 @@ describe("the geo datasets", () => {
     expect(getGeoRegionById("JP-1")?.country).toBe("JP");
     expect(getGeoRegionById("US-CA")?.name).toBe("California");
     expect(getGeoRegionById("CA-ON")?.name).toBe("Ontario");
+    expect(getGeoRegionById("TH-10")?.country).toBe("TH");
+    expect(getGeoRegionById("CN-BJ")?.country).toBe("CN");
+    expect(getGeoRegionById("AU-NSW")?.country).toBe("AU");
+    expect(getGeoRegionById("TW-TPE")?.country).toBe("TW");
   });
 
   it("returns nothing for an id no country uses", () => {
@@ -59,6 +64,13 @@ describe("the fields the map games ask questions about", () => {
 
   it("gives every region a display name", () => {
     expect(regions.filter((region) => !region.name?.trim())).toHaveLength(0);
+  });
+
+  it("gives all pilot regions names, capitals, and valid map paths", () => {
+    const all = getAllGeoRegions(true);
+    expect(all.filter((region) => !region.name?.trim())).toHaveLength(0);
+    expect(all.filter((region) => !region.capital?.name?.trim())).toHaveLength(0);
+    expect(all.filter((region) => !region.map?.path?.trim())).toHaveLength(0);
   });
 
   it("carries the Japanese reading and kanji a prefecture is drilled on", () => {

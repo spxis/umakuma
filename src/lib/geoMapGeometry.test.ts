@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { GEO_DATASETS, type CountryCode } from "./geoRegion";
-import { MAP_COUNTRIES } from "./mapCountries";
+import { getPlayableMapCountries } from "./mapCountries";
 import { GEO_REGION_COUNTS } from "./geoSubjectIds";
 
 /**
@@ -16,14 +16,14 @@ import { GEO_REGION_COUNTS } from "./geoSubjectIds";
  * Nothing asserted that a region's outline resembled the place. These do.
  */
 
-const COUNTRIES: CountryCode[] = ["JP", "US", "CA"];
+const COUNTRIES: CountryCode[] = ["JP", "US", "CA", "TH", "CN", "AU", "TW"];
 
 /*
  * Only a country actually on offer has to be drawable. The others are held
  * back precisely because they are not, and this pairing is the thing that must
  * not drift: offering a country whose map is a set of blobs is the bug.
  */
-const PLAYABLE = new Set<string>(MAP_COUNTRIES.map((country) => country.code));
+const PLAYABLE = new Set<string>(getPlayableMapCountries(true).map((country) => country.code));
 
 /** Drawing commands in a path, which is the crudest measure of detail there is. */
 function vertexCount(path: string): number {

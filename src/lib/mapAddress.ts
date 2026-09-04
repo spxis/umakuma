@@ -16,6 +16,10 @@ export const MAP_COUNTRY_SLUGS: Record<CountryCode, string> = {
   JP: "japan",
   US: "united-states",
   CA: "canada",
+  TH: "thailand",
+  CN: "china",
+  AU: "australia",
+  TW: "taiwan",
 };
 
 export function countryForSlug(slug: string | undefined | null): CountryCode | null {

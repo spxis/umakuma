@@ -1,0 +1,1277 @@
+{
+  "updatedAt": "2026-09-04T06:16:50.364Z",
+  "standard": "Natural Earth admin-1 vector dataset",
+  "country": "IE",
+  "countryName": "Ireland",
+  "divisionTypeName": "County",
+  "divisionTypePlural": "Counties",
+  "totalRegions": 34,
+  "regions": [
+    {
+      "code": "CE",
+      "name": "Clare",
+      "nameNative": "Clare",
+      "type": "county",
+      "capital": "An Clár",
+      "largestCity": "Clare",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Mid-West",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        369.79,
+        709.61
+      ],
+      "bbox": [
+        214.01,
+        620.78,
+        496.77,
+        788.37
+      ],
+      "neighbors": [
+        "G",
+        "LK",
+        "LK_2",
+        "TA"
+      ]
+    },
+    {
+      "code": "CN",
+      "name": "Cavan",
+      "nameNative": "Cavan",
+      "type": "county",
+      "capital": "An Cabhán",
+      "largestCity": "Cavan",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Border",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        653.22,
+        390.32
+      ],
+      "bbox": [
+        535.68,
+        304.95,
+        750.09,
+        450.94
+      ],
+      "neighbors": [
+        "LD",
+        "LM",
+        "MH",
+        "MN",
+        "WH"
+      ]
+    },
+    {
+      "code": "CO",
+      "name": "Cork",
+      "nameNative": "Cork",
+      "type": "county",
+      "capital": "Corcaigh",
+      "largestCity": "Cork",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "South-West",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        398.97,
+        970.52
+      ],
+      "bbox": [
+        167.4,
+        841.74,
+        569.21,
+        1100
+      ],
+      "neighbors": [
+        "CO_2",
+        "KY",
+        "LK",
+        "TA_2",
+        "WD"
+      ]
+    },
+    {
+      "code": "CO_2",
+      "name": "Cork",
+      "nameNative": "Cork",
+      "type": "city",
+      "capital": "Corcaigh city",
+      "largestCity": "Cork",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "South-West",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        462.35,
+        980.69
+      ],
+      "bbox": [
+        449.66,
+        969.69,
+        476.51,
+        989.87
+      ],
+      "neighbors": [
+        "CO"
+      ]
+    },
+    {
+      "code": "CW",
+      "name": "Carlow",
+      "nameNative": "Carlow",
+      "type": "county",
+      "capital": "Ceatharlach",
+      "largestCity": "Carlow",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "South-East",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        744.21,
+        742.96
+      ],
+      "bbox": [
+        697.53,
+        690.32,
+        797.85,
+        816.83
+      ],
+      "neighbors": [
+        "KE",
+        "KK",
+        "LS",
+        "WW",
+        "WX"
+      ]
+    },
+    {
+      "code": "D",
+      "name": "Dublin",
+      "nameNative": "Dublin",
+      "type": "county",
+      "capital": "Baile Átha Cliath",
+      "largestCity": "Dublin",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Dublin",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        834.79,
+        562.3
+      ],
+      "bbox": [
+        814.91,
+        546.49,
+        852.63,
+        578.46
+      ],
+      "neighbors": [
+        "D_2",
+        "D_3",
+        "D_4"
+      ]
+    },
+    {
+      "code": "D_2",
+      "name": "Dún Laoghaire–Rathdown",
+      "nameNative": "Dún Laoghaire–Rathdown",
+      "type": "county",
+      "capital": "Baile Átha Cliath",
+      "largestCity": "Dún Laoghaire–Rathdown",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Dublin",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        846.67,
+        593.59
+      ],
+      "bbox": [
+        831.09,
+        575.95,
+        864.16,
+        610.79
+      ],
+      "neighbors": [
+        "D",
+        "D_4",
+        "WW"
+      ]
+    },
+    {
+      "code": "D_3",
+      "name": "Fingal",
+      "nameNative": "Fingal",
+      "type": "county",
+      "capital": "Baile Átha Cliath",
+      "largestCity": "Fingal",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Dublin",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        835.13,
+        525.68
+      ],
+      "bbox": [
+        799.02,
+        487.21,
+        869.16,
+        564.81
+      ],
+      "neighbors": [
+        "D",
+        "D_4",
+        "KE",
+        "MH"
+      ]
+    },
+    {
+      "code": "D_4",
+      "name": "South Dublin",
+      "nameNative": "South Dublin",
+      "type": "county",
+      "capital": "Baile Átha Cliath",
+      "largestCity": "South Dublin",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Dublin",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        812.49,
+        587.03
+      ],
+      "bbox": [
+        789.87,
+        561.02,
+        834.22,
+        615.89
+      ],
+      "neighbors": [
+        "D",
+        "D_2",
+        "D_3",
+        "KE",
+        "WW"
+      ]
+    },
+    {
+      "code": "DL",
+      "name": "Donegal",
+      "nameNative": "Donegal",
+      "type": "county",
+      "capital": "Dún na nGall",
+      "largestCity": "Donegal",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Border",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        558.3,
+        130.82
+      ],
+      "bbox": [
+        414.54,
+        0,
+        712.95,
+        258.83
+      ],
+      "neighbors": [
+        "LM"
+      ]
+    },
+    {
+      "code": "G",
+      "name": "Galway",
+      "nameNative": "Galway",
+      "type": "county",
+      "capital": "Gaillimh",
+      "largestCity": "Galway",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "West",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        388.64,
+        566.09
+      ],
+      "bbox": [
+        177.08,
+        467.43,
+        548.81,
+        676.66
+      ],
+      "neighbors": [
+        "CE",
+        "G_2",
+        "MO",
+        "OY",
+        "RN",
+        "TA"
+      ]
+    },
+    {
+      "code": "G_2",
+      "name": "Galway",
+      "nameNative": "Galway",
+      "type": "city",
+      "capital": "Gaillimh city",
+      "largestCity": "Galway",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "West",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        373.21,
+        585.69
+      ],
+      "bbox": [
+        356.08,
+        574.44,
+        391.29,
+        594.43
+      ],
+      "neighbors": [
+        "G"
+      ]
+    },
+    {
+      "code": "KE",
+      "name": "Kildare",
+      "nameNative": "Kildare",
+      "type": "county",
+      "capital": "Cill Dara",
+      "largestCity": "Kildare",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Mid-East",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        743.04,
+        613.75
+      ],
+      "bbox": [
+        687.34,
+        541.57,
+        801.43,
+        705.64
+      ],
+      "neighbors": [
+        "CW",
+        "D_3",
+        "D_4",
+        "LS",
+        "MH",
+        "OY",
+        "WW"
+      ]
+    },
+    {
+      "code": "KK",
+      "name": "Kilkenny",
+      "nameNative": "Kilkenny",
+      "type": "county",
+      "capital": "Cill Chainnigh",
+      "largestCity": "Kilkenny",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "South-East",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        675.01,
+        788.04
+      ],
+      "bbox": [
+        599.84,
+        699.18,
+        727.97,
+        878.67
+      ],
+      "neighbors": [
+        "CW",
+        "LS",
+        "TA",
+        "TA_2",
+        "WD",
+        "WD_2",
+        "WX"
+      ]
+    },
+    {
+      "code": "KY",
+      "name": "Kerry",
+      "nameNative": "Kerry",
+      "type": "county",
+      "capital": "Ciarraí",
+      "largestCity": "Kerry",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "South-West",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        248.08,
+        914.19
+      ],
+      "bbox": [
+        117.91,
+        783.96,
+        350.86,
+        1032.53
+      ],
+      "neighbors": [
+        "CO",
+        "LK"
+      ]
+    },
+    {
+      "code": "LD",
+      "name": "Longford",
+      "nameNative": "Longford",
+      "type": "county",
+      "capital": "An Longfort",
+      "largestCity": "Longford",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Midlands",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        590.08,
+        468.44
+      ],
+      "bbox": [
+        538.28,
+        406.63,
+        647.53,
+        521.85
+      ],
+      "neighbors": [
+        "CN",
+        "LM",
+        "RN",
+        "WH"
+      ]
+    },
+    {
+      "code": "LH",
+      "name": "Louth",
+      "nameNative": "Louth",
+      "type": "county",
+      "capital": "Lú",
+      "largestCity": "Louth",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Border",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        806.28,
+        410.41
+      ],
+      "bbox": [
+        760.68,
+        354.52,
+        855.05,
+        465.41
+      ],
+      "neighbors": [
+        "MH",
+        "MN"
+      ]
+    },
+    {
+      "code": "LK",
+      "name": "Limerick",
+      "nameNative": "Limerick",
+      "type": "county",
+      "capital": "Luimneach",
+      "largestCity": "Limerick",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Mid-West",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        417.41,
+        811.67
+      ],
+      "bbox": [
+        311.79,
+        736.97,
+        517.08,
+        870.89
+      ],
+      "neighbors": [
+        "CE",
+        "CO",
+        "KY",
+        "LK_2",
+        "TA",
+        "TA_2"
+      ]
+    },
+    {
+      "code": "LK_2",
+      "name": "Limerick",
+      "nameNative": "Limerick",
+      "type": "city",
+      "capital": "Luimneach city",
+      "largestCity": "Limerick",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Mid-West",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        440.3,
+        766.12
+      ],
+      "bbox": [
+        430.55,
+        757.53,
+        447.9,
+        773.66
+      ],
+      "neighbors": [
+        "CE",
+        "LK"
+      ]
+    },
+    {
+      "code": "LM",
+      "name": "Leitrim",
+      "nameNative": "Leitrim",
+      "type": "county",
+      "capital": "Liatroim",
+      "largestCity": "Leitrim",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Border",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        541.18,
+        350.78
+      ],
+      "bbox": [
+        476.2,
+        254.7,
+        613.58,
+        442.36
+      ],
+      "neighbors": [
+        "CN",
+        "DL",
+        "LD",
+        "RN",
+        "SO"
+      ]
+    },
+    {
+      "code": "LS",
+      "name": "Laois",
+      "nameNative": "Laoighis",
+      "type": "county",
+      "capital": "Laois",
+      "largestCity": "Laois",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Midlands",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        652.82,
+        673.36
+      ],
+      "bbox": [
+        589.45,
+        609.96,
+        724.27,
+        730.18
+      ],
+      "neighbors": [
+        "CW",
+        "KE",
+        "KK",
+        "OY",
+        "TA"
+      ]
+    },
+    {
+      "code": "MH",
+      "name": "Meath",
+      "nameNative": "Meath",
+      "type": "county",
+      "capital": "An Mhí",
+      "largestCity": "Meath",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Mid-East",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        755.83,
+        489.44
+      ],
+      "bbox": [
+        653.05,
+        410.14,
+        842.82,
+        562.47
+      ],
+      "neighbors": [
+        "CN",
+        "D_3",
+        "KE",
+        "LH",
+        "MN",
+        "OY",
+        "WH"
+      ]
+    },
+    {
+      "code": "MN",
+      "name": "Monaghan",
+      "nameNative": "Monaghan",
+      "type": "administrative county",
+      "capital": "Monaghan",
+      "largestCity": "Monaghan",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Border",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        720.17,
+        343.7
+      ],
+      "bbox": [
+        653.01,
+        271.83,
+        782.28,
+        413.19
+      ],
+      "neighbors": [
+        "CN",
+        "LH",
+        "MH"
+      ]
+    },
+    {
+      "code": "MO",
+      "name": "Mayo",
+      "nameNative": "Mayo",
+      "type": "county",
+      "capital": "Maigh Eo",
+      "largestCity": "Mayo",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "West",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        316.09,
+        408.25
+      ],
+      "bbox": [
+        170.5,
+        290.28,
+        447.56,
+        533.94
+      ],
+      "neighbors": [
+        "G",
+        "RN",
+        "SO"
+      ]
+    },
+    {
+      "code": "OY",
+      "name": "Offaly",
+      "nameNative": "Offaly",
+      "type": "county",
+      "capital": "Uíbh Fhailí",
+      "largestCity": "Offaly",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Midlands",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        611.65,
+        610.1
+      ],
+      "bbox": [
+        530.8,
+        548.14,
+        713.01,
+        709.79
+      ],
+      "neighbors": [
+        "G",
+        "KE",
+        "LS",
+        "MH",
+        "RN",
+        "TA",
+        "WH"
+      ]
+    },
+    {
+      "code": "RN",
+      "name": "Roscommon",
+      "nameNative": "Roscommon",
+      "type": "county",
+      "capital": "Ros Comáin",
+      "largestCity": "Roscommon",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "West",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        502.62,
+        466.2
+      ],
+      "bbox": [
+        408.09,
+        356.51,
+        562.73,
+        591.31
+      ],
+      "neighbors": [
+        "G",
+        "LD",
+        "LM",
+        "MO",
+        "OY",
+        "SO",
+        "WH"
+      ]
+    },
+    {
+      "code": "SO",
+      "name": "Sligo",
+      "nameNative": "Sligo",
+      "type": "county",
+      "capital": "Sligeach",
+      "largestCity": "Sligo",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Border",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        442.03,
+        344.17
+      ],
+      "bbox": [
+        357.77,
+        255.38,
+        517.87,
+        413.15
+      ],
+      "neighbors": [
+        "LM",
+        "MO",
+        "RN"
+      ]
+    },
+    {
+      "code": "TA",
+      "name": "Tipperary",
+      "nameNative": "North Tipperary",
+      "type": "county",
+      "capital": "Tiobraid Árann",
+      "largestCity": "Tipperary",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Mid-West",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        537.82,
+        717.46
+      ],
+      "bbox": [
+        462.82,
+        620.94,
+        606.45,
+        802.31
+      ],
+      "neighbors": [
+        "CE",
+        "G",
+        "KK",
+        "LK",
+        "LS",
+        "OY",
+        "TA_2"
+      ]
+    },
+    {
+      "code": "TA_2",
+      "name": "Tipperary",
+      "nameNative": "South Tipperary",
+      "type": "county",
+      "capital": "Tiobraid Árann",
+      "largestCity": "Tipperary",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "South-East",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        566.75,
+        821.69
+      ],
+      "bbox": [
+        476.61,
+        743.69,
+        652.36,
+        890.67
+      ],
+      "neighbors": [
+        "CO",
+        "KK",
+        "LK",
+        "TA",
+        "WD"
+      ]
+    },
+    {
+      "code": "WD",
+      "name": "Waterford",
+      "nameNative": "Waterford",
+      "type": "county",
+      "capital": "Port Láirge",
+      "largestCity": "Waterford",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "South-East",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        610.5,
+        900.39
+      ],
+      "bbox": [
+        518.26,
+        847.71,
+        723.05,
+        964.11
+      ],
+      "neighbors": [
+        "CO",
+        "KK",
+        "TA_2",
+        "WD_2"
+      ]
+    },
+    {
+      "code": "WD_2",
+      "name": "Waterford",
+      "nameNative": "Waterford",
+      "type": "city",
+      "capital": "Port Láirge city",
+      "largestCity": "Waterford",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "South-East",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        701.5,
+        882.15
+      ],
+      "bbox": [
+        688.78,
+        871.81,
+        714.71,
+        889.77
+      ],
+      "neighbors": [
+        "KK",
+        "WD"
+      ]
+    },
+    {
+      "code": "WH",
+      "name": "Westmeath",
+      "nameNative": "Westmeath",
+      "type": "county",
+      "capital": "An Iarmhí",
+      "largestCity": "Westmeath",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Midlands",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        637.35,
+        520.42
+      ],
+      "bbox": [
+        549.81,
+        445.43,
+        718.32,
+        577.39
+      ],
+      "neighbors": [
+        "CN",
+        "LD",
+        "MH",
+        "OY",
+        "RN"
+      ]
+    },
+    {
+      "code": "WW",
+      "name": "Wicklow",
+      "nameNative": "Wicklow",
+      "type": "county",
+      "capital": "Cill Mhantáin",
+      "largestCity": "Wicklow",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Mid-East",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        818.59,
+        672.04
+      ],
+      "bbox": [
+        748.7,
+        603.19,
+        882.09,
+        755.24
+      ],
+      "neighbors": [
+        "CW",
+        "D_2",
+        "D_4",
+        "KE",
+        "WX"
+      ]
+    },
+    {
+      "code": "WX",
+      "name": "Wexford",
+      "nameNative": "Wexford",
+      "type": "county",
+      "capital": "Loch Garman",
+      "largestCity": "Wexford",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "South-East",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        787.06,
+        817.76
+      ],
+      "bbox": [
+        711.61,
+        723.4,
+        857.08,
+        912.42
+      ],
+      "neighbors": [
+        "CW",
+        "KK",
+        "WW"
+      ]
+    }
+  ]
+}

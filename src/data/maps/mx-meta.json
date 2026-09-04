@@ -1,0 +1,1205 @@
+{
+  "updatedAt": "2026-09-04T06:16:48.955Z",
+  "standard": "Natural Earth admin-1 vector dataset",
+  "country": "MX",
+  "countryName": "Mexico",
+  "divisionTypeName": "State",
+  "divisionTypePlural": "States",
+  "totalRegions": 32,
+  "regions": [
+    {
+      "code": "AGU",
+      "name": "Aguascalientes",
+      "nameNative": "Aguascalientes",
+      "type": "state",
+      "capital": "Aguascalientes",
+      "largestCity": "Aguascalientes",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Mexico",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        489.27,
+        395.53
+      ],
+      "bbox": [
+        473.2,
+        380.1,
+        505.99,
+        407.88
+      ],
+      "neighbors": [
+        "JAL",
+        "ZAC"
+      ]
+    },
+    {
+      "code": "BCN",
+      "name": "Baja California",
+      "nameNative": "Baja California",
+      "type": "state",
+      "capital": "Baja California",
+      "largestCity": "Baja California",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Mexico",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        104.9,
+        79.4
+      ],
+      "bbox": [
+        0,
+        3.28,
+        176.91,
+        174.08
+      ],
+      "neighbors": [
+        "BCS",
+        "SON"
+      ]
+    },
+    {
+      "code": "BCS",
+      "name": "Baja California Sur",
+      "nameNative": "Baja California Sur",
+      "type": "state",
+      "capital": "Baja California Sur",
+      "largestCity": "Baja California Sur",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Mexico",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        185.97,
+        248.58
+      ],
+      "bbox": [
+        65.82,
+        170.49,
+        263.35,
+        358.81
+      ],
+      "neighbors": [
+        "BCN"
+      ]
+    },
+    {
+      "code": "CAM",
+      "name": "Campeche",
+      "nameNative": "Campeche",
+      "type": "state",
+      "capital": "Campeche",
+      "largestCity": "Campeche",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Mexico",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        888.86,
+        491.16
+      ],
+      "bbox": [
+        816.86,
+        422.1,
+        932.56,
+        529.25
+      ],
+      "neighbors": [
+        "ROO",
+        "TAB",
+        "YUC"
+      ]
+    },
+    {
+      "code": "CHH",
+      "name": "Chihuahua",
+      "nameNative": "Chihuahua",
+      "type": "state",
+      "capital": "Chihuahua",
+      "largestCity": "Chihuahua",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Mexico",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        364.08,
+        155.98
+      ],
+      "bbox": [
+        280.05,
+        49.66,
+        460.78,
+        267.35
+      ],
+      "neighbors": [
+        "COA",
+        "DUR",
+        "SIN",
+        "SON"
+      ]
+    },
+    {
+      "code": "CHP",
+      "name": "Chiapas",
+      "nameNative": "Chiapas",
+      "type": "state",
+      "capital": "Chiapas",
+      "largestCity": "Chiapas",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Mexico",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        822.54,
+        578.54
+      ],
+      "bbox": [
+        766.63,
+        527.77,
+        893.14,
+        646.72
+      ],
+      "neighbors": [
+        "OAX",
+        "TAB",
+        "VER"
+      ]
+    },
+    {
+      "code": "COA",
+      "name": "Coahuila",
+      "nameNative": "Coahuila",
+      "type": "state",
+      "capital": "Coahuila",
+      "largestCity": "Coahuila",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Mexico",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        499.81,
+        210.86
+      ],
+      "bbox": [
+        440.19,
+        120.06,
+        568.97,
+        306.58
+      ],
+      "neighbors": [
+        "CHH",
+        "DUR",
+        "NLE",
+        "SLP",
+        "ZAC"
+      ]
+    },
+    {
+      "code": "COL",
+      "name": "Colima",
+      "nameNative": "Colima",
+      "type": "state",
+      "capital": "Colima",
+      "largestCity": "Colima",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Mexico",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        428.62,
+        496.04
+      ],
+      "bbox": [
+        75.31,
+        480.19,
+        452,
+        511.84
+      ],
+      "neighbors": [
+        "JAL",
+        "MIC"
+      ]
+    },
+    {
+      "code": "DIF",
+      "name": "Mexico",
+      "nameNative": "Distrito Federal",
+      "type": "federal district",
+      "capital": "Mexico",
+      "largestCity": "Mexico",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Mexico",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        595.78,
+        490.88
+      ],
+      "bbox": [
+        589.14,
+        480.38,
+        602.31,
+        498.3
+      ],
+      "neighbors": [
+        "MEX",
+        "MOR"
+      ]
+    },
+    {
+      "code": "DUR",
+      "name": "Durango",
+      "nameNative": "Durango",
+      "type": "state",
+      "capital": "Durango",
+      "largestCity": "Durango",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Mexico",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        408.54,
+        293.07
+      ],
+      "bbox": [
+        338.87,
+        225.46,
+        485.39,
+        384.6
+      ],
+      "neighbors": [
+        "CHH",
+        "COA",
+        "NAY",
+        "SIN",
+        "ZAC"
+      ]
+    },
+    {
+      "code": "GRO",
+      "name": "Guerrero",
+      "nameNative": "Guerrero",
+      "type": "state",
+      "capital": "Guerrero",
+      "largestCity": "Guerrero",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Mexico",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        571.33,
+        547.57
+      ],
+      "bbox": [
+        494.99,
+        505.65,
+        635.41,
+        594.14
+      ],
+      "neighbors": [
+        "MEX",
+        "MIC",
+        "MOR",
+        "OAX",
+        "PUE"
+      ]
+    },
+    {
+      "code": "GUA",
+      "name": "Guanajuato",
+      "nameNative": "Guanajuato",
+      "type": "state",
+      "capital": "Guanajuato",
+      "largestCity": "Guanajuato",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Mexico",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        532.82,
+        434.96
+      ],
+      "bbox": [
+        497.71,
+        400.75,
+        575.7,
+        469.38
+      ],
+      "neighbors": [
+        "JAL",
+        "MIC",
+        "QUE",
+        "SLP",
+        "ZAC"
+      ]
+    },
+    {
+      "code": "HID",
+      "name": "Hidalgo",
+      "nameNative": "Hidalgo",
+      "type": "state",
+      "capital": "Hidalgo",
+      "largestCity": "Hidalgo",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Mexico",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        603.6,
+        448.57
+      ],
+      "bbox": [
+        571.74,
+        416,
+        632.07,
+        479.54
+      ],
+      "neighbors": [
+        "MEX",
+        "PUE",
+        "QUE",
+        "SLP",
+        "TLA",
+        "VER"
+      ]
+    },
+    {
+      "code": "JAL",
+      "name": "Jalisco",
+      "nameNative": "Jalisco",
+      "type": "state",
+      "capital": "Jalisco",
+      "largestCity": "Jalisco",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Mexico",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        447.87,
+        445.11
+      ],
+      "bbox": [
+        379.69,
+        368.95,
+        516.54,
+        502.8
+      ],
+      "neighbors": [
+        "AGU",
+        "COL",
+        "GUA",
+        "MIC",
+        "NAY",
+        "SLP",
+        "ZAC"
+      ]
+    },
+    {
+      "code": "MEX",
+      "name": "State of Mexico",
+      "nameNative": "México",
+      "type": "state",
+      "capital": "State of Mexico",
+      "largestCity": "State of Mexico",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Mexico",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        579.02,
+        487.92
+      ],
+      "bbox": [
+        546.64,
+        454.97,
+        613.16,
+        522.41
+      ],
+      "neighbors": [
+        "DIF",
+        "GRO",
+        "HID",
+        "MIC",
+        "MOR",
+        "PUE",
+        "QUE",
+        "TLA"
+      ]
+    },
+    {
+      "code": "MIC",
+      "name": "Michoacán",
+      "nameNative": "Michoacán",
+      "type": "state",
+      "capital": "Michoacán",
+      "largestCity": "Michoacán",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Mexico",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        504.62,
+        494.1
+      ],
+      "bbox": [
+        443.12,
+        452.2,
+        562.76,
+        539.36
+      ],
+      "neighbors": [
+        "COL",
+        "GRO",
+        "GUA",
+        "JAL",
+        "MEX",
+        "QUE"
+      ]
+    },
+    {
+      "code": "MOR",
+      "name": "Morelos",
+      "nameNative": "Morelos",
+      "type": "state",
+      "capital": "Morelos",
+      "largestCity": "Morelos",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Mexico",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        598.37,
+        508.96
+      ],
+      "bbox": [
+        583.69,
+        495.5,
+        612.09,
+        523.12
+      ],
+      "neighbors": [
+        "DIF",
+        "GRO",
+        "MEX",
+        "PUE"
+      ]
+    },
+    {
+      "code": "NAY",
+      "name": "Nayarit",
+      "nameNative": "Nayarit",
+      "type": "state",
+      "capital": "Nayarit",
+      "largestCity": "Nayarit",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Mexico",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        406.68,
+        400.95
+      ],
+      "bbox": [
+        348.76,
+        358.88,
+        437.67,
+        441.1
+      ],
+      "neighbors": [
+        "DUR",
+        "JAL",
+        "SIN",
+        "ZAC"
+      ]
+    },
+    {
+      "code": "NLE",
+      "name": "Nuevo León",
+      "nameNative": "Nuevo León",
+      "type": "state",
+      "capital": "Nuevo León",
+      "largestCity": "Nuevo León",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Mexico",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        565.26,
+        271.33
+      ],
+      "bbox": [
+        525.57,
+        193.43,
+        613.19,
+        354.48
+      ],
+      "neighbors": [
+        "COA",
+        "SLP",
+        "TAM",
+        "ZAC"
+      ]
+    },
+    {
+      "code": "OAX",
+      "name": "Oaxaca",
+      "nameNative": "Oaxaca",
+      "type": "state",
+      "capital": "Oaxaca",
+      "largestCity": "Oaxaca",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Mexico",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        688.38,
+        569.22
+      ],
+      "bbox": [
+        617.42,
+        509.65,
+        774.28,
+        615.26
+      ],
+      "neighbors": [
+        "CHP",
+        "GRO",
+        "PUE",
+        "VER"
+      ]
+    },
+    {
+      "code": "PUE",
+      "name": "Puebla",
+      "nameNative": "Puebla",
+      "type": "state",
+      "capital": "Puebla",
+      "largestCity": "Puebla",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Mexico",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        637.31,
+        499.09
+      ],
+      "bbox": [
+        599.22,
+        435.49,
+        676.41,
+        538.64
+      ],
+      "neighbors": [
+        "GRO",
+        "HID",
+        "MEX",
+        "MOR",
+        "OAX",
+        "TLA",
+        "VER"
+      ]
+    },
+    {
+      "code": "QUE",
+      "name": "Querétaro",
+      "nameNative": "Querétaro",
+      "type": "state",
+      "capital": "Querétaro",
+      "largestCity": "Querétaro",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Mexico",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        570.75,
+        436.95
+      ],
+      "bbox": [
+        547.82,
+        407.86,
+        597.42,
+        468.08
+      ],
+      "neighbors": [
+        "GUA",
+        "HID",
+        "MEX",
+        "MIC",
+        "SLP"
+      ]
+    },
+    {
+      "code": "ROO",
+      "name": "Quintana Roo",
+      "nameNative": "Quintana Roo",
+      "type": "state",
+      "capital": "Quintana Roo",
+      "largestCity": "Quintana Roo",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Mexico",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        958.06,
+        455.36
+      ],
+      "bbox": [
+        915.5,
+        384.43,
+        1000,
+        520.29
+      ],
+      "neighbors": [
+        "CAM",
+        "YUC"
+      ]
+    },
+    {
+      "code": "SIN",
+      "name": "Sinaloa",
+      "nameNative": "Sinaloa",
+      "type": "state",
+      "capital": "Sinaloa",
+      "largestCity": "Sinaloa",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Mexico",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        327.8,
+        287.57
+      ],
+      "bbox": [
+        266.83,
+        214.45,
+        392.03,
+        379.14
+      ],
+      "neighbors": [
+        "CHH",
+        "DUR",
+        "NAY",
+        "SON"
+      ]
+    },
+    {
+      "code": "SLP",
+      "name": "San Luis Potosí",
+      "nameNative": "San Luis Potosí",
+      "type": "state",
+      "capital": "San Luis Potosí",
+      "largestCity": "San Luis Potosí",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Mexico",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        551.75,
+        375.15
+      ],
+      "bbox": [
+        491.36,
+        306.58,
+        619.14,
+        424.07
+      ],
+      "neighbors": [
+        "COA",
+        "GUA",
+        "HID",
+        "JAL",
+        "NLE",
+        "QUE",
+        "TAM",
+        "VER",
+        "ZAC"
+      ]
+    },
+    {
+      "code": "SON",
+      "name": "Sonora",
+      "nameNative": "Sonora",
+      "type": "state",
+      "capital": "Sonora",
+      "largestCity": "Sonora",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Mexico",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        232.42,
+        119.04
+      ],
+      "bbox": [
+        111.69,
+        11.11,
+        302.03,
+        242.46
+      ],
+      "neighbors": [
+        "BCN",
+        "CHH",
+        "SIN"
+      ]
+    },
+    {
+      "code": "TAB",
+      "name": "Tabasco",
+      "nameNative": "Tabasco",
+      "type": "state",
+      "capital": "Tabasco",
+      "largestCity": "Tabasco",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Mexico",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        815.39,
+        527.84
+      ],
+      "bbox": [
+        762.95,
+        503.18,
+        870.13,
+        550.08
+      ],
+      "neighbors": [
+        "CAM",
+        "CHP",
+        "VER"
+      ]
+    },
+    {
+      "code": "TAM",
+      "name": "Tamaulipas",
+      "nameNative": "Tamaulipas",
+      "type": "state",
+      "capital": "Tamaulipas",
+      "largestCity": "Tamaulipas",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Mexico",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        608.55,
+        315.07
+      ],
+      "bbox": [
+        561.11,
+        197.54,
+        653.78,
+        386.75
+      ],
+      "neighbors": [
+        "NLE",
+        "SLP",
+        "VER"
+      ]
+    },
+    {
+      "code": "TLA",
+      "name": "Tlaxcala",
+      "nameNative": "Tlaxcala",
+      "type": "state",
+      "capital": "Tlaxcala",
+      "largestCity": "Tlaxcala",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Mexico",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        627.85,
+        484.78
+      ],
+      "bbox": [
+        609.57,
+        473.95,
+        645.98,
+        495.93
+      ],
+      "neighbors": [
+        "HID",
+        "MEX",
+        "PUE"
+      ]
+    },
+    {
+      "code": "VER",
+      "name": "Veracruz",
+      "nameNative": "Veracruz",
+      "type": "state",
+      "capital": "Veracruz",
+      "largestCity": "Veracruz",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Mexico",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        687.24,
+        485.3
+      ],
+      "bbox": [
+        610.11,
+        377.94,
+        782.89,
+        558.53
+      ],
+      "neighbors": [
+        "CHP",
+        "HID",
+        "OAX",
+        "PUE",
+        "SLP",
+        "TAB",
+        "TAM"
+      ]
+    },
+    {
+      "code": "YUC",
+      "name": "Yucatán",
+      "nameNative": "Yucatán",
+      "type": "state",
+      "capital": "Yucatán",
+      "largestCity": "Yucatán",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Mexico",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        927.84,
+        419.33
+      ],
+      "bbox": [
+        878.54,
+        388,
+        972.68,
+        460.33
+      ],
+      "neighbors": [
+        "CAM",
+        "ROO"
+      ]
+    },
+    {
+      "code": "ZAC",
+      "name": "Zacatecas",
+      "nameNative": "Zacatecas",
+      "type": "state",
+      "capital": "Zacatecas",
+      "largestCity": "Zacatecas",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Mexico",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        478.47,
+        350.62
+      ],
+      "bbox": [
+        425.63,
+        285.73,
+        538.22,
+        429.73
+      ],
+      "neighbors": [
+        "AGU",
+        "COA",
+        "DUR",
+        "GUA",
+        "JAL",
+        "NAY",
+        "NLE",
+        "SLP"
+      ]
+    }
+  ]
+}

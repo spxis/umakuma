@@ -1,0 +1,623 @@
+{
+  "updatedAt": "2026-09-04T06:16:49.126Z",
+  "standard": "Natural Earth admin-1 vector dataset",
+  "country": "KR",
+  "countryName": "South Korea",
+  "divisionTypeName": "Province / city",
+  "divisionTypePlural": "Provinces and cities",
+  "totalRegions": 17,
+  "regions": [
+    {
+      "code": "11",
+      "name": "Seoul",
+      "nameNative": "서울특별시",
+      "type": "capital metropolitan city",
+      "capital": "Keijo",
+      "largestCity": "Seoul",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "South Korea",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        377.95,
+        274.54
+      ],
+      "bbox": [
+        344.03,
+        245.57,
+        407.75,
+        296.6
+      ],
+      "neighbors": [
+        "41"
+      ]
+    },
+    {
+      "code": "26",
+      "name": "Busan",
+      "nameNative": "부산광역시",
+      "type": "metropolitan city",
+      "capital": "Pusan",
+      "largestCity": "Busan",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "South Korea",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        711.7,
+        748.65
+      ],
+      "bbox": [
+        694.18,
+        727.05,
+        734.7,
+        772.99
+      ],
+      "neighbors": [
+        "48"
+      ]
+    },
+    {
+      "code": "27",
+      "name": "Daegu",
+      "nameNative": "대구광역시",
+      "type": "metropolitan city",
+      "capital": "Taegu",
+      "largestCity": "Daegu",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "South Korea",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        639.44,
+        603.35
+      ],
+      "bbox": [
+        614.71,
+        580.02,
+        661.26,
+        628.58
+      ],
+      "neighbors": [
+        "47"
+      ]
+    },
+    {
+      "code": "28",
+      "name": "Incheon",
+      "nameNative": "인천광역시",
+      "type": "metropolitan city",
+      "capital": "Inchon",
+      "largestCity": "Incheon",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Incheon",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        316.23,
+        288.5
+      ],
+      "bbox": [
+        274.19,
+        271.47,
+        344.2,
+        308.99
+      ],
+      "neighbors": [
+        "41"
+      ]
+    },
+    {
+      "code": "29",
+      "name": "Gwangju",
+      "nameNative": "광주광역시",
+      "type": "metropolitan city",
+      "capital": "Kwangju",
+      "largestCity": "Gwangju",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "South Korea",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        361.14,
+        742.05
+      ],
+      "bbox": [
+        345.41,
+        732.21,
+        375.32,
+        753.19
+      ],
+      "neighbors": [
+        "46"
+      ]
+    },
+    {
+      "code": "30",
+      "name": "Daejeon",
+      "nameNative": "대전광역시",
+      "type": "metropolitan city",
+      "capital": "Daejeon Gwang'yeogsi",
+      "largestCity": "Daejeon",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "South Korea",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        433.71,
+        510.1
+      ],
+      "bbox": [
+        410.96,
+        486.73,
+        453.4,
+        536.31
+      ],
+      "neighbors": [
+        "43",
+        "44",
+        "50"
+      ]
+    },
+    {
+      "code": "31",
+      "name": "Ulsan",
+      "nameNative": "울산광역시",
+      "type": "metropolitan city",
+      "capital": "Ulsan-gwangyoksi",
+      "largestCity": "Ulsan",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "South Korea",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        738.48,
+        677.54
+      ],
+      "bbox": [
+        699.02,
+        644.45,
+        776.88,
+        717.64
+      ],
+      "neighbors": [
+        "47",
+        "48"
+      ]
+    },
+    {
+      "code": "41",
+      "name": "Gyeonggi",
+      "nameNative": "경기도",
+      "type": "province",
+      "capital": "Kyonggi-do",
+      "largestCity": "Gyeonggi",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "South Korea",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        396.27,
+        277.23
+      ],
+      "bbox": [
+        0,
+        139.28,
+        508.9,
+        406.87
+      ],
+      "neighbors": [
+        "11",
+        "28",
+        "42",
+        "43",
+        "44"
+      ]
+    },
+    {
+      "code": "42",
+      "name": "Gangwon",
+      "nameNative": "강원도",
+      "type": "province",
+      "capital": "Kang-Won-Do",
+      "largestCity": "Gangwon",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "South Korea",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        590.55,
+        248.83
+      ],
+      "bbox": [
+        372.18,
+        56.45,
+        773.35,
+        457.61
+      ],
+      "neighbors": [
+        "41",
+        "43",
+        "47"
+      ]
+    },
+    {
+      "code": "43",
+      "name": "North Chungcheong",
+      "nameNative": "충청북도",
+      "type": "province",
+      "capital": "Chungchongbuk-Do",
+      "largestCity": "North Chungcheong",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "South Korea",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        505.79,
+        441.82
+      ],
+      "bbox": [
+        409.83,
+        338.7,
+        640.33,
+        587.99
+      ],
+      "neighbors": [
+        "30",
+        "41",
+        "42",
+        "44",
+        "45",
+        "47",
+        "50"
+      ]
+    },
+    {
+      "code": "44",
+      "name": "South Chungcheong",
+      "nameNative": "충청남도",
+      "type": "province",
+      "capital": "Chungchongnam-Do",
+      "largestCity": "South Chungcheong",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "South Korea",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        353.85,
+        482.04
+      ],
+      "bbox": [
+        235.96,
+        370.74,
+        475.55,
+        586.9
+      ],
+      "neighbors": [
+        "30",
+        "41",
+        "43",
+        "45",
+        "50"
+      ]
+    },
+    {
+      "code": "45",
+      "name": "North Jeolla",
+      "nameNative": "전라북도",
+      "type": "province",
+      "capital": "Chollabuk-Do",
+      "largestCity": "North Jeolla",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "South Korea",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        401.34,
+        644.33
+      ],
+      "bbox": [
+        252.58,
+        556.34,
+        524.17,
+        728.05
+      ],
+      "neighbors": [
+        "43",
+        "44",
+        "46",
+        "47",
+        "48"
+      ]
+    },
+    {
+      "code": "46",
+      "name": "South Jeolla",
+      "nameNative": "전라남도",
+      "type": "metropolitan city",
+      "capital": "Kwangju",
+      "largestCity": "South Jeolla",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "South Korea",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        360.72,
+        805.24
+      ],
+      "bbox": [
+        56.09,
+        690.57,
+        508.73,
+        982.75
+      ],
+      "neighbors": [
+        "29",
+        "45",
+        "48"
+      ]
+    },
+    {
+      "code": "47",
+      "name": "North Gyeongsang",
+      "nameNative": "경상북도",
+      "type": "metropolitan city",
+      "capital": "Taegu",
+      "largestCity": "North Gyeongsang",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "South Korea",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        652.27,
+        527.63
+      ],
+      "bbox": [
+        502.74,
+        263.45,
+        1000,
+        675.87
+      ],
+      "neighbors": [
+        "27",
+        "31",
+        "42",
+        "43",
+        "45",
+        "48"
+      ]
+    },
+    {
+      "code": "48",
+      "name": "South Gyeongsang",
+      "nameNative": "경상남도",
+      "type": "province",
+      "capital": "Kyongsangnam-Do",
+      "largestCity": "South Gyeongsang",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "South Korea",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        586.16,
+        722.4
+      ],
+      "bbox": [
+        474.6,
+        605.57,
+        745.56,
+        861.14
+      ],
+      "neighbors": [
+        "26",
+        "31",
+        "45",
+        "46",
+        "47"
+      ]
+    },
+    {
+      "code": "49",
+      "name": "Jeju",
+      "nameNative": "제주특별자치도",
+      "type": "province",
+      "capital": "Jeju-doQuelpart",
+      "largestCity": "Jeju",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "South Korea",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        298.4,
+        1106.39
+      ],
+      "bbox": [
+        231.97,
+        1070.96,
+        364.9,
+        1143.55
+      ],
+      "neighbors": []
+    },
+    {
+      "code": "50",
+      "name": "Sejong",
+      "nameNative": "세종특별자치시",
+      "type": "special self-governing city",
+      "capital": "Sejong",
+      "largestCity": "Sejong",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "South Korea",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        405.2,
+        473.15
+      ],
+      "bbox": [
+        385.29,
+        444.34,
+        433.93,
+        494.54
+      ],
+      "neighbors": [
+        "30",
+        "43",
+        "44"
+      ]
+    }
+  ]
+}

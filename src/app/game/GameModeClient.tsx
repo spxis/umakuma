@@ -37,7 +37,7 @@ function gameSelectionBatchSize(batchSize: number): GameSelection["batchSize"] {
   return isGameBatchSize(batchSize) ? batchSize : "all";
 }
 
-export default function GameModeClient({ accountId, nickname, member, initialKind }: GameModeClientProps) {
+export default function GameModeClient({ accountId, nickname, member, initialKind, isAdmin = false }: GameModeClientProps) {
   const [phase, setPhase] = useState<GamePhase>(initialKind ? "lobby" : "hub");
   const [setup, setSetup] = useState<GameSetupResponse | null>(null);
   const [setupError, setSetupError] = useState<string | null>(null);
@@ -250,6 +250,7 @@ export default function GameModeClient({ accountId, nickname, member, initialKin
               accountId={accountId}
               setup={setup}
               selection={selection}
+              isAdmin={isAdmin}
               starting={session.starting}
               onChange={setSelection}
               onStart={() => void session.startGame(selection)}

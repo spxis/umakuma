@@ -1,0 +1,607 @@
+{
+  "updatedAt": "2026-09-04T06:16:50.409Z",
+  "standard": "Natural Earth admin-1 vector dataset",
+  "country": "PL",
+  "countryName": "Poland",
+  "divisionTypeName": "Voivodeship",
+  "divisionTypePlural": "Voivodeships",
+  "totalRegions": 16,
+  "regions": [
+    {
+      "code": "DS",
+      "name": "Lower Silesian Voivodeship",
+      "nameNative": "Lower Silesian",
+      "type": "voivodeship|province",
+      "capital": "Dolnoslaskie",
+      "largestCity": "Lower Silesian Voivodeship",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Poland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        219.76,
+        581.86
+      ],
+      "bbox": [
+        65.04,
+        472.02,
+        351.91,
+        735.48
+      ],
+      "neighbors": [
+        "LB",
+        "OP",
+        "WP"
+      ]
+    },
+    {
+      "code": "KP",
+      "name": "Kuyavian-Pomeranian Voivodeship",
+      "nameNative": "Kuyavian-Pomeranian",
+      "type": "voivodeship|province",
+      "capital": "Kujawsko-Pomorskie",
+      "largestCity": "Kuyavian-Pomeranian Voivodeship",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Poland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        429.96,
+        283.27
+      ],
+      "bbox": [
+        318.27,
+        177.7,
+        546.42,
+        399.05
+      ],
+      "neighbors": [
+        "LD",
+        "MZ",
+        "PM",
+        "WN",
+        "WP"
+      ]
+    },
+    {
+      "code": "LB",
+      "name": "Lubusz Voivodeship",
+      "nameNative": "Lubusz",
+      "type": "voivodeship|province",
+      "capital": "Lubuskie",
+      "largestCity": "Lubusz Voivodeship",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Poland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        127.61,
+        402.67
+      ],
+      "bbox": [
+        51.85,
+        263.76,
+        223.25,
+        525.36
+      ],
+      "neighbors": [
+        "DS",
+        "WP",
+        "ZP"
+      ]
+    },
+    {
+      "code": "LD",
+      "name": "Łódź Voivodeship",
+      "nameNative": "Łódź",
+      "type": "voivodeship|province",
+      "capital": "Lódzkie",
+      "largestCity": "Łódź Voivodeship",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Poland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        515.95,
+        511.04
+      ],
+      "bbox": [
+        384.53,
+        390.24,
+        638.09,
+        628.12
+      ],
+      "neighbors": [
+        "KP",
+        "MZ",
+        "OP",
+        "SK",
+        "SL",
+        "WP"
+      ]
+    },
+    {
+      "code": "LU",
+      "name": "Lublin Voivodeship",
+      "nameNative": "Lublin",
+      "type": "voivodeship|province",
+      "capital": "Lubelskie",
+      "largestCity": "Lublin Voivodeship",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Poland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        856.63,
+        550.59
+      ],
+      "bbox": [
+        732.19,
+        385.31,
+        981.51,
+        694.17
+      ],
+      "neighbors": [
+        "MZ",
+        "PD",
+        "PK",
+        "SK"
+      ]
+    },
+    {
+      "code": "MA",
+      "name": "Lesser Poland Voivodeship",
+      "nameNative": "Lesser Poland",
+      "type": "voivodeship|province",
+      "capital": "Malopolskie",
+      "largestCity": "Lesser Poland Voivodeship",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Poland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        607.98,
+        777.57
+      ],
+      "bbox": [
+        487.77,
+        677.55,
+        731.3,
+        881.75
+      ],
+      "neighbors": [
+        "PK",
+        "SK",
+        "SL"
+      ]
+    },
+    {
+      "code": "MZ",
+      "name": "Masovian Voivodeship",
+      "nameNative": "Masovian",
+      "type": "voivodeship|province",
+      "capital": "Mazowieckie",
+      "largestCity": "Masovian Voivodeship",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Poland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        674.78,
+        391.72
+      ],
+      "bbox": [
+        504.65,
+        213.63,
+        865.37,
+        591.79
+      ],
+      "neighbors": [
+        "KP",
+        "LD",
+        "LU",
+        "PD",
+        "SK",
+        "WN"
+      ]
+    },
+    {
+      "code": "OP",
+      "name": "Opole Voivodeship",
+      "nameNative": "Opole",
+      "type": "voivodeship|province",
+      "capital": "Opolskie",
+      "largestCity": "Opole Voivodeship",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Poland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        365.29,
+        656.98
+      ],
+      "bbox": [
+        272.57,
+        573.41,
+        442.77,
+        757.74
+      ],
+      "neighbors": [
+        "DS",
+        "LD",
+        "SL",
+        "WP"
+      ]
+    },
+    {
+      "code": "PD",
+      "name": "Podlaskie Voivodeship",
+      "nameNative": "Podlachian",
+      "type": "voivodeship|province",
+      "capital": "Podlaskie",
+      "largestCity": "Podlaskie Voivodeship",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Poland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        837.91,
+        234.23
+      ],
+      "bbox": [
+        710.42,
+        59.41,
+        940.01,
+        387.59
+      ],
+      "neighbors": [
+        "LU",
+        "MZ",
+        "WN"
+      ]
+    },
+    {
+      "code": "PK",
+      "name": "Podkarpackie Voivodeship",
+      "nameNative": "Subcarpathian",
+      "type": "voivodeship|province",
+      "capital": "Podkarpackie",
+      "largestCity": "Podkarpackie Voivodeship",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Poland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        797.82,
+        751.74
+      ],
+      "bbox": [
+        696.85,
+        619.06,
+        939.28,
+        900
+      ],
+      "neighbors": [
+        "LU",
+        "MA",
+        "SK"
+      ]
+    },
+    {
+      "code": "PM",
+      "name": "Pomeranian Voivodeship",
+      "nameNative": "Pomeranian",
+      "type": "voivodeship|province",
+      "capital": "Pomorskie",
+      "largestCity": "Pomeranian Voivodeship",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Poland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        388.71,
+        109.41
+      ],
+      "bbox": [
+        276.53,
+        0,
+        545.21,
+        217.57
+      ],
+      "neighbors": [
+        "KP",
+        "WN",
+        "WP",
+        "ZP"
+      ]
+    },
+    {
+      "code": "SK",
+      "name": "Świętokrzyskie Voivodeship",
+      "nameNative": "Świętokrzyskie",
+      "type": "voivodeship|province",
+      "capital": "Swietokrzyskie",
+      "largestCity": "Świętokrzyskie Voivodeship",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Poland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        650.71,
+        636.11
+      ],
+      "bbox": [
+        549.63,
+        551.53,
+        756.84,
+        724.74
+      ],
+      "neighbors": [
+        "LD",
+        "LU",
+        "MA",
+        "MZ",
+        "PK",
+        "SL"
+      ]
+    },
+    {
+      "code": "SL",
+      "name": "Silesian Voivodeship",
+      "nameNative": "Silesian",
+      "type": "voivodeship|province",
+      "capital": "Slaskie",
+      "largestCity": "Silesian Voivodeship",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Poland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        475.94,
+        705.96
+      ],
+      "bbox": [
+        378.41,
+        592.25,
+        572.25,
+        849.24
+      ],
+      "neighbors": [
+        "LD",
+        "MA",
+        "OP",
+        "SK"
+      ]
+    },
+    {
+      "code": "WN",
+      "name": "Warmian-Masurian Voivodeship",
+      "nameNative": "Warmian-Masurian",
+      "type": "voivodeship|province",
+      "capital": "Warminsko-Mazurskie",
+      "largestCity": "Warmian-Masurian Voivodeship",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Poland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        638.77,
+        152.34
+      ],
+      "bbox": [
+        488.37,
+        60.82,
+        822.33,
+        271.88
+      ],
+      "neighbors": [
+        "KP",
+        "MZ",
+        "PD",
+        "PM"
+      ]
+    },
+    {
+      "code": "WP",
+      "name": "Greater Poland Voivodeship",
+      "nameNative": "Greater Poland",
+      "type": "voivodeship|province",
+      "capital": "Wielkopolskie",
+      "largestCity": "Greater Poland Voivodeship",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Poland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        310.3,
+        396.88
+      ],
+      "bbox": [
+        175.6,
+        191.29,
+        484,
+        587
+      ],
+      "neighbors": [
+        "DS",
+        "KP",
+        "LB",
+        "LD",
+        "OP",
+        "PM",
+        "ZP"
+      ]
+    },
+    {
+      "code": "ZP",
+      "name": "West Pomeranian Voivodeship",
+      "nameNative": "West Pomeranian",
+      "type": "voivodeship|province",
+      "capital": "Zachodniopomorskie",
+      "largestCity": "West Pomeranian Voivodeship",
+      "population": 0,
+      "areaKm2": 0,
+      "areaSqMi": 0,
+      "region": "Poland",
+      "officialLanguages": [],
+      "nicknames": [],
+      "no1Rankings": [],
+      "famousFor": {
+        "foods": [],
+        "landmarks": [],
+        "specialties": []
+      },
+      "symbols": {},
+      "centroid": [
+        163.07,
+        188.25
+      ],
+      "bbox": [
+        18.49,
+        38.16,
+        298.01,
+        337.01
+      ],
+      "neighbors": [
+        "LB",
+        "PM",
+        "WP"
+      ]
+    }
+  ]
+}
