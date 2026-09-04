@@ -16,7 +16,11 @@ import { regionNameLabel, regionNameLines } from "@/lib/regionNames";
 
 import { MAP_ZOOM_LEVELS } from "@/lib/geoMapFraming";
 import { filterMarks, markFor, markTone, markTotals, type MapMarkLayers } from "@/lib/mapMarks";
+import { CITY_DENSITIES, citiesAtDensity, cityDensityCounts, hasCities, isCityDensity, type CityDensity } from "@/lib/geoCities";
+import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
+
+import MapCityToggle from "./MapCityToggle";
 import type { MapKanjiFacts } from "@/lib/mapRegionKanji";
 
 import MapLayerToggles from "./MapLayerToggles";
@@ -130,6 +134,30 @@ export default function MapStudy({
     // eslint-disable-next-line react-hooks/exhaustive-deps -- the three booleans are the object
     [marking.marks, showKnown, showPractice, showVisited],
   );
+  /*
+   * The city overlay, remembered per browser like the mark layers.
+   *
+   * Read once on mount rather than during render: localStorage is not there on
+   * the server, and a value read while rendering would make the first client
+   * paint disagree with the markup React sent.
+   */
+  const cityCountry = hasCities(country);
+  const [showCities, setShowCities] = usePersistedBoolean("maps.cities.shown", { defaultValue: false });
+  const [cityDensity, setCityDensity] = useState<CityDensity>("major");
+  useEffect(() => {
+    setCityDensity(getStoredEnum("maps.cities.density", CITY_DENSITIES, "major"));
+  }, []);
+  const chooseDensity = useCallback((next: CityDensity) => {
+    if (!isCityDensity(next)) return;
+    setCityDensity(next);
+    setStoredEnum("maps.cities.density", next);
+  }, []);
+  const cityCounts = useMemo(() => cityDensityCounts(country), [country]);
+  const cities = useMemo(
+    () => (cityCountry && showCities ? citiesAtDensity(country, cityDensity) : []),
+    [cityCountry, showCities, country, cityDensity],
+  );
+
   const toggleLayer = useCallback((layer: keyof MapMarkLayers) => {
     if (layer === "known") setShowKnown((on) => !on);
     else if (layer === "practice") setShowPractice((on) => !on);
@@ -286,8 +314,21 @@ export default function MapStudy({
           </span>
         </div>
 
-        {saidAnything ? (
-          <MapLayerToggles totals={totals} layers={layers} onToggle={toggleLayer} total={dataset.totalRegions} />
+        {saidAnything || cityCountry ? (
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+            {saidAnything ? (
+              <MapLayerToggles totals={totals} layers={layers} onToggle={toggleLayer} total={dataset.totalRegions} />
+            ) : null}
+            {cityCountry ? (
+              <MapCityToggle
+                shown={showCities}
+                onToggle={() => setShowCities((on) => !on)}
+                density={cityDensity}
+                onDensity={chooseDensity}
+                counts={cityCounts}
+              />
+            ) : null}
+          </div>
         ) : null}
 
         <div className={`relative ${MAP_STUDY_HEIGHT} rounded-2xl border border-line bg-surface-muted p-2`}>
@@ -299,6 +340,7 @@ export default function MapStudy({
             onRegionDoubleSelect={view.zoomInto}
             onRegionHover={setHovered}
             regionLabel={regionLabel}
+            cities={cities}
             svgProps={view.panProps}
           />
           {/*

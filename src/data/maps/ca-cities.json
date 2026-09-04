@@ -1,0 +1,2298 @@
+{
+  "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_10m_populated_places.geojson (Natural Earth populated places), fitted to 1000x720",
+  "updatedAt": "2026-09-04T08:54:33.373Z",
+  "country": "CA",
+  "countryName": "Canada",
+  "viewBox": "0 0 1000 720",
+  "width": 1000,
+  "height": 720,
+  "totalCities": 254,
+  "cities": [
+    {
+      "name": "Toronto",
+      "region": "ON",
+      "x": 652.3,
+      "y": 674.57,
+      "rank": 1,
+      "capital": "region",
+      "population": 5213000
+    },
+    {
+      "name": "Vancouver",
+      "region": "BC",
+      "x": 135.3,
+      "y": 537.24,
+      "rank": 1,
+      "capital": null,
+      "population": 2313328
+    },
+    {
+      "name": "Montreal",
+      "region": "QC",
+      "x": 713.18,
+      "y": 620.67,
+      "rank": 2,
+      "capital": null,
+      "population": 3678000
+    },
+    {
+      "name": "Edmonton",
+      "region": "AB",
+      "x": 259.38,
+      "y": 503.24,
+      "rank": 2,
+      "capital": "region",
+      "population": 1058000
+    },
+    {
+      "name": "Ottawa",
+      "region": "ON",
+      "x": 688.57,
+      "y": 630.83,
+      "rank": 3,
+      "capital": "country",
+      "population": 1145000
+    },
+    {
+      "name": "Calgary",
+      "region": "AB",
+      "x": 241.57,
+      "y": 542.87,
+      "rank": 3,
+      "capital": null,
+      "population": 1110000
+    },
+    {
+      "name": "Winnipeg",
+      "region": "MB",
+      "x": 424.5,
+      "y": 591.9,
+      "rank": 3,
+      "capital": "region",
+      "population": 632063
+    },
+    {
+      "name": "Quebec City",
+      "region": "QC",
+      "x": 731.48,
+      "y": 587.94,
+      "rank": 3,
+      "capital": "region",
+      "population": 624177
+    },
+    {
+      "name": "Halifax",
+      "region": "NS",
+      "x": 834.36,
+      "y": 581.73,
+      "rank": 3,
+      "capital": "region",
+      "population": 359111
+    },
+    {
+      "name": "Victoria",
+      "region": "BC",
+      "x": 126.74,
+      "y": 549.67,
+      "rank": 3,
+      "capital": "region",
+      "population": 289625
+    },
+    {
+      "name": "Saskatoon",
+      "region": "SK",
+      "x": 324.11,
+      "y": 542.43,
+      "rank": 3,
+      "capital": null,
+      "population": 198958
+    },
+    {
+      "name": "Regina",
+      "region": "SK",
+      "x": 341.75,
+      "y": 575.55,
+      "rank": 3,
+      "capital": "region",
+      "population": 176183
+    },
+    {
+      "name": "St. John's",
+      "region": "NL",
+      "x": 916.85,
+      "y": 462.83,
+      "rank": 3,
+      "capital": "region",
+      "population": 131469
+    },
+    {
+      "name": "Thunder Bay",
+      "region": "ON",
+      "x": 516.41,
+      "y": 613.18,
+      "rank": 3,
+      "capital": null,
+      "population": 99334
+    },
+    {
+      "name": "Charlottetown",
+      "region": "PE",
+      "x": 825.43,
+      "y": 553.89,
+      "rank": 3,
+      "capital": "region",
+      "population": 42402
+    },
+    {
+      "name": "Whitehorse",
+      "region": "YT",
+      "x": 130.71,
+      "y": 307.17,
+      "rank": 3,
+      "capital": "region",
+      "population": 23276
+    },
+    {
+      "name": "Yellowknife",
+      "region": "NT",
+      "x": 294.14,
+      "y": 354.04,
+      "rank": 3,
+      "capital": "region",
+      "population": 19234
+    },
+    {
+      "name": "Prince Rupert",
+      "region": "BC",
+      "x": 107.23,
+      "y": 423.25,
+      "rank": 3,
+      "capital": null,
+      "population": 14708
+    },
+    {
+      "name": "Nain",
+      "region": "NL",
+      "x": 748.24,
+      "y": 390.25,
+      "rank": 3,
+      "capital": null,
+      "population": 1151
+    },
+    {
+      "name": "Churchill",
+      "region": "MB",
+      "x": 454.04,
+      "y": 437.7,
+      "rank": 3,
+      "capital": null,
+      "population": 1000
+    },
+    {
+      "name": "Naujaat",
+      "region": "NU",
+      "x": 503.67,
+      "y": 300,
+      "rank": 3,
+      "capital": null,
+      "population": 1000
+    },
+    {
+      "name": "Arctic Bay",
+      "region": "NU",
+      "x": 492.23,
+      "y": 188.56,
+      "rank": 3,
+      "capital": null,
+      "population": 604
+    },
+    {
+      "name": "Fort Good Hope",
+      "region": "NT",
+      "x": 222.73,
+      "y": 253.16,
+      "rank": 3,
+      "capital": null,
+      "population": 597
+    },
+    {
+      "name": "Resolute",
+      "region": "NU",
+      "x": 442.78,
+      "y": 164.49,
+      "rank": 3,
+      "capital": null,
+      "population": 250
+    },
+    {
+      "name": "Fort Severn",
+      "region": "ON",
+      "x": 518.11,
+      "y": 480.55,
+      "rank": 3,
+      "capital": null,
+      "population": 125
+    },
+    {
+      "name": "North Bay",
+      "region": "ON",
+      "x": 639.37,
+      "y": 629.07,
+      "rank": 4,
+      "capital": null,
+      "population": 50170
+    },
+    {
+      "name": "Sydney",
+      "region": "NS",
+      "x": 858.41,
+      "y": 537.94,
+      "rank": 4,
+      "capital": null,
+      "population": 37538
+    },
+    {
+      "name": "Timmins",
+      "region": "ON",
+      "x": 608.07,
+      "y": 597.26,
+      "rank": 4,
+      "capital": null,
+      "population": 34974
+    },
+    {
+      "name": "Brandon",
+      "region": "MB",
+      "x": 392.94,
+      "y": 591.5,
+      "rank": 4,
+      "capital": null,
+      "population": 28418
+    },
+    {
+      "name": "Fort McMurray",
+      "region": "AB",
+      "x": 293.69,
+      "y": 455.4,
+      "rank": 4,
+      "capital": null,
+      "population": 21863
+    },
+    {
+      "name": "Fort St. John",
+      "region": "BC",
+      "x": 205.69,
+      "y": 435.36,
+      "rank": 4,
+      "capital": null,
+      "population": 18776
+    },
+    {
+      "name": "Thompson",
+      "region": "MB",
+      "x": 419.57,
+      "y": 489.6,
+      "rank": 4,
+      "capital": null,
+      "population": 13727
+    },
+    {
+      "name": "Labrador City",
+      "region": "NL",
+      "x": 732.16,
+      "y": 470.03,
+      "rank": 4,
+      "capital": null,
+      "population": 10313
+    },
+    {
+      "name": "Iqaluit",
+      "region": "NU",
+      "x": 639.25,
+      "y": 308.32,
+      "rank": 4,
+      "capital": "region",
+      "population": 6124
+    },
+    {
+      "name": "Peace River",
+      "region": "AB",
+      "x": 237.41,
+      "y": 447.69,
+      "rank": 4,
+      "capital": null,
+      "population": 5340
+    },
+    {
+      "name": "Arviat",
+      "region": "NU",
+      "x": 453.77,
+      "y": 397.52,
+      "rank": 4,
+      "capital": null,
+      "population": 1868
+    },
+    {
+      "name": "Igloolik",
+      "region": "NU",
+      "x": 523.37,
+      "y": 248.71,
+      "rank": 4,
+      "capital": null,
+      "population": 1612
+    },
+    {
+      "name": "Cambridge Bay",
+      "region": "NU",
+      "x": 382.63,
+      "y": 256.8,
+      "rank": 4,
+      "capital": null,
+      "population": 1477
+    },
+    {
+      "name": "Dawson City",
+      "region": "YT",
+      "x": 137.7,
+      "y": 240.61,
+      "rank": 4,
+      "capital": null,
+      "population": 1319
+    },
+    {
+      "name": "Kugluktuk",
+      "region": "NU",
+      "x": 315.76,
+      "y": 264.85,
+      "rank": 4,
+      "capital": null,
+      "population": 1302
+    },
+    {
+      "name": "Kuujjuaq",
+      "region": "QC",
+      "x": 680.63,
+      "y": 395.83,
+      "rank": 4,
+      "capital": null,
+      "population": 1273
+    },
+    {
+      "name": "Kuujjuarapik",
+      "region": "QC",
+      "x": 614.82,
+      "y": 472.4,
+      "rank": 4,
+      "capital": null,
+      "population": 1243
+    },
+    {
+      "name": "Taloyoak",
+      "region": "NU",
+      "x": 452.52,
+      "y": 253.28,
+      "rank": 4,
+      "capital": null,
+      "population": 774
+    },
+    {
+      "name": "Fort Smith",
+      "region": "AB",
+      "x": 302.98,
+      "y": 399.85,
+      "rank": 4,
+      "capital": null,
+      "population": 518
+    },
+    {
+      "name": "Chesterfield Inlet",
+      "region": "NU",
+      "x": 478.33,
+      "y": 357.93,
+      "rank": 4,
+      "capital": null,
+      "population": 374
+    },
+    {
+      "name": "Hamilton",
+      "region": "ON",
+      "x": 648.62,
+      "y": 683.3,
+      "rank": 6,
+      "capital": null,
+      "population": 721053
+    },
+    {
+      "name": "Windsor",
+      "region": "ON",
+      "x": 610.88,
+      "y": 709.5,
+      "rank": 6,
+      "capital": null,
+      "population": 319246
+    },
+    {
+      "name": "Greater Sudbury",
+      "region": "ON",
+      "x": 620.42,
+      "y": 630.19,
+      "rank": 6,
+      "capital": null,
+      "population": 157857
+    },
+    {
+      "name": "Kelowna",
+      "region": "BC",
+      "x": 177.84,
+      "y": 543.2,
+      "rank": 6,
+      "capital": null,
+      "population": 125109
+    },
+    {
+      "name": "Trois-Rivières",
+      "region": "QC",
+      "x": 719.88,
+      "y": 601.95,
+      "rank": 6,
+      "capital": null,
+      "population": 119693
+    },
+    {
+      "name": "Moncton",
+      "region": "NB",
+      "x": 809.16,
+      "y": 566.25,
+      "rank": 6,
+      "capital": null,
+      "population": 90635
+    },
+    {
+      "name": "Red Deer",
+      "region": "AB",
+      "x": 250.24,
+      "y": 523.89,
+      "rank": 6,
+      "capital": null,
+      "population": 74857
+    },
+    {
+      "name": "Kamloops",
+      "region": "BC",
+      "x": 173.91,
+      "y": 527.18,
+      "rank": 6,
+      "capital": null,
+      "population": 68714
+    },
+    {
+      "name": "Prince George",
+      "region": "BC",
+      "x": 172.17,
+      "y": 464.89,
+      "rank": 6,
+      "capital": null,
+      "population": 65558
+    },
+    {
+      "name": "Medicine Hat",
+      "region": "AB",
+      "x": 273.48,
+      "y": 570.34,
+      "rank": 6,
+      "capital": null,
+      "population": 63138
+    },
+    {
+      "name": "Chicoutimi",
+      "region": "QC",
+      "x": 722.7,
+      "y": 560.99,
+      "rank": 6,
+      "capital": null,
+      "population": 53940
+    },
+    {
+      "name": "Fredericton",
+      "region": "NB",
+      "x": 789.68,
+      "y": 578.98,
+      "rank": 6,
+      "capital": "region",
+      "population": 52337
+    },
+    {
+      "name": "Grande Prairie",
+      "region": "AB",
+      "x": 217.26,
+      "y": 460.01,
+      "rank": 6,
+      "capital": null,
+      "population": 41462
+    },
+    {
+      "name": "Prince Albert",
+      "region": "SK",
+      "x": 336.56,
+      "y": 526.28,
+      "rank": 6,
+      "capital": null,
+      "population": 34609
+    },
+    {
+      "name": "Courtenay",
+      "region": "BC",
+      "x": 118.96,
+      "y": 521.59,
+      "rank": 6,
+      "capital": null,
+      "population": 32793
+    },
+    {
+      "name": "Moose Jaw",
+      "region": "SK",
+      "x": 331.31,
+      "y": 574.94,
+      "rank": 6,
+      "capital": null,
+      "population": 32166
+    },
+    {
+      "name": "Sept-Îles",
+      "region": "QC",
+      "x": 757.99,
+      "y": 508.41,
+      "rank": 6,
+      "capital": null,
+      "population": 25686
+    },
+    {
+      "name": "Corner Brook",
+      "region": "NL",
+      "x": 852.85,
+      "y": 480.39,
+      "rank": 6,
+      "capital": null,
+      "population": 20791
+    },
+    {
+      "name": "Val-d'Or",
+      "region": "QC",
+      "x": 650.22,
+      "y": 592.51,
+      "rank": 6,
+      "capital": null,
+      "population": 20625
+    },
+    {
+      "name": "North Battleford",
+      "region": "SK",
+      "x": 309.12,
+      "y": 529.13,
+      "rank": 6,
+      "capital": null,
+      "population": 19440
+    },
+    {
+      "name": "Williams Lake",
+      "region": "BC",
+      "x": 165.42,
+      "y": 496.14,
+      "rank": 6,
+      "capital": null,
+      "population": 14168
+    },
+    {
+      "name": "Dolbeau-Mistassini",
+      "region": "QC",
+      "x": 707.21,
+      "y": 558.98,
+      "rank": 6,
+      "capital": null,
+      "population": 13337
+    },
+    {
+      "name": "Kenora",
+      "region": "ON",
+      "x": 455.12,
+      "y": 593.86,
+      "rank": 6,
+      "capital": null,
+      "population": 10852
+    },
+    {
+      "name": "Dauphin",
+      "region": "MB",
+      "x": 393.28,
+      "y": 568.38,
+      "rank": 6,
+      "capital": null,
+      "population": 9077
+    },
+    {
+      "name": "Dryden",
+      "region": "ON",
+      "x": 473.65,
+      "y": 592.88,
+      "rank": 6,
+      "capital": null,
+      "population": 7862
+    },
+    {
+      "name": "Banff",
+      "region": "AB",
+      "x": 226.39,
+      "y": 536.54,
+      "rank": 6,
+      "capital": null,
+      "population": 7502
+    },
+    {
+      "name": "Yarmouth",
+      "region": "NS",
+      "x": 812.68,
+      "y": 610,
+      "rank": 6,
+      "capital": null,
+      "population": 7500
+    },
+    {
+      "name": "Flin Flon",
+      "region": "MB",
+      "x": 379.03,
+      "y": 504.15,
+      "rank": 6,
+      "capital": null,
+      "population": 6393
+    },
+    {
+      "name": "Fort Nelson",
+      "region": "BC",
+      "x": 207.27,
+      "y": 388.22,
+      "rank": 6,
+      "capital": null,
+      "population": 6315
+    },
+    {
+      "name": "Smithers",
+      "region": "BC",
+      "x": 138.73,
+      "y": 432.12,
+      "rank": 6,
+      "capital": null,
+      "population": 6245
+    },
+    {
+      "name": "Bathurst",
+      "region": "NB",
+      "x": 787.08,
+      "y": 547.36,
+      "rank": 6,
+      "capital": null,
+      "population": 6111
+    },
+    {
+      "name": "The Pas",
+      "region": "MB",
+      "x": 384.15,
+      "y": 521.13,
+      "rank": 6,
+      "capital": null,
+      "population": 6055
+    },
+    {
+      "name": "Norway House",
+      "region": "MB",
+      "x": 419,
+      "y": 520.46,
+      "rank": 6,
+      "capital": null,
+      "population": 6000
+    },
+    {
+      "name": "Jasper",
+      "region": "AB",
+      "x": 210.43,
+      "y": 499.7,
+      "rank": 6,
+      "capital": null,
+      "population": 3907
+    },
+    {
+      "name": "Gaspé",
+      "region": "QC",
+      "x": 788.91,
+      "y": 521.64,
+      "rank": 6,
+      "capital": null,
+      "population": 3677
+    },
+    {
+      "name": "Gander",
+      "region": "NL",
+      "x": 884.63,
+      "y": 457.45,
+      "rank": 6,
+      "capital": null,
+      "population": 3345
+    },
+    {
+      "name": "Inuvik",
+      "region": "NT",
+      "x": 212.98,
+      "y": 205.26,
+      "rank": 6,
+      "capital": null,
+      "population": 3022
+    },
+    {
+      "name": "Port Burwell",
+      "region": "NL",
+      "x": 692.83,
+      "y": 348.22,
+      "rank": 6,
+      "capital": null,
+      "population": 2762
+    },
+    {
+      "name": "Rankin Inlet",
+      "region": "NU",
+      "x": 468.2,
+      "y": 367.61,
+      "rank": 6,
+      "capital": null,
+      "population": 2472
+    },
+    {
+      "name": "Attawapiskat",
+      "region": "ON",
+      "x": 578.98,
+      "y": 523.85,
+      "rank": 6,
+      "capital": null,
+      "population": 1802
+    },
+    {
+      "name": "Moosonee",
+      "region": "ON",
+      "x": 603.95,
+      "y": 547.37,
+      "rank": 6,
+      "capital": null,
+      "population": 1725
+    },
+    {
+      "name": "Inukjuak",
+      "region": "QC",
+      "x": 596.1,
+      "y": 420.63,
+      "rank": 6,
+      "capital": null,
+      "population": 1597
+    },
+    {
+      "name": "Pond Inlet",
+      "region": "NU",
+      "x": 529.21,
+      "y": 186.21,
+      "rank": 6,
+      "capital": null,
+      "population": 1549
+    },
+    {
+      "name": "Kinngait",
+      "region": "NU",
+      "x": 579.7,
+      "y": 321.07,
+      "rank": 6,
+      "capital": null,
+      "population": 1326
+    },
+    {
+      "name": "Pangnirtung",
+      "region": "NU",
+      "x": 639.28,
+      "y": 262.97,
+      "rank": 6,
+      "capital": null,
+      "population": 1320
+    },
+    {
+      "name": "Gillam",
+      "region": "MB",
+      "x": 450.13,
+      "y": 479.38,
+      "rank": 6,
+      "capital": null,
+      "population": 1281
+    },
+    {
+      "name": "Gjoa Haven",
+      "region": "NU",
+      "x": 438.23,
+      "y": 269.01,
+      "rank": 6,
+      "capital": null,
+      "population": 1109
+    },
+    {
+      "name": "Tuktoyaktuk",
+      "region": "NT",
+      "x": 226.83,
+      "y": 191.71,
+      "rank": 6,
+      "capital": null,
+      "population": 929
+    },
+    {
+      "name": "Watson Lake",
+      "region": "YT",
+      "x": 170.05,
+      "y": 345.31,
+      "rank": 6,
+      "capital": null,
+      "population": 802
+    },
+    {
+      "name": "Mingan",
+      "region": "QC",
+      "x": 781.34,
+      "y": 496.41,
+      "rank": 6,
+      "capital": null,
+      "population": 588
+    },
+    {
+      "name": "Cartwright",
+      "region": "NL",
+      "x": 813.8,
+      "y": 406.32,
+      "rank": 6,
+      "capital": null,
+      "population": 505
+    },
+    {
+      "name": "Ulukhaktok",
+      "region": "NT",
+      "x": 316.54,
+      "y": 212.01,
+      "rank": 6,
+      "capital": null,
+      "population": 500
+    },
+    {
+      "name": "Lynn Lake",
+      "region": "MB",
+      "x": 390.18,
+      "y": 469,
+      "rank": 6,
+      "capital": null,
+      "population": 482
+    },
+    {
+      "name": "Fort Resolution",
+      "region": "NT",
+      "x": 293.57,
+      "y": 376.61,
+      "rank": 6,
+      "capital": null,
+      "population": 448
+    },
+    {
+      "name": "Kimmirut",
+      "region": "NU",
+      "x": 635.85,
+      "y": 326.71,
+      "rank": 6,
+      "capital": null,
+      "population": 385
+    },
+    {
+      "name": "Fort Simpson",
+      "region": "NT",
+      "x": 238.55,
+      "y": 344.89,
+      "rank": 6,
+      "capital": null,
+      "population": 283
+    },
+    {
+      "name": "Brochet",
+      "region": "MB",
+      "x": 385.97,
+      "y": 450.79,
+      "rank": 6,
+      "capital": null,
+      "population": 278
+    },
+    {
+      "name": "Ivujivik",
+      "region": "QC",
+      "x": 579.15,
+      "y": 355.12,
+      "rank": 6,
+      "capital": null,
+      "population": 156
+    },
+    {
+      "name": "Alert",
+      "region": "NU",
+      "x": 515.47,
+      "y": 4.1,
+      "rank": 6,
+      "capital": null,
+      "population": 125
+    },
+    {
+      "name": "Rigolet",
+      "region": "NL",
+      "x": 797.05,
+      "y": 407.82,
+      "rank": 6,
+      "capital": null,
+      "population": 124
+    },
+    {
+      "name": "Neskantaga First Nation",
+      "region": "ON",
+      "x": 524.19,
+      "y": 545.64,
+      "rank": 6,
+      "capital": null,
+      "population": 120
+    },
+    {
+      "name": "Uranium City",
+      "region": "SK",
+      "x": 328.81,
+      "y": 413.36,
+      "rank": 6,
+      "capital": null,
+      "population": 89
+    },
+    {
+      "name": "Grise Fiord",
+      "region": "NU",
+      "x": 491.12,
+      "y": 128.25,
+      "rank": 6,
+      "capital": null,
+      "population": 23
+    },
+    {
+      "name": "Barrie",
+      "region": "ON",
+      "x": 645.09,
+      "y": 663.07,
+      "rank": 7,
+      "capital": null,
+      "population": 182041
+    },
+    {
+      "name": "Abbotsford",
+      "region": "BC",
+      "x": 142.35,
+      "y": 544.73,
+      "rank": 7,
+      "capital": null,
+      "population": 151683
+    },
+    {
+      "name": "Kingston",
+      "region": "ON",
+      "x": 685.66,
+      "y": 654.15,
+      "rank": 7,
+      "capital": null,
+      "population": 114195
+    },
+    {
+      "name": "Saint John",
+      "region": "NB",
+      "x": 801.39,
+      "y": 586.76,
+      "rank": 7,
+      "capital": null,
+      "population": 87857
+    },
+    {
+      "name": "Nanaimo",
+      "region": "BC",
+      "x": 125.87,
+      "y": 535.4,
+      "rank": 7,
+      "capital": null,
+      "population": 84905
+    },
+    {
+      "name": "Lethbridge",
+      "region": "AB",
+      "x": 248.43,
+      "y": 570.04,
+      "rank": 7,
+      "capital": null,
+      "population": 70617
+    },
+    {
+      "name": "Shawinigan",
+      "region": "QC",
+      "x": 716.49,
+      "y": 599.43,
+      "rank": 7,
+      "capital": null,
+      "population": 49161
+    },
+    {
+      "name": "Cornwall",
+      "region": "ON",
+      "x": 702.47,
+      "y": 633.73,
+      "rank": 7,
+      "capital": null,
+      "population": 48821
+    },
+    {
+      "name": "Victoriaville",
+      "region": "QC",
+      "x": 728.53,
+      "y": 604.3,
+      "rank": 7,
+      "capital": null,
+      "population": 41500
+    },
+    {
+      "name": "Penticton",
+      "region": "BC",
+      "x": 174.23,
+      "y": 549.34,
+      "rank": 7,
+      "capital": null,
+      "population": 37721
+    },
+    {
+      "name": "Rimouski",
+      "region": "QC",
+      "x": 750.1,
+      "y": 549.01,
+      "rank": 7,
+      "capital": null,
+      "population": 35584
+    },
+    {
+      "name": "Campbell River",
+      "region": "BC",
+      "x": 119.01,
+      "y": 515.07,
+      "rank": 7,
+      "capital": null,
+      "population": 33430
+    },
+    {
+      "name": "Orangeville",
+      "region": "ON",
+      "x": 642.4,
+      "y": 672.45,
+      "rank": 7,
+      "capital": null,
+      "population": 32640
+    },
+    {
+      "name": "Saint-Georges",
+      "region": "QC",
+      "x": 742.99,
+      "y": 597.11,
+      "rank": 7,
+      "capital": null,
+      "population": 26149
+    },
+    {
+      "name": "Edmundston",
+      "region": "NB",
+      "x": 759.92,
+      "y": 565.04,
+      "rank": 7,
+      "capital": null,
+      "population": 17894
+    },
+    {
+      "name": "Pembroke",
+      "region": "QC",
+      "x": 669.37,
+      "y": 628.84,
+      "rank": 7,
+      "capital": null,
+      "population": 15551
+    },
+    {
+      "name": "Yorkton",
+      "region": "SK",
+      "x": 366.97,
+      "y": 565.03,
+      "rank": 7,
+      "capital": null,
+      "population": 15172
+    },
+    {
+      "name": "Swift Current",
+      "region": "SK",
+      "x": 306.49,
+      "y": 572.81,
+      "rank": 7,
+      "capital": null,
+      "population": 14906
+    },
+    {
+      "name": "Brooks",
+      "region": "AB",
+      "x": 262.46,
+      "y": 557.99,
+      "rank": 7,
+      "capital": null,
+      "population": 14163
+    },
+    {
+      "name": "Quesnel",
+      "region": "BC",
+      "x": 168.26,
+      "y": 480.89,
+      "rank": 7,
+      "capital": null,
+      "population": 13788
+    },
+    {
+      "name": "Powell River",
+      "region": "BC",
+      "x": 125.09,
+      "y": 520.65,
+      "rank": 7,
+      "capital": null,
+      "population": 12779
+    },
+    {
+      "name": "Nelson",
+      "region": "BC",
+      "x": 198.81,
+      "y": 558.7,
+      "rank": 7,
+      "capital": null,
+      "population": 11779
+    },
+    {
+      "name": "Mont-Laurier",
+      "region": "QC",
+      "x": 684.58,
+      "y": 610.86,
+      "rank": 7,
+      "capital": null,
+      "population": 11642
+    },
+    {
+      "name": "Dawson Creek",
+      "region": "BC",
+      "x": 207.92,
+      "y": 445.26,
+      "rank": 7,
+      "capital": null,
+      "population": 10802
+    },
+    {
+      "name": "Steinbach",
+      "region": "MB",
+      "x": 429.9,
+      "y": 598.41,
+      "rank": 7,
+      "capital": null,
+      "population": 9729
+    },
+    {
+      "name": "Revelstoke",
+      "region": "BC",
+      "x": 198.21,
+      "y": 530.23,
+      "rank": 7,
+      "capital": null,
+      "population": 7668
+    },
+    {
+      "name": "Parry Sound",
+      "region": "ON",
+      "x": 636.71,
+      "y": 647.62,
+      "rank": 7,
+      "capital": null,
+      "population": 7105
+    },
+    {
+      "name": "Stephenville",
+      "region": "NL",
+      "x": 850.68,
+      "y": 490.36,
+      "rank": 7,
+      "capital": null,
+      "population": 7054
+    },
+    {
+      "name": "Antigonish",
+      "region": "NS",
+      "x": 843.19,
+      "y": 556.45,
+      "rank": 7,
+      "capital": null,
+      "population": 6739
+    },
+    {
+      "name": "Meadow Lake",
+      "region": "SK",
+      "x": 312.16,
+      "y": 505.58,
+      "rank": 7,
+      "capital": null,
+      "population": 5882
+    },
+    {
+      "name": "Hearst",
+      "region": "ON",
+      "x": 577.15,
+      "y": 581.67,
+      "rank": 7,
+      "capital": null,
+      "population": 5043
+    },
+    {
+      "name": "Marathon",
+      "region": "ON",
+      "x": 549.41,
+      "y": 603.5,
+      "rank": 7,
+      "capital": null,
+      "population": 4627
+    },
+    {
+      "name": "Sioux Lookout",
+      "region": "ON",
+      "x": 483.5,
+      "y": 583.88,
+      "rank": 7,
+      "capital": null,
+      "population": 4570
+    },
+    {
+      "name": "Cochrane",
+      "region": "ON",
+      "x": 609.21,
+      "y": 586.09,
+      "rank": 7,
+      "capital": null,
+      "population": 4441
+    },
+    {
+      "name": "Kindersley",
+      "region": "SK",
+      "x": 295.7,
+      "y": 549.54,
+      "rank": 7,
+      "capital": null,
+      "population": 4383
+    },
+    {
+      "name": "Channel-Port aux Basques",
+      "region": "NL",
+      "x": 854.52,
+      "y": 508.69,
+      "rank": 7,
+      "capital": null,
+      "population": 4220
+    },
+    {
+      "name": "Digby",
+      "region": "NS",
+      "x": 810.24,
+      "y": 595.23,
+      "rank": 7,
+      "capital": null,
+      "population": 3949
+    },
+    {
+      "name": "Windsor",
+      "region": "NS",
+      "x": 825.58,
+      "y": 579.8,
+      "rank": 7,
+      "capital": null,
+      "population": 3864
+    },
+    {
+      "name": "Deer Lake",
+      "region": "ON",
+      "x": 458.15,
+      "y": 543.88,
+      "rank": 7,
+      "capital": null,
+      "population": 3743
+    },
+    {
+      "name": "Atikokan",
+      "region": "ON",
+      "x": 488.69,
+      "y": 610.21,
+      "rank": 7,
+      "capital": null,
+      "population": 3625
+    },
+    {
+      "name": "Fort Chipewyan",
+      "region": "AB",
+      "x": 303.89,
+      "y": 422.76,
+      "rank": 7,
+      "capital": null,
+      "population": 3222
+    },
+    {
+      "name": "Shelburne",
+      "region": "NS",
+      "x": 822.41,
+      "y": 606.31,
+      "rank": 7,
+      "capital": null,
+      "population": 3167
+    },
+    {
+      "name": "Lillooet",
+      "region": "BC",
+      "x": 157.62,
+      "y": 520.07,
+      "rank": 7,
+      "capital": null,
+      "population": 2893
+    },
+    {
+      "name": "Chapleau",
+      "region": "ON",
+      "x": 586.61,
+      "y": 613.39,
+      "rank": 7,
+      "capital": null,
+      "population": 2663
+    },
+    {
+      "name": "Mistissini",
+      "region": "QC",
+      "x": 680.18,
+      "y": 540.03,
+      "rank": 7,
+      "capital": null,
+      "population": 2645
+    },
+    {
+      "name": "Burns Lake",
+      "region": "BC",
+      "x": 146.85,
+      "y": 447.06,
+      "rank": 7,
+      "capital": null,
+      "population": 2635
+    },
+    {
+      "name": "Athabasca",
+      "region": "AB",
+      "x": 267.14,
+      "y": 484.43,
+      "rank": 7,
+      "capital": null,
+      "population": 2539
+    },
+    {
+      "name": "Nelson House",
+      "region": "MB",
+      "x": 410.05,
+      "y": 488.37,
+      "rank": 7,
+      "capital": null,
+      "population": 2500
+    },
+    {
+      "name": "Port Hardy",
+      "region": "BC",
+      "x": 102.29,
+      "y": 492.59,
+      "rank": 7,
+      "capital": null,
+      "population": 2295
+    },
+    {
+      "name": "Biggar",
+      "region": "SK",
+      "x": 309.89,
+      "y": 541.99,
+      "rank": 7,
+      "capital": null,
+      "population": 2192
+    },
+    {
+      "name": "Wiarton",
+      "region": "ON",
+      "x": 625.75,
+      "y": 661.42,
+      "rank": 7,
+      "capital": null,
+      "population": 2182
+    },
+    {
+      "name": "Wawa",
+      "region": "ON",
+      "x": 569.92,
+      "y": 613.54,
+      "rank": 7,
+      "capital": null,
+      "population": 2174
+    },
+    {
+      "name": "Hudson Bay",
+      "region": "SK",
+      "x": 370.73,
+      "y": 536.76,
+      "rank": 7,
+      "capital": null,
+      "population": 2157
+    },
+    {
+      "name": "Matagami",
+      "region": "QC",
+      "x": 643.52,
+      "y": 564.43,
+      "rank": 7,
+      "capital": null,
+      "population": 1966
+    },
+    {
+      "name": "Red Lake",
+      "region": "ON",
+      "x": 461.56,
+      "y": 571.43,
+      "rank": 7,
+      "capital": null,
+      "population": 1765
+    },
+    {
+      "name": "Northeastern Manitoulin and the Islands",
+      "region": "ON",
+      "x": 610.96,
+      "y": 642.16,
+      "rank": 7,
+      "capital": null,
+      "population": 1595
+    },
+    {
+      "name": "Baker Lake",
+      "region": "NU",
+      "x": 437.59,
+      "y": 342.89,
+      "rank": 7,
+      "capital": null,
+      "population": 1584
+    },
+    {
+      "name": "Bella Bella",
+      "region": "BC",
+      "x": 108.38,
+      "y": 467.4,
+      "rank": 7,
+      "capital": null,
+      "population": 1400
+    },
+    {
+      "name": "Cobalt",
+      "region": "ON",
+      "x": 631.7,
+      "y": 611.15,
+      "rank": 7,
+      "capital": null,
+      "population": 1372
+    },
+    {
+      "name": "Lake Louise",
+      "region": "AB",
+      "x": 221.4,
+      "y": 530.23,
+      "rank": 7,
+      "capital": null,
+      "population": 1248
+    },
+    {
+      "name": "Nipigon",
+      "region": "ON",
+      "x": 527.13,
+      "y": 601.81,
+      "rank": 7,
+      "capital": null,
+      "population": 1204
+    },
+    {
+      "name": "Fort McPherson",
+      "region": "NT",
+      "x": 198.31,
+      "y": 213.02,
+      "rank": 7,
+      "capital": null,
+      "population": 1069
+    },
+    {
+      "name": "Argentia",
+      "region": "NL",
+      "x": 907.68,
+      "y": 476.55,
+      "rank": 7,
+      "capital": null,
+      "population": 1063
+    },
+    {
+      "name": "Norman Wells",
+      "region": "NT",
+      "x": 225.68,
+      "y": 273.91,
+      "rank": 7,
+      "capital": null,
+      "population": 1027
+    },
+    {
+      "name": "Shamattawa",
+      "region": "MB",
+      "x": 475.65,
+      "y": 486.96,
+      "rank": 7,
+      "capital": null,
+      "population": 870
+    },
+    {
+      "name": "Coral Harbour",
+      "region": "NU",
+      "x": 532.64,
+      "y": 336.08,
+      "rank": 7,
+      "capital": null,
+      "population": 834
+    },
+    {
+      "name": "Buchans",
+      "region": "NL",
+      "x": 864.35,
+      "y": 475.26,
+      "rank": 7,
+      "capital": null,
+      "population": 685
+    },
+    {
+      "name": "Kangirsuk",
+      "region": "QC",
+      "x": 654.24,
+      "y": 371.45,
+      "rank": 7,
+      "capital": null,
+      "population": 549
+    },
+    {
+      "name": "Sandspit",
+      "region": "BC",
+      "x": 84.31,
+      "y": 431.08,
+      "rank": 7,
+      "capital": null,
+      "population": 538
+    },
+    {
+      "name": "Trout River",
+      "region": "NL",
+      "x": 845.81,
+      "y": 473.79,
+      "rank": 7,
+      "capital": null,
+      "population": 452
+    },
+    {
+      "name": "Forteau",
+      "region": "NL",
+      "x": 836.92,
+      "y": 438.01,
+      "rank": 7,
+      "capital": null,
+      "population": 448
+    },
+    {
+      "name": "Trepassey",
+      "region": "NL",
+      "x": 919.84,
+      "y": 479.75,
+      "rank": 7,
+      "capital": null,
+      "population": 398
+    },
+    {
+      "name": "Dease Lake",
+      "region": "BC",
+      "x": 146.16,
+      "y": 363.44,
+      "rank": 7,
+      "capital": null,
+      "population": 303
+    },
+    {
+      "name": "Chevery",
+      "region": "QC",
+      "x": 822.07,
+      "y": 468.47,
+      "rank": 7,
+      "capital": null,
+      "population": 284
+    },
+    {
+      "name": "Cat Lake",
+      "region": "ON",
+      "x": 483.13,
+      "y": 558.39,
+      "rank": 7,
+      "capital": null,
+      "population": 277
+    },
+    {
+      "name": "Radisson",
+      "region": "QC",
+      "x": 623.63,
+      "y": 496.85,
+      "rank": 7,
+      "capital": null,
+      "population": 270
+    },
+    {
+      "name": "St. Anthony",
+      "region": "NL",
+      "x": 849.54,
+      "y": 430.35,
+      "rank": 7,
+      "capital": null,
+      "population": 224
+    },
+    {
+      "name": "Oxford House",
+      "region": "MB",
+      "x": 445,
+      "y": 503.64,
+      "rank": 7,
+      "capital": null,
+      "population": 184
+    },
+    {
+      "name": "Churchill Falls",
+      "region": "NL",
+      "x": 754.55,
+      "y": 446.9,
+      "rank": 7,
+      "capital": null,
+      "population": 100
+    },
+    {
+      "name": "Burwash Landing",
+      "region": "YT",
+      "x": 111.06,
+      "y": 278.81,
+      "rank": 7,
+      "capital": null,
+      "population": 73
+    },
+    {
+      "name": "Oshawa",
+      "region": "ON",
+      "x": 658.07,
+      "y": 668.97,
+      "rank": 8,
+      "capital": null,
+      "population": 450963
+    },
+    {
+      "name": "Kitchener",
+      "region": "ON",
+      "x": 639.19,
+      "y": 681.96,
+      "rank": 8,
+      "capital": null,
+      "population": 417001
+    },
+    {
+      "name": "London",
+      "region": "ON",
+      "x": 631.62,
+      "y": 692.74,
+      "rank": 8,
+      "capital": null,
+      "population": 346765
+    },
+    {
+      "name": "Sarnia",
+      "region": "ON",
+      "x": 616.75,
+      "y": 696.17,
+      "rank": 8,
+      "capital": null,
+      "population": 144172
+    },
+    {
+      "name": "Sherbrooke",
+      "region": "QC",
+      "x": 733.6,
+      "y": 614.8,
+      "rank": 8,
+      "capital": null,
+      "population": 139652
+    },
+    {
+      "name": "Peterborough",
+      "region": "ON",
+      "x": 662.47,
+      "y": 659.88,
+      "rank": 8,
+      "capital": null,
+      "population": 83627
+    },
+    {
+      "name": "Saint-Jérôme",
+      "region": "QC",
+      "x": 706.68,
+      "y": 617.99,
+      "rank": 8,
+      "capital": null,
+      "population": 78439
+    },
+    {
+      "name": "Drummondville",
+      "region": "QC",
+      "x": 723.65,
+      "y": 609.42,
+      "rank": 8,
+      "capital": null,
+      "population": 59489
+    },
+    {
+      "name": "Chilliwack",
+      "region": "BC",
+      "x": 146.87,
+      "y": 544.47,
+      "rank": 8,
+      "capital": null,
+      "population": 51942
+    },
+    {
+      "name": "Joliette",
+      "region": "QC",
+      "x": 711.67,
+      "y": 611.1,
+      "rank": 8,
+      "capital": null,
+      "population": 45361
+    },
+    {
+      "name": "Belleville",
+      "region": "ON",
+      "x": 674.91,
+      "y": 658.73,
+      "rank": 8,
+      "capital": null,
+      "population": 43990
+    },
+    {
+      "name": "Orillia",
+      "region": "ON",
+      "x": 647.62,
+      "y": 658.38,
+      "rank": 8,
+      "capital": null,
+      "population": 37483
+    },
+    {
+      "name": "Brockville",
+      "region": "ON",
+      "x": 693.32,
+      "y": 644.94,
+      "rank": 8,
+      "capital": null,
+      "population": 26458
+    },
+    {
+      "name": "Rouyn-Noranda",
+      "region": "QC",
+      "x": 635.2,
+      "y": 594.32,
+      "rank": 8,
+      "capital": null,
+      "population": 24602
+    },
+    {
+      "name": "Owen Sound",
+      "region": "ON",
+      "x": 628.8,
+      "y": 663.8,
+      "rank": 8,
+      "capital": null,
+      "population": 22625
+    },
+    {
+      "name": "New Glasgow",
+      "region": "NS",
+      "x": 836.72,
+      "y": 561.14,
+      "rank": 8,
+      "capital": null,
+      "population": 20322
+    },
+    {
+      "name": "Terrace",
+      "region": "BC",
+      "x": 124.06,
+      "y": 429.35,
+      "rank": 8,
+      "capital": null,
+      "population": 19443
+    },
+    {
+      "name": "Cranbrook",
+      "region": "BC",
+      "x": 215.44,
+      "y": 563.65,
+      "rank": 8,
+      "capital": null,
+      "population": 18610
+    },
+    {
+      "name": "Rivière-du-Loup",
+      "region": "QC",
+      "x": 743.53,
+      "y": 563.64,
+      "rank": 8,
+      "capital": null,
+      "population": 16403
+    },
+    {
+      "name": "Camrose",
+      "region": "AB",
+      "x": 263.76,
+      "y": 514.1,
+      "rank": 8,
+      "capital": null,
+      "population": 15808
+    },
+    {
+      "name": "Wetaskiwin",
+      "region": "AB",
+      "x": 257.81,
+      "y": 513.37,
+      "rank": 8,
+      "capital": null,
+      "population": 11823
+    },
+    {
+      "name": "Amos",
+      "region": "QC",
+      "x": 644.04,
+      "y": 586.02,
+      "rank": 8,
+      "capital": null,
+      "population": 10516
+    },
+    {
+      "name": "Baie-Comeau",
+      "region": "QC",
+      "x": 748.01,
+      "y": 534.63,
+      "rank": 8,
+      "capital": null,
+      "population": 10435
+    },
+    {
+      "name": "Hinton",
+      "region": "AB",
+      "x": 218.36,
+      "y": 492.99,
+      "rank": 8,
+      "capital": null,
+      "population": 10265
+    },
+    {
+      "name": "Selkirk",
+      "region": "MB",
+      "x": 427.77,
+      "y": 587.26,
+      "rank": 8,
+      "capital": null,
+      "population": 9986
+    },
+    {
+      "name": "Weyburn",
+      "region": "SK",
+      "x": 348.55,
+      "y": 590.32,
+      "rank": 8,
+      "capital": null,
+      "population": 9362
+    },
+    {
+      "name": "Amherst",
+      "region": "NS",
+      "x": 817.44,
+      "y": 567.19,
+      "rank": 8,
+      "capital": null,
+      "population": 9336
+    },
+    {
+      "name": "Kapuskasing",
+      "region": "ON",
+      "x": 591.95,
+      "y": 583.71,
+      "rank": 8,
+      "capital": null,
+      "population": 9240
+    },
+    {
+      "name": "Happy Valley-Goose Bay",
+      "region": "NL",
+      "x": 789.38,
+      "y": 430.94,
+      "rank": 8,
+      "capital": null,
+      "population": 7572
+    },
+    {
+      "name": "La Sarre",
+      "region": "QC",
+      "x": 630.77,
+      "y": 585.45,
+      "rank": 8,
+      "capital": null,
+      "population": 7206
+    },
+    {
+      "name": "Vegreville",
+      "region": "AB",
+      "x": 273.62,
+      "y": 508.02,
+      "rank": 8,
+      "capital": null,
+      "population": 5813
+    },
+    {
+      "name": "Stettler",
+      "region": "AB",
+      "x": 262.02,
+      "y": 525.97,
+      "rank": 8,
+      "capital": null,
+      "population": 5494
+    },
+    {
+      "name": "Temiskaming Shores",
+      "region": "ON",
+      "x": 631.37,
+      "y": 609.1,
+      "rank": 8,
+      "capital": null,
+      "population": 5203
+    },
+    {
+      "name": "Creston",
+      "region": "BC",
+      "x": 204.97,
+      "y": 567.94,
+      "rank": 8,
+      "capital": null,
+      "population": 4816
+    },
+    {
+      "name": "Liverpool",
+      "region": "NS",
+      "x": 826.98,
+      "y": 598.29,
+      "rank": 8,
+      "capital": null,
+      "population": 4331
+    },
+    {
+      "name": "Melville",
+      "region": "SK",
+      "x": 362.8,
+      "y": 569.58,
+      "rank": 8,
+      "capital": null,
+      "population": 4279
+    },
+    {
+      "name": "Deer Lake",
+      "region": "NL",
+      "x": 855.42,
+      "y": 473.81,
+      "rank": 8,
+      "capital": null,
+      "population": 4163
+    },
+    {
+      "name": "Saint-Augustin",
+      "region": "QC",
+      "x": 823.68,
+      "y": 451.49,
+      "rank": 8,
+      "capital": null,
+      "population": 3961
+    },
+    {
+      "name": "Hay River",
+      "region": "NT",
+      "x": 275.09,
+      "y": 377.31,
+      "rank": 8,
+      "capital": null,
+      "population": 3900
+    },
+    {
+      "name": "La Ronge",
+      "region": "SK",
+      "x": 345.99,
+      "y": 494.38,
+      "rank": 8,
+      "capital": null,
+      "population": 3783
+    },
+    {
+      "name": "Lac La Biche",
+      "region": "AB",
+      "x": 279.95,
+      "y": 486.87,
+      "rank": 8,
+      "capital": null,
+      "population": 2986
+    },
+    {
+      "name": "Gimli",
+      "region": "MB",
+      "x": 426.59,
+      "y": 578.76,
+      "rank": 8,
+      "capital": null,
+      "population": 2623
+    },
+    {
+      "name": "Tofino",
+      "region": "BC",
+      "x": 105.52,
+      "y": 526.39,
+      "rank": 8,
+      "capital": null,
+      "population": 1655
+    },
+    {
+      "name": "Cap-Chat",
+      "region": "QC",
+      "x": 764.26,
+      "y": 529.19,
+      "rank": 8,
+      "capital": null,
+      "population": 1484
+    },
+    {
+      "name": "Thessalon",
+      "region": "ON",
+      "x": 590.33,
+      "y": 641.36,
+      "rank": 8,
+      "capital": null,
+      "population": 1464
+    },
+    {
+      "name": "Greenstone",
+      "region": "ON",
+      "x": 540.36,
+      "y": 587.52,
+      "rank": 8,
+      "capital": null,
+      "population": 1290
+    },
+    {
+      "name": "Berens River",
+      "region": "MB",
+      "x": 426.71,
+      "y": 548.46,
+      "rank": 8,
+      "capital": null,
+      "population": 892
+    },
+    {
+      "name": "Baddeck",
+      "region": "NS",
+      "x": 852.06,
+      "y": 541.19,
+      "rank": 8,
+      "capital": null,
+      "population": 852
+    },
+    {
+      "name": "La Scie",
+      "region": "NL",
+      "x": 864.43,
+      "y": 450.22,
+      "rank": 8,
+      "capital": null,
+      "population": 817
+    },
+    {
+      "name": "Natashquan",
+      "region": "QC",
+      "x": 803.8,
+      "y": 485.78,
+      "rank": 8,
+      "capital": null,
+      "population": 722
+    },
+    {
+      "name": "Sanirajak",
+      "region": "NU",
+      "x": 528.61,
+      "y": 256.12,
+      "rank": 8,
+      "capital": null,
+      "population": 654
+    },
+    {
+      "name": "Délı̨nę",
+      "region": "NT",
+      "x": 246.98,
+      "y": 286.32,
+      "rank": 8,
+      "capital": null,
+      "population": 525
+    },
+    {
+      "name": "Schefferville",
+      "region": "QC",
+      "x": 718.81,
+      "y": 440.65,
+      "rank": 8,
+      "capital": null,
+      "population": 471
+    },
+    {
+      "name": "Hopedale",
+      "region": "NL",
+      "x": 770.24,
+      "y": 398.96,
+      "rank": 8,
+      "capital": null,
+      "population": 442
+    },
+    {
+      "name": "Pukatawagan",
+      "region": "MB",
+      "x": 386.07,
+      "y": 487.99,
+      "rank": 8,
+      "capital": null,
+      "population": 431
+    },
+    {
+      "name": "Eastmain",
+      "region": "QC",
+      "x": 622.08,
+      "y": 525.38,
+      "rank": 8,
+      "capital": null,
+      "population": 335
+    },
+    {
+      "name": "Paulatuk",
+      "region": "NT",
+      "x": 273.92,
+      "y": 219.52,
+      "rank": 8,
+      "capital": null,
+      "population": 294
+    },
+    {
+      "name": "Port-Menier",
+      "region": "QC",
+      "x": 782.11,
+      "y": 505.58,
+      "rank": 8,
+      "capital": null,
+      "population": 263
+    },
+    {
+      "name": "Meander River",
+      "region": "AB",
+      "x": 249.9,
+      "y": 401.02,
+      "rank": 8,
+      "capital": null,
+      "population": 200
+    },
+    {
+      "name": "Port Hope Simpson",
+      "region": "NL",
+      "x": 831.64,
+      "y": 418.56,
+      "rank": 8,
+      "capital": null,
+      "population": 197
+    },
+    {
+      "name": "Tsiigehtchic",
+      "region": "NT",
+      "x": 203.93,
+      "y": 218.1,
+      "rank": 8,
+      "capital": null,
+      "population": 175
+    },
+    {
+      "name": "Stony Rapids",
+      "region": "SK",
+      "x": 351.83,
+      "y": 422.69,
+      "rank": 8,
+      "capital": null,
+      "population": 152
+    },
+    {
+      "name": "Salluit",
+      "region": "QC",
+      "x": 597.35,
+      "y": 353.64,
+      "rank": 8,
+      "capital": null,
+      "population": 106
+    },
+    {
+      "name": "Łutselk'e",
+      "region": "NT",
+      "x": 321.99,
+      "y": 362.2,
+      "rank": 8,
+      "capital": null,
+      "population": 102
+    },
+    {
+      "name": "Big Beaver House",
+      "region": "ON",
+      "x": 501.73,
+      "y": 535.31,
+      "rank": 8,
+      "capital": null,
+      "population": 10
+    },
+    {
+      "name": "Island Lake",
+      "region": "MB",
+      "x": 450.3,
+      "y": 520.61,
+      "rank": 8,
+      "capital": null,
+      "population": 10
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import {
   geoAlbers,
   geoConicConformal,
@@ -56,7 +57,15 @@ function neighboursBySharedPoints(features) {
   );
 }
 
-const COUNTRY_CONFIGS = [
+/*
+ * Exported so the city builder projects onto the very same canvas.
+ *
+ * A city is a point and a division is a polygon, but they only line up if both
+ * go through one projection fitted to one set of features. Copying the
+ * projection into the second script would put two builders in charge of where
+ * Toronto sits, and they would drift the way the two Canada builders did.
+ */
+export const COUNTRY_CONFIGS = [
   // Existing baseline
   {
     code: "CA",
@@ -471,37 +480,38 @@ async function loadDataset() {
   }
 }
 
-async function buildCountry(config, rawFeatures) {
-  const matching = rawFeatures.filter(config.filter);
-  if (matching.length === 0) {
-    throw new Error(`No matching features found for ${config.code}`);
-  }
+/** The one projection a country is drawn through, boundaries and cities alike. */
+export function projectionFor(config, features) {
+  return config.projection().fitSize([config.width, config.height], {
+    type: "FeatureCollection",
+    features,
+  });
+}
 
-  // Assign normalized unique codes
+/** The codes assigned to a country's divisions, in the builder's own order. */
+export function withRegionCodes(config, rawFeatures) {
+  const matching = rawFeatures.filter(config.filter);
   const codeCounts = new Map();
-  const featuresWithCodes = matching.map((f) => {
+  return matching.map((f) => {
     let code = config.codeFn(f);
     if (!code) {
       code = (f.properties.name_en || f.properties.name || "REG").slice(0, 3).toUpperCase();
     }
     const seen = codeCounts.get(code) || 0;
     codeCounts.set(code, seen + 1);
-    if (seen > 0) {
-      code = `${code}_${seen + 1}`;
-    }
-    return {
-      ...f,
-      properties: {
-        ...f.properties,
-        __code: code,
-      },
-    };
+    if (seen > 0) code = `${code}_${seen + 1}`;
+    return { ...f, properties: { ...f.properties, __code: code } };
   });
+}
 
-  const proj = config.projection().fitSize([config.width, config.height], {
-    type: "FeatureCollection",
-    features: featuresWithCodes,
-  });
+async function buildCountry(config, rawFeatures) {
+  const matching = rawFeatures.filter(config.filter);
+  if (matching.length === 0) {
+    throw new Error(`No matching features found for ${config.code}`);
+  }
+
+  const featuresWithCodes = withRegionCodes(config, rawFeatures);
+  const proj = projectionFor(config, featuresWithCodes);
   const draw = geoPath(proj);
   const adjacency = neighboursBySharedPoints(featuresWithCodes);
 
@@ -616,7 +626,12 @@ async function main() {
   console.log(`All ${COUNTRY_CONFIGS.length} country datasets generated successfully!`);
 }
 
-main().catch((err) => {
-  console.error("Build failed:", err);
-  process.exitCode = 1;
-});
+/* Imported by the city builder for its configs; only run when invoked directly. */
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  main().catch((err) => {
+    console.error("Build failed:", err);
+    process.exitCode = 1;
+  });
+}
+
+export { loadDataset };

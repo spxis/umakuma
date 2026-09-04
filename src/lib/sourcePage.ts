@@ -12,6 +12,7 @@ import { getKanjiDictionarySummary } from "@/lib/kanjiDictionary";
 import { prisma } from "@/lib/prisma";
 import { radicalIndexSummary } from "@/lib/radicalSearchServer";
 import { getSchoolGradeIndex } from "@/lib/schoolGrades";
+import { citysetFor } from "@/lib/geoCities";
 import {
   NATURAL_EARTH_TOTAL_BORDERS,
   NATURAL_EARTH_TOTAL_COUNTRIES,
@@ -54,6 +55,7 @@ const REPORT_COPY = {
   regionsDrawn: "Regions drawn",
   borders: "Bordering pairs",
   countriesMapped: "Countries mapped",
+  citiesPlaced: "Cities placed",
   wordsWithBand: "Words with a frequency band",
   wordsRanked: "Words ranked",
   mediaCorpora: "Media corpora",
@@ -277,6 +279,8 @@ function naturalEarth(key: SourceKey): SourceReport {
       { label: REPORT_COPY.regionsDrawn, value: NATURAL_EARTH_TOTAL_REGIONS },
       { label: REPORT_COPY.countriesMapped, value: NATURAL_EARTH_TOTAL_COUNTRIES },
       { label: REPORT_COPY.borders, value: NATURAL_EARTH_TOTAL_BORDERS },
+      /* The city layer is Populated Places, the same provider's other dataset. */
+      { label: REPORT_COPY.citiesPlaced, value: citysetFor("CA")?.totalCities ?? 0 },
     ],
     lastImportedAt: imported.at(-1) ?? null,
     version: null,

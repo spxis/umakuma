@@ -6,7 +6,10 @@ import { SOURCE_CREDITS, SOURCE_CREDIT_COPY, sourcePath } from "@/lib/sourceCred
 import { GEO_INSETS, applyInsetTransform, insetTransform, insetTransformAttribute } from "@/lib/geoMapInsets";
 import { geoBoxIsWholeCountry, geoFocusBox } from "@/lib/geoMapFraming";
 import { mapBoxToViewBox, type MapBox } from "@/lib/geoMapFraming";
+import type { MapCity } from "@/lib/geoCities";
 import { placeMapHandles } from "@/lib/mapHandles";
+
+import MapCityLayer from "./MapCityLayer";
 import { MAP_TONE_CLASS, MAP_TONES } from "./GameMode.constants";
 import type { MapTone } from "./GameMode.types";
 
@@ -53,6 +56,12 @@ type Props = {
    * The study map drags to pan; the game never does.
    */
   svgProps?: React.SVGProps<SVGSVGElement>;
+  /**
+   * Cities to draw over the outlines. The study map passes them when the
+   * reader asks for them; the game never does, because a labelled map answers
+   * the question it is asking.
+   */
+  cities?: MapCity[];
 };
 
 /*
@@ -102,6 +111,7 @@ export default function CountryMap({
   onRegionHover,
   regionLabel,
   svgProps,
+  cities,
 }: Props) {
   const choosable = Boolean(onRegionSelect) && !disabled;
   const dataset = GEO_DATASETS[country];
@@ -217,6 +227,10 @@ export default function CountryMap({
             </path>
           );
         })}
+
+        {/* Zoomed out, only the cities everyone knows are named; zoomed in there
+            is room for the rest, which is how a paper atlas behaves too. */}
+        {cities?.length ? <MapCityLayer cities={cities} stroke={stroke} /> : null}
 
         {/* Tap targets sit above every path so a small region is as easy to hit
             as Hokkaido, which is what keeps the question about knowing the map. */}

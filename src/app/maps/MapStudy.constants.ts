@@ -50,6 +50,31 @@ export const MAP_MARK_COPY = {
   ofTotal: (total: number) => `of ${total}`,
 } as const;
 
+/**
+ * The city overlay, in one map for the locale layer.
+ *
+ * "Cities" is a switch, and the three counts beside it are how many it draws -
+ * the numbers come from the data, so a rebuilt dataset cannot leave the label
+ * claiming a total nobody has.
+ */
+export const MAP_CITY_COPY = {
+  label: "Cities",
+  toggle: "Show cities on the map",
+  densityLabel: "How many cities",
+  density: {
+    capitals: (count: number) => `${count} capitals`,
+    major: (count: number) => `${count} major`,
+    all: (count: number) => `all ${count}`,
+  },
+  /** Under the region panel's heading, when a division is open. */
+  inRegion: (count: number, division: string) =>
+    count === 1 ? `1 city in this ${division}` : `${count} cities in this ${division}`,
+  none: "Natural Earth lists no cities here.",
+  /** Beside a city in the panel list. */
+  capitalOfCountry: "National capital",
+  capitalOfRegion: "Capital",
+} as const;
+
 /** The shape drawn on its own at the top of the panel. */
 /** Copy for the directory the panel shows while nothing is chosen. */
 export const MAP_DIRECTORY_COPY = {
