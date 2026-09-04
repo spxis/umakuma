@@ -4916,11 +4916,23 @@
     "id": "uk-study-routes",
     "name": "UK study routes",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "UK study routes",
+    "dateIsEstimate": false,
+    "version": "0.431.0",
+    "releasedAt": "2026-09-04T16:19:17Z"
+  },
+  {
+    "id": "uk-study-session",
+    "name": "A sitting on the UK ladder",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.431.0",
-    "releasedAt": "2026-09-04T16:19:17Z",
-    "summary": "UK study routes"
+    "version": "0.432.0",
+    "releasedAt": "2026-09-04T16:19:27Z",
+    "summary": "A sitting on the UK ladder"
   }
 ]
