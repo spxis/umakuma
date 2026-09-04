@@ -474,6 +474,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "nobori", ja: "登り", reading: "のぼり", gloss: "the climb" },
   { romaji: "hashigo", ja: "梯子", reading: "はしご", gloss: "the ladder" },
   { romaji: "Hitonigiri", ja: "一握り", reading: "ひとにぎり", gloss: "a handful to play among the thirty you may read" },
+  { romaji: "Fuzoku", ja: "付属", reading: "ふぞく", gloss: "every kanji belonging to the word, the word's own included" },
 ];
 
 /**

@@ -4820,11 +4820,23 @@
     "id": "map-playable-three",
     "name": "Three countries playable, thirty readable",
     "area": "games",
+    "status": "shipped",
     "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "John: playable countries stay Japan, the United States and Canada. The runs route validated mapCountry against 'is this a country', which after opening thirty of them would have let a crafted request start a run on France with no subject ids behind it; it asks isPlayableMapCountry now. Thailand, China, Australia and Taiwan lose adminOnly at the same time - they are the same generated Natural Earth data as the other twenty-five now open, so hiding four of thirty had stopped meaning anything. Requested 2026-09-04 by John.",
+    "dateIsEstimate": false,
+    "version": "0.423.0",
+    "releasedAt": "2026-09-04T15:06:51Z"
+  },
+  {
+    "id": "word-every-kanji",
+    "name": "Used in words leaves out the kanji you are reading",
+    "area": "study",
+    "kind": "bug",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.423.0",
-    "releasedAt": "2026-09-04T15:06:51Z",
-    "summary": "John: playable countries stay Japan, the United States and Canada. The runs route validated mapCountry against 'is this a country', which after opening thirty of them would have let a crafted request start a run on France with no subject ids behind it; it asks isPlayableMapCountry now. Thailand, China, Australia and Taiwan lose adminOnly at the same time - they are the same generated Natural Earth data as the other twenty-five now open, so hiding four of thirty had stopped meaning anything. Requested 2026-09-04 by John."
+    "version": "0.424.0",
+    "releasedAt": "2026-09-04T15:07:54Z",
+    "summary": "The kanji whose page you are on was dropped from each word's chips, so growth business drew three chips under a four-character word and a reader counting them finds the maths wrong. It is drawn now, ringed as the one you are on, with no href - it still leads nowhere and says so. Reported 2026-09-04 by John."
   }
 ]
