@@ -67,6 +67,29 @@ export function kanjiPlacement(kanji: string): KanjiLadderPlacement | null {
   return ladder.kanjiLevel[kanji] ?? null;
 }
 
+/**
+ * The level a classical radical with no kanji is offered at.
+ *
+ * Twelve of RADKFILE's 253 appear in no character we teach, so nothing a
+ * member learns depends on them. They are offered one per level across the end
+ * of the ladder rather than dropped, so the set can be completed by anybody who
+ * wants it — 龠 at level 100 is a curiosity, not a requirement.
+ */
+export function optionalRadicalLevel(radical: string): number | null {
+  return (ladder.optionalRadicalLevel as Record<string, number>)[radical] ?? null;
+}
+
+/** Every classical radical a level offers, required and optional alike. */
+export function radicalsOfferedAtLevel(level: number): { radical: string; optional: boolean }[] {
+  const required = Object.entries(ladder.radicalLevel)
+    .filter(([, at]) => at === level)
+    .map(([radical]) => ({ radical, optional: false }));
+  const extra = Object.entries(ladder.optionalRadicalLevel as Record<string, number>)
+    .filter(([, at]) => at === level)
+    .map(([radical]) => ({ radical, optional: true }));
+  return [...required, ...extra];
+}
+
 /** The ladder level that introduces a RADKFILE radical. */
 export function radicalLevel(radical: string): number | null {
   return ladder.radicalLevel[radical] ?? null;

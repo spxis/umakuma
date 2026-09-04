@@ -292,6 +292,30 @@ export function placeRadicals(radicals, levelOfKanji, lead = RADICAL_LEAD_LEVELS
   return { level, unused };
 }
 
+/**
+ * The classical radicals no kanji we teach is built from, spread across the end
+ * of the ladder.
+ *
+ * RADKFILE has 253 and only 241 are needed: 无, 曰, 韭, 鬥, 鹵, 黍, 黹, 鼠, 鼎,
+ * 黽, 齊 and 龠 appear in no jōyō character. They were simply dropped, which
+ * left the 253 incomplete for anybody who wanted the whole set, and left forty
+ * later levels teaching no radical at all while the first twenty carried a
+ * dozen each.
+ *
+ * That front-loading cannot be fixed - a radical has to be taught before the
+ * kanji built from it, and `placeRadicals` already puts each one as late as
+ * the lead allows. These twelve are the only ones with no such constraint, so
+ * they go one per level across the end, where there is nothing else to teach.
+ * Optional: a member is not asked to learn a shape no character they know uses.
+ */
+export function placeUnusedRadicals(unused, levelCount) {
+  const level = new Map();
+  const ordered = [...unused].sort();
+  const first = Math.max(1, levelCount - ordered.length + 1);
+  ordered.forEach((radical, index) => level.set(radical, first + index));
+  return level;
+}
+
 /** WaniKani's vocabulary, with the level each word was taught at. */
 async function loadWaniKaniVocabulary() {
   const index = JSON.parse(await fs.readFile(path.join(WK_LEVELS_DIR, "index.json"), "utf8"));
@@ -537,6 +561,8 @@ async function main() {
 
   const levelOfKanji = new Map(levels.flatMap((l) => l.kanji.map((k) => [k, l.level])));
   const { level: radicalLevel, unused } = placeRadicals(radicals, levelOfKanji);
+  /* The twelve nothing needs, one per level across the end of the ladder. */
+  const optionalRadicalLevel = placeUnusedRadicals(unused, LADDER_LEVELS);
   const vocabulary = await loadWaniKaniVocabulary();
   const frequency = JSON.parse(await fs.readFile(WORD_FREQUENCY_PATH, "utf8"));
   const { placed, unplaceable } = placeVocabulary(
@@ -569,6 +595,8 @@ async function main() {
     overrides: { applied: overrides.length, lastOpAt: overrides.at(-1)?.at ?? null },
     milestones,
     radicalLevel: Object.fromEntries(radicalLevel),
+    /* The classical radicals no kanji we teach uses. Offered, not required. */
+    optionalRadicalLevel: Object.fromEntries(optionalRadicalLevel),
     vocabularyLevel: Object.fromEntries(
       placed.flatMap((words, index) => words.map((w) => [w.id, index + 1])),
     ),
@@ -603,7 +631,8 @@ async function main() {
   const vocabSizes = ladder.map((l) => l.vocabulary);
   const radicalSizes = ladder.map((l) => l.radicals);
   const totals = sizes.map((value, index) => value + vocabSizes[index] + radicalSizes[index]);
-  console.log(`  radicals ${radicalLevel.size} of ${radicals.length} placed ${RADICAL_LEAD_LEVELS} levels before their first kanji (RADKFILE); ${unused.length} appear in no kanji we teach`);
+  console.log(`  radicals ${radicalLevel.size} of ${radicals.length} placed ${RADICAL_LEAD_LEVELS} levels before their first kanji (RADKFILE)`);
+  console.log(`  the other ${unused.length} appear in no kanji we teach; offered one per level from ${Math.max(1, LADDER_LEVELS - unused.length + 1)}`);
   console.log(`  vocabulary ${vocabSizes.reduce((a, b) => a + b, 0)} words placed, ${unplaceable.length} unplaceable`);
   for (const entry of unplaceable) console.log(`    skipped ${entry.word} (uses a kanji the ladder never teaches)`);
   console.log(`  subjects per level: ${Math.min(...totals)}-${Math.max(...totals)} (WaniKani averages 156)`);

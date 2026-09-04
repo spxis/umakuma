@@ -48,6 +48,12 @@ export type KanjiLadder = {
   kanjiLevel: Record<string, KanjiLadderPlacement>;
   /** RADKFILE radical character -> the ladder level that introduces it. */
   radicalLevel: Record<string, number>;
+  /**
+   * The classical radicals no kanji we teach is built from — twelve of
+   * RADKFILE's 253. Offered one per level across the end of the ladder so the
+   * set can be completed, never required: nothing a member knows uses them.
+   */
+  optionalRadicalLevel: Record<string, number>;
   /** WaniKani vocabulary subject id -> the ladder level that teaches it. */
   vocabularyLevel: Record<string, number>;
   ladder: KanjiLadderLevel[];

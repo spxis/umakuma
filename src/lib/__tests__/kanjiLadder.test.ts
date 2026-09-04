@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 
+import ladderData from "@/data/kanjiLadder.json";
 import jlptReadings from "@/data/jlptReadings.json";
 import kanjiLevels from "@/data/kanjiLevels.json";
 import {
@@ -13,7 +14,9 @@ import {
   kanjiPlacement,
   kanjiThrough,
   levelForJlpt,
+  optionalRadicalLevel,
   radicalLevel,
+  radicalsOfferedAtLevel,
   radicalsAtLevel,
   vocabularyLevel,
 } from "../kanjiLadder";
@@ -389,5 +392,50 @@ describe("kanji ladder lookups", () => {
     expect(throughTwo.slice(0, throughOne.length)).toEqual(throughOne);
     expect(kanjiThrough(KANJI_LADDER_LEVELS)).toHaveLength(KANJI_LADDER_TOTAL);
     expect(kanjiThrough(0)).toEqual([]);
+  });
+});
+
+/**
+ * RADKFILE has 253 classical radicals and only 241 are needed: 无, 曰, 韭, 鬥,
+ * 鹵, 黍, 黹, 鼠, 鼎, 黽, 齊 and 龠 appear in no jōyō character. Dropping them
+ * left the set incomplete for anybody who wanted all of it, and left forty
+ * later levels teaching no radical while the first twenty carried a dozen each.
+ */
+describe("the radicals nothing needs", () => {
+  it("offers all twelve, one per level, at the end of the ladder", () => {
+    const offered = Object.entries(
+      (ladderData as { optionalRadicalLevel: Record<string, number> }).optionalRadicalLevel,
+    );
+    expect(offered).toHaveLength(12);
+
+    const levels = offered.map(([, level]) => level).sort((left, right) => left - right);
+    /* One each, consecutive, finishing on the last level. */
+    expect(new Set(levels).size).toBe(levels.length);
+    expect(levels[levels.length - 1]).toBe(KANJI_LADDER_LEVELS);
+    expect(levels[0]).toBe(KANJI_LADDER_LEVELS - 11);
+
+    for (const [radical] of offered) {
+      expect(optionalRadicalLevel(radical)).not.toBeNull();
+      /* Offered is not taught: nothing a member learns is built from these. */
+      expect(radicalLevel(radical)).toBeNull();
+    }
+  });
+
+  it("accounts for every one of RADKFILE's radicals", () => {
+    const required = Object.keys((ladderData as { radicalLevel: Record<string, number> }).radicalLevel);
+    const optional = Object.keys(
+      (ladderData as { optionalRadicalLevel: Record<string, number> }).optionalRadicalLevel,
+    );
+    const all = JSON.parse(
+      readFileSync(join(process.cwd(), "src/data/radicals/index.json"), "utf8"),
+    ) as { radicals: { radical: string }[] };
+    expect(required.length + optional.length).toBe(all.radicals.length);
+    expect(new Set([...required, ...optional]).size).toBe(all.radicals.length);
+  });
+
+  it("marks which is which when a level is asked what it offers", () => {
+    const last = radicalsOfferedAtLevel(KANJI_LADDER_LEVELS);
+    expect(last.some((entry) => entry.radical === "龠" && entry.optional)).toBe(true);
+    expect(radicalsOfferedAtLevel(1).every((entry) => !entry.optional)).toBe(true);
   });
 });
