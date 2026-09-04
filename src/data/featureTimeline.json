@@ -4352,11 +4352,23 @@
     "id": "deploy-audit-retry",
     "name": "The audit times out and takes the deploy with it",
     "area": "platform",
+    "status": "shipped",
     "kind": "bug",
+    "date": "2026-09-03",
+    "summary": "pnpm security:check runs pnpm audit against registry.npmjs.org, and that endpoint socket-timed out three times in a row twice on 2026-09-03/04 - once in a local preflight, once in the CI verify job, which failed the whole deploy while every quality check had passed. A timeout is not a finding; it is no answer. Wrap the step in the same three-attempt retry the upload has, still red after three, and keep the schema drift check single-shot.",
+    "dateIsEstimate": false,
+    "version": "0.384.0",
+    "releasedAt": "2026-09-04T03:59:54Z"
+  },
+  {
+    "id": "parallel-level-ladder",
+    "name": "Parallel level ladder",
+    "area": "jlpt",
+    "kind": "feature",
     "status": "shipped",
     "date": "2026-09-03",
-    "version": "0.384.0",
-    "releasedAt": "2026-09-04T03:59:54Z",
-    "summary": "pnpm security:check runs pnpm audit against registry.npmjs.org, and that endpoint socket-timed out three times in a row twice on 2026-09-03/04 - once in a local preflight, once in the CI verify job, which failed the whole deploy while every quality check had passed. A timeout is not a finding; it is no answer. Wrap the step in the same three-attempt retry the upload has, still red after three, and keep the schema drift check single-shot."
+    "version": "0.385.0",
+    "releasedAt": "2026-09-04T04:03:48Z",
+    "summary": "A WaniKani-parallel progression over roughly 100 levels, covering the kanji WaniKani leaves out."
   }
 ]

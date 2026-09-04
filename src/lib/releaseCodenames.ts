@@ -435,6 +435,7 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Honyaku Nashi Hikaku", ja: "翻訳なし比較", reading: "ほんやくなしひかく", gloss: "two books on one question, side by side" },
   { romaji: "Matomete Narabete", ja: "まとめて並べて", reading: "まとめてならべて", gloss: "the reading and the English together, when you ask for them" },
   { romaji: "Mitabi Kiku", ja: "三度聞く", reading: "みたびきく", gloss: "ask three times before calling silence a no" },
+  { romaji: "Muttsu no Hajimari", ja: "六つの始まり", reading: "むっつのはじまり", gloss: "it begins with six, and climbs from there" },
 ];
 
 /**
