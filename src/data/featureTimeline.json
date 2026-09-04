@@ -4508,11 +4508,23 @@
     "id": "an-admin-console-for-every-source",
     "name": "An admin console for every source",
     "area": "admin",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "The accreditation pages answer 'what do we hold' one source at a time for a reader. The admin had no way to see across all twelve at once: what is loaded, when it last came in, which upstream release it is, and what the remedy is when it is behind. Three sources are tables a request can refill and get a button; the rest are files a script writes and name their command instead, since Vercel's filesystem is read-only.",
+    "dateIsEstimate": false,
+    "version": "0.397.0",
+    "releasedAt": "2026-09-04T08:24:19Z"
+  },
+  {
+    "id": "study-holds-its-records",
+    "name": "History and Stats belong under Study",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.397.0",
-    "releasedAt": "2026-09-04T08:24:19Z",
-    "summary": "The accreditation pages answer 'what do we hold' one source at a time for a reader. The admin had no way to see across all twelve at once: what is loaded, when it last came in, which upstream release it is, and what the remedy is when it is behind. Three sources are tables a request can refill and get a button; the rest are files a script writes and name their command instead, since Vercel's filesystem is read-only."
+    "version": "0.398.0",
+    "releasedAt": "2026-09-04T08:34:22Z",
+    "summary": "History and Stats sit under their own Progress group, but both are your WaniKani progress and belong with the studying that produced them. Move the pages for real - /users/<name>/study/history and /users/<name>/study/stats - and give Study a second row of three: Reviews, History, Stats. Progress goes away as a group. No redirects; update every caller. Requested 2026-09-04 by John."
   }
 ]

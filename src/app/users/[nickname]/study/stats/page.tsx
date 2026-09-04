@@ -4,10 +4,10 @@ import WanikaniRequiredNotice from "@/app/shared/WanikaniRequiredNotice";
 import { PAGE_SHELL_PADDING } from "@/app/shared/pageShell";
 import { MEMBER_CAPABILITIES } from "@/lib/memberCapabilities";
 
-import { DASHBOARD_PAGE_HEADERS } from "../dashboardPageHeaders";
-import { loadLevelProgress } from "../lib/levelProgress";
-import { loadUserPageShell } from "../lib/userPageShell";
-import { CONNECT_COPY } from "../wanikani/connectCopy";
+import { DASHBOARD_PAGE_HEADERS } from "../../dashboardPageHeaders";
+import { loadLevelProgress } from "../../lib/levelProgress";
+import { loadUserPageShell } from "../../lib/userPageShell";
+import { CONNECT_COPY } from "../../wanikani/connectCopy";
 import UserStatsPanels from "./UserStatsPanels";
 
 /**
@@ -58,7 +58,7 @@ export default async function UserStatsPage({
           userKey={shell.userKey}
           secondaryAction={{
             label: CONNECT_COPY.gateHistory,
-            href: `/users/${encodeURIComponent(shell.userKey)}/history`,
+            href: `/users/${encodeURIComponent(shell.userKey)}/study/history`,
           }}
         />
       )}

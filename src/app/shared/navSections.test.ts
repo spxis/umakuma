@@ -17,8 +17,8 @@ describe("the grouped header", () => {
       "library-explorer",
       "jlpt-explorer",
       "grades",
-      "history",
-      "stats",
+      "study/history",
+      "study/stats",
       "read",
       "news",
       "libraries",
@@ -42,7 +42,7 @@ describe("the grouped header", () => {
 
 describe("navChildHref", () => {
   it("scopes a page to the viewer", () => {
-    expect(navChildHref({ label: "History", path: "history" }, USER)).toBe(`/users/${USER}/history`);
+    expect(navChildHref({ label: "History", path: "study/history" }, USER)).toBe(`/users/${USER}/study/history`);
   });
 
   it("leaves an absolute path alone", () => {
@@ -50,7 +50,7 @@ describe("navChildHref", () => {
   });
 
   it("falls back to the leaderboard with no user to scope to", () => {
-    expect(navChildHref({ label: "History", path: "history" }, null)).toBe("/");
+    expect(navChildHref({ label: "History", path: "study/history" }, null)).toBe("/");
   });
 });
 
@@ -62,9 +62,17 @@ describe("sectionForPath", () => {
     expect(ids).toEqual(["explore", "explore", "explore"]);
   });
 
-  it("puts history and stats under progress, not settings", () => {
-    expect(sectionForPath(`/users/${USER}/history`, USER)?.id).toBe("progress");
-    expect(sectionForPath(`/users/${USER}/stats`, USER)?.id).toBe("progress");
+  /*
+   * Both are the account's WaniKani progress, so they belong with the reviews
+   * that produced them rather than in a Progress group of their own.
+   */
+  it("puts history and stats under study", () => {
+    expect(sectionForPath(`/users/${USER}/study/history`, USER)?.id).toBe("study");
+    expect(sectionForPath(`/users/${USER}/study/stats`, USER)?.id).toBe("study");
+  });
+
+  it("keeps the reviews page itself under study", () => {
+    expect(sectionForPath(`/users/${USER}/study`, USER)?.id).toBe("study");
   });
 
   /*
@@ -121,12 +129,18 @@ describe("sectionHasSubNav", () => {
    */
   it("is quiet for a group holding one page", () => {
     expect(sectionHasSubNav(sectionForPath("/", USER))).toBe(false);
-    expect(sectionHasSubNav(sectionForPath(`/users/${USER}/study`, USER))).toBe(false);
+    expect(sectionHasSubNav(sectionForPath(`/users/${USER}/game`, USER))).toBe(false);
   });
 
   it("shows for a group holding several", () => {
     expect(sectionHasSubNav(sectionForPath(`/users/${USER}/grades`, USER))).toBe(true);
     expect(sectionHasSubNav(sectionForPath(`/users/${USER}/news`, USER))).toBe(true);
+  });
+
+  /* Study gained a row when History and Stats joined it. */
+  it("shows for study, which is three pages now", () => {
+    expect(sectionHasSubNav(sectionForPath(`/users/${USER}/study`, USER))).toBe(true);
+    expect(sectionHasSubNav(sectionForPath(`/users/${USER}/study/stats`, USER))).toBe(true);
   });
 
   it("is quiet when there is no section at all", () => {
@@ -162,7 +176,7 @@ describe("visibleNavSections", () => {
   it("keeps everything the app can answer for itself", () => {
     const visible = paths(visibleNavSections(NAV_SECTIONS, UNCONNECTED));
     /* Read is absent on purpose: it is gated on being internal, not on a connection. */
-    for (const open of ["study", "game", "jlpt-explorer", "grades", "practice", "/maps", "lists", "history", "news", "libraries", "wanikani"]) {
+    for (const open of ["study", "game", "jlpt-explorer", "grades", "practice", "/maps", "lists", "study/history", "news", "libraries", "wanikani"]) {
       expect(visible, open).toContain(open);
     }
   });
@@ -178,7 +192,7 @@ describe("visibleNavSections", () => {
    */
   it("still resolves a gated address to its group", () => {
     expect(sectionForPath(`/users/${USER}/library-explorer`, USER)?.id).toBe("explore");
-    expect(sectionForPath(`/users/${USER}/stats`, USER)?.id).toBe("progress");
+    expect(sectionForPath(`/users/${USER}/study/stats`, USER)?.id).toBe("study");
   });
 });
 

@@ -6,8 +6,8 @@ import {
   ItemSpreadTabPanel,
   LevelProgressTabPanel,
   MainTabPanel,
-} from "../UserDashboardTabPanels";
-import type { loadLevelProgress } from "../lib/levelProgress";
+} from "../../UserDashboardTabPanels";
+import type { loadLevelProgress } from "../../lib/levelProgress";
 
 type Progress = Awaited<ReturnType<typeof loadLevelProgress>>;
 

@@ -318,7 +318,7 @@ test("user drilldown tabs load", async ({ browser, baseURL }) => {
 
 test("user history page loads", async ({ browser, baseURL }) => {
   const user = smokeUsers[0] ?? fallbackUsers[0];
-  const url = `${baseURL}/users/${encodeURIComponent(user)}/history`;
+  const url = `${baseURL}/users/${encodeURIComponent(user)}/study/history`;
 
   await assertPageLoads(browser, url, async (page) => {
     if (page.url().includes("/join?access=denied")) {

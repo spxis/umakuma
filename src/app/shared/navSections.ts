@@ -18,7 +18,7 @@ import { DASHBOARD_TAB_LABELS } from "../users/[nickname]/userReadConfig";
  * Grouping rather than hiding: everything reachable before is still one click
  * away, and the second row tells you where you are.
  */
-export type NavSectionId = "study" | "game" | "explore" | "lists" | "progress" | "read" | "settings";
+export type NavSectionId = "study" | "game" | "explore" | "lists" | "read" | "settings";
 
 export type NavChild = {
   label: string;
@@ -66,7 +66,23 @@ export type NavSection = {
  * shows no second row; the sub-nav would just repeat the header.
  */
 export const NAV_SECTIONS: NavSection[] = [
-  { id: "study", label: "Study", placement: "nav", children: [{ label: "Study", path: "study" }] },
+  /*
+   * Reviews, and the two records of them. History and Stats had a group of
+   * their own called Progress, which named the same thing from a distance:
+   * both pages are the account's WaniKani progress, and the studying that
+   * produced them is one click away in a different group. They sit under the
+   * reviews now, and Progress is gone rather than kept as an empty shell.
+   */
+  {
+    id: "study",
+    label: "Study",
+    placement: "nav",
+    children: [
+      { label: "Reviews", path: "study" },
+      { label: "History", path: "study/history" },
+      { label: DASHBOARD_TAB_LABELS.stats, path: "study/stats", requires: MEMBER_CAPABILITIES.wanikaniProgress },
+    ],
+  },
   { id: "game", label: "Game", placement: "nav", children: [{ label: "Game", path: "game" }] },
   {
     id: "explore",
@@ -113,15 +129,6 @@ export const NAV_SECTIONS: NavSection[] = [
       { label: "Auto lists", path: "lists/auto", memberOnly: true },
       { label: "Following", path: "lists/following", memberOnly: true },
       { label: "Archived", path: "lists/archived", memberOnly: true },
-    ],
-  },
-  {
-    id: "progress",
-    label: "Progress",
-    placement: "nav",
-    children: [
-      { label: "History", path: "history" },
-      { label: DASHBOARD_TAB_LABELS.stats, path: "stats", requires: MEMBER_CAPABILITIES.wanikaniProgress },
     ],
   },
   {

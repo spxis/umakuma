@@ -1,4 +1,4 @@
-import { MEMBER_PAGE_HEADERS } from "../dashboardPageHeaders";
+import { MEMBER_PAGE_HEADERS } from "../../dashboardPageHeaders";
 import { HISTORY_PAGE_COPY } from "./historyCopy";
 import MemberPageHeader from "@/app/shared/MemberPageHeader";
 import { notFound, redirect } from "next/navigation";
@@ -9,7 +9,7 @@ import StudyTagListsButton from "@/app/shared/StudyTagListsButton";
 import { authOptions, isAdminEmail } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { accountUrlKeyWhere } from "@/lib/accountLookup";
-import { canViewUserPage, resolveViewerMenuInfo } from "../userPageAuth";
+import { canViewUserPage, resolveViewerMenuInfo } from "../../userPageAuth";
 import HistoryScopedStudyHistoryTable from "./HistoryScopedStudyHistoryTable";
 
 type PageProps = {

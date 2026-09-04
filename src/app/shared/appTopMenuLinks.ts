@@ -8,7 +8,8 @@ export type MainLink = {
 };
 
 function userTabHref(username: string, tab: "learn" | "wk" | "jlpt" | "stats" | "news" | "read"): string {
-  const segment = tab === "learn" ? "study" : tab === "wk" ? "library-explorer" : tab === "jlpt" ? "jlpt-explorer" : tab;
+  const segment =
+    tab === "learn" ? "study" : tab === "wk" ? "library-explorer" : tab === "jlpt" ? "jlpt-explorer" : tab === "stats" ? "study/stats" : tab;
   return `/users/${encodeURIComponent(username)}/${segment}`;
 }
 
@@ -40,7 +41,7 @@ export function buildMainLinks(resolvedWkUsername: string | null): MainLink[] {
       { label: DASHBOARD_TAB_LABELS.wk, href: userTabHref(username, "wk"), dashboard: "wk" },
       { label: DASHBOARD_TAB_LABELS.jlpt, href: userTabHref(username, "jlpt"), dashboard: "jlpt" },
       { label: "Grades", href: `/users/${encodeURIComponent(username)}/grades`, dashboard: null },
-      { label: "History", href: `/users/${encodeURIComponent(username)}/history`, dashboard: null },
+      { label: "History", href: `/users/${encodeURIComponent(username)}/study/history`, dashboard: null },
       { label: DASHBOARD_TAB_LABELS.stats, href: userTabHref(username, "stats"), dashboard: "stats" },
       { label: DASHBOARD_TAB_LABELS.news, href: userTabHref(username, "news"), dashboard: "news" },
       { label: DASHBOARD_TAB_LABELS.read, href: userTabHref(username, "read"), dashboard: "read" },

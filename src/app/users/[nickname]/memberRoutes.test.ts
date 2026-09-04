@@ -29,9 +29,9 @@ describe("member pages", () => {
     "library-explorer",
     "jlpt-explorer",
     "read",
-    "stats",
+    "study/stats",
     "news",
-    "history",
+    "study/history",
     "lists",
     "libraries",
     "profile",
@@ -40,6 +40,14 @@ describe("member pages", () => {
 
   it.each(segments)("/%s is a route with a page of its own", (segment) => {
     expect(existsSync(join(process.cwd(), HERE, segment, "page.tsx"))).toBe(true);
+  });
+
+  /*
+   * History and Stats moved under Study, and moved means moved: the repo keeps
+   * no redirects, so an old address is a 404 rather than a second way in.
+   */
+  it.each(["history", "stats"])("leaves nothing behind at /%s", (segment) => {
+    expect(existsSync(join(process.cwd(), HERE, segment, "page.tsx"))).toBe(false);
   });
 
   /*
@@ -84,7 +92,7 @@ describe("member pages", () => {
 
   /* And the one page that is about level progress does load it. */
   it("stats loads the level progress", () => {
-    expect(readFileSync(join(process.cwd(), HERE, "stats/page.tsx"), "utf8")).toContain(
+    expect(readFileSync(join(process.cwd(), HERE, "study/stats/page.tsx"), "utf8")).toContain(
       "loadLevelProgress",
     );
   });
