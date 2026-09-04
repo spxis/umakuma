@@ -4544,11 +4544,23 @@
     "id": "pick-the-showcase-rows-out-of-the-source-s-data",
     "name": "Pick the showcase rows out of the source's data",
     "area": "admin",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "The showcase picks were hand-written constants and thirteen of their figures were wrong when checked against the data. An admin can now browse any source's rows - searched and paged, twenty at a time - and tick up to four, so the detail line the public card shows is one the data built rather than one somebody typed. Reset puts a source back to the chosen defaults.",
+    "dateIsEstimate": false,
+    "version": "0.400.0",
+    "releasedAt": "2026-09-04T10:02:45Z"
+  },
+  {
+    "id": "map-cities-everywhere",
+    "name": "Cities on every map, Japan and the US included",
+    "area": "games",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.400.0",
-    "releasedAt": "2026-09-04T10:02:45Z",
-    "summary": "The showcase picks were hand-written constants and thirteen of their figures were wrong when checked against the data. An admin can now browse any source's rows - searched and paged, twenty at a time - and tick up to four, so the detail line the public card shows is one the data built rather than one somebody typed. Reset puts a source back to the chosen defaults."
+    "version": "0.401.0",
+    "releasedAt": "2026-09-04T10:11:13Z",
+    "summary": "Cities on every map that has them, Japan and the United States included, and neither needed migrating to Natural Earth. The United States is drawn through Albers USA, which the builder rebuilds exactly and which carries Alaska and Hawaii in their own insets, so Anchorage and Honolulu land in the boxes already drawn. Japan's outlines are curated Mercator paths with no projection in code, so the transform is recovered by least squares and the build refuses to write a file unless every city sits inside its own prefecture; Okinawa's cities ride into its inset box with its outline. Cities are matched to their division by geometry rather than by name, which took France from none of 58 to all of them. A map that draws cities now credits both holders, since the outlines and the cities are not always the same one."
   }
 ]
