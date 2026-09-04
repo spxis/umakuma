@@ -4724,11 +4724,23 @@
     "id": "weight-the-words-people-actually-meet",
     "name": "Weight the words people actually meet",
     "area": "platform",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "The blend weighted a newspaper corpus at 1.0 against anime at 0.7, on the reasoning that print carries the widest written vocabulary. True, but it pays off only for somebody who gets far enough to read a newspaper, and most learners will not - they will watch. Media now leads: global and anime at 1.0, drama 0.8, movie and manga 0.7, newspaper down to 0.5. Levels 1-10 barely move, because the commonest words are common everywhere. Levels 11-30 gain uriKire, yomikata, oujo, giniro and lose kougyou, koukyou, shiten, shinrigaku to later levels - drama vocabulary up, business register down.",
+    "dateIsEstimate": false,
+    "version": "0.415.0",
+    "releasedAt": "2026-09-04T14:00:25Z"
+  },
+  {
+    "id": "all-253-radicals-and-the-last-twelve-get-a-level",
+    "name": "All 253 radicals, and the last twelve get a level",
+    "area": "platform",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.415.0",
-    "releasedAt": "2026-09-04T14:00:25Z",
-    "summary": "The blend weighted a newspaper corpus at 1.0 against anime at 0.7, on the reasoning that print carries the widest written vocabulary. True, but it pays off only for somebody who gets far enough to read a newspaper, and most learners will not - they will watch. Media now leads: global and anime at 1.0, drama 0.8, movie and manga 0.7, newspaper down to 0.5. Levels 1-10 barely move, because the commonest words are common everywhere. Levels 11-30 gain uriKire, yomikata, oujo, giniro and lose kougyou, koukyou, shiten, shinrigaku to later levels - drama vocabulary up, business register down."
+    "version": "0.416.0",
+    "releasedAt": "2026-09-04T14:05:48Z",
+    "summary": "RADKFILE has 253 classical radicals and only 241 are needed: \u65e0, \u66f0, \u97ed, \u9b25, \u9e75, \u9ecd, \u9ef9, \u9f20, \u9f0e, \u9efd, \u9f4a and \u9fa0 appear in no joyo character. They were dropped, which left the set incomplete for anybody who wanted all of it and left forty later levels teaching no radical while the first twenty carried a dozen each. They are now offered one per level from 89 to 100, marked optional because nothing a member learns is built from them. The front-loading of the other 241 cannot be fixed and should not be: a radical is taught before the kanji built from it, and each already sits as late as that allows."
   }
 ]
