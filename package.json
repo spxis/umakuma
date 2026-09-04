@@ -28,7 +28,7 @@
     "level:magic-check": "node scripts/check-level-magic-strings.mjs",
     "loc:check": "node scripts/check-max-loc.mjs",
     "security:check": "pnpm audit --prod --audit-level high",
-    "quality:check": "pnpm lint && pnpm constants:check && pnpm study:magic-check && pnpm level:magic-check && pnpm loc:check && pnpm typecheck && pnpm test:unit",
+    "quality:check": "pnpm lint && pnpm constants:check && pnpm study:magic-check && pnpm level:magic-check && pnpm loc:check && pnpm glyph:check && pnpm typecheck && pnpm test:unit",
     "quality:fix": "pnpm lint:fix && pnpm quality:check",
     "preflight:prod": "pnpm quality:check && pnpm security:check && pnpm build",
     "deploy:push": "git push origin main",
@@ -100,7 +100,8 @@
     "themes:build": "node scripts/build-srs-themes.mjs",
     "ladder:radical-links": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/seed-radical-links.ts",
     "ladder:overrides:export": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/export-ladder-overrides.ts",
-    "ladder:version": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/ladder-version.ts"
+    "ladder:version": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/ladder-version.ts",
+    "glyph:check": "node scripts/check-glyph-sizes.mjs"
   },
   "dependencies": {
     "@mozilla/readability": "^0.6.0",

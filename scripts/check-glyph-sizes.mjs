@@ -43,6 +43,7 @@ const ALLOWED = new Map([
   ["src/app/maps/MapRegionPanel.tsx", "a place name is a heading, not a subject glyph"],
   ["src/app/shared/subject-page/UsedInWordsBlock.tsx", "the compound is a word being read, not a chip"],
   ["src/app/search/SearchAnswers.tsx", "an answer written in Japanese is the answer, not a subject"],
+  ["src/app/admin/AdminLadderLevels.tsx", "a whole level's kanji run together on one line, to judge the level's shape rather than to read a subject"],
 ]);
 
 const files = [];
