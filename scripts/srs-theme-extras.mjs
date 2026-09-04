@@ -12,6 +12,38 @@ const bucket = (term, reading, meaning) => ({ term, reading, meaning });
 
 export const EXTRA_THEMES = [
   {
+    /*
+     * The reference. Every WaniKani member already knows these five words, and
+     * somebody arriving from there should be able to keep them rather than
+     * learn a second vocabulary on their first day. It is also the only theme
+     * in English, which makes it the one to check a layout against.
+     */
+    id: "wanikani",
+    name: "WaniKani",
+    sourceName: "WaniKani",
+    rating: "all",
+    /* An English theme should not open on 未. */
+    zero: { term: "Locked", reading: "Locked", meaning: "Not started", short: "—" },
+    buckets: {
+      1: bucket("Apprentice", "Apprentice", "Just met, reviewed within days"),
+      2: bucket("Guru", "Guru", "Held for a week or two"),
+      3: bucket("Master", "Master", "Held for a month"),
+      4: bucket("Enlightened", "Enlightened", "Held for four months"),
+      5: bucket("Burned", "Burned", "Done with, in WaniKani's telling"),
+    },
+    levels: [
+      ["Apprentice I", "Apprentice I", "Four hours until the next look", 1],
+      ["Apprentice II", "Apprentice II", "Eight hours", 1],
+      ["Apprentice III", "Apprentice III", "A day", 1],
+      ["Apprentice IV", "Apprentice IV", "Two days", 1],
+      ["Guru I", "Guru I", "A week — and the stage a level counts", 2],
+      ["Guru II", "Guru II", "Two weeks", 2],
+      ["Master", "Master", "A month", 3],
+      ["Enlightened", "Enlightened", "Four months", 4],
+      ["Burned", "Burned", "WaniKani stops asking. UmaKuma lets you ask again.", 5],
+    ],
+  },
+  {
     id: "amusement-park",
     name: "Thrill Seeker",
     sourceName: "Amusement Park",

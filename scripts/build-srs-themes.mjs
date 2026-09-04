@@ -171,15 +171,13 @@ for (const extra of EXTRA_THEMES) {
       bucketMeaning: bucket.meaning,
     };
   });
+  const zero = extra.zero ?? { term: "未着手", reading: "Michakushu", meaning: "Not started", short: "未" };
   levels.unshift({
     level: 0,
-    term: "未着手",
-    reading: "Michakushu",
-    meaning: "Not started",
-    short: "未",
-    bucket: "未着手",
-    bucketReading: "Michakushu",
-    bucketMeaning: "Not started",
+    ...zero,
+    bucket: zero.term,
+    bucketReading: zero.reading,
+    bucketMeaning: zero.meaning,
   });
   themes.push({
     id: extra.id,

@@ -94,6 +94,23 @@ export default function AdminThemesPanel() {
   );
 }
 
+/**
+ * The stages gathered under the bucket each belongs to.
+ *
+ * Consecutive rather than by name: a theme may reuse a word across buckets —
+ * Demon Slayer's 甲 is both a bucket and the stage inside it — and grouping by
+ * name would fold two different things together.
+ */
+function groupByBucket(theme: SrsTheme) {
+  const groups: { bucket: string; bucketReading: string; levels: SrsTheme["levels"] }[] = [];
+  for (const level of theme.levels) {
+    const last = groups[groups.length - 1];
+    if (last && last.bucket === level.bucket) last.levels.push(level);
+    else groups.push({ bucket: level.bucket, bucketReading: level.bucketReading, levels: [level] });
+  }
+  return groups;
+}
+
 function ThemeRow({ theme }: { theme: SrsTheme }) {
   return (
     <li className="rounded-xl border border-line bg-surface px-3 py-2.5">
@@ -112,16 +129,31 @@ function ThemeRow({ theme }: { theme: SrsTheme }) {
         ) : null}
       </div>
 
-      <ol className="mt-2 flex flex-wrap gap-1.5">
-        {theme.levels.map((level) => (
-          <li
-            key={level.level}
-            title={`${copy.stage} ${level.level} · ${level.reading} · ${level.meaning}${level.bucket ? ` · ${level.bucket}` : ""}`}
-            className={`rounded-lg px-2 py-1 ${THEME_STAGE_TONE[level.level]}`}
-          >
-            <span className="block text-[9px] font-black tabular-nums opacity-60">{level.level}</span>
-            <span {...japaneseTextProps("block text-sm font-black leading-tight")}>{level.short}</span>
-            <span className="block text-[9px] font-semibold leading-tight opacity-70">{level.reading}</span>
+      <ol className="mt-2 flex flex-wrap items-start gap-3">
+        {groupByBucket(theme).map((group) => (
+          <li key={`${group.bucket}-${group.levels[0].level}`}>
+            {/* The bucket is the grouping the system itself uses — 級位 covers
+                four belts, 範士 covers one — and a row of rungs without it
+                loses the shape the theme was built around. */}
+            <p className="mb-1 truncate text-[9px] font-black uppercase tracking-[0.06em] text-foreground/60">
+              {group.bucket}
+              {group.bucketReading && group.bucketReading !== group.bucket ? (
+                <span className="ml-1 font-semibold normal-case tracking-normal opacity-80">{group.bucketReading}</span>
+              ) : null}
+            </p>
+            <ol className="flex flex-wrap gap-1.5">
+              {group.levels.map((level) => (
+                <li
+                  key={level.level}
+                  title={`${copy.stage} ${level.level} · ${level.reading} · ${level.meaning}`}
+                  className={`rounded-lg px-2 py-1 ${THEME_STAGE_TONE[level.level]}`}
+                >
+                  <span className="block text-[9px] font-black tabular-nums opacity-60">{level.level}</span>
+                  <span {...japaneseTextProps("block text-sm font-black leading-tight")}>{level.short}</span>
+                  <span className="block text-[9px] font-semibold leading-tight opacity-70">{level.reading}</span>
+                </li>
+              ))}
+            </ol>
           </li>
         ))}
       </ol>

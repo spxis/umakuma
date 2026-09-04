@@ -4784,11 +4784,23 @@
     "id": "a-member-chooses-what-their-stages-are-called",
     "name": "A member chooses what their stages are called",
     "area": "account",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "The 89 themes existed as data an admin could browse and a member could not reach. The profile page now has a picker: the theme on now drawn as its own ladder, every choice as a four-rung preview, and search across names and rungs. Switching is instant and retroactive because nothing stored moves - the SRS values stay apprentice/guru/master/enlightened/burned and only the words change. Beside it an age band rather than a birthdate: the only thing the site wants from age is whether to offer the handful of themes about organised crime and nightlife, and an account that has never said is treated as the youngest.",
+    "dateIsEstimate": false,
+    "version": "0.420.0",
+    "releasedAt": "2026-09-04T14:24:37Z"
+  },
+  {
+    "id": "srs-theme-groups",
+    "name": "Theme stage groups in the viewer",
+    "area": "admin",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.420.0",
-    "releasedAt": "2026-09-04T14:24:37Z",
-    "summary": "The 89 themes existed as data an admin could browse and a member could not reach. The profile page now has a picker: the theme on now drawn as its own ladder, every choice as a four-rung preview, and search across names and rungs. Switching is instant and retroactive because nothing stored moves - the SRS values stay apprentice/guru/master/enlightened/burned and only the words change. Beside it an age band rather than a birthdate: the only thing the site wants from age is whether to offer the handful of themes about organised crime and nightlife, and an account that has never said is treated as the youngest."
+    "version": "0.421.0",
+    "releasedAt": "2026-09-04T14:36:41Z",
+    "summary": "Each theme's ten rungs drawn under the bucket they belong to; WaniKani added as the 90th theme for reference."
   }
 ]

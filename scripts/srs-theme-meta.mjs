@@ -370,6 +370,17 @@ export const SHORT_OVERRIDES = {
   "専門家": "専門",
   "ALFA-X": "ALFA-X",
   "East i": "East i",
+  /* The reference theme is English; its chips are abbreviations, not cuts. */
+  "Apprentice I": "App I",
+  "Apprentice II": "App II",
+  "Apprentice III": "App III",
+  "Apprentice IV": "App IV",
+  "Enlightened": "Enlt",
+  "Burned": "Burned",
+  /* Both are Guru; the bucket above says so and the stage number separates them. */
+  "Guru I": "Guru",
+  "Guru II": "Guru",
+  "Master": "Master",
   /* Cuts that would leave a chip mid-word. */
   "のっぺらぼう": "のっぺら",
   "呪いのビデオ": "呪いの",

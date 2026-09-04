@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-04T12:58:58.972Z",
+  "generatedAt": "2026-09-04T14:30:45.366Z",
   "themes": [
     {
       "id": "academic-system",
@@ -9372,6 +9372,115 @@
           "bucket": "緑の座",
           "bucketReading": "Midori no Za",
           "bucketMeaning": "The Green Throne"
+        }
+      ]
+    },
+    {
+      "id": "wanikani",
+      "name": "WaniKani",
+      "sourceName": "WaniKani",
+      "renamed": false,
+      "rating": "all",
+      "levels": [
+        {
+          "level": 0,
+          "term": "Locked",
+          "reading": "Locked",
+          "meaning": "Not started",
+          "short": "—",
+          "bucket": "Locked",
+          "bucketReading": "Locked",
+          "bucketMeaning": "Not started"
+        },
+        {
+          "level": 1,
+          "term": "Apprentice I",
+          "reading": "Apprentice I",
+          "meaning": "Four hours until the next look",
+          "short": "App I",
+          "bucket": "Apprentice",
+          "bucketReading": "Apprentice",
+          "bucketMeaning": "Just met, reviewed within days"
+        },
+        {
+          "level": 2,
+          "term": "Apprentice II",
+          "reading": "Apprentice II",
+          "meaning": "Eight hours",
+          "short": "App II",
+          "bucket": "Apprentice",
+          "bucketReading": "Apprentice",
+          "bucketMeaning": "Just met, reviewed within days"
+        },
+        {
+          "level": 3,
+          "term": "Apprentice III",
+          "reading": "Apprentice III",
+          "meaning": "A day",
+          "short": "App III",
+          "bucket": "Apprentice",
+          "bucketReading": "Apprentice",
+          "bucketMeaning": "Just met, reviewed within days"
+        },
+        {
+          "level": 4,
+          "term": "Apprentice IV",
+          "reading": "Apprentice IV",
+          "meaning": "Two days",
+          "short": "App IV",
+          "bucket": "Apprentice",
+          "bucketReading": "Apprentice",
+          "bucketMeaning": "Just met, reviewed within days"
+        },
+        {
+          "level": 5,
+          "term": "Guru I",
+          "reading": "Guru I",
+          "meaning": "A week — and the stage a level counts",
+          "short": "Guru",
+          "bucket": "Guru",
+          "bucketReading": "Guru",
+          "bucketMeaning": "Held for a week or two"
+        },
+        {
+          "level": 6,
+          "term": "Guru II",
+          "reading": "Guru II",
+          "meaning": "Two weeks",
+          "short": "Guru",
+          "bucket": "Guru",
+          "bucketReading": "Guru",
+          "bucketMeaning": "Held for a week or two"
+        },
+        {
+          "level": 7,
+          "term": "Master",
+          "reading": "Master",
+          "meaning": "A month",
+          "short": "Master",
+          "bucket": "Master",
+          "bucketReading": "Master",
+          "bucketMeaning": "Held for a month"
+        },
+        {
+          "level": 8,
+          "term": "Enlightened",
+          "reading": "Enlightened",
+          "meaning": "Four months",
+          "short": "Enlt",
+          "bucket": "Enlightened",
+          "bucketReading": "Enlightened",
+          "bucketMeaning": "Held for four months"
+        },
+        {
+          "level": 9,
+          "term": "Burned",
+          "reading": "Burned",
+          "meaning": "WaniKani stops asking. UmaKuma lets you ask again.",
+          "short": "Burned",
+          "bucket": "Burned",
+          "bucketReading": "Burned",
+          "bucketMeaning": "Done with, in WaniKani's telling"
         }
       ]
     },
