@@ -22,6 +22,14 @@ type Item = {
   srsStage: number | null;
 };
 
+type ImportOffer = {
+  available: boolean;
+  wkLevel: number | null;
+  floor: number;
+  matched: number;
+  unmatched: number;
+};
+
 type Queue = {
   counts: { lessons: number; reviews: number; upcoming: number };
   level: number;
@@ -58,6 +66,7 @@ export default function UkStudySession({ accountId }: { accountId: string }) {
   /* The row draws a running count on each button, the way it does in the
      Study explorer, so a sitting reads the same there and here. */
   const [tally, setTally] = useState({ wrong: 0, skipped: 0, correct: 0 });
+  const [offer, setOffer] = useState<ImportOffer | null>(null);
 
   const load = useCallback(async () => {
     try {
@@ -72,6 +81,30 @@ export default function UkStudySession({ accountId }: { accountId: string }) {
   useEffect(() => {
     void load();
   }, [load]);
+
+  useEffect(() => {
+    /* Only worth offering while it would actually move them. A member already
+       past the floor their WaniKani progress earns is told nothing. */
+    fetch(`/api/uk-study/${accountId}/import`)
+      .then((response) => (response.ok ? response.json() : null))
+      .then((payload: ImportOffer | null) => setOffer(payload))
+      .catch(() => setOffer(null));
+  }, [accountId]);
+
+  async function runImport() {
+    setBusy(true);
+    try {
+      const response = await fetch(`/api/uk-study/${accountId}/import`, { method: "POST" });
+      if (response.ok) {
+        const result = (await response.json()) as { level: number; matched: number };
+        setNote(copy.imported(result.level, result.matched));
+        setOffer(null);
+        await load();
+      }
+    } finally {
+      setBusy(false);
+    }
+  }
 
   async function beginLessons() {
     if (!queue || queue.lessons.length === 0) return;
@@ -171,6 +204,21 @@ export default function UkStudySession({ accountId }: { accountId: string }) {
       </div>
 
       {note ? <p className="rounded-2xl bg-emerald-100 px-4 py-3 text-sm font-black text-emerald-800">{note}</p> : null}
+
+      {offer?.available && offer.wkLevel !== null && offer.floor > queue.level ? (
+        <div className="rounded-3xl border border-accent/40 bg-accent/5 p-5">
+          <p className="text-sm font-black text-foreground">{copy.importHeading}</p>
+          <p className="mt-1 max-w-2xl text-sm font-semibold leading-relaxed text-foreground/80">
+            {copy.importOffer(offer.wkLevel, offer.floor, offer.matched)}
+          </p>
+          {offer.unmatched > 0 ? (
+            <p className="mt-1 text-[11px] font-semibold text-foreground/60">{copy.importUnmatched(offer.unmatched)}</p>
+          ) : null}
+          <button type="button" disabled={busy} className={`${PRIMARY} mt-3`} onClick={runImport}>
+            {busy ? copy.importing : copy.importAction}
+          </button>
+        </div>
+      ) : null}
 
       {item ? (
         <div className="rounded-3xl border border-line bg-surface p-8 text-center shadow-sm">
