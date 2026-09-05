@@ -5108,11 +5108,23 @@
     "id": "placement-test",
     "name": "Placement test",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "Placement test",
+    "dateIsEstimate": false,
+    "version": "0.447.0",
+    "releasedAt": "2026-09-05T02:22:48Z"
+  },
+  {
+    "id": "theme-questionnaire",
+    "name": "Theme questionnaire",
+    "area": "account",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.447.0",
-    "releasedAt": "2026-09-05T02:22:48Z",
-    "summary": "Placement test"
+    "version": "0.448.0",
+    "releasedAt": "2026-09-05T02:22:51Z",
+    "summary": "Theme questionnaire"
   }
 ]
