@@ -5372,11 +5372,23 @@
     "id": "review-xp-visible",
     "name": "Participation XP for every review, UK or WK",
     "area": "study",
+    "status": "shipped",
     "kind": "feature",
+    "date": "2026-09-05",
+    "summary": "A review answered on the site pays reviewAnswered/reviewCorrect whichever feed it came from. Check both review routes pay the same.",
+    "dateIsEstimate": false,
+    "version": "0.469.0",
+    "releasedAt": "2026-09-05T07:56:28Z"
+  },
+  {
+    "id": "main-goes-green-stale-tests",
+    "name": "main is red: the LOC gate fails on two study-explorer files",
+    "area": "platform",
+    "kind": "bug",
     "status": "shipped",
     "date": "2026-09-05",
-    "version": "0.469.0",
-    "releasedAt": "2026-09-05T07:56:28Z",
-    "summary": "A review answered on the site pays reviewAnswered/reviewCorrect whichever feed it came from. Check both review routes pay the same."
+    "version": "0.470.0",
+    "releasedAt": "2026-09-05T08:09:13Z",
+    "summary": "origin/main head 197c9273 (0.467.0) failed CI, LOC Gate and Deploy at 00:51. From 6b5111fd 'feat(study): UmaKuma is a source of the one Study explorer': StudyExplorerPanel.tsx is 505 lines and StudyExplorer.tsx is 501, against the 500 gate. Production is still serving 0.466.0 and every session's next push fails the same gate, because it runs over the whole tree rather than the diff - including the top-priority header ticket cmto36mct. Fix is the repo's own refactor rule: split by feature responsibility rather than shaving lines."
   }
 ]
