@@ -5060,11 +5060,23 @@
     "id": "xp-rank-names",
     "name": "XP rank names",
     "area": "platform",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "XP rank names",
+    "dateIsEstimate": false,
+    "version": "0.443.0",
+    "releasedAt": "2026-09-04T23:06:15Z"
+  },
+  {
+    "id": "admin-member-screen",
+    "name": "Admin member screen",
+    "area": "admin",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.443.0",
-    "releasedAt": "2026-09-04T23:06:15Z",
-    "summary": "XP rank names"
+    "version": "0.444.0",
+    "releasedAt": "2026-09-05T01:47:20Z",
+    "summary": "Admin member screen"
   }
 ]
