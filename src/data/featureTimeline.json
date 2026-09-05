@@ -5444,11 +5444,23 @@
     "id": "seeder-sees-names",
     "name": "A corrected name actually reaches the page",
     "area": "platform",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-05",
+    "summary": "The curriculum seeder compared levels and links but never the words themselves, so a radical that gained a meaning counted as unchanged and nothing was written. Fixing the six names upstream had no effect at all until this was found.",
+    "dateIsEstimate": false,
+    "version": "0.475.0",
+    "releasedAt": "2026-09-05T09:46:23Z"
+  },
+  {
+    "id": "radical-cross-names",
+    "name": "A radical says what the other system calls it",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-05",
-    "version": "0.475.0",
-    "releasedAt": "2026-09-05T09:46:23Z",
-    "summary": "The curriculum seeder compared levels and links but never the words themselves, so a radical that gained a meaning counted as unchanged and nothing was written. Fixing the six names upstream had no effect at all until this was found."
+    "version": "0.476.0",
+    "releasedAt": "2026-09-05T09:47:00Z",
+    "summary": "If you came from WaniKani you learned some radicals by their names, not ours. A review card now says both, so the shape you knew as one word and the one we teach are plainly the same radical. Their names are shown only to members who have connected a WaniKani account."
   }
 ]
