@@ -9,6 +9,7 @@ import UmaKumaPageBanner from "@/app/shared/UmaKumaPageBanner";
 import { displayReading, readingsForGrade } from "@/app/users/[nickname]/grades/gradeExplorerView";
 import { authOptions } from "@/lib/auth";
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
+import { confusableViewsFor } from "@/lib/kanjiConfusablesView";
 import { getKanjiDictionaryAttribution, getKanjiDictionaryEntry } from "@/lib/kanjiDictionary";
 import { getSchoolGradeKanjiByCharacter } from "@/lib/schoolGrades";
 import { subjectPageHit } from "@/lib/subjectFiler";
@@ -166,6 +167,7 @@ export default async function KanjiPage({ params }: Props) {
     dictionary,
     dictionaryAttribution: getKanjiDictionaryAttribution(),
     parts: await radicalPartsOf(character),
+    confusables: confusableViewsFor(character),
     alone: section !== null,
     worksheetHref: (() => {
       /*

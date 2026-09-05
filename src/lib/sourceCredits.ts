@@ -37,6 +37,7 @@ export const SOURCE_KEYS = {
   tatoeba: "tatoeba",
   jmdict: "jmdict",
   jiten: "jiten",
+  kanjiConfusion: "kanjiConfusion",
   curriculum: "curriculum",
   jpmap: "jpmap",
   usmap: "usmap",
@@ -52,6 +53,7 @@ export const SOURCE_KEY_VALUES = [
   SOURCE_KEYS.tatoeba,
   SOURCE_KEYS.jmdict,
   SOURCE_KEYS.jiten,
+  SOURCE_KEYS.kanjiConfusion,
   SOURCE_KEYS.curriculum,
   SOURCE_KEYS.jpmap,
   SOURCE_KEYS.usmap,
@@ -121,6 +123,18 @@ export const SOURCE_CREDITS: Record<SourceKey, SourceCredit> = {
     licence: "CC BY-SA 4.0",
     licenceUrl: "https://creativecommons.org/licenses/by-sa/4.0/",
   },
+  /*
+   * Which characters get mistaken for which. Two datasets from one project:
+   * the stroke-edit distances we use, and the human confusion experiment they
+   * were validated against. CC BY 3.0, so the credit is a licence condition
+   * rather than a courtesy.
+   */
+  [SOURCE_KEYS.kanjiConfusion]: {
+    source: "Kanji Confusion (Lars Yencken)",
+    url: "https://lars.yencken.org/datasets/kanji-confusion/",
+    licence: "CC BY 3.0",
+    licenceUrl: "https://creativecommons.org/licenses/by/3.0/",
+  },
   [SOURCE_KEYS.curriculum]: {
     source: "MEXT and the Agency for Cultural Affairs",
     url: "https://www.mext.go.jp/a_menu/shotou/new-cs/youryou/syo/koku/001.htm",
@@ -168,7 +182,10 @@ export const SOURCE_CREDIT_COPY = {
   mnemonics: "Mnemonics from",
   sentences: "Example sentences from",
   words: "Words from",
-  relations: "Radicals, look-alikes and vocabulary from",
+  relations: "Radicals and vocabulary from",
+  /* Two holders on one block, so each is named for what it gave. */
+  confusableDistances: "Look-alike distances from",
+  confusablePairs: "Look-alike pairs from",
   strokes: "Stroke data from",
   radicals: "Radical breakdowns from",
   dictionary: "Dictionary data from",

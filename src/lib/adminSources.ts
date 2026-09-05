@@ -59,6 +59,11 @@ export const SOURCE_OPERATIONS: Record<SourceKey, SourceOperation> = {
   /* Both halves of the frequency file come out of one run, so both say so. */
   [SOURCE_KEYS.jmdict]: { origin: SOURCE_ORIGINS.file, endpoint: null, command: "pnpm ladder:refresh" },
   [SOURCE_KEYS.jiten]: { origin: SOURCE_ORIGINS.file, endpoint: null, command: "pnpm ladder:refresh" },
+  [SOURCE_KEYS.kanjiConfusion]: {
+    origin: SOURCE_ORIGINS.file,
+    endpoint: null,
+    command: "pnpm build:kanji-confusables",
+  },
   [SOURCE_KEYS.curriculum]: {
     origin: SOURCE_ORIGINS.file,
     endpoint: null,

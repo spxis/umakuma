@@ -8,7 +8,6 @@ import { SUBJECT_PAGE_COPY } from "./SubjectPage.constants";
 const GROUP_HEADINGS: Record<RelatedGroupId, string> = {
   [RELATED_GROUPS.builtFrom]: SUBJECT_PAGE_COPY.builtFrom,
   [RELATED_GROUPS.usedIn]: SUBJECT_PAGE_COPY.usedIn,
-  [RELATED_GROUPS.looksLike]: SUBJECT_PAGE_COPY.looksLike,
   [RELATED_GROUPS.sharesKanji]: SUBJECT_PAGE_COPY.sharesKanji,
 };
 

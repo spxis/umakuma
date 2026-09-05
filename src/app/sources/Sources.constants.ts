@@ -126,6 +126,15 @@ export const SOURCE_DESCRIPTIONS: Record<
     ],
     terms: "Creative Commons Attribution-ShareAlike 4.0. The credit is a condition of use, and so is sharing any derived data under the same terms.",
   },
+  [SOURCE_KEYS.kanjiConfusion]: {
+    tab: "Look-alikes",
+    lede: "A research dataset on which kanji learners actually mistake for one another: a stroke-edit distance over the joyo set, validated against a confusion experiment with real participants. It is the only source here that catches the pairs differing by a single stroke.",
+    takes: [
+      "How close two characters are, as stroke edits",
+      "Each character's ten nearest look-alikes",
+    ],
+    terms: "Creative Commons Attribution 3.0. The credit is a condition of use. The pairs we add by hand, and WaniKani's own pairings beside them, are marked as such.",
+  },
   [SOURCE_KEYS.curriculum]: {
     tab: "School grades",
     lede: "Japan's official kanji tables: the elementary and secondary curricula from the Ministry of Education, the joyo list and the name-kanji list from the Agency for Cultural Affairs.",

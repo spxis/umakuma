@@ -94,14 +94,9 @@ describe("a kanji's groups", () => {
       subjectType: SUBJECT_TYPES.kanji,
       components: [DRAWN_RADICAL],
       amalgamations: [FOAM_WORD],
-      visuallySimilar: [BUBBLE_KANJI],
     });
 
-    expect(groups.map((group) => group.id)).toEqual([
-      RELATED_GROUPS.builtFrom,
-      RELATED_GROUPS.usedIn,
-      RELATED_GROUPS.looksLike,
-    ]);
+    expect(groups.map((group) => group.id)).toEqual([RELATED_GROUPS.builtFrom, RELATED_GROUPS.usedIn]);
     expect(groups[1]!.items.map((item) => item.label)).toEqual(["水泡"]);
   });
 
@@ -111,7 +106,6 @@ describe("a kanji's groups", () => {
       subjectType: SUBJECT_TYPES.kanji,
       components: [DRAWN_RADICAL],
       amalgamations: [FOAM_WORD],
-      visuallySimilar: [],
     });
     expect(groups[0]!.items[0]!.label).toBe("leaf");
     expect(groups[1]!.items[0]!.label).toBe("水泡");
@@ -123,13 +117,12 @@ describe("a radical's groups", () => {
    * The same field that holds words under a kanji holds kanji under a radical.
    * Reading it as words would put a kanji behind a /vocabulary address.
    */
-  it("lists the kanji built from it, and offers no look-alikes", () => {
+  it("lists the kanji built from it", () => {
     const groups = relatedGroupsFor({
       subjectId: 8769,
       subjectType: SUBJECT_TYPES.radical,
       components: [],
       amalgamations: [WATER_KANJI],
-      visuallySimilar: [BUBBLE_KANJI],
     });
 
     expect(groups.map((group) => group.id)).toEqual([RELATED_GROUPS.usedIn]);
@@ -144,7 +137,6 @@ describe("a word's groups", () => {
       subjectType: SUBJECT_TYPES.vocabulary,
       components: [WATER_KANJI, BUBBLE_KANJI],
       amalgamations: [],
-      visuallySimilar: [],
     });
     expect(groups.map((group) => group.id)).toEqual([RELATED_GROUPS.builtFrom]);
     expect(groups[0]!.items.map((item) => item.label)).toEqual(["水", "泡"]);
@@ -166,7 +158,6 @@ describe("a word's groups", () => {
       subjectType: SUBJECT_TYPES.vocabulary,
       components: [WATER_KANJI],
       amalgamations: [],
-      visuallySimilar: [],
       neighbours: [swimming, FOAM_WORD],
     });
 
@@ -181,7 +172,6 @@ describe("a word's groups", () => {
       subjectType: SUBJECT_TYPES.vocabulary,
       components: [WATER_KANJI],
       amalgamations: [],
-      visuallySimilar: [],
       neighbours: [WATER_KANJI],
     });
     expect(groups.map((group) => group.id)).toEqual([RELATED_GROUPS.builtFrom]);
@@ -194,7 +184,6 @@ describe("a word's groups", () => {
       subjectType: SUBJECT_TYPES.vocabulary,
       components: [],
       amalgamations: [],
-      visuallySimilar: [BUBBLE_KANJI],
     });
     expect(groups).toEqual([]);
   });
@@ -218,7 +207,6 @@ describe("how much of a group is drawn", () => {
       subjectType: SUBJECT_TYPES.kanji,
       components: [],
       amalgamations: many,
-      visuallySimilar: [],
     });
     expect(groups[0]!.items).toHaveLength(RELATED_LIMIT);
   });
@@ -230,7 +218,6 @@ describe("how much of a group is drawn", () => {
       subjectType: SUBJECT_TYPES.kanji,
       components: [],
       amalgamations: many,
-      visuallySimilar: [],
     });
     const levels = groups[0]!.items.map((item) => item.level);
     expect(levels).toEqual([...levels].sort((left, right) => left - right));
@@ -243,7 +230,6 @@ describe("how much of a group is drawn", () => {
       subjectType: SUBJECT_TYPES.kanji,
       components: [],
       amalgamations: [FOAM_WORD, FOAM_WORD],
-      visuallySimilar: [],
     });
     expect(groups[0]!.items).toHaveLength(1);
   });
@@ -255,7 +241,6 @@ describe("how much of a group is drawn", () => {
         subjectType: SUBJECT_TYPES.kanji,
         components: [],
         amalgamations: [],
-        visuallySimilar: [],
       }),
     ).toEqual([]);
   });

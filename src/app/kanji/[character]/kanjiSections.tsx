@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import ExampleSentences from "@/app/shared/ExampleSentences";
 import { KanjiDetailPanel, type KanjiDetailSummary } from "@/app/shared/KanjiDetailModal";
+import ConfusablesBlock from "@/app/shared/subject-page/ConfusablesBlock";
 import MnemonicsBlock from "@/app/shared/subject-page/MnemonicsBlock";
 import RadicalPartsBlock from "@/app/shared/subject-page/RadicalPartsBlock";
 import RelatedGroupBlock from "@/app/shared/subject-page/RelatedGroupBlock";
@@ -10,6 +11,7 @@ import SubjectBlock from "@/app/shared/subject-page/SubjectBlock";
 import UsedInWordsBlock from "@/app/shared/subject-page/UsedInWordsBlock";
 import { SOURCE_KEYS, SOURCE_CREDIT_COPY } from "@/lib/sourceCredits";
 import type { KanjiDictionaryAttribution, KanjiDictionaryEntry } from "@/lib/kanjiDictionary.types";
+import type { ConfusableView } from "@/lib/kanjiConfusablesView";
 import type { RadicalPart } from "@/lib/radicalSearchServer";
 import type { KanjiPage } from "@/lib/subjectPage";
 
@@ -42,6 +44,8 @@ export type KanjiSectionView = {
   dictionaryAttribution: KanjiDictionaryAttribution | null;
   /** What RADKFILE says this character is written with; empty where it has no entry. */
   parts: RadicalPart[];
+  /** The characters this one is mistaken for; empty for 22% of the ladder. */
+  confusables: ConfusableView[];
   /** True when one section is drawn on its own, with no page header above it. */
   alone: boolean;
   /**
@@ -148,6 +152,22 @@ export const KANJI_SECTION_BLOCKS: readonly KanjiSectionBlock[] = [
           <RelatedGroupBlock key={group.id} group={group} showToggle={index === 0} />
         ))}
       </SubjectBlock>
+    ),
+  },
+  /*
+   * After Related rather than between it and Written with: those two answer
+   * the same question out of two books and John asked that they stay
+   * adjacent, which `kanjiSectionOrder.test.ts` holds them to. This still
+   * reads with the shape blocks and before somebody's mnemonic.
+   */
+  {
+    id: SUBJECT_SECTIONS.confusables,
+    has: (view) => view.confusables.length > 0,
+    render: (view) => (
+      <ConfusablesBlock
+        items={view.confusables}
+        headingHref={view.sectionHref?.(SUBJECT_SECTIONS.confusables)}
+      />
     ),
   },
   {

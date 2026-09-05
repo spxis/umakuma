@@ -14,7 +14,6 @@ export const SUBJECT_PAGE_COPY = {
   readingNote: "Reading",
   builtFrom: "Built from",
   usedIn: "Used in",
-  looksLike: "Looks like",
   sharesKanji: "Other words with these kanji",
   usedInWords: "Used in words",
   /*
@@ -26,6 +25,13 @@ export const SUBJECT_PAGE_COPY = {
    * of reach of a keyboard.
    */
   lookUpOnJisho: (word: string) => `Look up ${word} on Jisho`,
+  /*
+   * Said as a warning rather than a resemblance. "Looks like" invites a
+   * reader to admire the similarity; the thing a learner needs to know is
+   * that these are the ones they will get wrong, and that they have already
+   * met most of them - the twin of a pair is a median of 21 levels behind.
+   */
+  confusablesHint: "These are the ones learners mix up. Check what tells them apart.",
   foundIn: "Found in",
   examples: "In use",
   heisig: "Heisig",
@@ -57,6 +63,7 @@ export const SUBJECT_PAGE_COPY = {
     meanings: "Meanings and readings",
     words: "Words",
     related: "Related",
+    confusables: "Easily confused with",
     mnemonics: "Mnemonics",
     examples: "In use",
   },

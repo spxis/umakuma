@@ -8,7 +8,7 @@ import { JP_TEXT_CLASS, NO_TRANSLATE_CLASS } from "./japaneseText";
 import { pillWords, pillWordsTitle } from "./pillWords";
 import { subjectGlyphTone } from "./subjectListView";
 import { usePillWords } from "./usePillWords";
-import { wkLevelBadge } from "@/lib/levelBadge";
+import { ukLevelBadge, wkLevelBadge } from "@/lib/levelBadge";
 
 /**
  * One item, as a pill: the glyph, and the words for it when they are wanted.
@@ -41,14 +41,31 @@ const JAPANESE = /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}]/u;
 
 const META_PILL = `${NO_TRANSLATE_CLASS} subject-pill border-line bg-surface/85 text-foreground/70`;
 
-/** A member's marks on the item: how often they get it right, and the level it is taught at. */
-function Meta({ level, successRate }: { level?: number | null; successRate?: number | null }) {
+/**
+ * A member's marks on the item: how often they get it right, and the level it
+ * is taught at.
+ *
+ * Two level props rather than one prop naming a system, for the reason
+ * `levelBadge` gives: there are exactly two ladders and they are named in the
+ * product. A caller holding WaniKani's level passes `level` and one holding
+ * ours passes `ukLevel`, so neither can label a number with the wrong system
+ * by accident, and a surface that knows both draws both.
+ */
+function Meta({
+  level,
+  ukLevel,
+  successRate,
+}: {
+  level?: number | null;
+  ukLevel?: number | null;
+  successRate?: number | null;
+}) {
   const rate =
     typeof successRate === "number" && Number.isFinite(successRate)
       ? Math.max(0, Math.min(100, Math.round(successRate)))
       : null;
-  const taught = typeof level === "number";
-  if (rate === null && !taught) return null;
+  const badges = [wkLevelBadge(level), ukLevelBadge(ukLevel)].filter((badge): badge is string => badge !== null);
+  if (rate === null && badges.length === 0) return null;
   return (
     <span className="mt-0.5 flex items-center gap-1">
       {rate !== null ? (
@@ -56,11 +73,11 @@ function Meta({ level, successRate }: { level?: number | null; successRate?: num
           {rate}%
         </span>
       ) : null}
-      {taught ? (
-        <span translate="no" className={META_PILL}>
-          {wkLevelBadge(level)}
+      {badges.map((badge) => (
+        <span key={badge} translate="no" className={META_PILL}>
+          {badge}
         </span>
-      ) : null}
+      ))}
     </span>
   );
 }
@@ -75,6 +92,7 @@ export default function SubjectPill({
   label,
   tone,
   level,
+  ukLevel,
   successRate,
   selected,
   trailing,
@@ -92,6 +110,8 @@ export default function SubjectPill({
   tone?: string;
   /** The WaniKani level, where the surface knows it. */
   level?: number | null;
+  /** The UmaKuma level, where the surface knows it. */
+  ukLevel?: number | null;
   /** The member's own success rate, where the surface knows it. */
   successRate?: number | null;
   /** Lit, for a strip where one pill is the one on screen. */
@@ -118,7 +138,7 @@ export default function SubjectPill({
       {words ? (
         <span className="max-w-28 truncate text-[11px] font-semibold text-foreground/65">{words}</span>
       ) : null}
-      <Meta level={level} successRate={successRate} />
+      <Meta level={level} ukLevel={ukLevel} successRate={successRate} />
       {trailing}
     </>
   );

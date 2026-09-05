@@ -7,9 +7,12 @@
  * Nothing here lands in the repo: the downloads go to a cache directory that
  * git ignores, and only the small derived files under src/data are committed.
  *
- * Sources, both CC BY-SA 4.0:
- *   JMdict  — EDRDG. Newspaper-corpus frequency tags per word.
- *   Jiten   — jiten.moe. Frequency lists per medium, from 16,232 titles.
+ * Sources:
+ *   JMdict  — EDRDG, CC BY-SA 4.0. Newspaper-corpus frequency tags per word.
+ *   Jiten   — jiten.moe, CC BY-SA 4.0. Frequency lists per medium, from 16,232
+ *     titles.
+ *   Kanji confusion — Lars Yencken, CC BY 3.0. Which characters get mistaken
+ *     for which, as stroke-edit distance over the 1,945 pre-2010 joyo kanji.
  */
 import fs from "node:fs/promises";
 import { createWriteStream } from "node:fs";
@@ -20,6 +23,17 @@ import { createGunzip } from "node:zlib";
 const CACHE_DIR = path.resolve(process.env.CORPORA_DIR ?? ".corpora");
 const JMDICT_URL = "http://ftp.edrdg.org/pub/Nihongo/JMdict_e.gz";
 const JITEN_DOWNLOAD = "https://api.jiten.moe/api/frequency-list/download";
+/*
+ * The neighbour list, not the raw experiment.
+ *
+ * The same dataset publishes the human judgements it was validated against —
+ * 2,660 ratings from an actual confusion study — and they are the better
+ * evidence, but they cover a few hundred pairs. This file is the derived one:
+ * every joyo character's ten nearest neighbours by stroke-edit distance, which
+ * is the coverage a curriculum needs.
+ */
+const KANJI_CONFUSION_URL =
+  "https://lars.yencken.org/datasets/kanji-confusion/jyouyou__strokeEditDistance.csv";
 
 /** Jiten's media types. Omitting the parameter gives the combined list. */
 export const JITEN_MEDIA = [
@@ -91,7 +105,16 @@ async function main() {
     }
     console.log(`  jiten-${name}.csv — ${(size / 1e6).toFixed(1)}MB`);
   }
-  console.log("\nNext: pnpm build:word-frequency && pnpm build:kanji-ladder");
+
+  const confusion = path.join(CACHE_DIR, "kanji-confusion.csv");
+  if (!force && (await isFresh(confusion))) {
+    console.log("  kanji-confusion.csv — cached");
+  } else {
+    const size = await download(KANJI_CONFUSION_URL, confusion);
+    console.log(`  kanji-confusion.csv — ${(size / 1e3).toFixed(0)}kB`);
+  }
+
+  console.log("\nNext: pnpm build:word-frequency && pnpm build:kanji-ladder && pnpm build:kanji-confusables");
 }
 
 main().catch((error) => {

@@ -5,6 +5,7 @@ import path from "node:path";
 
 import { GEO_DATASETS, type CountryCode } from "./geoRegion";
 import { getAllKanjiDictionaryEntries } from "./kanjiDictionary";
+import { CONFUSABLE_SOURCES, confusableEntries } from "./kanjiConfusables";
 import { prisma } from "./prisma";
 import { getAllSchoolGradeKanji } from "./schoolGrades";
 import type { ShowcaseRow } from "./sourceShowcase";
@@ -69,6 +70,30 @@ export function kanjidic2Rows(): ShowcaseRow[] {
 }
 
 type RadicalFile = { radicals: { radical: string; strokes: number; kanji: string }[] };
+
+/**
+ * One row per pair, said from the stronger side.
+ *
+ * Only the measured pairs: this reader answers for the distance dataset, and
+ * WaniKani's own pairings are that source's rows, not this one's.
+ */
+export function kanjiConfusionRows(): ShowcaseRow[] {
+  const rows: ShowcaseRow[] = [];
+  const seen = new Set<string>();
+  for (const [kanji, neighbours] of confusableEntries()) {
+    for (const neighbour of neighbours) {
+      if (!neighbour.sources.includes(CONFUSABLE_SOURCES.strokeEditDistance)) continue;
+      const key = kanji < neighbour.kanji ? `${kanji}${neighbour.kanji}` : `${neighbour.kanji}${kanji}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      rows.push({
+        specimen: `${kanji} / ${neighbour.kanji}`,
+        detail: `${Math.round(neighbour.score * 100)}% alike by stroke edits`,
+      });
+    }
+  }
+  return rows.sort((one, other) => one.specimen.localeCompare(other.specimen));
+}
 
 export function radkfileRows(): ShowcaseRow[] {
   return readJson<RadicalFile>("radicals/index.json").radicals.map((entry) => ({

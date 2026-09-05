@@ -1,8 +1,10 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
-import SourceCredit from "@/app/shared/SourceCredit";
+import { SourceCredits } from "@/app/shared/SourceCredit";
 import type { SourceKey } from "@/lib/sourceCredits";
+
+export type BlockCredit = { source: SourceKey; label: string };
 
 /**
  * One block of a subject page.
@@ -35,12 +37,20 @@ export default function SubjectBlock({
    * headings reads as a page of links rather than a page about a character.
    */
   headingHref?: string | null;
-  credit?: { source: SourceKey; label: string };
+  /**
+   * Where this block's content came from. One source is the usual case; a
+   * block fed by several names all of them, because a credit that lists one of
+   * two holders is a true sentence that leaves the other out - the same reason
+   * the maps credit their outlines and their cities separately.
+   */
+  credit?: BlockCredit | BlockCredit[];
   /** A control that belongs to this block, beside its heading. */
   action?: ReactNode;
   className?: string;
   children: ReactNode;
 }) {
+  const credits = credit ? (Array.isArray(credit) ? credit : [credit]) : [];
+
   return (
     <section className={`overflow-hidden rounded-3xl border border-line bg-surface ${className}`}>
       {/*
@@ -74,7 +84,7 @@ export default function SubjectBlock({
       {/* The padding is on the content, not the section, so the credit's rule
         * runs the full width of the card the way the stroke-order foot does. */}
       <div className="space-y-3 p-5">{children}</div>
-      {credit ? <SourceCredit source={credit.source} label={credit.label} /> : null}
+      <SourceCredits credits={credits} />
     </section>
   );
 }

@@ -22,6 +22,8 @@ export const SUBJECT_SECTIONS = {
   meanings: "meanings",
   words: "words",
   related: "related",
+  /** The characters this one is mistaken for. Kanji only. */
+  confusables: "confusables",
   mnemonics: "mnemonics",
   examples: "examples",
 } as const;

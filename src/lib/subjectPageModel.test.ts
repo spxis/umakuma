@@ -39,9 +39,11 @@ function wanikani(overrides: Partial<CatalogSubjectDetail> = {}): CatalogSubject
     readings: ["すい", "みず"],
     primaryReadings: ["すい"],
     radicals: [],
-    visuallySimilar: [],
     usedInVocabulary: [],
     componentKanji: [],
+    /* Still on the catalogue row, and no longer a group on the page: the
+       look-alikes come from our own pairs file now. */
+    visuallySimilar: [],
     meaningExplanation: "",
     readingExplanation: "",
     jlptLevel: 5,
@@ -103,7 +105,6 @@ describe("a kanji WaniKani teaches", () => {
           reference({ subjectId: 2551, subjectType: SUBJECT_TYPES.vocabulary, characters: "水泡", slug: "水泡", label: "水泡", meaning: "Foam", reading: "すいほう", wkLevel: 46 }),
           reference({ subjectId: 2600, subjectType: SUBJECT_TYPES.vocabulary, characters: "水泳", slug: "水泳", label: "水泳", meaning: "Swimming", reading: "すいえい", wkLevel: 10 }),
         ],
-        visuallySimilar: [reference({ subjectId: 900, characters: "氷", slug: "氷", label: "氷", meaning: "Ice" })],
         meaningExplanation: "<p>Looks like water.</p>",
         readingExplanation: "",
       }),
@@ -116,11 +117,7 @@ describe("a kanji WaniKani teaches", () => {
   });
 
   it("adds the relations, in reading order, easiest first", () => {
-    expect(page.related.map((group) => group.id)).toEqual([
-      RELATED_GROUPS.builtFrom,
-      RELATED_GROUPS.usedIn,
-      RELATED_GROUPS.looksLike,
-    ]);
+    expect(page.related.map((group) => group.id)).toEqual([RELATED_GROUPS.builtFrom, RELATED_GROUPS.usedIn]);
     expect(page.related[1]!.items.map((item) => item.label)).toEqual(["水泳", "水泡"]);
   });
 
@@ -129,10 +126,9 @@ describe("a kanji WaniKani teaches", () => {
    * kanji. Read wrong, a word ends up behind a kanji address that 404s.
    */
   it("sends each relation to the right kind of page", () => {
-    const [builtFrom, usedIn, looksLike] = page.related;
+    const [builtFrom, usedIn] = page.related;
     expect(builtFrom!.items[0]!.href).toBe("/radicals/leaf");
     expect(usedIn!.items[0]!.href).toBe(`/vocabulary/${encodeURIComponent("水泳")}`);
-    expect(looksLike!.items[0]!.href).toBe(`/kanji/${encodeURIComponent("氷")}`);
   });
 
   it("strips the markup from the mnemonics and drops an empty one", () => {

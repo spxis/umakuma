@@ -6,6 +6,7 @@ import {
   curriculumRows,
   jitenRows,
   jmdictRows,
+  kanjiConfusionRows,
   kanjiapiRows,
   kanjidic2Rows,
   kanjivgRows,
@@ -51,6 +52,8 @@ async function buildRows(key: SourceKey): Promise<ShowcaseRow[]> {
       return kanjidic2Rows();
     case SOURCE_KEYS.radkfile:
       return radkfileRows();
+    case SOURCE_KEYS.kanjiConfusion:
+      return kanjiConfusionRows();
     case SOURCE_KEYS.kanjivg:
       return kanjivgRows();
     case SOURCE_KEYS.kanjiapi:

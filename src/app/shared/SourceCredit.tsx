@@ -3,6 +3,57 @@ import Link from "next/link";
 import { SOURCE_CREDITS, sourcePath, type SourceKey } from "@/lib/sourceCredits";
 
 const LINK = "underline decoration-dotted underline-offset-2 hover:text-foreground/70";
+/** The one shape a section's credit takes: a rule across the full width. */
+const FOOT = "border-t border-line px-5 py-2 text-center text-[10px]";
+
+/**
+ * Several credits under one rule.
+ *
+ * A block fed by two sources names both, and stacking two feet would draw two
+ * rules where the page has one everywhere else. The style stays here rather
+ * than at the call site for the reason the single credit does: there is one
+ * way a section credits its source, and it is this file's to decide.
+ */
+export function SourceCredits({
+  credits,
+  className = "",
+}: {
+  credits: readonly { source: SourceKey; label: string }[];
+  className?: string;
+}) {
+  if (credits.length === 0) return null;
+  return (
+    <div className={`${FOOT} ${className}`}>
+      {credits.map((credit) => (
+        <p key={credit.source} className="font-semibold text-foreground/60">
+          <Line source={credit.source} label={credit.label} />
+        </p>
+      ))}
+    </div>
+  );
+}
+
+function Line({ source, label }: { source: SourceKey; label: string }) {
+  const credit = SOURCE_CREDITS[source];
+  return (
+    <>
+      {label}{" "}
+      <Link href={sourcePath(source)} className={LINK}>
+        {credit.source}
+      </Link>
+      {/* A source under its own terms rather than a public licence names no
+        * licence, and must not be made to look as though it granted one. */}
+      {credit.licence ? (
+        <>
+          {" "}
+          <a href={credit.licenceUrl} target="_blank" rel="noreferrer noopener" className={LINK}>
+            ({credit.licence})
+          </a>
+        </>
+      ) : null}
+    </>
+  );
+}
 
 /**
  * Who a page's content came from.
@@ -38,27 +89,10 @@ export default function SourceCredit({
   variant?: "foot" | "inline";
   className?: string;
 }) {
-  const credit = SOURCE_CREDITS[source];
-  const shape =
-    variant === "foot"
-      ? "border-t border-line px-5 py-2 text-center text-[10px]"
-      : "text-[11px]";
+  const shape = variant === "foot" ? FOOT : "text-[11px]";
   return (
     <p className={`${shape} font-semibold text-foreground/60 ${className}`}>
-      {label}{" "}
-      <Link href={sourcePath(source)} className={LINK}>
-        {credit.source}
-      </Link>
-      {/* A source under its own terms rather than a public licence names no
-        * licence, and must not be made to look as though it granted one. */}
-      {credit.licence ? (
-        <>
-          {" "}
-          <a href={credit.licenceUrl} target="_blank" rel="noreferrer noopener" className={LINK}>
-            ({credit.licence})
-          </a>
-        </>
-      ) : null}
+      <Line source={source} label={label} />
     </p>
   );
 }

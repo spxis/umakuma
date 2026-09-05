@@ -163,7 +163,6 @@ export function relatedGroupsForSubject(
     subjectType: detail.subjectType,
     components: components.map(toRelatedRow),
     amalgamations: detail.usedInVocabulary.map(toRelatedRow),
-    visuallySimilar: detail.visuallySimilar.map(toRelatedRow),
     neighbours: neighbours.map(toRelatedRow),
   });
 }

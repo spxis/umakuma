@@ -24,6 +24,7 @@ describe("who gets credited", () => {
       "jiten",
       "jmdict",
       "jpmap",
+      "kanjiConfusion",
       "kanjiapi",
       "kanjidic2",
       "kanjivg",

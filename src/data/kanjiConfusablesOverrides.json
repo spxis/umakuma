@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "add": [
+    {
+      "pair": ["活", "話"],
+      "reason": "In neither source. Both are 舌 under a different left side, and a learner meets 生活 and 会話 in the same weeks."
+    },
+    {
+      "pair": ["諸", "著"],
+      "reason": "In neither source. Both are 者 with something over or beside it, and the difference is one that a small type size loses."
+    },
+    {
+      "pair": ["博", "薄"],
+      "reason": "In neither source. 尃 carries both, and the pair is the standard example of a component doing the work while the radical decides the word."
+    },
+    {
+      "pair": ["猿", "遠"],
+      "reason": "In neither source. 袁 carries both; the monkey and the distance are told apart only by what is wrapped around it."
+    }
+  ],
+  "remove": []
+}

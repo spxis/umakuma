@@ -70,6 +70,11 @@ export const SHOWCASE_DEFAULTS: Record<SourceKey, ShowcaseRow[]> = {
     { specimen: "俺", detail: "Rank 67 in anime · band 12 of 48 in print", note: "A pronoun almost nobody writes and everybody says." },
     { specimen: "悪い", detail: "Rank 132 in anime · band 48 of 48 in print", note: "A day-one adjective the newspaper list nearly forgets." },
   ],
+  [SOURCE_KEYS.kanjiConfusion]: [
+    { specimen: "土 / 士", detail: "Identical but for the length of two strokes", note: "We teach one at level 5 and the other at 52, so a member meets the second knowing the first." },
+    { specimen: "未 / 末", detail: "The same character with the long stroke moved", note: "Both N3, both level 26 — the one pair on this list a learner meets together." },
+    { specimen: "田 / 由", detail: "One stroke through the top, or not", note: "A pair no component breakdown can tell apart, because they have the same components." },
+  ],
   [SOURCE_KEYS.curriculum]: [
     { specimen: "一", detail: "Grade 1", note: "Taught in the first year of school." },
     { specimen: "亀", detail: "Secondary school · frequency rank 1,353", note: "Turtle, held back past primary school though every child knows the word." },

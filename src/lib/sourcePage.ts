@@ -23,6 +23,7 @@ import {
   NATURAL_EARTH_TOTAL_REGIONS,
 } from "@/lib/naturalEarthCountries";
 import { SOURCE_KEYS, type SourceKey } from "@/lib/sourceCredits";
+import { CONFUSABLE_SOURCES, confusableCounts } from "@/lib/kanjiConfusables";
 import { cachedSourceReport } from "@/lib/sourceReportCache";
 import { wordFrequencySummary } from "@/lib/wordFrequency";
 import type { SourceReport } from "@/lib/sourceReport";
@@ -62,6 +63,8 @@ const REPORT_COPY = {
   citiesPlaced: "Cities placed",
   wordsWithBand: "Words with a frequency band",
   wordsRanked: "Words ranked",
+  confusablePairs: "Look-alike pairs",
+  charactersPaired: "Characters with a look-alike",
   mediaCorpora: "Media corpora",
 } as const;
 
@@ -148,6 +151,25 @@ function kanjivg(): SourceReport {
     counts: [{ label: REPORT_COPY.charactersWithStrokes, value: summary?.characterCount ?? 0 }],
     lastImportedAt: null,
     version: summary ? summary.commit.slice(0, 12) : null,
+    generatedAtMs: Date.now(),
+  };
+}
+
+/*
+ * The pairs file is a union of three sources and this reports our half of it:
+ * the measured distances. WaniKani's own pairings are counted under WaniKani,
+ * where a reader looking for them would go.
+ */
+function kanjiConfusion(): SourceReport {
+  const counts = confusableCounts();
+  return {
+    key: SOURCE_KEYS.kanjiConfusion,
+    counts: [
+      { label: REPORT_COPY.confusablePairs, value: counts.bySource[CONFUSABLE_SOURCES.strokeEditDistance] },
+      { label: REPORT_COPY.charactersPaired, value: counts.characters },
+    ],
+    lastImportedAt: null,
+    version: null,
     generatedAtMs: Date.now(),
   };
 }
@@ -311,6 +333,8 @@ export async function loadSourceReport(key: SourceKey): Promise<SourceReport> {
       return kanjivg();
     case SOURCE_KEYS.radkfile:
       return radkfile();
+    case SOURCE_KEYS.kanjiConfusion:
+      return kanjiConfusion();
     case SOURCE_KEYS.jmdict:
       return jmdict();
     case SOURCE_KEYS.jiten:

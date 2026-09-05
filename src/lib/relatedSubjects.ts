@@ -44,7 +44,6 @@ export type RelatedSubject = {
 export const RELATED_GROUPS = {
   builtFrom: "built-from",
   usedIn: "used-in",
-  looksLike: "looks-like",
   sharesKanji: "shares-kanji",
 } as const;
 
@@ -139,7 +138,6 @@ export function relatedGroupsFor({
   subjectType,
   components,
   amalgamations,
-  visuallySimilar,
   neighbours = [],
 }: {
   subjectId: number;
@@ -148,8 +146,6 @@ export function relatedGroupsFor({
   components: RelatedRow[];
   /** What is built from it: kanji for a radical, words for a kanji. */
   amalgamations: RelatedRow[];
-  /** Kanji easily confused with this one. */
-  visuallySimilar: RelatedRow[];
   /** Words sharing this word's kanji; empty for anything else. */
   neighbours?: RelatedRow[];
 }): RelatedGroup[] {
@@ -161,9 +157,6 @@ export function relatedGroupsFor({
 
   const usedIn = collect(amalgamations, self);
   if (usedIn.length > 0) groups.push({ id: RELATED_GROUPS.usedIn, items: usedIn });
-
-  const looksLike = subjectType === SUBJECT_TYPES.kanji ? collect(visuallySimilar, self) : [];
-  if (looksLike.length > 0) groups.push({ id: RELATED_GROUPS.looksLike, items: looksLike });
 
   if (subjectType === SUBJECT_TYPES.vocabulary) {
     /* The word itself and the kanji it is made of are already above. */
