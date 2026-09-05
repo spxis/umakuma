@@ -2,7 +2,15 @@
 
 import { useState } from "react";
 
-import { STUDY_REVIEW_ORDERS, STUDY_TEST_INTERVALS, type StudyPreferences } from "@/lib/srs/studyPreferences";
+import {
+  matchingPreset,
+  STUDY_PRESET_VALUES,
+  STUDY_PRESETS,
+  STUDY_REVIEW_ORDERS,
+  STUDY_TEST_INTERVALS,
+  type StudyPreferences,
+  type StudyPreset,
+} from "@/lib/srs/studyPreferences";
 
 import { STUDY_PREFS_COPY as copy } from "./profileCopy";
 
@@ -22,9 +30,12 @@ const IDLE = "border-line bg-surface text-foreground/70 hover:bg-surface-muted";
 export default function StudyPreferencesPanel({
   accountId,
   initial,
+  suggested,
 }: {
   accountId: string;
   initial: StudyPreferences;
+  /** What suits this account, offered rather than applied. */
+  suggested: StudyPreset;
 }) {
   const [prefs, setPrefs] = useState(initial);
   const [saving, setSaving] = useState(false);
@@ -66,6 +77,31 @@ export default function StudyPreferencesPanel({
       </div>
 
       <div className="space-y-3">
+        {row(
+          copy.presets.label,
+          copy.presets.note,
+          <>
+            {(Object.values(STUDY_PRESETS) as StudyPreset[]).map((preset) => (
+              <button
+                key={preset}
+                type="button"
+                disabled={saving}
+                title={copy.presets.descriptions[preset]}
+                onClick={() => save(STUDY_PRESET_VALUES[preset])}
+                className={`${CHIP} ${matchingPreset(prefs) === preset ? ACTIVE : IDLE}`}
+              >
+                {copy.presets.options[preset]}
+                {preset === suggested ? " ★" : ""}
+              </button>
+            ))}
+            <span className="w-full text-[11px] font-semibold text-foreground/70">
+              {matchingPreset(prefs) === null
+                ? copy.presets.custom
+                : copy.presets.suggested(copy.presets.options[suggested])}
+            </span>
+          </>,
+        )}
+
         {row(
           copy.reviewOrder.label,
           copy.reviewOrder.note,

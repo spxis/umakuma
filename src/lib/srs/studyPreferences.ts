@@ -1,3 +1,5 @@
+import { reviewEaseScore } from "@/lib/reviewDifficulty";
+
 /**
  * What a member may choose about how they study — and what they may not.
  *
@@ -48,6 +50,18 @@ export const STUDY_REVIEW_ORDERS = {
   lowestStage: "lowestStage",
   /** Shuffled, so nothing is predictable. */
   shuffled: "shuffled",
+  /**
+   * Easiest first, then hardest first.
+   *
+   * The same two words the Study filters already use, scored by the same
+   * `reviewEaseScore` — a blend of how often this member has got the item
+   * right, how far it has climbed, its level, and how recently it passed. A
+   * second notion of "hard" living beside the first is how they start
+   * disagreeing, and a member who sorts by difficulty in two places has every
+   * right to expect the same order.
+   */
+  easiest: "easiest",
+  hardest: "hardest",
 } as const;
 
 export type StudyReviewOrder = (typeof STUDY_REVIEW_ORDERS)[keyof typeof STUDY_REVIEW_ORDERS];
@@ -157,12 +171,32 @@ export function throttleAppliesTo(preferences: StudyPreferences, siteThrottleOn:
  * Pure and order-only: it never drops an item, so no choice here can shorten
  * somebody's queue. A test asserts the returned set is always the same set.
  */
-export function orderReviews<T extends { availableAt: Date | null; srsStage: number }>(
-  items: readonly T[],
-  order: StudyReviewOrder,
-  random: () => number = Math.random,
-): T[] {
+export function orderReviews<
+  T extends {
+    availableAt: Date | null;
+    srsStage: number;
+    subjectId?: number;
+    correctCount?: number;
+    reviewCount?: number;
+    passedAt?: Date | null;
+  },
+>(items: readonly T[], order: StudyReviewOrder, random: () => number = Math.random): T[] {
   const copy = [...items];
+  if (order === STUDY_REVIEW_ORDERS.easiest || order === STUDY_REVIEW_ORDERS.hardest) {
+    /* Scored by the site's own reviewEaseScore, so "hardest" means the same
+       thing here as it does in the Study filters. */
+    const scored = copy.map((item) => ({
+      item,
+      ease: reviewEaseScore({
+        subjectId: item.subjectId ?? 0,
+        srsStage: item.srsStage,
+        passedAt: item.passedAt ? item.passedAt.toISOString() : null,
+        performance: { correct: item.correctCount ?? 0, total: item.reviewCount ?? 0 },
+      }),
+    }));
+    const direction = order === STUDY_REVIEW_ORDERS.easiest ? -1 : 1;
+    return scored.sort((a, b) => (a.ease - b.ease) * direction).map((entry) => entry.item);
+  }
   if (order === STUDY_REVIEW_ORDERS.lowestStage) {
     return copy.sort((a, b) => a.srsStage - b.srsStage);
   }
@@ -180,4 +214,68 @@ export function orderReviews<T extends { availableAt: Date | null; srsStage: num
     if (b.availableAt === null) return -1;
     return a.availableAt.getTime() - b.availableAt.getTime();
   });
+}
+
+
+/**
+ * Ready-made settings, so nobody has to hold an opinion about five things at
+ * once.
+ *
+ * Every preset is only ever a shortcut to values a member could set by hand -
+ * none of them reaches past the line, and picking one changes nothing about
+ * what a level is worth. That is worth saying because "strict" and "gentle"
+ * sound like difficulty settings, and they are not: a gentle member and a
+ * strict member need exactly the same kanji at Guru to reach level 40. What
+ * differs is how much lands on them at once, and in what order.
+ */
+export const STUDY_PRESETS = {
+  /** Small sittings, lessons held back, frequent practice. */
+  gentle: "gentle",
+  /** The defaults. */
+  steady: "steady",
+  /** Long sittings, nothing held back, hardest first, checkpoints rare. */
+  intense: "intense",
+} as const;
+
+export type StudyPreset = (typeof STUDY_PRESETS)[keyof typeof STUDY_PRESETS];
+
+export const STUDY_PRESET_VALUES: Record<StudyPreset, StudyPreferences> = {
+  [STUDY_PRESETS.gentle]: {
+    reviewOrder: STUDY_REVIEW_ORDERS.easiest,
+    testInterval: 3,
+    batchSize: 5,
+    /* On rather than "site": somebody who asked for gentle has asked not to be
+       buried, and the site default may well be off. */
+    throttleLessons: "on",
+    dailyLessonCap: 10,
+    showLeechFlag: false,
+  },
+  [STUDY_PRESETS.steady]: DEFAULT_STUDY_PREFERENCES,
+  [STUDY_PRESETS.intense]: {
+    reviewOrder: STUDY_REVIEW_ORDERS.hardest,
+    testInterval: 10,
+    batchSize: 30,
+    throttleLessons: "off",
+    dailyLessonCap: 0,
+    showLeechFlag: true,
+  },
+};
+
+/**
+ * What to suggest, given who is using the account.
+ *
+ * A suggestion and nothing more: it is offered on the panel, never applied,
+ * and every preset stays pickable by anybody. An under-13 account gets gentle
+ * because a hundred reviews and a leech warning is a lot to put in front of a
+ * nine-year-old - not because the ladder should ask less of them. The kanji
+ * are the same kanji.
+ */
+export function suggestedPresetFor(ageBand: string | null | undefined): StudyPreset {
+  return ageBand === "under_13" ? STUDY_PRESETS.gentle : STUDY_PRESETS.steady;
+}
+
+/** Which preset a member's current settings match, if any. */
+export function matchingPreset(preferences: StudyPreferences): StudyPreset | null {
+  const entries = Object.entries(STUDY_PRESET_VALUES) as [StudyPreset, StudyPreferences][];
+  return entries.find(([, values]) => JSON.stringify(values) === JSON.stringify(preferences))?.[0] ?? null;
 }

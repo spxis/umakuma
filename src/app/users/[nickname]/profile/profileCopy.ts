@@ -179,6 +179,8 @@ export const STUDY_PREFS_COPY = {
       overdue: "Most overdue first",
       lowestStage: "Newest material first",
       shuffled: "Shuffled",
+      easiest: "Easiest first",
+      hardest: "Hardest first",
     } as Record<string, string>,
   },
   testInterval: {
@@ -203,5 +205,21 @@ export const STUDY_PREFS_COPY = {
      they stop, rather than finding out by being surprised. */
   fixed:
     "Some things are the same for everybody and are not yours to change: how many of a level's kanji you need at Guru to move up, how long the review intervals are, and the JLPT tests at levels 10, 20, 35, 50 and 100. UmaKuma level 40 has to mean the same thing on your profile as on anybody else's.",
+  presets: {
+    label: "Start from a set of settings",
+    note: "A shortcut to settings you could pick by hand. None of them changes what a level is worth — a gentle member and an intense one need exactly the same kanji at Guru to reach level 40.",
+    options: {
+      gentle: "Gentle",
+      steady: "Steady",
+      intense: "Intense",
+    } as Record<string, string>,
+    descriptions: {
+      gentle: "Short sittings, easiest first, lessons held back while reviews wait, practice every third level.",
+      steady: "The middle of the road, and what most people should start with.",
+      intense: "Long sittings, hardest first, nothing held back, practice every tenth level.",
+    } as Record<string, string>,
+    suggested: (name: string) => `Suggested for this account: ${name}`,
+    custom: "Your own settings",
+  },
   saveFailed: "Could not save that. Try again?",
 } as const;

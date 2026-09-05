@@ -25,7 +25,7 @@ import type { AgeBand } from "@/lib/srs/ageBand";
 import { memberTheme } from "@/lib/srs/srsThemeServer";
 
 import ProfileForm from "./ProfileForm";
-import { parseStudyPreferences } from "@/lib/srs/studyPreferences";
+import { parseStudyPreferences, suggestedPresetFor } from "@/lib/srs/studyPreferences";
 
 import StudyPreferencesPanel from "./StudyPreferencesPanel";
 import ThemePicker from "./ThemePicker";
@@ -176,6 +176,7 @@ export default async function UserProfilePage({ params }: PageProps) {
         <StudyPreferencesPanel
           accountId={account.id}
           initial={parseStudyPreferences(account.studyPreferences)}
+          suggested={suggestedPresetFor(account.ageBand)}
         />
       </div>
 

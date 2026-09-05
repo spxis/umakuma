@@ -9,6 +9,10 @@ import {
   parseStudyPreferences,
   STUDY_REVIEW_ORDERS,
   STUDY_TEST_INTERVALS,
+  matchingPreset,
+  STUDY_PRESET_VALUES,
+  STUDY_PRESETS,
+  suggestedPresetFor,
   throttleAppliesTo,
 } from "./studyPreferences";
 
@@ -130,5 +134,66 @@ describe("the order actually reaching the member", () => {
     const queue = readFileSync("src/lib/uk/ukStudyQueue.ts", "utf8");
     const fn = queue.slice(queue.indexOf("export async function ukReviews"));
     expect(fn.indexOf("take: limit")).toBeLessThan(fn.indexOf("orderReviews(dueRows"));
+  });
+});
+
+describe("presets", () => {
+  it("are only ever shortcuts to settings a member could pick by hand", () => {
+    /* "Gentle" and "intense" sound like difficulty settings and are not: a
+       gentle member and an intense one need exactly the same kanji at Guru to
+       reach level 40. Every preset must round-trip through the parser
+       unchanged, which is what proves it holds no value outside the allowed
+       set. */
+    for (const [name, values] of Object.entries(STUDY_PRESET_VALUES)) {
+      expect(parseStudyPreferences(JSON.stringify(values)), name).toEqual(values);
+    }
+  });
+
+  it("suggests the gentle one for a child, and never applies it", () => {
+    /* A suggestion, not a restriction. A nine-year-old should not meet a
+       hundred reviews and a leech warning on their first day - but the kanji
+       are the same kanji, and every preset stays pickable by anybody. */
+    expect(suggestedPresetFor("under_13")).toBe(STUDY_PRESETS.gentle);
+    expect(suggestedPresetFor("13_17")).toBe(STUDY_PRESETS.steady);
+    expect(suggestedPresetFor(null)).toBe(STUDY_PRESETS.steady);
+    const panel = readFileSync("src/app/users/[nickname]/profile/StudyPreferencesPanel.tsx", "utf8");
+    /* Marked with a star, never auto-saved. */
+    expect(panel).toContain('preset === suggested ? " ★" : ""');
+  });
+
+  it("recognises when a member's settings match one, and when they do not", () => {
+    expect(matchingPreset(STUDY_PRESET_VALUES.gentle)).toBe(STUDY_PRESETS.gentle);
+    expect(matchingPreset(DEFAULT_STUDY_PREFERENCES)).toBe(STUDY_PRESETS.steady);
+    expect(matchingPreset({ ...STUDY_PRESET_VALUES.gentle, batchSize: 7 })).toBeNull();
+  });
+
+  it("holds no preset that reaches past the line", () => {
+    const gate = readFileSync("src/lib/uk/ukLevel.ts", "utf8");
+    for (const values of Object.values(STUDY_PRESET_VALUES)) {
+      for (const key of Object.keys(values)) {
+        expect(gate, `${key} must not reach the level gate`).not.toContain(key);
+      }
+    }
+  });
+});
+
+describe("easiest and hardest", () => {
+  const items = [
+    { subjectId: 1, srsStage: 1, availableAt: new Date("2026-09-01"), correctCount: 1, reviewCount: 9, passedAt: null },
+    { subjectId: 2, srsStage: 8, availableAt: new Date("2026-09-02"), correctCount: 9, reviewCount: 9, passedAt: null },
+  ];
+
+  it("uses the site's own difficulty score, not a second one", () => {
+    /* A member who sorts by difficulty in two places has every right to expect
+       the same order, so this reuses reviewEaseScore rather than inventing a
+       rival notion of "hard". */
+    const source = readFileSync("src/lib/srs/studyPreferences.ts", "utf8");
+    expect(source).toContain('from "@/lib/reviewDifficulty"');
+    expect(source).toContain("reviewEaseScore(");
+  });
+
+  it("puts the well-known item first for easiest, and last for hardest", () => {
+    expect(orderReviews(items, STUDY_REVIEW_ORDERS.easiest)[0].subjectId).toBe(2);
+    expect(orderReviews(items, STUDY_REVIEW_ORDERS.hardest)[0].subjectId).toBe(1);
   });
 });
