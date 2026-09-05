@@ -127,6 +127,21 @@ export type ShipStamp = { version: string; releasedAt: string; date: string };
  * This is that seam: the ticket supplies what the work *is*, the stamp
  * supplies what the release *was*, and the entry that lands in the commit
  * carries both.
+ *
+ * **The ticket's own words are not the entry's.** They used to be, and the
+ * assumption underneath was that a ticket reads as a feature description. Most
+ * do; the ones most likely to be shipped this way do not, because they are
+ * written as instructions to whoever picks the work up. `/releases` is a
+ * public page, and one release published "TOP PRIORITY: the header's right
+ * side carries the member, not the release" with WHAT GOES, CONSTRAINTS and a
+ * list of `src/` paths as its summary, beside entries that read as one
+ * member-facing line.
+ *
+ * So the release states its own summary, and `release:take` refuses without
+ * one. Of the three ways to fix this - require a summary, cap the length, or
+ * take the commit subject - only the first makes somebody write the member's
+ * sentence. A commit subject is closer than a ticket detail and still written
+ * to the repo rather than to a reader of the releases page.
  */
 export type ShippableTicket = {
   /** The timeline id to file it under; the ticket's `filedAs`, or a fresh slug. */
@@ -137,17 +152,67 @@ export type ShippableTicket = {
   kind?: string | null;
 };
 
-export function entryFromTicket(ticket: ShippableTicket, stamp: ShipStamp): FeatureTimelineEntry {
+/** What the member reads on `/releases`, written for them rather than derived. */
+export type PublishedWords = {
+  /** One sentence or two, in plain prose. */
+  summary: string;
+  /** The entry's title, when the ticket's own is written as an instruction. */
+  name?: string | null;
+};
+
+/**
+ * Anything that gives away a summary written to an agent rather than a member.
+ *
+ * Cheap and deliberately narrow: requiring `--summary` is the fix, and this
+ * only catches the case where the ticket's detail is pasted straight into it.
+ */
+const BRIEF_MARKERS: readonly { test: RegExp; problem: string }[] = [
+  { test: /\n/, problem: "runs to more than one line" },
+  { test: /\bsrc\//, problem: "names a source path" },
+  { test: /\b(TOP PRIORITY|WHAT GOES|CONSTRAINTS|DO NOT|MUST NOT|ASK JOHN)\b/, problem: "carries an instruction heading" },
+  { test: /\bRequested \d{4}-\d{2}-\d{2}\b/, problem: "carries the ticket's own bookkeeping" },
+];
+
+/** How long a release summary may run before it stops being a summary. */
+export const MAX_RELEASE_SUMMARY = 400;
+
+/** What is wrong with a proposed summary, or nothing. */
+export function releaseSummaryProblems(summary: string): string[] {
+  const trimmed = summary.trim();
+  const problems: string[] = [];
+  if (trimmed.length === 0) problems.push("is empty");
+  if (trimmed.length > MAX_RELEASE_SUMMARY) {
+    problems.push(`runs to ${trimmed.length} characters, past the ${MAX_RELEASE_SUMMARY} a summary may take`);
+  }
+  for (const marker of BRIEF_MARKERS) {
+    if (marker.test.test(trimmed)) problems.push(marker.problem);
+  }
+  return problems;
+}
+
+export function entryFromTicket(
+  ticket: ShippableTicket,
+  stamp: ShipStamp,
+  published: PublishedWords,
+): FeatureTimelineEntry {
+  const problems = releaseSummaryProblems(published.summary);
+  if (problems.length > 0) {
+    throw new Error(
+      `That summary ${problems.join(", and ")}. /releases is a public page: ` +
+        "pass --summary with the sentence a member should read, not the ticket's own words.",
+    );
+  }
+
   return {
     id: ticket.id,
-    name: ticket.title,
+    name: (published.name ?? ticket.title).trim(),
     area: (ticket.area ?? "platform") as FeatureTimelineEntry["area"],
     kind: (ticket.kind ?? "feature") as FeatureTimelineEntry["kind"],
     status: FEATURE_STATUSES.shipped,
     date: stamp.date,
     version: stamp.version,
     releasedAt: stamp.releasedAt,
-    summary: ticket.detail ?? ticket.title,
+    summary: published.summary.trim(),
   };
 }
 

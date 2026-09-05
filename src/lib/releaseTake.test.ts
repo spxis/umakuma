@@ -1,9 +1,14 @@
+import { readFileSync } from "node:fs";
+
 import { describe, expect, it } from "vitest";
 
 import { FEATURE_AREAS, FEATURE_STATUSES, type FeatureTimelineEntry } from "./featureTimeline";
 import type { ReleaseCodename } from "./releaseCodenames";
 import {
   codenameProblems,
+  entryFromTicket,
+  MAX_RELEASE_SUMMARY,
+  releaseSummaryProblems,
   higherVersion,
   minorOf,
   nextVersion,
@@ -199,5 +204,65 @@ describe("higherVersion", () => {
   it("falls back to main when there is no local version to read", () => {
     expect(higherVersion("0.429.0", null)).toBe("0.429.0");
     expect(higherVersion("0.429.0", undefined)).toBe("0.429.0");
+  });
+});
+
+describe("what a release says on a public page", () => {
+  const stamp = { version: "0.500.0", releasedAt: "2026-09-05T10:00:00Z", date: "2026-09-05" };
+  const ticket = { id: "a-thing", title: "A thing", area: "study", kind: "feature" };
+
+  /* A release published "TOP PRIORITY: the header's right side carries the
+     member, not the release" with WHAT GOES, CONSTRAINTS and src/ paths as its
+     summary, because the ticket's detail was copied in verbatim. */
+  it("takes the words the release was given, not the ticket's", () => {
+    const entry = entryFromTicket(
+      { ...ticket, detail: "TOP PRIORITY: do the thing.\nCONSTRAINTS: src/app/page.tsx" },
+      stamp,
+      { summary: "The header carries your XP now." },
+    );
+    expect(entry.summary).toBe("The header carries your XP now.");
+  });
+
+  it("refuses a summary that is a brief rather than a sentence", () => {
+    for (const bad of [
+      "TOP PRIORITY: ship the thing",
+      "Fix it in src/lib/thing.ts",
+      "Line one\nline two",
+      "Something happened. Requested 2026-09-05 by John.",
+      "",
+      "x".repeat(MAX_RELEASE_SUMMARY + 1),
+    ]) {
+      expect(() => entryFromTicket(ticket, stamp, { summary: bad })).toThrow(/public page/);
+    }
+  });
+
+  it("says what is wrong with it, so the second attempt is better", () => {
+    expect(releaseSummaryProblems("See src/app/page.tsx")).toContain("names a source path");
+    expect(releaseSummaryProblems("one\ntwo")).toContain("runs to more than one line");
+    expect(releaseSummaryProblems("A good, plain summary of the change.")).toEqual([]);
+  });
+
+  /* A ticket title can be written as an instruction too - "Radical picker
+     tiles should be blue, not white" is a request, not a release. */
+  it("lets the release rename itself where the ticket's title is an instruction", () => {
+    const entry = entryFromTicket(ticket, stamp, {
+      summary: "Radicals are blue everywhere they are offered.",
+      name: "Every radical is blue",
+    });
+    expect(entry.name).toBe("Every radical is blue");
+  });
+
+  it("keeps the ticket's title when the release does not override it", () => {
+    expect(entryFromTicket(ticket, stamp, { summary: "A plain summary." }).name).toBe("A thing");
+  });
+
+  it("trims what it is given, so a stray newline is not stored", () => {
+    const entry = entryFromTicket(ticket, stamp, { summary: "  A plain summary.  " });
+    expect(entry.summary).toBe("A plain summary.");
+  });
+
+  it("is required by the script, not merely available to it", () => {
+    const script = readFileSync("scripts/release-take.ts", "utf8");
+    expect(script).toContain("--summary is required with --ticket");
   });
 });

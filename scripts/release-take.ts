@@ -106,7 +106,11 @@ async function main(): Promise<void> {
   if (!ticketId && (!id || id.startsWith("--"))) {
     console.error(
       'Usage: pnpm release:take <entry-id> --romaji "…" --ja "…" --reading "…" --gloss "…"\n' +
-        '   or: pnpm release:take --ticket <ticket-id> [--as <timeline-id>] --romaji "…" …',
+        '   or: pnpm release:take --ticket <ticket-id> --summary "…" [--name "…"] [--as <timeline-id>] --romaji "…" …\n' +
+        "\n--summary is what a member reads on /releases. Write it for them: one\n" +
+        "sentence or two of plain prose, not the ticket's own words, which are\n" +
+        "addressed to whoever picks the work up. --name overrides the ticket's\n" +
+        "title where that is written as an instruction too.",
     );
     process.exit(1);
   }
@@ -163,7 +167,20 @@ async function main(): Promise<void> {
 
     if (!ticket) throw new Error(`No ticket ${ticketId} on the board.`);
     shippedId = flag("as") ?? ticket.filedAs ?? slugFor(ticket.title);
-    entries = [...loadFeatureTimeline(), entryFromTicket({ ...ticket, id: shippedId }, stamp)];
+    /* The release states its own words. Refused rather than derived - see
+       entryFromTicket, and the release that published an agent brief. */
+    const summary = flag("summary");
+    if (!summary) {
+      throw new Error(
+        "--summary is required with --ticket. /releases is a public page and a " +
+          "ticket's detail is written to whoever picks the work up, not to a member. " +
+          "Pass the sentence they should read.",
+      );
+    }
+    entries = [
+      ...loadFeatureTimeline(),
+      entryFromTicket({ ...ticket, id: shippedId }, stamp, { summary, name: flag("name") }),
+    ];
 
     const closing = shippedId;
     markTicketShipped = async () => {
