@@ -6118,12 +6118,25 @@
     "id": "ug-second-ordering",
     "name": "UG phase 1: the second ordering, built and readable",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-05",
+    "summary": "A second route through the same kanji, ordered the way a Japanese school teaches them rather than the way the JLPT tests them: grade one complete by level 5, grade six by 51, and no level ever straddling two school years. The ladder is built; choosing it comes next.",
+    "dateIsEstimate": false,
+    "release": 492,
+    "version": "1.10.0",
+    "releasedAt": "2026-09-05T23:10:30Z"
+  },
+  {
+    "id": "ladder-rules-checker",
+    "name": "A checker for the two ladders' rules",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-05",
-    "version": "1.10.0",
-    "release": 492,
-    "releasedAt": "2026-09-05T23:10:30Z",
-    "summary": "A second route through the same kanji, ordered the way a Japanese school teaches them rather than the way the JLPT tests them: grade one complete by level 5, grade six by 51, and no level ever straddling two school years. The ladder is built; choosing it comes next."
+    "version": "1.11.0",
+    "release": 493,
+    "releasedAt": "2026-09-05T23:57:55Z",
+    "summary": "Both ladders are now checked against the rules they promise - every radical before the character that uses it, every word after its kanji, every band and school year finishing where the ladder says it does - so a rebuild that breaks one cannot ship."
   }
 ]

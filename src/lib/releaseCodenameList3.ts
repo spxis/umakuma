@@ -54,4 +54,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Kaeru Kikan", ja: "変える期間", reading: "かえるきかん", gloss: "the span that changed" },
   { romaji: "Kigen no Toikake", ja: "期限の問いかけ", reading: "きげんのといかけ", gloss: "the question of which deadline" },
   { romaji: "Kugiri no Michisuji", ja: "区切りの道筋", reading: "くぎりのみちすじ", gloss: "a route cut into clean sections" },
+  { romaji: "Kensa no Keiro", ja: "検査の経路", reading: "けんさのけいろ", gloss: "a route you can inspect" },
 ];
