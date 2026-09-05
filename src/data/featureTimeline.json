@@ -5276,11 +5276,23 @@
     "id": "map-game-answer-handles",
     "name": "Map game shows the prompt and the map but no answer tiles",
     "area": "games",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-04",
+    "summary": "John, 2026-09-04, screenshot of /users/johnmorrisdotca/game/map: question 1/10 'CHOOSE THE PREFECTURE - READING \u307f\u3048' draws the prompt band and the full Japan map, and nothing to answer with. Map mode is the usesCornersBoard false game whose tiles sit in a row numbered 1-4, so the row is either not rendering or rendering empty. Clock was running at 0:20.9, so the round had started.",
+    "dateIsEstimate": false,
+    "version": "0.461.0",
+    "releasedAt": "2026-09-05T06:54:02Z"
+  },
+  {
+    "id": "word-shows-every-character",
+    "name": "Used in words drops the kanji it does not know",
+    "area": "study",
     "kind": "bug",
     "status": "shipped",
-    "date": "2026-09-04",
-    "version": "0.461.0",
-    "releasedAt": "2026-09-05T06:54:02Z",
-    "summary": "John, 2026-09-04, screenshot of /users/johnmorrisdotca/game/map: question 1/10 'CHOOSE THE PREFECTURE - READING \u307f\u3048' draws the prompt band and the full Japan map, and nothing to answer with. Map mode is the usesCornersBoard false game whose tiles sit in a row numbered 1-4, so the row is either not rendering or rendering empty. Clock was running at 0:20.9, so the round had started."
+    "date": "2026-09-05",
+    "version": "0.462.0",
+    "releasedAt": "2026-09-05T07:12:10Z",
+    "summary": "John, 2026-09-05, screenshot of /kanji/\u5348: the chip row under each compound is missing characters. \u620a\u5348 draws only \u5348, \u4e19\u5348 draws only \u5348, \u58ec\u5348\u8ecd\u4e71 draws \u5348 \u8ecd \u4e71 and not \u58ec, \u5e9a\u5348 draws only \u5348. The words that survive intact (\u7aef\u5348\u306e\u7bc0\u53e5, \u7532\u5348\u8fb2\u6c11\u6226\u4e89) are the ones whose every character the site teaches. So the row is silently dropping any kanji with no catalogue entry - \u4e19 is joyo, and \u620a \u58ec \u5e9a are jinmeiyo, which the ladder deliberately does not carry. A word is written with what it is written with; the row has to draw every character."
   }
 ]
