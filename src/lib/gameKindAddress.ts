@@ -13,6 +13,9 @@ export const GAME_KIND_SLUGS: Record<GameKind, string> = {
   [GAME_KINDS.timeAttack]: "time-attack",
   [GAME_KINDS.shiritori]: "shiritori",
   [GAME_KINDS.map]: "map",
+  /* Addressable so a completed test can be linked to, though nothing in the
+     games hub routes here - a test is reached by finishing a level. */
+  [GAME_KINDS.levelTest]: "level-test",
 };
 
 export function gameKindForSlug(slug: string | undefined | null): GameKind | null {

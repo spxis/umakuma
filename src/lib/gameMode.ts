@@ -1,9 +1,9 @@
-import type { SubjectType } from "@/lib/domainConstants";
-import type { GameChoiceCount } from "@/lib/gameBoard";
 
 // The board's own vocabulary lives in `gameBoard`; it is re-exported here so
 // every caller keeps one import for the game domain.
 export * from "@/lib/gameBoard";
+export * from "@/lib/gameMode.types";
+import type { GamePoolItem } from "@/lib/gameMode.types";
 
 export const GAME_BATCH_SIZES = [5, 10, 15, 20, 25, 50] as const;
 export const GAME_ULTRA_BATCH_SIZE = -1;
@@ -17,7 +17,17 @@ export const GAME_KINDS = {
   timeAttack: "time_attack",
   shiritori: "shiritori",
   map: "map",
+  /**
+   * A level test. A kind, but not a game anybody picks.
+   *
+   * It runs on the same board, scoring and answer route as the rest, which is
+   * why it is a GameKind at all - but it is reached by finishing a level, not
+   * from the games hub, so it is deliberately absent from
+   * `GAME_KIND_VALUES` below. That list is what a member may choose.
+   */
+  levelTest: "level_test",
 } as const;
+/** The games a member may pick from the hub. Not every kind. */
 export const GAME_KIND_VALUES = [
   GAME_KINDS.match,
   GAME_KINDS.daily,
@@ -135,6 +145,27 @@ export type GameKindRules = {
 };
 
 export const GAME_KIND_RULES: Record<GameKind, GameKindRules> = {
+  [GAME_KINDS.levelTest]: {
+    /* Fixed by the gate, not by the player: the question count comes from
+       whether this is a checkpoint or a JLPT final, and the level is the one
+       they have just finished. Nothing here is theirs to set, which is the
+       whole difference between a test and a game. */
+    usesBatchSize: false,
+    usesLevel: false,
+    requiresLevel: false,
+    usesCategory: false,
+    usesHardMode: false,
+    usesUltraMode: false,
+    usesTimeLimit: false,
+    usesDirection: false,
+    usesAnswerMode: false,
+    usesPracticeList: false,
+    usesCornersBoard: true,
+    fixedQuestionCount: null,
+    fixedCategory: null,
+    oncePerDay: false,
+    sharedPool: false,
+  },
   [GAME_KINDS.match]: {
     usesBatchSize: true,
     usesLevel: true,
@@ -242,90 +273,6 @@ export const GAME_KIND_RULES: Record<GameKind, GameKindRules> = {
   },
 };
 
-export type GamePoolItem = {
-  assignmentId: number;
-  subjectId: number;
-  subjectType: SubjectType;
-  level: number;
-  srsStage: number;
-  startedAt: string | null;
-};
-
-export type GameOption = {
-  subjectId: number;
-  subjectType: SubjectType;
-  level: number;
-  characters: string;
-  primaryMeaning: string | null;
-  primaryReading: string | null;
-};
-
-/** A tile as rendered: an option plus the text it displays for this direction. */
-export type GameOptionTile = GameOption & { label: string };
-
-export type GameQuestionPayload = {
-  id: string;
-  position: number;
-  answerType: GameAnswerType;
-  prompt: string;
-  /**
-   * Set when the prompt is a shape rather than text, so the client knows what to
-   * draw. Only Map mode's Read direction uses it, where the prompt is the
-   * highlighted prefecture and the tiles carry the names.
-   */
-  promptSubjectId: number | null;
-  /** Two, three or four tiles, in display order. */
-  options: GameOptionTile[];
-};
-
-export type GameRunSummary = {
-  id: string;
-  accountId: string;
-  kind: GameKind;
-  batchSize: number;
-  timeLimitMs: number | null;
-  level: number | null;
-  category: GameCategory;
-  hardMode: boolean;
-  choiceCount: GameChoiceCount;
-  direction: GameDirection;
-  ultraMode: boolean;
-  questionCount: number;
-  answeredCount: number;
-  correctCount: number;
-  currentStreak: number;
-  bestStreak: number;
-  score: number;
-  durationMs: number | null;
-  status: "active" | "completed" | "abandoned";
-  startedAt: string;
-  completedAt: string | null;
-};
-
-export type GameLeaderboardEntry = {
-  /** Which country a Map run was played on; null for every other game. */
-  mapCountry?: string | null;
-  runId: string;
-  accountId: string;
-  nickname: string;
-  wkUsername: string;
-  kind: GameKind;
-  category: GameCategory;
-  hardMode: boolean;
-  choiceCount: GameChoiceCount;
-  direction: GameDirection;
-  ultraMode: boolean;
-  batchSize: number;
-  level: number | null;
-  score: number;
-  durationMs: number;
-  bestStreak: number;
-  correctCount: number;
-  questionCount: number;
-  completedAt: string;
-  completedDatePst: string;
-};
-
 export function isGameBatchSize(value: number): value is GameBatchSize {
   return GAME_BATCH_SIZES.includes(value as GameBatchSize);
 }
@@ -338,8 +285,19 @@ export function isGameCategory(value: string): value is GameCategory {
   return GAME_CATEGORIES.includes(value as GameCategory);
 }
 
-export function isGameKind(value: string): value is GameKind {
-  return GAME_KIND_VALUES.includes(value as GameKind);
+/** A kind a member may pick from the hub. Narrower than GameKind, honestly so. */
+export type PlayableGameKind = (typeof GAME_KIND_VALUES)[number];
+
+/**
+ * Whether a stored or typed value names a playable game.
+ *
+ * Checked against the playable list rather than every kind, because the
+ * callers are restoring a member's hub selection from storage - and a
+ * persisted "level_test" must not become the game they land on. The predicate
+ * narrows to PlayableGameKind so the type says what the check actually does.
+ */
+export function isGameKind(value: string): value is PlayableGameKind {
+  return (GAME_KIND_VALUES as readonly string[]).includes(value);
 }
 
 export function isGameTimeLimitMs(value: number): value is GameTimeLimitMs {

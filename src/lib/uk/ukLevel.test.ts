@@ -194,3 +194,42 @@ describe("the placement award", () => {
     expect(XP_BONUSES.placementAward % 5).toBe(0);
   });
 });
+
+
+describe("a JLPT final holding a member at a milestone", () => {
+  /* Ten levels, each with two kanji, so level 10 is a milestone with N5. */
+  const totals: UkLevelTotals[] = Array.from({ length: 12 }, (_, at) => ({ level: at + 1, kanji: 2, radicals: 0 }));
+  const allDone = totals.flatMap((entry) => kanjiRows(entry.level, 2));
+
+  it("stops at the milestone with the kanji done and names the gate", () => {
+    /* Distinct from "not finished yet", and the difference matters to the
+       member: one says keep studying, the other says you are ready, sit the
+       test. */
+    const held = resolveUkLevel({ rows: allDone, totals, floor: 1, maxLevel: 12 });
+    expect(held.level).toBe(10);
+    expect(held.ratio).toBe(1);
+    expect(held.heldByGate).toBe("jlpt:5");
+  });
+
+  it("passes through once the gate is passed", () => {
+    const through = resolveUkLevel({ rows: allDone, totals, floor: 1, maxLevel: 12, passedGateKeys: ["jlpt:5"] });
+    expect(through.level).toBe(12);
+    expect(through.heldByGate).toBeUndefined();
+  });
+
+  it("never holds anybody on a checkpoint", () => {
+    /* A checkpoint opens the level whatever the score; refusing to advance
+       somebody who declined one would make it a gate after all. */
+    const short = totals.slice(0, 6);
+    const done = short.flatMap((entry) => kanjiRows(entry.level, 2));
+    expect(resolveUkLevel({ rows: done, totals: short, floor: 1, maxLevel: 6 }).level).toBe(6);
+  });
+
+  it("holds nobody when no caller has asked about gates", () => {
+    /* The default is empty, which every caller with no opinion passes - and a
+       member must never be held by a gate nobody asked about. But a milestone
+       is still a milestone, so with the default the member IS held there. */
+    const held = resolveUkLevel({ rows: allDone, totals, floor: 1, maxLevel: 12 });
+    expect(held.heldByGate).toBeDefined();
+  });
+});

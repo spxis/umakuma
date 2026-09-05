@@ -57,12 +57,19 @@ export function clearUkLevelTotalsCache(): void {
 
 /** What a member's level would be right now, without writing it. */
 export async function deriveUkLevel(accountId: string): Promise<UkLevelResolution> {
-  const [account, totals, states] = await Promise.all([
+  const [account, totals, states, passedFinals] = await Promise.all([
     prisma.account.findUnique({ where: { id: accountId }, select: { ukLevelFloor: true } }),
     ukLevelTotals(),
     prisma.ukSrsState.findMany({
       where: { accountId },
       select: { srsStage: true, passedAt: true, subject: { select: { level: true, kind: true } } },
+    }),
+    /* Only finals that must be passed, and only the ones that were. A
+       checkpoint never holds anybody, so it is not asked about here. */
+    prisma.levelTest.findMany({
+      where: { accountId, mustPass: true, verdict: { in: ["solid", "passed"] } },
+      select: { gateKey: true },
+      distinct: ["gateKey"],
     }),
   ]);
 
@@ -75,6 +82,7 @@ export async function deriveUkLevel(accountId: string): Promise<UkLevelResolutio
     })),
     totals,
     floor: account?.ukLevelFloor ?? 1,
+    passedGateKeys: passedFinals.map((row) => row.gateKey),
   });
 }
 

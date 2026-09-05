@@ -23,6 +23,8 @@ type Item = {
   passed: boolean;
 };
 
+type WaitingGate = { kind: "checkpoint" | "jlpt_final"; level: number; nLevel?: number } | null;
+
 type ImportOffer = {
   available: boolean;
   wkLevel: number | null;
@@ -34,7 +36,7 @@ type ImportOffer = {
 type Queue = {
   counts: { lessons: number; reviews: number; upcoming: number; throttle?: { held: boolean; due: number } };
   level: number;
-  progress: { passed: number; total: number; gate: string };
+  progress: { passed: number; total: number; gate: string; heldByGate?: string };
   lessons: Item[];
   reviews: Item[];
 };
@@ -68,6 +70,7 @@ export default function UkStudySession({ accountId }: { accountId: string }) {
      Study explorer, so a sitting reads the same there and here. */
   const [tally, setTally] = useState({ wrong: 0, skipped: 0, correct: 0 });
   const [offer, setOffer] = useState<ImportOffer | null>(null);
+  const [gate, setGate] = useState<WaitingGate>(null);
 
   const load = useCallback(async () => {
     try {
@@ -91,6 +94,22 @@ export default function UkStudySession({ accountId }: { accountId: string }) {
       .then((payload: ImportOffer | null) => setOffer(payload))
       .catch(() => setOffer(null));
   }, [accountId]);
+
+  useEffect(() => {
+    /* Asked separately from the queue so a slow gate lookup never delays the
+       reviews, which are what most visits are for. */
+    fetch(`/api/uk-study/${accountId}/level-test`)
+      .then((response) => (response.ok ? response.json() : null))
+      .then((payload: { gate: WaitingGate } | null) => setGate(payload?.gate ?? null))
+      .catch(() => setGate(null));
+  }, [accountId, queue?.level]);
+
+  function sitTest() {
+    /* The test is a game the runner starts the way it starts every game, so
+       the member is only walked to its lobby; the run is created there, with
+       the gate re-derived on the server rather than carried in a link. */
+    window.location.assign(window.location.pathname.replace(/\/uk-study\/?$/, "/game/level-test"));
+  }
 
   async function runImport() {
     setBusy(true);
@@ -205,6 +224,19 @@ export default function UkStudySession({ accountId }: { accountId: string }) {
       </div>
 
       {note ? <p className="rounded-2xl bg-emerald-100 px-4 py-3 text-sm font-black text-emerald-800">{note}</p> : null}
+
+      {gate ? (
+        <div className="rounded-3xl border border-violet-300 bg-violet-50 p-5">
+          <p className="text-sm font-semibold leading-relaxed text-violet-900">
+            {gate.kind === "jlpt_final"
+              ? copy.testWaiting.jlpt_final(gate.level, gate.nLevel ?? 0)
+              : copy.testWaiting.checkpoint(gate.level)}
+          </p>
+          <button type="button" className={`${PRIMARY} mt-3`} onClick={sitTest}>
+            {copy.sitTest}
+          </button>
+        </div>
+      ) : null}
 
       {offer?.available && offer.wkLevel !== null && offer.floor > queue.level ? (
         <div className="rounded-3xl border border-accent/40 bg-accent/5 p-5">

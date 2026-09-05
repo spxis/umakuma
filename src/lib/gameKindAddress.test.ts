@@ -7,7 +7,10 @@ describe("a game in the address", () => {
   it("gives every game a name a member can read", () => {
     expect(GAME_KIND_SLUGS[GAME_KINDS.revenge]).toBe("practice");
     expect(GAME_KIND_SLUGS[GAME_KINDS.timeAttack]).toBe("time-attack");
-    expect(new Set(Object.values(GAME_KIND_SLUGS)).size).toBe(GAME_KIND_VALUES.length);
+    /* Every kind has a distinct slug - including the level test, which is a
+       kind but not a game anybody picks, so it is one more than the hub list. */
+    expect(new Set(Object.values(GAME_KIND_SLUGS)).size).toBe(Object.keys(GAME_KINDS).length);
+    expect(Object.keys(GAME_KINDS).length).toBe(GAME_KIND_VALUES.length + 1);
   });
 
   it("reads every one of them back", () => {

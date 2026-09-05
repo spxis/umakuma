@@ -15,6 +15,13 @@ export const UK_STUDY_COPY = {
     `Lessons are on hold while you have ${due} reviews waiting. Clear some and they will come back.`,
   nothingToLearn: "Nothing new at this level. Clear your reviews to move up.",
   reveal: "Show me",
+  /* A test standing between the member and the next level. The two kinds
+     read differently on purpose: one is practice, the other is a claim. */
+  testWaiting: {
+    checkpoint: (level: number) => `Level ${level} is done. A short checkpoint is waiting — it opens the next level whatever you score.`,
+    jlpt_final: (level: number, nLevel: number) => `Level ${level} is done and that completes N${nLevel}. The N${nLevel} test has to be passed before the next level opens.`,
+  },
+  sitTest: "Sit the test",
   /* The latch, named. WaniKani has this rule and never says so on screen. */
   passed: "Passed",
   passedHint: "Reached Guru once, so it counts toward the level for good - even if it slips back.",

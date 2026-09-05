@@ -1,3 +1,4 @@
+import { GAME_KINDS } from "@/lib/gameMode";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -19,6 +20,7 @@ import { completedRunValues, hydrateGameQuestions, toGameRunSummary } from "@/li
 import { buildAppendedQuestions } from "@/lib/gameRunAppend";
 import { prisma } from "@/lib/prisma";
 import { settleDailyXp } from "@/lib/xp/xpDayServer";
+import { finalizeLevelTestForRun } from "@/lib/uk/ukLevelTestServer";
 import { awardXpQuietly } from "@/lib/xp/xpServer";
 import { gameXpAwards } from "@/lib/xp/xpStudyAwards";
 
@@ -185,7 +187,11 @@ export async function POST(
            well, or only the timed games would ever pay. Quiet either way: a
            game that scored and could not bank its XP is still a finished
            game. */
-        if (outcome.completedNow) {
+        if (outcome.completedNow && pendingKind === GAME_KINDS.levelTest) {
+          /* A test is not a game: its finish is a verdict on the gate, and it
+             pays the test's own XP inside that, never the game's. */
+          await finalizeLevelTestForRun(accountId, runId);
+        } else if (outcome.completedNow) {
           await awardXpQuietly({ accountId, requests: gameXpAwards() });
           /* And what the day has become because of it: the sign-in, a streak
              milestone, the "a lesson and a game" quest. Swallows its own

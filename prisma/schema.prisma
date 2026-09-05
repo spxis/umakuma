@@ -179,6 +179,7 @@ model Account {
   xpLevel             Int                @default(1)
   xpEvents            XpEvent[]
   restDays            MemberRest[]
+  levelTests          LevelTest[]
   restGrants          MemberRestGrant[]
   /// While set, the member is away: the streak is held and SRS due dates move
   /// with them rather than piling up. Cleared on return, which is when the
@@ -469,6 +470,8 @@ enum GameKind {
   time_attack
   shiritori
   map
+  /// A level test. Appended, never reordered: these are persisted values.
+  level_test
 }
 
 enum ReadingChallengeStatus {
@@ -1471,4 +1474,59 @@ model MemberRest {
   @@unique([accountId, dayKey])
   @@index([accountId, kind])
   @@index([periodId])
+}
+
+
+enum LevelTestKind {
+  /// Written, not passed. Opens the level whatever the score.
+  checkpoint
+  /// Must be passed. Levels 10, 20, 35, 50 and 100 certify N5 through N1.
+  jlpt_final
+}
+
+enum LevelTestVerdict {
+  solid
+  passed
+  nearly
+  not_yet
+}
+
+/// One sitting of a level test.
+///
+/// The questions, answers and scoring all live in `GameRun` with kind
+/// `level_test`, so the runner, the answer route, the Corners board and the
+/// results panel are the ones already built and tested. This row holds the
+/// things a run cannot: which gate it stands at, whether it must be passed,
+/// which attempt it is, and what the verdict was.
+///
+/// `curriculumVersion` is recorded because a test is a claim about a
+/// curriculum. If the ladder moves, a pass sat on version 1.2 should still say
+/// what it was a pass *of* rather than silently becoming a claim about
+/// material the member never saw.
+model LevelTest {
+  id                String            @id @default(cuid())
+  accountId         String
+  kind              LevelTestKind
+  /// `jlpt:3` or `check:15`. Stable, so an attempt can be found by its gate.
+  gateKey           String
+  attempt           Int               @default(1)
+  level             Int
+  questionCount     Int
+  /// Percent needed. Zero where the test only has to be written.
+  threshold         Int
+  mustPass          Boolean
+  answeredCount     Int               @default(0)
+  correctCount      Int               @default(0)
+  verdict           LevelTestVerdict?
+  /// The GameRun this was played on, where one was used.
+  runId             String?
+  curriculumVersion String
+  startedAt         DateTime          @default(now())
+  completedAt       DateTime?
+
+  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@unique([accountId, gateKey, attempt])
+  @@index([accountId, gateKey])
+  @@index([accountId, completedAt])
 }

@@ -112,6 +112,7 @@ export const GAME_KIND_LABELS: Record<GameKind, string> = {
   [GAME_KINDS.timeAttack]: "Time Attack",
   [GAME_KINDS.shiritori]: "Shiritori",
   [GAME_KINDS.map]: "Map",
+  [GAME_KINDS.levelTest]: "Level Test",
 };
 
 export const GAME_KIND_TAGLINES: Record<GameKind, string> = {
@@ -121,6 +122,7 @@ export const GAME_KIND_TAGLINES: Record<GameKind, string> = {
   [GAME_KINDS.timeAttack]: "Beat the clock, not the question count.",
   [GAME_KINDS.shiritori]: "Chain words by their last kana.",
   [GAME_KINDS.map]: "Forty-seven prefectures, plus your home regions. Know them all?",
+  [GAME_KINDS.levelTest]: "What you just learned, before you move on.",
 };
 
 export const GAME_KIND_RULE_COPY: Record<GameKind, string> = {
@@ -130,6 +132,7 @@ export const GAME_KIND_RULE_COPY: Record<GameKind, string> = {
   [GAME_KINDS.timeAttack]: "Answer as many as you can before the clock runs out. Wrong answers cost you, but they do not end the run.",
   [GAME_KINDS.shiritori]: "Each word has to start with the kana the last one ended on. One wrong link ends the chain.",
   [GAME_KINDS.map]: "Name the region or prefecture lit up on the map, or find it by name. The wrong answers are neighbouring regions, so a rough idea will not save you.",
+  [GAME_KINDS.levelTest]: "Questions drawn from the levels you have just finished. A checkpoint opens the next level whatever you score; a JLPT test has to be passed.",
 };
 
 export const GAME_KIND_EMOJI: Record<GameKind, string> = {
@@ -139,6 +142,7 @@ export const GAME_KIND_EMOJI: Record<GameKind, string> = {
   [GAME_KINDS.timeAttack]: "⏱️",
   [GAME_KINDS.shiritori]: "🔗",
   [GAME_KINDS.map]: "🗾",
+  [GAME_KINDS.levelTest]: "📝",
 };
 
 /** Per-game accents so each game reads as its own thing on the hub and scoreboard. */
@@ -149,6 +153,7 @@ export const GAME_KIND_ACCENT: Record<GameKind, { border: string; text: string; 
   [GAME_KINDS.timeAttack]: { border: "border-sky-500/50", text: "text-sky-600", solid: "border-sky-600 bg-sky-600 text-white" },
   [GAME_KINDS.shiritori]: { border: "border-emerald-500/50", text: "text-emerald-600", solid: "border-emerald-600 bg-emerald-600 text-white" },
   [GAME_KINDS.map]: { border: "border-indigo-500/50", text: "text-indigo-600", solid: "border-indigo-600 bg-indigo-600 text-white" },
+  [GAME_KINDS.levelTest]: { border: "border-violet-500/50", text: "text-violet-600", solid: "border-violet-600 bg-violet-600 text-white" },
 };
 
 export const GAME_LEADERBOARD_MODE_LABELS: Record<GameLeaderboardMode, string> = {

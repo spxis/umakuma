@@ -1,5 +1,6 @@
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import { KANJI_LADDER_LEVELS } from "@/lib/kanjiLadder";
+import { blockedByGate, jlptCompletedAtLevel } from "./ukGates";
 
 /**
  * Where a member stands on our hundred levels.
@@ -68,6 +69,14 @@ export type UkLevelResolution = {
   total: number;
   /** What the level is actually gated on, so a caller can name it correctly. */
   gate: string;
+  /**
+   * Set when the level's kanji are done and a JLPT final is what remains.
+   *
+   * Distinct from "not finished yet", and the difference matters to the
+   * member: one says keep studying, the other says you are ready, sit the
+   * test.
+   */
+  heldByGate?: string;
 };
 
 /**
@@ -80,11 +89,22 @@ export function resolveUkLevel({
   totals,
   floor,
   maxLevel = KANJI_LADDER_LEVELS,
+  passedGateKeys = [],
 }: {
   rows: readonly UkLevelProgressRow[];
   totals: readonly UkLevelTotals[];
   floor: number;
   maxLevel?: number;
+  /**
+   * Gates this member has already passed, as `jlpt:3` keys.
+   *
+   * Only the JLPT finals appear here and only they can hold anybody: a
+   * checkpoint opens its level whatever the score, so refusing to advance
+   * somebody who declined one would make it a gate after all. Empty by
+   * default, which is what every caller that has no opinion should pass -
+   * a member is never held by a gate nobody has asked about.
+   */
+  passedGateKeys?: readonly string[];
 }): UkLevelResolution {
   const totalsByLevel = new Map(totals.map((entry) => [entry.level, entry]));
   const passedByLevel = new Map<number, number>();
@@ -106,6 +126,19 @@ export function resolveUkLevel({
       continue;
     }
     if (has / need >= UK_LEVEL_UNLOCK_THRESHOLD) {
+      /* The kanji are done; a milestone still has to be certified. Level 35
+         says N3 was verified, and it may not say that on the strength of the
+         reviews alone. */
+      if (blockedByGate(candidate, passedGateKeys)) {
+        return {
+          level: candidate,
+          ratio: 1,
+          passed: has,
+          total: need,
+          gate: gateKindFor(levelTotals!),
+          heldByGate: `jlpt:${jlptCompletedAtLevel(candidate)}`,
+        };
+      }
       level = Math.min(candidate + 1, maxLevel);
       continue;
     }

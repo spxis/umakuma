@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+import { pendingGate, startLevelTest } from "@/lib/uk/ukLevelTestServer";
 import { canAccessAccount } from "@/lib/accountAccess";
 import { isAuthorizedAdmin } from "@/lib/admin";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
@@ -18,7 +19,7 @@ import {
   GAME_PRACTICE_LISTS,
   resolveGameAnswerMode,
   type GameDirection,
-  isGameTimeLimitMs,
+  isGameTimeLimitMs, type PlayableGameKind,
 } from "@/lib/gameMode";
 import { hydrateGameQuestions, toGameRunSummary } from "@/lib/gameModeServer";
 import { isAdminOnlyMapCountry, isPlayableMapCountry } from "@/lib/mapCountries";
@@ -32,7 +33,7 @@ import {
 import { GAME_LADDERS } from "@/lib/gameRunCreate";
 
 const bodySchema = z.object({
-  kind: z.string().refine(isGameKind).default(GAME_KINDS.match),
+  kind: z.string().refine((value) => isGameKind(value) || value === GAME_KINDS.levelTest).default(GAME_KINDS.match),
   batchSize: z.union([z.literal("all"), z.number().int().refine(isGameBatchSize)]).default("all"),
   level: z.number().int().min(1).max(60).nullable().default(null),
   category: z.string().refine(isGameCategory),
@@ -103,7 +104,18 @@ export async function POST(request: Request, context: { params: Promise<{ accoun
           return NextResponse.json({ error: "That map is not available." }, { status: 403 });
         }
 
-        const rules = gameKindRules(parsed.data.kind);
+        /* A level test is started like any game so the runner can play it,
+           but nothing in the body says what is tested: the gate is the one
+           the member's standing has reached, derived here and nowhere else. */
+        if (parsed.data.kind === GAME_KINDS.levelTest) {
+          const gate = await pendingGate(accountId);
+          if (!gate) return NextResponse.json({ error: "No test is waiting." }, { status: 409 });
+          const { run } = await startLevelTest(accountId, gate);
+          const questions = await hydrateGameQuestions(run.questions, run.direction as GameDirection);
+          return NextResponse.json({ run: toGameRunSummary(run), questions }, { status: 201 });
+        }
+
+        const rules = gameKindRules(parsed.data.kind as PlayableGameKind);
         const gameRequest: GameRunRequest = {
           kind: parsed.data.kind,
           batchSize: parsed.data.batchSize,

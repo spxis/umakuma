@@ -21,6 +21,7 @@ import {
   type GameLeaderboardEntry,
   type GameMetric,
 } from "@/lib/gameMode";
+import { GAME_KINDS } from "@/lib/gameMode";
 import { resolveGameScore } from "@/lib/gameScoring";
 import { prisma } from "@/lib/prisma";
 
@@ -98,7 +99,10 @@ export async function GET(request: Request, context: { params: Promise<{ account
           prisma.gameRun.findMany({
             where: {
               status: "completed",
-              kind: parsed.data.kind === "any" ? undefined : parsed.data.kind,
+              /* "Overall" means every game, and a level test is not a game:
+                 it is reached by finishing a level, and its score certifies a
+                 curriculum rather than competing on a board. Left off. */
+              kind: parsed.data.kind === "any" ? { not: GAME_KINDS.levelTest } : parsed.data.kind,
               batchSize: parsed.data.batchSize === "any" ? undefined : parsed.data.batchSize,
               level: parsed.data.level === "any"
                 ? undefined
@@ -118,7 +122,10 @@ export async function GET(request: Request, context: { params: Promise<{ account
             where: {
               status: "completed",
               durationMs: { not: null },
-              kind: parsed.data.kind === "any" ? undefined : parsed.data.kind,
+              /* "Overall" means every game, and a level test is not a game:
+                 it is reached by finishing a level, and its score certifies a
+                 curriculum rather than competing on a board. Left off. */
+              kind: parsed.data.kind === "any" ? { not: GAME_KINDS.levelTest } : parsed.data.kind,
             },
             orderBy: { completedAt: "desc" },
             take: 12,
