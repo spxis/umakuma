@@ -1,5 +1,7 @@
 import themeData from "@/data/srsThemes.json";
 
+import type { SrsThemeTag } from "./srsThemeTags";
+
 /**
  * What each SRS stage is called, in the theme a member has chosen.
  *
@@ -56,6 +58,15 @@ export type SrsTheme = {
   sourceName: string;
   renamed: boolean;
   rating: SrsThemeRating;
+  /**
+   * What the theme is about, for the five-question picker.
+   *
+   * Generated: `scripts/srs-theme-tags.mjs` holds the hand-written map and
+   * `pnpm themes:build` emits it here, so a tag cannot drift away from the
+   * theme it describes. A theme with no tags is still browsable — the
+   * questionnaire narrows the list, it never shortens it.
+   */
+  tags: SrsThemeTag[];
   levels: SrsThemeLevel[];
 };
 

@@ -9,6 +9,7 @@ import {
   THEME_RATING_DEFAULT,
   THEME_RENAMES,
 } from "./srs-theme-meta.mjs";
+import { ALL_TAGS, THEME_TAGS, scriptTagFor } from "./srs-theme-tags.mjs";
 
 /**
  * Builds `src/data/srsThemes.json`, the committed source for SRS themes.
@@ -189,6 +190,30 @@ for (const extra of EXTRA_THEMES) {
   });
 }
 
+/*
+ * Tags last, over the parsed themes and the authored ones together, so the two
+ * paths cannot end up disagreeing about what a tag is.
+ *
+ * A tag written against an id no theme has is otherwise silent — the theme it
+ * was meant for simply never matches — so the build refuses rather than
+ * shipping a questionnaire with a hole in it.
+ */
+const knownIds = new Set(themes.map((theme) => theme.id));
+const orphanTags = Object.keys(THEME_TAGS).filter((id) => !knownIds.has(id));
+if (orphanTags.length) throw new Error(`tags written for themes that do not exist: ${orphanTags.join(", ")}`);
+
+const vocabulary = new Set(ALL_TAGS);
+const untagged = [];
+for (const theme of themes) {
+  const hand = THEME_TAGS[theme.id] ?? [];
+  for (const tag of hand) {
+    if (!vocabulary.has(tag)) throw new Error(`${theme.id} carries an unknown tag "${tag}"`);
+  }
+  if (hand.length === 0) untagged.push(theme.id);
+  /* Deduplicated and sorted, so reordering the map does not churn the JSON. */
+  theme.tags = [...new Set([...hand, scriptTagFor(theme.levels)])].sort();
+}
+
 themes.sort((left, right) => left.name.localeCompare(right.name));
 
 await fs.writeFile(
@@ -210,3 +235,4 @@ console.log(`  renamed for trademark: ${themes.filter((t) => t.renamed).length}`
 console.log(`  rung swaps applied: ${Object.values(RUNG_REPLACEMENTS).reduce((s, r) => s + Object.keys(r).length, 0)}`);
 console.log(`  ratings: all ${counts.all}, teen ${counts.teen}, adult ${counts.adult}`);
 console.log(`  chips still over ${SHORT_MAX} characters: ${longShorts}`);
+console.log(`  untagged themes (browsable, never suggested): ${untagged.length}${untagged.length ? ` — ${untagged.join(", ")}` : ""}`);

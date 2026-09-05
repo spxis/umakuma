@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-04T14:30:45.366Z",
+  "generatedAt": "2026-09-05T01:58:54.936Z",
   "themes": [
     {
       "id": "academic-system",
@@ -108,6 +108,14 @@
           "bucketReading": "Meiyo Kyōju",
           "bucketMeaning": "Professor Emeritus"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "discipline",
+        "language",
+        "office",
+        "turning-up",
+        "work"
       ]
     },
     {
@@ -217,6 +225,13 @@
           "bucketReading": "Jimotomin",
           "bucketMeaning": "Local"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "anime",
+        "mountain-temple",
+        "travel",
+        "turning-up"
       ]
     },
     {
@@ -326,6 +341,13 @@
           "bucketReading": "Gorira",
           "bucketMeaning": "Gorilla (Inhuman Reflexes)"
         }
+      ],
+      "tags": [
+        "city-night",
+        "discipline",
+        "english-friendly",
+        "games",
+        "turning-up"
       ]
     },
     {
@@ -435,6 +457,13 @@
           "bucketReading": "Tensai Basukettoman",
           "bucketMeaning": "Genius Basketball Man"
         }
+      ],
+      "tags": [
+        "anime",
+        "discipline",
+        "english-friendly",
+        "stadium",
+        "turning-up"
       ]
     },
     {
@@ -544,6 +573,13 @@
           "bucketReading": "Densetsu no Atama",
           "bucketMeaning": "Legendary Leader"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "city-night",
+        "power",
+        "underworld",
+        "violence"
       ]
     },
     {
@@ -653,6 +689,13 @@
           "bucketReading": "Kaubōi",
           "bucketMeaning": "Cowboy"
         }
+      ],
+      "tags": [
+        "anime",
+        "cleverness",
+        "mixed-script",
+        "spaceship",
+        "violence"
       ]
     },
     {
@@ -762,6 +805,14 @@
           "bucketReading": "Sekai Ōja",
           "bucketMeaning": "World Champion"
         }
+      ],
+      "tags": [
+        "anime",
+        "discipline",
+        "dojo",
+        "english-friendly",
+        "power",
+        "stadium"
       ]
     },
     {
@@ -871,6 +922,13 @@
           "bucketReading": "Aka-obi",
           "bucketMeaning": "Red Belt"
         }
+      ],
+      "tags": [
+        "cleverness",
+        "discipline",
+        "dojo",
+        "mixed-script",
+        "turning-up"
       ]
     },
     {
@@ -980,6 +1038,12 @@
           "bucketReading": "Eru-zero-kei",
           "bucketMeaning": "L0 Series Maglev"
         }
+      ],
+      "tags": [
+        "discipline",
+        "english-friendly",
+        "power",
+        "travel"
       ]
     },
     {
@@ -1089,6 +1153,12 @@
           "bucketReading": "Chōdendō",
           "bucketMeaning": "Superconducting"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "discipline",
+        "power",
+        "travel"
       ]
     },
     {
@@ -1198,6 +1268,13 @@
           "bucketReading": "Kyōkō",
           "bucketMeaning": "The Pope"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "discipline",
+        "kindness",
+        "mountain-temple",
+        "turning-up"
       ]
     },
     {
@@ -1307,6 +1384,13 @@
           "bucketReading": "Zekkai no Tankutsuka",
           "bucketMeaning": "Netherworld-Class Raider"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "anime",
+        "cleverness",
+        "turning-up",
+        "violence"
       ]
     },
     {
@@ -1416,6 +1500,14 @@
           "bucketReading": "Dōjima no Ryū",
           "bucketMeaning": "Dragon of Dojima"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "city-night",
+        "games",
+        "power",
+        "underworld",
+        "violence"
       ]
     },
     {
@@ -1525,6 +1617,12 @@
           "bucketReading": "Maesutoro",
           "bucketMeaning": "Maestro"
         }
+      ],
+      "tags": [
+        "discipline",
+        "english-friendly",
+        "kindness",
+        "turning-up"
       ]
     },
     {
@@ -1634,6 +1732,13 @@
           "bucketReading": "Danchō",
           "bucketMeaning": "Commander"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "anime",
+        "discipline",
+        "power",
+        "violence"
       ]
     },
     {
@@ -1743,6 +1848,14 @@
           "bucketReading": "Masutā",
           "bucketMeaning": "Master"
         }
+      ],
+      "tags": [
+        "cleverness",
+        "english-friendly",
+        "family",
+        "games",
+        "kindness",
+        "turning-up"
       ]
     },
     {
@@ -1852,6 +1965,13 @@
           "bucketReading": "Gōsuto",
           "bucketMeaning": "Ghost"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "anime",
+        "city-night",
+        "cleverness",
+        "violence"
       ]
     },
     {
@@ -1961,6 +2081,11 @@
           "bucketReading": "Yubiwa Shojisha",
           "bucketMeaning": "Ring-bearer"
         }
+      ],
+      "tags": [
+        "english-friendly",
+        "kindness",
+        "turning-up"
       ]
     },
     {
@@ -2070,6 +2195,11 @@
           "bucketReading": "Koibito",
           "bucketMeaning": "Lovers"
         }
+      ],
+      "tags": [
+        "anime",
+        "kindness",
+        "mixed-script"
       ]
     },
     {
@@ -2179,6 +2309,13 @@
           "bucketReading": "Sābā no Hashira",
           "bucketMeaning": "Pillar of the Server"
         }
+      ],
+      "tags": [
+        "adult-content",
+        "all-japanese",
+        "games",
+        "power",
+        "turning-up"
       ]
     },
     {
@@ -2288,6 +2425,13 @@
           "bucketReading": "Kunshu",
           "bucketMeaning": "Monarch"
         }
+      ],
+      "tags": [
+        "anime",
+        "english-friendly",
+        "games",
+        "power",
+        "violence"
       ]
     },
     {
@@ -2397,6 +2541,12 @@
           "bucketReading": "Shōten shita Sonzai",
           "bucketMeaning": "Ascended Being"
         }
+      ],
+      "tags": [
+        "cleverness",
+        "mixed-script",
+        "spaceship",
+        "turning-up"
       ]
     },
     {
@@ -2506,6 +2656,14 @@
           "bucketReading": "Okami",
           "bucketMeaning": "Proprietress (Okiya Mother)"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "city-night",
+        "discipline",
+        "kindness",
+        "language",
+        "travel"
       ]
     },
     {
@@ -2615,6 +2773,13 @@
           "bucketReading": "Sekai Ōja",
           "bucketMeaning": "World Champion"
         }
+      ],
+      "tags": [
+        "anime",
+        "discipline",
+        "english-friendly",
+        "games",
+        "turning-up"
       ]
     },
     {
@@ -2724,6 +2889,13 @@
           "bucketReading": "Nanbā Wan",
           "bucketMeaning": "#1 Hero[cite: 1]"
         }
+      ],
+      "tags": [
+        "anime",
+        "english-friendly",
+        "kindness",
+        "power",
+        "turning-up"
       ]
     },
     {
@@ -2833,6 +3005,12 @@
           "bucketReading": "Saikyō no Hīrō",
           "bucketMeaning": "The Strongest Hero"
         }
+      ],
+      "tags": [
+        "anime",
+        "english-friendly",
+        "power",
+        "turning-up"
       ]
     },
     {
@@ -2942,6 +3120,13 @@
           "bucketReading": "Toraifōsu Hojisha",
           "bucketMeaning": "Bearer of the Triforce"
         }
+      ],
+      "tags": [
+        "cleverness",
+        "games",
+        "kindness",
+        "mixed-script",
+        "turning-up"
       ]
     },
     {
@@ -3051,6 +3236,12 @@
           "bucketReading": "Zenkoku Seiha",
           "bucketMeaning": "National Champion"
         }
+      ],
+      "tags": [
+        "discipline",
+        "mixed-script",
+        "stadium",
+        "turning-up"
       ]
     },
     {
@@ -3160,6 +3351,13 @@
           "bucketReading": "Kaichō",
           "bucketMeaning": "Chairman"
         }
+      ],
+      "tags": [
+        "anime",
+        "cleverness",
+        "mixed-script",
+        "power",
+        "violence"
       ]
     },
     {
@@ -3269,6 +3467,12 @@
           "bucketReading": "Densetsu no Otaku",
           "bucketMeaning": "Legendary Otaku"
         }
+      ],
+      "tags": [
+        "anime",
+        "city-night",
+        "mixed-script",
+        "turning-up"
       ]
     },
     {
@@ -3378,6 +3582,14 @@
           "bucketReading": "Tennō",
           "bucketMeaning": "Emperor"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "cleverness",
+        "discipline",
+        "language",
+        "office",
+        "work"
       ]
     },
     {
@@ -3487,6 +3699,13 @@
           "bucketReading": "Shīshījī no Shinigami",
           "bucketMeaning": "CCG's Reaper"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "anime",
+        "city-night",
+        "power",
+        "violence"
       ]
     },
     {
@@ -3596,6 +3815,12 @@
           "bucketReading": "Densetsu no Utahime",
           "bucketMeaning": "Legendary Diva"
         }
+      ],
+      "tags": [
+        "city-night",
+        "english-friendly",
+        "stadium",
+        "turning-up"
       ]
     },
     {
@@ -3705,6 +3930,11 @@
           "bucketReading": "Maboroshi no Meiki",
           "bucketMeaning": "Legendary Phantom Device"
         }
+      ],
+      "tags": [
+        "discipline",
+        "english-friendly",
+        "turning-up"
       ]
     },
     {
@@ -3814,6 +4044,14 @@
           "bucketReading": "Kakusha",
           "bucketMeaning": "Awakened One"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "discipline",
+        "kindness",
+        "language",
+        "mountain-temple",
+        "travel"
       ]
     },
     {
@@ -3923,6 +4161,12 @@
           "bucketReading": "Chōdendō Rinia",
           "bucketMeaning": "Maglev"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "discipline",
+        "travel",
+        "turning-up"
       ]
     },
     {
@@ -4032,6 +4276,12 @@
           "bucketReading": "Hikari no Senshi",
           "bucketMeaning": "Warrior of Light"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "cleverness",
+        "games",
+        "power"
       ]
     },
     {
@@ -4141,6 +4391,13 @@
           "bucketReading": "Hanshi",
           "bucketMeaning": "Hanshi (master instructor title)"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "cleverness",
+        "discipline",
+        "dojo",
+        "turning-up"
       ]
     },
     {
@@ -4250,6 +4507,13 @@
           "bucketReading": "Banana Kingu",
           "bucketMeaning": "Banana King"
         }
+      ],
+      "tags": [
+        "english-friendly",
+        "family",
+        "games",
+        "power",
+        "turning-up"
       ]
     },
     {
@@ -4359,6 +4623,13 @@
           "bucketReading": "Kataribe",
           "bucketMeaning": "The Storyteller"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "cleverness",
+        "language",
+        "mountain-temple",
+        "violence"
       ]
     },
     {
@@ -4468,6 +4739,12 @@
           "bucketReading": "Hanshi",
           "bucketMeaning": "Exemplary Teacher"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "discipline",
+        "dojo",
+        "turning-up"
       ]
     },
     {
@@ -4577,6 +4854,12 @@
           "bucketReading": "Gurando Masutā",
           "bucketMeaning": "Grand Master"
         }
+      ],
+      "tags": [
+        "discipline",
+        "english-friendly",
+        "power",
+        "spaceship"
       ]
     },
     {
@@ -4686,6 +4969,13 @@
           "bucketReading": "Naito obu Zero",
           "bucketMeaning": "Knight of Zero[cite: 1]"
         }
+      ],
+      "tags": [
+        "anime",
+        "cleverness",
+        "mixed-script",
+        "power",
+        "violence"
       ]
     },
     {
@@ -4795,6 +5085,13 @@
           "bucketReading": "Kenja",
           "bucketMeaning": "Sage"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "anime",
+        "cleverness",
+        "kindness",
+        "turning-up"
       ]
     },
     {
@@ -4904,6 +5201,12 @@
           "bucketReading": "Shinkyū Mahōtsukai",
           "bucketMeaning": "God-Rank Mage"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "anime",
+        "cleverness",
+        "power"
       ]
     },
     {
@@ -5013,6 +5316,12 @@
           "bucketReading": "Akaki Eiyū",
           "bucketMeaning": "The Red Hero"
         }
+      ],
+      "tags": [
+        "cleverness",
+        "english-friendly",
+        "games",
+        "power"
       ]
     },
     {
@@ -5122,6 +5431,13 @@
           "bucketReading": "Gandamu Pairotto",
           "bucketMeaning": "Gundam Pilot"
         }
+      ],
+      "tags": [
+        "anime",
+        "mixed-script",
+        "power",
+        "spaceship",
+        "violence"
       ]
     },
     {
@@ -5231,6 +5547,13 @@
           "bucketReading": "Sūpā Sumasshu",
           "bucketMeaning": "Super Smash"
         }
+      ],
+      "tags": [
+        "english-friendly",
+        "family",
+        "games",
+        "kindness",
+        "turning-up"
       ]
     },
     {
@@ -5340,6 +5663,11 @@
           "bucketReading": "Chōetsusha",
           "bucketMeaning": "Beyond Omega"
         }
+      ],
+      "tags": [
+        "cleverness",
+        "english-friendly",
+        "power"
       ]
     },
     {
@@ -5449,6 +5777,13 @@
           "bucketReading": "Fikusā",
           "bucketMeaning": "Shadow Fixer"
         }
+      ],
+      "tags": [
+        "adult-content",
+        "city-night",
+        "cleverness",
+        "english-friendly",
+        "underworld"
       ]
     },
     {
@@ -5558,6 +5893,13 @@
           "bucketReading": "Hyakki Yagyō",
           "bucketMeaning": "Night Parade of a Hundred Demons"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "language",
+        "mountain-temple",
+        "power",
+        "violence"
       ]
     },
     {
@@ -5667,6 +6009,13 @@
           "bucketReading": "Dai-onmyōji",
           "bucketMeaning": "Grand Master"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "cleverness",
+        "discipline",
+        "language",
+        "mountain-temple"
       ]
     },
     {
@@ -5776,6 +6125,13 @@
           "bucketReading": "Kaizoku-ō",
           "bucketMeaning": "Pirate King"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "anime",
+        "kindness",
+        "power",
+        "turning-up"
       ]
     },
     {
@@ -5885,6 +6241,13 @@
           "bucketReading": "Kyokuchō",
           "bucketMeaning": "Bureau Chief[cite: 1]"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "anime",
+        "city-night",
+        "cleverness",
+        "violence"
       ]
     },
     {
@@ -5994,6 +6357,11 @@
           "bucketReading": "Mai Denchū",
           "bucketMeaning": "My Utility Pole"
         }
+      ],
+      "tags": [
+        "discipline",
+        "english-friendly",
+        "turning-up"
       ]
     },
     {
@@ -6103,6 +6471,11 @@
           "bucketReading": "Kizuna",
           "bucketMeaning": "Bond"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "anime",
+        "kindness"
       ]
     },
     {
@@ -6212,6 +6585,13 @@
           "bucketReading": "Tenhō-i",
           "bucketMeaning": "Zenith (Emperor of Heaven)"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "city-night",
+        "cleverness",
+        "games",
+        "turning-up"
       ]
     },
     {
@@ -6321,6 +6701,13 @@
           "bucketReading": "Shachō",
           "bucketMeaning": "Company President"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "discipline",
+        "office",
+        "turning-up",
+        "work"
       ]
     },
     {
@@ -6430,6 +6817,12 @@
           "bucketReading": "Meijin",
           "bucketMeaning": "Grandmaster"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "discipline",
+        "dojo",
+        "power"
       ]
     },
     {
@@ -6539,6 +6932,11 @@
           "bucketReading": "Chikyū Saikyō no Hīrō",
           "bucketMeaning": "Earth's Mightiest Hero"
         }
+      ],
+      "tags": [
+        "cleverness",
+        "english-friendly",
+        "power"
       ]
     },
     {
@@ -6648,6 +7046,13 @@
           "bucketReading": "Shinigami-ō",
           "bucketMeaning": "Shinigami King"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "anime",
+        "city-night",
+        "cleverness",
+        "violence"
       ]
     },
     {
@@ -6757,6 +7162,13 @@
           "bucketReading": "Kage",
           "bucketMeaning": "Shadow"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "cleverness",
+        "discipline",
+        "dojo",
+        "violence"
       ]
     },
     {
@@ -6866,6 +7278,13 @@
           "bucketReading": "Kage",
           "bucketMeaning": "Shadow (Village Leader)"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "anime",
+        "dojo",
+        "power",
+        "turning-up"
       ]
     },
     {
@@ -6975,6 +7394,13 @@
           "bucketReading": "Kyokuchō",
           "bucketMeaning": "Commander"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "discipline",
+        "dojo",
+        "power",
+        "violence"
       ]
     },
     {
@@ -7084,6 +7510,14 @@
           "bucketReading": "Daigūji",
           "bucketMeaning": "Grand Priest"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "discipline",
+        "kindness",
+        "language",
+        "mountain-temple",
+        "travel"
       ]
     },
     {
@@ -7193,6 +7627,13 @@
           "bucketReading": "Tokkyū Jujutsushi",
           "bucketMeaning": "Special Grade Sorcerer[cite: 1]"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "anime",
+        "cleverness",
+        "power",
+        "violence"
       ]
     },
     {
@@ -7302,6 +7743,12 @@
           "bucketReading": "Sōtaichō",
           "bucketMeaning": "Captain-Commander"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "anime",
+        "discipline",
+        "power"
       ]
     },
     {
@@ -7411,6 +7858,13 @@
           "bucketReading": "Haipā Sonikku",
           "bucketMeaning": "Hyper Sonic"
         }
+      ],
+      "tags": [
+        "english-friendly",
+        "family",
+        "games",
+        "power",
+        "turning-up"
       ]
     },
     {
@@ -7520,6 +7974,13 @@
           "bucketReading": "Tasogare",
           "bucketMeaning": "Twilight"
         }
+      ],
+      "tags": [
+        "anime",
+        "cleverness",
+        "family",
+        "kindness",
+        "mixed-script"
       ]
     },
     {
@@ -7629,6 +8090,13 @@
           "bucketReading": "Gensui",
           "bucketMeaning": "Fleet Admiral"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "cleverness",
+        "kindness",
+        "spaceship",
+        "turning-up"
       ]
     },
     {
@@ -7738,6 +8206,13 @@
           "bucketReading": "Daisōtō",
           "bucketMeaning": "Führer"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "anime",
+        "cleverness",
+        "discipline",
+        "violence"
       ]
     },
     {
@@ -7847,6 +8322,13 @@
           "bucketReading": "Bungū-ō",
           "bucketMeaning": "Stationery Tycoon"
         }
+      ],
+      "tags": [
+        "kindness",
+        "mixed-script",
+        "office",
+        "turning-up",
+        "work"
       ]
     },
     {
@@ -7956,6 +8438,14 @@
           "bucketReading": "Yokozuna",
           "bucketMeaning": "Grand Champion"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "discipline",
+        "dojo",
+        "power",
+        "stadium",
+        "turning-up"
       ]
     },
     {
@@ -8065,6 +8555,13 @@
           "bucketReading": "Taishō",
           "bucketMeaning": "Boss / Owner"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "discipline",
+        "travel",
+        "turning-up",
+        "work"
       ]
     },
     {
@@ -8174,6 +8671,13 @@
           "bucketReading": "Shinjinrui",
           "bucketMeaning": "New Mankind"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "anime",
+        "cleverness",
+        "power",
+        "violence"
       ]
     },
     {
@@ -8283,6 +8787,13 @@
           "bucketReading": "Kaichō",
           "bucketMeaning": "Chairman (Godfather)"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "city-night",
+        "power",
+        "underworld",
+        "violence"
       ]
     },
     {
@@ -8392,6 +8903,14 @@
           "bucketReading": "Sōshō",
           "bucketMeaning": "Master"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "discipline",
+        "kindness",
+        "language",
+        "mountain-temple",
+        "travel"
       ]
     },
     {
@@ -8501,6 +9020,15 @@
           "bucketReading": "Abatā",
           "bucketMeaning": "Avatar"
         }
+      ],
+      "tags": [
+        "anime",
+        "discipline",
+        "dojo",
+        "family",
+        "kindness",
+        "mixed-script",
+        "mountain-temple"
       ]
     },
     {
@@ -8610,6 +9138,13 @@
           "bucketReading": "Ritsu no Nushi",
           "bucketMeaning": "Lord of the Order"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "games",
+        "power",
+        "turning-up",
+        "violence"
       ]
     },
     {
@@ -8719,6 +9254,14 @@
           "bucketReading": "Hashira",
           "bucketMeaning": "Pillar"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "anime",
+        "discipline",
+        "dojo",
+        "power",
+        "violence"
       ]
     },
     {
@@ -8828,6 +9371,12 @@
           "bucketReading": "Zekkyō-ō",
           "bucketMeaning": "King of Screams"
         }
+      ],
+      "tags": [
+        "english-friendly",
+        "family",
+        "travel",
+        "turning-up"
       ]
     },
     {
@@ -8937,6 +9486,12 @@
           "bucketReading": "Dokutā",
           "bucketMeaning": "The Doctor"
         }
+      ],
+      "tags": [
+        "cleverness",
+        "english-friendly",
+        "kindness",
+        "spaceship"
       ]
     },
     {
@@ -9046,6 +9601,13 @@
           "bucketReading": "Ningen Kokuhō",
           "bucketMeaning": "Living National Treasure"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "discipline",
+        "travel",
+        "turning-up",
+        "work"
       ]
     },
     {
@@ -9155,6 +9717,12 @@
           "bucketReading": "Shiawase no Kiiroi Shinkansen",
           "bucketMeaning": "Yellow Bullet Train of Happiness"
         }
+      ],
+      "tags": [
+        "cleverness",
+        "english-friendly",
+        "travel",
+        "turning-up"
       ]
     },
     {
@@ -9264,6 +9832,13 @@
           "bucketReading": "Chiisana Kyojin",
           "bucketMeaning": "Little Giant"
         }
+      ],
+      "tags": [
+        "anime",
+        "discipline",
+        "mixed-script",
+        "stadium",
+        "turning-up"
       ]
     },
     {
@@ -9373,6 +9948,14 @@
           "bucketReading": "Midori no Za",
           "bucketMeaning": "The Green Throne"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "anime",
+        "cleverness",
+        "kindness",
+        "mountain-temple",
+        "travel"
       ]
     },
     {
@@ -9482,6 +10065,12 @@
           "bucketReading": "Burned",
           "bucketMeaning": "Done with, in WaniKani's telling"
         }
+      ],
+      "tags": [
+        "discipline",
+        "english-friendly",
+        "language",
+        "turning-up"
       ]
     },
     {
@@ -9591,6 +10180,13 @@
           "bucketReading": "Hōōin Kyōma",
           "bucketMeaning": "Okabe's alter-ego"
         }
+      ],
+      "tags": [
+        "anime",
+        "city-night",
+        "cleverness",
+        "games",
+        "mixed-script"
       ]
     },
     {
@@ -9700,6 +10296,14 @@
           "bucketReading": "Shinrei",
           "bucketMeaning": "Divine Spirit"
         }
+      ],
+      "tags": [
+        "all-japanese",
+        "language",
+        "mountain-temple",
+        "power",
+        "travel",
+        "violence"
       ]
     },
     {
@@ -9809,6 +10413,14 @@
           "bucketReading": "Tayū",
           "bucketMeaning": "Grand Courtesan"
         }
+      ],
+      "tags": [
+        "adult-content",
+        "all-japanese",
+        "city-night",
+        "cleverness",
+        "discipline",
+        "underworld"
       ]
     }
   ]

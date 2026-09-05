@@ -7,12 +7,9 @@ import { AGE_BANDS, type AgeBand } from "@/lib/srs/ageBand";
 import { srsThemeBuckets, type SrsTheme } from "@/lib/srs/srsThemes";
 
 import ThemeLadder from "./ThemeLadder";
+import ThemeQuestionnaire from "./ThemeQuestionnaire";
 
-import { THEME_PICKER_COPY as copy } from "./profileCopy";
-
-const CHIP = "inline-flex h-8 items-center rounded-full border px-3 text-[11px] font-bold transition";
-const ACTIVE = "border-accent bg-accent text-white";
-const IDLE = "border-line bg-surface text-foreground/70 hover:bg-surface-muted";
+import { THEME_CHIP, THEME_PICKER_COPY as copy } from "./profileCopy";
 /* Ninety themes is a page that never ends. The list scrolls inside the card,
    so the age question and the ladder on now stay on screen while browsing. */
 const LIST_HEIGHT = "max-h-[26rem]";
@@ -103,7 +100,7 @@ export default function ThemePicker({
               type="button"
               disabled={saving}
               onClick={() => save({ ageBand: band })}
-              className={`${CHIP} ${ageBand === band ? ACTIVE : IDLE}`}
+              className={`${THEME_CHIP.base} ${ageBand === band ? THEME_CHIP.active : THEME_CHIP.idle}`}
             >
               {copy.ageBands[band]}
             </button>
@@ -124,6 +121,16 @@ export default function ThemePicker({
         <p className="mt-0.5 mb-2 text-sm font-black text-foreground">{theme.name}</p>
         <ThemeLadder theme={theme} />
       </div>
+
+      {/* Five questions over the list, not instead of it: the whole browsable
+          set stays below, in the order it has always been in. */}
+      <ThemeQuestionnaire
+        themes={choices}
+        ageBand={ageBand}
+        currentThemeId={theme.id}
+        busy={saving}
+        onPick={(themeId) => save({ themeId })}
+      />
 
       <div>
         <input
