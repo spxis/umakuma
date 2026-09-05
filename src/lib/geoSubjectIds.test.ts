@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 /* Registers all seven; nothing is in memory until something loads it. */
 import "./geoDatasetsAll";
@@ -106,5 +106,39 @@ describe("the counts the id scheme depends on", () => {
    */
   it.each(COUNTRIES)("still has the expected number of divisions for %s", (country) => {
     expect(getGeoRegionsByCountry(country)).toHaveLength(GEO_REGION_COUNTS[country as GameMapCountry]);
+  });
+});
+
+describe("a country whose data lands after this module is imported", () => {
+  /*
+   * The browser's order, which the import at the top of this file hides.
+   *
+   * `geoSubjectIds` is in the bundle from the first render; a country's regions
+   * only exist once its chunk has been fetched. The offsets used to be built
+   * once at module load, so they were built from an empty region list and kept
+   * that way for the life of the page: `geoRegionIdFromSubjectId` named no id
+   * ever again, while `isGeoSubjectId` - which reads the pinned counts and no
+   * dataset - went on answering true.
+   *
+   * What John saw: the map game drew "CHOOSE THE PREFECTURE · READING みえ",
+   * drew the whole of Japan, and offered nothing to answer with, because every
+   * option resolved to null and the handles are built from those.
+   */
+  it("names an id once the chunk has landed, not only if it landed first", async () => {
+    vi.resetModules();
+    const ids = await import("./geoSubjectIds");
+    const mie = ids.GEO_SUBJECT_ID_BASES.JP + 24;
+
+    /* Nothing is loaded in a fresh module graph, so there is nothing to name. */
+    expect(ids.geoRegionIdFromSubjectId(mie)).toBeNull();
+    /* And the band check answers from the counts, which is the asymmetry that
+       let a run start with questions nothing could draw. */
+    expect(ids.isGeoSubjectId(mie)).toBe(true);
+
+    const { loadGeoDataset } = await import("./geoDatasetLoaders");
+    await loadGeoDataset("JP");
+
+    expect(ids.geoRegionIdFromSubjectId(mie)).toBe("JP-24");
+    expect(ids.geoSubjectId("JP", 24)).toBe(mie);
   });
 });

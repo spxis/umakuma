@@ -66,26 +66,50 @@ function sortedCodesFor(country: CountryCode): string[] {
     .sort((left, right) => left.localeCompare(right));
 }
 
-const OFFSETS_BY_COUNTRY = new Map<CountryCode, Map<string, number>>(
-  COUNTRY_CODES.map((country) => {
-    if (country === "JP") {
-      // Japan's offset is the prefecture code itself, which the original scheme
-      // used and historical runs already hold.
-      return [
-        country,
-        new Map(getGeoRegionsByCountry(country).map((region) => [String(region.code), Number(region.code)])),
-      ];
-    }
+/**
+ * A country's offsets, built the first time they can be.
+ *
+ * Built once at module load before, which was wrong in a way nothing caught: a
+ * country's regions are registered when its dataset chunk lands, and this
+ * module is imported long before any of them. So every map was built from an
+ * empty region list and cached that way for the life of the page - `geoSubjectId`
+ * returned null for every region and `geoRegionIdFromSubjectId` could not name
+ * a single id, while `isGeoSubjectId` (which reads the pinned counts and no
+ * dataset) went on answering true.
+ *
+ * What that looked like: the map game drew the prompt, drew the country, and
+ * offered nothing to answer with. `CountryMap` loads its own dataset through
+ * `useGeoDataset` and redrew when it landed; the option handles were built from
+ * this cache and stayed empty forever.
+ *
+ * An empty result is never cached, so the first call after the dataset lands
+ * builds the real map. The unit tests missed it because the suite imports the
+ * datasets before this module, which is the one order the browser never uses.
+ */
+const OFFSETS_BY_COUNTRY = new Map<CountryCode, Map<string, number>>();
 
-    return [country, new Map(sortedCodesFor(country).map((code, index) => [code, index + 1]))];
-  }),
-);
+function offsetsFor(country: CountryCode): Map<string, number> {
+  const cached = OFFSETS_BY_COUNTRY.get(country);
+  if (cached) return cached;
+
+  const built =
+    country === "JP"
+      ? // Japan's offset is the prefecture code itself, which the original
+        // scheme used and historical runs already hold.
+        new Map(getGeoRegionsByCountry(country).map((region) => [String(region.code), Number(region.code)]))
+      : new Map(sortedCodesFor(country).map((code, index) => [code, index + 1]));
+
+  /* Only a real answer is kept: an empty one means the dataset has not landed
+     yet, and caching it is exactly what broke the board. */
+  if (built.size > 0) OFFSETS_BY_COUNTRY.set(country, built);
+  return built;
+}
 
 /** The reserved subject id for a region, given its country and code. */
 export function geoSubjectId(country: CountryCode, code: string | number): number | null {
   /* A country the game has no id range for has no subject id, by definition. */
   if (!isGameMapCountry(country)) return null;
-  const offset = OFFSETS_BY_COUNTRY.get(country)?.get(String(code));
+  const offset = offsetsFor(country).get(String(code));
   return offset === undefined ? null : GEO_SUBJECT_ID_BASES[country] + offset;
 }
 
@@ -106,7 +130,7 @@ export function geoRegionIdFromSubjectId(subjectId: number): string | null {
       continue;
     }
 
-    for (const [code, candidate] of OFFSETS_BY_COUNTRY.get(country) ?? []) {
+    for (const [code, candidate] of offsetsFor(country)) {
       if (candidate === offset) {
         return `${country}-${code}`;
       }
