@@ -5492,11 +5492,23 @@
     "id": "radical-name-one-source",
     "name": "One name, read from one place",
     "area": "platform",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-05",
+    "summary": "A radical's name is decided once, where the curriculum is kept, and every page reads it from there. The explorer used to work out its own and could disagree with a review card about the same character.",
+    "dateIsEstimate": false,
+    "version": "0.479.0",
+    "releasedAt": "2026-09-05T18:39:29Z"
+  },
+  {
+    "id": "radical-no-reading",
+    "name": "A radical is not asked for a reading",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-05",
-    "version": "0.479.0",
-    "releasedAt": "2026-09-05T18:39:29Z",
-    "summary": "A radical's name is decided once, where the curriculum is kept, and every page reads it from there. The explorer used to work out its own and could disagree with a review card about the same character."
+    "version": "0.480.0",
+    "releasedAt": "2026-09-05T18:40:03Z",
+    "summary": "A radical is a shape, not a sound, so a review card no longer opens with an empty Reading panel above the meaning. Every surface that labels a reading now checks first."
   }
 ]
