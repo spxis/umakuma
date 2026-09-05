@@ -282,6 +282,7 @@ export default function StudyReviewModalSection({
                     selectedMeaningExplanation={selectedMeaningExplanation}
                     selectedReadingExplanationRaw={selectedReadingExplanationRaw}
                     wanikaniName={selectedItem.wanikaniName}
+                    umakumaName={selectedItem.umakumaName}
                     hasReading={!isRadicalSubjectType(selectedItem.subjectType)}
                     isPracticeItem={isPracticeItem}
                     assignmentId={selectedItem.assignmentId}

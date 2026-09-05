@@ -30,6 +30,12 @@ export type LevelItem = {
    * holds it.
    */
   wanikaniName?: string | null;
+  /*
+   * Ours, on a WaniKani surface - the mirror of the field above. Ungated,
+   * because our names are ours to show; a member reading their WaniKani queue
+   * can see what this site calls the same shape without connecting anything.
+   */
+  umakumaName?: string | null;
   successRate?: number;
   characters: string;
   meanings: string[];

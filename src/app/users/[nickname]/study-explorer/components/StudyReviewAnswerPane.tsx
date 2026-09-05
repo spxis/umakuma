@@ -16,6 +16,8 @@ type Props = {
   selectedReadingExplanationRaw: string;
   /** WaniKani's own word for this radical, for a member who may read it. */
   wanikaniName?: string | null;
+  /** Ours, when the card being read is WaniKani's. */
+  umakumaName?: string | null;
   /** A radical has no reading, so it is not asked for one. */
   hasReading: boolean;
   isPracticeItem: boolean;
@@ -39,6 +41,7 @@ export default function StudyReviewAnswerPane({
   selectedMeaningExplanation,
   selectedReadingExplanationRaw,
   wanikaniName,
+  umakumaName,
   hasReading,
   isPracticeItem,
   assignmentId,
@@ -93,6 +96,10 @@ export default function StudyReviewAnswerPane({
               directly under ours rather than at the bottom of the card: the
               two names answer the same question and belong together. */}
           <CrossSystemName system={LEVEL_SYSTEMS.wanikani} name={wanikaniName} className="mt-2" />
+          {/* And the mirror: our name, when the feed being read is theirs.
+              Only ever one of the two is filled - a card belongs to one
+              system and names the other. */}
+          <CrossSystemName system={LEVEL_SYSTEMS.umakuma} name={umakumaName} className="mt-2" />
           {hasAltMeanings ? (
             <div className="mt-3">
               <p className="text-[9px] font-bold uppercase tracking-[0.1em] text-foreground/60">

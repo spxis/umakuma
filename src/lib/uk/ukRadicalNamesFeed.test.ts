@@ -65,3 +65,34 @@ describe("who may read their names", () => {
     expect(route).toContain("pagedItems.filter");
   });
 });
+
+describe("our name on WaniKani's own items", () => {
+  const server = readFileSync("src/lib/uk/ukRadicalNamesServer.ts", "utf8");
+
+  /* The mirror of the merge above. A card belongs to one system and names the
+     other, so only ever one of the two fields is filled. */
+  it("is not gated, because our names are ours to show", () => {
+    const ours = server.slice(server.indexOf("withUmakumaRadicalNames"));
+    expect(ours).not.toContain("hasWanikaniConnection");
+    expect(ours).toContain("ukRadicalLink");
+  });
+
+  it("asks only about radicals, and only once", () => {
+    expect(server).toContain("item.subjectType === SUBJECT_TYPES.radical");
+    expect(server).toContain("new Set(ids)");
+  });
+
+  it("is wired into the WaniKani queue", () => {
+    const route = readFileSync("src/app/api/study/[accountId]/queue/route.ts", "utf8");
+    expect(route).toContain("await withUmakumaRadicalNames(scored)");
+  });
+
+  it("draws through the same component as their name on ours", () => {
+    const pane = readFileSync(
+      "src/app/users/[nickname]/study-explorer/components/StudyReviewAnswerPane.tsx",
+      "utf8",
+    );
+    expect(pane).toContain("system={LEVEL_SYSTEMS.wanikani} name={wanikaniName}");
+    expect(pane).toContain("system={LEVEL_SYSTEMS.umakuma} name={umakumaName}");
+  });
+});

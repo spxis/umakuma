@@ -21,6 +21,7 @@ import { mergeTroubleRows, troubleInjectionCount, type StudySubjectTagMap } from
 import { fetchStudyTagRows } from "@/lib/studySubjectTags";
 import { parseReviewDifficultySort, sortQueueRows } from "./queueRouteDifficulty";
 import { resolveSubjectGlyph } from "@/lib/radicalGlyphs";
+import { withUmakumaRadicalNames } from "@/lib/uk/ukRadicalNamesServer";
 
 type RouteContext = {
   params: Promise<{ accountId: string }>;
@@ -436,9 +437,13 @@ export async function GET(request: Request, context: RouteContext) {
         availableAt: row.data.available_at,
       };
     });
-    const items = difficultySort
+    const scored = difficultySort
       ? applyReviewSuccessRates(rawItems, performanceBySubjectId)
       : await withReviewSuccessRates(accountId, rawItems);
+
+    /* And what UmaKuma calls the same radical - the mirror of the WaniKani
+       name we put on ours. */
+    const items = await withUmakumaRadicalNames(scored);
 
     if (canWriteServerCache) {
       setCachedStudyQueue(

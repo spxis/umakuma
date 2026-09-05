@@ -1,3 +1,4 @@
+import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import { prisma } from "@/lib/prisma";
 import { hasWanikaniConnection } from "@/lib/wanikaniConnection";
 
@@ -31,4 +32,43 @@ export async function loadWanikaniRadicalNames(
     select: { ukSubjectId: true, theirName: true },
   });
   return new Map(links.map((link) => [link.ukSubjectId, link.theirName]));
+}
+
+/**
+ * Puts our name for a radical onto WaniKani's own items.
+ *
+ * The mirror of the function above and deliberately ungated: our names are
+ * ours to show, so a member reading their WaniKani queue sees what UmaKuma
+ * calls the same shape whether or not they have ever opened our ladder.
+ *
+ * Loads and merges in one call rather than handing a map back, because the
+ * caller is a route that has no other reason to know the pairing exists - and
+ * generic over the row, since each feed carries its own shape and all this
+ * needs is a subject id.
+ */
+export async function withUmakumaRadicalNames<T extends { subjectId: number; subjectType?: string }>(
+  items: readonly T[],
+): Promise<(T & { umakumaName?: string | null })[]> {
+  const ids = items
+    .filter((item) => item.subjectType === SUBJECT_TYPES.radical)
+    .map((item) => item.subjectId);
+  if (ids.length === 0) return [...items];
+
+  const links = await prisma.ukRadicalLink
+    .findMany({
+      where: { wkSubjectId: { in: [...new Set(ids)] } },
+      select: { wkSubjectId: true, ourName: true },
+    })
+    .catch(() => []);
+
+  const names = new Map<number, string>();
+  for (const link of links) {
+    if (link.ourName) names.set(link.wkSubjectId, link.ourName);
+  }
+  if (names.size === 0) return [...items];
+
+  return items.map((item) => {
+    const ours = names.get(item.subjectId);
+    return ours ? { ...item, umakumaName: ours } : item;
+  });
 }
