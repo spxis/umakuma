@@ -5312,11 +5312,23 @@
     "id": "pill-levels-switch",
     "name": "Pill levels toggle: WK/UK chips on every SubjectPill row",
     "area": "study",
+    "status": "shipped",
     "kind": "bug",
+    "date": "2026-09-05",
+    "summary": "Used in words shows no level; Easily confused with shows UK level - same component, different callers. Add a Levels position to the standing pill-words control (Off / \u3042 / EN / Both + levels) so WK and UK chips show on every pill row or none. Two display modes only: the large card with full metadata, the pill with a limited subset.",
+    "dateIsEstimate": false,
+    "version": "0.464.0",
+    "releasedAt": "2026-09-05T07:30:50Z"
+  },
+  {
+    "id": "review-xp-parity",
+    "name": "Participation XP for every review, UK or WK",
+    "area": "study",
+    "kind": "feature",
     "status": "shipped",
     "date": "2026-09-05",
-    "version": "0.464.0",
-    "releasedAt": "2026-09-05T07:30:50Z",
-    "summary": "Used in words shows no level; Easily confused with shows UK level - same component, different callers. Add a Levels position to the standing pill-words control (Off / \u3042 / EN / Both + levels) so WK and UK chips show on every pill row or none. Two display modes only: the large card with full metadata, the pill with a limited subset."
+    "version": "0.465.0",
+    "releasedAt": "2026-09-05T07:30:53Z",
+    "summary": "A review answered on the site pays reviewAnswered/reviewCorrect whichever feed it came from. Check both review routes pay the same."
   }
 ]

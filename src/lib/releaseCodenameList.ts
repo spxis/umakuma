@@ -478,4 +478,5 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Nigeta Moji", ja: "逃げた文字", reading: "にげたもじ", gloss: "the characters that got away" },
   { romaji: "Nukarinai Shiken", ja: "抜かりない試験", reading: "ぬかりないしけん", gloss: "a test with nothing missed" },
   { romaji: "Nefuda no Kimari", ja: "値札の決まり", reading: "ねふだのきまり", gloss: "one rule for every chip's tag" },
+  { romaji: "Nobiru Keikenchi", ja: "伸びる経験値", reading: "のびるけいけんち", gloss: "experience that grows on either feed" },
 ];
