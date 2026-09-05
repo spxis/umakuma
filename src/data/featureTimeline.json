@@ -6105,12 +6105,25 @@
     "id": "campaign-helpers-ask",
     "name": "Campaign helpers ask which campaign",
     "area": "reading",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-05",
+    "summary": "The helpers behind the reading challenge take the campaign being looked at rather than assuming the first one, so a stale answer cannot hide a control again.",
+    "dateIsEstimate": false,
+    "release": 491,
+    "version": "1.9.3",
+    "releasedAt": "2026-09-05T21:24:21Z"
+  },
+  {
+    "id": "ug-second-ordering",
+    "name": "UG phase 1: the second ordering, built and readable",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-05",
-    "version": "1.9.3",
-    "release": 491,
-    "releasedAt": "2026-09-05T21:24:21Z",
-    "summary": "The helpers behind the reading challenge take the campaign being looked at rather than assuming the first one, so a stale answer cannot hide a control again."
+    "version": "1.10.0",
+    "release": 492,
+    "releasedAt": "2026-09-05T23:10:30Z",
+    "summary": "A second route through the same kanji, ordered the way a Japanese school teaches them rather than the way the JLPT tests them: grade one complete by level 5, grade six by 51, and no level ever straddling two school years. The ladder is built; choosing it comes next."
   }
 ]
