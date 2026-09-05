@@ -5408,11 +5408,23 @@
     "id": "xp-ladder-chart",
     "name": "XP ladder chart beside the XP board",
     "area": "account",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-05",
+    "summary": "Two columns on /xp: the standings one side, the levels info the other - what each rank costs, its running total and its name, with the viewer's own rank marked.",
+    "dateIsEstimate": false,
+    "version": "0.472.0",
+    "releasedAt": "2026-09-05T09:05:06Z"
+  },
+  {
+    "id": "xp-profile-header",
+    "name": "Profile header says the XP, the rank and what is left",
+    "area": "account",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-05",
-    "version": "0.472.0",
-    "releasedAt": "2026-09-05T09:05:06Z",
-    "summary": "Two columns on /xp: the standings one side, the levels info the other - what each rank costs, its running total and its name, with the viewer's own rank marked."
+    "version": "0.473.0",
+    "releasedAt": "2026-09-05T09:06:42Z",
+    "summary": "The profile page header should read like '50,000 XP (L10 Black Belt)' - the total, the XP level, the rank name, and how much more is needed to level up."
   }
 ]
