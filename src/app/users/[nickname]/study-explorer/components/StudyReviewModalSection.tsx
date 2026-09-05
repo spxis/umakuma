@@ -1,4 +1,6 @@
+
 import { useGlyphFontPreference } from "@/lib/glyphFontPreference";
+import { isRadicalSubjectType } from "../../level-explorer/lib/levelExplorerDomain";
 import { openViewGlyphViewer } from "@/lib/viewGlyphViewer";
 import type { StudyReviewModalSectionProps as Props } from "./StudyReviewModalSection.types";
 import {
@@ -280,6 +282,7 @@ export default function StudyReviewModalSection({
                     selectedMeaningExplanation={selectedMeaningExplanation}
                     selectedReadingExplanationRaw={selectedReadingExplanationRaw}
                     wanikaniName={selectedItem.wanikaniName}
+                    hasReading={!isRadicalSubjectType(selectedItem.subjectType)}
                     isPracticeItem={isPracticeItem}
                     assignmentId={selectedItem.assignmentId}
                     selectedOutcome={selectedOutcome}

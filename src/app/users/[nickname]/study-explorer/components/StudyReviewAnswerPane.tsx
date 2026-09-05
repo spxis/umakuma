@@ -16,6 +16,8 @@ type Props = {
   selectedReadingExplanationRaw: string;
   /** WaniKani's own word for this radical, for a member who may read it. */
   wanikaniName?: string | null;
+  /** A radical has no reading, so it is not asked for one. */
+  hasReading: boolean;
   isPracticeItem: boolean;
   assignmentId: number;
   selectedOutcome: ReviewOutcome | undefined;
@@ -37,6 +39,7 @@ export default function StudyReviewAnswerPane({
   selectedMeaningExplanation,
   selectedReadingExplanationRaw,
   wanikaniName,
+  hasReading,
   isPracticeItem,
   assignmentId,
   selectedOutcome,
@@ -59,22 +62,27 @@ export default function StudyReviewAnswerPane({
   return (
     <div className="flex h-full min-h-0 flex-col">
       <div className="min-h-0 flex-1 overflow-y-auto rounded-xl border border-line bg-surface px-3 py-2.5 sm:px-4 sm:py-3">
-        <section>
-          <FieldLabel size="xs" tone="muted">
-            {STUDY_REVIEW_MODAL_SECTION_TEXT.reading}
-          </FieldLabel>
-          {/* Both scripts of the reading, which is the answer being revealed. */}
-          <div lang="ja" translate="no" className={noTranslateClass("mt-1 flex min-w-0 items-end gap-2")}>
-            <p className="text-2xl font-black leading-tight text-foreground sm:text-4xl">{primaryReading}</p>
-            {primaryReadingKatakana !== "-" ? (
-              <p className="text-xs font-semibold leading-tight text-foreground/70 sm:text-sm">
-                {primaryReadingKatakana}
-              </p>
-            ) : null}
-          </div>
-        </section>
+        {/* A radical is a shape, not a sound: it has no reading and never
+            will, so the panel is absent rather than drawn holding a dash.
+            It was the first thing on the card and it was always empty. */}
+        {hasReading ? (
+          <section>
+            <FieldLabel size="xs" tone="muted">
+              {STUDY_REVIEW_MODAL_SECTION_TEXT.reading}
+            </FieldLabel>
+            {/* Both scripts of the reading, which is the answer being revealed. */}
+            <div lang="ja" translate="no" className={noTranslateClass("mt-1 flex min-w-0 items-end gap-2")}>
+              <p className="text-2xl font-black leading-tight text-foreground sm:text-4xl">{primaryReading}</p>
+              {primaryReadingKatakana !== "-" ? (
+                <p className="text-xs font-semibold leading-tight text-foreground/70 sm:text-sm">
+                  {primaryReadingKatakana}
+                </p>
+              ) : null}
+            </div>
+          </section>
+        ) : null}
 
-        <section className="mt-3 border-t border-line/70 pt-3">
+        <section className={hasReading ? "mt-3 border-t border-line/70 pt-3" : ""}>
           <FieldLabel size="xs" tone="muted">
             {STUDY_REVIEW_MODAL_SECTION_TEXT.meaning}
           </FieldLabel>
