@@ -1,9 +1,10 @@
+import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 
 import { describe, expect, it } from "vitest";
 
 import { ACTIVE_READING_CHALLENGE } from "@/lib/readingChallengeRules";
-import { isCampaignDate } from "@/lib/readingSignoff";
+import { campaignDaysRemaining, isCampaignDate } from "@/lib/readingSignoff";
 
 const CALENDAR = "src/app/users/[nickname]/UserReadingCalendar.tsx";
 const PANEL = "src/app/users/[nickname]/UserReadingSignoffPanel.tsx";
@@ -36,12 +37,52 @@ describe("the calendar follows the campaign that is selected", () => {
   });
 });
 
-describe("why it went unnoticed", () => {
-  /* The constant is the first challenge and always was. Nothing updates it
-     when a new campaign starts, so anything still reading it is answering
-     about a challenge that finished. */
+describe("why it went unnoticed, and why it cannot recur", () => {
+  /* The constant is the first challenge and always was: nothing moves it when
+     a new campaign starts, so anything reading it answers about a challenge
+     that finished. */
   it("still names a campaign that has ended", () => {
     expect(ACTIVE_READING_CHALLENGE.goalDatePst < "2026-09-01").toBe(true);
-    expect(isCampaignDate("2026-09-03")).toBe(false);
+  });
+
+  /* So the campaign is an argument now and there is nowhere to forget it. A
+     function that silently answers about the wrong campaign is worse than no
+     function. */
+  it("asks which campaign rather than assuming one", () => {
+    const winter = { startDatePst: "2026-09-01", goalDatePst: "2026-12-06" };
+    expect(isCampaignDate("2026-09-03", winter)).toBe(true);
+    expect(isCampaignDate("2026-08-31", winter)).toBe(false);
+    expect(isCampaignDate("2026-12-07", winter)).toBe(false);
+  });
+
+  it("counts the days left of the campaign it is given", () => {
+    const winter = { startDatePst: "2026-09-01", goalDatePst: "2026-12-06" };
+    expect(campaignDaysRemaining("2026-12-06", winter.goalDatePst)).toBe(1);
+    expect(campaignDaysRemaining("2026-12-07", winter.goalDatePst)).toBe(0);
+    expect(campaignDaysRemaining("2026-09-01", winter.goalDatePst)).toBe(97);
+    /* It takes the date it needs, not a whole campaign - asking for both
+       dates made the home page pass the goal twice to satisfy the type. */
+  });
+
+  /* The rule, grepped rather than asserted per file: the constant's dates are
+     a last-resort fallback, never the answer. A `??` in front of one is a
+     default; anything else is a surface quietly using the wrong campaign. */
+  it("leaves no surface reading the constant's dates outright", () => {
+    const found = execFileSync(
+      "git",
+      ["grep", "-n", "-E", String.raw`READING_CAMPAIGN\.(startDatePst|goalDatePst)`, "--", "src"],
+      { encoding: "utf8" },
+    )
+      .split("\n")
+      .filter(Boolean)
+      .filter((line) => !line.includes(".test."))
+      /* The definitions themselves, and the fallbacks that spell out `??`. */
+      .filter((line) => !line.startsWith("src/lib/readingSignoff.ts"))
+      .filter((line) => !/\?\?\s*READING_CAMPAIGN\./.test(line))
+      /* The home page names its fallback on its own line before the try. */
+      .filter((line) => !/^src\/app\/page\.tsx:\d+:\s*let challenge/.test(line))
+      .filter((line) => !/^src\/app\/users\/\[nickname\]\/UserReadingSignoffPanel\.campaigns\.ts:\d+:\s+(start|goal)DatePst:/.test(line));
+
+    expect(found, `campaign dates read outright:\n${found.join("\n")}`).toEqual([]);
   });
 });

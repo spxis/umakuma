@@ -249,16 +249,30 @@ export function formatCampaignDateLabel(dateKey: string): string {
   }).format(parseDateKeyAsUtc(dateKey));
 }
 
-export function campaignDaysRemaining(todayDateKey: string): number {
+/**
+ * How long a campaign has left, and whether a day is inside it.
+ *
+ * Both take the campaign rather than reading `READING_CAMPAIGN`, which is the
+ * *first* challenge and stays the first challenge forever - nothing moves it
+ * when a new one starts. `isCampaignDate` used to read it and answered "no"
+ * for every day of the campaign a member was actually looking at, which is how
+ * the check-in button disappeared for the whole family.
+ *
+ * A function that silently answers about the wrong campaign is worse than no
+ * function, so the campaign is an argument and there is nowhere to forget it.
+ */
+export type CampaignDates = { startDatePst: string; goalDatePst: string };
+
+export function campaignDaysRemaining(todayDateKey: string, goalDatePst: string): number {
   const today = parseDateKeyAsUtc(todayDateKey);
-  const goal = parseDateKeyAsUtc(READING_CAMPAIGN.goalDatePst);
+  const goal = parseDateKeyAsUtc(goalDatePst);
   const msPerDay = 24 * 60 * 60 * 1000;
   const diff = Math.floor((goal.getTime() - today.getTime()) / msPerDay) + 1;
   return Math.max(0, diff);
 }
 
-export function isCampaignDate(dateKey: string): boolean {
-  return dateKey >= READING_CAMPAIGN.startDatePst && dateKey <= READING_CAMPAIGN.goalDatePst;
+export function isCampaignDate(dateKey: string, campaign: CampaignDates): boolean {
+  return dateKey >= campaign.startDatePst && dateKey <= campaign.goalDatePst;
 }
 
 export function currentReviewQueueFromAssignmentCache(

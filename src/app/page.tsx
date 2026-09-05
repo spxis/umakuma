@@ -14,7 +14,7 @@ import {
   READING_CAMPAIGN,
   computeReadingLeaderboard,
   getTodayDateInputValue,
-  parseDateKeyAsUtc,
+  campaignDaysRemaining,
   type ReadingSignoffRecord,
 } from "@/lib/readingSignoff";
 import AppTopMenuRow from "./shared/AppTopMenuRow";
@@ -113,13 +113,10 @@ export default async function Home() {
     console.error("Could not resolve active campaign selection", error);
   }
 
-  const challengeDaysLeft = (() => {
-    const todayDate = parseDateKeyAsUtc(challengeToday);
-    const goalDate = parseDateKeyAsUtc(challengeGoalDatePst);
-    const msPerDay = 24 * 60 * 60 * 1000;
-    const diff = Math.floor((goalDate.getTime() - todayDate.getTime()) / msPerDay) + 1;
-    return Math.max(0, diff);
-  })();
+  /* The same count the reading page makes, from the same function: it was
+     spelled out again here, and a second copy of a date calculation is a
+     second chance to be a day out. */
+  const challengeDaysLeft = campaignDaysRemaining(challengeToday, challengeGoalDatePst);
 
   let leaderboard: LeaderboardRow[] = [];
   let setupMessage = "";
