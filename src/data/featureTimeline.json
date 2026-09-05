@@ -5132,11 +5132,23 @@
     "id": "admin-time-off",
     "name": "Time off on the admin member screen",
     "area": "admin",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "Time off on the admin member screen",
+    "dateIsEstimate": false,
+    "version": "0.449.0",
+    "releasedAt": "2026-09-05T02:22:53Z"
+  },
+  {
+    "id": "daily-quests",
+    "name": "Daily quests and streak awards",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.449.0",
-    "releasedAt": "2026-09-05T02:22:53Z",
-    "summary": "Time off on the admin member screen"
+    "version": "0.450.0",
+    "releasedAt": "2026-09-05T02:22:56Z",
+    "summary": "Daily quests and streak awards"
   }
 ]
