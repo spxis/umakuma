@@ -52,4 +52,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Enjiru Kaidan", ja: "演じる階段", reading: "えんじるかいだん", gloss: "the staircase, playing its part" },
   { romaji: "Okonau Bunrui", ja: "行う分類", reading: "おこなうぶんるい", gloss: "sorted by what you are doing" },
   { romaji: "Kaeru Kikan", ja: "変える期間", reading: "かえるきかん", gloss: "the span that changed" },
+  { romaji: "Kigen no Toikake", ja: "期限の問いかけ", reading: "きげんのといかけ", gloss: "the question of which deadline" },
 ];

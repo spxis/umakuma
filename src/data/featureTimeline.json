@@ -6092,12 +6092,25 @@
     "id": "checkin-follows-campaign",
     "name": "Check-in follows the campaign you picked",
     "area": "reading",
+    "status": "shipped",
     "kind": "bug",
+    "date": "2026-09-05",
+    "summary": "The daily check-in button is back: the calendar was still asking about the first reading challenge, so every day of the current one looked like it was outside the campaign.",
+    "dateIsEstimate": false,
+    "release": 490,
+    "version": "1.9.2",
+    "releasedAt": "2026-09-05T20:33:36Z"
+  },
+  {
+    "id": "campaign-helpers-ask",
+    "name": "Campaign helpers ask which campaign",
+    "area": "reading",
+    "kind": "feature",
     "status": "shipped",
     "date": "2026-09-05",
-    "version": "1.9.2",
-    "release": 490,
-    "releasedAt": "2026-09-05T20:33:36Z",
-    "summary": "The daily check-in button is back: the calendar was still asking about the first reading challenge, so every day of the current one looked like it was outside the campaign."
+    "version": "1.9.3",
+    "release": 491,
+    "releasedAt": "2026-09-05T21:24:21Z",
+    "summary": "The helpers behind the reading challenge take the campaign being looked at rather than assuming the first one, so a stale answer cannot hide a control again."
   }
 ]
