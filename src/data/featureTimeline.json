@@ -5084,11 +5084,23 @@
     "id": "xp-pricing",
     "name": "Price XP from the site",
     "area": "admin",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "Price XP from the site",
+    "dateIsEstimate": false,
+    "version": "0.445.0",
+    "releasedAt": "2026-09-05T01:47:22Z"
+  },
+  {
+    "id": "xp-time-off",
+    "name": "Time off and the balance simulator",
+    "area": "platform",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.445.0",
-    "releasedAt": "2026-09-05T01:47:22Z",
-    "summary": "Price XP from the site"
+    "version": "0.446.0",
+    "releasedAt": "2026-09-05T01:47:25Z",
+    "summary": "Time off and the balance simulator"
   }
 ]
