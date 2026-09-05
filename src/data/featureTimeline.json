@@ -5264,11 +5264,23 @@
     "id": "repo-rule-fixes",
     "name": "Three rules the repo states and did not follow",
     "area": "platform",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-04",
+    "summary": "Three rules the repo states and did not follow",
+    "dateIsEstimate": false,
+    "version": "0.460.0",
+    "releasedAt": "2026-09-05T04:03:33Z"
+  },
+  {
+    "id": "map-game-answer-handles",
+    "name": "Map game shows the prompt and the map but no answer tiles",
+    "area": "games",
     "kind": "bug",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.460.0",
-    "releasedAt": "2026-09-05T04:03:33Z",
-    "summary": "Three rules the repo states and did not follow"
+    "version": "0.461.0",
+    "releasedAt": "2026-09-05T06:54:02Z",
+    "summary": "John, 2026-09-04, screenshot of /users/johnmorrisdotca/game/map: question 1/10 'CHOOSE THE PREFECTURE - READING \u307f\u3048' draws the prompt band and the full Japan map, and nothing to answer with. Map mode is the usesCornersBoard false game whose tiles sit in a row numbered 1-4, so the row is either not rendering or rendering empty. Clock was running at 0:20.9, so the round had started."
   }
 ]
