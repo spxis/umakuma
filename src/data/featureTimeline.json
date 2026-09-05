@@ -5228,22 +5228,23 @@
     "id": "study-presets",
     "name": "Easiest/hardest order and study presets",
     "area": "study",
-    "kind": "feature",
     "status": "shipped",
+    "kind": "feature",
     "date": "2026-09-04",
+    "summary": "Easiest/hardest order and study presets",
+    "dateIsEstimate": false,
     "version": "0.457.0",
-    "releasedAt": "2026-09-05T03:19:24Z",
-    "summary": "Easiest/hardest order and study presets"
+    "releasedAt": "2026-09-05T03:19:24Z"
   },
   {
     "id": "teach-confusable-kanji-together",
     "name": "Teach confusable kanji together, not apart",
     "area": "study",
+    "status": "shipped",
     "kind": "feature",
-    "status": "planned",
     "date": "2026-09-04",
-    "dateIsEstimate": true,
-    "release": 1,
-    "summary": "Kanji Garden pairs easily-confused kanji and breaks them down by component, so a learner meets \u6599 and \u79d1 side by side and \u5fb9 \u64a4 \u5fb5 as a set, rather than meeting one in level 12 and its twin in level 40 with nothing to tell them apart. John: keep in mind for a later tuning pass, not now. Two halves: (1) a confusable set derived from shared components - RADKFILE already gives every kanji its parts, so a pair sharing all but one part is computable, and near-identical shapes can be scored on component overlap; (2) what to do with a set, which is either pulling its members into the same ladder level (a build-time constraint alongside the JLPT and grade ordering) or showing the set on a kanji's page and in reviews as a 'do not confuse with' row. The second is cheap and does not disturb the ladder; the first is the real version and needs the ordering rules to admit a fourth constraint. Requested 2026-09-04 by John with a Kanji Garden screenshot. Wished 2026-09-04."
+    "summary": "Kanji Garden pairs easily-confused kanji and breaks them down by component, so a learner meets \u6599 and \u79d1 side by side and \u5fb9 \u64a4 \u5fb5 as a set, rather than meeting one in level 12 and its twin in level 40 with nothing to tell them apart. John: keep in mind for a later tuning pass, not now. Two halves: (1) a confusable set derived from shared components - RADKFILE already gives every kanji its parts, so a pair sharing all but one part is computable, and near-identical shapes can be scored on component overlap; (2) what to do with a set, which is either pulling its members into the same ladder level (a build-time constraint alongside the JLPT and grade ordering) or showing the set on a kanji's page and in reviews as a 'do not confuse with' row. The second is cheap and does not disturb the ladder; the first is the real version and needs the ordering rules to admit a fourth constraint. Requested 2026-09-04 by John with a Kanji Garden screenshot. Wished 2026-09-04.",
+    "version": "0.458.0",
+    "releasedAt": "2026-09-05T03:59:24Z"
   }
 ]
