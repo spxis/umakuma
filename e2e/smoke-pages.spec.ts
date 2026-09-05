@@ -4,6 +4,9 @@ import fs from "node:fs";
 import { STUDY_LIST_COPY } from "@/app/shared/studyListCopy";
 import { CONNECT_COPY } from "@/app/users/[nickname]/wanikani/connectCopy";
 import { STUDY_PANEL_TEXT } from "@/app/users/[nickname]/study-explorer/components/StudyExplorer.constants";
+import { XP_BOARD_COPY } from "@/app/xp/xpBoardCopy";
+import { XP_HISTORY_COPY } from "@/app/users/[nickname]/xp/xpHistoryCopy";
+import { XP_RANK_COPY } from "@/app/users/[nickname]/profile/profileCopy";
 
 import { STORAGE_STATE } from "./sessionState";
 
@@ -1188,4 +1191,35 @@ test("a province named under the wrong region is a 404", async ({ browser, baseU
   const response = await page.goto(`${baseURL}/maps/canada/region/prairies/ontario`);
   expect(response?.status()).toBe(404);
   await context.close();
+});
+
+/*
+ * The XP board is the first one the whole family can appear on: it ranks
+ * `Account.xp`, which everybody starts earning on their first day, rather than
+ * WaniKani numbers, which a member without a connected account has none of. It
+ * has to answer for a signed-out visitor too - `listableTo` decides who is
+ * listed, and an empty board is a state, not a failure.
+ */
+test("the XP board loads and names its own ranking", async ({ browser, baseURL }) => {
+  await assertPageLoads(browser, `${baseURL}/xp`, async (page) => {
+    await expect(page.getByRole("heading", { name: XP_BOARD_COPY.title })).toBeVisible();
+    await expect(page.getByText(XP_BOARD_COPY.blurb)).toBeVisible();
+  });
+});
+
+/* A member's own XP history: owner-only, the way Study history is. */
+test("the member XP history page loads", async ({ browser, baseURL }) => {
+  const user = smokeUsers[0] ?? fallbackUsers[0];
+
+  await assertPageLoads(browser, `${baseURL}/users/${encodeURIComponent(user)}/xp`, async (page) => {
+    if (page.url().includes("/join?access=denied")) {
+      await expect(page.getByText(USER_ACCESS_GATE_TEXT)).toBeVisible();
+      return;
+    }
+
+    await expect(page.getByRole("heading", { name: XP_HISTORY_COPY.title, exact: true })).toBeVisible();
+    /* The standing card, shared with the profile page, is always drawn. */
+    await expect(page.getByRole("heading", { name: XP_RANK_COPY.heading })).toBeVisible();
+    await expect(page.getByRole("link", { name: XP_HISTORY_COPY.board })).toBeVisible();
+  });
 });

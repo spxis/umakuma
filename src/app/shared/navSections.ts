@@ -86,6 +86,11 @@ export const NAV_SECTIONS: NavSection[] = [
          so it carries no capability gate, unlike Stats below it. */
       { label: UK_STUDY_PAGE.tab, path: UK_STUDY_PAGE.path },
       { label: "History", path: "study/history" },
+      /* The other record of turning up. XP is earned by reviews, games and
+         reading alike, so it is not only study - but it is a member's own
+         record of what they did, which is what this group already holds.
+         Owner-only, so a visitor with no page of their own is not offered it. */
+      { label: "XP", path: "xp", memberOnly: true },
       { label: DASHBOARD_TAB_LABELS.stats, path: "study/stats", requires: MEMBER_CAPABILITIES.wanikaniProgress },
     ],
   },
