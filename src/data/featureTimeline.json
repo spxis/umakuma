@@ -6066,12 +6066,25 @@
     "id": "uk-explorer-consistency",
     "name": "The UmaKuma explorer looks like the others",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-05",
+    "summary": "One level to an address, a picker for the hundred, and the same cards, rows and density toggle every other list of subjects on the site uses.",
+    "dateIsEstimate": false,
+    "release": 488,
+    "version": "1.9.0",
+    "releasedAt": "2026-09-05T20:08:55Z"
+  },
+  {
+    "id": "review-level-picker",
+    "name": "A review level filter offers only levels you have",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-05",
-    "version": "1.9.0",
-    "release": 488,
-    "releasedAt": "2026-09-05T20:08:55Z",
-    "summary": "One level to an address, a picker for the hundred, and the same cards, rows and density toggle every other list of subjects on the site uses."
+    "version": "1.9.1",
+    "release": 489,
+    "releasedAt": "2026-09-05T20:33:24Z",
+    "summary": "The level row in Study lists only the levels your queue has something on; the curriculum explorer still shows all hundred."
   }
 ]
