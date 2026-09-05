@@ -5204,11 +5204,23 @@
     "id": "srs-scoring-rules",
     "name": "Scoring rules switchable from the admin site",
     "area": "admin",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "Scoring rules switchable from the admin site",
+    "dateIsEstimate": false,
+    "version": "0.455.0",
+    "releasedAt": "2026-09-05T02:48:50Z"
+  },
+  {
+    "id": "study-preferences",
+    "name": "Members choose how they study",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.455.0",
-    "releasedAt": "2026-09-05T02:48:50Z",
-    "summary": "Scoring rules switchable from the admin site"
+    "version": "0.456.0",
+    "releasedAt": "2026-09-05T03:08:54Z",
+    "summary": "Members choose how they study"
   }
 ]
