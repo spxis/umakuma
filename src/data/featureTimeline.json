@@ -5975,11 +5975,23 @@
     "id": "radical-picker-blue",
     "name": "Radical picker tiles should be blue, not white",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-05",
+    "summary": "Every radical in both pickers is drawn in the radical colour: light at rest, solid when chosen, and faded rather than colourless when it leads nowhere.",
+    "dateIsEstimate": false,
+    "version": "1.6.5",
+    "releasedAt": "2026-09-05T19:34:46Z"
+  },
+  {
+    "id": "radical-cross-name-wk",
+    "name": "Our name on a WaniKani radical",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-05",
-    "version": "1.6.5",
-    "releasedAt": "2026-09-05T19:34:46Z",
-    "summary": "Every radical in both pickers is drawn in the radical colour: light at rest, solid when chosen, and faded rather than colourless when it leads nowhere."
+    "version": "1.7.0",
+    "releasedAt": "2026-09-05T19:35:14Z",
+    "summary": "A WaniKani radical now says what UmaKuma calls the same shape, the mirror of the WaniKani name already shown on ours."
   }
 ]
