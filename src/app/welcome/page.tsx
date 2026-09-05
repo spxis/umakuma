@@ -3,7 +3,8 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-import { isAwaitingApproval, isLockedOut } from "@/lib/accountApproval";
+import { isAwaitingApproval } from "@/lib/accountApproval";
+import { isAccountBarred } from "@/lib/accountStanding";
 import { normalizeDisplayName } from "@/lib/accountIdentity";
 import { authOptions } from "@/lib/auth";
 import { INVITE_SESSION_COOKIE_NAME, verifyInviteSessionToken } from "@/lib/inviteSession";
@@ -70,11 +71,11 @@ export default async function WelcomePage() {
   const account = email
     ? await prisma.account.findFirst({
         where: { joinedByEmail: { equals: email, mode: "insensitive" } },
-        select: { slug: true, wkUsername: true, approvalStatus: true },
+        select: { slug: true, wkUsername: true, approvalStatus: true, disabledAt: true },
       })
     : await prisma.account.findUnique({
         where: { id: inviteAccountId as string },
-        select: { slug: true, wkUsername: true, approvalStatus: true },
+        select: { slug: true, wkUsername: true, approvalStatus: true, disabledAt: true },
       });
 
   if (account) {
@@ -83,7 +84,7 @@ export default async function WelcomePage() {
      * would land them on a refusal notice, and offering the signup form would
      * invite them to make a second account.
      */
-    if (isLockedOut(account.approvalStatus)) {
+    if (isAccountBarred(account)) {
       return (
         <NoticeCard
           heading={WELCOME_COPY.rejectedHeading}

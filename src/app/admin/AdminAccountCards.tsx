@@ -59,6 +59,14 @@ export default function AdminAccountCards({
                       {copy.table.internalBadge}
                     </span>
                   ) : null}
+                  {/* An account switched off is the one thing about a row that
+                      changes what every other column means, so it is said on
+                      the row rather than only on the member's own screen. */}
+                  {account.disabledAt ? (
+                    <span className="shrink-0 rounded-full border border-rose-300 bg-rose-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-rose-700">
+                      {copy.table.disabledBadge}
+                    </span>
+                  ) : null}
                 </p>
                 <p className="truncate text-xs text-foreground/65">@{account.wkUsername}</p>
               </div>

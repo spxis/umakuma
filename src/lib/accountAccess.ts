@@ -2,7 +2,7 @@ import "server-only";
 
 import { getServerSession } from "next-auth";
 
-import { isLockedOut } from "@/lib/accountApproval";
+import { ACCOUNT_STANDING_SELECT, isAccountBarred } from "@/lib/accountStanding";
 import { isAuthorizedAdmin } from "@/lib/admin";
 import { authOptions } from "@/lib/auth";
 import {
@@ -14,14 +14,15 @@ import { prisma } from "@/lib/prisma";
 
 /** The columns any access decision is made from. */
 const ACCESS_SELECT = {
+  ...ACCOUNT_STANDING_SELECT,
   inviteCodeHash: true,
-  approvalStatus: true,
   joinedByEmail: true,
 } as const;
 
 type AccessFields = {
   inviteCodeHash: string | null;
   approvalStatus: string | null;
+  disabledAt: Date | null;
   joinedByEmail: string | null;
 };
 
@@ -71,7 +72,7 @@ function decideAccess(requester: Requester, account: AccessFields | null): boole
   if (requester.kind === "admin") {
     return true;
   }
-  if (!account || isLockedOut(account.approvalStatus)) {
+  if (!account || isAccountBarred(account)) {
     return false;
   }
   if (requester.holdsInvite && account.inviteCodeHash) {
@@ -85,10 +86,11 @@ function decideAccess(requester: Requester, account: AccessFields | null): boole
 /**
  * Whether this request may act as this account.
  *
- * Owning an account is not by itself enough: a rejected account is locked out
- * of its own data too, on every path but the admin's. Otherwise being turned
- * away only removed someone from the leaderboard while leaving every study,
- * game and tag route open to them.
+ * Owning an account is not by itself enough: an account that was turned away,
+ * or that an admin has since switched off, is locked out of its own data too,
+ * on every path but the admin's. Otherwise being barred only removed someone
+ * from the leaderboard while leaving every study, game and tag route open to
+ * them.
  *
  * The admin bypass answers without reading anything, because reviewing an
  * account is how a rejection gets reconsidered.

@@ -81,6 +81,13 @@ export function buildAccountRowActions(
   return {
     menu: [
       {
+        id: ACCOUNT_ROW_ACTION_IDS.manage,
+        label: ADMIN_USERS_COPY.rowActions.manage,
+        href: `/admin/users/${encodeURIComponent(account.id)}`,
+        disabled: false,
+        destructive: false,
+      },
+      {
         id: ACCOUNT_ROW_ACTION_IDS.viewPage,
         label: ADMIN_USERS_COPY.rowActions.viewPage,
         href: `/users/${encodeURIComponent(account.wkUsername)}`,

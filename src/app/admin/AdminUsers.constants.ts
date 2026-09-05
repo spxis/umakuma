@@ -28,6 +28,7 @@ export const ADMIN_USERS_COPY = {
     actions: "Actions",
     meBadge: "Me",
     internalBadge: "Internal",
+    disabledBadge: "Disabled",
     levelPrefix: "Lv",
     joinedByPrefix: "by",
     inviteNotSet: "Not set",
@@ -42,6 +43,10 @@ export const ADMIN_USERS_COPY = {
     remaining: (seconds: number) => `Locked ${seconds}s`,
   },
   rowActions: {
+    /* First in the menu: it is the one entry that leads somewhere the rest of
+       these actions also live, so a second click on a member is a page rather
+       than another menu. */
+    manage: "Manage member",
     /*
      * Not "Open as user", which read as impersonation. It is a plain link to
      * the member's own page - no session is switched and nothing is done as

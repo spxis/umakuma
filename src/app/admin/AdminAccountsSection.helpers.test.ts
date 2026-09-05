@@ -28,6 +28,7 @@ function account(overrides: Partial<AdminAccount> = {}): AdminAccount {
     inviteCodeUpdatedAt: null,
     createdAt: "2026-04-01T00:00:00.000Z",
     internal: false,
+    disabledAt: null,
     ...overrides,
   };
 }
@@ -141,6 +142,7 @@ describe("buildAccountRowActions", () => {
     });
 
     expect(actions.menu.map((item) => item.id)).toEqual([
+      ACCOUNT_ROW_ACTION_IDS.manage,
       ACCOUNT_ROW_ACTION_IDS.viewPage,
       ACCOUNT_ROW_ACTION_IDS.refresh,
       ACCOUNT_ROW_ACTION_IDS.setInvite,
@@ -149,6 +151,21 @@ describe("buildAccountRowActions", () => {
       ACCOUNT_ROW_ACTION_IDS.history,
     ]);
     expect(actions.menu.every((item) => !item.disabled)).toBe(true);
+  });
+
+  /* The row menu is for acting on a row you are scanning past; the member's
+     own screen is where the same jobs live in full, so the menu leads there
+     first. */
+  it("leads to the member's admin screen, with an encoded account id", () => {
+    const actions = buildAccountRowActions(account({ id: "id/with slash", lastSyncedAt: staleSyncedAt }), {
+      busy: false,
+      nowMs: NOW_MS,
+    });
+
+    const manage = actions.menu.find((item) => item.id === ACCOUNT_ROW_ACTION_IDS.manage);
+    expect(manage?.label).toBe("Manage member");
+    expect(manage?.href).toBe("/admin/users/id%2Fwith%20slash");
+    expect(manage?.disabled).toBe(false);
   });
 
   it("links history to the admin history page for the account id", () => {

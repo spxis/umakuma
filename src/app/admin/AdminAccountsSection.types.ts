@@ -14,6 +14,8 @@ export type AdminAccount = {
   createdAt: string;
   /** The family and the helpers: the members the reading challenge is for. */
   internal: boolean;
+  /** Switched off by an admin. Null is the ordinary, working state. */
+  disabledAt: string | null;
 };
 
 export type AdminAccountsSectionProps = {
@@ -33,6 +35,7 @@ export type SortDir = "asc" | "desc";
 
 /** The ids of the per-row menu actions, in their menu order. */
 export const ACCOUNT_ROW_ACTION_IDS = {
+  manage: "manage",
   viewPage: "viewPage",
   refresh: "refresh",
   setInvite: "setInvite",

@@ -3,7 +3,8 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { generateFriendlyName, normalizeDisplayName, slugify, uniqueSlug } from "@/lib/accountIdentity";
-import { ACCOUNT_APPROVAL, isLockedOut } from "@/lib/accountApproval";
+import { ACCOUNT_APPROVAL } from "@/lib/accountApproval";
+import { isAccountBarred } from "@/lib/accountStanding";
 import { WELCOME_COPY } from "@/app/welcome/welcomeCopy";
 import { isAccountVisibility } from "@/lib/accountVisibility";
 import { checkRateLimit, createRateLimitResponse } from "@/lib/apiRateLimit";
@@ -62,18 +63,20 @@ export async function POST(request: Request) {
        */
       const existing = await prisma.account.findFirst({
         where: { joinedByEmail: { equals: email, mode: "insensitive" } },
-        select: { id: true, slug: true, approvalStatus: true },
+        select: { id: true, slug: true, approvalStatus: true, disabledAt: true },
       });
       if (existing) {
         /*
-         * Except a rejected one, which must not be handed back as though the
-         * signup worked. They cannot make a second account either - this email
-         * already has one - so the honest answer is that this is the end of it.
+         * Except a barred one - turned away, or switched off since - which
+         * must not be handed back as though the signup worked. They cannot
+         * make a second account either, this email already has one, so the
+         * honest answer is that this is the end of it. The notice says the
+         * account is closed rather than why, which is true either way.
          */
-        if (isLockedOut(existing.approvalStatus)) {
+        if (isAccountBarred(existing)) {
           return NextResponse.json({ error: WELCOME_COPY.rejectedBody }, { status: 403 });
         }
-        return NextResponse.json({ account: existing, created: false });
+        return NextResponse.json({ account: { id: existing.id, slug: existing.slug }, created: false });
       }
 
       const parsed = bodySchema.safeParse(await request.json().catch(() => null));
@@ -111,7 +114,7 @@ export async function POST(request: Request) {
           approvalStatus: requiresApproval(settings) ? ACCOUNT_APPROVAL.pending : ACCOUNT_APPROVAL.approved,
           approvedAt: requiresApproval(settings) ? null : new Date(),
         },
-        select: { id: true, slug: true, approvalStatus: true },
+        select: { id: true, slug: true, approvalStatus: true, disabledAt: true },
       });
 
       return NextResponse.json({ account, created: true }, { status: 201 });

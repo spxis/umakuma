@@ -4,10 +4,16 @@ import { ACCOUNT_APPROVAL } from "./accountApproval";
 import { ACCOUNT_VISIBILITY } from "./accountVisibility";
 import { listableTo, viewerKind } from "./accountListing";
 
-const account = (visibility: string | null, approvalStatus: string | null, id = "a") => ({
+const account = (
+  visibility: string | null,
+  approvalStatus: string | null,
+  id = "a",
+  disabledAt: Date | null = null,
+) => ({
   id,
   visibility,
   approvalStatus,
+  disabledAt,
 });
 
 describe("listableTo", () => {
@@ -62,6 +68,20 @@ describe("listableTo", () => {
     const rows = [account(ACCOUNT_VISIBILITY.public, ACCOUNT_APPROVAL.rejected)];
     expect(listableTo(rows, "admin")).toHaveLength(0);
     expect(listableTo(rows, "member")).toHaveLength(0);
+  });
+
+  /*
+   * Disabling has to be visible from outside, or it is a note rather than an
+   * act: an approved, public member who has been switched off leaves the board
+   * for everybody, the admin included.
+   */
+  it("keeps a disabled account off every list, approved and public though it is", () => {
+    const rows = [
+      account(ACCOUNT_VISIBILITY.public, ACCOUNT_APPROVAL.approved, "a", new Date("2026-09-04T00:00:00Z")),
+    ];
+    expect(listableTo(rows, "admin")).toHaveLength(0);
+    expect(listableTo(rows, "member")).toHaveLength(0);
+    expect(listableTo(rows, "anonymous")).toHaveLength(0);
   });
 });
 

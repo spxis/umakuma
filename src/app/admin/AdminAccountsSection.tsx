@@ -153,6 +153,11 @@ export default function AdminAccountsSection({
                             {copy.table.internalBadge}
                           </span>
                         ) : null}
+                        {account.disabledAt ? (
+                          <span className="rounded-full border border-rose-300 bg-rose-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-rose-700">
+                            {copy.table.disabledBadge}
+                          </span>
+                        ) : null}
                       </div>
                       <p className="text-xs text-foreground/65">
                         @{account.wkUsername}

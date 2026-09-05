@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 
-import { isLockedOut } from "@/lib/accountApproval";
+import { isAccountBarred } from "@/lib/accountStanding";
 import { isAdminEmail } from "@/lib/auth";
 import { INVITE_SESSION_COOKIE_NAME, verifyInviteSessionToken } from "@/lib/inviteSession";
 import { prisma } from "@/lib/prisma";
@@ -76,6 +76,7 @@ export async function resolveViewerMenuInfo(input: {
         slug: true,
         internal: true,
         approvalStatus: true,
+        disabledAt: true,
         tokenEncrypted: true,
         tokenIv: true,
         tokenTag: true,
@@ -83,10 +84,11 @@ export async function resolveViewerMenuInfo(input: {
     });
 
     /*
-     * A rejected account is nobody here. Not null, though - the session is
-     * real, and the menu still has to offer them a way to sign out of it.
+     * A barred account - turned away, or switched off since - is nobody here.
+     * Not null, though: the session is real, and the menu still has to offer
+     * them a way to sign out of it.
      */
-    const viewerIsMember = viewerAccount !== null && !isLockedOut(viewerAccount.approvalStatus);
+    const viewerIsMember = viewerAccount !== null && !isAccountBarred(viewerAccount);
 
     return {
       provider: "google",
@@ -122,6 +124,7 @@ export async function resolveViewerMenuInfo(input: {
       joinedByEmail: true,
       inviteCodeHash: true,
       approvalStatus: true,
+      disabledAt: true,
       tokenEncrypted: true,
       tokenIv: true,
       tokenTag: true,
@@ -129,13 +132,13 @@ export async function resolveViewerMenuInfo(input: {
   });
 
   // An invite account needs a code and one address; the address may be a slug,
-  // since an invited member need not have connected WaniKani either. A rejected
+  // since an invited member need not have connected WaniKani either. A barred
   // one is refused outright - unlike a Google session there is nothing else the
   // cookie is good for, and `/api/invite/session` clears it on the next call.
   if (!inviteAccount?.inviteCodeHash || !(inviteAccount.wkUsername || inviteAccount.slug)) {
     return null;
   }
-  if (isLockedOut(inviteAccount.approvalStatus)) {
+  if (isAccountBarred(inviteAccount)) {
     return null;
   }
 

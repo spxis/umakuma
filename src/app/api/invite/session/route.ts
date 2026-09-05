@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import type { Prisma } from "@prisma/client";
 import { z } from "zod";
 
-import { isLockedOut } from "@/lib/accountApproval";
+import { isAccountBarred } from "@/lib/accountStanding";
 import { hashInviteCode, isValidInviteCodeShape, normalizeInviteCode } from "@/lib/inviteCode";
 import { clearInviteAttempts, consumeInviteAttempt } from "@/lib/inviteRateLimit";
 import {
@@ -46,13 +46,14 @@ export async function GET(request: Request) {
             wkUsername: true,
             inviteCodeHash: true,
             approvalStatus: true,
+            disabledAt: true,
           },
         });
 
-        // A rejection takes effect on the next request, not at their next
+        // Being barred takes effect on the next request, not at their next
         // sign-in: leaving a live cookie standing would leave the account in
         // use for as long as the tab stayed open.
-        if (!account || !account.inviteCodeHash || isLockedOut(account.approvalStatus)) {
+        if (!account || !account.inviteCodeHash || isAccountBarred(account)) {
           cookieStore.delete(INVITE_SESSION_COOKIE_NAME);
           return NextResponse.json({ signedIn: false });
         }
@@ -103,12 +104,13 @@ export async function POST(request: Request) {
             nickname: true,
             wkUsername: true,
             approvalStatus: true,
+            disabledAt: true,
           },
         });
 
-        // Same answer for a rejected account as for a code that never existed.
+        // Same answer for a barred account as for a code that never existed.
         // Saying which it is would confirm the code to whoever is holding it.
-        if (!account || isLockedOut(account.approvalStatus)) {
+        if (!account || isAccountBarred(account)) {
           return NextResponse.json({ error: "Invite code is invalid." }, { status: 401 });
         }
 

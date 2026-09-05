@@ -10,7 +10,8 @@ import { onlyConnected } from "./wanikaniConnection";
  *
  * Two filters answering different questions, and both belong here rather than
  * at the call site. `listableTo` decides who may be seen at all - the member's
- * own visibility choice and the admin's approval - and `onlyConnected` decides
+ * own visibility choice, the admin's approval, and whether the account has
+ * been switched off - and `onlyConnected` decides
  * who this particular board can rank, since it ranks WaniKani numbers and an
  * account without a connection has none.
  *
@@ -29,6 +30,7 @@ export async function loadLeaderboardAccounts(viewer: Viewer) {
       wkLevel: true,
       visibility: true,
       approvalStatus: true,
+      disabledAt: true,
       reviewCount: true,
       burnedCount: true,
       pendingReviews: true,
