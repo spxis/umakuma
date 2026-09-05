@@ -5120,11 +5120,23 @@
     "id": "theme-questionnaire",
     "name": "Theme questionnaire",
     "area": "account",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "Theme questionnaire",
+    "dateIsEstimate": false,
+    "version": "0.448.0",
+    "releasedAt": "2026-09-05T02:22:51Z"
+  },
+  {
+    "id": "admin-time-off",
+    "name": "Time off on the admin member screen",
+    "area": "admin",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.448.0",
-    "releasedAt": "2026-09-05T02:22:51Z",
-    "summary": "Theme questionnaire"
+    "version": "0.449.0",
+    "releasedAt": "2026-09-05T02:22:53Z",
+    "summary": "Time off on the admin member screen"
   }
 ]
