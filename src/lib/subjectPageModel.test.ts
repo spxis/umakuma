@@ -173,9 +173,17 @@ describe("the words a kanji appears in", () => {
     expect(wednesday!.kanji).toHaveLength([...wednesday!.written].length);
   });
 
-  it("keeps a word with no kanji chips rather than dropping it", () => {
-    const words = toWordExamples(WORD_EXAMPLES, "水");
-    expect(words[1]).toEqual({ written: "水泳", pronounced: "すいえい", gloss: "swimming", kanji: [] });
+  /*
+   * This used to assert an empty row, which is the bug it now guards: nothing
+   * was stored about 水泳's characters, so the row drew none of them. The word
+   * decides what is in it, and the stored items only answer for what they know.
+   */
+  it("draws a word's characters even when nothing was stored about them", () => {
+    const [, swimming] = toWordExamples(WORD_EXAMPLES, "水");
+    expect(swimming!.written).toBe("水泳");
+    expect(swimming!.kanji.map((item) => item.label)).toEqual(["水", "泳"]);
+    expect(swimming!.kanji[0]!.current).toBe(true);
+    expect(swimming!.kanji[1]!.href).toBe(`/kanji/${encodeURIComponent("泳")}`);
   });
 
   /* 一 appears in hundreds of words; all of them is a page nobody scrolls. */

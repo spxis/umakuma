@@ -1,12 +1,14 @@
 import { WORD_EXAMPLE_LIMIT } from "@/app/shared/subject-page/SubjectPage.constants";
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import { subjectHref } from "@/lib/globalSearch";
+import { getKanjiDictionaryEntry } from "@/lib/kanjiDictionary";
 import { kanjiPlacement } from "@/lib/kanjiLadder";
 import { parseJlptWordExamples } from "@/lib/jlptWordExamples";
 import type { KanjiDictionaryEntry } from "@/lib/kanjiDictionary.types";
 import { relatedGroupsFor, type RelatedGroup, type RelatedRow } from "@/lib/relatedSubjects";
 import type { SchoolGradeKanjiEntry } from "@/lib/schoolGrades.types";
 import type { CatalogRelatedReference, CatalogSubjectDetail } from "@/lib/subjectCatalogDetails";
+import { wordKanjiChips } from "@/lib/wordKanjiChips";
 
 /**
  * A kanji page, assembled from whatever knows the character.
@@ -97,33 +99,32 @@ export function toWordExamples(raw: unknown, character: string): WordExample[] {
       pronounced: example.pronounced,
       gloss: example.gloss,
       /*
-       * Every kanji in the word, this one included.
+       * Every kanji in the word, this one included, taken from the word.
        *
-       * The kanji whose page this is used to be dropped, on the grounds that a
-       * link back to where you are does nothing. But the row is showing what a
-       * word is made of, and leaving one out makes 成長事業 look like three
-       * characters: the reader counts the chips against the word above them
-       * and finds the maths wrong. It is drawn like the others and marked as
-       * the one you are on, with no href, so it still leads nowhere - it just
-       * says so by being flat rather than by being absent.
+       * Two characters used to go missing here. The one whose page this is was
+       * dropped on the grounds that a link back to where you are does nothing,
+       * which made 成長事業 look like three characters. And every character
+       * WaniKani does not teach was dropped by the enrichment that fed this
+       * row, which left 戊午 drawing 午 alone.
+       *
+       * Both are the same mistake: the row shows what a word is made of, so
+       * the word decides what is in it. `wordKanjiChips` walks the spelling and
+       * the stored items only answer for the ones they know; the dictionary
+       * fills in a meaning for the rest, since KANJIDIC2 has all 10,384 and
+       * the jinmeiyō characters in these compounds are exactly the ones the
+       * ladder will never carry.
        */
-      kanji: (example.kanjiItems ?? []).flatMap((item) => {
-        const current = item.label === character;
-        const href = current
+      kanji: wordKanjiChips(example.written, example.kanjiItems ?? [], character).map((chip) => ({
+        label: chip.label,
+        /* No link back to the page you are on: it is drawn flat instead. */
+        href: chip.current
           ? null
-          : subjectHref({ subjectType: SUBJECT_TYPES.kanji, characters: item.label, slug: null });
-        if (!current && !href) return [];
-        return [
-          {
-            label: item.label,
-            href,
-            reading: item.reading ?? null,
-            meaning: item.meaning ?? null,
-            level: typeof item.wkLevel === "number" ? item.wkLevel : null,
-            current,
-          },
-        ];
-      }),
+          : subjectHref({ subjectType: SUBJECT_TYPES.kanji, characters: chip.label, slug: null }),
+        reading: chip.reading,
+        meaning: chip.meaning ?? getKanjiDictionaryEntry(chip.label)?.primaryMeaning ?? null,
+        level: chip.level,
+        current: chip.current,
+      })),
     }));
 }
 

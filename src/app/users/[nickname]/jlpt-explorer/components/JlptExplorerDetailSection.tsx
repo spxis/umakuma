@@ -12,6 +12,7 @@ import type { KanjiStats } from "./JlptExplorerContent.types";
 import GlyphMetadataBadges from "../../shared/GlyphMetadataBadges";
 import PillWordsToggle from "@/app/shared/PillWordsToggle";
 import SubjectPill from "@/app/shared/SubjectPill";
+import { wordKanjiChips, type WordKanjiFacts } from "@/lib/wordKanjiChips";
 import FieldLabel from "../../../../shared/FieldLabel";
 import ReadingsLine from "@/app/shared/ReadingsLine";
 import { READING_KIND_DISPLAY, READING_KINDS } from "@/lib/domainConstants";
@@ -37,6 +38,42 @@ type Props = {
   kanjiStatsError: string | null;
   onToggleStatsOpen: () => void;
 };
+
+/**
+ * The characters a compound is written with.
+ *
+ * Drawn from the word rather than from the enrichment beside it: the stored
+ * items hold only the kanji WaniKani teaches, so this row drew 午 alone under
+ * 戊午 and three chips under the four characters of 壬午軍乱.
+ */
+function WordExampleChips({
+  written,
+  facts,
+  successRateOf,
+}: {
+  written: string;
+  facts: readonly WordKanjiFacts[];
+  successRateOf: (label: string) => number | undefined;
+}) {
+  const chips = wordKanjiChips(written, facts);
+  if (chips.length === 0) return null;
+
+  return (
+    <div className="mt-2 flex flex-wrap gap-2">
+      {chips.map((chip, index) => (
+        <SubjectPill
+          key={`${written}-${chip.label}-${index}`}
+          glyph={chip.label}
+          subjectType={SUBJECT_TYPES.kanji}
+          reading={chip.reading}
+          meaning={chip.meaning}
+          level={chip.level}
+          successRate={successRateOf(chip.label)}
+        />
+      ))}
+    </div>
+  );
+}
 
 export default function JlptExplorerDetailSection({
   selectedItem,
@@ -265,21 +302,11 @@ export default function JlptExplorerDetailSection({
                   <p className="text-base font-bold text-foreground">{example.written || "-"}</p>
                   <p className="text-xs font-semibold text-foreground/70">{example.pronounced || "-"}</p>
                   <p className="mt-1 text-sm text-foreground/85">{example.gloss || "-"}</p>
-                  {example.kanjiItems?.length ? (
-                    <div className="mt-2 flex flex-wrap gap-2">
-                      {example.kanjiItems.map((item) => (
-                        <SubjectPill
-                          key={`${example.written}-${item.subjectId}`}
-                          glyph={item.label}
-                          subjectType={SUBJECT_TYPES.kanji}
-                          reading={item.reading}
-                          meaning={item.meaning}
-                          level={item.wkLevel}
-                          successRate={userKanjiByChar.get(item.label)?.successRate}
-                        />
-                      ))}
-                    </div>
-                  ) : null}
+                  <WordExampleChips
+                    written={example.written}
+                    facts={example.kanjiItems ?? []}
+                    successRateOf={(label) => userKanjiByChar.get(label)?.successRate}
+                  />
                 </li>
               ))}
             </ul>
