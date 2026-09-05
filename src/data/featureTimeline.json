@@ -5348,11 +5348,23 @@
     "id": "umakuma-study-source",
     "name": "One review interface for UK and WK feeds",
     "area": "study",
+    "status": "shipped",
     "kind": "feature",
+    "date": "2026-09-05",
+    "summary": "The review session UI is one component; the feed (UK queue vs WK queue) is the only difference. Audit UkStudySession vs the WK study review modal and fold to one.",
+    "dateIsEstimate": false,
+    "version": "0.467.0",
+    "releasedAt": "2026-09-05T07:51:08Z"
+  },
+  {
+    "id": "loc-panel-header",
+    "name": "The header label moves out of the panel",
+    "area": "study",
+    "kind": "bug",
     "status": "shipped",
     "date": "2026-09-05",
-    "version": "0.467.0",
-    "releasedAt": "2026-09-05T07:51:08Z",
-    "summary": "The review session UI is one component; the feed (UK queue vs WK queue) is the only difference. Audit UkStudySession vs the WK study review modal and fold to one."
+    "version": "0.468.0",
+    "releasedAt": "2026-09-05T07:56:26Z",
+    "summary": "0.467.0 pushed StudyExplorerPanel to 505 lines and StudyExplorer to 501; main went red on the LOC gate. The ladder-prefix rule moves to the group's constants."
   }
 ]
