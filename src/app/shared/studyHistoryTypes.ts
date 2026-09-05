@@ -1,4 +1,5 @@
 import { type SrsBucket, type WkStatus, type SubjectType, type ReviewResult } from "@/lib/domainConstants";
+import type { ConfusableWarning } from "@/lib/kanjiConfusableWarning.types";
 import type { JlptMeta } from "@/lib/jlptTypes";
 
 export type HistorySrsBucket = SrsBucket;
@@ -12,7 +13,12 @@ export type HistorySubjectData = {
   readings?: string[];
   primaryReadings?: string[];
   radicals?: Array<{ subjectId: number; label: string; wkLevel?: number | null; reading?: string | null; meaning?: string | null }>;
-  visuallySimilar?: Array<{ subjectId: number; label: string; wkLevel?: number | null; reading?: string | null; meaning?: string | null }>;
+  /*
+   * The look-alike warning, already gated to what this member can act on -
+   * see `confusableWarnings`. Not a list of every similar character: one that
+   * fires on every kanji is one a reader learns to skip.
+   */
+  confusables?: ConfusableWarning[];
   usedInVocabulary?: Array<{ subjectId: number; label: string; wkLevel?: number | null; reading?: string | null; meaning?: string | null }>;
   componentKanji?: Array<{ subjectId: number; label: string; wkLevel?: number | null; reading?: string | null; meaning?: string | null }>;
   meaningExplanation?: string;

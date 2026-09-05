@@ -330,13 +330,14 @@ export default function StudyReviewModal({
   const useStudyFlashLayout = studyMode && isReviewQueueItem(selectedItem);
   const displayedItem = {
     ...selectedItem,
-    visuallySimilar: filterStudyModeRelatedItems(selectedItem.visuallySimilar, studyMode, currentLevel),
     usedInVocabulary: filterStudyModeRelatedItems(selectedItem.usedInVocabulary, studyMode, currentLevel),
     componentKanji: filterStudyModeRelatedItems(selectedItem.componentKanji, studyMode, currentLevel),
   };
 
   const hasRadicals = hasRenderableRelatedItems(displayedItem.radicals as RelatedReference[] | undefined);
-  const hasVisuallySimilar = hasRenderableRelatedItems(displayedItem.visuallySimilar as RelatedReference[] | undefined);
+  /* Already held to what this member can act on, so study mode does not filter
+     it again: the warning about a twin four levels ahead is the point of it. */
+  const hasVisuallySimilar = (displayedItem.confusables?.length ?? 0) > 0;
   const hasUsedInVocabulary =
     hasRenderableRelatedItems(displayedItem.usedInVocabulary as RelatedReference[] | undefined) ||
     (isRadicalSubjectType(displayedItem.subjectType) &&

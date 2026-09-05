@@ -190,7 +190,6 @@ export default function ViewGlyphModalHost() {
 
       const allRelated: Array<{ ref: RelatedReference; type: SubjectType }> = [
         ...((item.radicals as RelatedReference[] | undefined) ?? []).map((ref) => ({ ref, type: SUBJECT_TYPES.radical })),
-        ...((item.visuallySimilar as RelatedReference[] | undefined) ?? []).map((ref) => ({ ref, type: SUBJECT_TYPES.kanji })),
         ...((item.componentKanji as RelatedReference[] | undefined) ?? []).map((ref) => ({ ref, type: SUBJECT_TYPES.kanji })),
         ...((item.usedInVocabulary as RelatedReference[] | undefined) ?? []).map((ref) => ({
           ref,
@@ -308,7 +307,7 @@ export default function ViewGlyphModalHost() {
   const allMeanings = buildStudyReviewAllMeanings(item);
   const { primaryReadingHiragana, primaryReadingKatakana, secondaryReadingValue } = deriveStudyReviewReadings(item);
   const hasRadicals = hasRenderableRelatedItems(item.radicals as RelatedReference[] | undefined);
-  const hasVisuallySimilar = hasRenderableRelatedItems(item.visuallySimilar as RelatedReference[] | undefined);
+  const hasVisuallySimilar = (item.confusables?.length ?? 0) > 0;
   const hasUsedInVocabulary = hasRenderableRelatedItems(item.usedInVocabulary as RelatedReference[] | undefined);
   const hasComponentKanji = hasRenderableRelatedItems(item.componentKanji as RelatedReference[] | undefined);
   const usedKanjiItems = collectUsedKanjiItems(item);

@@ -13,6 +13,8 @@ import {
 } from "./StudyExplorer.constants";
 import LevelExplorerReviewStatsCard from "../../level-explorer/components/LevelExplorerReviewStatsCard";
 import { parseWordExamples } from "../../jlpt-explorer/lib/jlptExplorerContentHelpers";
+import ConfusableWarningRow from "@/app/shared/ConfusableWarningRow";
+import { CONFUSABLE_WARNING_COPY } from "@/app/shared/ConfusableWarning.constants";
 import { openViewGlyphViewer } from "@/lib/viewGlyphViewer";
 import { SUBJECT_TYPES, type SubjectType } from "@/lib/domainConstants";
 import {
@@ -230,11 +232,10 @@ export default function StudyReviewModalMetaPanels({
                   ) : null}
                   {hasVisuallySimilar ? (
                     <div className="rounded-xl border border-line bg-surface px-3 py-2">
-                      <FieldLabel size="xs" tone="muted">{STUDY_REVIEW_META_TEXT.visuallySimilar}</FieldLabel>
-                      {renderSharedRelatedCards(
-                        selectedItem.visuallySimilar as RelatedReference[] | undefined,
-                        SUBJECT_TYPES.kanji,
-                      )}
+                      <FieldLabel size="xs" tone="muted">{CONFUSABLE_WARNING_COPY.heading}</FieldLabel>
+                      <div className="mt-2">
+                        <ConfusableWarningRow items={selectedItem.confusables ?? []} showEnglish={showEnglish} />
+                      </div>
                     </div>
                   ) : null}
                 </div>

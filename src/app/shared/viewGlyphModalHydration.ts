@@ -10,7 +10,7 @@ type CatalogSubjectPayload = {
   readings?: string[];
   primaryReadings?: string[];
   radicals?: StudyQueueItem["radicals"];
-  visuallySimilar?: StudyQueueItem["visuallySimilar"];
+  confusables?: StudyQueueItem["confusables"];
   usedInVocabulary?: StudyQueueItem["usedInVocabulary"];
   componentKanji?: StudyQueueItem["componentKanji"];
   meaningExplanation?: string;
@@ -68,7 +68,7 @@ function toHydratedStudyQueueItem(
     readings,
     primaryReadings,
     radicals: subject.radicals ?? [],
-    visuallySimilar: subject.visuallySimilar ?? [],
+    confusables: subject.confusables ?? [],
     usedInVocabulary: subject.usedInVocabulary ?? [],
     componentKanji: subject.componentKanji ?? [],
     meaningExplanation: subject.meaningExplanation,
@@ -88,7 +88,7 @@ export function shouldHydrateViewGlyphItem(item: StudyQueueItem): boolean {
   const hasReadingExplanation = typeof item.readingExplanation === "string" && item.readingExplanation.trim().length > 0;
   const hasRelated =
     (item.radicals?.length ?? 0) > 0 ||
-    (item.visuallySimilar?.length ?? 0) > 0 ||
+    (item.confusables?.length ?? 0) > 0 ||
     (item.usedInVocabulary?.length ?? 0) > 0 ||
     (item.componentKanji?.length ?? 0) > 0;
   const hasJlpt = item.jlptMeta !== null && item.jlptMeta !== undefined;

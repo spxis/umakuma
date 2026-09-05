@@ -1,5 +1,6 @@
 import type { SubjectType, WkStatus } from "@/lib/domainConstants";
 import type { JlptMeta } from "@/lib/jlptTypes";
+import type { ConfusableWarning } from "@/lib/kanjiConfusableWarning.types";
 
 export type RelatedReference = {
   subjectId: number;
@@ -20,7 +21,17 @@ export type LevelItem = {
   readings?: string[];
   primaryReadings?: string[];
   radicals?: RelatedReference[];
+  /*
+   * WaniKani's own look-alike list, still what the level browser draws.
+   *
+   * The study surfaces draw `confusables` instead: theirs is a list of similar
+   * characters and ours is a warning, gated to the twins this member can
+   * actually act on. Moving the browser onto the same source is filed work,
+   * not an accident.
+   */
   visuallySimilar?: RelatedReference[];
+  /** The look-alike warning, already gated - see `confusableWarnings`. */
+  confusables?: ConfusableWarning[];
   usedInVocabulary?: RelatedReference[];
   componentKanji?: RelatedReference[];
   meaningExplanation?: string;

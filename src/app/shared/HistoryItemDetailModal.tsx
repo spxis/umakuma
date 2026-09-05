@@ -51,7 +51,7 @@ function toStudyQueueItem(attempt: StudyHistoryAttempt): StudyQueueItem {
           ? [attempt.subjectReading]
           : [],
     radicals: subject?.radicals,
-    visuallySimilar: subject?.visuallySimilar,
+    confusables: subject?.confusables,
     usedInVocabulary: subject?.usedInVocabulary,
     componentKanji: subject?.componentKanji,
     meaningExplanation: subject?.meaningExplanation,

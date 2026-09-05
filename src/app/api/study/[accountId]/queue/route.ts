@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { loadStudyAccount } from "@/lib/accountAccess";
+import { confusableWarnings } from "@/lib/kanjiConfusableWarning";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import {
   WANIKANI_REQUIRED_MESSAGE,
@@ -343,7 +344,6 @@ export async function GET(request: Request, context: RouteContext) {
 
       const componentSubjectIds = subjectData?.component_subject_ids ?? [];
       const amalgamationSubjectIds = subjectData?.amalgamation_subject_ids ?? [];
-      const visuallySimilarSubjectIds = subjectData?.visually_similar_subject_ids ?? [];
       const relatedSubjectType = (subjectId: number) => normalizeSubjectType(pageSubjectById.get(subjectId)?.object ?? "");
 
       const radicals =
@@ -364,9 +364,16 @@ export async function GET(request: Request, context: RouteContext) {
                 .map(relatedReferenceFromId)
             : [];
 
-      const visuallySimilar =
+      /*
+       * Not WaniKani's list any more, and not a list at all: a warning, held
+       * to the twins this member can act on. Theirs covered 67% of the kanji
+       * they teach and nothing else; ours is the union of their pairs, a
+       * stroke-edit distance and a curation pass, gated to what is already
+       * learned or close enough ahead to be worth remembering.
+       */
+      const confusables =
         subjectType === SUBJECT_TYPES.kanji
-          ? visuallySimilarSubjectIds.map(relatedReferenceFromId)
+          ? confusableWarnings(subjectData?.characters ?? "", account.wkLevel ?? null)
           : [];
 
       const componentKanji =
@@ -415,7 +422,7 @@ export async function GET(request: Request, context: RouteContext) {
         readings,
         primaryReadings,
         radicals,
-        visuallySimilar,
+        confusables,
         usedInVocabulary,
         componentKanji,
         meaningExplanation: subjectData?.meaning_mnemonic ?? "",
