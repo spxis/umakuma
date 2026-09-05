@@ -232,6 +232,42 @@ async function submitReview(accountId: string, body: unknown): Promise<Response>
   });
 }
 
+/*
+ * PUT /assignments/{id}/start - the lesson, taken. WaniKani moves the item to
+ * Apprentice 1 and asks for its first review four hours on; the UK mirror
+ * sends this for an item WaniKani has unlocked but the member has only ever
+ * met here.
+ */
+async function startAssignment(accountId: string, assignmentId: number): Promise<Response> {
+  const account = await loadAccount(accountId);
+  if (!account) return new Response("not found", { status: 404 });
+  const target = account.rows.find((row) => row.id === assignmentId);
+  if (!target) return new Response(JSON.stringify({ error: "assignment not found" }), { status: 404 });
+  if (typeof target.data.started_at === "string") {
+    return new Response(JSON.stringify({ error: "assignment already started" }), { status: 422 });
+  }
+  const now = new Date();
+  const nextRows = account.rows.map((row) =>
+    row.id !== target.id
+      ? row
+      : {
+          ...row,
+          data_updated_at: now.toISOString(),
+          data: {
+            ...row.data,
+            srs_stage: 1,
+            started_at: now.toISOString(),
+            available_at: new Date(now.getTime() + 4 * 3_600_000).toISOString(),
+          },
+        },
+  );
+  await prisma.account.update({
+    where: { id: accountId },
+    data: { assignmentCache: nextRows as never, assignmentCacheUpdatedAt: now },
+  });
+  return jsonResponse(nextRows.find((row) => row.id === target.id));
+}
+
 export async function mockWaniKaniFetch(
   path: string,
   init: { method?: string; body?: unknown } | undefined,
@@ -250,6 +286,9 @@ export async function mockWaniKaniFetch(
     const parsed = typeof init?.body === "string" ? (JSON.parse(init.body) as unknown) : init?.body;
     return submitReview(accountId, parsed);
   }
+
+  const start = method === "PUT" ? /^\/assignments\/(\d+)\/start$/.exec(url.pathname) : null;
+  if (start) return startAssignment(accountId, Number(start[1]));
 
   const account = await loadAccount(accountId);
   if (!account) return new Response(JSON.stringify({ error: "account not found" }), { status: 404 });

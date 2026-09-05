@@ -5,6 +5,7 @@ import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { REVIEW_RESULTS } from "@/lib/domainConstants";
 import { recordUkReview } from "@/lib/uk/ukStudyWrite";
+import { mirrorUkReviewToWaniKani } from "@/lib/uk/ukWanikaniMirrorServer";
 
 type RouteContext = { params: Promise<{ accountId: string }> };
 
@@ -49,7 +50,11 @@ export async function POST(request: Request, context: RouteContext) {
           return NextResponse.json({ error: "That item has not been started." }, { status: 409 });
         }
 
-        return NextResponse.json(outcome);
+        /* After the write, never inside it: a member playing both systems
+           gets the same answer sent to WaniKani, and WaniKani's mood cannot
+           undo a review that is already theirs here. */
+        const mirror = await mirrorUkReviewToWaniKani({ accountId, subjectId: parsed.data.subjectId, result: parsed.data.result });
+        return NextResponse.json({ ...outcome, mirror });
       } catch (error) {
         console.error(error);
         return NextResponse.json({ error: "Could not record that answer." }, { status: 500 });
