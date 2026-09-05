@@ -75,7 +75,11 @@ describe("the latch, shown", () => {
        "Passed" beside it knows the level is safe and knows why. */
     const queue = readFileSync("src/lib/uk/ukStudyQueue.ts", "utf8");
     expect(queue).toContain("passed: boolean;");
-    expect(queue).toContain("select: { subjectId: true, srsStage: true, passedAt: true }");
+    /* The column has to be selected for the flag to be derivable at all.
+       Matched loosely rather than as a whole select clause: the previous
+       version pinned the exact string and broke the moment availableAt was
+       added for review ordering, which told us nothing about the latch. */
+    expect(queue).toMatch(/select:\s*\{[^}]*passedAt: true/);
     const session = readFileSync("src/app/users/[nickname]/uk-study/UkStudySession.tsx", "utf8");
     expect(session).toContain("item.passed ?");
   });
@@ -85,7 +89,11 @@ describe("the latch, shown", () => {
        would be a bug worth seeing, and an item at stage 2 that was stamped is
        the whole point. */
     const queue = readFileSync("src/lib/uk/ukStudyQueue.ts", "utf8");
-    expect(queue).toContain("state?.passedAt !== null && state?.passedAt !== undefined");
+    /* Derived from the stamp, never from the current stage: an item at stage 6
+       that was never stamped is a bug worth seeing, and an item at stage 2
+       that was stamped is the whole point. */
+    expect(queue).toMatch(/passedAt !== null/);
+    expect(queue).not.toMatch(/passed:\s*state\.srsStage >=/);
   });
 });
 

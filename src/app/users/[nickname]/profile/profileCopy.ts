@@ -166,3 +166,42 @@ export const THEME_CHIP = {
   active: "border-accent bg-accent text-white",
   idle: "border-line bg-surface text-foreground/70 hover:bg-surface-muted",
 } as const;
+
+
+export const STUDY_PREFS_COPY = {
+  heading: "How you want to study",
+  blurb:
+    "These are yours to set, and you can change them whenever you like. They change how studying feels and how fast you take on new work — never how much you have to know to reach a level.",
+  reviewOrder: {
+    label: "Which reviews come first",
+    note: "The same reviews either way. Only the order changes.",
+    options: {
+      overdue: "Most overdue first",
+      lowestStage: "Newest material first",
+      shuffled: "Shuffled",
+    } as Record<string, string>,
+  },
+  testInterval: {
+    label: "How often you are offered a checkpoint",
+    note: "A short test on what you have just learned. It opens the level whatever you score, so it is practice rather than a gate.",
+    options: (interval: number) => (interval === 0 ? "Never" : interval === 1 ? "Every level" : `Every ${interval} levels`),
+  },
+  throttle: {
+    label: "New lessons while reviews are waiting",
+    note: "Holding lessons back while you are behind keeps the pile from growing. It makes levels come slower and reviews feel lighter.",
+    options: {
+      site: "Use the site's setting",
+      on: "Hold them back",
+      off: "Keep giving me lessons",
+    } as Record<string, string>,
+  },
+  batchSize: {
+    label: "Items in one sitting",
+    note: "A shorter sitting is a shorter sitting, not an easier one.",
+  },
+  /* The line, said out loud. A member offered choices deserves to know where
+     they stop, rather than finding out by being surprised. */
+  fixed:
+    "Some things are the same for everybody and are not yours to change: how many of a level's kanji you need at Guru to move up, how long the review intervals are, and the JLPT tests at levels 10, 20, 35, 50 and 100. UmaKuma level 40 has to mean the same thing on your profile as on anybody else's.",
+  saveFailed: "Could not save that. Try again?",
+} as const;

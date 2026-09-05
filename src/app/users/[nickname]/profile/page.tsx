@@ -25,6 +25,9 @@ import type { AgeBand } from "@/lib/srs/ageBand";
 import { memberTheme } from "@/lib/srs/srsThemeServer";
 
 import ProfileForm from "./ProfileForm";
+import { parseStudyPreferences } from "@/lib/srs/studyPreferences";
+
+import StudyPreferencesPanel from "./StudyPreferencesPanel";
 import ThemePicker from "./ThemePicker";
 import XpRankPanel from "./XpRankPanel";
 import { JLPT_STATUS_LABELS, PROFILE_COPY } from "./profileCopy";
@@ -70,7 +73,7 @@ export default async function UserProfilePage({ params }: PageProps) {
     where: accountUrlKeyWhere(decodeURIComponent(nickname)),
     select: {
       id: true, nickname: true, slug: true, displayName: true, visibility: true, wkUsername: true, wkLevel: true,
-      jlptStatus: true, srsTheme: true, ageBand: true, xp: true,
+      jlptStatus: true, srsTheme: true, ageBand: true, xp: true, studyPreferences: true,
       jlptCertificates: { select: { id: true, system: true, level: true, year: true } },
       lastSyncedAt: true, lastActivityAt: true,
       tokenEncrypted: true, tokenIv: true, tokenTag: true,
@@ -165,6 +168,14 @@ export default async function UserProfilePage({ params }: PageProps) {
           initialTheme={memberThemeChoices.theme}
           initialChoices={memberThemeChoices.choices}
           initialAgeBand={(account.ageBand as AgeBand | null) ?? null}
+        />
+      </div>
+
+      {/* Study settings save as they are chosen, like the theme above. */}
+      <div className="mb-4">
+        <StudyPreferencesPanel
+          accountId={account.id}
+          initial={parseStudyPreferences(account.studyPreferences)}
         />
       </div>
 

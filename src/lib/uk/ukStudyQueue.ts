@@ -4,6 +4,8 @@ import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import { prisma } from "@/lib/prisma";
 import { getCatalogSubjectDetails } from "@/lib/subjectCatalogDetails";
 import { srsScoringRules } from "@/lib/srs/srsScoringRules";
+import { orderReviews, throttleAppliesTo } from "@/lib/srs/studyPreferences";
+import { memberStudyPreferences } from "@/lib/srs/studyPreferencesServer";
 
 /**
  * What a member has to do on the UmaKuma ladder right now.
@@ -136,8 +138,11 @@ function toItem(
  * the threshold can be moved without a deploy.
  */
 export async function ukLessonThrottle(accountId: string, now = new Date()): Promise<UkThrottle> {
-  const rules = await srsScoringRules();
-  if (!rules.throttleLessonsOnBacklog) {
+  const [rules, preferences] = await Promise.all([srsScoringRules(), memberStudyPreferences(accountId)]);
+  /* The site sets the default; the member may hold an opinion. Pace, not
+     standard - the same freedom as choosing to study for twenty minutes
+     instead of an hour. */
+  if (!throttleAppliesTo(preferences, rules.throttleLessonsOnBacklog)) {
     return { held: false, due: 0, threshold: rules.backlogThreshold };
   }
   const due = await prisma.ukSrsState.count({
@@ -169,12 +174,19 @@ export async function ukLessons(accountId: string, limit = 50): Promise<UkStudyI
 
 /** Items whose next review has come round. */
 export async function ukReviews(accountId: string, now = new Date(), limit = 100): Promise<UkStudyItem[]> {
-  const due = await prisma.ukSrsState.findMany({
+  const preferences = await memberStudyPreferences(accountId);
+  /* Ordered in the database by due date, then reordered to the member's
+     choice. Taken before reordering so the limit still means "the most
+     overdue hundred" whatever order they read them in - a shuffle that also
+     chose *which* items to serve would be a different queue, not a different
+     order. */
+  const dueRows = await prisma.ukSrsState.findMany({
     where: { accountId, availableAt: { not: null, lte: now } },
-    select: { subjectId: true, srsStage: true, passedAt: true },
+    select: { subjectId: true, srsStage: true, passedAt: true, availableAt: true },
     orderBy: { availableAt: "asc" },
     take: limit,
   });
+  const due = orderReviews(dueRows, preferences.reviewOrder);
   if (due.length === 0) return [];
 
   const rows = await prisma.ukSubject.findMany({
@@ -184,11 +196,16 @@ export async function ukReviews(accountId: string, now = new Date(), limit = 100
       meanings: true, readings: true, wkSubjectId: true,
     },
   });
-  const stateById = new Map(due.map((state) => [state.subjectId, state]));
   const content = await withContent(rows);
-  return rows.map((row) => {
-    const state = stateById.get(row.id);
-    return toItem(row, content, state?.srsStage ?? 0, state?.passedAt !== null && state?.passedAt !== undefined);
+  /* Walk `due`, not `rows`. The subjects come back in whatever order the
+     database chose, so mapping over them would have thrown the member's
+     chosen order away - the reorder above would have been dead code doing
+     nothing, which is the worst kind of working. */
+  const rowById = new Map(rows.map((row) => [row.id, row]));
+  return due.flatMap((state) => {
+    const row = rowById.get(state.subjectId);
+    if (!row) return [];
+    return [toItem(row, content, state.srsStage, state.passedAt !== null)];
   });
 }
 

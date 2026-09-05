@@ -142,6 +142,15 @@ model Account {
   /// instant and retroactive.
   srsTheme                  String?
 
+  /// How this member chooses to study, as JSON - review order, batch size,
+  /// checkpoint interval, whether lessons are held back behind a backlog.
+  ///
+  /// Only ergonomics and pace live here. Nothing in it can reach the level
+  /// gate, and a test enforces that: UmaKuma level 40 has to mean the same
+  /// thing for everybody or the badges, the leaderboard and the JLPT
+  /// milestones stop meaning anything. See `srs/studyPreferences.ts`.
+  studyPreferences String?
+
   /// under_13 | 13_17 | 18_plus. Decides which themes may be offered, since
   /// the set includes organised crime and the sex trade. Null is treated as
   /// the youngest: guessing upward is the mistake that reaches a child.
