@@ -3,7 +3,7 @@ import { execFileSync } from "node:child_process";
 
 import { describe, expect, it } from "vitest";
 
-import { levelBadge, LEVEL_SYSTEMS, ukLevelBadge, wkLevelBadge } from "./levelBadge";
+import { levelBadge, LEVEL_SYSTEMS, libraryLevelBadge, ukLevelBadge, wkLevelBadge } from "./levelBadge";
 
 /**
  * A level with no system in front of it is a number with two possible
@@ -37,27 +37,48 @@ describe("levelBadge", () => {
       .split("\n")
       .filter(Boolean)
       .filter((line) => !line.includes(".test."))
-      /* Two exemptions, both the same cause: a member's own uploaded library
-         is a third ladder, and neither surface can say whose level it is
-         drawing. The manager page is about one library throughout; the Study
-         header draws the level inside "<library name> (L3)", which names the
-         ladder beside it. Both get a prefix once the library's own is decided.
-         Recorded on the board — remove these when it is.
-
-         The second path is the label helper, which now answers WK3 or UK3 for
-         the two real ladders and keeps the bare form only for a library. It
-         moved from StudyExplorerPanel into the group's constants when the
-         header came out of the panel, and this list did not move with it. */
-      .filter(
-        (line) =>
-          !line.startsWith("src/app/users/[nickname]/StudySourceLibraryItemsManager.tsx") &&
-          !line.startsWith("src/app/users/[nickname]/study-explorer/components/StudyExplorer.constants.ts"),
-      );
+      /* No exemptions. A member's own library was the last bare L on the
+         site and it has its own prefix now - the two surfaces that drew it,
+         the library manager's level dropdown and the Study header's
+         "<library name> (LIB3)", both ask levelBadge like everything else. */
+      ;
 
     expect(found, `bare level badges:\n${found.join("\n")}`).toEqual([]);
   });
 
   it("has the module every surface reads it from", () => {
     expect(readFileSync("src/lib/levelBadge.ts", "utf8")).toContain("LEVEL_SYSTEMS");
+  });
+});
+
+describe("the member's own library", () => {
+  /* The third ladder, and the last surface still drawing a bare L. It was
+     defensible while the library was named right beside the number, and
+     stopped being so when L was reserved for the XP rank: a bare L3 next to a
+     library name reads as rank 3, a different ladder and a different number. */
+  it("has a prefix of its own", () => {
+    expect(libraryLevelBadge(3)).toBe("LIB3");
+    expect(LEVEL_SYSTEMS.library).toBe("LIB");
+  });
+
+  it("draws nothing for a level that is not there, like the others", () => {
+    expect(libraryLevelBadge(null)).toBeNull();
+    expect(libraryLevelBadge(undefined)).toBeNull();
+  });
+
+  it("is distinct from every other ladder's prefix", () => {
+    const prefixes = Object.values(LEVEL_SYSTEMS);
+    expect(new Set(prefixes).size).toBe(prefixes.length);
+    /* And from the XP rank's bare L, which lives in xpRanks. */
+    for (const prefix of prefixes) expect(prefix).not.toBe("L");
+  });
+
+  it("is what the two surfaces that used to draw a bare L now ask for", () => {
+    for (const file of [
+      "src/app/users/[nickname]/StudySourceLibraryItemsManager.tsx",
+      "src/app/users/[nickname]/study-explorer/components/StudyExplorer.constants.ts",
+    ]) {
+      expect(readFileSync(file, "utf8")).toContain("libraryLevelBadge");
+    }
   });
 });

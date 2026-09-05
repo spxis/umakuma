@@ -1,4 +1,4 @@
-import { ukLevelBadge, wkLevelBadge } from "@/lib/levelBadge";
+import { libraryLevelBadge, ukLevelBadge, wkLevelBadge } from "@/lib/levelBadge";
 
 import type { StudySource } from "../lib/studyExplorerTypes";
 
@@ -220,7 +220,7 @@ export function studyLevelHeaderLabel(studySource: StudySource, level: number | 
   const value = Math.max(1, level ?? 1);
   if (studySource === "umakuma") return ukLevelBadge(value)!;
   if (studySource === "wanikani") return wkLevelBadge(value)!;
-  return `L${value}`;
+  return libraryLevelBadge(value)!;
 }
 
 export const STUDY_REVIEW_MODAL_TRANSITION_CUE_DURATION_MS = 900;

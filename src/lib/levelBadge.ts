@@ -10,15 +10,28 @@
  * can sit on the same pill and mean different things without either one having
  * to be hidden or explained.
  *
- * Deliberately not a display map keyed by an enum. There are exactly two
- * ladders, they are named in the product, and a member reads these two strings
- * more often than almost anything else on the site.
+ * Deliberately not a display map keyed by an enum. There are three ladders,
+ * they are named in the product, and a member reads these strings more often
+ * than almost anything else on the site.
+ *
+ * A fourth prefix lives elsewhere: `L` is the XP rank, in `xpRanks.ts`, and it
+ * is bare because it only ever appears beside the XP total that names it.
  */
 export const LEVEL_SYSTEMS = {
   /** WaniKani's sixty. */
   wanikani: "WK",
   /** Ours. A hundred. */
   umakuma: "UK",
+  /**
+   * A member's own uploaded library, which is a third ladder with as many
+   * levels as they gave it.
+   *
+   * Left bare for a while on the grounds that the library is named right
+   * beside the number - "Business Japanese (L3)" - and that was defensible
+   * until `L` was reserved for the XP rank. A bare `L3` beside a library name
+   * now reads as rank 3, which is a different ladder and a different number.
+   */
+  library: "LIB",
 } as const;
 
 export type LevelSystem = (typeof LEVEL_SYSTEMS)[keyof typeof LEVEL_SYSTEMS];
@@ -39,4 +52,9 @@ export function wkLevelBadge(level: number | null | undefined): string | null {
 /** Ours. */
 export function ukLevelBadge(level: number | null | undefined): string | null {
   return levelBadge(LEVEL_SYSTEMS.umakuma, level);
+}
+
+/** A member's own library. */
+export function libraryLevelBadge(level: number | null | undefined): string | null {
+  return levelBadge(LEVEL_SYSTEMS.library, level);
 }
