@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { stringifyTimeline } from "../src/lib/backlogBoard";
@@ -50,7 +50,20 @@ const ROOT = process.cwd();
 const BOARD = join(ROOT, "src", "data", "featureTimeline.json");
 /* The list, not the rules: they were split when the pair crossed the 500-line
    gate, and release:take writes only the list. */
-const CODENAMES_FILE = join(ROOT, "src", "lib", "releaseCodenameList.ts");
+/*
+ * The names live in numbered parts, and a new one goes on the end of the last:
+ * the list crossed the 500-line gate at release 486 and had to be split.
+ */
+function lastCodenamePart(): string {
+  const dir = join(ROOT, "src", "lib");
+  const parts = readdirSync(dir)
+    .filter((name) => /^releaseCodenameList\d+\.ts$/.test(name))
+    .sort((a, b) => Number(a.replace(/\D/g, "")) - Number(b.replace(/\D/g, "")));
+  if (parts.length === 0) throw new Error("No codename list parts in src/lib.");
+  return join(dir, parts[parts.length - 1]);
+}
+
+const CODENAMES_FILE = lastCodenamePart();
 const VERSION_FILE = join(ROOT, "src", "lib", "appVersion.ts");
 const PACKAGE_FILE = join(ROOT, "package.json");
 
@@ -157,7 +170,7 @@ async function main(): Promise<void> {
   }
 
   const now = new Date();
-  const stamp = { version, releasedAt: `${now.toISOString().slice(0, 19)}Z`, date: getVancouverDateKey(now) };
+  const stamp = { version, releasedAt: `${now.toISOString().slice(0, 19)}Z`, date: getVancouverDateKey(now), release };
 
   let entries;
   let shippedId: string;

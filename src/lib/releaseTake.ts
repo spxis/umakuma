@@ -100,7 +100,19 @@ export function codenameProblems(
   return problems;
 }
 
-export type ShipStamp = { version: string; releasedAt: string; date: string };
+export type ShipStamp = {
+  version: string;
+  releasedAt: string;
+  date: string;
+  /**
+   * Which release this is, counting from the first.
+   *
+   * Recorded because the version stopped carrying it: with major, minor and
+   * patch meaning what they ordinarily mean, 1.7.4 does not say it is the
+   * 484th release - and the codename list is positional, so something has to.
+   */
+  release: number;
+};
 
 /**
  * The entry as it reads once it has shipped.
@@ -200,6 +212,7 @@ export function entryFromTicket(
     status: FEATURE_STATUSES.shipped,
     date: stamp.date,
     version: stamp.version,
+    release: stamp.release,
     releasedAt: stamp.releasedAt,
     summary: published.summary.trim(),
   };
@@ -231,6 +244,7 @@ export function shipEntry(
       status: FEATURE_STATUSES.shipped,
       date: stamp.date,
       version: stamp.version,
+      release: stamp.release,
       releasedAt: stamp.releasedAt,
     };
     delete shipped.dateIsEstimate;

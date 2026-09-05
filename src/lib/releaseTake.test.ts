@@ -87,7 +87,7 @@ describe("what a codename may be", () => {
 });
 
 describe("shipping the entry", () => {
-  const stamp = { version: "0.296.0", releasedAt: "2026-09-02T16:00:00Z", date: "2026-09-02" };
+  const stamp = { version: "0.296.0", releasedAt: "2026-09-02T16:00:00Z", date: "2026-09-02", release: 1 };
 
   it("stamps it and drops what only a plan carries", () => {
     const [shipped] = shipEntry(
@@ -213,7 +213,7 @@ describe("higherVersion", () => {
 });
 
 describe("what a release says on a public page", () => {
-  const stamp = { version: "0.500.0", releasedAt: "2026-09-05T10:00:00Z", date: "2026-09-05" };
+  const stamp = { version: "0.500.0", releasedAt: "2026-09-05T10:00:00Z", date: "2026-09-05", release: 1 };
   const ticket = { id: "a-thing", title: "A thing", area: "study", kind: "feature" };
 
   /* A release published "TOP PRIORITY: the header's right side carries the

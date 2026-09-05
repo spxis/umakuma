@@ -14,7 +14,7 @@
 export const APP_VERSION = "1.7.4";
 
 /** Which release this is, counting from the first. */
-export const APP_VERSION_RELEASE = 480;
+export const APP_VERSION_RELEASE = 486;
 
 /** The calendar day APP_VERSION shipped, `YYYY-MM-DD`. */
 export const APP_VERSION_DATE = "2026-09-05";
