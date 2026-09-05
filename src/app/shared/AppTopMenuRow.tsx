@@ -236,6 +236,7 @@ export default function AppTopMenuRow({
         section={sectionHasSubNav(visibleActiveSection) ? visibleActiveSection : null}
         pathname={pathname}
         wkUsername={resolvedWkUsername}
+        viewerMenuInfo={viewerMenuInfo}
         subNav={subNav}
       />
     </div>

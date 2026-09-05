@@ -101,6 +101,14 @@ function AdminWorkspacePageContent({
         // loads their token.
         hasWanikani: Boolean(userWkUsername),
         internal: false,
+        // No numbers here, so the header's member strip stays collapsed on
+        // admin pages. This viewer is assembled from the session alone - it
+        // never loads an account row, which is where XP and both levels live -
+        // and inventing zeroes would have the workspace reporting an admin's
+        // progress as nothing at all.
+        xp: null,
+        ukLevel: null,
+        wkLevel: null,
         isAdmin: emailAllowed,
       }
     : null;

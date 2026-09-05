@@ -80,6 +80,9 @@ export async function resolveViewerMenuInfo(input: {
         tokenEncrypted: true,
         tokenIv: true,
         tokenTag: true,
+        xp: true,
+        ukLevel: true,
+        wkLevel: true,
       },
     });
 
@@ -103,6 +106,9 @@ export async function resolveViewerMenuInfo(input: {
       accountId: viewerIsMember ? viewerAccount.id : null,
       hasWanikani: viewerIsMember && hasWanikaniConnection(viewerAccount),
       internal: viewerIsMember ? viewerAccount.internal : false,
+      xp: viewerIsMember ? viewerAccount.xp : null,
+      ukLevel: viewerIsMember ? viewerAccount.ukLevel : null,
+      wkLevel: viewerIsMember ? viewerAccount.wkLevel : null,
       isAdmin: viewerIsAdmin,
     };
   }
@@ -128,6 +134,9 @@ export async function resolveViewerMenuInfo(input: {
       tokenEncrypted: true,
       tokenIv: true,
       tokenTag: true,
+      xp: true,
+      ukLevel: true,
+      wkLevel: true,
     },
   });
 
@@ -151,6 +160,9 @@ export async function resolveViewerMenuInfo(input: {
     accountId: invitePayload.accountId,
     hasWanikani: hasWanikaniConnection(inviteAccount),
     internal: inviteAccount.internal,
+    xp: inviteAccount.xp,
+    ukLevel: inviteAccount.ukLevel,
+    wkLevel: inviteAccount.wkLevel,
     isAdmin: false,
   };
 }

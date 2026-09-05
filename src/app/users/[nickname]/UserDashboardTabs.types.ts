@@ -80,6 +80,17 @@ export type ViewerMenuInfo = {
   hasWanikani: boolean;
   /** One of us: the family and anybody let in deliberately. Decides who is offered the reading challenge. */
   internal: boolean;
+  /**
+   * The three numbers the header carries, and null for anyone who is not a
+   * member — signed out, or an account that was turned away. Null rather than
+   * zero on purpose: a stranger has no XP, which is a different statement from
+   * having earned none, and the header draws nothing at all for the first.
+   */
+  xp: number | null;
+  /** Ours, out of a hundred. Null for a non-member. */
+  ukLevel: number | null;
+  /** WaniKani's, out of sixty. Null for a non-member and for a member who has never connected one. */
+  wkLevel: number | null;
   isAdmin: boolean;
 };
 

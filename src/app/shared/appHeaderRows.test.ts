@@ -41,10 +41,16 @@ describe("the header rows", () => {
   });
 
   /*
-   * The codename is decoration; the pages of a section are not. It took enough
-   * of the second row between 1024 and 1280 to push STROKES off the end.
+   * The member strip took the codename's place at the end of the second row.
+   * The codename was decoration and could be held back to 1280px; XP is what a
+   * member came to see, so it is drawn at every width and holds its own size
+   * instead - which only works because the pages beside it are the half of the
+   * row that scrolls.
    */
-  it("holds the codename back until the section row is safe", () => {
-    expect(read("src/app/shared/ReleaseMotto.tsx")).toContain("xl:block");
+  it("keeps the member strip at its own width rather than letting it wrap", () => {
+    const source = read("src/app/shared/HeaderMemberStats.tsx");
+    expect(source).toContain("shrink-0");
+    expect(source).toContain("whitespace-nowrap");
+    expect(source).not.toContain("flex-wrap");
   });
 });

@@ -13,6 +13,9 @@ function viewer(overrides: Partial<ViewerMenuInfo> = {}): ViewerMenuInfo {
     accountId: null,
     hasWanikani: false,
     internal: false,
+    xp: null,
+    ukLevel: null,
+    wkLevel: null,
     isAdmin: false,
     ...overrides,
   };

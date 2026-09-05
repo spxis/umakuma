@@ -4,30 +4,35 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { navChildHref, navChildrenFor, type NavChild, type NavSection } from "./navSections";
-import ReleaseMotto from "./ReleaseMotto";
+import HeaderMemberStats from "./HeaderMemberStats";
+import type { ViewerMenuInfo } from "@/app/users/[nickname]/UserDashboardTabs.types";
 
 /**
- * The header's second row: where you are inside a section, and the release.
+ * The header's second row: where you are inside a section, and how you are doing.
  *
- * The codename used to sit in the top row between the search field and the
- * menu, which is what kept search down to a 96px box - three things competing
- * for the right-hand end of one row. It reads perfectly well down here, and the
- * row was already being drawn on most pages anyway.
+ * The right-hand end of this row carried the release codename.
+ * It reports the member instead now - XP, and the two ladders - because the
+ * footer was already printing the version, the codename, its reading and the
+ * date, so the header was spending its most-read corner on a second copy of
+ * something nobody needed twice.
  *
- * So this row is always present, not only when a section has children. That
- * keeps the header the same height from page to page, which stops the content
- * below it jumping as you navigate - and gives the codename a fixed home rather
- * than one that appears and disappears.
+ * This row is always present, not only when a section has children. That keeps
+ * the header the same height from page to page, which stops the content below
+ * it jumping as you navigate - and gives the strip a fixed home rather than one
+ * that appears and disappears.
  */
 export default function AppSubNavRow({
   section,
   pathname,
   wkUsername,
+  viewerMenuInfo,
   subNav,
 }: {
   section: NavSection | null;
   pathname: string | null;
   wkUsername: string | null;
+  /** Whose numbers the strip at the end of the row reports: the viewer's own, never the page's. */
+  viewerMenuInfo: ViewerMenuInfo | null;
   /**
    * A section whose pages are not in `navSections` - admin, whose tabs come
    * from its own registry. It renders in the same slot as the rest so admin
@@ -73,7 +78,7 @@ export default function AppSubNavRow({
         <span aria-hidden="true" />
       ))}
 
-      <ReleaseMotto className="ml-auto shrink-0" />
+      <HeaderMemberStats viewerMenuInfo={viewerMenuInfo} className="ml-auto" />
     </div>
   );
 }
