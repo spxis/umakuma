@@ -5192,11 +5192,23 @@
     "id": "passed-flag",
     "name": "Show the latch: a Passed flag on an item",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "Show the latch: a Passed flag on an item",
+    "dateIsEstimate": false,
+    "version": "0.454.0",
+    "releasedAt": "2026-09-05T02:30:27Z"
+  },
+  {
+    "id": "srs-scoring-rules",
+    "name": "Scoring rules switchable from the admin site",
+    "area": "admin",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.454.0",
-    "releasedAt": "2026-09-05T02:30:27Z",
-    "summary": "Show the latch: a Passed flag on an item"
+    "version": "0.455.0",
+    "releasedAt": "2026-09-05T02:48:50Z",
+    "summary": "Scoring rules switchable from the admin site"
   }
 ]
