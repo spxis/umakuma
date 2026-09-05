@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+
 import { describe, expect, it } from "vitest";
 
 import {
@@ -216,5 +218,34 @@ describe("the shipped ladder, after the reordering", () => {
        about itself and belongs on no card. */
     const anywhere = radicals.filter((row) => row.meanings.some((m) => /\(no\.?\s*\d+\)/i.test(m)));
     expect(anywhere.map((row) => row.characters)).toEqual([]);
+  });
+});
+
+describe("the two contracts over one rule", () => {
+  /* The explorer named its radicals a second way and the second way drifted:
+     it showed 乙 as "the latter" and drew nothing at all for the six shapes
+     the dictionary does not name, while the seed had both right. */
+  it("answers the same for a caller that can survive not knowing", async () => {
+    const { radicalMeaningsOrNone } = await import("./radicalShapes");
+    for (const [shape, words] of [
+      ["乙", ["the latter", "fishhook radical (no. 5)"]],
+      ["ノ", []],
+      ["大", ["large", "big"]],
+    ] as const) {
+      expect(radicalMeaningsOrNone(shape, words)).toEqual(radicalMeanings(shape, words));
+    }
+  });
+
+  it("returns nothing rather than refusing, where a blank is survivable", async () => {
+    const { radicalMeaningsOrNone } = await import("./radicalShapes");
+    expect(radicalMeaningsOrNone("鬯", [])).toBeNull();
+    expect(() => radicalMeanings("鬯", [])).toThrow();
+  });
+
+  it("is the only place the explorer names a radical", async () => {
+    const crosswalk = readFileSync("src/lib/ladder/ladderCrosswalk.ts", "utf8");
+    expect(crosswalk).toContain("radicalMeaningsOrNone(characters, words)");
+    /* The dictionary's first meaning is the kanji's, not the radical's. */
+    expect(crosswalk).not.toContain("primaryMeaning: entry?.primaryMeaning ?? null,\n    source: LADDER_SOURCES.radkfile");
   });
 });

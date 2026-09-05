@@ -176,6 +176,28 @@ export function radicalMeanings(
   characters: string,
   fromDictionary: readonly string[] | undefined,
 ): string[] {
+  const words = radicalMeaningsOrNone(characters, fromDictionary);
+  if (words) return words;
+
+  throw new Error(
+    `No name for the radical ${characters} (U+${characters.codePointAt(0)?.toString(16).toUpperCase()}). ` +
+      "Add it to RADICAL_STROKE_NAMES in src/lib/ladder/radicalShapes.ts — no radical may ship unnamed.",
+  );
+}
+
+/**
+ * The same rules, for a caller that can survive not knowing.
+ *
+ * One rule, two contracts. The seed writes the database and must refuse, so it
+ * calls `radicalMeanings`; a view drawing a partial set - a crosswalk built
+ * over a dictionary that holds three entries in a test - would rather print
+ * nothing than stop. Both walk the same four steps, so a name cannot come out
+ * two ways depending on who asked.
+ */
+export function radicalMeaningsOrNone(
+  characters: string,
+  fromDictionary: readonly string[] | undefined,
+): string[] | null {
   if (fromDictionary && fromDictionary.length > 0) return orderedDictionaryMeanings(fromDictionary);
 
   const romaji = KATAKANA_ROMAJI[characters];
@@ -192,12 +214,9 @@ export function radicalMeanings(
      than a refusal - and the two spellings cannot drift into two names,
      because there is only ever one. */
   const ours = RADICAL_SHAPE_TWINS_REVERSED[characters];
-  if (ours && ours !== characters) return radicalMeanings(ours, undefined);
+  if (ours && ours !== characters) return radicalMeaningsOrNone(ours, undefined);
 
-  throw new Error(
-    `No name for the radical ${characters} (U+${characters.codePointAt(0)?.toString(16).toUpperCase()}). ` +
-      "Add it to RADICAL_STROKE_NAMES in src/lib/ladder/radicalShapes.ts — no radical may ship unnamed.",
-  );
+  return null;
 }
 
 /** The katakana a shape is, for a surface that wants to say so. Null if none. */

@@ -67,7 +67,8 @@ async function build(): Promise<Held> {
   const dictionary = new Map(
     getAllKanjiDictionaryEntries().map((entry) => [
       entry.kanji,
-      { primaryMeaning: entry.primaryMeaning, schoolGrade: entry.grade, frequencyRank: entry.frequencyRank },
+      /* `meanings` too: a radical is named from the whole list, not the first. */
+      { primaryMeaning: entry.primaryMeaning, meanings: entry.meanings, schoolGrade: entry.grade, frequencyRank: entry.frequencyRank },
     ]),
   );
 

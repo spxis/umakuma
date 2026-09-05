@@ -1,5 +1,7 @@
-import { gradeBand, type KanjiGradeBand } from "@/lib/kanjiCoverage";
 import { SUBJECT_TYPES, type SubjectType } from "@/lib/domainConstants";
+import { gradeBand, type KanjiGradeBand } from "@/lib/kanjiCoverage";
+
+import { radicalMeaningsOrNone } from "./radicalShapes";
 
 /**
  * Every item on the UmaKuma ladder, beside where the other systems put it.
@@ -66,7 +68,17 @@ export type LadderCrosswalkInput = {
   /** `vocabularyLevel` from the ladder: WK subject id (as text) -> level. */
   vocabulary: Record<string, number>;
   /** KANJIDIC2, for meanings, grades and print frequency. */
-  dictionary: ReadonlyMap<string, { primaryMeaning: string | null; schoolGrade: number | null; frequencyRank: number | null }>;
+  /*
+   * `meanings` is carried as well as `primaryMeaning` because a radical is not
+   * named by its kanji's first meaning: 乙 the kanji means "the latter" and 乙
+   * the radical is the fishhook, and `radicalMeanings` needs the whole list to
+   * find that out. Without it this page named its radicals a second way, and
+   * the second way drifted.
+   */
+  dictionary: ReadonlyMap<
+    string,
+    { primaryMeaning: string | null; meanings?: readonly string[]; schoolGrade: number | null; frequencyRank: number | null }
+  >;
   /** WaniKani's words, for the characters and meaning a subject id stands for. */
   words: ReadonlyMap<number, { characters: string; primaryMeaning: string | null; wkLevel: number }>;
   /** The blended corpus rank per WK subject id, from `wordFrequency.json`. */
@@ -101,8 +113,18 @@ function kanjiRow(
 }
 
 function radicalRow(characters: string, level: number, input: LadderCrosswalkInput): LadderRow {
-  /* 247 of the 253 are also kanji, so the dictionary names most of them. */
+  /*
+   * The same naming the curriculum seed uses, rather than the dictionary's
+   * first meaning. Two paths named these radicals and only one of them had the
+   * rules: this page showed 乙 as "the latter" where the seed had it as the
+   * fishhook, and drew nothing at all for the six shapes the dictionary does
+   * not name. `radicalMeanings` is now the only answer either path gives.
+   */
   const entry = input.dictionary.get(characters);
+  /* A caller that carries only the primary meaning still gets named from it;
+     the list is what lets the radical's own name be found inside it. */
+  const words = entry?.meanings ?? (entry?.primaryMeaning ? [entry.primaryMeaning] : undefined);
+  const named = radicalMeaningsOrNone(characters, words)?.[0] ?? null;
   return {
     key: `radical:${characters}`,
     kind: SUBJECT_TYPES.radical,
@@ -114,7 +136,7 @@ function radicalRow(characters: string, level: number, input: LadderCrosswalkInp
     schoolGrade: null,
     band: gradeBand(null),
     frequencyRank: null,
-    primaryMeaning: entry?.primaryMeaning ?? null,
+    primaryMeaning: named,
     source: LADDER_SOURCES.radkfile,
   };
 }
