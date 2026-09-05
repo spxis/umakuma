@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 
+import { compareVersions } from "./releaseOrdinal";
+
 import {
   FEATURE_AREA_LABELS,
   FEATURE_AREA_VALUES,
@@ -271,9 +273,12 @@ describe("versions", () => {
 
   it("keeps the footer constant and package.json on the latest release", async () => {
     const shipped = featuresByStatus(loadFeatureTimeline(), FEATURE_STATUSES.shipped);
+    /* Numerically, not alphabetically: "1.9.3" sorts after "1.10.0" as a
+       string, so the first two-digit minor would make this pick the wrong
+       release and fail every build after it. */
     const latest = shipped
       .map((item) => item.version!)
-      .sort()
+      .sort(compareVersions)
       .at(-1);
 
     const { APP_VERSION, APP_VERSION_DATE } = await import("./appVersion");
