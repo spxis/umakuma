@@ -218,12 +218,22 @@ Run `pnpm quality:check` after non-trivial `src/` edits. If lint issues are auto
   workflow and the canonical alias for the version — and investigate then.
   Three deploys were watched to completion on 2026-09-04, about eighteen
   minutes of sleeping, and every one of them was green.
-- **Work in your own git worktree, never in the shared checkout.** Several
-  sessions have this repository open at once, and one working tree with several
-  writers loses work in ways that do not announce themselves: a `git add -A`
-  sweeps somebody else's half-finished file into an unrelated commit, a rebase
-  drops a deletion nobody notices, a stash pop lands inside another session's
-  edit. All three happened on 2026-09-02 and a board entry was lost outright.
+- **Work in your own git worktree, never in the shared checkout - and never
+  share a worktree either.** Several sessions have this repository open at once,
+  and one working tree with several writers loses work in ways that do not
+  announce themselves: a `git add -A` sweeps somebody else's half-finished file
+  into an unrelated commit, a rebase drops a deletion nobody notices, a stash
+  pop lands inside another session's edit. All three happened on 2026-09-02 and
+  a board entry was lost outright.
+
+  **One agent, one worktree. A worktree is not a room several agents can share.**
+  Four agents were run in parallel inside a single worktree on 2026-09-04 and it
+  reproduced the same hazard one level down, where it felt safe. `quality:check`
+  went red twice on files that session had never touched and green again on its
+  own as another agent saved, so a green gate meant only "nobody else was
+  mid-save at that instant" - which is not what a gate is for. Nothing about a
+  worktree makes concurrent writers safe; it only makes them less visible.
+
   One command sets one up:
 
       pnpm worktree <name> [--port 6402]
