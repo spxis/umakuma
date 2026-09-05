@@ -5360,11 +5360,23 @@
     "id": "loc-panel-header",
     "name": "The header label moves out of the panel",
     "area": "study",
+    "status": "shipped",
     "kind": "bug",
+    "date": "2026-09-05",
+    "summary": "0.467.0 pushed StudyExplorerPanel to 505 lines and StudyExplorer to 501; main went red on the LOC gate. The ladder-prefix rule moves to the group's constants.",
+    "dateIsEstimate": false,
+    "version": "0.468.0",
+    "releasedAt": "2026-09-05T07:56:26Z"
+  },
+  {
+    "id": "review-xp-visible",
+    "name": "Participation XP for every review, UK or WK",
+    "area": "study",
+    "kind": "feature",
     "status": "shipped",
     "date": "2026-09-05",
-    "version": "0.468.0",
-    "releasedAt": "2026-09-05T07:56:26Z",
-    "summary": "0.467.0 pushed StudyExplorerPanel to 505 lines and StudyExplorer to 501; main went red on the LOC gate. The ladder-prefix rule moves to the group's constants."
+    "version": "0.469.0",
+    "releasedAt": "2026-09-05T07:56:28Z",
+    "summary": "A review answered on the site pays reviewAnswered/reviewCorrect whichever feed it came from. Check both review routes pay the same."
   }
 ]
