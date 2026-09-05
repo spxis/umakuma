@@ -64,87 +64,49 @@ try {
 
                 await clearExpiredSyncLocks();
 
-                let accounts;
-
-                try {
-                  accounts = await prisma.account.findMany(({
-                    orderBy: [{ score: "desc" }, { wkLevel: "desc" }],
-                    select: {
-                      id: true,
-                      nickname: true,
-                      wkUsername: true,
-                      wkLevel: true,
-                      reviewCount: true,
-                      burnedCount: true,
-                      pendingReviews: true,
-                      radicalCount: true,
-                      vocabularyCount: true,
-                      apprenticeCount: true,
-                      guruCount: true,
-                      masterCount: true,
-                      enlightenedCount: true,
-                      levelKanjiTotal: true,
-                      levelKanjiLearned: true,
-                      levelKanjiGuruPlus: true,
-                      levelKanjiLocked: true,
-                      estimatedHoursRemaining: true,
-                      lastActivityAt: true,
-                      score: true,
-                      lastSyncedAt: true,
-                      lastSyncStatus: true,
-                      isSyncing: true,
-                      syncLockUntil: true,
-                      joinedByName: true,
-                      joinedByEmail: true,
-                      inviteCodeUpdatedAt: true,
-                      internal: true,
-                      disabledAt: true,
-                      createdAt: true,
-                    },
-                  } as unknown) as Prisma.AccountFindManyArgs);
-                } catch (error) {
-                  // Fallback for environments where new invite-code columns are not yet migrated.
-                  const fallbackAccounts = await prisma.account.findMany({
-                    orderBy: [{ score: "desc" }, { wkLevel: "desc" }],
-                    select: {
-                      id: true,
-                      nickname: true,
-                      wkUsername: true,
-                      wkLevel: true,
-                      reviewCount: true,
-                      burnedCount: true,
-                      pendingReviews: true,
-                      radicalCount: true,
-                      vocabularyCount: true,
-                      apprenticeCount: true,
-                      guruCount: true,
-                      masterCount: true,
-                      enlightenedCount: true,
-                      levelKanjiTotal: true,
-                      levelKanjiLearned: true,
-                      levelKanjiGuruPlus: true,
-                      levelKanjiLocked: true,
-                      estimatedHoursRemaining: true,
-                      lastActivityAt: true,
-                      score: true,
-                      lastSyncedAt: true,
-                      lastSyncStatus: true,
-                      isSyncing: true,
-                      syncLockUntil: true,
-                      createdAt: true,
-                    },
-                  });
-
-                  accounts = fallbackAccounts.map((row) => ({
-                    ...row,
-                    internal: false,
-                    disabledAt: null,
-                    joinedByName: null,
-                    joinedByEmail: null,
-                    inviteCodeUpdatedAt: null,
-                  }));
-                  console.warn("/api/accounts falling back due schema mismatch", error);
-                }
+                /* One query, and it either works or it fails loudly.
+                   There was a fallback here that re-queried without the
+                   newer columns and fabricated their values, added when
+                   invite codes landed. It is the compatibility layer
+                   AGENTS.md forbids, and worse than dead weight: a real
+                   drift between main and the database would have been
+                   swallowed into a warning and served as data, which is
+                   exactly the failure db:drift:check exists to catch. */
+                const accounts = await prisma.account.findMany(({
+                  orderBy: [{ score: "desc" }, { wkLevel: "desc" }],
+                  select: {
+                    id: true,
+                    nickname: true,
+                    wkUsername: true,
+                    wkLevel: true,
+                    reviewCount: true,
+                    burnedCount: true,
+                    pendingReviews: true,
+                    radicalCount: true,
+                    vocabularyCount: true,
+                    apprenticeCount: true,
+                    guruCount: true,
+                    masterCount: true,
+                    enlightenedCount: true,
+                    levelKanjiTotal: true,
+                    levelKanjiLearned: true,
+                    levelKanjiGuruPlus: true,
+                    levelKanjiLocked: true,
+                    estimatedHoursRemaining: true,
+                    lastActivityAt: true,
+                    score: true,
+                    lastSyncedAt: true,
+                    lastSyncStatus: true,
+                    isSyncing: true,
+                    syncLockUntil: true,
+                    joinedByName: true,
+                    joinedByEmail: true,
+                    inviteCodeUpdatedAt: true,
+                    internal: true,
+                    disabledAt: true,
+                    createdAt: true,
+                  },
+                } as unknown) as Prisma.AccountFindManyArgs);
 
                 return NextResponse.json({ accounts });
               } catch (error) {

@@ -60,6 +60,12 @@ function Fact({
   );
 }
 
+/* Prisma-backed, and CI builds without a DATABASE_URL. These pages have
+   survived without this only because something upstream reads cookies() and
+   forces dynamic by accident - which is not a guarantee, and the next page
+   copied from them would not inherit it. */
+export const dynamic = "force-dynamic";
+
 export default async function UserProfilePage({ params }: PageProps) {
   const session = await getServerSession(authOptions);
   const viewerEmail = session?.user?.email?.trim().toLowerCase() ?? null;
