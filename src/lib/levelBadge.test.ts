@@ -42,11 +42,16 @@ describe("levelBadge", () => {
          drawing. The manager page is about one library throughout; the Study
          header draws the level inside "<library name> (L3)", which names the
          ladder beside it. Both get a prefix once the library's own is decided.
-         Recorded on the board — remove these when it is. */
+         Recorded on the board — remove these when it is.
+
+         The second path is the label helper, which now answers WK3 or UK3 for
+         the two real ladders and keeps the bare form only for a library. It
+         moved from StudyExplorerPanel into the group's constants when the
+         header came out of the panel, and this list did not move with it. */
       .filter(
         (line) =>
           !line.startsWith("src/app/users/[nickname]/StudySourceLibraryItemsManager.tsx") &&
-          !line.startsWith("src/app/users/[nickname]/study-explorer/components/StudyExplorerPanel.tsx"),
+          !line.startsWith("src/app/users/[nickname]/study-explorer/components/StudyExplorer.constants.ts"),
       );
 
     expect(found, `bare level badges:\n${found.join("\n")}`).toEqual([]);

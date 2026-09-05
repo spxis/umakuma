@@ -79,6 +79,7 @@ describe("what a held member is told", () => {
     expect(copy).toContain("lessonsHeld:");
     expect(copy).toContain("reviews waiting");
     const session = readFileSync("src/app/users/[nickname]/uk-study/UkStudySession.tsx", "utf8");
-    expect(session).toContain("queue.counts.throttle?.held");
+    /* The throttle sits on the queue itself, not under a counts object. */
+    expect(session).toContain("queue.throttle?.held");
   });
 });

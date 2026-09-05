@@ -17,7 +17,8 @@ describe("the UmaKuma sitting", () => {
     expect(source).not.toContain("StudyReviewFlashActionRow");
     expect(source).toContain("href={studyHref}");
     const page = readFileSync("src/app/users/[nickname]/uk-study/page.tsx", "utf8");
-    expect(page).toContain("study-explorer?source=umakuma");
+    /* The route is `study`; `study-explorer` is the component folder and 404s. */
+    expect(page).toContain("study?source=umakuma");
     const queue = readFileSync("src/app/api/uk-study/[accountId]/queue/route.ts", "utf8");
     expect(queue).toContain("mapUkQueueItem");
   });
