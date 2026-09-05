@@ -542,7 +542,7 @@
     "area": "platform",
     "status": "shipped",
     "date": "2026-09-02",
-    "summary": "An account has not needed WaniKani since 0.95.0, but the site was built when it did, and the assumption survived in the places nobody thought of as WaniKani features. A member without a connection was offered the Library Explorer and Stats by their own header and met sixty empty levels and a wall of zeros that congratulated them on passing a level gate they had reached by never starting; Study answered This account has no WaniKani connection in red above a full filter panel over an empty list. One list in src/lib/memberCapabilities.ts now says what the site can do and which four things read WaniKani's own data - the queue, the Library Explorer, the progress figures and a leaderboard standing - and the navigation, the pages and the connection page all ask it rather than each deciding for themselves. The two WaniKani-only pages say what they would have been, why they cannot be it yet and where to connect, instead of rendering nothing convincingly. Study is the one that is not only WaniKani's: an uploaded library has its own items and its own schedule in this app's tables, so a member with one opens on that source rather than on a WaniKani queue that can only answer 409, and a member with neither is told what they need rather than what failed. Requested 2026-09-02 by John with screenshots.",
+    "summary": "An account has not needed WaniKani since 0.95.0, but the site was built when it did, and the assumption survived in the places nobody thought of as WaniKani features. A member without a connection was offered the Library Explorer and Stats by their own header and met sixty empty levels and a wall of zeros that congratulated them on passing a level gate they had reached by never starting; Study answered This account has no WaniKani connection in red above a full filter panel over an empty list. One list in src/lib/memberCapabilities.ts now says what the site can do and which four things read WaniKani's own data - the queue, the Library Explorer, the progress figures and a leaderboard standing - and the navigation, the pages and the connection page all ask it rather than each deciding for themselves. The two WaniKani-only pages say what they would have been, why they cannot be it yet and where to connect, instead of rendering nothing convincingly. Study is the one that is not only WaniKani's: an uploaded library has its own items and its own schedule in this app's tables, so a member with one opens on that source rather than on a WaniKani queue that can only answer 409, and a member with neither is told what they need rather than what failed.",
     "dateIsEstimate": false,
     "release": 8,
     "version": "0.269.0",
@@ -887,7 +887,7 @@
     "area": "study",
     "status": "shipped",
     "date": "2026-08-30",
-    "summary": "Reported by John: the level read as a pill in the lists and as faint borderless text on the study card and in the view modal. The in-glyph level and success rate are pills everywhere now.",
+    "summary": "The level read as a pill in the lists and as faint borderless text on the study card and in the view modal. The in-glyph level and success rate are pills everywhere now.",
     "dateIsEstimate": false,
     "version": "0.78.0",
     "releasedAt": "2026-08-30T19:13:54Z"
@@ -898,7 +898,7 @@
     "area": "platform",
     "status": "shipped",
     "date": "2026-08-30",
-    "summary": "Reported by John: modals grew and shrank with their contents. ModalShell now owns two heights, a content one for forms and a fixed one for lists, and a test fails if a modal hand-rolls its own again.",
+    "summary": "Modals grew and shrank with their contents. ModalShell now owns two heights, a content one for forms and a fixed one for lists, and a test fails if a modal hand-rolls its own again.",
     "dateIsEstimate": false,
     "version": "0.79.0",
     "releasedAt": "2026-08-30T19:25:58Z"
@@ -942,7 +942,7 @@
     "area": "jlpt",
     "status": "shipped",
     "date": "2026-08-30",
-    "summary": "Reported by John: the grade cards listed readings a character never has on its own. KANJIDIC hyphenates compound-only forms, and 31 of the 80 first-grade entries carried one, so the King card claimed a kun reading of -nou that only exists inside a compound. Those are filtered out of the display.",
+    "summary": "The grade cards listed readings a character never has on its own. KANJIDIC hyphenates compound-only forms, and 31 of the 80 first-grade entries carried one, so the King card claimed a kun reading of -nou that only exists inside a compound. Those are filtered out of the display.",
     "dateIsEstimate": false,
     "version": "0.83.0",
     "releasedAt": "2026-08-30T20:14:16Z"
@@ -975,7 +975,7 @@
     "area": "jlpt",
     "status": "shipped",
     "date": "2026-08-30",
-    "summary": "Reported by John: the grade cards listed every reading a character has ever taken. They now use the readings from the joyo table, which is the cabinet-notified list for general use - so King correctly shows no kun reading, Sound files its in reading as on, and Life drops from twenty-one readings to ten. Both fonts are shown in the stroke view for comparison.",
+    "summary": "The grade cards listed every reading a character has ever taken. They now use the readings from the joyo table, which is the cabinet-notified list for general use - so King correctly shows no kun reading, Sound files its in reading as on, and Life drops from twenty-one readings to ten. Both fonts are shown in the stroke view for comparison.",
     "dateIsEstimate": false,
     "version": "0.86.0",
     "releasedAt": "2026-08-30T20:50:29Z"
@@ -1998,7 +1998,7 @@
     "area": "study",
     "status": "shipped",
     "date": "2026-08-31",
-    "summary": "A saved list could be created and deleted and nothing in between, so a typo in \"Week 1\" could only be fixed by throwing the list away and picking every character again. Lists now rename in place: the name becomes a field on the card, Enter saves it, Escape abandons it, and the characters are never touched. Renaming is its own request rather than a save under a new name, which matters more than it sounds - saving under a name that already exists replaces that list's contents, so a rename expressed that way would quietly empty whichever list already held the name. Choosing a name another list has now says so and keeps what was typed, because colliding with \"Week 1\" is an ordinary thing to do rather than an error to swallow. Names are tidied the same way whether saved or renamed, so \"Week  1\" and \"Week 1\" stay one list instead of becoming two nobody can tell apart. The two built-in lists, Trouble and Favourites, offer neither rename nor delete: they fill themselves as you tag while you study, and untagging the last item empties one rather than removing it. Three controls no longer fit a card at the width the grid gives it, so the row wraps rather than breaking \"Practise these\" across two lines inside its own button, and the condensed view stopped running off the right edge of a phone.",
+    "summary": "A saved list could be created and deleted and nothing in between, so a typo in \"Week 1\" could only be fixed by throwing the list away and picking every character again. Lists now rename in place: the name becomes a field on the card, Enter saves it, Escape abandons it, and the characters are never touched. Renaming is its own request rather than a save under a new name, which matters more than it sounds - saving under a name that already exists replaces that list's contents, so a rename expressed that way would quietly empty whichever list already held the name. Choosing a name another list has now says so and keeps what was typed, because colliding with \"Week 1\" is an ordinary thing to do rather than an error to swallow. Names are tidied the same way whether saved or renamed, so \"Week 1\" and \"Week 1\" stay one list instead of becoming two nobody can tell apart. The two built-in lists, Trouble and Favourites, offer neither rename nor delete: they fill themselves as you tag while you study, and untagging the last item empties one rather than removing it. Three controls no longer fit a card at the width the grid gives it, so the row wraps rather than breaking \"Practise these\" across two lines inside its own button, and the condensed view stopped running off the right edge of a phone.",
     "dateIsEstimate": false,
     "version": "0.182.0",
     "releasedAt": "2026-09-01T04:24:11Z"
@@ -2622,7 +2622,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-01",
-    "summary": "Searching ten kanji and keeping each one meant, for every kanji: open it, find the tag on its page, go back, search the next. The results dropdown and the search page now carry an Add to lists control at the edge of the list. Opened, every row grows a quiet column: the trouble and favourite marks the explorers use, then one small chip per saved list, lit when the row is already on it and toggled with a tap. The dropdown widens to make room; in the narrower search columns and on a phone the column drops to a line under the row. Kanji the JLPT and school-grade catalogues answer with borrow their WaniKani twin's id so they can be tagged too, and a word contributes its kanji to a list rather than its kana. Whether the column is open is remembered per browser. Requested 2026-09-01 by John.",
+    "summary": "Searching ten kanji and keeping each one meant, for every kanji: open it, find the tag on its page, go back, search the next. The results dropdown and the search page now carry an Add to lists control at the edge of the list. Opened, every row grows a quiet column: the trouble and favourite marks the explorers use, then one small chip per saved list, lit when the row is already on it and toggled with a tap. The dropdown widens to make room; in the narrower search columns and on a phone the column drops to a line under the row. Kanji the JLPT and school-grade catalogues answer with borrow their WaniKani twin's id so they can be tagged too, and a word contributes its kanji to a list rather than its kana. Whether the column is open is remembered per browser.",
     "dateIsEstimate": false,
     "version": "0.236.0",
     "releasedAt": "2026-09-02T05:16:20Z"
@@ -2658,7 +2658,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-01",
-    "summary": "A list is a first-class thing, so it has an address of its own: /users/<member>/lists/<name>, the name in kebab case, a Japanese name kept as itself. The owner chooses Private, Link only or Public from the page. Link only makes an unguessable key the moment it is chosen, and the copy button hands out the link; Public needs no key. Whoever may open the list gets the same page - the name, who made it, when it was made and last changed, how often it has been shared, kind chips, a search, cards or rows - and somebody not signed in gets one quiet card inviting them to sign in and keep it. A private list reads as absent to everyone else. Names are displayable - letters in any script, digits and a title's punctuation, stray marks dropped - and two names that would share an address are refused. Requested 2026-09-01 by John.",
+    "summary": "A list is a first-class thing, so it has an address of its own: /users/<member>/lists/<name>, the name in kebab case, a Japanese name kept as itself. The owner chooses Private, Link only or Public from the page. Link only makes an unguessable key the moment it is chosen, and the copy button hands out the link; Public needs no key. Whoever may open the list gets the same page - the name, who made it, when it was made and last changed, how often it has been shared, kind chips, a search, cards or rows - and somebody not signed in gets one quiet card inviting them to sign in and keep it. A private list reads as absent to everyone else. Names are displayable - letters in any script, digits and a title's punctuation, stray marks dropped - and two names that would share an address are refused.",
     "dateIsEstimate": false,
     "version": "0.241.0",
     "releasedAt": "2026-09-02T06:37:27Z"
@@ -2670,7 +2670,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-01",
-    "summary": "Reading somebody's list now offers two ways to keep it, for two different promises. Copy makes a list of your own from its items - named so it fits on your shelf, Week 1 (copy) if you have a Week 1 - and remembers where it came from, while the source counts one more copy. Follow keeps the owner's list as theirs: read-only, always current, listed under Following on your Lists page with the owner's name, and dropped from there. A list made private since you followed it says so. The add-to-lists column from search sits on the list page as well, so one row of a friend's list can be tagged or filed into a list of your own. Both need exactly the permission that opening the list needs. Requested 2026-09-01 by John.",
+    "summary": "Reading somebody's list now offers two ways to keep it, for two different promises. Copy makes a list of your own from its items - named so it fits on your shelf, Week 1 (copy) if you have a Week 1 - and remembers where it came from, while the source counts one more copy. Follow keeps the owner's list as theirs: read-only, always current, listed under Following on your Lists page with the owner's name, and dropped from there. A list made private since you followed it says so. The add-to-lists column from search sits on the list page as well, so one row of a friend's list can be tagged or filed into a list of your own. Both need exactly the permission that opening the list needs.",
     "dateIsEstimate": false,
     "version": "0.242.0",
     "releasedAt": "2026-09-02T06:47:48Z"
@@ -2682,7 +2682,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-01",
-    "summary": "A shared list can be opened so anyone who can see it adds to it at once, or kept locked, from a control beside the visibility. On a locked list a member's addition becomes a suggestion, typed into a box on the list's page with a note on why; taking an item out is always a suggestion, whoever asks, since a list open to additions is not open to being emptied. The owner sees the suggestions on the list itself - the item, the verb, who asked, when and why - and approves or declines each one; approving changes the list on the spot, and a suggestion that would decide nothing is never made. Requested 2026-09-01 by John.",
+    "summary": "A shared list can be opened so anyone who can see it adds to it at once, or kept locked, from a control beside the visibility. On a locked list a member's addition becomes a suggestion, typed into a box on the list's page with a note on why; taking an item out is always a suggestion, whoever asks, since a list open to additions is not open to being emptied. The owner sees the suggestions on the list itself - the item, the verb, who asked, when and why - and approves or declines each one; approving changes the list on the spot, and a suggestion that would decide nothing is never made.",
     "dateIsEstimate": false,
     "version": "0.243.0",
     "releasedAt": "2026-09-02T06:59:28Z"
@@ -2694,7 +2694,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-02",
-    "summary": "A private list nobody else has seen is deleted, as it always was. A list that others hold - shared by link or public, followed, copied, or with suggestions waiting - is archived instead: closed to change for everyone, the owner included, still readable, copyable and followable by everyone who had it, and listed under Archived on the owner's Lists page with Restore and Delete for good. The confirmation says which of the two will happen before the click, and deleting for good says who loses the link. A follower whose list has gone private or away sees so on their own page. Requested 2026-09-01 by John.",
+    "summary": "A private list nobody else has seen is deleted, as it always was. A list that others hold - shared by link or public, followed, copied, or with suggestions waiting - is archived instead: closed to change for everyone, the owner included, still readable, copyable and followable by everyone who had it, and listed under Archived on the owner's Lists page with Restore and Delete for good. The confirmation says which of the two will happen before the click, and deleting for good says who loses the link. A follower whose list has gone private or away sees so on their own page.",
     "dateIsEstimate": false,
     "version": "0.244.0",
     "releasedAt": "2026-09-02T07:08:50Z"
@@ -2718,7 +2718,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-02",
-    "summary": "Seventy-two lists nobody owns, gathered at /lists: every JLPT level N5 to N1, every Japanese school grade and the junior-high set, and every one of WaniKani's sixty levels. They are not snapshots but live - a question stored as a list rather than rows, asked again each time one is opened - so Grade 1 is whatever the grade table says today and a WaniKani level is what it teaches now, radicals then kanji then the words that use them. Each has a public page of its own with the same rows, kind chips, search and burned filter a member's list gets, and the two ways to keep it: follow it and it stays current under Lists that keep themselves on your own page, or copy it and it becomes rows of your own, to cut down to half of Grade 1 or to Grade 1 without what you already know. The index sits under Explore as Kanji lists. Requested 2026-09-01 by John.",
+    "summary": "Seventy-two lists nobody owns, gathered at /lists: every JLPT level N5 to N1, every Japanese school grade and the junior-high set, and every one of WaniKani's sixty levels. They are not snapshots but live - a question stored as a list rather than rows, asked again each time one is opened - so Grade 1 is whatever the grade table says today and a WaniKani level is what it teaches now, radicals then kanji then the words that use them. Each has a public page of its own with the same rows, kind chips, search and burned filter a member's list gets, and the two ways to keep it: follow it and it stays current under Lists that keep themselves on your own page, or copy it and it becomes rows of your own, to cut down to half of Grade 1 or to Grade 1 without what you already know. The index sits under Explore as Kanji lists.",
     "dateIsEstimate": false,
     "version": "0.248.0",
     "releasedAt": "2026-09-02T07:55:20Z"
@@ -2780,7 +2780,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-02",
-    "summary": "A third built-in list beside Trouble and Favourites: Burned, for the items you know so well you never need to read them again. It starts empty for everyone, and is marked by hand with a third mark - a small flame - on every glyph the other two marks are on. A member with WaniKani connected opens the Burned list and sees an offer with the count on it, Apply 157 burned from WaniKani, applied on the click and again whenever they like, never silently on sync. Applied, a Hide burned toggle on the list viewer and on every list page takes those items out and says how many went, so a list never looks shorter than it is without saying why. There is no practice sheet for what you know. Requested 2026-09-01 by John.",
+    "summary": "A third built-in list beside Trouble and Favourites: Burned, for the items you know so well you never need to read them again. It starts empty for everyone, and is marked by hand with a third mark - a small flame - on every glyph the other two marks are on. A member with WaniKani connected opens the Burned list and sees an offer with the count on it, Apply 157 burned from WaniKani, applied on the click and again whenever they like, never silently on sync. Applied, a Hide burned toggle on the list viewer and on every list page takes those items out and says how many went, so a list never looks shorter than it is without saying why. There is no practice sheet for what you know.",
     "dateIsEstimate": false,
     "version": "0.245.0",
     "releasedAt": "2026-09-02T07:22:09Z"
@@ -2804,7 +2804,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-02",
-    "summary": "A list card said one thing about itself - when it last changed - so a reader deciding whether a shared list was worth opening had nothing to go on: not how big it is, not whether anybody else keeps it, not whether it is still being added to. Every list now carries the same facts wherever it is described: when it was made, when it last changed, how many people follow it, and how many times it has been copied and shared. They are drawn by one component, so a list cannot describe itself one way on its card and another on its page - the list page had this vocabulary already and the cards had none of it, and now there is one. A fact that has not happened is left out rather than printed as a zero, because \"copied 0 times\" is a sentence about failure and a list nobody has copied yet simply does not mention copying. The follower count is new data: the lists query counts subscriptions alongside the rows. Two details that only showed up on screen: the separator trails its fact rather than leading the next one, or a wrapped line starts with a dot nobody meant, and the card no longer prints its size twice. Requested 2026-09-01 by John.",
+    "summary": "A list card said one thing about itself - when it last changed - so a reader deciding whether a shared list was worth opening had nothing to go on: not how big it is, not whether anybody else keeps it, not whether it is still being added to. Every list now carries the same facts wherever it is described: when it was made, when it last changed, how many people follow it, and how many times it has been copied and shared. They are drawn by one component, so a list cannot describe itself one way on its card and another on its page - the list page had this vocabulary already and the cards had none of it, and now there is one. A fact that has not happened is left out rather than printed as a zero, because \"copied 0 times\" is a sentence about failure and a list nobody has copied yet simply does not mention copying. The follower count is new data: the lists query counts subscriptions alongside the rows. Two details that only showed up on screen: the separator trails its fact rather than leading the next one, or a wrapped line starts with a dot nobody meant, and the card no longer prints its size twice.",
     "dateIsEstimate": false,
     "release": 32,
     "version": "0.277.0",
@@ -2817,7 +2817,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-02",
-    "summary": "The site groups kanji by what a learner is doing - the WaniKani level they are on, the year a Japanese child is taught them, the JLPT that will test them - and none of those answer the question somebody has with a pen in their hand: what else is written in this many strokes? The dictionary has known every character's stroke count since the day it was ingested, so /strokes lists all thirty-three counts with how many kanji each holds, and /strokes/12 is those nine hundred and twenty-five characters, commonest first. A Common only filter keeps the two hundred and fifty-seven a newspaper actually uses, which is the difference between a page to study and a page to scroll, and long counts page. The count is a path so it can be linked and reloaded; what is on the page - the filter, the page number - stays in the query. A signed-in member gets the same add-to-lists column search has, so a character met here goes straight onto one of their lists. It sits under Learn beside the maps. Requested 2026-09-01 by John.",
+    "summary": "The site groups kanji by what a learner is doing - the WaniKani level they are on, the year a Japanese child is taught them, the JLPT that will test them - and none of those answer the question somebody has with a pen in their hand: what else is written in this many strokes? The dictionary has known every character's stroke count since the day it was ingested, so /strokes lists all thirty-three counts with how many kanji each holds, and /strokes/12 is those nine hundred and twenty-five characters, commonest first. A Common only filter keeps the two hundred and fifty-seven a newspaper actually uses, which is the difference between a page to study and a page to scroll, and long counts page. The count is a path so it can be linked and reloaded; what is on the page - the filter, the page number - stays in the query. A signed-in member gets the same add-to-lists column search has, so a character met here goes straight onto one of their lists. It sits under Learn beside the maps.",
     "dateIsEstimate": false,
     "version": "0.263.0",
     "releasedAt": "2026-09-02T11:35:48Z"
@@ -2829,7 +2829,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-02",
-    "summary": "A list can be marked complete or studied by its owner, and carries a grade the system assigns after a study or review pass over it - how much of the list is known, and how well it went. Shown on the card and the list's page. Ties to practising from a list and the who-knows-what overlay. Requested 2026-09-01 by John.",
+    "summary": "A list can be marked complete or studied by its owner, and carries a grade the system assigns after a study or review pass over it - how much of the list is known, and how well it went. Shown on the card and the list's page. Ties to practising from a list and the who-knows-what overlay.",
     "dateIsEstimate": false,
     "version": "0.317.0",
     "releasedAt": "2026-09-03T05:26:21Z"
@@ -2853,7 +2853,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-02",
-    "summary": "Two or more of your lists made into one, from the Lists page. They are numbered as they are picked, because the order is the answer - merging Week 1 and Week 2 should read as Week 1 then Week 2 - and the panel says how big the result will be and how many items the lists shared before anything is written. Clearing the sources away afterwards is a choice rather than the default, and goes through the same rule the delete button uses, so a source somebody else follows is archived rather than deleted out from under them. Requested 2026-09-02 by John.",
+    "summary": "Two or more of your lists made into one, from the Lists page. They are numbered as they are picked, because the order is the answer - merging Week 1 and Week 2 should read as Week 1 then Week 2 - and the panel says how big the result will be and how many items the lists shared before anything is written. Clearing the sources away afterwards is a choice rather than the default, and goes through the same rule the delete button uses, so a source somebody else follows is archived rather than deleted out from under them.",
     "dateIsEstimate": false,
     "version": "0.250.0",
     "releasedAt": "2026-09-02T09:42:36Z"
@@ -2901,7 +2901,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-02",
-    "summary": "A map was /map?region=21, which says nothing to a reader, a link in a chat or a search engine. A map is a place, so it is addressed as one: /maps, /maps/japan, /maps/japan/gifu, /maps/united-states/california, /maps/canada/ontario. Every part of it can be linked to on its own, choosing a region or a country writes the path, and the back button walks them. A path naming a country or a region that does not exist is a 404 rather than a quiet fall back to Japan. The old address is gone rather than redirected - a site with two addresses for one page has to explain which is the real one - which is the pattern the rest of the site's addresses will follow. Requested 2026-09-02 by John.",
+    "summary": "A map was /map?region=21, which says nothing to a reader, a link in a chat or a search engine. A map is a place, so it is addressed as one: /maps, /maps/japan, /maps/japan/gifu, /maps/united-states/california, /maps/canada/ontario. Every part of it can be linked to on its own, choosing a region or a country writes the path, and the back button walks them. A path naming a country or a region that does not exist is a 404 rather than a quiet fall back to Japan. The old address is gone rather than redirected - a site with two addresses for one page has to explain which is the real one - which is the pattern the rest of the site's addresses will follow.",
     "dateIsEstimate": false,
     "version": "0.262.0",
     "releasedAt": "2026-09-02T11:25:28Z"
@@ -2913,7 +2913,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-02",
-    "summary": "The auto lists sat under Explore as Kanji lists while a member's own lists sat under Lists, on a page that looked nothing like theirs. Every list lives under Lists now: the built-in two, the sets you saved, the lists you follow, the auto lists in full - all of them on one page, in sections, with a star on the auto lists you follow. Explore has lost its Kanji lists entry, and Lists leads a visitor with no page of their own to the auto lists, which are the part of Lists that belongs to everybody. The three list surfaces also shared out one search field, so the viewer, a list's page and an auto list's page all clear with an X and offer the list's own items as you type, rather than one having both and two having neither. They are called Auto lists now, which is what John called them. Requested 2026-09-02 by John with screenshots.",
+    "summary": "The auto lists sat under Explore as Kanji lists while a member's own lists sat under Lists, on a page that looked nothing like theirs. Every list lives under Lists now: the built-in two, the sets you saved, the lists you follow, the auto lists in full - all of them on one page, in sections, with a star on the auto lists you follow. Explore has lost its Kanji lists entry, and Lists leads a visitor with no page of their own to the auto lists, which are the part of Lists that belongs to everybody. The three list surfaces also shared out one search field, so the viewer, a list's page and an auto list's page all clear with an X and offer the list's own items as you type, rather than one having both and two having neither. They are called Auto lists now, which is what John called them.",
     "dateIsEstimate": false,
     "version": "0.251.0",
     "releasedAt": "2026-09-02T09:48:41Z"
@@ -2937,7 +2937,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-03",
-    "summary": "A number written the Japanese way - \u4e00\u5104\u4e8c\u5343\u4e07 - answers with the English number, and the reverse. Requested 2026-09-02 by John.",
+    "summary": "A number written the Japanese way - \u4e00\u5104\u4e8c\u5343\u4e07 - answers with the English number, and the reverse.",
     "dateIsEstimate": false,
     "version": "0.344.0",
     "releasedAt": "2026-09-03T10:30:39Z"
@@ -2985,7 +2985,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-02",
-    "summary": "The pills that stand for a kanji or a word turn up in several places - the words a kanji is used in, the related groups on a subject page, a paste being turned into a list, a list being edited - and they had drifted: some carried the reading and the meaning, some carried the glyph alone. They are one component now, and every one of them can say what it is: the reading and the meaning under the glyph, with one control that shows or hides that text everywhere at once, remembered per browser and on by default. The paste preview gained the words it was missing, so a chapter comes back as items a member can read rather than a wall of characters to guess at. The pill also decides for itself what is Japanese, so a radical WaniKani draws by name is no longer set in a Japanese face. Requested 2026-09-02 by John.",
+    "summary": "The pills that stand for a kanji or a word turn up in several places - the words a kanji is used in, the related groups on a subject page, a paste being turned into a list, a list being edited - and they had drifted: some carried the reading and the meaning, some carried the glyph alone. They are one component now, and every one of them can say what it is: the reading and the meaning under the glyph, with one control that shows or hides that text everywhere at once, remembered per browser and on by default. The paste preview gained the words it was missing, so a chapter comes back as items a member can read rather than a wall of characters to guess at. The pill also decides for itself what is Japanese, so a radical WaniKani draws by name is no longer set in a Japanese face.",
     "dateIsEstimate": false,
     "version": "0.256.0",
     "releasedAt": "2026-09-02T10:27:30Z"
@@ -2997,7 +2997,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-02",
-    "summary": "The header group called Explore is where a member goes to learn - the two explorers, the school grades, the practice sheets, the maps - so it is called Learn. The maps entry is called Maps, since there are three countries behind it and more to come, and the page names itself the same way. Requested 2026-09-02 by John.",
+    "summary": "The header group called Explore is where a member goes to learn - the two explorers, the school grades, the practice sheets, the maps - so it is called Learn. The maps entry is called Maps, since there are three countries behind it and more to come, and the page names itself the same way.",
     "dateIsEstimate": false,
     "version": "0.254.0",
     "releasedAt": "2026-09-02T10:13:08Z"
@@ -3081,7 +3081,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-02",
-    "summary": "Typing Heisei 3 is a request to be told a number, and no catalogue holds one - the search read the digit instead and answered with thirty rows about three, so the only question on the page with a real answer got everything except it. An answer is a second kind of result now: worked out rather than looked up, and shown above the catalogues because it is what was typed. 1991 sits where a glyph would, with \u5e73\u62103\u5e74 beside it and the reading underneath. The five modern eras are covered, back to Meiji in 1868, written in kanji or in Latin letters, with or without the \u5e74, in whichever romanization of a long vowel somebody learned - Showa, Shouwa and Sh\u014dwa are the same era - and \u5143\u5e74 read as the first year it means. A year an era never reached answers with nothing rather than with arithmetic: \u662d\u548c stopped at 64 and \u5e73\u6210 at 31, so Showa 65 is not a late date, it is not a date. The answer sits outside the results deliberately, because Taisho 5 is a date the catalogues hold nothing for and an answer that vanished when the page said nothing matched would be missing exactly when it was wanted. The catalogue rows still run underneath, since \u4ee4\u548c is also a word somebody may want the reading of. Requested 2026-09-02 by John.",
+    "summary": "Typing Heisei 3 is a request to be told a number, and no catalogue holds one - the search read the digit instead and answered with thirty rows about three, so the only question on the page with a real answer got everything except it. An answer is a second kind of result now: worked out rather than looked up, and shown above the catalogues because it is what was typed. 1991 sits where a glyph would, with \u5e73\u62103\u5e74 beside it and the reading underneath. The five modern eras are covered, back to Meiji in 1868, written in kanji or in Latin letters, with or without the \u5e74, in whichever romanization of a long vowel somebody learned - Showa, Shouwa and Sh\u014dwa are the same era - and \u5143\u5e74 read as the first year it means. A year an era never reached answers with nothing rather than with arithmetic: \u662d\u548c stopped at 64 and \u5e73\u6210 at 31, so Showa 65 is not a late date, it is not a date. The answer sits outside the results deliberately, because Taisho 5 is a date the catalogues hold nothing for and an answer that vanished when the page said nothing matched would be missing exactly when it was wanted. The catalogue rows still run underneath, since \u4ee4\u548c is also a word somebody may want the reading of.",
     "dateIsEstimate": false,
     "version": "0.265.0",
     "releasedAt": "2026-09-02T11:44:40Z"
@@ -3093,7 +3093,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-02",
-    "summary": "A learner reading a Japanese page meets prices constantly - a 1,500\u5186 lunch, an 8,800\u5186 textbook - and has no sense of whether that is cheap. Typing the amount answers it now. Any currency the European Central Bank publishes goes into yen, and a yen amount comes back in Canadian and American dollars together, because a yen amount names no second currency and the site is written for both countries rather than one of them. The amount may be written either way round, with the code or with a symbol that means one thing and only one - \u20ac23, \u00a310.50, \u00a51500, 1500\u5186, 14.40 CAD, EUR 23 - with a thousands comma or without, and in full-width digits, which is what a Japanese keyboard produces. There is deliberately no bare dollar sign: it names the Canadian dollar and the American one, and guessing would be wrong for half the people who typed it. The rates come from Frankfurter, which republishes the ECB's daily reference rates with no key, no account and no request budget to run down - the thing that rules out most free rate APIs for a search box, where one member typing slowly is several requests. They are fetched at most once every six hours, shared by every reader, and only when a query actually names an amount, so a search for a word waits on nothing and nothing about a query leaves the site. The answer prints the day it is quoting rather than implying the rate is live, because the ECB publishes on working days and a weekend answers with Friday's numbers. If the rates cannot be reached there is no line at all: a stale number shown as today's would be worse than none, and the three catalogues still have something to say. Requested 2026-09-02 by John.",
+    "summary": "A learner reading a Japanese page meets prices constantly - a 1,500\u5186 lunch, an 8,800\u5186 textbook - and has no sense of whether that is cheap. Typing the amount answers it now. Any currency the European Central Bank publishes goes into yen, and a yen amount comes back in Canadian and American dollars together, because a yen amount names no second currency and the site is written for both countries rather than one of them. The amount may be written either way round, with the code or with a symbol that means one thing and only one - \u20ac23, \u00a310.50, \u00a51500, 1500\u5186, 14.40 CAD, EUR 23 - with a thousands comma or without, and in full-width digits, which is what a Japanese keyboard produces. There is deliberately no bare dollar sign: it names the Canadian dollar and the American one, and guessing would be wrong for half the people who typed it. The rates come from Frankfurter, which republishes the ECB's daily reference rates with no key, no account and no request budget to run down - the thing that rules out most free rate APIs for a search box, where one member typing slowly is several requests. They are fetched at most once every six hours, shared by every reader, and only when a query actually names an amount, so a search for a word waits on nothing and nothing about a query leaves the site. The answer prints the day it is quoting rather than implying the rate is live, because the ECB publishes on working days and a weekend answers with Friday's numbers. If the rates cannot be reached there is no line at all: a stale number shown as today's would be worse than none, and the three catalogues still have something to say.",
     "dateIsEstimate": false,
     "version": "0.266.0",
     "releasedAt": "2026-09-02T11:45:06Z"
@@ -3105,7 +3105,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-02",
-    "summary": "A converted amount answers \"how much is this\", and the number on its own is flat. The interesting thing about 1500\u5186 is that it was CA$19.21 ten years ago and is CA$13.01 now - the yen has moved a long way inside one learner's study career, and the price was carrying that history the whole time without saying so. An amount now shows what it was worth 180 days, one, five, ten and twenty years back, in the same currencies the answer is given in, with the change from then to now beside each. Every point is an average of the thirty days of published rates before it rather than a single day's rate: a currency can move a percent on a Tuesday for reasons that have nothing to do with the decade, and quoting that Tuesday as \"five years ago\" would put a wobble into a line meant to show a trend. The table says as much under itself, because an average and a spot rate are different claims and a percentage with no direction stated is a coin toss for the reader. The six requests run together rather than in turn, and each past window is held for a day - a window that has already closed will never say anything different, and only its ends move. Any of the five may fail and take only its own row with it; four rows of history is still four rows of history, and none at all is no table rather than an empty one. A point that would reach past January 1999, where the European Central Bank's rates begin, is not asked for. Requested 2026-09-02 by John.",
+    "summary": "A converted amount answers \"how much is this\", and the number on its own is flat. The interesting thing about 1500\u5186 is that it was CA$19.21 ten years ago and is CA$13.01 now - the yen has moved a long way inside one learner's study career, and the price was carrying that history the whole time without saying so. An amount now shows what it was worth 180 days, one, five, ten and twenty years back, in the same currencies the answer is given in, with the change from then to now beside each. Every point is an average of the thirty days of published rates before it rather than a single day's rate: a currency can move a percent on a Tuesday for reasons that have nothing to do with the decade, and quoting that Tuesday as \"five years ago\" would put a wobble into a line meant to show a trend. The table says as much under itself, because an average and a spot rate are different claims and a percentage with no direction stated is a coin toss for the reader. The six requests run together rather than in turn, and each past window is held for a day - a window that has already closed will never say anything different, and only its ends move. Any of the five may fail and take only its own row with it; four rows of history is still four rows of history, and none at all is no table rather than an empty one. A point that would reach past January 1999, where the European Central Bank's rates begin, is not asked for.",
     "dateIsEstimate": false,
     "version": "0.268.0",
     "releasedAt": "2026-09-02T11:58:15Z"
@@ -3117,7 +3117,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-02",
-    "summary": "The reading challenge is one family's arrangement about pocket money, and it was on the public leaderboard with a button inviting anybody to log today's check-in. A member is one of three kinds now - admin, internal, everyone else - and the Read page, its nav tab, its banner on the leaderboard and the check-in route behind it are offered to the first two only. The Read group keeps its news reader for everybody, under the name News, so nobody loses a page. Admins grant the kind from the row menu in the users table; the members already here a month with WaniKani were marked internal in one pass. Requested 2026-09-02 by John.",
+    "summary": "The reading challenge is one family's arrangement about pocket money, and it was on the public leaderboard with a button inviting anybody to log today's check-in. A member is one of three kinds now - admin, internal, everyone else - and the Read page, its nav tab, its banner on the leaderboard and the check-in route behind it are offered to the first two only. The Read group keeps its news reader for everybody, under the name News, so nobody loses a page. Admins grant the kind from the row menu in the users table; the members already here a month with WaniKani were marked internal in one pass.",
     "dateIsEstimate": false,
     "version": "0.270.0",
     "releasedAt": "2026-09-02T12:15:00Z"
@@ -3192,7 +3192,7 @@
     "status": "shipped",
     "kind": "bug",
     "date": "2026-09-02",
-    "summary": "Japan counts in ten-thousands, and every price a learner meets is written that way: rent is 8\u4e07\u5186, a salary 400\u4e07\u5186, a flat 3,000\u4e07\u5186. The search read the digits and dropped the unit, so 400\u4e07\u5186 came back as four hundred yen - wrong by four decimal places on exactly the figures somebody moving to Japan needs to understand. \u5343, \u4e07, \u5104 and \u5146 are read now, and they stack the way they are written, so 3\u51045000\u4e07\u5186 is three hundred and fifty million and 5\u4e073\u5343\u5186 is fifty-three thousand. Units that climb rather than fall are a typo and answer with nothing, because a confident wrong figure is worse than none. The Latin shorthand is the same idea in the reader's own writing - 20k yen, 1.5m yen, $50k - and a magnitude letter is only one where a word does not follow, or the M of 20 MXN would read as a million and leave XN behind as the currency. The size cap moved with it: it was a trillion, which answered Japan's national debt of 1,300\u5146\u5186 with nothing. A magnitude still needs a currency beside it, so 20k and 5\u4e07 on their own remain numbers rather than prices. Requested 2026-09-02 by John.",
+    "summary": "Japan counts in ten-thousands, and every price a learner meets is written that way: rent is 8\u4e07\u5186, a salary 400\u4e07\u5186, a flat 3,000\u4e07\u5186. The search read the digits and dropped the unit, so 400\u4e07\u5186 came back as four hundred yen - wrong by four decimal places on exactly the figures somebody moving to Japan needs to understand. \u5343, \u4e07, \u5104 and \u5146 are read now, and they stack the way they are written, so 3\u51045000\u4e07\u5186 is three hundred and fifty million and 5\u4e073\u5343\u5186 is fifty-three thousand. Units that climb rather than fall are a typo and answer with nothing, because a confident wrong figure is worse than none. The Latin shorthand is the same idea in the reader's own writing - 20k yen, 1.5m yen, $50k - and a magnitude letter is only one where a word does not follow, or the M of 20 MXN would read as a million and leave XN behind as the currency. The size cap moved with it: it was a trillion, which answered Japan's national debt of 1,300\u5146\u5186 with nothing. A magnitude still needs a currency beside it, so 20k and 5\u4e07 on their own remain numbers rather than prices.",
     "dateIsEstimate": false,
     "release": 53,
     "version": "0.276.0",
@@ -3231,7 +3231,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-02",
-    "summary": "The way to look up a character you cannot read: you cannot type it and you do not know its readings, but you can see \u65e5 on the left and \u6708 on the right. Every search box now carries a Radicals button - the header, the phone sheet and the results page, since they are one field - and it opens the classical grid: 253 radicals in stroke-count order, the ones paper dictionaries index by. Picking narrows on all of them rather than any, so \u65e5 with \u6708 is the thirty-one characters holding both, commonest first, each one a link to its page. Radicals that appear in none of what is left are dimmed rather than left as routes to an empty list, which is the whole ergonomics of the thing. The answer is pinned above the grid so a pick made at the bottom of it is still answered where you can see it. The radicals are RADKFILE's - Michael Raine's analysis of the JIS kanji, kept by the EDRDG under the same share-alike terms as the dictionary - covering 6,355 characters, rather than WaniKani's teaching radicals, which are named for what they look like and only reach the two thousand kanji it teaches. It is a dialog rather than a dropdown because 253 buttons and their answer do not fit under a field: hung from the header on a phone it ran six hundred pixels past the bottom of a screen that clips. Requested 2026-09-02 by John.",
+    "summary": "The way to look up a character you cannot read: you cannot type it and you do not know its readings, but you can see \u65e5 on the left and \u6708 on the right. Every search box now carries a Radicals button - the header, the phone sheet and the results page, since they are one field - and it opens the classical grid: 253 radicals in stroke-count order, the ones paper dictionaries index by. Picking narrows on all of them rather than any, so \u65e5 with \u6708 is the thirty-one characters holding both, commonest first, each one a link to its page. Radicals that appear in none of what is left are dimmed rather than left as routes to an empty list, which is the whole ergonomics of the thing. The answer is pinned above the grid so a pick made at the bottom of it is still answered where you can see it. The radicals are RADKFILE's - Michael Raine's analysis of the JIS kanji, kept by the EDRDG under the same share-alike terms as the dictionary - covering 6,355 characters, rather than WaniKani's teaching radicals, which are named for what they look like and only reach the two thousand kanji it teaches. It is a dialog rather than a dropdown because 253 buttons and their answer do not fit under a field: hung from the header on a phone it ran six hundred pixels past the bottom of a screen that clips.",
     "dateIsEstimate": false,
     "version": "0.279.0",
     "releasedAt": "2026-09-02T13:52:28Z"
@@ -3306,7 +3306,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-02",
-    "summary": "The radical command could only be written in Japanese, which left the typed half of the feature useless to exactly the reader it was built for: somebody looking up a character they cannot read is usually in the same position with its parts - they can see the shape and have no way to type it. :radicals sun + moon now answers with the same thirty-one characters as \u65e5 + \u6708. Names come from two sources, best first, because neither covers the set alone: the kanji dictionary for the 247 of 253 radicals that are also kanji, which is the accurate answer and costs nothing since the file is already shipped; and WaniKani's own radical names for the 199 whose character is in this set, because a member taught \"fins\" for \u30cf will type what they were taught. WaniKani's are teaching mnemonics rather than classical names - it calls \u4e45 a raptor cage - so they answer second and never over the dictionary. A name that reaches neither answers with nothing rather than a neighbour: WaniKani draws some of its radicals instead of writing them, so \"beggar\" names a picture and no character here. The command's own reading changed with it. A space is inside \"long time\" and between \u65e5 and \u6708, so it is no longer a separator: parts split on a plus or a comma, and then a part of Japanese script becomes one radical per character while a part of Latin letters stays one name however many words it holds. Requested 2026-09-02 by John.",
+    "summary": "The radical command could only be written in Japanese, which left the typed half of the feature useless to exactly the reader it was built for: somebody looking up a character they cannot read is usually in the same position with its parts - they can see the shape and have no way to type it. :radicals sun + moon now answers with the same thirty-one characters as \u65e5 + \u6708. Names come from two sources, best first, because neither covers the set alone: the kanji dictionary for the 247 of 253 radicals that are also kanji, which is the accurate answer and costs nothing since the file is already shipped; and WaniKani's own radical names for the 199 whose character is in this set, because a member taught \"fins\" for \u30cf will type what they were taught. WaniKani's are teaching mnemonics rather than classical names - it calls \u4e45 a raptor cage - so they answer second and never over the dictionary. A name that reaches neither answers with nothing rather than a neighbour: WaniKani draws some of its radicals instead of writing them, so \"beggar\" names a picture and no character here. The command's own reading changed with it. A space is inside \"long time\" and between \u65e5 and \u6708, so it is no longer a separator: parts split on a plus or a comma, and then a part of Japanese script becomes one radical per character while a part of Latin letters stays one name however many words it holds.",
     "dateIsEstimate": false,
     "release": 56,
     "version": "0.286.0",
@@ -3344,7 +3344,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-02",
-    "summary": "A kanji page said how the character is drawn and what it means but not what it is made of, while the RADKFILE index behind the radical search already knew the parts of 6,355 characters. Written with sits under the stroke box: each part as it is written, its English name where the dictionary has one, and a link into the radical search for everything else built from it - which is the question a reader has next. Its own block with its own credit, because the data is EDRDG's rather than WaniKani's and every block on this page names its source. The index is stored radical-first, since that is the direction a search runs, so the page's question is answered by testing 253 memberships rather than by keeping a second copy the other way round. Reachable on its own at /kanji/<character>/parts, and absent for a character RADKFILE does not cover. Requested 2026-09-02 by John.",
+    "summary": "A kanji page said how the character is drawn and what it means but not what it is made of, while the RADKFILE index behind the radical search already knew the parts of 6,355 characters. Written with sits under the stroke box: each part as it is written, its English name where the dictionary has one, and a link into the radical search for everything else built from it - which is the question a reader has next. Its own block with its own credit, because the data is EDRDG's rather than WaniKani's and every block on this page names its source. The index is stored radical-first, since that is the direction a search runs, so the page's question is answered by testing 253 memberships rather than by keeping a second copy the other way round. Reachable on its own at /kanji/<character>/parts, and absent for a character RADKFILE does not cover.",
     "dateIsEstimate": false,
     "version": "0.318.0",
     "releasedAt": "2026-09-03T05:32:38Z"
@@ -3442,7 +3442,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-02",
-    "summary": "A list could be turned into a writing sheet only from its card on the shelf, and only as a picked sheet carrying every one of its characters in the query string - which broke on a long list, went stale the moment the list changed, and could not be sent to anybody as a link to \u201cmy Week 1 sheet\u201d. The page you actually read a list on offered nothing at all. A saved list is a practice source of its own now, addressed by name at /practice/list/week-1, and the sheet is titled with the list's name so a printout says which list it is. Both surfaces - the card and the list's own page - offer Worksheet and Print, the second opening the print dialog on arrival; Burned offers neither, since tracing what you already know is not practice. The list page's search box takes a line of its own on a phone, where five controls beside it had squeezed it down to four characters. Requested 2026-09-02 by John.",
+    "summary": "A list could be turned into a writing sheet only from its card on the shelf, and only as a picked sheet carrying every one of its characters in the query string - which broke on a long list, went stale the moment the list changed, and could not be sent to anybody as a link to \u201cmy Week 1 sheet\u201d. The page you actually read a list on offered nothing at all. A saved list is a practice source of its own now, addressed by name at /practice/list/week-1, and the sheet is titled with the list's name so a printout says which list it is. Both surfaces - the card and the list's own page - offer Worksheet and Print, the second opening the print dialog on arrival; Burned offers neither, since tracing what you already know is not practice. The list page's search box takes a line of its own on a phone, where five controls beside it had squeezed it down to four characters.",
     "dateIsEstimate": false,
     "version": "0.291.0",
     "releasedAt": "2026-09-02T16:05:03Z"
@@ -3454,7 +3454,7 @@
     "status": "shipped",
     "kind": "bug",
     "date": "2026-09-02",
-    "summary": "The header carried seven sections and wrapped to two lines on a laptop, which is what made every narrow page look broken. Two of them did not earn the room: the leaderboard is the site's own front page and undeveloped besides, and Progress is history and statistics - things a member looks up occasionally rather than navigates by. Both moved into the account menu, where History and Statistics now sit beside Profile and WaniKani, which is where the rest of \"about my account\" already lived. The row is Study, Game, Learn, Lists and Read, and it fits on one line. The menu learned a distinction while that was open: a page rooted at the site rather than at the member is listed with Updates rather than among your own pages, because the leaderboard is everybody's and listing it under Profile would be a link to somebody else's. Requested 2026-09-02 by John.",
+    "summary": "The header carried seven sections and wrapped to two lines on a laptop, which is what made every narrow page look broken. Two of them did not earn the room: the leaderboard is the site's own front page and undeveloped besides, and Progress is history and statistics - things a member looks up occasionally rather than navigates by. Both moved into the account menu, where History and Statistics now sit beside Profile and WaniKani, which is where the rest of \"about my account\" already lived. The row is Study, Game, Learn, Lists and Read, and it fits on one line. The menu learned a distinction while that was open: a page rooted at the site rather than at the member is listed with Updates rather than among your own pages, because the leaderboard is everybody's and listing it under Profile would be a link to somebody else's.",
     "dateIsEstimate": false,
     "release": 65,
     "version": "0.292.0",
@@ -3515,7 +3515,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-02",
-    "summary": "The stroke order panel plays the whole character and nothing else: there is no way to hold a single stroke still and look at it, which is what somebody copying the character actually needs. A row of numbers opens under the header - closed by default, so the panel stays as quiet as it is now - and picking a number draws that stroke alone: the strokes before it in grey, the strokes after it blank, the chosen one in colour and animated so the pen direction is visible. Requested 2026-09-02 by John.",
+    "summary": "The stroke order panel plays the whole character and nothing else: there is no way to hold a single stroke still and look at it, which is what somebody copying the character actually needs. A row of numbers opens under the header - closed by default, so the panel stays as quiet as it is now - and picking a number draws that stroke alone: the strokes before it in grey, the strokes after it blank, the chosen one in colour and animated so the pen direction is visible.",
     "dateIsEstimate": false,
     "version": "0.304.0",
     "releasedAt": "2026-09-03T01:04:17Z"
@@ -3527,7 +3527,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-02",
-    "summary": "The kanji page shows everything about a character at one address, so there is no way to hand somebody the stroke order and nothing else. Each panel gets a path of its own under the character - /kanji/<character>/stroke shows the stroke order alone, and the other panels follow the same shape - built from one registry so a section is defined once and rendered identically whether it is on the whole page or on its own. An unknown segment is a 404 rather than a silent fall back to the whole page. The same shape then covers radicals and words, and the share control on each panel points at that panel's own address. Requested 2026-09-02 by John.",
+    "summary": "The kanji page shows everything about a character at one address, so there is no way to hand somebody the stroke order and nothing else. Each panel gets a path of its own under the character - /kanji/<character>/stroke shows the stroke order alone, and the other panels follow the same shape - built from one registry so a section is defined once and rendered identically whether it is on the whole page or on its own. An unknown segment is a 404 rather than a silent fall back to the whole page. The same shape then covers radicals and words, and the share control on each panel points at that panel's own address.",
     "dateIsEstimate": false,
     "version": "0.307.0",
     "releasedAt": "2026-09-03T02:28:55Z"
@@ -3551,7 +3551,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-02",
-    "summary": "The kanji page gained an address for each of its parts; the radical and word pages, which are built from the same blocks, kept answering only as a whole. Both now take the same section segment - /radicals/leaf/related, /vocabulary/\u6c34\u6ce1/examples - from one shared registry and one shared address module, so the three public subject pages cannot drift into three different answers to the same question. A section a subject has nothing under is a 404, and every section page names the subject's own page as canonical. Requested 2026-09-02 by John.",
+    "summary": "The kanji page gained an address for each of its parts; the radical and word pages, which are built from the same blocks, kept answering only as a whole. Both now take the same section segment - /radicals/leaf/related, /vocabulary/\u6c34\u6ce1/examples - from one shared registry and one shared address module, so the three public subject pages cannot drift into three different answers to the same question. A section a subject has nothing under is a 404, and every section page names the subject's own page as canonical.",
     "dateIsEstimate": false,
     "version": "0.309.0",
     "releasedAt": "2026-09-03T03:51:00Z"
@@ -3611,7 +3611,7 @@
     "status": "shipped",
     "kind": "bug",
     "date": "2026-09-02",
-    "summary": "The stroke picker offered the numbers and nothing else, so following a character stroke by stroke meant aiming at a different target for every step - and a twenty-nine stroke character wraps its numbers into a block to search through. Previous and next sit together in front of the numbers, so one repeated press walks the whole character from a control that does not move; they were tried at either end of the numbers first, which put them half a panel apart as soon as the row wrapped. The ends join up rather than going dead, because somebody who has just reached the last stroke wants to watch it built again and a stopped button sends them back to hunt for 1. The opener and the numbers also share one row now instead of stacking. Requested 2026-09-02 by John.",
+    "summary": "The stroke picker offered the numbers and nothing else, so following a character stroke by stroke meant aiming at a different target for every step - and a twenty-nine stroke character wraps its numbers into a block to search through. Previous and next sit together in front of the numbers, so one repeated press walks the whole character from a control that does not move; they were tried at either end of the numbers first, which put them half a panel apart as soon as the row wrapped. The ends join up rather than going dead, because somebody who has just reached the last stroke wants to watch it built again and a stopped button sends them back to hunt for 1. The opener and the numbers also share one row now instead of stacking.",
     "dateIsEstimate": false,
     "version": "0.320.0",
     "releasedAt": "2026-09-03T05:57:01Z"
@@ -3635,7 +3635,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-02",
-    "summary": "Studying one stroke drew that stroke and the ones before it and nothing else, so a first stroke was a single mark in an empty box with no sense of where in the character it belonged. The animation already draws the finished character faintly underneath and deliberately drops it the moment a stroke is picked, because an outline of everything is also what makes not-drawn-yet look drawn - so this is a mode rather than a change of default. Outline sits beside Replay and Numbers, appears only while a stroke is picked since the full drawing already has its outline, is off unless asked for, and is remembered per device. Requested 2026-09-02 by John.",
+    "summary": "Studying one stroke drew that stroke and the ones before it and nothing else, so a first stroke was a single mark in an empty box with no sense of where in the character it belonged. The animation already draws the finished character faintly underneath and deliberately drops it the moment a stroke is picked, because an outline of everything is also what makes not-drawn-yet look drawn - so this is a mode rather than a change of default. Outline sits beside Replay and Numbers, appears only while a stroke is picked since the full drawing already has its outline, is off unless asked for, and is remembered per device.",
     "dateIsEstimate": false,
     "version": "0.322.0",
     "releasedAt": "2026-09-03T06:15:06Z"
@@ -3647,7 +3647,7 @@
     "status": "shipped",
     "kind": "bug",
     "date": "2026-09-02",
-    "summary": "The palette override covered the site's own tokens, which is most of a page and not all of it: a panel painted with a literal Tailwind colour never asks the tokens anything, so the amber suggestion box printed a tinted block and coloured text regardless. The default inverts - every surface white, every word black - so a colour has to be opted into rather than chased down after somebody notices it on paper. The tracing sheet keeps its greys, since its faint characters are the thing being traced. Requested 2026-09-02 by John.",
+    "summary": "The palette override covered the site's own tokens, which is most of a page and not all of it: a panel painted with a literal Tailwind colour never asks the tokens anything, so the amber suggestion box printed a tinted block and coloured text regardless. The default inverts - every surface white, every word black - so a colour has to be opted into rather than chased down after somebody notices it on paper. The tracing sheet keeps its greys, since its faint characters are the thing being traced.",
     "dateIsEstimate": false,
     "version": "0.323.0",
     "releasedAt": "2026-09-03T06:18:30Z"
@@ -3659,7 +3659,7 @@
     "status": "shipped",
     "kind": "bug",
     "date": "2026-09-02",
-    "summary": "Two switches on the stroke panel, both on and both remembered. Outline shipped a release earlier showing only while a single stroke was picked, on the reasoning that the full animation already draws its faint character - which read as the button disappearing when you left that view, and took the choice away where somebody might want the drawing clean. One switch now governs the faint character in both views. Replay was a one-shot button, so watching a stroke order twice meant finding it and pressing it again; it is a switch too, and the character draws itself over and over with a second's rest between runs - measured at 1,018ms in the browser. Without that rest the last stroke lands and the page blanks in the same instant, which reads as a glitch rather than a repeat. Requested 2026-09-02 by John.",
+    "summary": "Two switches on the stroke panel, both on and both remembered. Outline shipped a release earlier showing only while a single stroke was picked, on the reasoning that the full animation already draws its faint character - which read as the button disappearing when you left that view, and took the choice away where somebody might want the drawing clean. One switch now governs the faint character in both views. Replay was a one-shot button, so watching a stroke order twice meant finding it and pressing it again; it is a switch too, and the character draws itself over and over with a second's rest between runs - measured at 1,018ms in the browser. Without that rest the last stroke lands and the page blanks in the same instant, which reads as a glitch rather than a repeat.",
     "dateIsEstimate": false,
     "version": "0.325.0",
     "releasedAt": "2026-09-03T06:36:25Z"
@@ -3683,7 +3683,7 @@
     "status": "shipped",
     "kind": "bug",
     "date": "2026-09-02",
-    "summary": "Stroke order draws its title in a header bar across the top of its card - a rule under it, a muted ground, the stroke count on the right - and every other block put a small label inside its padded body instead, or had no title at all. Meanings, Mnemonics and Related carried no heading, so a reader scrolling a kanji page met cards that looked like different components. One header bar in SubjectBlock, the one stroke order already used, and a title on every block that is a section of the page - taken from the same sectionTitles the section pages are named by, so a card and its own address agree. The right-hand slot is that panel's too: where its stroke count sits, a block's own control sits. Requested 2026-09-02 by John.",
+    "summary": "Stroke order draws its title in a header bar across the top of its card - a rule under it, a muted ground, the stroke count on the right - and every other block put a small label inside its padded body instead, or had no title at all. Meanings, Mnemonics and Related carried no heading, so a reader scrolling a kanji page met cards that looked like different components. One header bar in SubjectBlock, the one stroke order already used, and a title on every block that is a section of the page - taken from the same sectionTitles the section pages are named by, so a card and its own address agree. The right-hand slot is that panel's too: where its stroke count sits, a block's own control sits.",
     "dateIsEstimate": false,
     "version": "0.327.0",
     "releasedAt": "2026-09-03T06:43:01Z"
@@ -3695,7 +3695,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-02",
-    "summary": "The radical picker asks 'which kanji has these parts' from inside a search dropdown, which is the right shape for somebody mid-search and the wrong one for somebody who wants to see the radicals. This is the stroke browser's layout over the same index: counts along the top, the 253 radicals grouped by stroke below them, and the kanji containing whatever is picked. Picking is a link, so the state is in the address. The parts on a kanji page lead here instead of priming a search box. Requested 2026-09-02 by John.",
+    "summary": "The radical picker asks 'which kanji has these parts' from inside a search dropdown, which is the right shape for somebody mid-search and the wrong one for somebody who wants to see the radicals. This is the stroke browser's layout over the same index: counts along the top, the 253 radicals grouped by stroke below them, and the kanji containing whatever is picked. Picking is a link, so the state is in the address. The parts on a kanji page lead here instead of priming a search box.",
     "dateIsEstimate": false,
     "version": "0.328.0",
     "releasedAt": "2026-09-03T06:50:26Z"
@@ -3719,7 +3719,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-03",
-    "summary": "Holding a stroke still drew it in colour with every earlier stroke behind it in grey, which answers where in the character it falls but not what the stroke itself is - on a twenty-two stroke character the one you asked about is a coloured mark inside a nearly finished glyph. Only hides what is already down and leaves the single stroke on the page; with Outline on it sits over the faint whole character, which is the shape of the question: this stroke, there. A finished stroke becomes 'not yet reached' rather than a fourth state, because that is already what the animation knows how to leave wound back, and the numbers follow the same rule so nothing is numbered that is not drawn. Off by default - where a stroke falls is the usual thing to want - and remembered. Requested 2026-09-03 by John.",
+    "summary": "Holding a stroke still drew it in colour with every earlier stroke behind it in grey, which answers where in the character it falls but not what the stroke itself is - on a twenty-two stroke character the one you asked about is a coloured mark inside a nearly finished glyph. Only hides what is already down and leaves the single stroke on the page; with Outline on it sits over the faint whole character, which is the shape of the question: this stroke, there. A finished stroke becomes 'not yet reached' rather than a fourth state, because that is already what the animation knows how to leave wound back, and the numbers follow the same rule so nothing is numbered that is not drawn. Off by default - where a stroke falls is the usual thing to want - and remembered.",
     "dateIsEstimate": false,
     "version": "0.330.0",
     "releasedAt": "2026-09-03T08:07:42Z"
@@ -3731,7 +3731,7 @@
     "status": "shipped",
     "kind": "bug",
     "date": "2026-09-03",
-    "summary": "Stroke order's header carried the readings and the meaning under its title - the only block on the page whose header did two jobs, now that every other card wears the same plain bar. It did that because the kanji page had no header of its own: the card was the first thing on the page, so it became one. The page names its character now, and stroke order's bar says Stroke order and the stroke count like every other card. A section drawn on its own - /kanji/X/stroke, or the panel in a modal - keeps the line, because there is no page header above it there. summaryLine moved out of the client module into lib on the way: a function exported from a 'use client' file cannot be called during a server render, which is how the page broke the first time it was wired up. Requested 2026-09-03 by John.",
+    "summary": "Stroke order's header carried the readings and the meaning under its title - the only block on the page whose header did two jobs, now that every other card wears the same plain bar. It did that because the kanji page had no header of its own: the card was the first thing on the page, so it became one. The page names its character now, and stroke order's bar says Stroke order and the stroke count like every other card. A section drawn on its own - /kanji/X/stroke, or the panel in a modal - keeps the line, because there is no page header above it there. summaryLine moved out of the client module into lib on the way: a function exported from a 'use client' file cannot be called during a server render, which is how the page broke the first time it was wired up.",
     "dateIsEstimate": false,
     "version": "0.331.0",
     "releasedAt": "2026-09-03T08:14:50Z"
@@ -3743,7 +3743,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-03",
-    "summary": "A sheet for one character, at /kanji/<character>/sheet and linked from the stroke panel. The character and its readings at the top, then every stroke as its own square the way a stroke-order chart shows it - all of them, so a twenty-two stroke character gets twenty-two squares rather than the first row - and then the rest of the page ruled into fifty-six empty squares to copy it into. The list sheets print a grid across many characters, a row each; this is the other shape, one character and room to work at it. The squares are the list sheets' own: Cell, TraceGlyph and StrokeStepGlyph came out of TracingSheet into sheetCells so both draw the same workbook square rather than drifting apart. Public like the character page it hangs off, because a parent printing a sheet for a child has no reason to sign in first, and a static segment so the stroke-order section keeps its address. Requested 2026-09-03 by John.",
+    "summary": "A sheet for one character, at /kanji/<character>/sheet and linked from the stroke panel. The character and its readings at the top, then every stroke as its own square the way a stroke-order chart shows it - all of them, so a twenty-two stroke character gets twenty-two squares rather than the first row - and then the rest of the page ruled into fifty-six empty squares to copy it into. The list sheets print a grid across many characters, a row each; this is the other shape, one character and room to work at it. The squares are the list sheets' own: Cell, TraceGlyph and StrokeStepGlyph came out of TracingSheet into sheetCells so both draw the same workbook square rather than drifting apart. Public like the character page it hangs off, because a parent printing a sheet for a child has no reason to sign in first, and a static segment so the stroke-order section keeps its address.",
     "dateIsEstimate": false,
     "version": "0.332.0",
     "releasedAt": "2026-09-03T08:23:50Z"
@@ -3755,7 +3755,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-03",
-    "summary": "The one-character sheet ruled the whole of Now You into empty squares, which asks a child to copy from a chart four inches up the page. A workbook leads the hand before it lets go: the first practice row is the character built stroke by stroke in faint, to trace over, and every row after it opens with the finished character in faint before the blanks. Nothing below the chart is highlighted - down there every mark is something to draw, and one black stroke among them would be the only one that is not. The chart at the top keeps its black stroke, since that is what says which one is new. StrokeStepGlyph grew a ghost tone for it rather than a second component. Requested 2026-09-03 by John.",
+    "summary": "The one-character sheet ruled the whole of Now You into empty squares, which asks a child to copy from a chart four inches up the page. A workbook leads the hand before it lets go: the first practice row is the character built stroke by stroke in faint, to trace over, and every row after it opens with the finished character in faint before the blanks. Nothing below the chart is highlighted - down there every mark is something to draw, and one black stroke among them would be the only one that is not. The chart at the top keeps its black stroke, since that is what says which one is new. StrokeStepGlyph grew a ghost tone for it rather than a second component.",
     "dateIsEstimate": false,
     "version": "0.333.0",
     "releasedAt": "2026-09-03T08:48:48Z"
@@ -3767,7 +3767,7 @@
     "status": "shipped",
     "kind": "bug",
     "date": "2026-09-03",
-    "summary": "Two words for two actions, and the site had them crossed. On the list cards and the list page, Print was a link that navigated to the worksheet and asked it to open the print dialog on arrival - a button called Print that changed the page - while the stroke panel's new Print went to the one-character sheet and then did nothing, sitting in a row of its own under the drawing. One rule: Worksheet is the button that goes to a sheet, and Print exists only on a sheet, where it opens the dialog - with the scope menu where there is more than one page, as the practice sheet already does. The cards and the list page lose their navigating Print; the stroke panel's button becomes Worksheet in the header slot beside the stroke count; the one-character sheet gets the same Print button the practice sheet has. The arrive-and-print flag stays, because the sheet's own Everything choice reloads into the print layout and needs it. Requested 2026-09-03 by John.",
+    "summary": "Two words for two actions, and the site had them crossed. On the list cards and the list page, Print was a link that navigated to the worksheet and asked it to open the print dialog on arrival - a button called Print that changed the page - while the stroke panel's new Print went to the one-character sheet and then did nothing, sitting in a row of its own under the drawing. One rule: Worksheet is the button that goes to a sheet, and Print exists only on a sheet, where it opens the dialog - with the scope menu where there is more than one page, as the practice sheet already does. The cards and the list page lose their navigating Print; the stroke panel's button becomes Worksheet in the header slot beside the stroke count; the one-character sheet gets the same Print button the practice sheet has. The arrive-and-print flag stays, because the sheet's own Everything choice reloads into the print layout and needs it.",
     "dateIsEstimate": false,
     "version": "0.335.0",
     "releasedAt": "2026-09-03T08:59:34Z"
@@ -3803,7 +3803,7 @@
     "status": "shipped",
     "kind": "bug",
     "date": "2026-09-03",
-    "summary": "The one-character practice sheet was a second implementation beside the practice sheet the lists print - its own page, its own component, its own row grammar (faint model leading each row, no heading line) and none of the options, so the two looked like two products. There is one sheet now: TracingSheet takes the characters it is given and a Fill the page option shares the page's rows between them - one kanji takes the whole page, two take half each - on top of whatever rows each needs of its own, the stroke chart in Stroke order mode or the trace row in Trace mode. The character page's Worksheet links into the member's practice sheet with that character picked, Stroke order on and the page filled, so it has the same header, the same Practise, Sheet and Options rows, the same square sizes and the same Print. /kanji/X/sheet, KanjiPracticeSheet and its copy are deleted. The faint-first-row grammar of 0.333.0 goes with them: the shared row is the workbook's - the finished character to copy, faint repeats to trace, blanks to write - and a variant belongs as an option on this sheet, not a fork. Requested 2026-09-03 by John.",
+    "summary": "The one-character practice sheet was a second implementation beside the practice sheet the lists print - its own page, its own component, its own row grammar (faint model leading each row, no heading line) and none of the options, so the two looked like two products. There is one sheet now: TracingSheet takes the characters it is given and a Fill the page option shares the page's rows between them - one kanji takes the whole page, two take half each - on top of whatever rows each needs of its own, the stroke chart in Stroke order mode or the trace row in Trace mode. The character page's Worksheet links into the member's practice sheet with that character picked, Stroke order on and the page filled, so it has the same header, the same Practise, Sheet and Options rows, the same square sizes and the same Print. /kanji/X/sheet, KanjiPracticeSheet and its copy are deleted. The faint-first-row grammar of 0.333.0 goes with them: the shared row is the workbook's - the finished character to copy, faint repeats to trace, blanks to write - and a variant belongs as an option on this sheet, not a fork.",
     "dateIsEstimate": false,
     "version": "0.337.0",
     "releasedAt": "2026-09-03T09:22:55Z"
@@ -3827,7 +3827,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-03",
-    "summary": "Kanto is eight prefectures inside a thumbnail: on a whole-country map Saitama and Gunma are a few pixels of the same grey. Three zoom steps rather than a free zoom, with drag, arrow keys and +/-/0 to move around, and the window clamped so a drag that runs off the edge stops rather than framing open sea. Requested 2026-09-03 by John.",
+    "summary": "Kanto is eight prefectures inside a thumbnail: on a whole-country map Saitama and Gunma are a few pixels of the same grey. Three zoom steps rather than a free zoom, with drag, arrow keys and +/-/0 to move around, and the window clamped so a drag that runs off the edge stops rather than framing open sea.",
     "dateIsEstimate": false,
     "version": "0.339.0",
     "releasedAt": "2026-09-03T09:28:42Z"
@@ -3839,7 +3839,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-03",
-    "summary": "The practice sheet carries no brand at all: on screen the page has the site's navigation and nothing that says UmaKuma, and on paper - where a sheet is photocopied, handed to a child and pinned to a fridge - there is nothing at all. Every other page wears the banner. The sheet wants the brand minimally on screen, the mark and the name above the title, and more minimally still on paper: one quiet line, the name and the address, in the grey the rest of the printed sheet uses, so whoever picks the page up knows where it came from and where to get another. Requested 2026-09-03 by John.",
+    "summary": "The practice sheet carries no brand at all: on screen the page has the site's navigation and nothing that says UmaKuma, and on paper - where a sheet is photocopied, handed to a child and pinned to a fridge - there is nothing at all. Every other page wears the banner. The sheet wants the brand minimally on screen, the mark and the name above the title, and more minimally still on paper: one quiet line, the name and the address, in the grey the rest of the printed sheet uses, so whoever picks the page up knows where it came from and where to get another.",
     "dateIsEstimate": false,
     "version": "0.340.0",
     "releasedAt": "2026-09-03T09:39:02Z"
@@ -3851,7 +3851,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-03",
-    "summary": "The map panel drew the characters of a place name as coloured boxes of its own making: no meaning, no reading, and no way to keep one, on a site where every other place a kanji appears carries all three. It uses the shared subject card now, which brings the reading, the meaning, the link to the character's page and the filing column with it. Double-clicking a region zooms one step in on it. Requested 2026-09-03 by John.",
+    "summary": "The map panel drew the characters of a place name as coloured boxes of its own making: no meaning, no reading, and no way to keep one, on a site where every other place a kanji appears carries all three. It uses the shared subject card now, which brings the reading, the meaning, the link to the character's page and the filing column with it. Double-clicking a region zooms one step in on it.",
     "dateIsEstimate": false,
     "version": "0.341.0",
     "releasedAt": "2026-09-03T09:42:38Z"
@@ -3911,7 +3911,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-03",
-    "summary": "A member marks each prefecture, state or province 'I know it' or 'Needs practice', and separately flags the ones they have been to - the map paints all three in soft greens, ambers and a blue outline. Two facts rather than one. One new table, MapRegionMark, unique per member per region. Requested 2026-09-03 by John.",
+    "summary": "A member marks each prefecture, state or province 'I know it' or 'Needs practice', and separately flags the ones they have been to - the map paints all three in soft greens, ambers and a blue outline. Two facts rather than one. One new table, MapRegionMark, unique per member per region.",
     "dateIsEstimate": false,
     "version": "0.345.0",
     "releasedAt": "2026-09-03T10:42:47Z"
@@ -3935,7 +3935,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-03",
-    "summary": "On the country map Kagawa is four millimetres of grey and Rhode Island is smaller than the word for it, so the shape - the one thing a map is for - is the thing you cannot see. The panel draws the chosen region filling its width, neighbours in outline so it reads as a place rather than a blob. Requested 2026-09-03 by John.",
+    "summary": "On the country map Kagawa is four millimetres of grey and Rhode Island is smaller than the word for it, so the shape - the one thing a map is for - is the thing you cannot see. The panel draws the chosen region filling its width, neighbours in outline so it reads as a place rather than a blob.",
     "dateIsEstimate": false,
     "version": "0.347.0",
     "releasedAt": "2026-09-03T10:48:44Z"
@@ -3959,7 +3959,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-03",
-    "summary": "The releases page prints every month at full length, so the page opens on a wall of entries and the month somebody came for is a long scroll away. Each month becomes a section that folds: the current month open, the rest closed, any of them toggled by hand, and the choice remembered per device so a refresh does not undo it. Requested 2026-09-03 by John.",
+    "summary": "The releases page prints every month at full length, so the page opens on a wall of entries and the month somebody came for is a long scroll away. Each month becomes a section that folds: the current month open, the rest closed, any of them toggled by hand, and the choice remembered per device so a refresh does not undo it.",
     "dateIsEstimate": false,
     "version": "0.351.0",
     "releasedAt": "2026-09-03T11:25:55Z"
@@ -3971,7 +3971,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-03",
-    "summary": "Every release is already tagged by area, and the tags are shown without being usable: there is no way to ask for the games work, or everything that touched search. The page lays out every area it holds with a count beside it, and choosing one filters the list. Areas only - a feature and a bug are not the same kind of tag. Requested 2026-09-03 by John.",
+    "summary": "Every release is already tagged by area, and the tags are shown without being usable: there is no way to ask for the games work, or everything that touched search. The page lays out every area it holds with a count beside it, and choosing one filters the list. Areas only - a feature and a bug are not the same kind of tag.",
     "dateIsEstimate": false,
     "version": "0.353.0",
     "releasedAt": "2026-09-03T11:30:27Z"
@@ -3995,7 +3995,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-03",
-    "summary": "Planned work moves out of featureTimeline.json into Postgres, with an atomic claim and a six-hour lease. The file keeps the shipped record, because a release entry has to land in the same commit as its code. Requested 2026-09-03 by John.",
+    "summary": "Planned work moves out of featureTimeline.json into Postgres, with an atomic claim and a six-hour lease. The file keeps the shipped record, because a release entry has to land in the same commit as its code.",
     "dateIsEstimate": false,
     "version": "0.354.0",
     "releasedAt": "2026-09-03T12:25:07Z"
@@ -4031,7 +4031,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-03",
-    "summary": "With nothing chosen the map's side panel is an empty box with one line in it, on a page whose other half is a map. It should carry the whole country instead: every region as a row with its name, its kanji and its shape, in columns, at a size somebody can read. A row does what the map does - hovering it lights the region, choosing it opens the panel - so the list is a second way through the same door rather than a table of contents. Requested 2026-09-03 by John.",
+    "summary": "With nothing chosen the map's side panel is an empty box with one line in it, on a page whose other half is a map. It should carry the whole country instead: every region as a row with its name, its kanji and its shape, in columns, at a size somebody can read. A row does what the map does - hovering it lights the region, choosing it opens the panel - so the list is a second way through the same door rather than a table of contents.",
     "dateIsEstimate": false,
     "version": "0.357.0",
     "releasedAt": "2026-09-03T12:37:07Z"
@@ -4043,7 +4043,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-03",
-    "summary": "The three map datasets are shown with no attribution anywhere: Global Map Japan via GSI, US Census Bureau via us-atlas, and Natural Earth. GSI's terms require both a source citation and a statement that the data was edited, and ours are reprojected, simplified and move Okinawa into an inset. Requested 2026-09-03 by John.",
+    "summary": "The three map datasets are shown with no attribution anywhere: Global Map Japan via GSI, US Census Bureau via us-atlas, and Natural Earth. GSI's terms require both a source citation and a statement that the data was edited, and ours are reprojected, simplified and move Okinawa into an inset.",
     "dateIsEstimate": false,
     "version": "0.358.0",
     "releasedAt": "2026-09-03T12:39:36Z"
@@ -4055,7 +4055,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-03",
-    "summary": "The board holds every piece of work, so the model, library, API and admin panel say Ticket rather than FeatureWish. The physical table keeps its name, because prisma db push drops and recreates rather than renaming. The board offers every move a ticket's state allows and says who holds it. Requested 2026-09-03 by John.",
+    "summary": "The board holds every piece of work, so the model, library, API and admin panel say Ticket rather than FeatureWish. The physical table keeps its name, because prisma db push drops and recreates rather than renaming. The board offers every move a ticket's state allows and says who holds it.",
     "dateIsEstimate": false,
     "version": "0.359.0",
     "releasedAt": "2026-09-03T12:47:04Z"
@@ -4067,7 +4067,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-03",
-    "summary": "The header's first link is Leaderboard, and for a signed-out visitor it is the only one - so the one thing an anonymous reader is offered is the scoreboard, on a page about a kanji. John: no more attention to the Leaderboard. Take the link out of the header. The anonymous nav is then empty on purpose; John will decide what a visitor should be offered. Requested 2026-09-03 by John.",
+    "summary": "The header's first link is Leaderboard, and for a signed-out visitor it is the only one - so the one thing an anonymous reader is offered is the scoreboard, on a page about a kanji. John: no more attention to the Leaderboard. Take the link out of the header. The anonymous nav is then empty on purpose; John will decide what a visitor should be offered.",
     "dateIsEstimate": false,
     "version": "0.360.0",
     "releasedAt": "2026-09-03T12:53:04Z"
@@ -4139,7 +4139,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-03",
-    "summary": "The map directory groups regions under headings - Prairies, Northern Canada, Tohoku, Kansai. Those headings should be selectable, lighting up every member on the map at once, so a learner can see a region as a shape rather than picking its members off one at a time. Requested 2026-09-03 by John.",
+    "summary": "The map directory groups regions under headings - Prairies, Northern Canada, Tohoku, Kansai. Those headings should be selectable, lighting up every member on the map at once, so a learner can see a region as a shape rather than picking its members off one at a time.",
     "dateIsEstimate": false,
     "version": "0.366.0",
     "releasedAt": "2026-09-03T15:16:03Z"
@@ -4175,7 +4175,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-03",
-    "summary": "The item chips printed both halves at once - \u30ad \u00b7 cape, \u3057\u3085\u304f \u00b7 Lodging - and nobody had chosen that: the control was on or off, and \"on\" meant everything the chip knew. The reading and the meaning are two different questions, and a member reading a page wants one of them at a time. It is a three-way choice now - Off, \u3042, EN - held once per browser and read by every chip on every page: the parts of a character, the words a kanji is used in, the related groups, the kanji of a place name, a paste being turned into a list. Segments rather than a button that cycles, because a cycling button cannot say what the other choices are and you end up pressing it until the page looks right. The half a chip does not print stays on its title, so seeing it costs a hover rather than a trip back to the control, and each mode falls back to the word the chip actually has - a radical WaniKani draws has a name and no reading, and asking for readings must not empty a whole row of them. Requested 2026-09-03 by John.",
+    "summary": "The item chips printed both halves at once - \u30ad \u00b7 cape, \u3057\u3085\u304f \u00b7 Lodging - and nobody had chosen that: the control was on or off, and \"on\" meant everything the chip knew. The reading and the meaning are two different questions, and a member reading a page wants one of them at a time. It is a three-way choice now - Off, \u3042, EN - held once per browser and read by every chip on every page: the parts of a character, the words a kanji is used in, the related groups, the kanji of a place name, a paste being turned into a list. Segments rather than a button that cycles, because a cycling button cannot say what the other choices are and you end up pressing it until the page looks right. The half a chip does not print stays on its title, so seeing it costs a hover rather than a trip back to the control, and each mode falls back to the word the chip actually has - a radical WaniKani draws has a name and no reading, and asking for readings must not empty a whole row of them.",
     "dateIsEstimate": false,
     "version": "0.369.0",
     "releasedAt": "2026-09-03T15:39:25Z"
@@ -4259,7 +4259,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-03",
-    "summary": "The subject page sections have titles now and each title already has a RESTful path behind it. Offer the link: on hover a section title becomes a link to its own view, for example /kanji/X/related, and the main kanji page can be navigated from. Requested 2026-09-03 by John.",
+    "summary": "The subject page sections have titles now and each title already has a RESTful path behind it. Offer the link: on hover a section title becomes a link to its own view, for example /kanji/X/related, and the main kanji page can be navigated from.",
     "dateIsEstimate": false,
     "version": "0.376.0",
     "releasedAt": "2026-09-03T16:18:13Z"
@@ -4271,7 +4271,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-03",
-    "summary": "John: it looks really good but can someone guess what each thing does? Why is 10 strokes a different badge from the Worksheet button - do those belong together? Question the design and the layout, ask why each thing is where it is. Concise is good, not too busy. One idea of his: the 10 strokes label folds into the Show one stroke button, and pressing that is what reveals the ten numbered buttons. Requested 2026-09-03 by John.",
+    "summary": "John: it looks really good but can someone guess what each thing does? Why is 10 strokes a different badge from the Worksheet button - do those belong together? Question the design and the layout, ask why each thing is where it is. Concise is good, not too busy. One idea of his: the 10 strokes label folds into the Show one stroke button, and pressing that is what reveals the ten numbered buttons.",
     "dateIsEstimate": false,
     "version": "0.377.0",
     "releasedAt": "2026-09-04T02:40:26Z"
@@ -4283,7 +4283,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-03",
-    "summary": "A worksheet row carries the readings; it has room for more of what is known about that character. Decide what earns the space. Requested 2026-09-03 by John.",
+    "summary": "A worksheet row carries the readings; it has room for more of what is known about that character. Decide what earns the space.",
     "dateIsEstimate": false,
     "version": "0.378.0",
     "releasedAt": "2026-09-04T02:49:48Z"
@@ -4331,7 +4331,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-03",
-    "summary": "Written with holds radicals only, so it is the same kind of fact as the Built from group in Related and should sit next to it rather than in its own block further up. Requested 2026-09-03 by John.",
+    "summary": "Written with holds radicals only, so it is the same kind of fact as the Built from group in Related and should sit next to it rather than in its own block further up.",
     "dateIsEstimate": false,
     "version": "0.382.0",
     "releasedAt": "2026-09-04T03:14:25Z"
@@ -4343,7 +4343,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-03",
-    "summary": "The control over what an item chip says offered Off, kana and English - one question at a time, which was the point of it. The objection to printing both was never to seeing the pair though, it was to having no say in it, so Both is back as a fourth choice: a chip reads \u3057\u3085\u304f / Lodging for anyone who asks for that, and the other three modes are untouched for anyone who does not. It draws through the same function the hover title has always used, so what you see when you ask for the pair and what you get on a hover cannot drift into two formats, and it falls back the way the other modes do - to whichever half the chip actually has - rather than printing a joiner with nothing on one side of it. Requested 2026-09-03 by John.",
+    "summary": "The control over what an item chip says offered Off, kana and English - one question at a time, which was the point of it. The objection to printing both was never to seeing the pair though, it was to having no say in it, so Both is back as a fourth choice: a chip reads \u3057\u3085\u304f / Lodging for anyone who asks for that, and the other three modes are untouched for anyone who does not. It draws through the same function the hover title has always used, so what you see when you ask for the pair and what you get on a hover cannot drift into two formats, and it falls back the way the other modes do - to whichever half the chip actually has - rather than printing a joiner with nothing on one side of it.",
     "dateIsEstimate": false,
     "version": "0.383.0",
     "releasedAt": "2026-09-04T03:55:27Z"
@@ -4427,7 +4427,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-03",
-    "summary": "At /maps/japan/region/kansai the only signs that Kansai is what is framed are the URL and the side panel; the map itself has no title. Put an overlay title in the map's top-left corner - there is room, and the pan hint already sits bottom-left in that style - naming the region, and the region and the province when one is chosen (Kansai \u00b7 Osaka). John also suggested a leader line from the region's centre to a label, the way the game's handles point. Requested 2026-09-03 by John.",
+    "summary": "At /maps/japan/region/kansai the only signs that Kansai is what is framed are the URL and the side panel; the map itself has no title. Put an overlay title in the map's top-left corner - there is room, and the pan hint already sits bottom-left in that style - naming the region, and the region and the province when one is chosen (Kansai \u00b7 Osaka). John also suggested a leader line from the region's centre to a label, the way the game's handles point.",
     "dateIsEstimate": false,
     "version": "0.390.0",
     "releasedAt": "2026-09-04T04:48:59Z"
@@ -4439,7 +4439,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-03",
-    "summary": "The study map paints a member's own marks - known green, practise amber, visited outlined - over every region, always. There is no way to turn that layer off to see the plain map, or to see one kind of mark alone. Controls to toggle each layer, in or above the map or in the side panel. Requested 2026-09-03 by John.",
+    "summary": "The study map paints a member's own marks - known green, practise amber, visited outlined - over every region, always. There is no way to turn that layer off to see the plain map, or to see one kind of mark alone. Controls to toggle each layer, in or above the map or in the side panel.",
     "dateIsEstimate": false,
     "version": "0.391.0",
     "releasedAt": "2026-09-04T04:56:04Z"
@@ -4523,7 +4523,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-04",
-    "summary": "History and Stats sit under their own Progress group, but both are your WaniKani progress and belong with the studying that produced them. Move the pages for real - /users/<name>/study/history and /users/<name>/study/stats - and give Study a second row of three: Reviews, History, Stats. Progress goes away as a group. No redirects; update every caller. Requested 2026-09-04 by John.",
+    "summary": "History and Stats sit under their own Progress group, but both are your WaniKani progress and belong with the studying that produced them. Move the pages for real - /users/<name>/study/history and /users/<name>/study/stats - and give Study a second row of three: Reviews, History, Stats. Progress goes away as a group. No redirects; update every caller.",
     "dateIsEstimate": false,
     "version": "0.398.0",
     "releasedAt": "2026-09-04T08:34:22Z"
@@ -4823,7 +4823,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-04",
-    "summary": "John: playable countries stay Japan, the United States and Canada. The runs route validated mapCountry against 'is this a country', which after opening thirty of them would have let a crafted request start a run on France with no subject ids behind it; it asks isPlayableMapCountry now. Thailand, China, Australia and Taiwan lose adminOnly at the same time - they are the same generated Natural Earth data as the other twenty-five now open, so hiding four of thirty had stopped meaning anything. Requested 2026-09-04 by John.",
+    "summary": "John: playable countries stay Japan, the United States and Canada. The runs route validated mapCountry against 'is this a country', which after opening thirty of them would have let a crafted request start a run on France with no subject ids behind it; it asks isPlayableMapCountry now. Thailand, China, Australia and Taiwan lose adminOnly at the same time - they are the same generated Natural Earth data as the other twenty-five now open, so hiding four of thirty had stopped meaning anything.",
     "dateIsEstimate": false,
     "version": "0.423.0",
     "releasedAt": "2026-09-04T15:06:51Z"
@@ -4847,7 +4847,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-04",
-    "summary": "An arrow on the right of a word's row, shown only while that row is hovered or the link has focus, opening the word on jisho.org in a new tab. Out of the way of reading and still reachable by keyboard. Requested 2026-09-04 by John.",
+    "summary": "An arrow on the right of a word's row, shown only while that row is hovered or the link has focus, opening the word on jisho.org in a new tab. Out of the way of reading and still reachable by keyboard.",
     "dateIsEstimate": false,
     "version": "0.425.0",
     "releasedAt": "2026-09-04T15:08:42Z"
@@ -5243,7 +5243,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-04",
-    "summary": "Kanji Garden pairs easily-confused kanji and breaks them down by component, so a learner meets \u6599 and \u79d1 side by side and \u5fb9 \u64a4 \u5fb5 as a set, rather than meeting one in level 12 and its twin in level 40 with nothing to tell them apart. John: keep in mind for a later tuning pass, not now. Two halves: (1) a confusable set derived from shared components - RADKFILE already gives every kanji its parts, so a pair sharing all but one part is computable, and near-identical shapes can be scored on component overlap; (2) what to do with a set, which is either pulling its members into the same ladder level (a build-time constraint alongside the JLPT and grade ordering) or showing the set on a kanji's page and in reviews as a 'do not confuse with' row. The second is cheap and does not disturb the ladder; the first is the real version and needs the ordering rules to admit a fourth constraint. Requested 2026-09-04 by John with a Kanji Garden screenshot. Wished 2026-09-04.",
+    "summary": "Kanji Garden pairs easily-confused kanji and breaks them down by component, so a learner meets \u6599 and \u79d1 side by side and \u5fb9 \u64a4 \u5fb5 as a set, rather than meeting one in level 12 and its twin in level 40 with nothing to tell them apart. John: keep in mind for a later tuning pass, not now. Two halves: (1) a confusable set derived from shared components - RADKFILE already gives every kanji its parts, so a pair sharing all but one part is computable, and near-identical shapes can be scored on component overlap; (2) what to do with a set, which is either pulling its members into the same ladder level (a build-time constraint alongside the JLPT and grade ordering) or showing the set on a kanji's page and in reviews as a 'do not confuse with' row. The second is cheap and does not disturb the ladder; the first is the real version and needs the ordering rules to admit a fourth constraint. Wished 2026-09-04.",
     "dateIsEstimate": false,
     "version": "0.458.0",
     "releasedAt": "2026-09-05T03:59:24Z"
