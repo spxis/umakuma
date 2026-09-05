@@ -162,3 +162,35 @@ describe("who is recorded as having placed a member", () => {
     expect(server).toContain("data: moved");
   });
 });
+
+
+describe("the placement award", () => {
+  it("is paid once, only for an external placement, and never scaled by level", async () => {
+    /* John: "a placement award, which you only get from doing a placement
+       test from other systems." Three properties, each pinned to the source
+       because a live test would need a database and this is what has to stay
+       true regardless of the numbers around it. */
+    const { readFileSync } = await import("node:fs");
+    const server = readFileSync("src/lib/uk/ukLevelServer.ts", "utf8");
+    /* Once: the first placement is the one where ukPlacedAt was still null. */
+    expect(server).toContain("account?.ukPlacedAt === null");
+    /* External only: an admin raise or a member's own bump is not arriving. */
+    expect(server).toContain('new Set<string>(["placement_test", "wanikani"])');
+    expect(server).toContain("EXTERNAL_PLACEMENT_SOURCES.has(source)");
+    /* A flat kind, no amount computed from the level reached. */
+    expect(server).toContain('kind: "placementAward"');
+    expect(server).not.toMatch(/placementAward.*\*\s*next/);
+  });
+
+  it("cannot fail the placement it rides on", async () => {
+    const { readFileSync } = await import("node:fs");
+    const server = readFileSync("src/lib/uk/ukLevelServer.ts", "utf8");
+    expect(server).toContain("awardXpQuietly({ accountId, requests: [{ kind: \"placementAward\"");
+  });
+
+  it("is priced in fives and exists as a kind", async () => {
+    const { XP_BONUSES } = await import("@/lib/xp/xpAwards");
+    expect(XP_BONUSES.placementAward).toBe(250);
+    expect(XP_BONUSES.placementAward % 5).toBe(0);
+  });
+});

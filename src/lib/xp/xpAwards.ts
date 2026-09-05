@@ -49,6 +49,21 @@ export const XP_AWARDS = {
  * Every value is a multiple of five, the same rule the rank costs follow.
  */
 export const XP_BONUSES = {
+  /**
+   * For arriving with knowledge from somewhere else - a placement test
+   * passed, or WaniKani progress carried across. Paid once, ever, and never
+   * scaled by the level reached.
+   *
+   * The simulator settled the amount. A member who earns level 20 here has
+   * banked about 36,000 XP over 285 days; paying an importer for the level
+   * would seat them above somebody who attended daily for most of a year.
+   * But the zero start costs almost nothing - importer and from-scratch
+   * learner doing the identical day are within three ranks of each other at
+   * a month - so the award is for the act of placing, not the height. 250 is
+   * rank 5, which is exactly where vacation unlocks: enough that somebody
+   * carrying a level-20 queue is not on a beginner's allowances.
+   */
+  placementAward: 250,
   /** Seven days in a row. The first one that takes a bit of holding. */
   sevenDayStreak: 50,
   thirtyDayStreak: 150,
@@ -280,6 +295,7 @@ export function xpAwardValue(
  * cell somebody notices in production.
  */
 export const XP_TYPE_NOTES: Record<string, string> = {
+  placementAward: "For arriving with what you already knew — a placement test passed, or WaniKani progress carried across. Once, ever.",
   dailySignIn: "For showing up at all, once a day.",
   reviewAnswered: "For every review you answer, right or wrong \u2014 attempting it is the habit.",
   reviewCorrect: "On top of answering, for getting it right.",

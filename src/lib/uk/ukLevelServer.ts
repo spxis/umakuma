@@ -4,6 +4,7 @@ import { KANJI_LADDER_LEVELS } from "@/lib/kanjiLadder";
 import { prisma } from "@/lib/prisma";
 
 import { resolveUkLevel, type UkLevelResolution, type UkLevelTotals } from "./ukLevel";
+import { awardXpQuietly } from "@/lib/xp/xpServer";
 
 /**
  * Reading and writing a member's UmaKuma level.
@@ -92,6 +93,9 @@ export async function syncAccountUkLevel(accountId: string): Promise<UkLevelReso
   return resolved;
 }
 
+/** The sources that mean "knowledge from somewhere else", which is what the placement award is for. */
+const EXTERNAL_PLACEMENT_SOURCES = new Set<string>(["placement_test", "wanikani"]);
+
 /**
  * Raises the floor and re-derives. Never lowers: a floor is what a placement
  * test or a WaniKani import bought, and taking it back is the one thing that
@@ -108,7 +112,7 @@ export async function raiseUkLevelFloor({
 }): Promise<UkLevelResolution> {
   const account = await prisma.account.findUnique({
     where: { id: accountId },
-    select: { ukLevelFloor: true },
+    select: { ukLevelFloor: true, ukPlacedAt: true },
   });
   const current = account?.ukLevelFloor ?? 1;
   const next = Math.min(Math.max(floor, current), KANJI_LADDER_LEVELS);
@@ -129,5 +133,15 @@ export async function raiseUkLevelFloor({
       ? { ukLevelFloor: next, ukPlacedAt: new Date(), ukPlacementSource: source }
       : { ukLevelFloor: next },
   });
+
+  /* The placement award: once, ever, and only for knowledge that came from
+     somewhere else. `ukPlacedAt` being null before this call is what makes it
+     the first placement; the source is what makes it external - an admin
+     raising a floor, or a member's own bump-up, is not arriving with
+     knowledge. Quiet, because a placement that succeeded must not fail on the
+     XP it hands out. */
+  if (moved && account?.ukPlacedAt === null && EXTERNAL_PLACEMENT_SOURCES.has(source)) {
+    await awardXpQuietly({ accountId, requests: [{ kind: "placementAward", note: `placed at level ${next}` }] });
+  }
   return syncAccountUkLevel(accountId);
 }
