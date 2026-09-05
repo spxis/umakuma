@@ -134,6 +134,28 @@ const JLPT_BANDS = [
 /** Kanji on no JLPT list sort with N1, at the end. */
 const BAND_ORDER = [5, 4, 3, 2, 1];
 
+const GRADE_LADDER_PATH = path.resolve("src/data/gradeLadder.json");
+
+/**
+ * The grade stream's shape: how many levels each school year is given.
+ *
+ * A grade is divided rather than ramped, so no level ever straddles two school
+ * years and "you have finished grade three" is true at a level boundary. The
+ * counts hold every division between 19 and 21 kanji against the 2020 kyōiku
+ * list — 80, 160, 200, 202, 193, 191.
+ */
+const GRADE_DIVISIONS = { 1: 4, 2: 8, 3: 10, 4: 10, 5: 9, 6: 9 };
+
+/**
+ * The levels between grade six and the rest, holding the characters an exam
+ * wants before N1 that no Japanese primary school teaches. Finish them and N2
+ * is complete to the character.
+ */
+const TOPUP_LEVELS = 6;
+
+/** The last grade a Japanese primary school covers. */
+const FINAL_KYOIKU_GRADE = 6;
+
 /**
  * Which band a kanji is *taught* in when the JLPT has never heard of it.
  *
@@ -437,6 +459,44 @@ export function rampedSizes(total, count, [from, to]) {
   return sizes;
 }
 
+
+/**
+ * The grade stream: the same kanji, ordered the way a Japanese school teaches.
+ *
+ * Everything below the kanji is untouched, because it does not need touching —
+ * `placeRadicals` and `placeVocabulary` are pure functions of where the kanji
+ * landed, so a second ordering carries its own radicals and words for free.
+ * That is the whole reason a second stream is cheap.
+ *
+ * Three segments, and the ordering produces them in that order on its own: the
+ * six school years, then the characters an exam wants before N1 that no primary
+ * school teaches, then everything left. Level 1 holds radicals and no kanji,
+ * exactly as the exam stream does — grade one is written with 74 distinct
+ * radicals, and a first level of twenty kanji would arrive carrying pieces
+ * nobody had seen.
+ *
+ * A hundred levels, not the eighty-seven the kanji alone would need. The
+ * vocabulary decides: only 3,734 of the 6,796 words can be written with kyōiku
+ * kanji alone, so a shorter ladder would leave the back half carrying about a
+ * hundred words a level. The kanji fit in eighty-seven; the words do not.
+ */
+export function gradeLevelSizes(sequence, gradeOf, isTopUp) {
+  const sizes = [0];
+  for (let grade = 1; grade <= FINAL_KYOIKU_GRADE; grade += 1) {
+    const count = sequence.filter((kanji) => gradeOf(kanji) === grade).length;
+    sizes.push(...rampedSizes(count, GRADE_DIVISIONS[grade], [1, 1]));
+  }
+  const topUp = sequence.filter((kanji) => isTopUp(kanji)).length;
+  sizes.push(...rampedSizes(topUp, TOPUP_LEVELS, [1, 1]));
+
+  const placed = sizes.reduce((sum, size) => sum + size, 0);
+  const remaining = sequence.length - placed;
+  /* The back half climbs: nobody arrives here without having finished every
+     character a Japanese twelve-year-old has been taught. */
+  sizes.push(...rampedSizes(remaining, LADDER_LEVELS - sizes.length, [1, 1.6]));
+  return sizes;
+}
+
 async function main() {
   const waniKani = await loadWaniKaniOrder();
   const dictionary = await loadDictionary();
@@ -638,6 +698,120 @@ async function main() {
   console.log(`  subjects per level: ${Math.min(...totals)}-${Math.max(...totals)} (WaniKani averages 156)`);
   console.log(`  L1-10 total: ${totals.slice(0, 10).join(" ")}`);
   for (const m of milestones) console.log(`  N${m.nLevel}: ${String(m.kanji).padStart(4)} kanji, 100% complete at level ${m.completeAtLevel}`);
+
+  /* ------------------------------------------------------------------ *
+   * The grade stream, from the same inputs and the same placement rules.
+   * ------------------------------------------------------------------ */
+  const gradeOf = (kanji) => entryFor(kanji)?.grade ?? JOYO_MAX_GRADE;
+  const isKyoiku = (kanji) => gradeOf(kanji) <= FINAL_KYOIKU_GRADE;
+  /* Wanted before N1, taught in no primary school: the top-up. */
+  const isTopUp = (kanji) => !isKyoiku(kanji) && [2, 3].includes(nLevelOf(kanji));
+
+  /*
+   * School year leads; inside a year the exam's own order decides, then print
+   * frequency, then strokes. The same four keys the exam stream uses, with the
+   * first two swapped over — which is the whole difference between the two
+   * ladders.
+   */
+  const gradePriority = (kanji) => {
+    const entry = entryFor(kanji);
+    return [
+      gradeOf(kanji),
+      isTopUp(kanji) ? 0 : 1,
+      bandRank(kanji),
+      entry?.frequencyRank ?? 9_999,
+      entry?.strokeCount ?? 30,
+    ];
+  };
+
+  /* Part before whole applies inside a school year here, not inside a band. */
+  const gradeNeeds = kanjiPrerequisites(radicals, everyKanji, (a, b) => gradeOf(a) === gradeOf(b));
+  const gradeLifted = liftPriorities(everyKanji, gradeNeeds, gradePriority);
+  const gradeSequence = orderKanji(everyKanji, gradeNeeds, (k) => gradeLifted.get(k) ?? gradePriority(k));
+
+  const gradeSizes = gradeLevelSizes(gradeSequence, gradeOf, isTopUp);
+  const gradeLevels = [];
+  let cursor = 0;
+  gradeSizes.forEach((size, index) => {
+    gradeLevels.push({ level: index + 1, kanji: gradeSequence.slice(cursor, cursor + size) });
+    cursor += size;
+  });
+
+  const gradeLevelOfKanji = new Map(gradeLevels.flatMap((l) => l.kanji.map((k) => [k, l.level])));
+  const gradeRadicals = placeRadicals(radicals, gradeLevelOfKanji);
+  const gradeOptionalRadicals = placeUnusedRadicals(gradeRadicals.unused, LADDER_LEVELS);
+  const gradeVocabulary = placeVocabulary(
+    vocabulary,
+    gradeLevelOfKanji,
+    gradeLevels.map((l) => l.kanji.length),
+    (id) => frequency.rank[id] ?? Number.MAX_SAFE_INTEGER,
+  );
+
+  const completesAt = (matches) => {
+    const levels = gradeSequence.filter(matches).map((k) => gradeLevelOfKanji.get(k));
+    return levels.length === 0 ? null : Math.max(...levels);
+  };
+
+  const gradeLadder = gradeLevels.map((entry, index) => ({
+    ...entry,
+    /* The school year this level teaches, or null past grade six. */
+    grade: entry.kanji.length === 0 ? null : (isKyoiku(entry.kanji[0]) ? gradeOf(entry.kanji[0]) : null),
+    vocabulary: gradeVocabulary.placed[index].length,
+    radicals: [...gradeRadicals.level.values()].filter((level) => level === entry.level).length,
+  }));
+
+  const gradeOutput = {
+    generatedAt: new Date().toISOString(),
+    levels: LADDER_LEVELS,
+    totalKanji: everything.length,
+    stream: "UG",
+    source: { waniKani: waniKani.length, addedJoyo: missing.length },
+    /* Where each school year finishes, which is the promise this stream makes. */
+    gradeMilestones: [1, 2, 3, 4, 5, 6].map((grade) => ({
+      grade,
+      kanji: gradeSequence.filter((k) => gradeOf(k) === grade).length,
+      completeAtLevel: completesAt((k) => gradeOf(k) === grade),
+    })),
+    /* And where the exam bands land on it, which is what a member switching
+       between the two ladders needs to be able to compare. */
+    milestones: BAND_ORDER.map((nLevel) => ({
+      nLevel,
+      kanji: gradeSequence.filter((k) => nLevelOf(k) === nLevel).length,
+      completeAtLevel: completesAt((k) => nLevelOf(k) === nLevel),
+    })),
+    radicalLevel: Object.fromEntries(gradeRadicals.level),
+    optionalRadicalLevel: Object.fromEntries(gradeOptionalRadicals),
+    vocabularyLevel: Object.fromEntries(
+      gradeVocabulary.placed.flatMap((words, index) => words.map((w) => [w.id, index + 1])),
+    ),
+    kanjiLevel: Object.fromEntries(
+      gradeLadder.flatMap((l) =>
+        l.kanji.map((k) => [
+          k,
+          {
+            level: l.level,
+            waniKaniLevel: wkLevelOf.get(k) ?? null,
+            nLevel: nLevelOf(k) || null,
+            schoolGrade: entryFor(k)?.grade ?? null,
+          },
+        ]),
+      ),
+    ),
+    ladder: gradeLadder,
+  };
+  await fs.writeFile(GRADE_LADDER_PATH, `${JSON.stringify(gradeOutput, null, 2)}\n`, "utf8");
+
+  const gradeSubjectTotals = gradeLadder.map((l) => l.kanji.length + l.vocabulary + l.radicals);
+  console.log(`\nWrote ${GRADE_LADDER_PATH}`);
+  console.log(`  kanji per level: ${Math.min(...gradeSizes.filter((n) => n > 0))}-${Math.max(...gradeSizes)}`);
+  console.log(`  subjects per level: ${Math.min(...gradeSubjectTotals)}-${Math.max(...gradeSubjectTotals)}`);
+  for (const m of gradeOutput.gradeMilestones) {
+    console.log(`  G${m.grade}: ${String(m.kanji).padStart(4)} kanji, complete at UG${m.completeAtLevel}`);
+  }
+  for (const m of gradeOutput.milestones) {
+    console.log(`  N${m.nLevel}: ${String(m.kanji).padStart(4)} kanji, complete at UG${m.completeAtLevel}`);
+  }
+  console.log(`  vocabulary ${gradeVocabulary.placed.reduce((sum, w) => sum + w.length, 0)} words, ${gradeVocabulary.unplaceable.length} unplaceable`);
 }
 
 main().catch((error) => {
