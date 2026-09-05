@@ -5168,11 +5168,23 @@
     "id": "balance-simulator",
     "name": "Balance simulator",
     "area": "admin",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "Balance simulator",
+    "dateIsEstimate": false,
+    "version": "0.452.0",
+    "releasedAt": "2026-09-05T02:23:01Z"
+  },
+  {
+    "id": "placement-award",
+    "name": "Placement award",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.452.0",
-    "releasedAt": "2026-09-05T02:23:01Z",
-    "summary": "Balance simulator"
+    "version": "0.453.0",
+    "releasedAt": "2026-09-05T02:23:04Z",
+    "summary": "Placement award"
   }
 ]
