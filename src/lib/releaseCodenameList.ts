@@ -484,4 +484,5 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Fukkyuu no Asa", ja: "復旧の朝", reading: "ふっきゅうのあさ", gloss: "the morning it came back" },
   { romaji: "Henka no Kizuki", ja: "変化の気づき", reading: "へんかのきづき", gloss: "noticing what the answer changed" },
   { romaji: "Hodoku Kijutsu", ja: "解く記述", reading: "ほどくきじゅつ", gloss: "the description untangled from the code" },
+  { romaji: "Manabi no Mochimono", ja: "学びの持ち物", reading: "まなびのもちもの", gloss: "the numbers you carry" },
 ];
