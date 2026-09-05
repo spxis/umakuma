@@ -6023,11 +6023,23 @@
     "id": "uk-level-filter",
     "name": "Level filter is empty and inert in UmaKuma mode",
     "area": "study",
+    "status": "shipped",
     "kind": "bug",
+    "date": "2026-09-05",
+    "summary": "The level filter works in UmaKuma mode: real counts, real chips, and picking a level filters the list.",
+    "dateIsEstimate": false,
+    "version": "1.7.3",
+    "releasedAt": "2026-09-05T19:37:19Z"
+  },
+  {
+    "id": "tickets-tab-outstanding",
+    "name": "The tickets tab counts what is left",
+    "area": "admin",
+    "kind": "feature",
     "status": "shipped",
     "date": "2026-09-05",
-    "version": "1.7.3",
-    "releasedAt": "2026-09-05T19:37:19Z",
-    "summary": "The level filter works in UmaKuma mode: real counts, real chips, and picking a level filters the list."
+    "version": "1.7.4",
+    "releasedAt": "2026-09-05T19:37:35Z",
+    "summary": "The tickets tab counts what is left to do rather than every request the board has ever held."
   }
 ]

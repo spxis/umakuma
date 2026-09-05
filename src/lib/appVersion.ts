@@ -11,7 +11,7 @@
  * agree with `package.json` and the record, so a forgotten bump fails
  * `quality:check` rather than shipping a stale number.
  */
-export const APP_VERSION = "1.7.3";
+export const APP_VERSION = "1.7.4";
 
 /** Which release this is, counting from the first. */
 export const APP_VERSION_RELEASE = 480;
