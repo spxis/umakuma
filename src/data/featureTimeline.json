@@ -5096,11 +5096,23 @@
     "id": "xp-time-off",
     "name": "Time off and the balance simulator",
     "area": "platform",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "Time off and the balance simulator",
+    "dateIsEstimate": false,
+    "version": "0.446.0",
+    "releasedAt": "2026-09-05T01:47:25Z"
+  },
+  {
+    "id": "placement-test",
+    "name": "Placement test",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.446.0",
-    "releasedAt": "2026-09-05T01:47:25Z",
-    "summary": "Time off and the balance simulator"
+    "version": "0.447.0",
+    "releasedAt": "2026-09-05T02:22:48Z",
+    "summary": "Placement test"
   }
 ]
