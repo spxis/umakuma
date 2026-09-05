@@ -7,6 +7,7 @@ import AdminJlptCatalogPanel from "./AdminJlptCatalogPanel";
 import AdminJlptCatalogOperationsPanel from "./AdminJlptCatalogOperationsPanel";
 import AdminLadderBrowser from "./AdminLadderBrowser";
 import AdminLadderOps from "./AdminLadderOps";
+import AdminXpTypesPanel from "./AdminXpTypesPanel";
 import AdminThemesPanel from "./AdminThemesPanel";
 import AdminSourcesPanel from "./AdminSourcesPanel";
 import { usePersistedTab } from "@/lib/usePersistedTab";
@@ -51,6 +52,7 @@ const DATASETS = [
   { id: "maps", label: "Maps", hasModes: false },
   { id: "sources", label: "Sources", hasModes: false },
   { id: "ladder", label: "Ladder", hasModes: false },
+  { id: "xp", label: "XP", hasModes: false },
   { id: "themes", label: "Themes", hasModes: false },
 ] as const;
 
@@ -147,6 +149,9 @@ export default function AdminDataWorkspaceSection({
       ) : null}
 
       {dataCatalogView === "themes" ? <AdminThemesPanel /> : null}
+
+      {/* Pricing the economy, which is why the kinds are rows. */}
+      {dataCatalogView === "xp" && sessionAuthorized ? <AdminXpTypesPanel /> : null}
 
       {dataCatalogView === "ladder" ? (
         <div className="space-y-3">

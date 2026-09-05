@@ -79,6 +79,31 @@ export async function awardXp({
     return { awarded: 0, xp: account?.xp ?? 0, level: account?.xpLevel ?? 1, rankedUp: false };
   }
 
+  return creditXp({ accountId, kind, dayKey, amount, note });
+}
+
+/**
+ * The write itself: the day's row, the member's total, and the rank that falls
+ * out of it.
+ *
+ * Held apart from `awardXp` so that deciding *how much* and writing *that much*
+ * are two jobs rather than one. Everything a member earns is capped on the way
+ * in; an admin's award is not, and both still land here, so `Account.xp` and
+ * `Account.xpLevel` keep the single writer this module exists to give them.
+ */
+async function creditXp({
+  accountId,
+  kind,
+  dayKey,
+  amount,
+  note,
+}: {
+  accountId: string;
+  kind: string;
+  dayKey: string;
+  amount: number;
+  note?: string | null;
+}): Promise<XpAwardResult> {
   const [, account] = await prisma.$transaction([
     prisma.xpEvent.upsert({
       where: { accountId_kind_dayKey: { accountId, kind, dayKey } },
@@ -104,6 +129,57 @@ export async function awardXp({
   }
 
   return { awarded: amount, xp: account.xp, level, rankedUp: level > account.xpLevel };
+}
+
+/**
+ * An admin handing a member XP directly.
+ *
+ * **The daily cap does not apply, and neither does the once-a-day rule.** A cap
+ * shapes what a member can earn by grinding, and this was not earned by
+ * grinding: it is a decision somebody made about this member, on this day, with
+ * their name on it. Trimming 500 down to the 15 left under the cap and
+ * returning success would be the worst available answer - the admin would be
+ * told it worked, the member would get a fraction, and nothing on either screen
+ * would say why. If an award should be refused it should be refused out loud,
+ * and there is nobody to refuse it to: the admin *is* the authority the cap
+ * defers to.
+ *
+ * What it does not do is get its own ledger. The award accumulates onto the
+ * day's row for its kind, like every other award, because `XpEvent` is one row
+ * per kind per day by design - the cap read and the once-a-day check are both
+ * that row existing. The consequence is real and worth stating: an admin award
+ * of a *capped* kind fills that kind's cap for the day, so the member's own
+ * earning of that kind is squeezed for the rest of it. That is why the panel
+ * shows each type's cap and what the member has already earned today beside the
+ * amount field - the trade is put in front of the admin rather than discovered
+ * by the member. Giving admin grants a ledger of their own means a second table
+ * or a wider unique index, and neither is worth buying before somebody has been
+ * bitten by this.
+ *
+ * `amount` is the admin's, already validated at the route boundary; `kind` is
+ * an `XpType.id` read from the database rather than an `XpAwardKind`, so a
+ * retired type can still be awarded deliberately.
+ */
+export async function awardXpAsAdmin({
+  accountId,
+  kind,
+  amount,
+  note,
+  now = new Date(),
+}: {
+  accountId: string;
+  kind: string;
+  amount: number;
+  note?: string | null;
+  now?: Date;
+}): Promise<XpAwardResult> {
+  return creditXp({
+    accountId,
+    kind,
+    dayKey: getVancouverDateKey(now),
+    amount,
+    note: note ?? null,
+  });
 }
 
 /** What a member has earned today, by kind, for showing a cap as it fills. */

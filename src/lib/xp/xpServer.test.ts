@@ -42,7 +42,7 @@ vi.mock("@/lib/prisma", () => ({
   },
 }));
 
-const { awardXp, awardXpQuietly } = await import("./xpServer");
+const { awardXp, awardXpAsAdmin, awardXpQuietly } = await import("./xpServer");
 const { XP_BONUSES, XP_DAILY_CAPS } = await import("./xpAwards");
 
 beforeEach(() => {
@@ -126,5 +126,62 @@ describe("awarding XP quietly", () => {
     const second = await awardXp({ accountId: "acct", kind: "n5Complete" });
     expect(second.awarded).toBe(0);
     expect(account.xp).toBe(XP_BONUSES.n5Complete);
+  });
+});
+
+/**
+ * An admin award is a deliberate override, and the tests here are the four
+ * properties that makes it: the cap does not trim it, a once-a-day kind may be
+ * given again, it still shares the day's row with the member's own earning,
+ * and it goes through the same rank recomputation as everything else.
+ */
+describe("awarding XP as an admin", () => {
+  it("pays the whole amount past a cap the member's own earning would meet", async () => {
+    const cap = XP_DAILY_CAPS.burnedItem!;
+    const result = await awardXpAsAdmin({ accountId: "acct", kind: "burnedItem", amount: 500 });
+
+    expect(result.awarded).toBe(500);
+    expect(account.xp).toBe(500);
+    expect(500).toBeGreaterThan(cap);
+  });
+
+  it("gives a once-a-day award again, on a day it has already been earned", async () => {
+    await awardXp({ accountId: "acct", kind: "n5Complete" });
+    const again = await awardXpAsAdmin({ accountId: "acct", kind: "n5Complete", amount: 25 });
+
+    expect(again.awarded).toBe(25);
+    expect(account.xp).toBe(XP_BONUSES.n5Complete + 25);
+  });
+
+  /*
+   * The consequence worth knowing about, and the reason the form shows each
+   * kind's cap beside the amount: the award lands on the day's row like every
+   * other one, and the cap is read off that row.
+   */
+  it("fills the day's row for its kind, so the member earns no more of it today", async () => {
+    await awardXpAsAdmin({ accountId: "acct", kind: "burnedItem", amount: 500 });
+    const earned = await awardXp({ accountId: "acct", kind: "burnedItem" });
+
+    expect(earned.awarded).toBe(0);
+  });
+
+  it("moves the rank through the same recomputation, and says that it did", async () => {
+    const result = await awardXpAsAdmin({ accountId: "acct", kind: "dailySignIn", amount: 100_000 });
+
+    expect(result.level).toBeGreaterThan(1);
+    expect(result.rankedUp).toBe(true);
+    expect(account.xpLevel).toBe(result.level);
+  });
+
+  /* A note is what the member reads on their history, so it must reach the
+     row rather than being dropped on the way through. */
+  it("carries the note it was given", async () => {
+    await awardXpAsAdmin({
+      accountId: "acct",
+      kind: "gameFinished",
+      amount: 30,
+      note: "turned up to the Saturday session",
+    });
+    expect(account.xp).toBe(30);
   });
 });

@@ -1,6 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 
 import { XP_AWARDS, XP_BONUSES, XP_DAILY_CAPS, XP_TYPE_NOTES } from "../src/lib/xp/xpAwards";
+import { XP_PROPOSED_AWARDS, XP_PROPOSED_NOTES } from "../src/lib/xp/xpProposedAwards";
+import priceOverrides from "../src/data/xpPriceOverrides.json";
 
 /**
  * Writes the XP economy into the database from the constants that define it.
@@ -23,35 +25,72 @@ async function main(): Promise<void> {
      of XP, so nothing downstream is told which map a row came out of. Both are
      read here so a new bonus cannot land without a row, which is how the first
      seeding run wrote nine types and silently missed eleven. */
-  const all = [...Object.entries(XP_AWARDS), ...Object.entries(XP_BONUSES)].map(([id, amount]) => ({
-    id,
-    amount: Number(amount),
-  }));
+  const all = [
+    ...Object.entries(XP_AWARDS),
+    ...Object.entries(XP_BONUSES),
+    /* Proposed but unwired: they seed so they can be seen and priced in the
+       admin screen, and none of them fires until something calls awardXp with
+       its key. A row with no caller costs nothing; a kind with no row cannot
+       be reviewed. */
+    ...Object.entries(XP_PROPOSED_AWARDS),
+  ].map(([id, amount]) => ({ id, amount: Number(amount) }));
 
+  /* Committed prices win over the constants. The admin screen decides what an
+     award is worth; `pnpm xp:prices:export` carries that decision into the
+     repository, and this is where it lands in every environment rather than
+     only the one it was made in. */
+  const overrides = (priceOverrides as { prices?: Record<string, { amount?: number; dailyCap?: number | null; label?: string; note?: string; retired?: boolean }> }).prices ?? {};
+
+  /* An amount an admin has priced from the site outranks the number in the
+     code. Without this, the next seed would silently undo every tuning
+     decision - which would make the table pointless, since being able to
+     retune without a deploy is the whole reason it exists. */
+  const priced = new Set(
+    (await prisma.xpType.findMany({ where: { pricedAt: { not: null } }, select: { id: true } })).map(
+      (row) => row.id,
+    ),
+  );
+
+  let repriced = 0;
   for (const entry of all) {
-    const note = XP_TYPE_NOTES[entry.id] ?? "";
-    const label = entry.id
+    const override = overrides[entry.id];
+    const note =
+      override?.note ?? XP_TYPE_NOTES[entry.id] ?? (XP_PROPOSED_NOTES as Record<string, string>)[entry.id] ?? "";
+    const amount = override?.amount ?? entry.amount;
+    const cap =
+      override?.dailyCap !== undefined
+        ? override.dailyCap
+        : ((XP_DAILY_CAPS as Record<string, number | undefined>)[entry.id] ?? null);
+    const label = override?.label ?? entry.id
       .replace(/([A-Z])/g, " $1")
       .replace(/^./, (character) => character.toUpperCase())
       .trim();
+    /* Skipped only while an edit is still *unexported*. Once it is in the
+       committed file the file is authoritative and writing it back is a
+       no-op - and if somebody has since edited the file by hand, that is a
+       decision the seed should carry, not one pricedAt should block. */
+    if (priced.has(entry.id) && !overrides[entry.id]) {
+      repriced += 1;
+      continue;
+    }
     await prisma.xpType.upsert({
       where: { id: entry.id },
       create: {
         id: entry.id,
         label,
         note,
-        amount: entry.amount,
+        amount,
         /* The base allowance. Games widen with the member's rank at award
            time, so this row is the floor rather than the whole truth - the
            note says so, and `xpAwardValue` is where the widening happens. */
-        dailyCap: (XP_DAILY_CAPS as Record<string, number | undefined>)[entry.id] ?? null,
+        dailyCap: cap,
       },
       update: {
         label,
         note,
-        amount: entry.amount,
-        dailyCap: (XP_DAILY_CAPS as Record<string, number | undefined>)[entry.id] ?? null,
-        retiredAt: null,
+        amount,
+        dailyCap: cap,
+        retiredAt: override?.retired ? new Date() : null,
       },
     });
   }
@@ -63,7 +102,12 @@ async function main(): Promise<void> {
     await prisma.xpType.updateMany({ where: { id: { in: retiring } }, data: { retiredAt: new Date() } });
   }
 
-  console.log(`XP types: ${all.length} written, ${retiring.length} retired.`);
+    const fromFile = all.filter((entry) => overrides[entry.id]).length;
+  console.log(
+    `XP types: ${all.length - repriced} written (${fromFile} priced from the committed file), ` +
+      `${repriced} held as unexported admin edits, ${retiring.length} retired.`,
+  );
+  if (repriced > 0) console.log("Run `pnpm xp:prices:export` to carry those into the repository.");
 }
 
 main()

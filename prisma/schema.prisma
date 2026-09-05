@@ -55,6 +55,26 @@ model Account {
   visibility               String?
   approvalStatus           String?
   approvedAt               DateTime?
+  /**
+   * Switched off by an admin, and why, and by whom.
+   *
+   * Not `approvalStatus`, deliberately. Rejection answers "should this person
+   * be let in", asked once at the door, and `approvedAt` is the record of that
+   * answer. Disabling happens to somebody already inside - an account being
+   * reissued, a member who asked for a break, an abuse report being looked at
+   * - and it has to be reversible without rewriting the approval history.
+   * Overloading `rejected` would have made re-enabling indistinguishable from
+   * approving, and would have told an established member on their own page
+   * that they were never let in.
+   *
+   * Null means enabled: a column added under existing rows must not switch
+   * anybody off, and the absence of a timestamp is the honest way to say
+   * nobody has ever done this. The reason is for the admin reading the account
+   * back in a month, not for the member.
+   */
+  disabledAt               DateTime?
+  disabledReason           String?
+  disabledBy               String?
   joinedByEmail            String?
   joinedByName             String?
   inviteCodeHash           String?
@@ -149,6 +169,12 @@ model Account {
   xp                  Int                @default(0)
   xpLevel             Int                @default(1)
   xpEvents            XpEvent[]
+  restDays            MemberRest[]
+  /// While set, the member is away: the streak is held and SRS due dates move
+  /// with them rather than piling up. Cleared on return, which is when the
+  /// queue is shifted forward by the length of the absence.
+  vacationStartedAt   DateTime?
+  vacationEndsAt      DateTime?
 
   internal               Boolean                 @default(false)
   jlptCertificates       JlptCertificate[]
@@ -1300,6 +1326,12 @@ model XpType {
   /// deliberate for reviews: capping study means telling somebody their work
   /// stopped counting.
   dailyCap  Int?
+  /// Set the first time an admin prices this kind from the site. Once set,
+  /// `xp:types:seed` stops overwriting the amount, cap, label and note - the
+  /// constants say which kinds exist, and a decision made here outranks the
+  /// number a developer typed. Without this the next seed would silently undo
+  /// every tuning decision.
+  pricedAt  DateTime?
   /// Retired kinds keep their rows, so old events still explain themselves.
   retiredAt DateTime?
   createdAt DateTime @default(now())
@@ -1347,4 +1379,41 @@ model XpEvent {
 
   @@unique([accountId, kind, dayKey])
   @@index([accountId, createdAt])
+}
+
+
+/// Why a day with no study still counted.
+enum MemberRestKind {
+  /// Spent automatically after the fact, to keep a streak alive.
+  rest
+  /// A planned absence. Freezes the SRS as well as the streak.
+  vacation
+}
+
+/// One day a member was away and not penalised for it.
+///
+/// A row per day rather than a period with two ends, for the same reason the
+/// streak is derived from days that exist: the streak calculation asks "was
+/// this day covered", and a row per day answers it directly instead of by
+/// arithmetic over ranges that can overlap, invert, or be left open by a
+/// process that died halfway.
+///
+/// A vacation writes its whole span up front, so the days are covered even if
+/// nothing runs again until the member returns.
+model MemberRest {
+  id        String         @id @default(cuid())
+  accountId String
+  /// Vancouver day, the same key XpEvent uses.
+  dayKey    String
+  kind      MemberRestKind
+  /// Groups the days of one vacation, so it can be described and cancelled as
+  /// the single decision it was.
+  periodId  String?
+  createdAt DateTime       @default(now())
+
+  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@unique([accountId, dayKey])
+  @@index([accountId, kind])
+  @@index([periodId])
 }
