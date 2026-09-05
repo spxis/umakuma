@@ -5252,11 +5252,23 @@
     "id": "confusable-warning-in-reviews",
     "name": "A warning in reviews before you get a look-alike wrong",
     "area": "study",
+    "status": "shipped",
     "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "Shipped as 0.459.0. The study surfaces draw a warning held to the twins the member can act on, rather than WaniKani's list of similar characters.",
+    "dateIsEstimate": false,
+    "version": "0.459.0",
+    "releasedAt": "2026-09-05T03:59:46Z"
+  },
+  {
+    "id": "repo-rule-fixes",
+    "name": "Three rules the repo states and did not follow",
+    "area": "platform",
+    "kind": "bug",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.459.0",
-    "releasedAt": "2026-09-05T03:59:46Z",
-    "summary": "Shipped as 0.459.0. The study surfaces draw a warning held to the twins the member can act on, rather than WaniKani's list of similar characters."
+    "version": "0.460.0",
+    "releasedAt": "2026-09-05T04:03:33Z",
+    "summary": "Three rules the repo states and did not follow"
   }
 ]
