@@ -5480,11 +5480,23 @@
     "id": "radical-name-one-way",
     "name": "The explorer names a radical the same way",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-05",
+    "summary": "The UmaKuma Explorer worked out radical names for itself instead of reading the ones the curriculum holds, so it left six of them blank and called \u4e59 the latter where a review card called it the fishhook. Both now ask the same question in the same place.",
+    "dateIsEstimate": false,
+    "version": "0.478.0",
+    "releasedAt": "2026-09-05T10:02:16Z"
+  },
+  {
+    "id": "radical-name-one-source",
+    "name": "One name, read from one place",
+    "area": "platform",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-05",
-    "version": "0.478.0",
-    "releasedAt": "2026-09-05T10:02:16Z",
-    "summary": "The UmaKuma Explorer worked out radical names for itself instead of reading the ones the curriculum holds, so it left six of them blank and called \u4e59 the latter where a review card called it the fishhook. Both now ask the same question in the same place."
+    "version": "0.479.0",
+    "releasedAt": "2026-09-05T18:39:29Z",
+    "summary": "A radical's name is decided once, where the curriculum is kept, and every page reads it from there. The explorer used to work out its own and could disagree with a review card about the same character."
   }
 ]

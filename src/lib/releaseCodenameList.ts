@@ -492,4 +492,5 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Yadoru Aidagara", ja: "宿る間柄", reading: "やどるあいだがら", gloss: "the kinship between the two names" },
   { romaji: "Yuzuru Honmyou", ja: "譲る本名", reading: "ゆずるほんみょう", gloss: "the true name, given back" },
   { romaji: "Yosomichi no Shuusoku", ja: "余所道の収束", reading: "よそみちのしゅうそく", gloss: "the second path folded into the first" },
+  { romaji: "Rakan no Minamoto", ja: "羅漢の源", reading: "らかんのみなもと", gloss: "the single source everything reads" },
 ];
