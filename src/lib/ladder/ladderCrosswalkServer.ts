@@ -9,6 +9,7 @@ import { getAllKanjiDictionaryEntries } from "@/lib/kanjiDictionary";
 import { prisma } from "@/lib/prisma";
 
 import { buildLadderCrosswalk, type LadderRow } from "./ladderCrosswalk";
+import { UK_SUBJECT_KINDS } from "./ladderSeedPlan";
 import { summarizeLadderLevels, type LadderLevelSummary } from "./ladderQuery";
 
 /**
@@ -63,21 +64,50 @@ async function loadWords(): Promise<Map<number, { characters: string; primaryMea
   return words;
 }
 
+/**
+ * What the curriculum calls each radical.
+ *
+ * Read rather than worked out. `UkSubject` is where a radical's name is
+ * decided - by the seed, through `radicalShapes` - and every surface that
+ * shows one reads it from there. This page used to derive its own from
+ * KANJIDIC and got a different answer: nothing at all for the six shapes the
+ * dictionary does not name, and the kanji's meaning where the radical has its
+ * own, so it called 乙 "the latter" while a review card called it the
+ * fishhook. Two derivations of one fact will always drift; there is one now.
+ */
+async function loadRadicalNames(): Promise<Map<string, string>> {
+  const rows = await prisma.ukSubject
+    .findMany({
+      where: { kind: UK_SUBJECT_KINDS.radical, removedAt: null },
+      select: { characters: true, meanings: true },
+    })
+    .catch(() => []);
+
+  const names = new Map<string, string>();
+  for (const row of rows) {
+    const name = row.meanings[0];
+    if (name) names.set(row.characters, name);
+  }
+  return names;
+}
+
 async function build(): Promise<Held> {
   const dictionary = new Map(
     getAllKanjiDictionaryEntries().map((entry) => [
       entry.kanji,
-      /* `meanings` too: a radical is named from the whole list, not the first. */
-      { primaryMeaning: entry.primaryMeaning, meanings: entry.meanings, schoolGrade: entry.grade, frequencyRank: entry.frequencyRank },
+      { primaryMeaning: entry.primaryMeaning, schoolGrade: entry.grade, frequencyRank: entry.frequencyRank },
     ]),
   );
+
+  const [words, radicalNames] = await Promise.all([loadWords(), loadRadicalNames()]);
 
   const rows = buildLadderCrosswalk({
     kanji: ladderData.kanjiLevel,
     radicals: ladderData.radicalLevel,
     vocabulary: ladderData.vocabularyLevel,
     dictionary,
-    words: await loadWords(),
+    words,
+    radicalNames,
     wordRank: loadWordRanks(),
   });
 

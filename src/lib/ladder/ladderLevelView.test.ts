@@ -19,6 +19,7 @@ const rows = buildLadderCrosswalk({
   radicals: { 口: 1, 一: 1, 日: 1 },
   vocabulary: { "2467": 1, "2468": 12 },
   dictionary: new Map(),
+  radicalNames: new Map([["口", "mouth"], ["一", "one"], ["日", "sun"]]),
   words: new Map([
     [2467, { characters: "これ", primaryMeaning: "this", wkLevel: 1 }],
     [2468, { characters: "日本語", primaryMeaning: "Japanese", wkLevel: 10 }],

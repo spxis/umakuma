@@ -186,15 +186,13 @@ export function radicalMeanings(
 }
 
 /**
- * The same rules, for a caller that can survive not knowing.
+ * The four steps, separated so the refusal above reads as the contract it is.
  *
- * One rule, two contracts. The seed writes the database and must refuse, so it
- * calls `radicalMeanings`; a view drawing a partial set - a crosswalk built
- * over a dictionary that holds three entries in a test - would rather print
- * nothing than stop. Both walk the same four steps, so a name cannot come out
- * two ways depending on who asked.
+ * Private: `UkSubject` is where a radical's name is decided, and everything
+ * that shows one reads it from there. Nothing else derives a name, which is
+ * the point - the explorer had its own derivation and drifted from this one.
  */
-export function radicalMeaningsOrNone(
+function radicalMeaningsOrNone(
   characters: string,
   fromDictionary: readonly string[] | undefined,
 ): string[] | null {

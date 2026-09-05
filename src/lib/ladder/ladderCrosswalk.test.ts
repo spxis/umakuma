@@ -24,6 +24,8 @@ const input: LadderCrosswalkInput = {
     ["苺", { primaryMeaning: "strawberry", schoolGrade: null, frequencyRank: 2000 }],
     ["口", { primaryMeaning: "mouth", schoolGrade: 1, frequencyRank: 320 }],
   ]),
+  /* The curriculum's names, which is where every surface reads them from. */
+  radicalNames: new Map([["口", "mouth"]]),
   words: new Map([[2467, { characters: "一つ", primaryMeaning: "one thing", wkLevel: 2 }]]),
   wordRank: { "2467": 88 },
 };
@@ -109,6 +111,7 @@ describe("the shape of the ladder", () => {
       radicals: ladderData.radicalLevel,
       vocabulary: {},
       dictionary: new Map(),
+      radicalNames: new Map(),
       words: new Map(),
       wordRank: {},
     });
@@ -125,6 +128,7 @@ describe("the shape of the ladder", () => {
       radicals: {},
       vocabulary: {},
       dictionary: new Map(),
+      radicalNames: new Map(),
       words: new Map(),
       wordRank: {},
     });

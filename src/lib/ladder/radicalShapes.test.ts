@@ -1,3 +1,5 @@
+import { execFileSync } from "node:child_process";
+
 import { readFileSync } from "node:fs";
 
 import { describe, expect, it } from "vitest";
@@ -221,31 +223,51 @@ describe("the shipped ladder, after the reordering", () => {
   });
 });
 
-describe("the two contracts over one rule", () => {
-  /* The explorer named its radicals a second way and the second way drifted:
-     it showed 乙 as "the latter" and drew nothing at all for the six shapes
-     the dictionary does not name, while the seed had both right. */
-  it("answers the same for a caller that can survive not knowing", async () => {
-    const { radicalMeaningsOrNone } = await import("./radicalShapes");
-    for (const [shape, words] of [
-      ["乙", ["the latter", "fishhook radical (no. 5)"]],
-      ["ノ", []],
-      ["大", ["large", "big"]],
-    ] as const) {
-      expect(radicalMeaningsOrNone(shape, words)).toEqual(radicalMeanings(shape, words));
-    }
-  });
-
-  it("returns nothing rather than refusing, where a blank is survivable", async () => {
-    const { radicalMeaningsOrNone } = await import("./radicalShapes");
-    expect(radicalMeaningsOrNone("鬯", [])).toBeNull();
-    expect(() => radicalMeanings("鬯", [])).toThrow();
-  });
-
-  it("is the only place the explorer names a radical", async () => {
+describe("one name, read from one place", () => {
+  /* John: "we fix in one place and then reading anywhere would show that."
+     UkSubject is that place. The seed writes it through these rules; every
+     surface reads the row. The explorer used to derive its own and drifted -
+     it called 乙 the latter where a review card called it the fishhook. */
+  it("is not derived a second time by the explorer", () => {
     const crosswalk = readFileSync("src/lib/ladder/ladderCrosswalk.ts", "utf8");
-    expect(crosswalk).toContain("radicalMeaningsOrNone(characters, words)");
-    /* The dictionary's first meaning is the kanji's, not the radical's. */
-    expect(crosswalk).not.toContain("primaryMeaning: entry?.primaryMeaning ?? null,\n    source: LADDER_SOURCES.radkfile");
+    expect(crosswalk).toContain("input.radicalNames.get(characters)");
+    expect(crosswalk).not.toContain("radicalShapes");
+    expect(crosswalk).not.toContain("entry?.primaryMeaning ?? null,\n    source: LADDER_SOURCES.radkfile");
+  });
+
+  it("is read from the curriculum table, not worked out again", () => {
+    const server = readFileSync("src/lib/ladder/ladderCrosswalkServer.ts", "utf8");
+    expect(server).toContain("prisma.ukSubject");
+    expect(server).toContain("radicalNames");
+  });
+
+  /* The naming rules stay in one module and only the seed calls them, so
+     there is exactly one writer and no second opinion. */
+  it("keeps the rules to the one writer", () => {
+    const callers = execFileSync(
+      "git",
+      ["grep", "-l", "radicalMeanings", "--", "src", "scripts"],
+      { encoding: "utf8" },
+    )
+      .split("\n")
+      .filter(Boolean)
+      .filter((file) => !file.includes(".test."));
+    expect(callers.sort()).toEqual(["src/lib/ladder/ladderSeedPlan.ts", "src/lib/ladder/radicalShapes.ts"]);
   });
 });
+
+describe("the shipped ladder, after the reordering", () => {
+  it("prints no index gloss and no bare numbering at any radical", async () => {
+    const { ladderSeedPlan } = await import("../../../scripts/uk-subjects-plan");
+    const radicals = ladderSeedPlan().rows.filter((row) => row.kind === "radical");
+
+    const glossy = radicals.filter((row) => /radical\s*(?:variant\s*)?\(no\.?\s*\d+\)/i.test(row.meanings[0] ?? ""));
+    expect(glossy.map((row) => `${row.characters}: ${row.meanings[0]}`)).toEqual([]);
+
+    /* Nowhere in the alternates either - the numbering is the index talking
+       about itself and belongs on no card. */
+    const anywhere = radicals.filter((row) => row.meanings.some((m) => /\(no\.?\s*\d+\)/i.test(m)));
+    expect(anywhere.map((row) => row.characters)).toEqual([]);
+  });
+});
+
