@@ -98,6 +98,25 @@ export const XP_RANK_COPY = {
 } as const;
 
 /**
+ * The XP line in the profile's own header.
+ *
+ * Says the same three facts the rank card below says at length - the total,
+ * the rung, what is left - in one line, because the header is read at a glance
+ * and the card is read on purpose. Asked for in this shape by John on
+ * 2026-09-05: "50000 XP (L10 Black Belt)".
+ */
+export const PROFILE_XP_HEADLINE_COPY = {
+  label: "XP",
+  total: (xp: number) => `${xp.toLocaleString()} XP`,
+  /** `L10 Elder`. The rung is bare because the total beside it says XP. */
+  rank: (badge: string, name: string) => `${badge} ${name}`,
+  toNext: (amount: number, name: string) => `${amount.toLocaleString()} XP to ${name}`,
+  atTop: "The top of the ladder",
+  title: (level: number, name: string, total: number) =>
+    `Rank ${level}, ${name} — ${total.toLocaleString()} XP earned in all`,
+} as const;
+
+/**
  * Copy for the five-question theme finder.
  *
  * Every label is keyed by the tag it sets, so the questionnaire draws itself

@@ -29,6 +29,7 @@ import { parseStudyPreferences, suggestedPresetFor } from "@/lib/srs/studyPrefer
 
 import StudyPreferencesPanel from "./StudyPreferencesPanel";
 import ThemePicker from "./ThemePicker";
+import ProfileXpHeadline from "./ProfileXpHeadline";
 import XpRankPanel from "./XpRankPanel";
 import { JLPT_STATUS_LABELS, PROFILE_COPY } from "./profileCopy";
 
@@ -138,6 +139,7 @@ export default async function UserProfilePage({ params }: PageProps) {
         icon={MEMBER_PAGE_HEADERS.profile.icon}
         title={name}
         subtitle={PROFILE_COPY.heading}
+        actions={<ProfileXpHeadline xp={account.xp} />}
         className="mb-4"
       />
 
