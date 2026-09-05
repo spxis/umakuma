@@ -1,3 +1,9 @@
+import { queueItemLevel } from "@/lib/studyQueueSummary";
+
+/* Levels come from `queueItemLevel`, never `item.wkLevel`: a UmaKuma item has
+   `ukLevel` and no `wkLevel`, so asking WaniKani's skipped every one of them
+   and the filter row drew "ALL (0)", no chips, and matched nothing. */
+
 import { useMemo } from "react";
 
 import type {
@@ -106,11 +112,9 @@ export function useStudyExplorerDerivedData({
       if (!effectiveShowLocked && item.status === STUDY_WK_STATUSES.locked) {
         continue;
       }
-      if (typeof item.wkLevel !== "number") {
-        continue;
-      }
-
-      countsByLevel[item.wkLevel] = (countsByLevel[item.wkLevel] ?? 0) + 1;
+      const level = queueItemLevel(item);
+      if (level === null) continue;
+      countsByLevel[level] = (countsByLevel[level] ?? 0) + 1;
     }
 
     return countsByLevel;
@@ -197,7 +201,8 @@ export function useStudyExplorerDerivedData({
 
     for (const item of loadedItems) {
       if (effectiveRecentOnly && !isRecentStudyItem(item)) continue;
-      if (item.queueType === queueMode && typeof item.wkLevel === "number") output.add(item.wkLevel);
+      const level = queueItemLevel(item);
+      if (item.queueType === queueMode && level !== null) output.add(level);
     }
 
     return output;
@@ -245,11 +250,9 @@ export function useStudyExplorerDerivedData({
       if (!effectiveShowLocked && item.status === STUDY_WK_STATUSES.locked) {
         continue;
       }
-      if (typeof item.wkLevel !== "number") {
-        continue;
-      }
-
-      countsByLevel[item.wkLevel] = (countsByLevel[item.wkLevel] ?? 0) + 1;
+      const level = queueItemLevel(item);
+      if (level === null) continue;
+      countsByLevel[level] = (countsByLevel[level] ?? 0) + 1;
     }
 
     return countsByLevel;
@@ -302,7 +305,7 @@ export function useStudyExplorerDerivedData({
     for (const item of loadedItems) {
       if (effectiveRecentOnly && !isRecentStudyItem(item)) continue;
       if (item.queueType !== queueMode) continue;
-      if (viewedLevel !== null && item.wkLevel !== viewedLevel) continue;
+      if (viewedLevel !== null && queueItemLevel(item) !== viewedLevel) continue;
       if (!isAllStudySrsFilter(effectiveSrsFilter) && item.status !== effectiveSrsFilter) continue;
       if (effectiveSrsStageFilter !== null && item.srsStage !== effectiveSrsStageFilter) continue;
       if (!effectiveShowLocked && item.status === STUDY_WK_STATUSES.locked) continue;
@@ -357,7 +360,7 @@ export function useStudyExplorerDerivedData({
     for (const item of loadedItems) {
       if (effectiveRecentOnly && !isRecentStudyItem(item)) continue;
       if (item.queueType !== queueMode) continue;
-      if (viewedLevel !== null && item.wkLevel !== viewedLevel) continue;
+      if (viewedLevel !== null && queueItemLevel(item) !== viewedLevel) continue;
       if (!isAllStudyTypeFilter(typeFilter) && item.subjectType !== typeFilter) continue;
       if (!effectiveShowLocked && item.status === STUDY_WK_STATUSES.locked) continue;
 
@@ -410,7 +413,7 @@ export function useStudyExplorerDerivedData({
     for (const item of loadedItems) {
       if (effectiveRecentOnly && !isRecentStudyItem(item)) continue;
       if (item.queueType !== queueMode) continue;
-      if (viewedLevel !== null && item.wkLevel !== viewedLevel) continue;
+      if (viewedLevel !== null && queueItemLevel(item) !== viewedLevel) continue;
       if (!isAllStudyTypeFilter(typeFilter) && item.subjectType !== typeFilter) continue;
       if (!effectiveShowLocked && item.status === STUDY_WK_STATUSES.locked) continue;
 
