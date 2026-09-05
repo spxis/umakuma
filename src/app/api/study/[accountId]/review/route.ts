@@ -15,6 +15,10 @@ import { emitSumilabuTelemetry } from "@/lib/sumilabuTelemetry";
 import { WK_STATUSES, type WkStatus, REVIEW_RESULTS } from "@/lib/domainConstants";
 import { srsLabel } from "@/lib/wanikani/helpers";
 import { postWaniKani } from "@/lib/wanikani/http";
+import { SRS_BURNED_STAGE } from "@/lib/srs/srsSchedule";
+import { settleDailyXp } from "@/lib/xp/xpDayServer";
+import { awardXpQuietly } from "@/lib/xp/xpServer";
+import { reviewXpAwards } from "@/lib/xp/xpStudyAwards";
 
 type RouteContext = {
   params: Promise<{ accountId: string }>;
@@ -266,6 +270,23 @@ export async function POST(request: Request, context: RouteContext) {
     const transition = transitionDirection({ previousGrouping, newGrouping });
 
     clearStudyQueueCache(accountId);
+
+    /* A review is a review whichever feed it came from: an answer on the
+       WaniKani queue pays the same participation XP as one on the UK ladder.
+       This route never moves a UK level, so before and after are the same
+       and no level award can fire. Quiet, after the write, like the UK one. */
+    const now = new Date();
+    await awardXpQuietly({
+      accountId,
+      requests: reviewXpAwards({
+        correct: incorrect === 0,
+        burnedNow: newSrsStage === SRS_BURNED_STAGE && (previousSrsStage ?? 0) < SRS_BURNED_STAGE,
+        levelBefore: 0,
+        levelAfter: 0,
+      }),
+      now,
+    });
+    await settleDailyXp({ accountId, now });
 
     return NextResponse.json({
       ok: true,
