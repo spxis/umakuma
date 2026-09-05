@@ -290,6 +290,7 @@ export function editAppVersion(
   published: string,
   version: string,
   day: string,
+  release: number,
 ): PlannedEdit {
   const from = `export const APP_VERSION = "${published}";`;
   if (!text.includes(from)) {
@@ -300,7 +301,10 @@ export function editAppVersion(
     file,
     contents: text
       .replace(from, `export const APP_VERSION = "${version}";`)
-      .replace(/export const APP_VERSION_DATE = "[\d-]+";/, `export const APP_VERSION_DATE = "${day}";`),
+      .replace(/export const APP_VERSION_DATE = "[\d-]+";/, `export const APP_VERSION_DATE = "${day}";`)
+      /* The count as well as the number: the version stopped carrying it, and
+         the footer needs it to say what this release is called. */
+      .replace(/export const APP_VERSION_RELEASE = \d+;/, `export const APP_VERSION_RELEASE = ${release};`),
   };
 }
 

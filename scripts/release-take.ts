@@ -240,6 +240,7 @@ async function main(): Promise<void> {
       published,
       version,
       getVancouverDateKey(now),
+      release,
     ),
     editReplacingOnce(
       PACKAGE_FILE,

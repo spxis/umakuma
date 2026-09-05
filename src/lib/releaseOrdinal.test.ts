@@ -82,3 +82,15 @@ describe("the codenames survive the renumbering", () => {
     expect(APP_VERSION_RELEASE).toBe(last.release);
   });
 });
+
+describe("the take keeps all four numbers together", () => {
+  /* The count is written in two places - the entry and the footer - and only
+     the entry was being updated, so the first release after the renumbering
+     failed the gate rather than shipping with a stale count. */
+  it("rewrites the footer's release alongside its version", () => {
+    const lib = readFileSync("src/lib/releaseTake.ts", "utf8");
+    expect(lib).toContain("APP_VERSION_RELEASE = ${release};");
+    const script = readFileSync("scripts/release-take.ts", "utf8");
+    expect(script).toContain("getVancouverDateKey(now),\n      release,");
+  });
+});

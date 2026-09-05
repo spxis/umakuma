@@ -160,11 +160,14 @@ describe("working out the edits before writing any of them", () => {
   it("moves the version and the day it shipped together", () => {
     const text = [
       'export const APP_VERSION = "0.10.0";',
+      'export const APP_VERSION_RELEASE = 12;',
       'export const APP_VERSION_DATE = "2026-01-01";',
     ].join("\n");
-    const edit = editAppVersion("appVersion.ts", text, "0.10.0", "0.11.0", "2026-09-03");
+    const edit = editAppVersion("appVersion.ts", text, "0.10.0", "0.11.0", "2026-09-05", 500);
     expect(edit.contents).toContain('APP_VERSION = "0.11.0"');
-    expect(edit.contents).toContain('APP_VERSION_DATE = "2026-09-03"');
+    expect(edit.contents).toContain('APP_VERSION_DATE = "2026-09-05"');
+    /* And the count, which the version no longer carries. */
+    expect(edit.contents).toContain("APP_VERSION_RELEASE = 500;");
   });
 
   /*
@@ -175,7 +178,7 @@ describe("working out the edits before writing any of them", () => {
    */
   it("refuses when somebody else has shipped since you started", () => {
     const text = 'export const APP_VERSION = "0.12.0";';
-    expect(() => editAppVersion("appVersion.ts", text, "0.10.0", "0.11.0", "2026-09-03")).toThrow(
+    expect(() => editAppVersion("appVersion.ts", text, "0.10.0", "0.11.0", "2026-09-05", 500)).toThrow(
       /does not hold 0\.10\.0/,
     );
   });
