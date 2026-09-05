@@ -5072,11 +5072,23 @@
     "id": "admin-member-screen",
     "name": "Admin member screen",
     "area": "admin",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "Admin member screen",
+    "dateIsEstimate": false,
+    "version": "0.444.0",
+    "releasedAt": "2026-09-05T01:47:20Z"
+  },
+  {
+    "id": "xp-pricing",
+    "name": "Price XP from the site",
+    "area": "admin",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.444.0",
-    "releasedAt": "2026-09-05T01:47:20Z",
-    "summary": "Admin member screen"
+    "version": "0.445.0",
+    "releasedAt": "2026-09-05T01:47:22Z",
+    "summary": "Price XP from the site"
   }
 ]
