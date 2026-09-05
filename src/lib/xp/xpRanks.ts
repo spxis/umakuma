@@ -91,3 +91,28 @@ export function xpRanks(): XpRank[] {
 export function xpRanksAreNamed(): boolean {
   return byLevel.size === XP_RANKS;
 }
+
+/**
+ * `L` belongs to the XP ladder. The curriculum ones are `WK` and `UK`.
+ *
+ * `levelBadge.ts` exists because a naked `L17` on a subject was a question
+ * with two answers, and the fix was to prefix both curriculum ladders. That
+ * left `L` free, and John reserved it here on 2026-09-05: a rank is never
+ * drawn on a subject, so the one place a bare L can appear is the XP ladder,
+ * where `XP10` beside `50,000 XP` would read as a second number rather than a
+ * rung.
+ *
+ * So the three prefixes divide cleanly - `WK` and `UK` for what you have
+ * learned, `L` for what you have turned up for - and none of them needs
+ * explaining next to the others.
+ *
+ * Written as a concatenation rather than a template so the guard in
+ * `levelBadge.test.ts` still catches a *level* drawn without its system, which
+ * is the thing that rule is actually for.
+ */
+export const XP_RANK_PREFIX = "L";
+
+/** `L10`. The rung, for a line that has already said XP. */
+export function xpRankBadge(level: number): string {
+  return XP_RANK_PREFIX + String(xpRank(level).level);
+}

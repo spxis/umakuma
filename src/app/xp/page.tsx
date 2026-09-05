@@ -12,7 +12,8 @@ import { viewerKind } from "@/lib/accountListing";
 import { authOptions, isAdminEmail } from "@/lib/auth";
 
 import XpBoardRows from "./XpBoardRows";
-import { XP_BOARD_COPY } from "./xpBoardCopy";
+import XpLadderChart from "./XpLadderChart";
+import { XP_BOARD_COPY, XP_LADDER_COPY } from "./xpBoardCopy";
 import { loadXpBoard } from "./lib/xpBoardServer";
 import { xpBoardPlacement } from "./lib/xpBoard";
 
@@ -55,7 +56,7 @@ export default async function XpBoardPage() {
   return (
     <div className={`${PAGE_WIDTH.wide} ${PAGE_SHELL_PADDING}`}>
       <PublicPageHeader />
-      <main className={PAGE_WIDTH.reading}>
+      <main className={PAGE_WIDTH.wide}>
         <MemberPageHeader
           icon={DASHBOARD_PAGE_HEADERS.stats.icon}
           title={XP_BOARD_COPY.title}
@@ -85,21 +86,34 @@ export default async function XpBoardPage() {
           </p>
         ) : null}
 
-        <section className="overflow-hidden rounded-2xl border border-line bg-surface">
-          {entries.length === 0 ? (
-            <div className="p-8 text-center">
-              <p className="text-base font-black text-foreground">{XP_BOARD_COPY.empty}</p>
-              <p className="mt-1 text-sm font-semibold text-foreground/70">
-                {XP_BOARD_COPY.emptyHint}
-              </p>
-            </div>
-          ) : (
-            <XpBoardRows
-              entries={entries}
-              viewer={{ isAdmin, address, accountId: viewerMenuInfo?.accountId ?? null }}
-            />
-          )}
-        </section>
+        {/*
+          * Two columns from `lg` up: who is climbing on the left, what they
+          * are climbing on the right. Stacked below that, standings first -
+          * on a phone the board is what somebody opened this page for, and
+          * the ladder is what they scroll to.
+          */}
+        <div className="grid gap-3 lg:grid-cols-2 lg:items-start">
+          <section className="overflow-hidden rounded-2xl border border-line bg-surface">
+            <h2 className="border-b border-line px-4 py-3 text-base font-black text-foreground">
+              {XP_LADDER_COPY.standings}
+            </h2>
+            {entries.length === 0 ? (
+              <div className="p-8 text-center">
+                <p className="text-base font-black text-foreground">{XP_BOARD_COPY.empty}</p>
+                <p className="mt-1 text-sm font-semibold text-foreground/70">
+                  {XP_BOARD_COPY.emptyHint}
+                </p>
+              </div>
+            ) : (
+              <XpBoardRows
+                entries={entries}
+                viewer={{ isAdmin, address, accountId: viewerMenuInfo?.accountId ?? null }}
+              />
+            )}
+          </section>
+
+          <XpLadderChart xp={own?.xp ?? null} />
+        </div>
       </main>
     </div>
   );

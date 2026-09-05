@@ -23,6 +23,38 @@ export const XP_BOARD_COPY = {
   history: "Your XP history",
 } as const;
 
+/**
+ * What the ladder chart says.
+ *
+ * Its own map beside the board's rather than folded into it: the board is
+ * about people and this is about the ladder they are climbing, and a locale
+ * layer will want to move one without reading the other.
+ */
+export const XP_LADDER_COPY = {
+  title: "The ladder",
+  blurb:
+    "Every rank and what it asks for. The cost is that rank alone; the total is everything it took to stand there.",
+  standings: "Standings",
+  columnRank: "Rank",
+  columnCost: "Costs",
+  columnTotal: "Total",
+  /* A rank nobody pays for wants a word rather than a zero: 0 XP in a column
+     of prices reads as a bug, where "Start" reads as the fact it is. */
+  start: "Start",
+  amount: (xp: number) => `${xp.toLocaleString()} XP`,
+  here: "You",
+  whereYouAre: "Where you are",
+  previousRung: "Passed",
+  currentRung: "Now",
+  nextRung: "Next",
+  everyRung: "Every rank",
+  hereTitle: (level: number, name: string) => `You are rank ${level}, ${name}`,
+  reachedTitle: (level: number, name: string) => `Rank ${level}, ${name} — passed`,
+  aheadTitle: (level: number, name: string) => `Rank ${level}, ${name}`,
+  shape: (ranks: number, total: number) =>
+    `${ranks} ranks, ${total.toLocaleString()} XP from the first day to the last.`,
+} as const;
+
 /** `1` -> `1st`. Only used for a placing, so only ever a small number. */
 export function ordinal(value: number): string {
   const tens = value % 100;
