@@ -5403,5 +5403,16 @@
     "dateIsEstimate": false,
     "version": "0.471.0",
     "releasedAt": "2026-09-05T08:17:29Z"
+  },
+  {
+    "id": "xp-ladder-chart",
+    "name": "XP ladder chart beside the XP board",
+    "area": "account",
+    "kind": "feature",
+    "status": "shipped",
+    "date": "2026-09-05",
+    "version": "0.472.0",
+    "releasedAt": "2026-09-05T09:05:06Z",
+    "summary": "Two columns on /xp: the standings one side, the levels info the other - what each rank costs, its running total and its name, with the viewer's own rank marked."
   }
 ]
