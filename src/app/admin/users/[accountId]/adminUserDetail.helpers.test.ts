@@ -2,17 +2,26 @@ import { describe, expect, it } from "vitest";
 
 import { ACCOUNT_APPROVAL } from "@/lib/accountApproval";
 import { ACCOUNT_VISIBILITY } from "@/lib/accountVisibility";
-import type { AdminAccountDetail, AdminXpTypeOption } from "@/lib/adminAccountDetail.types";
+import type {
+  AdminAccountDetail,
+  AdminActivitySummary,
+  AdminRestStanding,
+  AdminXpTypeOption,
+} from "@/lib/adminAccountDetail.types";
 import { AGE_BANDS } from "@/lib/srs/ageBand";
 
 import { ADMIN_USER_DETAIL_COPY as COPY } from "./AdminUserDetail.constants";
 import {
   accountFacts,
+  activityFacts,
   capLine,
   capWarning,
   editDraftFrom,
   editPatchFrom,
+  lastActiveLine,
   standingLine,
+  usedOfAllowedLine,
+  vacationState,
 } from "./adminUserDetail.helpers";
 
 function account(overrides: Partial<AdminAccountDetail> = {}): AdminAccountDetail {
@@ -190,5 +199,128 @@ describe("capWarning", () => {
     expect(capWarning(xpType(), Number.NaN)).toBeNull();
     expect(capWarning(xpType(), 0)).toBeNull();
     expect(capWarning(null, 50)).toBeNull();
+  });
+});
+
+function activity(overrides: Partial<AdminActivitySummary> = {}): AdminActivitySummary {
+  return {
+    currentStreak: 12,
+    longestStreak: 40,
+    activeToday: true,
+    lastActiveDay: "2026-09-04",
+    daysSinceLastActive: 0,
+    daysActive: 90,
+    totalXp: 4200,
+    averagePerActiveDay: 47,
+    bestDay: { dayKey: "2026-08-01", amount: 260 },
+    ...overrides,
+  };
+}
+
+function rest(overrides: Partial<AdminRestStanding> = {}): AdminRestStanding {
+  return {
+    restDaysEarned: 12,
+    restDaysGranted: 0,
+    restDaysAllowed: 12,
+    restDaysUsed: 3,
+    restDaysLeft: 9,
+    vacationWeeksAllowed: 2,
+    vacationDaysEarned: 14,
+    vacationDaysGranted: 0,
+    vacationDaysAllowed: 14,
+    vacationDaysUsed: 0,
+    vacationDaysLeft: 14,
+    onVacation: false,
+    vacationStartedAt: null,
+    vacationEndsAt: null,
+    ...overrides,
+  };
+}
+
+describe("lastActiveLine", () => {
+  it("says today, yesterday, or how long it has been", () => {
+    expect(lastActiveLine(activity({ daysSinceLastActive: 0 }))).toBe(COPY.activity.today);
+    expect(lastActiveLine(activity({ daysSinceLastActive: 1 }))).toBe(COPY.activity.yesterday);
+    expect(lastActiveLine(activity({ daysSinceLastActive: 14 }))).toBe(COPY.activity.daysAgo(14));
+  });
+
+  it("says never rather than nothing for a member who has not started", () => {
+    expect(lastActiveLine(activity({ daysSinceLastActive: null, lastActiveDay: null }))).toBe(COPY.activity.never);
+  });
+});
+
+describe("usedOfAllowedLine", () => {
+  it("leaves the granted note off when nothing was granted", () => {
+    expect(usedOfAllowedLine(3, 12, 0)).toBe(COPY.activity.usedOfAllowed(3, 12));
+  });
+
+  /* An admin needs to see that part of an allowance was handed over rather
+     than earned, or a generous-looking number reads as the rules being wrong. */
+  it("says how much of the allowance was granted", () => {
+    expect(usedOfAllowedLine(3, 22, 10)).toContain("10");
+  });
+});
+
+describe("vacationState", () => {
+  it("is quiet about a member who is not away", () => {
+    expect(vacationState(rest())).toMatchObject({ status: "home", endable: false, lines: [] });
+  });
+
+  it("leads with the return date, which is the fact being looked for", () => {
+    const away = vacationState(
+      rest({
+        onVacation: true,
+        vacationStartedAt: "2026-09-01T00:00:00.000Z",
+        vacationEndsAt: "2026-09-15T00:00:00.000Z",
+      }),
+    );
+    expect(away.status).toBe("away");
+    expect(away.endable).toBe(true);
+    expect(away.lines[0]).toContain("Back on");
+  });
+
+  /*
+   * The state worth having a name for. Nothing runs on its own to close a
+   * vacation - `endVacation` is called, not scheduled - so a span whose end
+   * date has passed leaves the member home with an unshifted queue while every
+   * other screen has gone back to normal. Collapsing it into "not away" would
+   * hide the one case an admin has to act on.
+   */
+  it("flags a vacation whose end date has passed but which nobody ended", () => {
+    const overdue = vacationState(
+      rest({
+        onVacation: false,
+        vacationStartedAt: "2026-08-01T00:00:00.000Z",
+        vacationEndsAt: "2026-08-15T00:00:00.000Z",
+      }),
+    );
+    expect(overdue.status).toBe("overdue");
+    expect(overdue.endable).toBe(true);
+    expect(overdue.lines[0]).toBe(COPY.activity.awayOverdue);
+  });
+});
+
+describe("activityFacts", () => {
+  it("puts the streak, the last visit and both allowances on the grid", () => {
+    const facts = activityFacts(account(), activity(), rest());
+    const labels = facts.map((fact) => fact.label);
+    expect(labels).toContain(COPY.activity.currentStreak);
+    expect(labels).toContain(COPY.activity.lastActive);
+    expect(labels).toContain(COPY.activity.restDays);
+    expect(labels).toContain(COPY.activity.vacationDays);
+  });
+
+  it("says whether today already counts, so a streak at risk is visible", () => {
+    const counted = activityFacts(account(), activity({ activeToday: true }), rest());
+    const atRisk = activityFacts(account(), activity({ activeToday: false }), rest());
+    const streakOf = (facts: ReturnType<typeof activityFacts>) =>
+      facts.find((fact) => fact.label === COPY.activity.currentStreak)?.value ?? "";
+    expect(streakOf(counted)).toContain(COPY.activity.streakToday);
+    expect(streakOf(atRisk)).toContain(COPY.activity.streakAtRisk);
+  });
+
+  it("does not pretend a member with no history has a best day", () => {
+    const facts = activityFacts(account(), activity({ bestDay: null }), rest());
+    expect(facts.find((fact) => fact.label === COPY.activity.bestDay)?.value).toBe(COPY.facts.none);
   });
 });

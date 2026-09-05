@@ -9,10 +9,12 @@ import AdminFeedbackProvider from "@/app/admin/AdminFeedbackProvider";
 
 import { ADMIN_USER_DETAIL_COPY as COPY, ADMIN_USER_DETAIL_STYLES as S } from "./AdminUserDetail.constants";
 import AdminUserActions from "./AdminUserActions";
+import AdminUserActivity from "./AdminUserActivity";
 import AdminUserEditForm from "./AdminUserEditForm";
 import AdminUserFacts from "./AdminUserFacts";
 import AdminUserLadder from "./AdminUserLadder";
 import AdminUserStanding from "./AdminUserStanding";
+import AdminUserTimeOff from "./AdminUserTimeOff";
 import AdminUserXpAward from "./AdminUserXpAward";
 
 /**
@@ -86,12 +88,19 @@ export default function AdminUserDetail({ accountId }: { accountId: string }) {
         </div>
 
         <AdminUserFacts account={payload.account} />
+        <AdminUserActivity account={payload.account} activity={payload.activity} rest={payload.rest} />
         <AdminUserEditForm key={`edit-${revision}`} {...section} />
         <AdminUserXpAward
           key={`xp-${revision}`}
           {...section}
           xpTypes={payload.xpTypes}
           recentXpEvents={payload.recentXpEvents}
+        />
+        <AdminUserTimeOff
+          key={`timeoff-${revision}`}
+          {...section}
+          rest={payload.rest}
+          grants={payload.restGrants}
         />
         <AdminUserStanding key={`standing-${revision}`} {...section} />
         <AdminUserLadder key={`ladder-${revision}`} {...section} />

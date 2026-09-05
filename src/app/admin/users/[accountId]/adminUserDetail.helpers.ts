@@ -1,7 +1,12 @@
 import { ACCOUNT_APPROVAL_DISPLAY, resolveApproval } from "@/lib/accountApproval";
 import { ACCOUNT_VISIBILITY_DISPLAY, resolveVisibility } from "@/lib/accountVisibility";
-import type { AdminAccountDetail, AdminXpTypeOption } from "@/lib/adminAccountDetail.types";
-import { formatDateTimeShort } from "@/lib/timeFormat";
+import type {
+  AdminAccountDetail,
+  AdminActivitySummary,
+  AdminRestStanding,
+  AdminXpTypeOption,
+} from "@/lib/adminAccountDetail.types";
+import { formatDateShort, formatDateTimeShort } from "@/lib/timeFormat";
 
 import { ADMIN_USER_DETAIL_COPY as COPY } from "./AdminUserDetail.constants";
 import type { AdminUserEditDraft, AdminUserFact } from "./AdminUserDetail.types";
@@ -127,4 +132,104 @@ export function capWarning(type: AdminXpTypeOption | null, amount: number): stri
     return null;
   }
   return type.earnedToday + amount > type.dailyCap ? COPY.xp.capWarning(type.label) : null;
+}
+
+/**
+ * How long ago they were last here, in words.
+ *
+ * The single most useful number on this screen for a family site: a member who
+ * has not appeared in a fortnight is worth knowing about while there is still
+ * something to be done about it. "14 days ago" reads at a glance where a date
+ * has to be subtracted from today first.
+ */
+export function lastActiveLine(activity: AdminActivitySummary): string {
+  if (activity.daysSinceLastActive === null) return COPY.activity.never;
+  if (activity.daysSinceLastActive <= 0) return COPY.activity.today;
+  if (activity.daysSinceLastActive === 1) return COPY.activity.yesterday;
+  return COPY.activity.daysAgo(activity.daysSinceLastActive);
+}
+
+/** "3 of 14 used (includes 7 granted)", or without the tail when none was. */
+export function usedOfAllowedLine(used: number, allowed: number, granted: number): string {
+  const base = COPY.activity.usedOfAllowed(used, allowed);
+  return granted > 0 ? `${base} (${COPY.activity.grantedNote(granted)})` : base;
+}
+
+/**
+ * The three states a vacation can be in, and only one of them is "away".
+ *
+ * The third is the one worth having: a vacation whose end date has passed but
+ * which nobody has ended. Nothing runs on its own to close one - `endVacation`
+ * is called, not scheduled - so the member is home, their queue has not been
+ * shifted, and every screen but this one has quietly gone back to normal.
+ * That is precisely what the End button is for, so the state has to be visible
+ * rather than collapsed into "not on vacation".
+ */
+export type VacationState = {
+  status: "home" | "away" | "overdue";
+  heading: string;
+  lines: string[];
+  /** Whether there is a vacation for an admin to end. */
+  endable: boolean;
+};
+
+export function vacationState(rest: AdminRestStanding): VacationState {
+  if (!rest.vacationStartedAt) {
+    return { status: "home", heading: COPY.activity.homeLine, lines: [], endable: false };
+  }
+
+  const since = COPY.activity.awaySince(formatDateShort(rest.vacationStartedAt));
+  if (rest.onVacation) {
+    return {
+      status: "away",
+      heading: COPY.activity.awayHeading,
+      lines: [COPY.activity.awayLine(formatDateShort(rest.vacationEndsAt)), since],
+      endable: true,
+    };
+  }
+
+  return {
+    status: "overdue",
+    heading: COPY.activity.awayHeading,
+    lines: [COPY.activity.awayOverdue, since],
+    endable: true,
+  };
+}
+
+/**
+ * The activity grid: what they have earned, how consistently, and how much
+ * latitude they have left.
+ */
+export function activityFacts(
+  account: AdminAccountDetail,
+  activity: AdminActivitySummary,
+  rest: AdminRestStanding,
+): AdminUserFact[] {
+  return [
+    { label: COPY.activity.xp, value: COPY.facts.xpLine(account.xp, account.xpIntoLevel, account.xpLevelSpan) },
+    { label: COPY.activity.rank, value: COPY.facts.rankLine(account.xpRankName, account.xpLevel) },
+    {
+      label: COPY.activity.currentStreak,
+      value: `${COPY.activity.streakLine(activity.currentStreak, activity.longestStreak)} - ${
+        activity.activeToday ? COPY.activity.streakToday : COPY.activity.streakAtRisk
+      }`,
+    },
+    { label: COPY.activity.lastActive, value: lastActiveLine(activity) },
+    { label: COPY.activity.daysActive, value: COPY.activity.days(activity.daysActive) },
+    { label: COPY.activity.averagePerDay, value: String(activity.averagePerActiveDay) },
+    {
+      label: COPY.activity.bestDay,
+      value: activity.bestDay
+        ? COPY.activity.bestDayLine(activity.bestDay.dayKey, activity.bestDay.amount)
+        : COPY.facts.none,
+    },
+    {
+      label: COPY.activity.restDays,
+      value: usedOfAllowedLine(rest.restDaysUsed, rest.restDaysAllowed, rest.restDaysGranted),
+    },
+    {
+      label: COPY.activity.vacationDays,
+      value: usedOfAllowedLine(rest.vacationDaysUsed, rest.vacationDaysAllowed, rest.vacationDaysGranted),
+    },
+  ];
 }

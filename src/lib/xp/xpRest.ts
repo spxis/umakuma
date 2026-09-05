@@ -97,11 +97,33 @@ export function nextRestUnlockAfter(xpLevel: number): { rank: number; days?: num
    in instalments. Tunable like the rest. */
 export const MAX_VACATION_DAYS_AT_ONCE = 42;
 
+/**
+ * What a member is allowed, what they have spent, and what an admin added.
+ *
+ * Earned and granted are reported apart as well as together, because they
+ * answer different questions and an admin needs both: "what does this rank
+ * come with" is the rule working as designed, and "what did somebody hand
+ * them" is a decision a person made and may want to revisit. A single
+ * `allowed` number would hide the second inside the first.
+ *
+ * `vacationWeeksAllowed` stays in weeks because that is the unit the ladder
+ * itself speaks in, and it means only what the rank earns. Grants are in days,
+ * so `vacationDaysAllowed` is the number anything actually deciding should
+ * read.
+ */
 export type RestStanding = {
+  /** Rest days the rank comes with. */
+  restDaysEarned: number;
+  /** Rest days an admin added on top. */
+  restDaysGranted: number;
   restDaysAllowed: number;
   restDaysUsed: number;
   restDaysLeft: number;
+  /** Whole weeks the rank earns. Says nothing about grants. */
   vacationWeeksAllowed: number;
+  vacationDaysEarned: number;
+  vacationDaysGranted: number;
+  vacationDaysAllowed: number;
   vacationDaysUsed: number;
   vacationDaysLeft: number;
   /** True while a vacation is running, so the site can say so rather than look broken. */
@@ -113,21 +135,44 @@ export function restStanding({
   restDaysUsed,
   vacationDaysUsed,
   onVacation,
+  restDaysGranted = 0,
+  vacationDaysGranted = 0,
 }: {
   xpLevel: number;
   restDaysUsed: number;
   vacationDaysUsed: number;
   onVacation: boolean;
+  /* Default zero, so every existing caller reads exactly as it did before
+     grants existed. */
+  restDaysGranted?: number;
+  vacationDaysGranted?: number;
 }): RestStanding {
-  const restDaysAllowed = restDaysAllowedAt(xpLevel);
+  const restDaysEarned = restDaysAllowedAt(xpLevel);
   const vacationWeeksAllowed = vacationWeeksAllowedAt(xpLevel);
+  const vacationDaysEarned = vacationWeeksAllowed * 7;
+  const restDaysAllowed = restDaysEarned + restDaysGranted;
+  const vacationDaysAllowed = vacationDaysEarned + vacationDaysGranted;
   return {
+    restDaysEarned,
+    restDaysGranted,
     restDaysAllowed,
     restDaysUsed,
     restDaysLeft: Math.max(0, restDaysAllowed - restDaysUsed),
     vacationWeeksAllowed,
+    vacationDaysEarned,
+    vacationDaysGranted,
+    vacationDaysAllowed,
     vacationDaysUsed,
-    vacationDaysLeft: Math.max(0, vacationWeeksAllowed * 7 - vacationDaysUsed),
+    vacationDaysLeft: Math.max(0, vacationDaysAllowed - vacationDaysUsed),
     onVacation,
   };
 }
+
+/**
+ * The largest single grant the admin form will take.
+ *
+ * A fat-finger guard rather than a policy, the same as the XP award ceiling:
+ * a year is more time off than anybody is going to hand over in one decision,
+ * and several grants compose anyway.
+ */
+export const MAX_TIME_OFF_GRANT_DAYS = 365;

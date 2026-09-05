@@ -3,7 +3,13 @@ import "server-only";
 import { getVancouverDateKey } from "@/lib/dailySnapshot";
 import { prisma } from "@/lib/prisma";
 
-import { restDaysAllowedAt, restStanding, vacationWeeksAllowedAt, type RestStanding } from "./xpRest";
+import {
+  MAX_TIME_OFF_GRANT_DAYS,
+  restDaysAllowedAt,
+  restStanding,
+  vacationWeeksAllowedAt,
+  type RestStanding,
+} from "./xpRest";
 import { timeOffRules } from "./xpRestSettings";
 
 /**
@@ -28,10 +34,19 @@ function dayKeysBetween(from: Date, to: Date): string[] {
   return days;
 }
 
-/** Days off used in the rolling year, which is the window the allowance is for. */
+/**
+ * Days off used in the rolling year, which is the window the allowance is for.
+ *
+ * Grants are counted in the same window as usage, deliberately. The allowance
+ * is a rolling-year allowance, so a grant that never expired would be sitting
+ * in a different time model from the thing it tops up: a standing +7 would
+ * have quietly been +14 of latitude after two years while every screen still
+ * said seven. A grant covers the year it was made for; another year wants
+ * another decision.
+ */
 export async function memberRestStanding(accountId: string, now = new Date()): Promise<RestStanding> {
   const since = new Date(now.getTime() - ROLLING_YEAR_DAYS * MS_PER_DAY);
-  const [account, used] = await Promise.all([
+  const [account, used, granted] = await Promise.all([
     prisma.account.findUnique({
       where: { id: accountId },
       select: { xpLevel: true, vacationStartedAt: true, vacationEndsAt: true },
@@ -41,25 +56,97 @@ export async function memberRestStanding(accountId: string, now = new Date()): P
       where: { accountId, createdAt: { gte: since } },
       _count: { _all: true },
     }),
+    prisma.memberRestGrant.groupBy({
+      by: ["kind"],
+      where: { accountId, createdAt: { gte: since } },
+      _sum: { days: true },
+    }),
   ]);
 
   const rules = await timeOffRules();
   const count = (kind: string) => used.find((row) => row.kind === kind)?._count._all ?? 0;
+  const grant = (kind: string) => granted.find((row) => row.kind === kind)?._sum.days ?? 0;
   const xpLevel = account?.xpLevel ?? 1;
+
+  /* Recomputed against the live rules rather than the constants, which are
+     only the defaults a fresh environment starts with. */
+  const restDaysEarned = restDaysAllowedAt(xpLevel, rules.restDays);
+  const vacationWeeksAllowed = vacationWeeksAllowedAt(xpLevel, rules.vacationWeeks);
+  const vacationDaysEarned = vacationWeeksAllowed * 7;
+  const restDaysAllowed = restDaysEarned + grant("rest");
+  const vacationDaysAllowed = vacationDaysEarned + grant("vacation");
+
   return {
     ...restStanding({
       xpLevel,
       restDaysUsed: count("rest"),
       vacationDaysUsed: count("vacation"),
       onVacation: account?.vacationEndsAt !== null && (account?.vacationEndsAt ?? new Date(0)) > now,
+      restDaysGranted: grant("rest"),
+      vacationDaysGranted: grant("vacation"),
     }),
-    /* Recomputed against the live rules rather than the constants, which are
-       only the defaults a fresh environment starts with. */
-    restDaysAllowed: restDaysAllowedAt(xpLevel, rules.restDays),
-    restDaysLeft: Math.max(0, restDaysAllowedAt(xpLevel, rules.restDays) - count("rest")),
-    vacationWeeksAllowed: vacationWeeksAllowedAt(xpLevel, rules.vacationWeeks),
-    vacationDaysLeft: Math.max(0, vacationWeeksAllowedAt(xpLevel, rules.vacationWeeks) * 7 - count("vacation")),
+    restDaysEarned,
+    restDaysAllowed,
+    restDaysLeft: Math.max(0, restDaysAllowed - count("rest")),
+    vacationWeeksAllowed,
+    vacationDaysEarned,
+    vacationDaysAllowed,
+    vacationDaysLeft: Math.max(0, vacationDaysAllowed - count("vacation")),
   };
+}
+
+export type TimeOffGrant = {
+  id: string;
+  kind: "rest" | "vacation";
+  days: number;
+  note: string | null;
+  grantedBy: string | null;
+  createdAt: Date;
+  /** False once the rolling year has moved past it, so a reader can see why
+      a grant stopped counting rather than watching it vanish. */
+  counting: boolean;
+};
+
+/** Every grant this member has been given, newest first. */
+export async function memberTimeOffGrants(accountId: string, now = new Date()): Promise<TimeOffGrant[]> {
+  const since = new Date(now.getTime() - ROLLING_YEAR_DAYS * MS_PER_DAY);
+  const rows = await prisma.memberRestGrant.findMany({
+    where: { accountId },
+    orderBy: { createdAt: "desc" },
+    take: 20,
+    select: { id: true, kind: true, days: true, note: true, grantedBy: true, createdAt: true },
+  });
+  return rows.map((row) => ({ ...row, counting: row.createdAt >= since }));
+}
+
+/**
+ * Hands a member extra days off, on top of what their rank earns.
+ *
+ * Additive and audited: the row records which admin, when and why, and it
+ * composes with the ladder rather than replacing it, so a grant does not stop
+ * a member benefiting from the rank they climb to next or from a later retune
+ * of the rules. Undoing one is deleting the row, not granting a negative.
+ */
+export async function grantTimeOff({
+  accountId,
+  kind,
+  days,
+  note,
+  grantedBy,
+}: {
+  accountId: string;
+  kind: "rest" | "vacation";
+  days: number;
+  note?: string | null;
+  grantedBy?: string | null;
+}): Promise<{ ok: true; standing: RestStanding } | { ok: false; refusal: "outOfRange" }> {
+  if (!Number.isInteger(days) || days < 1 || days > MAX_TIME_OFF_GRANT_DAYS) {
+    return { ok: false, refusal: "outOfRange" };
+  }
+  await prisma.memberRestGrant.create({
+    data: { accountId, kind, days, note: note?.trim() || null, grantedBy: grantedBy ?? null },
+  });
+  return { ok: true, standing: await memberRestStanding(accountId) };
 }
 
 /** Every day the streak is held for this member, for `resolveStreak`. */

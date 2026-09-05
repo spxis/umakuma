@@ -170,6 +170,7 @@ model Account {
   xpLevel             Int                @default(1)
   xpEvents            XpEvent[]
   restDays            MemberRest[]
+  restGrants          MemberRestGrant[]
   /// While set, the member is away: the streak is held and SRS due dates move
   /// with them rather than piling up. Cleared on return, which is when the
   /// queue is shifted forward by the length of the absence.
@@ -1388,6 +1389,51 @@ enum MemberRestKind {
   rest
   /// A planned absence. Freezes the SRS as well as the streak.
   vacation
+}
+
+/// Days off an admin handed over, on top of what the rank earns.
+///
+/// A row rather than a column on the account, and additive rather than an
+/// override, for three reasons that all point the same way.
+///
+/// **Additive** because "extra" is what was asked for. An override column
+/// would replace the derived allowance, so a member granted twenty days at
+/// rank 5 would still have twenty at rank 50 — the grant would quietly become
+/// a cap, and the member would be opted out of every future retune of the
+/// rules. A grant that sits on top composes with the ladder instead of
+/// replacing it.
+///
+/// **A row** because the allowance is a rolling-year allowance: usage is
+/// counted over the last 365 days, so a grant counted the same way lives in
+/// the same time model as everything around it. A permanent integer column
+/// would drift out of that model — after two years a member with a standing
+/// +7 has had fourteen days of latitude while the screen still says seven.
+/// Rows also compose (three small grants are three rows), revoke by deletion,
+/// and carry the audit that a column cannot: which admin, when, and why.
+///
+/// Not a `MemberRest` row of a third kind. That table means "a day the member
+/// was away", keyed `@@unique([accountId, dayKey])`; a grant is not a day and
+/// has no day key, so storing one there would mean inventing keys that could
+/// collide with real days off.
+model MemberRestGrant {
+  id        String         @id @default(cuid())
+  accountId String
+  /// Which allowance this tops up. The same enum the usage rows use, so there
+  /// is no second list of kinds to drift from the first.
+  kind      MemberRestKind
+  /// Whole days added. Positive only: taking latitude back from somebody who
+  /// may already have booked against it is a different act, and the way to
+  /// undo a grant is to delete the row.
+  days      Int
+  /// Why, for the admin reading it back in a month. Never shown to the member.
+  note      String?
+  /// Which admin, by email. The audit the XP grants have not got.
+  grantedBy String?
+  createdAt DateTime       @default(now())
+
+  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  @@index([accountId, createdAt])
 }
 
 /// One day a member was away and not penalised for it.

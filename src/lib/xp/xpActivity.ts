@@ -45,10 +45,25 @@ function daysBetween(from: string, to: string): number {
   return Math.round((b - a) / MS_PER_DAY);
 }
 
-export function summariseXpActivity(rows: readonly XpDay[], today: string): XpActivity {
+/**
+ * @param protectedDays Days the member was away and not penalised for it, as
+ *   `protectedDayKeys` returns them. They hold the chain and nothing else -
+ *   they are not activity, so they never count toward `daysActive`, `totalXp`
+ *   or the best day. Passing them matters because `resolveStreak` is what the
+ *   member's own page reads, and a summary that left them out would show an
+ *   admin a shorter streak than the member is being shown for the same
+ *   account, which is the sort of disagreement nobody can debug from a
+ *   screenshot.
+ */
+export function summariseXpActivity(
+  rows: readonly XpDay[],
+  today: string,
+  protectedDays: readonly string[] = [],
+): XpActivity {
   const streak = resolveStreak(
     rows.map((row) => row.dayKey),
     today,
+    protectedDays,
   );
 
   const perDay = new Map<string, number>();

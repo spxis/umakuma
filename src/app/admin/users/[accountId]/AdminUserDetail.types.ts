@@ -1,5 +1,11 @@
 import type { AccountVisibility } from "@/lib/accountVisibility";
-import type { AdminAccountDetail, AdminAccountDetailPayload, AdminXpTypeOption } from "@/lib/adminAccountDetail.types";
+import type {
+  AdminAccountDetail,
+  AdminAccountDetailPayload,
+  AdminRestStanding,
+  AdminTimeOffGrantRow,
+  AdminXpTypeOption,
+} from "@/lib/adminAccountDetail.types";
 
 /** One label-and-value line in the read-only grid. */
 export type AdminUserFact = {
@@ -40,4 +46,9 @@ export type AdminUserSectionProps = {
 export type AdminUserXpProps = AdminUserSectionProps & {
   xpTypes: AdminXpTypeOption[];
   recentXpEvents: AdminAccountDetailPayload["recentXpEvents"];
+};
+
+export type AdminUserTimeOffProps = AdminUserSectionProps & {
+  rest: AdminRestStanding;
+  grants: AdminTimeOffGrantRow[];
 };
