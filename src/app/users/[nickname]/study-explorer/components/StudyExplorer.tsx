@@ -446,8 +446,7 @@ export default function StudyExplorer({
           <StudyExplorerPanel
             canToggleEnglish={canToggleEnglish} showEnglish={showEnglish} studyMode={studyMode}
             studySourceHeaderLabel={studySourceHeaderLabel}
-            studySource={studySource}
-            studySourceIsCustom={studySourceIsCustom}
+            studySource={studySource} studySourceIsCustom={studySourceIsCustom}
             studySourceLevel={studySourceLevel}
             levelOptions={levelOptions} availableLevels={availableLevels} reviewLevelCounts={reviewLevelCounts}
             viewedLevel={effectiveViewedLevel} typeFilter={typeFilter} srsFilter={effectiveSrsFilter}

@@ -1,3 +1,7 @@
+import { ukLevelBadge, wkLevelBadge } from "@/lib/levelBadge";
+
+import type { StudySource } from "../lib/studyExplorerTypes";
+
 import type {
   StudySrsFilter,
   StudySrsStageFilter,
@@ -204,6 +208,20 @@ export const STUDY_REVIEW_MODAL_TOUCH = {
   axisDominanceRatio: 1.25,
   maxSwipeDurationMs: 750,
 } as const;
+
+/**
+ * The level in the panel header, prefixed by the ladder it belongs to.
+ *
+ * Bare only for a member's own uploaded library, which is on neither ladder -
+ * for the other two, "WK3" or "UK3" says which one, since a bare number has
+ * meant two things since UmaKuma got a ladder of its own.
+ */
+export function studyLevelHeaderLabel(studySource: StudySource, level: number | null): string {
+  const value = Math.max(1, level ?? 1);
+  if (studySource === "umakuma") return ukLevelBadge(value)!;
+  if (studySource === "wanikani") return wkLevelBadge(value)!;
+  return `L${value}`;
+}
 
 export const STUDY_REVIEW_MODAL_TRANSITION_CUE_DURATION_MS = 900;
 

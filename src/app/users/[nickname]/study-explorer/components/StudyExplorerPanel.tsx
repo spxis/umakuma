@@ -1,4 +1,3 @@
-import { ukLevelBadge, wkLevelBadge } from "@/lib/levelBadge";
 import { glyphTextSizeClass } from "@/app/shared/glyphSizes";
 import { useState } from "react";
 import ExplorerBulkSelectionPanel from "../../shared/ExplorerBulkSelectionPanel";
@@ -12,6 +11,7 @@ import StudyStatusFilters from "./StudyStatusFilters";
 import StudyUpcomingReviewsSection from "./StudyUpcomingReviewsSection";
 import StudyLoadingShimmerOverlay from "./StudyLoadingShimmerOverlay";
 import {
+  studyLevelHeaderLabel,
   isAllStudyTypeFilter,
   isLessonLockedQueueItem,
   isReviewQueueItem,
@@ -130,18 +130,7 @@ export default function StudyExplorerPanel({
   const totalReviewsInVisibleLevels = Object.values(reviewLevelCounts).reduce((sum, count) => sum + count, 0);
   const totalLessonsInVisibleLevels = lessonLevelOptions.reduce((sum, [, count]) => sum + count, 0);
   const allTypeCount = queueMode === STUDY_QUEUE_TYPES.lesson ? (viewedLevel === null ? totalItems : (lessonLevelCounts[viewedLevel] ?? typeCounts.all)) : typeCounts.all;
-  /* The panel knows its source now, so the level is prefixed by the ladder
-     it belongs to - WK or UK - and stays bare only for a member's own
-     uploaded library, which is on neither. */
-  const headerLevel = Math.max(1, studySourceLevel ?? 1);
-  const studyLevelHeaderLabel =
-    studySource === "umakuma"
-      ? ukLevelBadge(headerLevel)
-      : studySource === "wanikani"
-        ? wkLevelBadge(headerLevel)
-        : `L${headerLevel}`;
-  /* The library and level; the page header above already says Study. */
-  const studyHeaderLabel = `${studySourceHeaderLabel} (${studyLevelHeaderLabel})`;
+  const studyHeaderLabel = `${studySourceHeaderLabel} (${studyLevelHeaderLabel(studySource, studySourceLevel)})`;
   const hasMoreMatchingItems = hasMorePages && filteredItems.length < allTypeCount;
   const shouldShowLoadMoreUi = hasMoreMatchingItems && filteredItems.length > 1;
   const showFilterPagingState = queueMode === STUDY_QUEUE_TYPES.lesson && viewedLevel !== null && hasMoreMatchingItems && filteredItems.length === 0;
