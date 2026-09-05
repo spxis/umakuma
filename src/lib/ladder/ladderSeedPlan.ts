@@ -1,4 +1,5 @@
 import { LADDER_SOURCES, type LadderSource } from "./ladderCrosswalk";
+import { radicalMeanings, radicalWkSubjectId } from "./radicalShapes";
 
 /**
  * The rows `UkSubject` should hold, computed from the built ladder.
@@ -81,14 +82,20 @@ function kanjiRows(input: LadderSeedInput): UkSubjectPlanRow[] {
 /**
  * Radicals are RADKFILE's list, which is not WaniKani's, so every one of them
  * carries its own content. 247 of the 253 are also kanji, so the dictionary
- * names most; the rest are shapes with no meaning of their own and stay empty.
+ * names most; the remaining six are katakana-shaped strokes that no dictionary
+ * names, and `radicalShapes.ts` names those - they were shipping blank, with a
+ * review card drawing the glyph where the meaning should have been.
  *
- * They do still link where WaniKani teaches the same character. That link was
+ * They do still link where WaniKani teaches the same shape. That link was
  * missing and it cost more than it looked: a WaniKani member importing their
  * progress matched **none** of their radicals, because the match is made on
  * `wkSubjectId` and every radical of ours had null. 196 of 241 have a
  * counterpart by character, so 196 items of somebody's work were being thrown
  * away on every import.
+ *
+ * By *shape* rather than by character, because the two sources spell three of
+ * them differently - our 卜 is their ト - and matching on the codepoint alone
+ * left the one John learned as *toe* with no counterpart at all.
  *
  * The source stays `radkfile` regardless — where an item came from and who
  * else teaches it are different questions, and the list is still RADKFILE's.
@@ -101,11 +108,11 @@ function radicalRows(input: LadderSeedInput): UkSubjectPlanRow[] {
       kind: UK_SUBJECT_KINDS.radical,
       characters,
       level,
-      wkSubjectId: input.radicalSubjectIds?.get(characters) ?? null,
+      wkSubjectId: radicalWkSubjectId(characters, input.radicalSubjectIds),
       source: LADDER_SOURCES.radkfile,
       nLevel: null,
       schoolGrade: null,
-      meanings: entry?.meanings ?? [],
+      meanings: radicalMeanings(characters, entry?.meanings),
       readings: [],
     };
   });
