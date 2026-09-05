@@ -48,4 +48,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Wakachi no Shuukei", ja: "分かちの集計", reading: "わかちのしゅうけい", gloss: "the two counted apart" },
   { romaji: "Ariau Dankai", ja: "在り合う段階", reading: "ありあうだんかい", gloss: "the levels that are actually there" },
   { romaji: "Ikkatsu no Nokori", ja: "一括の残り", reading: "いっかつののこり", gloss: "what is left, at a glance" },
+  { romaji: "Uchiwake no Meihyou", ja: "内訳の名標", reading: "うちわけのめいひょう", gloss: "the label that says which" },
 ];

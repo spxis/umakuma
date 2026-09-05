@@ -5980,9 +5980,9 @@
     "date": "2026-09-05",
     "summary": "Every radical in both pickers is drawn in the radical colour: light at rest, solid when chosen, and faded rather than colourless when it leads nowhere.",
     "dateIsEstimate": false,
+    "release": 481,
     "version": "1.6.5",
-    "releasedAt": "2026-09-05T19:34:46Z",
-    "release": 481
+    "releasedAt": "2026-09-05T19:34:46Z"
   },
   {
     "id": "radical-cross-name-wk",
@@ -5993,9 +5993,9 @@
     "date": "2026-09-05",
     "summary": "A WaniKani radical now says what UmaKuma calls the same shape, the mirror of the WaniKani name already shown on ours.",
     "dateIsEstimate": false,
+    "release": 482,
     "version": "1.7.0",
-    "releasedAt": "2026-09-05T19:35:14Z",
-    "release": 482
+    "releasedAt": "2026-09-05T19:35:14Z"
   },
   {
     "id": "release-writes-summary",
@@ -6006,9 +6006,9 @@
     "date": "2026-09-05",
     "summary": "A release now states its own one-line summary instead of reusing the words from the request that started it.",
     "dateIsEstimate": false,
+    "release": 483,
     "version": "1.7.1",
-    "releasedAt": "2026-09-05T19:36:01Z",
-    "release": 483
+    "releasedAt": "2026-09-05T19:36:01Z"
   },
   {
     "id": "release-page-counters",
@@ -6019,9 +6019,9 @@
     "date": "2026-09-05",
     "summary": "The release page counts what is actually queued and what somebody is holding, instead of reading zero from a file that only records what has shipped.",
     "dateIsEstimate": false,
+    "release": 484,
     "version": "1.7.2",
-    "releasedAt": "2026-09-05T19:36:21Z",
-    "release": 484
+    "releasedAt": "2026-09-05T19:36:21Z"
   },
   {
     "id": "uk-level-filter",
@@ -6032,20 +6032,33 @@
     "date": "2026-09-05",
     "summary": "The level filter works in UmaKuma mode: real counts, real chips, and picking a level filters the list.",
     "dateIsEstimate": false,
+    "release": 485,
     "version": "1.7.3",
-    "releasedAt": "2026-09-05T19:37:19Z",
-    "release": 485
+    "releasedAt": "2026-09-05T19:37:19Z"
   },
   {
     "id": "tickets-tab-outstanding",
     "name": "The tickets tab counts what is left",
     "area": "admin",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-05",
+    "summary": "The tickets tab counts what is left to do rather than every request the board has ever held.",
+    "dateIsEstimate": false,
+    "release": 486,
+    "version": "1.7.4",
+    "releasedAt": "2026-09-05T19:37:35Z"
+  },
+  {
+    "id": "library-level-prefix",
+    "name": "A library level says which library",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-05",
-    "version": "1.7.4",
-    "releasedAt": "2026-09-05T19:37:35Z",
-    "summary": "The tickets tab counts what is left to do rather than every request the board has ever held.",
-    "release": 486
+    "version": "1.8.0",
+    "release": 487,
+    "releasedAt": "2026-09-05T19:52:33Z",
+    "summary": "A level from your own uploaded library now reads LIB3, so it cannot be mistaken for a WaniKani level, an UmaKuma one, or your XP rank."
   }
 ]
