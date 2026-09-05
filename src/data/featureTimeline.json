@@ -6011,11 +6011,23 @@
     "id": "release-page-counters",
     "name": "The release page counters read the board",
     "area": "admin",
+    "status": "shipped",
     "kind": "feature",
+    "date": "2026-09-05",
+    "summary": "The release page counts what is actually queued and what somebody is holding, instead of reading zero from a file that only records what has shipped.",
+    "dateIsEstimate": false,
+    "version": "1.7.2",
+    "releasedAt": "2026-09-05T19:36:21Z"
+  },
+  {
+    "id": "uk-level-filter",
+    "name": "Level filter is empty and inert in UmaKuma mode",
+    "area": "study",
+    "kind": "bug",
     "status": "shipped",
     "date": "2026-09-05",
-    "version": "1.7.2",
-    "releasedAt": "2026-09-05T19:36:21Z",
-    "summary": "The release page counts what is actually queued and what somebody is holding, instead of reading zero from a file that only records what has shipped."
+    "version": "1.7.3",
+    "releasedAt": "2026-09-05T19:37:19Z",
+    "summary": "The level filter works in UmaKuma mode: real counts, real chips, and picking a level filters the list."
   }
 ]

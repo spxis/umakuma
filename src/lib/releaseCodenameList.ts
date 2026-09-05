@@ -498,4 +498,5 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Renkei suru Katagata", ja: "連携する方々", reading: "れんけいするかたがた", gloss: "each side named by the other" },
   { romaji: "Rousaku no Jibun", ja: "労作の自分", reading: "ろうさくのじぶん", gloss: "words of its own making" },
   { romaji: "Wakachi no Shuukei", ja: "分かちの集計", reading: "わかちのしゅうけい", gloss: "the two counted apart" },
+  { romaji: "Ariau Dankai", ja: "在り合う段階", reading: "ありあうだんかい", gloss: "the levels that are actually there" },
 ];
