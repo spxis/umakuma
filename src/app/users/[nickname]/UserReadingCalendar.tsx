@@ -1,9 +1,7 @@
 import Image from "next/image";
 import {
-  READING_CAMPAIGN,
   dayKey,
   formatMonthLabel,
-  isCampaignDate,
   parseDateKeyAsUtc,
   shiftMonth,
   toDateKeyUtc,
@@ -26,6 +24,16 @@ type UserReadingCalendarProps = {
   signoffByDayAndMember: Map<string, Map<string, ReadingSignoffRecord>>;
   signoffEntriesByDayAndMember: Map<string, Map<string, ReadingSignoffEntryRecord[]>>;
   viewerCanChooseMember: boolean;
+  /**
+   * The campaign being looked at, not the one the code was written around.
+   *
+   * These were read from the `READING_CAMPAIGN` constant, which is the *first*
+   * challenge - Japan Trip 2026, ending 2026-07-20. The page has had a
+   * campaign selector since, so every day of the Winter challenge fell outside
+   * "the campaign" and the check-in button was never drawn for anybody.
+   */
+  campaignStartDatePst: string;
+  campaignGoalDatePst: string;
   onMonthChange: Dispatch<SetStateAction<string>>;
   onOpenCheckinModal: (dateKey: string) => void;
   onOpenMemberHistory: (member: Member) => void;
@@ -44,6 +52,8 @@ export default function UserReadingCalendar({
   signoffByDayAndMember,
   signoffEntriesByDayAndMember,
   viewerCanChooseMember,
+  campaignStartDatePst,
+  campaignGoalDatePst,
   onMonthChange,
   onOpenCheckinModal,
   onOpenMemberHistory,
@@ -73,8 +83,11 @@ export default function UserReadingCalendar({
 
   const showCalendarLoadingOverlay =
     isLoading && signoffByDayAndMember.size === 0 && signoffEntriesByDayAndMember.size === 0;
-  const minMonthKey = READING_CAMPAIGN.startDatePst.slice(0, 7);
-  const maxMonthKey = READING_CAMPAIGN.goalDatePst.slice(0, 7);
+  /* The months the *selected* campaign runs over. Read from the constant, the
+     Next button was disabled from the first day of the Winter challenge,
+     because July 2026 was as far as the first challenge went. */
+  const minMonthKey = campaignStartDatePst.slice(0, 7);
+  const maxMonthKey = campaignGoalDatePst.slice(0, 7);
   const canGoPrevMonth = monthKey > minMonthKey;
   const canGoNextMonth = monthKey < maxMonthKey;
 
@@ -138,9 +151,9 @@ export default function UserReadingCalendar({
           const byMemberEntries = signoffEntriesByDayAndMember.get(key) ?? new Map<string, ReadingSignoffEntryRecord[]>();
           const activeMembers = trackedMembers.filter((member) => byMemberEntries.has(member.id) || byMember.has(member.id));
           const isToday = key === today;
-          const isCampaignStart = key === READING_CAMPAIGN.startDatePst;
-          const isCampaignGoal = key === READING_CAMPAIGN.goalDatePst;
-          const isInsideCampaign = isCampaignDate(key);
+          const isCampaignStart = key === campaignStartDatePst;
+          const isCampaignGoal = key === campaignGoalDatePst;
+          const isInsideCampaign = key >= campaignStartDatePst && key <= campaignGoalDatePst;
           const regularWindowIncludesDate = key >= regularWindowStart && key <= regularWindowEnd;
           const canCheckIn = isInsideCampaign && (viewerCanChooseMember || regularWindowIncludesDate);
 

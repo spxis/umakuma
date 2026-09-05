@@ -434,6 +434,8 @@ export default function UserReadingSignoffPanel({ accountId, initialMonthKey, in
               signoffByDayAndMember={signoffByDayAndMember}
               signoffEntriesByDayAndMember={signoffEntriesByDayAndMember}
               viewerCanChooseMember={viewerCanChooseMember}
+              campaignStartDatePst={selectedCampaignStartDatePst}
+              campaignGoalDatePst={selectedCampaignGoalDatePst}
               onMonthChange={setMonthKey}
               onOpenCheckinModal={openCheckinModal}
               onOpenMemberHistory={setHistoryMember}
