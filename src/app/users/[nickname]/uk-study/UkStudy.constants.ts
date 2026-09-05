@@ -9,6 +9,10 @@ export const UK_STUDY_COPY = {
   startLessons: "Start lessons",
   doReviews: "Do reviews",
   nothingDue: "Nothing due. Come back when the next batch comes round.",
+  /* Held, not finished. An empty lesson list with no explanation is the
+     cruellest possible reading of a backlog. */
+  lessonsHeld: (due: number) =>
+    `Lessons are on hold while you have ${due} reviews waiting. Clear some and they will come back.`,
   nothingToLearn: "Nothing new at this level. Clear your reviews to move up.",
   reveal: "Show me",
   /* The latch, named. WaniKani has this rule and never says so on screen. */

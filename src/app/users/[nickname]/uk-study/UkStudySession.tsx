@@ -32,7 +32,7 @@ type ImportOffer = {
 };
 
 type Queue = {
-  counts: { lessons: number; reviews: number; upcoming: number };
+  counts: { lessons: number; reviews: number; upcoming: number; throttle?: { held: boolean; due: number } };
   level: number;
   progress: { passed: number; total: number; gate: string };
   lessons: Item[];
@@ -282,7 +282,11 @@ export default function UkStudySession({ accountId }: { accountId: string }) {
           <button type="button" disabled={queue.counts.reviews === 0} className={QUIET} onClick={beginReviews}>
             {copy.doReviews}
           </button>
-          {queue.counts.lessons === 0 && queue.counts.reviews === 0 ? (
+          {queue.counts.throttle?.held ? (
+            <p className="w-full text-sm font-semibold text-amber-700">
+              {copy.lessonsHeld(queue.counts.throttle.due)}
+            </p>
+          ) : queue.counts.lessons === 0 && queue.counts.reviews === 0 ? (
             <p className="w-full text-sm font-semibold text-foreground/70">{copy.nothingDue}</p>
           ) : null}
         </div>

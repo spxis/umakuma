@@ -3,6 +3,7 @@ import "server-only";
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import { prisma } from "@/lib/prisma";
 import { getCatalogSubjectDetails } from "@/lib/subjectCatalogDetails";
+import { srsScoringRules } from "@/lib/srs/srsScoringRules";
 
 /**
  * What a member has to do on the UmaKuma ladder right now.
@@ -41,8 +42,18 @@ export type UkStudyItem = {
   passed: boolean;
 };
 
+export type UkThrottle = {
+  /** True while lessons are held back because reviews are outstanding. */
+  held: boolean;
+  /** Reviews due right now, which is what the threshold is measured against. */
+  due: number;
+  threshold: number;
+};
+
 export type UkStudyCounts = {
   lessons: number;
+  /** Why lessons are zero, when they are zero because of the backlog. */
+  throttle: UkThrottle;
   reviews: number;
   /** Due later today, so a member knows whether to wait. */
   upcoming: number;
@@ -112,11 +123,38 @@ function toItem(
 }
 
 /** Items with no state row: never seen, and open. */
+/**
+ * Whether lessons are being held back by the review backlog.
+ *
+ * Anki does this by default - the review limit also caps new cards, so
+ * introduction pauses while you are behind - and our balance simulator
+ * measured what it is worth here: average backlog down 85% for 0.8% of
+ * progress across twenty-four personas. It costs single-sitting learners
+ * most, because they open behind more often.
+ *
+ * Off unless an admin has switched it on. The rules live in SiteSetting so
+ * the threshold can be moved without a deploy.
+ */
+export async function ukLessonThrottle(accountId: string, now = new Date()): Promise<UkThrottle> {
+  const rules = await srsScoringRules();
+  if (!rules.throttleLessonsOnBacklog) {
+    return { held: false, due: 0, threshold: rules.backlogThreshold };
+  }
+  const due = await prisma.ukSrsState.count({
+    where: { accountId, availableAt: { not: null, lte: now } },
+  });
+  return { held: due >= rules.backlogThreshold, due, threshold: rules.backlogThreshold };
+}
+
 export async function ukLessons(accountId: string, limit = 50): Promise<UkStudyItem[]> {
-  const [rows, states] = await Promise.all([
+  const [rows, states, throttle] = await Promise.all([
     unlockedSubjects(accountId),
     prisma.ukSrsState.findMany({ where: { accountId }, select: { subjectId: true } }),
+    ukLessonThrottle(accountId),
   ]);
+  /* Held rather than hidden: the member is told why on the study page, so an
+     empty lesson list never reads as "you have finished". */
+  if (throttle.held) return [];
   const seen = new Set(states.map((state) => state.subjectId));
   /* Radicals first, then kanji, then words — the order a level is met, so a
      member is never asked for a character before its parts. */
@@ -155,14 +193,16 @@ export async function ukReviews(accountId: string, now = new Date(), limit = 100
 }
 
 export async function ukStudyCounts(accountId: string, now = new Date()): Promise<UkStudyCounts> {
-  const [rows, states] = await Promise.all([
+  const [rows, states, throttle] = await Promise.all([
     unlockedSubjects(accountId),
     prisma.ukSrsState.findMany({ where: { accountId }, select: { subjectId: true, availableAt: true } }),
+    ukLessonThrottle(accountId, now),
   ]);
   const seen = new Set(states.map((state) => state.subjectId));
   const endOfDay = new Date(now.getTime() + 24 * 60 * 60 * 1000);
   return {
-    lessons: rows.filter((row) => !seen.has(row.id)).length,
+    lessons: throttle.held ? 0 : rows.filter((row) => !seen.has(row.id)).length,
+    throttle,
     reviews: states.filter((state) => state.availableAt !== null && state.availableAt <= now).length,
     upcoming: states.filter(
       (state) => state.availableAt !== null && state.availableAt > now && state.availableAt <= endOfDay,
