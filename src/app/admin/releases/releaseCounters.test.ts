@@ -37,3 +37,22 @@ describe("waiting", () => {
     }
   });
 });
+
+describe("the tickets tab", () => {
+  const tabs = readFileSync("src/app/admin/releases/ReleaseTimelineTabs.tsx", "utf8");
+
+  /* John: "Tickets should represent what's left to do." It counted every row
+     the board has ever held - 157, of which 127 had shipped and 4 were
+     declined - so the number said the same thing forever. */
+  it("counts what is outstanding, not the board's whole history", () => {
+    expect(tabs).toContain("isWaitingTicket(wish.status) || wish.status === TICKET_STATUSES.inProgress");
+    expect(tabs).toContain("${remaining.length}");
+    expect(tabs).not.toContain("${wishes.length}");
+  });
+
+  /* The list still shows them all: a declined row is kept so the same thing is
+     not asked for twice. It is the count that means outstanding. */
+  it("still hands the whole board to the list below it", () => {
+    expect(tabs).toContain("<TicketBoard initialWishes={wishes} />");
+  });
+});

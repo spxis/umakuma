@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import SegmentedControl from "@/app/shared/SegmentedControl";
 import type { FeatureTimelineEntry } from "@/lib/featureTimeline";
-import type { Ticket } from "@/lib/tickets";
+import { isWaitingTicket, TICKET_STATUSES, type Ticket } from "@/lib/tickets";
 
 import {
   RELEASE_TAB_COOKIE_KEY,
@@ -50,6 +50,17 @@ export default function ReleaseTimelineTabs({
     document.cookie = `${RELEASE_TAB_COOKIE_KEY}=${next}; path=/; max-age=${60 * 60 * 24 * 180}`;
   };
 
+  /*
+   * The count is what is left to do, not every row the board has ever held.
+   *
+   * It read `wishes.length`, which is all 157 - and 127 of those had shipped
+   * and 4 were declined. A queue that counts its own history says the same
+   * number forever and answers nobody's question. The board below still lists
+   * them all, because a declined row is kept so the same thing is not asked
+   * twice; it is the tab's number that means "outstanding".
+   */
+  const remaining = wishes.filter((wish) => isWaitingTicket(wish.status) || wish.status === TICKET_STATUSES.inProgress);
+
   const legend: Record<ReleaseTab, string> = {
     [RELEASE_TABS.inProgress]: RELEASE_TIMELINE_COPY.inProgressLegend,
     [RELEASE_TABS.planned]: RELEASE_TIMELINE_COPY.estimateLegend,
@@ -91,7 +102,7 @@ export default function ReleaseTimelineTabs({
           },
           {
             value: RELEASE_TABS.wishes,
-            label: `${RELEASE_TIMELINE_COPY.wishHeading} · ${wishes.length}`,
+            label: `${RELEASE_TIMELINE_COPY.wishHeading} · ${remaining.length}`,
           },
         ]}
       />
