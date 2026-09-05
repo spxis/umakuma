@@ -179,25 +179,43 @@ describe("study filter utils", () => {
     dateNowSpy.mockRestore();
   });
 
-  it("groups consecutive disabled review levels into range chips", () => {
+  /* John's rule for the two pickers: "Doing reviews filters to only those in
+     your review view. For explorer shows all levels." A level with nothing in
+     it used to be collapsed into a disabled range chip - a control that
+     cannot be pressed, naming levels the reader has no reviews on. */
+  it("shows only the levels the queue has something in", () => {
     expect(
       groupStudyReviewLevelChips([1, 2, 3, 4, 5, 6, 7], new Set([5, 6]), null, true),
     ).toEqual([
-      { kind: "range", startLevel: 1, endLevel: 4 },
       { kind: "single", level: 5 },
       { kind: "single", level: 6 },
-      { kind: "range", startLevel: 7, endLevel: 7 },
     ]);
   });
 
-  it("keeps selected review level as a selectable single chip", () => {
+  it("keeps the chosen level even when nothing is left on it", () => {
     expect(
       groupStudyReviewLevelChips([1, 2, 3, 4], new Set([4]), 2, true),
     ).toEqual([
-      { kind: "range", startLevel: 1, endLevel: 1 },
       { kind: "single", level: 2 },
-      { kind: "range", startLevel: 3, endLevel: 3 },
       { kind: "single", level: 4 },
+    ]);
+  });
+
+  /* The grouped path - WaniKani's older/recent split - drew the same filler
+     ranges, so both had to go. Its own group chips stay: those are pressable,
+     and they gather levels the reader does have. */
+  it("leaves no filler range in the grouped path either", () => {
+    const chips = groupStudyReviewLevelChips([1, 2, 3, 4, 5], new Set([2, 5]), null, true, 4);
+    expect(chips.filter((chip) => chip.kind === "range" && chip.group === undefined)).toEqual([]);
+  });
+
+  /* Before the queue has loaded there is nothing to filter by, so every level
+     is offered rather than none. */
+  it("offers every level while there is no data to filter on", () => {
+    expect(groupStudyReviewLevelChips([1, 2, 3], new Set(), null, false)).toEqual([
+      { kind: "single", level: 1 },
+      { kind: "single", level: 2 },
+      { kind: "single", level: 3 },
     ]);
   });
 });

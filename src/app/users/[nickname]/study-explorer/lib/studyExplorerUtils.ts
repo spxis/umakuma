@@ -239,33 +239,21 @@ function appendReviewLevelChips(
   viewedLevel: number | null,
   hasData: boolean,
 ): void {
-  let rangeStart: number | null = null;
-  let rangeEnd: number | null = null;
-
-  const flushRange = () => {
-    if (rangeStart === null || rangeEnd === null) {
-      return;
-    }
-    grouped.push({ kind: "range", startLevel: rangeStart, endLevel: rangeEnd });
-    rangeStart = null;
-    rangeEnd = null;
-  };
-
+  /*
+   * A level with nothing in it is left out entirely.
+   *
+   * The row used to collapse those into a disabled range chip - "2-20",
+   * "22-100" - which is a control that cannot be pressed, describing levels
+   * the reader has no reviews on, in a view that is only about the reviews
+   * they do have. John's rule for the two pickers: reviews show the levels in
+   * your queue, the explorer shows all hundred. This is the reviews half.
+   */
   for (const level of levels) {
     const isSelected = viewedLevel === level;
     const unavailable = hasData && !isSelected && !availableLevels.has(level);
-    if (unavailable) {
-      if (rangeStart === null) {
-        rangeStart = level;
-      }
-      rangeEnd = level;
-      continue;
-    }
-    flushRange();
+    if (unavailable) continue;
     grouped.push({ kind: "single", level });
   }
-
-  flushRange();
 }
 
 export function groupStudyReviewLevelChips(
@@ -289,32 +277,16 @@ export function groupStudyReviewLevelChips(
   const olderEnd = olderLevels[olderLevels.length - 1];
   const recentStart = recentLevels[0];
   const recentEnd = recentLevels[recentLevels.length - 1];
-  let unavailableRangeStart: number | null = null;
-  let unavailableRangeEnd: number | null = null;
   let olderGroupRendered = false;
   let recentGroupRendered = false;
-
-  const flushUnavailableRange = () => {
-    if (unavailableRangeStart === null || unavailableRangeEnd === null) {
-      return;
-    }
-    grouped.push({ kind: "range", startLevel: unavailableRangeStart, endLevel: unavailableRangeEnd });
-    unavailableRangeStart = null;
-    unavailableRangeEnd = null;
-  };
 
   for (const level of levelOptions) {
     const isSelected = viewedLevel === level;
     const unavailable = hasData && !isSelected && !availableLevels.has(level);
-    if (unavailable) {
-      if (unavailableRangeStart === null) {
-        unavailableRangeStart = level;
-      }
-      unavailableRangeEnd = level;
-      continue;
-    }
-
-    flushUnavailableRange();
+    /* Left out rather than collapsed into a chip that cannot be pressed - see
+       `appendReviewLevelChips`. The older/recent groups below are different:
+       those are pressable, and they gather levels the reader *does* have. */
+    if (unavailable) continue;
 
     const isOlder = level < recentStartLevel;
     if (!showOlderLevels && isOlder && olderStart !== undefined && olderEnd !== undefined) {
@@ -336,7 +308,6 @@ export function groupStudyReviewLevelChips(
     grouped.push({ kind: "single", level });
   }
 
-  flushUnavailableRange();
   return grouped;
 }
 
