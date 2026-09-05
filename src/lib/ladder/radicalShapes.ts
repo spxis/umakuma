@@ -82,6 +82,51 @@ const RADICAL_STROKE_NAMES: Readonly<Record<string, readonly string[]>> = {
 };
 
 /**
+ * The index naming the shape, as in "fishhook radical (no. 5)".
+ *
+ * KANJIDIC entries are about the *kanji*, and for a radical that is often a
+ * different word: 乙 the kanji means "the latter", 乙 the radical is the
+ * fishhook. Where the two differ the dictionary says so in exactly this form,
+ * and the name we want is the part before "radical".
+ */
+const INDEX_GLOSS = /^(.*?)\s*radical\s*(?:variant\s*)?\(no\.?\s*\d+\)\s*$/i;
+
+/**
+ * The radical's own name, pulled out of the index's description of it.
+ *
+ * Two things are trimmed. The numbering, which is the index describing its own
+ * ordering and means nothing to a learner. And the index's hedge - it writes
+ * "table or windy" and "twenty or letter H" where it is offering two readings
+ * of a shape, and the first is the one a member is taught.
+ */
+function radicalNameFromGloss(meaning: string): string | null {
+  const matched = INDEX_GLOSS.exec(meaning.trim());
+  if (!matched) return null;
+  const name = matched[1].split(/\s+or\s+/i)[0]?.trim() ?? "";
+  return name.length > 0 ? name : null;
+}
+
+/**
+ * The dictionary's words for a radical, with its own name put first.
+ *
+ * Two bugs, one cause, both visible on a review card. 乙 was printed as *the
+ * latter* - the kanji's meaning - when the card in front of the member was the
+ * fishhook. And eighteen radicals printed the index's raw description at a
+ * learner: 广 read "dotted cliff radical (no. 53)", which looks like a name and
+ * teaches a wrong one.
+ *
+ * So the radical's name leads and the kanji's meanings follow it as
+ * alternatives, which are still worth having - 乙 really does mean *the
+ * latter* - and the numbering is dropped entirely.
+ */
+function orderedDictionaryMeanings(fromDictionary: readonly string[]): string[] {
+  const named = fromDictionary.map(radicalNameFromGloss).find((name) => name !== null);
+  if (!named) return [...fromDictionary];
+  const rest = fromDictionary.filter((meaning) => radicalNameFromGloss(meaning) === null);
+  return [named, ...rest.filter((meaning) => meaning.toLowerCase() !== named.toLowerCase())];
+}
+
+/**
  * The WaniKani subject teaching this radical, by character or by shape.
  *
  * `ids` is keyed by WaniKani's own spelling and holds only subjects they still
@@ -107,8 +152,8 @@ export function radicalWkSubjectId(
  *
  * The order is John's, 2026-09-05:
  *
- * 1. The dictionary, which names 247 of RADKFILE's 253 because they are also
- *    kanji.
+ * 1. The dictionary, with the radical's own name first where it gives one -
+ *    乙 is the *fishhook*, not *the latter*, which is what the kanji means.
  * 2. The English number, where the shape is one - ハ is *eight*.
  * 3. The katakana read out - ノ is *no*. Kept as an alternative meaning under
  *    rule 2 as well, since it is the honest description of the shape and what
@@ -131,7 +176,7 @@ export function radicalMeanings(
   characters: string,
   fromDictionary: readonly string[] | undefined,
 ): string[] {
-  if (fromDictionary && fromDictionary.length > 0) return [...fromDictionary];
+  if (fromDictionary && fromDictionary.length > 0) return orderedDictionaryMeanings(fromDictionary);
 
   const romaji = KATAKANA_ROMAJI[characters];
   if (romaji) {

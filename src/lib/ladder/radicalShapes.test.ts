@@ -163,3 +163,58 @@ describe("the two spellings of one shape", () => {
     expect(radicalMeanings("丿", ["slash"])).toEqual(["slash"]);
   });
 });
+
+describe("a radical is called what the radical is called", () => {
+  /* John, seeing 乙 in a review: "curious why this is called the latter rather
+     than the fishhook, since it's shown as a fishhook radical." KANJIDIC
+     entries are about the kanji; for a radical that is often a different word,
+     and the dictionary says which in the gloss. */
+  it("leads with the radical's name, not the kanji's meaning", () => {
+    expect(radicalMeanings("乙", ["the latter", "duplicate", "witty", "fishhook radical (no. 5)"])).toEqual([
+      "fishhook",
+      "the latter",
+      "duplicate",
+      "witty",
+    ]);
+  });
+
+  /* Eighteen radicals printed the index's own description at a learner. It
+     reads as a name and teaches a wrong one. */
+  it("never prints the index describing its own numbering", () => {
+    expect(radicalMeanings("广", ["dotted cliff radical (no. 53)"])).toEqual(["dotted cliff"]);
+    expect(radicalMeanings("巛", ["curving river radical (no.47)"])).toEqual(["curving river"]);
+    expect(radicalMeanings("彑", ["pig's head radical variant (no. 58)"])).toEqual(["pig's head"]);
+  });
+
+  it("takes the first of the index's two readings of a shape", () => {
+    expect(radicalMeanings("几", ["table", "table or windy radical (no. 16)"])).toEqual(["table"]);
+    expect(radicalMeanings("廾", ["twenty", "twenty or letter H radical (no. 55)"])).toEqual(["twenty"]);
+  });
+
+  it("says a name once, however many ways the dictionary gives it", () => {
+    expect(radicalMeanings("口", ["mouth", "mouth radical (no. 30)"])).toEqual(["mouth"]);
+  });
+
+  it("leaves a radical the dictionary names plainly alone", () => {
+    expect(radicalMeanings("大", ["large", "big"])).toEqual(["large", "big"]);
+  });
+
+  it("keeps the kanji's meanings, which are still true", () => {
+    expect(radicalMeanings("乙", ["the latter", "fishhook radical (no. 5)"])).toContain("the latter");
+  });
+});
+
+describe("the shipped ladder, after the reordering", () => {
+  it("prints no index gloss and no bare numbering at any radical", async () => {
+    const { ladderSeedPlan } = await import("../../../scripts/uk-subjects-plan");
+    const radicals = ladderSeedPlan().rows.filter((row) => row.kind === "radical");
+
+    const glossy = radicals.filter((row) => /radical\s*(?:variant\s*)?\(no\.?\s*\d+\)/i.test(row.meanings[0] ?? ""));
+    expect(glossy.map((row) => `${row.characters}: ${row.meanings[0]}`)).toEqual([]);
+
+    /* Nowhere in the alternates either - the numbering is the index talking
+       about itself and belongs on no card. */
+    const anywhere = radicals.filter((row) => row.meanings.some((m) => /\(no\.?\s*\d+\)/i.test(m)));
+    expect(anywhere.map((row) => row.characters)).toEqual([]);
+  });
+});
