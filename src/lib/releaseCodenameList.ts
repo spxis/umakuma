@@ -487,4 +487,5 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Manabi no Mochimono", ja: "学びの持ち物", reading: "まなびのもちもの", gloss: "the numbers you carry" },
   { romaji: "Mitooshi no Dan", ja: "見通しの段", reading: "みとおしのだん", gloss: "the rung you can see ahead" },
   { romaji: "Muchuu no Suuchi", ja: "夢中の数値", reading: "むちゅうのすうち", gloss: "the figure you keep checking" },
+  { romaji: "Mekuru Kata", ja: "めくる形", reading: "めくるかた", gloss: "the shape you turn over" },
 ];

@@ -5420,11 +5420,23 @@
     "id": "xp-profile-header",
     "name": "Profile header says the XP, the rank and what is left",
     "area": "account",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-05",
+    "summary": "The profile page header should read like '50,000 XP (L10 Black Belt)' - the total, the XP level, the rank name, and how much more is needed to level up.",
+    "dateIsEstimate": false,
+    "version": "0.473.0",
+    "releasedAt": "2026-09-05T09:06:42Z"
+  },
+  {
+    "id": "radical-names",
+    "name": "Every radical has a name",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-05",
-    "version": "0.473.0",
-    "releasedAt": "2026-09-05T09:06:42Z",
-    "summary": "The profile page header should read like '50,000 XP (L10 Black Belt)' - the total, the XP level, the rank name, and how much more is needed to level up."
+    "version": "0.474.0",
+    "releasedAt": "2026-09-05T09:45:39Z",
+    "summary": "Six radicals had no meaning at all, so a review card drew its own glyph where the word should be. They are named now - by the English number where the shape is one, and otherwise by the katakana it is. Three more are paired with WaniKani at last: we write that radical as one character and they write it as another, so the link had never been made."
   }
 ]
