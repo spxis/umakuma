@@ -40,6 +40,8 @@ export type UkReviewOutcome = {
   /** The level the member stands on after this answer. */
   level: number;
   levelledUp: boolean;
+  /** What this answer paid, so the page can say so on the answer itself. */
+  xpAwarded: number;
 };
 
 /** Opens items as lessons. Ignores any the member has already started. */
@@ -132,7 +134,7 @@ export async function recordUkReview({
   const resolved = await syncAccountUkLevel(accountId);
   const levelBefore = before?.ukLevel ?? 1;
 
-  await awardXpQuietly({
+  const xpAwarded = await awardXpQuietly({
     accountId,
     requests: reviewXpAwards({ correct, burnedNow, levelBefore, levelAfter: resolved.level }),
     now,
@@ -145,6 +147,8 @@ export async function recordUkReview({
     newSrsStage,
     level: resolved.level,
     levelledUp: resolved.level > levelBefore,
+    /* What this answer paid, so the page can say so on the answer itself. */
+    xpAwarded,
   };
 }
 

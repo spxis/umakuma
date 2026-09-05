@@ -158,6 +158,7 @@ export function useStudyReviewSubmission({
 
         const payload = (await response.json()) as {
           error?: string;
+          xpAwarded?: number;
           review?: ReviewSrsTransition;
         };
 
@@ -165,8 +166,14 @@ export function useStudyReviewSubmission({
           throw new Error(payload.error ?? "Could not submit review.");
         }
 
-        if (payload.review && (payload.review.transition === "promoted" || payload.review.transition === "demoted")) {
-          onSetLatestReviewTransition(payload.review);
+        /* A stage change is a cue; so is the XP the answer paid, even when
+           the stage held - a member who turned up should see it count. */
+        const xpAwarded = typeof payload.xpAwarded === "number" ? payload.xpAwarded : 0;
+        if (
+          payload.review &&
+          (payload.review.transition === "promoted" || payload.review.transition === "demoted" || xpAwarded > 0)
+        ) {
+          onSetLatestReviewTransition({ ...payload.review, xpAwarded });
         }
 
         if (!itemForSubmit?.isInjectedTrouble) {

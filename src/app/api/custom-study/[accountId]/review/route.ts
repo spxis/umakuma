@@ -16,6 +16,10 @@ import {
 } from "@/lib/srs/srsSchedule";
 import { prisma } from "@/lib/prisma";
 import { REVIEW_RESULTS } from "@/lib/domainConstants";
+import { SRS_BURNED_STAGE } from "@/lib/srs/srsSchedule";
+import { settleDailyXp } from "@/lib/xp/xpDayServer";
+import { awardXpQuietly } from "@/lib/xp/xpServer";
+import { reviewXpAwards } from "@/lib/xp/xpStudyAwards";
 
 type RouteContext = {
   params: Promise<{ accountId: string }>;
@@ -154,8 +158,24 @@ export async function POST(request: Request, context: RouteContext) {
           }),
         ]);
 
+        /* A review is a review whichever feed it came from - the third feed
+           pays the same participation XP as the other two, and says so. */
+        const xpNow = new Date();
+        const xpAwarded = await awardXpQuietly({
+          accountId,
+          requests: reviewXpAwards({
+            correct: parsed.data.result === REVIEW_RESULTS.correct,
+            burnedNow: newSrsStage === SRS_BURNED_STAGE && previousSrsStage < SRS_BURNED_STAGE,
+            levelBefore: 0,
+            levelAfter: 0,
+          }),
+          now: xpNow,
+        });
+        await settleDailyXp({ accountId, now: xpNow });
+
         return NextResponse.json({
           ok: true,
+          xpAwarded,
           review: {
             assignmentId: state.id,
             subjectId: state.itemId,

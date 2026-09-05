@@ -13,6 +13,7 @@ import {
   STUDY_REVIEW_MODAL_STORAGE_KEYS,
   STUDY_REVIEW_MODAL_TOUCH,
   STUDY_REVIEW_MODAL_TRANSITION_CUE_DURATION_MS,
+  STUDY_REVIEW_XP_CUE,
   STUDY_REVIEW_MODAL_VIEWER_MODES,
   STUDY_VIEWER_MODES,
 } from "./StudyExplorer.constants";
@@ -255,7 +256,9 @@ export default function StudyReviewModal({
       return;
     }
 
-    if (latestReviewTransition.transition !== "promoted" && latestReviewTransition.transition !== "demoted") {
+    const moved = latestReviewTransition.transition === "promoted" || latestReviewTransition.transition === "demoted";
+    const xp = latestReviewTransition.xpAwarded ?? 0;
+    if (!moved && xp <= 0) {
       return;
     }
 
@@ -274,10 +277,11 @@ export default function StudyReviewModal({
     const verb = latestReviewTransition.transition === "promoted" ? "Promoted" : "Dropped";
 
     queueMicrotask(() => {
+      const xpCue = xp > 0 ? STUDY_REVIEW_XP_CUE(xp) : null;
       setVisibleTransitionCue({
         assignmentId: latestReviewTransition.assignmentId,
-        tone: latestReviewTransition.transition === "promoted" ? "positive" : "negative",
-        message: `${verb} to ${nextGroupingLabel}${nextStageLabel}`,
+        tone: latestReviewTransition.transition === "demoted" ? "negative" : "positive",
+        message: moved ? [`${verb} to ${nextGroupingLabel}${nextStageLabel}`, xpCue].filter(Boolean).join(" · ") : xpCue!,
       });
     });
 

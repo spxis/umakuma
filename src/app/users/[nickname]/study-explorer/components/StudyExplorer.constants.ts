@@ -224,6 +224,8 @@ export function studyLevelHeaderLabel(studySource: StudySource, level: number | 
 }
 
 export const STUDY_REVIEW_MODAL_TRANSITION_CUE_DURATION_MS = 900;
+/** The XP an answer paid, on the answer. */
+export const STUDY_REVIEW_XP_CUE = (xp: number): string => `+${xp} XP`;
 
 export const STUDY_REVIEW_HELPERS_TEXT = {
   empty: "-",

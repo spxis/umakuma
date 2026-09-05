@@ -111,6 +111,8 @@ export type ReviewSrsTransition = {
   previousGrouping: ReviewSrsGrouping | null;
   newGrouping: ReviewSrsGrouping | null;
   transition: "promoted" | "demoted" | "unchanged" | "unknown";
+  /** What the answer paid, shown on the answer itself. */
+  xpAwarded?: number;
 };
 
 export type SubmitInFlight = {

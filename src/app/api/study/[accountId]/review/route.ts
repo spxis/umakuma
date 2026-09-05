@@ -276,7 +276,7 @@ export async function POST(request: Request, context: RouteContext) {
        This route never moves a UK level, so before and after are the same
        and no level award can fire. Quiet, after the write, like the UK one. */
     const now = new Date();
-    await awardXpQuietly({
+    const xpAwarded = await awardXpQuietly({
       accountId,
       requests: reviewXpAwards({
         correct: incorrect === 0,
@@ -290,6 +290,7 @@ export async function POST(request: Request, context: RouteContext) {
 
     return NextResponse.json({
       ok: true,
+      xpAwarded,
       review: {
         assignmentId: parsed.data.assignmentId,
         subjectId:

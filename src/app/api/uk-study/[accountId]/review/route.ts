@@ -77,6 +77,7 @@ export async function POST(request: Request, context: RouteContext) {
           },
           level: outcome.level,
           levelledUp: outcome.levelledUp,
+          xpAwarded: outcome.xpAwarded,
           mirror,
         });
       } catch (error) {
