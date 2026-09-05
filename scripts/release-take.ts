@@ -15,7 +15,6 @@ import {
   editReplacingOnce,
   entryFromTicket,
   higherVersion,
-  minorOf,
   nextVersion,
   shipEntry,
   type PlannedEdit,
@@ -117,11 +116,11 @@ async function main(): Promise<void> {
 
   const published = publishedVersion();
   const version = nextVersion(published);
-  const minor = minorOf(version);
-  const { kana, cycle } = codenameKanaForMinor(minor);
+  const release = loadFeatureTimeline().filter((entry) => entry.version).length + 1;
+  const { kana, cycle } = codenameKanaForMinor(release);
 
   /* A name may already be planned ahead for this minor; only ask when it is not. */
-  const planned = CODENAMES[minor - 1];
+  const planned = CODENAMES[release - 1];
   const codename: ReleaseCodename | null =
     planned ??
     (flag("romaji") && flag("ja") && flag("reading") && flag("gloss")
@@ -130,14 +129,14 @@ async function main(): Promise<void> {
 
   if (!codename) {
     console.error(
-      `0.${minor}.0 has no codename yet. It lands on ${kana} (cycle ${cycle}), so pass one whose reading starts there:\n` +
+      `${version} has no codename yet. It lands on ${kana} (cycle ${cycle}), so pass one whose reading starts there:\n` +
         '  --romaji "…" --ja "…" --reading "…" --gloss "…"',
     );
     process.exit(1);
   }
 
   if (!planned) {
-    const problems = codenameProblems(codename, minor, CODENAMES);
+    const problems = codenameProblems(codename, release, CODENAMES);
     if (problems.length > 0) {
       console.error(`That codename will not pass the gate:\n${problems.map((p) => `  - ${p.message}`).join("\n")}`);
       process.exit(1);

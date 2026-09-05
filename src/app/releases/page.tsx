@@ -7,7 +7,7 @@ import CodenameText from "@/app/shared/CodenameText";
 import umakumaLogo from "@/images/umakuma-banner1-transparent.png";
 import { loadFeatureTimeline, publicReleaseEntries, publicSummaryFor } from "@/lib/featureTimeline";
 import { authOptions, isAdminEmail } from "@/lib/auth";
-import { codenameForVersion } from "@/lib/releaseCodenames";
+import { codenameForRelease } from "@/lib/releaseCodenames";
 
 import { FEATURE_AREA_LABELS } from "@/lib/featureTimeline";
 
@@ -110,7 +110,7 @@ export default async function PublicReleasesPage({
         >
           <ul className="space-y-2">
             {month.entries.map((entry) => {
-              const codename = entry.version ? codenameForVersion(entry.version) : null;
+              const codename = entry.release ? codenameForRelease(entry.release) : null;
               return (
                 <li key={entry.id} id={releaseAnchor(entry)}>
                   <details className="group rounded-2xl border border-line bg-surface px-4 py-3 transition open:bg-surface-muted/40">

@@ -64,7 +64,7 @@ describe("loadFeatureTimeline", () => {
     }
 
     const ordered = [...stamped].sort(
-      (left, right) => Number(left.version!.split(".")[1]) - Number(right.version!.split(".")[1]),
+      (left, right) => (left.release ?? 0) - (right.release ?? 0),
     );
     for (let index = 1; index < ordered.length; index += 1) {
       expect(
@@ -227,7 +227,10 @@ describe("formatFeatureDate", () => {
 });
 
 describe("versions", () => {
-  const VERSION_PATTERN = /^0\.\d+\.0$/;
+  /* Two shapes, one counter. Before the site went into production a release
+     moved the minor; from 1.0.0 it moves the patch, and `releaseOrdinal` reads
+     the count out of either. */
+  const VERSION_PATTERN = /^\d+\.\d+\.\d+$/;
 
   it("stamps every shipped entry with a version and no planned entry", () => {
     for (const item of loadFeatureTimeline()) {
@@ -248,13 +251,15 @@ describe("versions", () => {
 
   it("numbers versions 1..N with no gaps, in date order", () => {
     const shipped = featuresByStatus(loadFeatureTimeline(), FEATURE_STATUSES.shipped);
-    const minors = shipped
-      .map((item) => Number(item.version!.split(".")[1]))
+    const ordinals = shipped
+      .map((item) => item.release ?? 0)
       .sort((left, right) => left - right);
-    expect(minors).toEqual(minors.map((_, index) => index + 1));
+    /* The count is 1..N with no gaps whatever the versions are written as:
+       0.N.0 before the site went into production and 1.0.x after. */
+    expect(ordinals).toEqual(ordinals.map((_, index) => index + 1));
 
     const byMinor = [...shipped].sort(
-      (left, right) => Number(left.version!.split(".")[1]) - Number(right.version!.split(".")[1]),
+      (left, right) => (left.release ?? 0) - (right.release ?? 0),
     );
     for (let index = 1; index < byMinor.length; index += 1) {
       expect(
@@ -268,7 +273,7 @@ describe("versions", () => {
     const shipped = featuresByStatus(loadFeatureTimeline(), FEATURE_STATUSES.shipped);
     const latest = shipped
       .map((item) => item.version!)
-      .sort((left, right) => Number(left.split(".")[1]) - Number(right.split(".")[1]))
+      .sort()
       .at(-1);
 
     const { APP_VERSION, APP_VERSION_DATE } = await import("./appVersion");

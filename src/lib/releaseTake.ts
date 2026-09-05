@@ -1,5 +1,6 @@
 import { FEATURE_STATUSES, type FeatureTimelineEntry } from "./featureTimeline";
 import { codenameKanaForMinor, toHiragana, type ReleaseCodename } from "./releaseCodenames";
+import { compareVersions, RELEASE_STEPS, versionAfter, type ReleaseStep } from "./releaseOrdinal";
 
 /**
  * Taking a release number, as rules rather than as a ritual.
@@ -29,13 +30,8 @@ import { codenameKanaForMinor, toHiragana, type ReleaseCodename } from "./releas
 /** Only `na` and `no` may recur: they are grammar, not words. */
 const PARTICLES = new Set(["na", "no"]);
 
-export type VersionParts = { major: number; minor: number; patch: number };
 
-export function parseVersion(value: string): VersionParts | null {
-  const match = /^(\d+)\.(\d+)\.(\d+)$/.exec(value.trim());
-  if (!match) return null;
-  return { major: Number(match[1]), minor: Number(match[2]), patch: Number(match[3]) };
-}
+export { parseVersion, type VersionParts } from "./releaseVersionParts";
 
 /**
  * The next release, which is always the next minor.
@@ -44,17 +40,10 @@ export function parseVersion(value: string): VersionParts | null {
  * patch, and a release that did would break the codename walk, since the
  * gojūon is indexed by minor alone.
  */
-export function nextVersion(published: string): string {
-  const parts = parseVersion(published);
-  if (!parts) throw new Error(`"${published}" is not a version this repository uses.`);
-  return `${parts.major}.${parts.minor + 1}.0`;
+export function nextVersion(published: string, step: ReleaseStep = RELEASE_STEPS.feature): string {
+  return versionAfter(published, step);
 }
 
-export function minorOf(version: string): number {
-  const parts = parseVersion(version);
-  if (!parts) throw new Error(`"${version}" is not a version this repository uses.`);
-  return parts.minor;
-}
 
 /** Every romaji word already spoken for, particles aside. */
 export function usedCodenameWords(codenames: readonly ReleaseCodename[]): Set<string> {
@@ -78,16 +67,16 @@ export type CodenameProblem = { field: "kana" | "words" | "pair" | "gloss"; mess
  */
 export function codenameProblems(
   candidate: ReleaseCodename,
-  minor: number,
+  release: number,
   existing: readonly ReleaseCodename[],
 ): CodenameProblem[] {
   const problems: CodenameProblem[] = [];
-  const { kana } = codenameKanaForMinor(minor);
+  const { kana } = codenameKanaForMinor(release);
 
   if (!toHiragana(candidate.reading).startsWith(kana)) {
     problems.push({
       field: "kana",
-      message: `0.${minor}.0 lands on ${kana}, and "${candidate.reading}" does not start with it.`,
+      message: `Release ${release} lands on ${kana}, and "${candidate.reading}" does not start with it.`,
     });
   }
 
@@ -331,5 +320,5 @@ export function editAppendingCodename(
  */
 export function higherVersion(remote: string, local: string | null | undefined): string {
   if (!local) return remote;
-  return minorOf(local) > minorOf(remote) ? local : remote;
+  return compareVersions(local, remote) > 0 ? local : remote;
 }

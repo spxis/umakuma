@@ -1,5 +1,5 @@
 import CodenameText from "@/app/shared/CodenameText";
-import { codenameForVersion } from "@/lib/releaseCodenames";
+import { codenameForRelease } from "@/lib/releaseCodenames";
 
 import {
   FEATURE_AREA_LABELS,
@@ -76,7 +76,7 @@ function FeatureRow({
           <span className="font-semibold text-foreground">{entry.name}</span>
 
           {(() => {
-            const codename = entry.version ? codenameForVersion(entry.version) : null;
+            const codename = entry.release ? codenameForRelease(entry.release) : null;
             return codename ? (
               <CodenameText
                 codename={codename}

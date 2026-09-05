@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 
-import { APP_VERSION, APP_VERSION_DATE } from "@/lib/appVersion";
-import { codenameForVersion } from "@/lib/releaseCodenames";
+import { APP_VERSION, APP_VERSION_DATE, APP_VERSION_RELEASE } from "@/lib/appVersion";
+import { codenameForRelease } from "@/lib/releaseCodenames";
 import { RELEASES_HREF } from "@/lib/releaseLink";
 import { SOURCES_HREF } from "@/lib/sourceCredits";
 import CodenameText from "./shared/CodenameText";
@@ -18,7 +18,7 @@ const RELEASE_DATE_LABEL = new Intl.DateTimeFormat("en-CA", {
   timeZone: "UTC",
 }).format(new Date(`${APP_VERSION_DATE}T00:00:00Z`));
 
-const CODENAME = codenameForVersion(APP_VERSION);
+const CODENAME = codenameForRelease(APP_VERSION_RELEASE);
 
 type Props = {
   /** Concise mode chips (DEV, ADV) for globally enabled flags; empty when none. */

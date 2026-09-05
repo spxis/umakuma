@@ -10,7 +10,6 @@ import {
   MAX_RELEASE_SUMMARY,
   releaseSummaryProblems,
   higherVersion,
-  minorOf,
   nextVersion,
   parseVersion,
   shipEntry,
@@ -38,9 +37,15 @@ const codename = (romaji: string, reading: string): ReleaseCodename => ({
 });
 
 describe("the next number", () => {
-  it("moves the minor, which is the only thing a release moves", () => {
-    expect(nextVersion("0.294.0")).toBe("0.295.0");
-    expect(minorOf("0.295.0")).toBe(295);
+  /* Everything before production is v0 and leads to 1.0.0; after it, a
+     feature moves the minor and a tweak the patch. */
+  it("leaves v0 for the first big release", () => {
+    expect(nextVersion("0.381.0")).toBe("1.0.0");
+  });
+
+  it("moves the minor for a feature and the patch for a tweak", () => {
+    expect(nextVersion("1.6.4")).toBe("1.7.0");
+    expect(nextVersion("1.6.4", "tweak")).toBe("1.6.5");
   });
 
   it("refuses anything that is not a version this repository uses", () => {
