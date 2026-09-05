@@ -1,6 +1,7 @@
 import type { StudyTag } from "@/lib/domainConstants";
 import type { RefObject } from "react";
 import type {
+  StudySource,
   UpcomingReviewItem,
   StudyQueueItem,
   StudyQueueMode,
@@ -17,6 +18,7 @@ type StudyExplorerPanelProps = {
   showEnglish: boolean;
   studyMode: boolean;
   studySourceHeaderLabel: string;
+  studySource: StudySource;
   studySourceIsCustom: boolean;
   studySourceLevel: number | null;
   levelOptions: number[];

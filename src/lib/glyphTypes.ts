@@ -15,6 +15,10 @@ export type LevelItem = {
   subjectId: number;
   subjectType?: SubjectType;
   wkLevel?: number;
+  /** Ours, where the feed is ours. Drawn as UK n beside WK n, never as either. */
+  ukLevel?: number | null;
+  /** Whose meanings and readings these are, for the credit line under them. Absent means WaniKani's. */
+  contentSource?: "wanikani" | "kanjidic2" | "radkfile";
   successRate?: number;
   characters: string;
   meanings: string[];

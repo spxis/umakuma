@@ -6,6 +6,7 @@ export const UK_STUDY_COPY = {
   lessons: "Lessons",
   reviews: "Reviews",
   upcoming: "Due later today",
+  openStudy: "Open Study",
   startLessons: "Start lessons",
   doReviews: "Do reviews",
   nothingDue: "Nothing due. Come back when the next batch comes round.",
@@ -50,5 +51,3 @@ export const UK_STUDY_COPY = {
   meaningLabel: "Meaning",
 } as const;
 
-/** How many items one sitting hands over at a time. */
-export const UK_STUDY_BATCH = 10;

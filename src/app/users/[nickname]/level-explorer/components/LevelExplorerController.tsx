@@ -1,4 +1,5 @@
 "use client";
+import type { StudySource } from "@/app/users/[nickname]/study-explorer/lib/studyExplorerTypes";
 
 import { useEffect, useMemo, useRef } from "react";
 
@@ -21,7 +22,7 @@ type Props = {
   isActive?: boolean;
   explorerTitle: string;
   onOpenStudySourceManager: () => void;
-  explorerSource: "wanikani" | "custom";
+  explorerSource: StudySource;
   customLibraryId: string | null;
   maxLevel: number;
   accountPendingReviews: number;

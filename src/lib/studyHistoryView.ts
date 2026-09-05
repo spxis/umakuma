@@ -1,3 +1,4 @@
+import type { StudySource } from "@/app/users/[nickname]/study-explorer/lib/studyExplorerTypes";
 import { prisma } from "@/lib/prisma";
 import { getCustomStudyHistoryRows } from "@/lib/customStudy/customStudyHistoryRows";
 import { getCatalogSubjectDetails } from "@/lib/subjectCatalogDetails";
@@ -13,7 +14,7 @@ import type { JlptMeta } from "@/lib/jlptTypes";
 import { isReviewResult, type ReviewResult } from "@/lib/domainConstants";
 export type StudyHistorySortBy = "submittedAt" | "result" | "subjectType" | "subject" | "user";
 export type StudyHistorySortDir = "asc" | "desc";
-export type StudyHistorySource = "wanikani" | "custom";
+export type StudyHistorySource = StudySource;
 export type StudyHistoryRow = {
   id: string;
   accountId: string;

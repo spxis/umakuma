@@ -43,6 +43,12 @@ export type LadderSeedInput = {
   /** WaniKani's kanji subject ids by character, so a row can link to its catalogue entry. */
   kanjiSubjectIds: ReadonlyMap<string, number>;
   /**
+   * The written form of each WaniKani word, by subject id. The row carries it
+   * so games, placement and the queue can draw a word without a catalogue
+   * round trip - meanings, readings and mnemonics still resolve at read time.
+   */
+  vocabularyCharacters: ReadonlyMap<number, string>;
+  /**
    * WaniKani's *radical* subject ids by character.
    *
    * Separate from the kanji map on purpose: WaniKani teaches 七 twice, once as
@@ -110,7 +116,7 @@ function vocabularyRows(input: LadderSeedInput): UkSubjectPlanRow[] {
   return Object.entries(input.vocabulary).map(([id, level]) => ({
     key: `wk:${id}`,
     kind: UK_SUBJECT_KINDS.vocabulary,
-    characters: "",
+    characters: input.vocabularyCharacters.get(Number(id)) ?? "",
     level,
     wkSubjectId: Number(id),
     source: LADDER_SOURCES.wanikani,

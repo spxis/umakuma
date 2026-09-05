@@ -2,27 +2,24 @@ import { readFileSync } from "node:fs";
 
 import { describe, expect, it } from "vitest";
 
-import { UK_STUDY_ANSWER_ROW, UK_STUDY_PAGE } from "./ukStudyPage";
+import { UK_STUDY_PAGE } from "./ukStudyPage";
 
 const SESSION = "src/app/users/[nickname]/uk-study/UkStudySession.tsx";
 
 describe("the UmaKuma sitting", () => {
-  it("answers with the site's own row, not a third way", () => {
-    /* The site already had two established ways to answer: the review row -
-       Wrong / Skip / Correct, with its keyboard shortcuts and tallies - and
-       the Corners board's two, three or four tiles. A hand-rolled pair of
-       buttons here made a third, on a site whose whole convention is one
-       reusable style per job. */
+  it("hands the sitting to the Study explorer, fed from our ladder", () => {
+    /* One review interface for every feed. The page drew its own card and
+       answer row for a release; that was a second way to sit a review on a
+       site whose convention is one reusable style per job. Now the page keeps
+       what is ours alone - level, gate, import, numbers - and the sitting is
+       the explorer's, over the UK queue. */
     const source = readFileSync(SESSION, "utf8");
-    expect(source).toContain(UK_STUDY_ANSWER_ROW);
-    expect(source).not.toContain('"I knew it"');
-  });
-
-  it("keeps a running tally, the way the row expects", () => {
-    const source = readFileSync(SESSION, "utf8");
-    for (const field of ["wrong", "skipped", "correct"]) {
-      expect(source, field).toContain(`${field}={tally.${field}}`);
-    }
+    expect(source).not.toContain("StudyReviewFlashActionRow");
+    expect(source).toContain("href={studyHref}");
+    const page = readFileSync("src/app/users/[nickname]/uk-study/page.tsx", "utf8");
+    expect(page).toContain("study-explorer?source=umakuma");
+    const queue = readFileSync("src/app/api/uk-study/[accountId]/queue/route.ts", "utf8");
+    expect(queue).toContain("mapUkQueueItem");
   });
 
   it("skips without writing, so a passed item keeps its stage", () => {

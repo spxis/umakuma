@@ -55,7 +55,9 @@ export function useStudySourceState({ accountId, countsStorageKey, isHydrated, h
    * addressed `source=wanikani` is ignored for the same reason: it names
    * something this account does not have.
    */
-  const defaultSource: StudySource = hasWanikani ? "wanikani" : "custom";
+  /* Our ladder is the source everybody has, so it is where everybody starts;
+     WaniKani and a custom library are a switch away for those who have them. */
+  const defaultSource: StudySource = "umakuma";
 
   const [studySource, setStudySource] = useState<StudySource>(() => {
     if (typeof window === "undefined") {
@@ -64,12 +66,12 @@ export function useStudySourceState({ accountId, countsStorageKey, isHydrated, h
 
     const params = new URLSearchParams(window.location.search);
     const sourceFromUrl = params.get("source");
-    if (sourceFromUrl === "custom" || (sourceFromUrl === "wanikani" && hasWanikani)) {
+    if (sourceFromUrl === "custom" || sourceFromUrl === "umakuma" || (sourceFromUrl === "wanikani" && hasWanikani)) {
       return sourceFromUrl;
     }
 
     const storedSource = window.localStorage.getItem(studySourceStorageKey);
-    if (storedSource === "custom" || (storedSource === "wanikani" && hasWanikani)) {
+    if (storedSource === "custom" || storedSource === "umakuma" || (storedSource === "wanikani" && hasWanikani)) {
       return storedSource;
     }
 
@@ -127,7 +129,9 @@ export function useStudySourceState({ accountId, countsStorageKey, isHydrated, h
         ? customLibraryId
           ? `/api/custom-study/${accountId}/counts?libraryId=${encodeURIComponent(customLibraryId)}`
           : null
-        : `/api/study/${accountId}/counts`,
+        : studySource === "umakuma"
+          ? `/api/uk-study/${accountId}/counts`
+          : `/api/study/${accountId}/counts`,
     [accountId, customLibraryId, studySource],
   );
 

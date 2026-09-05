@@ -1,3 +1,4 @@
+import type { StudySource } from "@/app/users/[nickname]/study-explorer/lib/studyExplorerTypes";
 import type { Dispatch, SetStateAction } from "react";
 import type { SubjectType } from "@/lib/domainConstants";
 
@@ -17,7 +18,7 @@ type VisibleTypes = { radical: boolean; kanji: boolean; vocabulary: boolean };
 
 type Params = {
   accountId: string;
-  explorerSource: "wanikani" | "custom";
+  explorerSource: StudySource;
   customLibraryId: string | null;
   initialLevel: number;
   storageKeys: { typeVisibility: string; stickyMerge: string; filtersCollapsed: string };

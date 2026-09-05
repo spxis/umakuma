@@ -5,7 +5,9 @@ import { STUDY_QUEUE_TYPES } from "./studyExplorerDomain";
 const STUDY_QUEUE_STORAGE_SCOPE_VERSION = "v2";
 
 export function buildStudyApiBasePath(accountId: string, studySource: StudySource): string {
-  return studySource === "custom" ? `/api/custom-study/${accountId}` : `/api/study/${accountId}`;
+  if (studySource === "custom") return `/api/custom-study/${accountId}`;
+  if (studySource === "umakuma") return `/api/uk-study/${accountId}`;
+  return `/api/study/${accountId}`;
 }
 
 export function buildStudyQueueStorageScopeKey(

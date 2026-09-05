@@ -4,5 +4,3 @@ export const UK_STUDY_PAGE = {
   path: "uk-study",
 } as const;
 
-/** Where the session's answer row comes from, asserted by the test. */
-export const UK_STUDY_ANSWER_ROW = "StudyReviewFlashActionRow";

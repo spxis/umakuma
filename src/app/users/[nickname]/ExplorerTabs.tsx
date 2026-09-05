@@ -326,12 +326,14 @@ export default function ExplorerTabs({
 
   const studySourceHeaderLabel = studySource === "custom"
     ? (activeCustomLibraryName?.trim() || "Custom")
-    : "WaniKani";
+    : studySource === "umakuma"
+      ? "UmaKuma"
+      : "WaniKani";
   const studySourceIsCustom = studySource === "custom";
-  const studySourceLevel = studySource === "custom"
+  const studySourceLevel = studySource === "custom" || studySource === "umakuma"
     ? (typeof studyCounts?.currentLevel === "number" ? studyCounts.currentLevel : 1)
     : (typeof studyCounts?.currentLevel === "number" ? studyCounts.currentLevel : maxLevel);
-  const effectiveStudyMaxLevel = studySource === "custom"
+  const effectiveStudyMaxLevel = studySource === "custom" || studySource === "umakuma"
     ? Math.max(
       typeof studyCounts?.maxLevel === "number" ? studyCounts.maxLevel : 1,
       typeof studySourceLevel === "number" ? studySourceLevel : 1,

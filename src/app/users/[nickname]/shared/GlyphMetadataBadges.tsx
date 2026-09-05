@@ -3,10 +3,11 @@
 import { NO_TRANSLATE_CLASS } from "@/app/shared/japaneseText";
 
 import { useIsRowDensity } from "./explorerCardDensity";
-import { wkLevelBadge } from "@/lib/levelBadge";
+import { ukLevelBadge, wkLevelBadge } from "@/lib/levelBadge";
 
 type Props = {
   level?: number | null;
+  ukLevel?: number | null;
   successRate?: number | null;
   hoverGroup?: "glyph-tile" | "explorer-card";
 };
@@ -30,6 +31,7 @@ function hoverClass(group: NonNullable<Props["hoverGroup"]>): string {
 
 export default function GlyphMetadataBadges({
   level,
+  ukLevel,
   successRate,
   hoverGroup = "explorer-card",
 }: Props) {
@@ -57,11 +59,11 @@ export default function GlyphMetadataBadges({
           className={`${NO_TRANSLATE_CLASS} ${chipClass} ${inRow ? "" : "left-1.5"}`}
         >{`${validRate}%`}</span>
       ) : null}
-      {typeof level === "number" ? (
+      {typeof level === "number" || typeof ukLevel === "number" ? (
         <span
           translate="no"
           className={`${NO_TRANSLATE_CLASS} ${chipClass} ${inRow ? "" : "right-1.5"}`}
-        >{wkLevelBadge(level)}</span>
+        >{[wkLevelBadge(level ?? null), ukLevelBadge(ukLevel ?? null)].filter(Boolean).join(" · ")}</span>
       ) : null}
     </>
   );

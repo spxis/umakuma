@@ -30,6 +30,7 @@ type Props = {
 };
 
 const DROPDOWN_WANIKANI_VALUE = "";
+const DROPDOWN_UMAKUMA_VALUE = "umakuma";
 
 export default function StudySourceControls({
   accountId,
@@ -141,7 +142,7 @@ export default function StudySourceControls({
     const activeLibraryId = libraries.find((library) => library.isActive)?.id ?? libraries[0]?.id ?? null;
     const resolvedCurrentLibraryId = customLibraryId ?? activeLibraryId;
     queueMicrotask(() => {
-      setDraftLibraryId(studySource === "custom" ? resolvedCurrentLibraryId : null);
+      setDraftLibraryId(studySource === "custom" ? resolvedCurrentLibraryId : studySource === "umakuma" ? DROPDOWN_UMAKUMA_VALUE : null);
       setSelectionMessage(null);
       setIsModalOpen(true);
     });
@@ -186,6 +187,11 @@ export default function StudySourceControls({
   async function applySelectedLibrary(): Promise<void> {
     setSelectionMessage(null);
 
+    if (draftLibraryId === DROPDOWN_UMAKUMA_VALUE) {
+      onSetStudySource("umakuma");
+      setIsModalOpen(false);
+      return;
+    }
     if (!draftLibraryId || draftLibraryId === DROPDOWN_WANIKANI_VALUE) {
       if (hasWanikani) {
         onSetStudySource("wanikani");
@@ -235,8 +241,9 @@ export default function StudySourceControls({
                   disabled={isLoading}
                 >
                   {/* Not offered to an account that has no WaniKani to go back to. */}
-                  {hasWanikani ? <option value={DROPDOWN_WANIKANI_VALUE}>WaniKani (default)</option> : null}
-                  {hasWanikani ? <option disabled>──────────</option> : null}
+                  <option value={DROPDOWN_UMAKUMA_VALUE}>UmaKuma (default)</option>
+                  {hasWanikani ? <option value={DROPDOWN_WANIKANI_VALUE}>WaniKani</option> : null}
+                  <option disabled>──────────</option>
                   {libraries.map((library) => (
                     <option key={library.id} value={library.id}>
                       {library.name} ({library.itemCount})

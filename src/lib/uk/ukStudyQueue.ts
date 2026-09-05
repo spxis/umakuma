@@ -31,6 +31,8 @@ export type UkStudyItem = {
   level: number;
   meanings: string[];
   readings: string[];
+  /** WaniKani's id where WaniKani teaches it; the credit line and the mirror both turn on this. */
+  wkSubjectId: number | null;
   /** Null for a lesson, which has no state yet. */
   srsStage: number | null;
   /**
@@ -86,8 +88,10 @@ type LadderRow = Awaited<ReturnType<typeof unlockedSubjects>>[number];
  * Never their mnemonics: that is WaniKani's copyrighted text, and it is shown
  * only to members who have connected their own account.
  */
-async function withContent(rows: LadderRow[]): Promise<Map<number, { meanings: string[]; readings: string[] }>> {
-  const filled = new Map<number, { meanings: string[]; readings: string[] }>();
+type ResolvedContent = { meanings: string[]; readings: string[]; characters: string };
+
+async function withContent(rows: LadderRow[]): Promise<Map<number, ResolvedContent>> {
+  const filled = new Map<number, ResolvedContent>();
   const wanted = rows.filter((row) => row.wkSubjectId !== null);
   if (wanted.length === 0) return filled;
 
@@ -97,14 +101,14 @@ async function withContent(rows: LadderRow[]): Promise<Map<number, { meanings: s
   for (const row of wanted) {
     const detail = details.get(row.wkSubjectId as number);
     if (!detail) continue;
-    filled.set(row.id, { meanings: detail.meanings, readings: detail.readings });
+    filled.set(row.id, { meanings: detail.meanings, readings: detail.readings, characters: detail.characters });
   }
   return filled;
 }
 
 function toItem(
   row: LadderRow,
-  content: Map<number, { meanings: string[]; readings: string[] }>,
+  content: Map<number, ResolvedContent>,
   srsStage: number | null,
   passed = false,
 ): UkStudyItem {
@@ -113,7 +117,10 @@ function toItem(
     subjectId: row.id,
     key: row.key,
     kind: row.kind,
-    characters: row.characters,
+    /* The seed left every WaniKani-sourced word without its characters for a
+       time; the catalogue has always known them. */
+    characters: row.characters || resolved?.characters || "",
+    wkSubjectId: row.wkSubjectId,
     level: row.level,
     /* The row's own facts win where it has them: those are the items
        WaniKani never taught, and the catalogue has nothing to say. */

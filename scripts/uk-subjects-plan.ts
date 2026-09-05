@@ -87,6 +87,20 @@ function loadRadicalSubjectIds(): Map<string, number> {
   return ids;
 }
 
+function loadVocabularyCharacters(): Map<number, string> {
+  const index = readJson<{ files: string[] }>("wk-catalog-levels/index.json");
+  const characters = new Map<number, string>();
+  for (const file of index.files) {
+    const level = readJson<{ vocabulary?: { characters: string | null; wkSubjectId: number }[] }>(
+      join("wk-catalog-levels", file),
+    );
+    for (const subject of level.vocabulary ?? []) {
+      if (subject.characters) characters.set(subject.wkSubjectId, subject.characters);
+    }
+  }
+  return characters;
+}
+
 export function ladderSeedPlan(): { rows: UkSubjectPlanRow[]; ladder: LadderFile } {
   const ladder = readJson<LadderFile>("kanjiLadder.json");
   return {
@@ -98,6 +112,7 @@ export function ladderSeedPlan(): { rows: UkSubjectPlanRow[]; ladder: LadderFile
       dictionary: loadDictionary(),
       kanjiSubjectIds: loadKanjiSubjectIds(),
       radicalSubjectIds: loadRadicalSubjectIds(),
+      vocabularyCharacters: loadVocabularyCharacters(),
     }),
   };
 }

@@ -80,8 +80,10 @@ describe("the latch, shown", () => {
        version pinned the exact string and broke the moment availableAt was
        added for review ordering, which told us nothing about the latch. */
     expect(queue).toMatch(/select:\s*\{[^}]*passedAt: true/);
-    const session = readFileSync("src/app/users/[nickname]/uk-study/UkStudySession.tsx", "utf8");
-    expect(session).toContain("item.passed ?");
+    /* The explorer draws the sitting now and has no slot for the latch; the
+       feed adapter says so rather than filling `passedAt` with a pretend date. */
+    const feed = readFileSync("src/lib/uk/ukExplorerFeed.ts", "utf8");
+    expect(feed).toContain("passedAt: null");
   });
 
   it("derives it from passedAt and nothing else", () => {

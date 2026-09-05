@@ -229,9 +229,10 @@ export default function LevelExplorerDetailSection({
         </details>
       ) : null}
 
-      {/* The meanings, readings and mnemonics above are WaniKani's, the same as
-        * on the public subject pages, and are credited the same way. */}
-      <SourceCredit source={SOURCE_KEYS.wanikani} label={SOURCE_CREDIT_COPY.subjectData} />
+      {/* The meanings, readings and mnemonics above are credited to whoever
+        * wrote them - WaniKani's unless the item says otherwise, as our own
+        * ladder's RADKFILE radicals and KANJIDIC2 kanji do. */}
+      <SourceCredit source={selectedItem.contentSource ?? SOURCE_KEYS.wanikani} label={SOURCE_CREDIT_COPY.subjectData} />
     </section>
   );
 }

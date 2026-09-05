@@ -1,3 +1,4 @@
+import { ukLevelBadge, wkLevelBadge } from "@/lib/levelBadge";
 import { glyphTextSizeClass } from "@/app/shared/glyphSizes";
 import { useState } from "react";
 import ExplorerBulkSelectionPanel from "../../shared/ExplorerBulkSelectionPanel";
@@ -61,6 +62,7 @@ export default function StudyExplorerPanel({
   showEnglish,
   studyMode,
   studySourceHeaderLabel,
+  studySource,
   studySourceIsCustom,
   studySourceLevel,
   levelOptions,
@@ -128,12 +130,16 @@ export default function StudyExplorerPanel({
   const totalReviewsInVisibleLevels = Object.values(reviewLevelCounts).reduce((sum, count) => sum + count, 0);
   const totalLessonsInVisibleLevels = lessonLevelOptions.reduce((sum, [, count]) => sum + count, 0);
   const allTypeCount = queueMode === STUDY_QUEUE_TYPES.lesson ? (viewedLevel === null ? totalItems : (lessonLevelCounts[viewedLevel] ?? typeCounts.all)) : typeCounts.all;
-  /* Bare on purpose, and the only place left that is. The Study explorer runs
-     over WaniKani's library or a member's own uploaded one, and this component
-     is not told which — so "WK3" here would be a lie half the time. It sits
-     inside "<library name> (L3)", which names the ladder beside it. Prefix it
-     properly once the panel knows its source. */
-  const studyLevelHeaderLabel = `L${Math.max(1, studySourceLevel ?? 1)}`;
+  /* The panel knows its source now, so the level is prefixed by the ladder
+     it belongs to - WK or UK - and stays bare only for a member's own
+     uploaded library, which is on neither. */
+  const headerLevel = Math.max(1, studySourceLevel ?? 1);
+  const studyLevelHeaderLabel =
+    studySource === "umakuma"
+      ? ukLevelBadge(headerLevel)
+      : studySource === "wanikani"
+        ? wkLevelBadge(headerLevel)
+        : `L${headerLevel}`;
   /* The library and level; the page header above already says Study. */
   const studyHeaderLabel = `${studySourceHeaderLabel} (${studyLevelHeaderLabel})`;
   const hasMoreMatchingItems = hasMorePages && filteredItems.length < allTypeCount;

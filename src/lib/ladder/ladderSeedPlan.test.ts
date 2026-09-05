@@ -22,6 +22,7 @@ const input: LadderSeedInput = {
     ["口", { meanings: ["mouth"], onReadings: ["コウ"], kunReadings: ["くち"], grade: 1 }],
   ]),
   kanjiSubjectIds: new Map([["日", 476]]),
+  vocabularyCharacters: new Map([[2467, "一"]]),
 };
 
 describe("the rows the curriculum should hold", () => {
@@ -159,6 +160,7 @@ describe("radicals linked to WaniKani's own", () => {
     vocabulary: {},
     dictionary: new Map([["七", { meanings: ["seven"], onReadings: ["シチ"], kunReadings: ["なな"], grade: 1 }]]),
     kanjiSubjectIds: new Map([["七", 500]]),
+    vocabularyCharacters: new Map(),
     radicalSubjectIds: new Map([["七", 12]]),
   };
 
@@ -186,5 +188,15 @@ describe("radicals linked to WaniKani's own", () => {
   it("links without the map at all, so the seed still runs", () => {
     const { radicalSubjectIds: _omitted, ...without } = input;
     expect(buildLadderSeedPlan(without).find((row) => row.key === "radical:七")?.wkSubjectId).toBeNull();
+  });
+});
+
+describe("a word's written form", () => {
+  it("is carried on the row, from the catalogue, so nothing downstream draws a blank", () => {
+    /* The first seed left all 6,795 words with characters "" - "a level and
+       a pointer" - and every game, placement probe and lesson card that read
+       the row drew nothing. */
+    const word = buildLadderSeedPlan(input).find((row) => row.key === "wk:2467");
+    expect(word?.characters).toBe("一");
   });
 });

@@ -1,11 +1,12 @@
 "use client";
+import type { StudySource } from "@/app/users/[nickname]/study-explorer/lib/studyExplorerTypes";
 
 import { useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 
 import StudyHistoryTable from "@/app/shared/StudyHistoryTable";
 
-type StudyHistorySource = "wanikani" | "custom";
+type StudyHistorySource = StudySource;
 
 type Props = {
   accountId: string;

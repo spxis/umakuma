@@ -1,3 +1,4 @@
+import type { StudySource } from "@/app/users/[nickname]/study-explorer/lib/studyExplorerTypes";
 import { useMemo, useState } from "react";
 
 import type { Snapshot, SrsFilter } from "../../explorerTypes";
@@ -12,7 +13,7 @@ import {
 } from "./levelExplorerState";
 
 type UseLevelExplorerControllerStateArgs = {
-  explorerSource: "wanikani" | "custom";
+  explorerSource: StudySource;
   maxLevel: number;
   initialSnapshot: Snapshot;
   initialSrsFilter: SrsFilter;

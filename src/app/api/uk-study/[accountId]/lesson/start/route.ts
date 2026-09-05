@@ -7,8 +7,10 @@ import { startUkLessons } from "@/lib/uk/ukStudyWrite";
 
 type RouteContext = { params: Promise<{ accountId: string }> };
 
+/* The explorer starts one lesson at a time, by the id it threads through
+   every callback - on our ladder, the subject's. */
 const bodySchema = z.object({
-  subjectIds: z.array(z.number().int().positive()).min(1).max(100),
+  assignmentId: z.number().int().positive(),
 });
 
 /** Opens items as lessons. The level check happens server-side, not here. */
@@ -29,7 +31,7 @@ export async function POST(request: Request, context: RouteContext) {
           return NextResponse.json({ error: "Invalid request." }, { status: 400 });
         }
 
-        const started = await startUkLessons({ accountId, subjectIds: parsed.data.subjectIds });
+        const started = await startUkLessons({ accountId, subjectIds: [parsed.data.assignmentId] });
         return NextResponse.json({ started });
       } catch (error) {
         console.error(error);
