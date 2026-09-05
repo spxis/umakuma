@@ -2,12 +2,19 @@ import "server-only";
 
 import { NextResponse } from "next/server";
 
+import { getVancouverDateKey } from "@/lib/dailySnapshot";
 import { prisma } from "@/lib/prisma";
+import { summariseXpActivity } from "@/lib/xp/xpActivity";
+import { memberRestStanding, memberTimeOffGrants, protectedDayKeys } from "@/lib/xp/xpRestServer";
 import { xpEarnedToday } from "@/lib/xp/xpServer";
 import { xpRankName } from "@/lib/xp/xpRanks";
 import { xpStanding } from "@/lib/xp/xpCurve";
 
-import type { AdminAccountDetail, AdminAccountDetailPayload, AdminXpTypeOption } from "./adminAccountDetail.types";
+import type {
+  AdminAccountDetail,
+  AdminAccountDetailPayload,
+  AdminXpTypeOption,
+} from "./adminAccountDetail.types";
 
 /**
  * Everything the admin's screen for one member is drawn from, in one read.
@@ -60,6 +67,8 @@ export async function loadAdminAccountDetail(accountId: string): Promise<AdminAc
       lastSyncError: true,
       lastActivityAt: true,
       createdAt: true,
+      vacationStartedAt: true,
+      vacationEndsAt: true,
     },
   });
 
@@ -67,7 +76,7 @@ export async function loadAdminAccountDetail(accountId: string): Promise<AdminAc
     return null;
   }
 
-  const [types, earnedToday, recentEvents] = await Promise.all([
+  const [types, earnedToday, recentEvents, everyDay, protectedDays, rest, grants] = await Promise.all([
     prisma.xpType.findMany({
       orderBy: [{ retiredAt: "asc" }, { label: "asc" }],
       select: { id: true, label: true, note: true, amount: true, dailyCap: true, retiredAt: true },
@@ -79,7 +88,23 @@ export async function loadAdminAccountDetail(accountId: string): Promise<AdminAc
       take: 12,
       select: { id: true, kind: true, amount: true, dayKey: true, note: true, updatedAt: true },
     }),
+    /* Every row, not a page of them: the streak and the activity summary are
+       derived from the whole history, and one member's rows are bounded by the
+       days they have used the site rather than by anything that grows with the
+       size of the site. */
+    prisma.xpEvent.findMany({
+      where: { accountId },
+      select: { dayKey: true, kind: true, amount: true },
+    }),
+    protectedDayKeys(accountId),
+    memberRestStanding(accountId),
+    memberTimeOffGrants(accountId),
   ]);
+
+  /* The protected days go in, so the streak here is the streak the member is
+     shown on their own page. An admin reading a shorter number than the member
+     is looking at is a disagreement nobody can debug from a screenshot. */
+  const activity = summariseXpActivity(everyDay, getVancouverDateKey(new Date()), protectedDays);
 
   const standing = xpStanding(account.xp);
 
@@ -142,6 +167,31 @@ export async function loadAdminAccountDetail(accountId: string): Promise<AdminAc
       dayKey: event.dayKey,
       note: event.note,
       updatedAt: event.updatedAt.toISOString(),
+    })),
+    activity: {
+      currentStreak: activity.streak.current,
+      longestStreak: activity.streak.longest,
+      activeToday: activity.streak.activeToday,
+      lastActiveDay: activity.streak.lastActiveDay,
+      daysSinceLastActive: activity.daysSinceLastActive,
+      daysActive: activity.daysActive,
+      totalXp: activity.totalXp,
+      averagePerActiveDay: activity.averagePerActiveDay,
+      bestDay: activity.bestDay,
+    },
+    rest: {
+      ...rest,
+      vacationStartedAt: account.vacationStartedAt?.toISOString() ?? null,
+      vacationEndsAt: account.vacationEndsAt?.toISOString() ?? null,
+    },
+    restGrants: grants.map((grant) => ({
+      id: grant.id,
+      kind: grant.kind,
+      days: grant.days,
+      note: grant.note,
+      grantedBy: grant.grantedBy,
+      createdAt: grant.createdAt.toISOString(),
+      counting: grant.counting,
     })),
   };
 }

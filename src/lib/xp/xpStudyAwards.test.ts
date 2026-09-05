@@ -62,8 +62,8 @@ describe("what one review earns", () => {
 
   it("leaves the routine level award alone, because the pacing model has not got it", () => {
     /* Wiring `curriculumLevelGained` would put another ~10 XP a day on the
-       steady learner and take them under the three-year target. It wants doing
-       with `learnerPacing.ts`, not beside it. */
+       reference learner and take them under the three-year target. It wants
+       doing with `balanceSimulator.ts`, not beside it. */
     const awards = reviewXpAwards({ correct: true, burnedNow: false, levelBefore: 3, levelAfter: 4 });
     expect(kinds(awards)).not.toContain("curriculumLevelGained");
   });

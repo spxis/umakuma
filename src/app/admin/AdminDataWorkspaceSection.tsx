@@ -8,6 +8,7 @@ import AdminJlptCatalogOperationsPanel from "./AdminJlptCatalogOperationsPanel";
 import AdminLadderBrowser from "./AdminLadderBrowser";
 import AdminLadderOps from "./AdminLadderOps";
 import AdminXpTypesPanel from "./AdminXpTypesPanel";
+import AdminBalanceSimulatorPanel from "./AdminBalanceSimulatorPanel";
 import AdminThemesPanel from "./AdminThemesPanel";
 import AdminSourcesPanel from "./AdminSourcesPanel";
 import { usePersistedTab } from "@/lib/usePersistedTab";
@@ -53,6 +54,7 @@ const DATASETS = [
   { id: "sources", label: "Sources", hasModes: false },
   { id: "ladder", label: "Ladder", hasModes: false },
   { id: "xp", label: "XP", hasModes: false },
+  { id: "balance", label: "Balance", hasModes: false },
   { id: "themes", label: "Themes", hasModes: false },
 ] as const;
 
@@ -152,6 +154,9 @@ export default function AdminDataWorkspaceSection({
 
       {/* Pricing the economy, which is why the kinds are rows. */}
       {dataCatalogView === "xp" && sessionAuthorized ? <AdminXpTypesPanel /> : null}
+
+      {/* And judging the price, which is why the simulator sits beside it. */}
+      {dataCatalogView === "balance" && sessionAuthorized ? <AdminBalanceSimulatorPanel /> : null}
 
       {dataCatalogView === "ladder" ? (
         <div className="space-y-3">

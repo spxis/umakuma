@@ -22,9 +22,12 @@
  * 250 followed by a rank 11 costing 83 — a ladder that got *easier* at the
  * exact moment it was supposed to start biting.
  *
- * The total is calibrated against the **steady** profile in
- * `learnerPacing.ts` — six days a week, fifty reviews, ten lessons — who
- * reaches rank 100 in three years, the target John set.
+ * The total is calibrated against the **morning-and-night** persona in
+ * `simPersonas.ts` — most days, forty-five reviews, ten lessons, twice a day —
+ * who reaches rank 100 at about three years and four months. John's target was
+ * three years, and the simulator rebuild moved the answer by four months
+ * rather than by years, which is the reason to believe either of them.
+ * `balanceSimulator.ts` is the instrument; there is no second model.
  *
  * It has been calibrated four times and every pass was a real correction,
  * which is the argument for the model rather than an embarrassment about it.
@@ -35,7 +38,10 @@
  *    years quietly became 2.6.
  * 3. Against a *simulation* of that loop rather than a fixed daily rate, which
  *    is the only instrument that can price a curve whose own rewards feed back
- *    into it.
+ *    into it. The closed-form model it replaced was retired outright rather
+ *    than kept beside it: it still believed a level held forty items where the
+ *    shipped ladder averages ninety-three, and two models that disagree are
+ *    worse than one that is wrong, because nobody knows which was consulted.
  * 4. With the bonus economy folded in as well — clean sessions, burns, streak
  *    milestones and JLPT bands are earned by the same behaviour the profiles
  *    already describe, so leaving them out made the routine day look smaller

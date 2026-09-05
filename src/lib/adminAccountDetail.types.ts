@@ -74,10 +74,62 @@ export type AdminXpEventRow = {
   updatedAt: string;
 };
 
+/**
+ * How a member is actually getting on, as opposed to what their row says.
+ *
+ * `daysSinceLastActive` is the number this screen exists for on a family site:
+ * a member who has not appeared in a fortnight is worth knowing about before
+ * they are gone for good, and nothing else on the page says it.
+ */
+export type AdminActivitySummary = {
+  currentStreak: number;
+  longestStreak: number;
+  activeToday: boolean;
+  lastActiveDay: string | null;
+  daysSinceLastActive: number | null;
+  daysActive: number;
+  totalXp: number;
+  averagePerActiveDay: number;
+  bestDay: { dayKey: string; amount: number } | null;
+};
+
+/** The allowance, what is spent, and what an admin added on top. */
+export type AdminRestStanding = {
+  restDaysEarned: number;
+  restDaysGranted: number;
+  restDaysAllowed: number;
+  restDaysUsed: number;
+  restDaysLeft: number;
+  vacationWeeksAllowed: number;
+  vacationDaysEarned: number;
+  vacationDaysGranted: number;
+  vacationDaysAllowed: number;
+  vacationDaysUsed: number;
+  vacationDaysLeft: number;
+  onVacation: boolean;
+  /** When they went away and when they are due back. ISO, or null. */
+  vacationStartedAt: string | null;
+  vacationEndsAt: string | null;
+};
+
+export type AdminTimeOffGrantRow = {
+  id: string;
+  kind: string;
+  days: number;
+  note: string | null;
+  grantedBy: string | null;
+  createdAt: string;
+  /** False once the rolling year has moved past it and it stopped counting. */
+  counting: boolean;
+};
+
 export type AdminAccountDetailPayload = {
   account: AdminAccountDetail;
   xpTypes: AdminXpTypeOption[];
   recentXpEvents: AdminXpEventRow[];
+  activity: AdminActivitySummary;
+  rest: AdminRestStanding;
+  restGrants: AdminTimeOffGrantRow[];
 };
 
 /**

@@ -59,9 +59,9 @@ export function reviewXpAwards({
 
   /* `curriculumLevelGained` is deliberately not awarded here. It is a defined
      routine award with an obvious trigger, and wiring it would put another
-     ~10 XP a day on the steady learner - which `learnerPacing.ts` does not
-     model, and which would take that learner under the three-year target the
-     curve was built against. It wants doing with the model, not beside it. */
+     ~10 XP a day on the reference learner, which would take them under the
+     three-year target the curve was built against. `balanceSimulator.ts`
+     models it; it wants doing with the model, not beside it. */
   if (levelAfter > levelBefore) {
     const reached = jlptCompletedAt(levelAfter);
     /* Only a band the member did not already hold. Re-deriving the level is

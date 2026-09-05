@@ -17,8 +17,8 @@
  * while somebody is still deciding whether this site is for them, rather than
  * years later when it would be a reward for having already stayed.
  *
- * `learnerPacing.ts` models the effect: an entitlement that moved the steady
- * learner's three-year climb would be an entitlement priced wrong.
+ * `balanceSimulator.ts` models the effect: an entitlement that moved the
+ * reference learner's three-year climb would be an entitlement priced wrong.
  */
 
 export const XP_GAMES_PER_DAY_BASE = 2;
