@@ -6053,12 +6053,25 @@
     "id": "library-level-prefix",
     "name": "A library level says which library",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-05",
+    "summary": "A level from your own uploaded library now reads LIB3, so it cannot be mistaken for a WaniKani level, an UmaKuma one, or your XP rank.",
+    "dateIsEstimate": false,
+    "release": 487,
+    "version": "1.8.0",
+    "releasedAt": "2026-09-05T19:52:33Z"
+  },
+  {
+    "id": "uk-explorer-consistency",
+    "name": "The UmaKuma explorer looks like the others",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-05",
-    "version": "1.8.0",
-    "release": 487,
-    "releasedAt": "2026-09-05T19:52:33Z",
-    "summary": "A level from your own uploaded library now reads LIB3, so it cannot be mistaken for a WaniKani level, an UmaKuma one, or your XP rank."
+    "version": "1.9.0",
+    "release": 488,
+    "releasedAt": "2026-09-05T20:08:55Z",
+    "summary": "One level to an address, a picker for the hundred, and the same cards, rows and density toggle every other list of subjects on the site uses."
   }
 ]
