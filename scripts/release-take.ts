@@ -5,6 +5,7 @@ import { join } from "node:path";
 import { stringifyTimeline } from "../src/lib/backlogBoard";
 import { getVancouverDateKey } from "../src/lib/dailySnapshot";
 import { loadFeatureTimeline } from "../src/lib/featureTimeline";
+import { RELEASE_STEPS } from "../src/lib/releaseOrdinal";
 import { CODENAMES, codenameKanaForMinor, type ReleaseCodename } from "../src/lib/releaseCodenames";
 import { PrismaClient } from "@prisma/client";
 
@@ -105,7 +106,8 @@ async function main(): Promise<void> {
   if (!ticketId && (!id || id.startsWith("--"))) {
     console.error(
       'Usage: pnpm release:take <entry-id> --romaji "…" --ja "…" --reading "…" --gloss "…"\n' +
-        '   or: pnpm release:take --ticket <ticket-id> --summary "…" [--name "…"] [--as <timeline-id>] --romaji "…" …\n' +
+        '   or: pnpm release:take --ticket <ticket-id> --summary "…" [--name "…"] [--tweak|--major] [--as <timeline-id>] --romaji "…" …\n' +
+        "\n--tweak for a fix or a follow-up (moves the patch), --major for a big\nrelease (moves the major). A new feature is the default and moves the minor.\n" +
         "\n--summary is what a member reads on /releases. Write it for them: one\n" +
         "sentence or two of plain prose, not the ticket's own words, which are\n" +
         "addressed to whoever picks the work up. --name overrides the ticket's\n" +
@@ -115,7 +117,18 @@ async function main(): Promise<void> {
   }
 
   const published = publishedVersion();
-  const version = nextVersion(published);
+  /*
+   * What kind of release this is, which is what decides the number: a feature
+   * moves the minor, a tweak the patch, a big release the major. Named on the
+   * command line rather than guessed from the ticket, because `kind` only
+   * knows feature-or-bug and a correction to yesterday's feature is neither.
+   */
+  const step = flag("major") !== undefined || process.argv.includes("--major")
+    ? RELEASE_STEPS.major
+    : process.argv.includes("--tweak")
+      ? RELEASE_STEPS.tweak
+      : RELEASE_STEPS.feature;
+  const version = nextVersion(published, step);
   const release = loadFeatureTimeline().filter((entry) => entry.version).length + 1;
   const { kana, cycle } = codenameKanaForMinor(release);
 
