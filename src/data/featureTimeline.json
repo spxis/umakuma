@@ -6079,12 +6079,25 @@
     "id": "review-level-picker",
     "name": "A review level filter offers only levels you have",
     "area": "study",
+    "status": "shipped",
     "kind": "feature",
+    "date": "2026-09-05",
+    "summary": "The level row in Study lists only the levels your queue has something on; the curriculum explorer still shows all hundred.",
+    "dateIsEstimate": false,
+    "release": 489,
+    "version": "1.9.1",
+    "releasedAt": "2026-09-05T20:33:24Z"
+  },
+  {
+    "id": "checkin-follows-campaign",
+    "name": "Check-in follows the campaign you picked",
+    "area": "reading",
+    "kind": "bug",
     "status": "shipped",
     "date": "2026-09-05",
-    "version": "1.9.1",
-    "release": 489,
-    "releasedAt": "2026-09-05T20:33:24Z",
-    "summary": "The level row in Study lists only the levels your queue has something on; the curriculum explorer still shows all hundred."
+    "version": "1.9.2",
+    "release": 490,
+    "releasedAt": "2026-09-05T20:33:36Z",
+    "summary": "The daily check-in button is back: the calendar was still asking about the first reading challenge, so every day of the current one looked like it was outside the campaign."
   }
 ]
