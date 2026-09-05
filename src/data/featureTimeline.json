@@ -5394,13 +5394,14 @@
   },
   {
     "id": "header-member-stats",
-    "name": "TOP PRIORITY: the header's right side carries the member, not the release",
+    "name": "Your XP and levels in the header",
     "area": "platform",
-    "kind": "feature",
     "status": "shipped",
+    "kind": "feature",
     "date": "2026-09-05",
+    "summary": "The right of the header carries your own numbers now \u2014 your XP, your UmaKuma level and your WaniKani level \u2014 in the place the release codename used to sit. Each level keeps its prefix, so UK23 and WK12 can sit beside each other without either needing to be explained. Nothing was lost: the footer still prints the version, its codename and the date. Signed out there is no strip at all rather than a row of zeroes, and on a phone the XP stays while the two levels step aside to leave the section pages room.",
+    "dateIsEstimate": false,
     "version": "0.471.0",
-    "releasedAt": "2026-09-05T08:17:29Z",
-    "summary": "John, 2026-09-05, top priority: 'Show User XP in main page in Header. Replace the App Version name under Search and Menu in RHS (since it already exists in footer). That new section is where we show User XP, UK level, WK level, other potential stats. Work with other agent to get this deployed.'\n\nWHAT GOES: the release codename block on the right of the header, under Search and Menu - the \u300c\u3068\u308a\u304d\u3081\u300d \u00b7 \u53d6\u308a\u6c7a\u3081 \u00b7 TORIKIME \u00b7 THE RULES, KEPT strip. It is not lost: the footer already prints the version, the codename, its reading, the gloss and the date, so nothing has to be preserved here.\n\nWHAT ARRIVES: the member's own numbers in that slot - XP first, then UK level and WK level, with room for more later. Both ladders are already prefixed by levelBadge (WK17, UK23), which is exactly what makes them safe to sit side by side; do not draw a bare L17.\n\nCONSTRAINTS: AGENTS is explicit that the header's two rows never wrap - each holds one line at every width and scrolls, flex-nowrap overflow-x-auto whitespace-nowrap admin-tab-scroll with shrink-0 on each item, and appHeaderRows.test.ts fails if flex-wrap returns. The codename was already named there as the thing that gives way to the pages first, so this replacement is with the grain. A signed-out visitor has no XP and no levels: the slot has to collapse rather than draw zeros.\n\nSOURCES: XP is loadXpBoard/xpBoardPlacement territory (src/app/xp/lib); WK level is Account.wkLevel; UK level is Account.ukLevel. The header reads the session already."
+    "releasedAt": "2026-09-05T08:17:29Z"
   }
 ]
