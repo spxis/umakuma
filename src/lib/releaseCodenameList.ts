@@ -476,4 +476,5 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "torikime", ja: "取り決め", reading: "とりきめ", gloss: "the rules, kept" },
   { romaji: "Naosu Medama", ja: "直す目玉", reading: "なおすめだま", gloss: "the markers you answer with, put back" },
   { romaji: "Nigeta Moji", ja: "逃げた文字", reading: "にげたもじ", gloss: "the characters that got away" },
+  { romaji: "Nukarinai Shiken", ja: "抜かりない試験", reading: "ぬかりないしけん", gloss: "a test with nothing missed" },
 ];

@@ -5288,11 +5288,23 @@
     "id": "word-shows-every-character",
     "name": "Used in words drops the kanji it does not know",
     "area": "study",
+    "status": "shipped",
     "kind": "bug",
+    "date": "2026-09-05",
+    "summary": "John, 2026-09-05, screenshot of /kanji/\u5348: the chip row under each compound is missing characters. \u620a\u5348 draws only \u5348, \u4e19\u5348 draws only \u5348, \u58ec\u5348\u8ecd\u4e71 draws \u5348 \u8ecd \u4e71 and not \u58ec, \u5e9a\u5348 draws only \u5348. The words that survive intact (\u7aef\u5348\u306e\u7bc0\u53e5, \u7532\u5348\u8fb2\u6c11\u6226\u4e89) are the ones whose every character the site teaches. So the row is silently dropping any kanji with no catalogue entry - \u4e19 is joyo, and \u620a \u58ec \u5e9a are jinmeiyo, which the ladder deliberately does not carry. A word is written with what it is written with; the row has to draw every character.",
+    "dateIsEstimate": false,
+    "version": "0.462.0",
+    "releasedAt": "2026-09-05T07:12:10Z"
+  },
+  {
+    "id": "uk-level-tests",
+    "name": "Tests between levels",
+    "area": "study",
+    "kind": "feature",
     "status": "shipped",
     "date": "2026-09-05",
-    "version": "0.462.0",
-    "releasedAt": "2026-09-05T07:12:10Z",
-    "summary": "John, 2026-09-05, screenshot of /kanji/\u5348: the chip row under each compound is missing characters. \u620a\u5348 draws only \u5348, \u4e19\u5348 draws only \u5348, \u58ec\u5348\u8ecd\u4e71 draws \u5348 \u8ecd \u4e71 and not \u58ec, \u5e9a\u5348 draws only \u5348. The words that survive intact (\u7aef\u5348\u306e\u7bc0\u53e5, \u7532\u5348\u8fb2\u6c11\u6226\u4e89) are the ones whose every character the site teaches. So the row is silently dropping any kanji with no catalogue entry - \u4e19 is joyo, and \u620a \u58ec \u5e9a are jinmeiyo, which the ladder deliberately does not carry. A word is written with what it is written with; the row has to draw every character."
+    "version": "0.463.0",
+    "releasedAt": "2026-09-05T07:15:46Z",
+    "summary": "A checkpoint every 5 levels (member-tunable), JLPT finals at 10/20/35/50/100 that must be passed at 70%. Played through the game runner as GameKind.level_test; graded on the last answer; held level resolves through passed gates."
   }
 ]
