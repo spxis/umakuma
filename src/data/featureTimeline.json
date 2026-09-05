@@ -5216,11 +5216,23 @@
     "id": "study-preferences",
     "name": "Members choose how they study",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "Members choose how they study",
+    "dateIsEstimate": false,
+    "version": "0.456.0",
+    "releasedAt": "2026-09-05T03:08:54Z"
+  },
+  {
+    "id": "study-presets",
+    "name": "Easiest/hardest order and study presets",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.456.0",
-    "releasedAt": "2026-09-05T03:08:54Z",
-    "summary": "Members choose how they study"
+    "version": "0.457.0",
+    "releasedAt": "2026-09-05T03:19:24Z",
+    "summary": "Easiest/hardest order and study presets"
   }
 ]

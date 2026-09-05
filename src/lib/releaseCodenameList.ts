@@ -470,4 +470,5 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "sebone", ja: "背骨", reading: "せぼね", gloss: "the backbone of the gate" },
   { romaji: "sonaetsuke", ja: "備え付け", reading: "そなえつけ", gloss: "the fittings, adjustable" },
   { romaji: "tazuna", ja: "手綱", reading: "たづな", gloss: "the reins, in your hands" },
+  { romaji: "chouwa", ja: "調和", reading: "ちょうわ", gloss: "set to suit you" },
 ];
