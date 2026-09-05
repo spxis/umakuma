@@ -5156,11 +5156,23 @@
     "id": "xp-board",
     "name": "XP board and member XP history",
     "area": "platform",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-04",
+    "summary": "XP board and member XP history",
+    "dateIsEstimate": false,
+    "version": "0.451.0",
+    "releasedAt": "2026-09-05T02:22:59Z"
+  },
+  {
+    "id": "balance-simulator",
+    "name": "Balance simulator",
+    "area": "admin",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-04",
-    "version": "0.451.0",
-    "releasedAt": "2026-09-05T02:22:59Z",
-    "summary": "XP board and member XP history"
+    "version": "0.452.0",
+    "releasedAt": "2026-09-05T02:23:01Z",
+    "summary": "Balance simulator"
   }
 ]
