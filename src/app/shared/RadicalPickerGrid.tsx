@@ -3,6 +3,7 @@
 import { Fragment } from "react";
 
 import { JP_TEXT_CLASS } from "./japaneseText";
+import { RADICAL_TILE_CLASS } from "./radicalTileClass";
 import { RADICAL_SEARCH_COPY } from "./radicalSearchCopy";
 import { RADICAL_GRID_CLASSES } from "@/lib/radicalGridSize";
 import type { RadicalPicker } from "./useRadicalPicker";
@@ -62,10 +63,10 @@ export default function RadicalPickerGrid({ picker }: { picker: RadicalPicker })
                     title={RADICAL_SEARCH_COPY.radicalTitle(radical, group.strokes)}
                     className={`inline-flex items-center justify-center rounded border leading-none transition ${cell} ${JP_TEXT_CLASS} ${
                       isPicked
-                        ? "border-accent bg-accent text-white"
+                        ? RADICAL_TILE_CLASS.chosen
                         : dead
-                          ? "cursor-not-allowed border-line/60 bg-surface-muted text-foreground/60 opacity-40"
-                          : "border-line bg-surface text-foreground hover:bg-surface-muted"
+                          ? RADICAL_TILE_CLASS.deadEnd
+                          : RADICAL_TILE_CLASS.rest
                     }`}
                   >
                     {radical}

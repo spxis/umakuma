@@ -20,3 +20,4 @@ export const RADICAL_BROWSER_COPY = {
   deadEnd: "No remaining kanji have this part",
   strokeTitle: (strokes: number) => (strokes === 1 ? "1 stroke" : `${strokes} strokes`),
 } as const;
+

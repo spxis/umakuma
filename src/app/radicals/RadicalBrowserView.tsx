@@ -19,6 +19,8 @@ import { RADICAL_GRID_CLASSES, RADICAL_GRID_DEFAULT } from "@/lib/radicalGridSiz
 import type { RadicalGroup } from "@/lib/radicalSearch";
 import type { RadicalMatch } from "@/lib/radicalSearchServer";
 
+import { RADICAL_TILE_CLASS } from "@/app/shared/radicalTileClass";
+
 import { RADICAL_BROWSER_COPY } from "./RadicalBrowser.constants";
 
 const VIEW_MODE_KEY = "wr:radicals:view-mode";
@@ -153,7 +155,7 @@ export default function RadicalBrowserView({
                     <span
                       key={radical}
                       title={RADICAL_BROWSER_COPY.deadEnd}
-                      className={`${box} cursor-not-allowed border-line/60 bg-surface-muted text-foreground/60 opacity-40`}
+                      className={`${box} ${RADICAL_TILE_CLASS.deadEnd}`}
                     >
                       {glyph}
                     </span>
@@ -163,9 +165,7 @@ export default function RadicalBrowserView({
                       href={radicalsHref({ parts: togglePart(chosen, radical) })}
                       aria-pressed={on}
                       title={names[radical] ?? RADICAL_BROWSER_COPY.strokeTitle(group.strokes)}
-                      className={`${box} ${
-                        on ? "border-accent bg-accent text-white" : "border-line bg-surface text-foreground hover:bg-surface-muted"
-                      }`}
+                      className={`${box} ${on ? RADICAL_TILE_CLASS.chosen : RADICAL_TILE_CLASS.rest}`}
                     >
                       {glyph}
                     </Link>
