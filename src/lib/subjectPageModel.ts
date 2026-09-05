@@ -51,6 +51,7 @@ export type WordExampleKanji = {
   reading: string | null;
   meaning: string | null;
   level: number | null;
+  ukLevel: number | null;
   /** The kanji the page is about, marked rather than missing. */
   current: boolean;
 };
@@ -123,6 +124,7 @@ export function toWordExamples(raw: unknown, character: string): WordExample[] {
         reading: chip.reading,
         meaning: chip.meaning ?? getKanjiDictionaryEntry(chip.label)?.primaryMeaning ?? null,
         level: chip.level,
+        ukLevel: kanjiPlacement(chip.label)?.level ?? null,
         current: chip.current,
       })),
     }));

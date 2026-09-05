@@ -15,7 +15,7 @@ function draw(): Document {
  */
 describe("the control over every chip's words", () => {
   const doc = draw();
-  const buttons = [...doc.querySelectorAll("button")];
+  const buttons = [...doc.querySelectorAll('[role="group"] button')];
 
   it("shows all four choices at once", () => {
     expect(buttons.map((button) => button.textContent)).toEqual([
@@ -38,6 +38,20 @@ describe("the control over every chip's words", () => {
 
   it("is one named group, not three loose buttons", () => {
     expect(doc.querySelector('[role="group"]')?.getAttribute("aria-label")).toBe(SUBJECT_PAGE_COPY.pillWordsLabel);
+  });
+
+  /* Levels are a second question, so they are a switch beside the segments,
+     not a fifth segment - and they start on, because the confusables drew
+     levels and the words in a compound did not until every chip obeyed one
+     standing choice. */
+  it("keeps the levels switch beside the segments, on by default", () => {
+    const levels = [...doc.querySelectorAll("button")].find(
+      (button) => button.textContent === SUBJECT_PAGE_COPY.pillLevels,
+    );
+    expect(levels).toBeDefined();
+    expect(levels?.closest('[role="group"]')).toBeNull();
+    expect(levels?.getAttribute("aria-pressed")).toBe("true");
+    expect(levels?.getAttribute("title")).toBe(SUBJECT_PAGE_COPY.pillLevelsTitle);
   });
 
   /* The server cannot know what this browser stored, so it draws the default. */

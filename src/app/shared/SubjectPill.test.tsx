@@ -48,6 +48,12 @@ describe("what a surface may put on it", () => {
     expect(text).toContain("WK3");
   });
 
+  it("draws both ladders when the surface knows both", () => {
+    const text = draw(<SubjectPill glyph="語" level={12} ukLevel={9} />).body.textContent ?? "";
+    expect(text).toContain("WK12");
+    expect(text).toContain("UK9");
+  });
+
   it("carries neither mark when the surface knows neither", () => {
     const text = draw(<SubjectPill glyph="山" reading="やま" />).body.textContent ?? "";
     expect(text).not.toMatch(/L\d|%/);

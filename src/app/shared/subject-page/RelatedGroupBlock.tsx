@@ -44,6 +44,8 @@ export default function RelatedGroupBlock({ group, showToggle = false }: { group
               reading={item.reading}
               meaning={item.meaning}
               href={item.href}
+              level={item.level}
+              ukLevel={item.ukLevel}
             />
           </li>
         ))}

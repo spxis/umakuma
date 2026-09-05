@@ -12,10 +12,10 @@ const growthBusiness: WordExample = {
   pronounced: "せいちょうじぎょう",
   gloss: "(high) growth business",
   kanji: [
-    { label: "成", href: "/kanji/a", reading: "せい", meaning: "Become", level: 1, current: false },
-    { label: "長", href: null, reading: "ちょう", meaning: "Long", level: 2, current: true },
-    { label: "事", href: "/kanji/c", reading: "じ", meaning: "Occurrence", level: 3, current: false },
-    { label: "業", href: "/kanji/d", reading: "ぎょう", meaning: "Business", level: 4, current: false },
+    { label: "成", href: "/kanji/a", reading: "せい", meaning: "Become", level: 1, ukLevel: null, current: false },
+    { label: "長", href: null, reading: "ちょう", meaning: "Long", level: 2, ukLevel: null, current: true },
+    { label: "事", href: "/kanji/c", reading: "じ", meaning: "Occurrence", level: 3, ukLevel: null, current: false },
+    { label: "業", href: "/kanji/d", reading: "ぎょう", meaning: "Business", level: 4, ukLevel: null, current: false },
   ],
 };
 

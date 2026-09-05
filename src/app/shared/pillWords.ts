@@ -30,6 +30,18 @@ export const PILL_WORD_MODE_VALUES = Object.values(PILL_WORD_MODES);
 export const PILL_WORDS_STORAGE_KEY = "umakuma:pill-words";
 
 /**
+ * Whether every chip also carries the levels it is taught at - WK and UK,
+ * whichever the surface knows. One standing choice, for the same reason the
+ * words are one: the confusables drew levels and the words in a compound did
+ * not, on the same component, and a reader saw two rules where there is one.
+ */
+export const PILL_LEVELS_STORAGE_KEY = "umakuma:pill-levels";
+export const PILL_LEVEL_MODES = { on: "on", off: "off" } as const;
+export type PillLevelMode = (typeof PILL_LEVEL_MODES)[keyof typeof PILL_LEVEL_MODES];
+export const PILL_LEVEL_MODE_VALUES = Object.values(PILL_LEVEL_MODES);
+export const DEFAULT_PILL_LEVEL_MODE: PillLevelMode = PILL_LEVEL_MODES.on;
+
+/**
  * English to begin with.
  *
  * The old on-by-default was argued for as "a learner is better served by being

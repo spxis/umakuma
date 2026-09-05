@@ -51,6 +51,7 @@ export default function UmakumaSearchResults({ hits, kind }: { hits: { rows: Lad
                         : subjectHref({ subjectType: row.kind, characters: row.characters, slug: null })
                     }
                     level={row.wkLevel}
+                    ukLevel={row.ukLevel}
                   />
                 </li>
               ))}

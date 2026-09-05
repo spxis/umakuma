@@ -43,6 +43,7 @@ export default function ConfusableWarningRow({
               reading={item.reading}
               meaning={showEnglish ? item.meaning : null}
               level={item.wkLevel}
+              ukLevel={item.ukLevel}
               label={known ? CONFUSABLE_WARNING_COPY.knownTitle : CONFUSABLE_WARNING_COPY.aheadTitle(badge ?? "")}
               trailing={
                 <span

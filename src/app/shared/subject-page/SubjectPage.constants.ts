@@ -45,6 +45,8 @@ export const SUBJECT_PAGE_COPY = {
   pillWordsReadingTitle: "Readings",
   pillWordsEnglishTitle: "English",
   pillWordsBothTitle: "Reading and English",
+  pillLevels: "LV",
+  pillLevelsTitle: "WK and UK levels on item chips",
   /* The strip under the card, for a reader with no account to file into. */
   filingSignedOut: (label: string) => `Keep ${label} on a list of your own`,
   filingJoin: "Join UmaKuma",

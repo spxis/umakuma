@@ -81,6 +81,8 @@ export default function UsedInWordsBlock({
                       reading={item.reading}
                       meaning={item.meaning}
                       href={item.href}
+                      level={item.level}
+                      ukLevel={item.ukLevel}
                       selected={item.current}
                     />
                   </li>

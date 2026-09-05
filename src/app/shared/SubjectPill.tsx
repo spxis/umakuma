@@ -7,6 +7,8 @@ import { JP_TEXT_CLASS, NO_TRANSLATE_CLASS } from "./japaneseText";
 
 import { pillWords, pillWordsTitle } from "./pillWords";
 import { subjectGlyphTone } from "./subjectListView";
+import { PILL_LEVEL_MODES } from "./pillWords";
+import { usePillLevels } from "./usePillLevels";
 import { usePillWords } from "./usePillWords";
 import { ukLevelBadge, wkLevelBadge } from "@/lib/levelBadge";
 
@@ -64,7 +66,11 @@ function Meta({
     typeof successRate === "number" && Number.isFinite(successRate)
       ? Math.max(0, Math.min(100, Math.round(successRate)))
       : null;
-  const badges = [wkLevelBadge(level), ukLevelBadge(ukLevel)].filter((badge): badge is string => badge !== null);
+  const [levelMode] = usePillLevels();
+  const badges =
+    levelMode === PILL_LEVEL_MODES.on
+      ? [wkLevelBadge(level), ukLevelBadge(ukLevel)].filter((badge): badge is string => badge !== null)
+      : [];
   if (rate === null && badges.length === 0) return null;
   return (
     <span className="mt-0.5 flex items-center gap-1">
