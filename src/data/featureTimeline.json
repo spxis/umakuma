@@ -5324,11 +5324,23 @@
     "id": "review-xp-parity",
     "name": "Participation XP for every review, UK or WK",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-05",
+    "summary": "A review answered on the site pays reviewAnswered/reviewCorrect whichever feed it came from. Check both review routes pay the same.",
+    "dateIsEstimate": false,
+    "version": "0.465.0",
+    "releasedAt": "2026-09-05T07:30:53Z"
+  },
+  {
+    "id": "uk-review-wanikani-mirror",
+    "name": "UK reviews also post to WaniKani for connected members",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-05",
-    "version": "0.465.0",
-    "releasedAt": "2026-09-05T07:30:53Z",
-    "summary": "A review answered on the site pays reviewAnswered/reviewCorrect whichever feed it came from. Check both review routes pay the same."
+    "version": "0.466.0",
+    "releasedAt": "2026-09-05T07:30:56Z",
+    "summary": "A WK-connected member who reviews on the UK ladder is playing both systems: for a UK item with a wkSubjectId whose WK assignment is available for review, POST the same outcome to WaniKani's /reviews (and start the assignment with /assignments/{id}/start when it is unstarted). WK does not import reviews, so this is the only way to keep the two in step. Idempotent, never blocks the UK write, logged."
   }
 ]
