@@ -490,4 +490,5 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Mekuru Kata", ja: "めくる形", reading: "めくるかた", gloss: "the shape you turn over" },
   { romaji: "Moreta Kakikae", ja: "漏れた書き換え", reading: "もれたかきかえ", gloss: "the rewrite that slipped through" },
   { romaji: "Yadoru Aidagara", ja: "宿る間柄", reading: "やどるあいだがら", gloss: "the kinship between the two names" },
+  { romaji: "Yuzuru Honmyou", ja: "譲る本名", reading: "ゆずるほんみょう", gloss: "the true name, given back" },
 ];

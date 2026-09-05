@@ -5456,11 +5456,23 @@
     "id": "radical-cross-names",
     "name": "A radical says what the other system calls it",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-05",
+    "summary": "If you came from WaniKani you learned some radicals by their names, not ours. A review card now says both, so the shape you knew as one word and the one we teach are plainly the same radical. Their names are shown only to members who have connected a WaniKani account.",
+    "dateIsEstimate": false,
+    "version": "0.476.0",
+    "releasedAt": "2026-09-05T09:47:00Z"
+  },
+  {
+    "id": "radical-own-name",
+    "name": "A radical goes by its own name",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-05",
-    "version": "0.476.0",
-    "releasedAt": "2026-09-05T09:47:00Z",
-    "summary": "If you came from WaniKani you learned some radicals by their names, not ours. A review card now says both, so the shape you knew as one word and the one we teach are plainly the same radical. Their names are shown only to members who have connected a WaniKani account."
+    "version": "0.477.0",
+    "releasedAt": "2026-09-05T09:56:21Z",
+    "summary": "The dictionary describes kanji, and a radical often goes by a different word: 乙 the kanji is the latter, 乙 the radical is the fishhook. Sixty-four radicals were printed under the wrong one, and eighteen of those showed the index's own description, numbering and all. The radical's name comes first now, with the kanji meanings kept beside it."
   }
 ]
