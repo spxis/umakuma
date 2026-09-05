@@ -10,6 +10,7 @@ import {
 } from "@/lib/accountVisibility";
 
 import WelcomeJlptStep from "./WelcomeJlptStep";
+import WelcomePlacementStep from "./WelcomePlacementStep";
 import WelcomeWanikaniStep from "./WelcomeWanikaniStep";
 import { WELCOME_COPY } from "./welcomeCopy";
 
@@ -41,7 +42,7 @@ export default function WelcomeForm({ suggestedName, defaultVisibility, askDispl
    * rather than losing the account entirely.
    */
   const [accountId, setAccountId] = useState<string | null>(null);
-  const [step, setStep] = useState<"identity" | "wanikani" | "jlpt">("identity");
+  const [step, setStep] = useState<"identity" | "wanikani" | "placement" | "jlpt">("identity");
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -84,7 +85,15 @@ export default function WelcomeForm({ suggestedName, defaultVisibility, askDispl
   }
 
   if (step === "wanikani" && accountId) {
-    return <WelcomeWanikaniStep accountId={accountId} onDone={() => setStep("jlpt")} />;
+    return <WelcomeWanikaniStep accountId={accountId} onDone={() => setStep("placement")} />;
+  }
+
+  /* After WaniKani and before the JLPT question, because it is the only step
+     that changes what the member is taught: the placement offers to bring the
+     progress they may have just connected, and the JLPT answer is a line on a
+     profile either way. */
+  if (step === "placement" && accountId) {
+    return <WelcomePlacementStep accountId={accountId} onDone={() => setStep("jlpt")} />;
   }
 
   if (step === "jlpt" && accountId) {

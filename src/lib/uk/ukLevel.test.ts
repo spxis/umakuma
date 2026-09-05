@@ -149,3 +149,16 @@ describe("the schema behind it", () => {
     expect(writers).toEqual(["src/lib/uk/ukLevelServer.ts"]);
   });
 });
+
+describe("who is recorded as having placed a member", () => {
+  it("only names a source when the floor actually moved", async () => {
+    /* A member who imports WaniKani and then sits the placement test was
+       being recorded as `placement_test` even when the test found nothing the
+       import had not already given them. The field that says how somebody got
+       where they are then names the wrong thing. */
+    const { readFileSync } = await import("node:fs");
+    const server = readFileSync("src/lib/uk/ukLevelServer.ts", "utf8");
+    expect(server).toContain("const moved = next > current;");
+    expect(server).toContain("data: moved");
+  });
+});

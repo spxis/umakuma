@@ -64,6 +64,41 @@ export const WELCOME_COPY = {
   wanikaniConnected: "Connected as",
   wanikaniSkip: "I do not use WaniKani",
 
+  /**
+   * The placement step.
+   *
+   * Three doors, and the first one is not a consolation prize: most newcomers
+   * belong on level 1 and should be able to say so in one click, without
+   * sitting a test to prove it. The other two are for the two kinds of person
+   * who arrive already reading - one with a WaniKani account behind them, one
+   * without.
+   */
+  placementHeading: "How much Japanese do you already read?",
+  placementBody:
+    "Nothing here is permanent. The ladder only ever moves up, so whichever you pick, you cannot end up further back than you started.",
+
+  placementBeginner: "Start me at level 1",
+  placementBeginnerHint: "Radicals first, then the kanji built from them. The right way in if you are starting out.",
+  placementTest: "Take the placement test",
+  placementTestHint:
+    "Eight questions a round, and we stop as soon as we know where you sit. Two minutes for most people.",
+  placementWanikani: "Use my WaniKani progress",
+  placementWanikaniHint: "Every review you have already earned, carried across item by item.",
+
+  placementStarting: "Setting up the first round...",
+  placementImporting: "Bringing your progress across...",
+  placementFailed: "Could not start the placement test. Start at level 1 for now - the ladder can still move you up.",
+  placementImportFailed: "Could not read your WaniKani progress. You can connect it again later from your profile.",
+
+  probeBody: "Pick what each one means. Guess when you are not sure - we are reading the round, not the answer.",
+  probeSubmit: "Next round",
+  probeSubmitting: "Checking...",
+  probeStop: "That is enough",
+  probeUnanswered: "Pick an answer for every one, or stop the test here.",
+
+  resultHeading: "Here is where you start",
+  resultAction: "Carry on",
+
   jlptHeading: "Have you taken the JLPT?",
   jlptBody: "Only if you want it on your profile. It changes nothing about how you study here.",
 
@@ -97,3 +132,39 @@ export const WELCOME_COPY = {
   closedBody: "If someone gave you a code, you can use it to join. Otherwise, ask them for one.",
   closedAction: "I have a code",
 } as const;
+
+/** "Around level 35", so a member can see the test climbing. */
+export function probeHeading(rung: number): string {
+  return `Around level ${rung}`;
+}
+
+/** "Round 3 of 10". Named rather than counted, because most tests stop early. */
+export function probeProgress(probeNumber: number, maxProbes: number): string {
+  return `Round ${probeNumber} of ${maxProbes}`;
+}
+
+/**
+ * What the result says, and what it never says.
+ *
+ * A test that is unsure still reports the level it found, never a smaller one.
+ * Placing somebody below what they answered to be safe is the one outcome that
+ * makes the whole thing worthless: the levels below are seeded into reviews
+ * anyway, so an over-reach corrects itself within a week, while an under-reach
+ * is a reader sent back through material they finished years ago.
+ */
+export function placementResultLine(level: number, confidence: "high" | "medium" | "low"): string {
+  if (confidence === "high") {
+    return `You start on level ${level}. Everything below it is in your reviews, so we can check we were right.`;
+  }
+  if (confidence === "medium") {
+    return `You start on level ${level}. It may be a rung either way - your first reviews will settle it.`;
+  }
+  return `We think level ${level} - if that feels low, keep going and your reviews will lift it.`;
+}
+
+/** What the seeding did, in the two numbers a member cares about. */
+export function placementSeedLine(seeded: number, seededMissed: number): string {
+  const credited = `${seeded} ${seeded === 1 ? "item" : "items"} credited and due in a week`;
+  if (seededMissed === 0) return `${credited}.`;
+  return `${credited}, and the ${seededMissed} you missed are waiting for you now.`;
+}

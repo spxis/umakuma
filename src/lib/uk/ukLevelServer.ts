@@ -110,10 +110,24 @@ export async function raiseUkLevelFloor({
     where: { id: accountId },
     select: { ukLevelFloor: true },
   });
-  const next = Math.min(Math.max(floor, account?.ukLevelFloor ?? 1), KANJI_LADDER_LEVELS);
+  const current = account?.ukLevelFloor ?? 1;
+  const next = Math.min(Math.max(floor, current), KANJI_LADDER_LEVELS);
+
+  /* Only record who placed them when the floor actually moved.
+   *
+   * Stamping unconditionally meant a member who imported WaniKani and later
+   * sat the placement test was recorded as `placement_test` even when the test
+   * found nothing the import had not already given them — so the one field
+   * that says how somebody got where they are would name the wrong thing.
+   * Raise-only is the rule everywhere else here; this makes the provenance
+   * raise-only too. Found by the agent building the placement test, which is
+   * the caller that would have been blamed for it. */
+  const moved = next > current;
   await prisma.account.update({
     where: { id: accountId },
-    data: { ukLevelFloor: next, ukPlacedAt: new Date(), ukPlacementSource: source },
+    data: moved
+      ? { ukLevelFloor: next, ukPlacedAt: new Date(), ukPlacementSource: source }
+      : { ukLevelFloor: next },
   });
   return syncAccountUkLevel(accountId);
 }
