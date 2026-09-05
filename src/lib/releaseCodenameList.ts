@@ -491,4 +491,5 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Moreta Kakikae", ja: "漏れた書き換え", reading: "もれたかきかえ", gloss: "the rewrite that slipped through" },
   { romaji: "Yadoru Aidagara", ja: "宿る間柄", reading: "やどるあいだがら", gloss: "the kinship between the two names" },
   { romaji: "Yuzuru Honmyou", ja: "譲る本名", reading: "ゆずるほんみょう", gloss: "the true name, given back" },
+  { romaji: "Yosomichi no Shuusoku", ja: "余所道の収束", reading: "よそみちのしゅうそく", gloss: "the second path folded into the first" },
 ];
