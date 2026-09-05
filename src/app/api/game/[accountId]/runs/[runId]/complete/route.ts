@@ -5,6 +5,7 @@ import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { gameKindRules, type GameKind } from "@/lib/gameMode";
 import { completedRunValues, toGameRunSummary } from "@/lib/gameModeServer";
 import { prisma } from "@/lib/prisma";
+import { settleDailyXp } from "@/lib/xp/xpDayServer";
 import { awardXpQuietly } from "@/lib/xp/xpServer";
 import { gameXpAwards } from "@/lib/xp/xpStudyAwards";
 
@@ -61,6 +62,10 @@ export async function POST(
            finds the run already complete and must not pay for it twice. */
         if (outcome.completedNow) {
           await awardXpQuietly({ accountId, requests: gameXpAwards() });
+          /* And what the day has become because of it: the sign-in, a streak
+             milestone, the "a lesson and a game" quest. Swallows its own
+             failures, like the award above it. */
+          await settleDailyXp({ accountId });
         }
 
         return NextResponse.json({ run: toGameRunSummary(outcome.run) }, { status: 200 });

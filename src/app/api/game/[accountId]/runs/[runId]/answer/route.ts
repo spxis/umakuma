@@ -18,6 +18,7 @@ import { accumulateItemScore } from "@/lib/gameScoring";
 import { completedRunValues, hydrateGameQuestions, toGameRunSummary } from "@/lib/gameModeServer";
 import { buildAppendedQuestions } from "@/lib/gameRunAppend";
 import { prisma } from "@/lib/prisma";
+import { settleDailyXp } from "@/lib/xp/xpDayServer";
 import { awardXpQuietly } from "@/lib/xp/xpServer";
 import { gameXpAwards } from "@/lib/xp/xpStudyAwards";
 
@@ -186,6 +187,10 @@ export async function POST(
            game. */
         if (outcome.completedNow) {
           await awardXpQuietly({ accountId, requests: gameXpAwards() });
+          /* And what the day has become because of it: the sign-in, a streak
+             milestone, the "a lesson and a game" quest. Swallows its own
+             failures, like the award above it. */
+          await settleDailyXp({ accountId });
         }
 
         const appendedQuestions = outcome.appendedFromPosition === null

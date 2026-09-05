@@ -3,6 +3,7 @@ import "server-only";
 import { REVIEW_RESULTS } from "@/lib/domainConstants";
 import { prisma } from "@/lib/prisma";
 import { initialLessonState, nextSrsStage, nextStageAvailableAt, SRS_BURNED_STAGE } from "@/lib/srs/srsSchedule";
+import { settleDailyXp } from "@/lib/xp/xpDayServer";
 import { awardXpQuietly } from "@/lib/xp/xpServer";
 import { lessonXpAwards, reviewXpAwards } from "@/lib/xp/xpStudyAwards";
 
@@ -25,6 +26,11 @@ import { UK_LEVEL_PASS_SRS_STAGE } from "./ukLevel";
  * scores correctly and cannot record its XP is still a completed answer, so
  * the awarding goes through `awardXpQuietly`, after the transaction that wrote
  * the state has already committed.
+ *
+ * `settleDailyXp` follows it for the same reason and under the same rule. The
+ * awards above are what this action was worth; that call is what the *day* has
+ * become because of it - a sign-in, a streak that has just reached thirty, a
+ * quest whose fiftieth review this was. It swallows its own failures too.
  */
 
 export type UkReviewOutcome = {
@@ -66,6 +72,7 @@ export async function startUkLessons({
   /* Per item actually started, not per item asked for: `skipDuplicates` means
      a resent request opens nothing, and it should pay for nothing. */
   await awardXpQuietly({ accountId, requests: lessonXpAwards(created.count), now });
+  await settleDailyXp({ accountId, now });
   return created.count;
 }
 
@@ -130,6 +137,7 @@ export async function recordUkReview({
     requests: reviewXpAwards({ correct, burnedNow, levelBefore, levelAfter: resolved.level }),
     now,
   });
+  await settleDailyXp({ accountId, now });
 
   return {
     subjectId,

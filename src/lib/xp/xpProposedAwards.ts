@@ -1,11 +1,17 @@
 /**
- * Twenty more kinds of XP, proposed rather than decided.
+ * Sixteen more kinds of XP, proposed rather than decided.
  *
  * John asked for a set to react to — "I can fix up later if I don't like" — so
  * these are a starting position, not a finished economy. They are deliberately
  * kept out of `XP_AWARDS` and `XP_BONUSES`: those two maps are the awards the
- * site actually gives, and mixing twenty unfired kinds into them would make it
+ * site actually gives, and mixing a pile of unfired kinds into them would make it
  * impossible to see at a glance what the economy really is.
+ *
+ * There were twenty. Four of them - `queueCleared`, `flawlessDay`,
+ * `fiftyReviewDay` and `wellRoundedDay` - turned out to be quest-shaped and
+ * moved into `XP_BONUSES` when the daily quests were wired, repriced on the
+ * way. That is the intended exit from this file: a kind leaves when
+ * something fires it.
  *
  * They still seed into `XpType`, so every one appears in the admin screen with
  * its amount and its note, and the amount can be changed there without a
@@ -42,18 +48,13 @@ export const XP_PROPOSED_AWARDS = {
   curriculumComplete: 5000,
   /** A hundred items burned. */
   hundredBurned: 300,
+
+  /* --- Effort, on a day. Four of these have left: `queueCleared`,
+     `flawlessDay`, `fiftyReviewDay` and `wellRoundedDay` became the daily
+     quests and live in `XP_BONUSES` now, repriced for a kind that fires most
+     days rather than now and again. What is left here is still waiting. */
   /** Every radical on a level learned, before its kanji. */
   levelRadicalsCleared: 50,
-
-  // --- Effort, on a day. The ones that pay for turning up and working.
-  /** The review queue taken to zero. */
-  queueCleared: 50,
-  /** A day with no wrong answers at all, over at least twenty reviews. */
-  flawlessDay: 100,
-  /** Fifty reviews in a day. */
-  fiftyReviewDay: 50,
-  /** Both ladders touched in one day: a lesson and a game. */
-  wellRoundedDay: 25,
 
   // --- Games. Kept modest, since games already pay per finish and the daily
   // allowance is what a rank buys.
@@ -87,10 +88,6 @@ export const XP_PROPOSED_NOTES: Record<XpProposedAwardKind, string> = {
   curriculumComplete: "For finishing the curriculum. All hundred levels.",
   hundredBurned: "For carrying a hundred items all the way to the top stage.",
   levelRadicalsCleared: "For learning every radical on a level before meeting its kanji.",
-  queueCleared: "For taking your review queue all the way to zero.",
-  flawlessDay: "For a day of at least twenty reviews with nothing wrong in it.",
-  fiftyReviewDay: "For fifty reviews in a single day.",
-  wellRoundedDay: "For a day with both a lesson and a game in it.",
   personalBest: "For beating your own best score.",
   flawlessGame: "For a game with every answer right.",
   mapCleared: "For finding every prefecture on the map.",

@@ -42,9 +42,9 @@ export const XP_AWARDS = {
  * batch of ten happens about one sitting in five at ordinary accuracy. Priced
  * per event with no ceiling, burning alone would have been worth more than the
  * whole routine day it sits beside. So a bonus is a garnish on the routine
- * economy, not a second economy — see `learnerPacing.ts`, which models the
- * rate each of these actually fires at and holds the steady learner to the
- * three years the curve was built for.
+ * economy, not a second economy — `balanceSimulator.ts` fires each of these at
+ * the rate the schedule actually produces it, caps included, and holds the
+ * reference learner to the three years the curve was built for.
  *
  * Every value is a multiple of five, the same rule the rank costs follow.
  */
@@ -65,6 +65,34 @@ export const XP_BONUSES = {
   cleanSession: 5,
   /** Stage 9: the end of an item's journey. */
   burnedItem: 5,
+
+  /* --- The daily quests. Two or three of these are put in front of a member
+     each day by `xpQuests.ts`, chosen to suit the size of their ordinary day,
+     and each pays once, on the day it is finished.
+
+     They arrived here out of `xpProposedAwards.ts`, which is where a kind
+     waits until something fires it: that module's rule is that these two maps
+     are the awards the site actually gives, so wiring a kind means moving it
+     rather than reaching across.
+
+     **Every one was repriced downward on the way over.** The proposed numbers
+     (25, 50, 50, 100) were written for kinds that fire now and again; a quest
+     fires most days a member studies, and three of them at those prices would
+     have put about 90 XP on top of a steady learner's 166 XP day. That is not
+     a garnish, it is a second economy - the exact thing the note above this
+     map says a bonus must never become. At 10, 15, 20 and 40 a full day of
+     quests is worth about a fifth of the day it garnishes, the same order as
+     the sign-in and the day's games together. */
+
+  /** A lesson and a game in one day. The one every member can reach. */
+  wellRoundedDay: 10,
+  /** The review queue taken to zero. Scales its own difficulty. */
+  queueCleared: 15,
+  /** Fifty reviews answered in a day. */
+  fiftyReviewDay: 20,
+  /** Twenty reviews or more in a day with nothing wrong in any of them. */
+  flawlessDay: 40,
+
   /** A JLPT band completed on the kanji ladder. The big ones. */
   n5Complete: 300,
   n4Complete: 600,
@@ -96,6 +124,11 @@ export function isXpBonusKind(kind: XpAwardKind): kind is XpBonusKind {
  */
 export const XP_DAILY_CAPS: Partial<Record<XpAwardKind, number>> = {
   dailySignIn: XP_AWARDS.dailySignIn,
+  /* A week is seven days long however many times a day the streak is looked
+     at. Capped as well as listed once-a-day - the same belt and braces
+     `dailySignIn` wears - because this one is repeatable in shape, and a
+     caller that forgot the rule would pay it on every answer. */
+  weeklyStreak: XP_AWARDS.weeklyStreak,
   gameFinished: XP_AWARDS.gameFinished * 2,
   lessonLearned: XP_AWARDS.lessonLearned * 30,
   /* Five units, which a clean batch of twenty-two fills on its own. */
@@ -115,6 +148,16 @@ export const XP_DAILY_CAPS: Partial<Record<XpAwardKind, number>> = {
  */
 export const XP_ONCE_PER_DAY: XpAwardKind[] = [
   "dailySignIn",
+  "weeklyStreak",
+  /* The quests, where it is policy rather than insurance: a quest is a
+     question about today, and today only has one answer. Finishing the
+     fiftieth review twice does not happen, but crossing the line and then
+     answering another twenty does, and each of those answers settles the
+     day's quests again. */
+  "wellRoundedDay",
+  "queueCleared",
+  "fiftyReviewDay",
+  "flawlessDay",
   "sevenDayStreak",
   "thirtyDayStreak",
   "hundredDayStreak",
@@ -252,6 +295,10 @@ export const XP_TYPE_NOTES: Record<string, string> = {
   yearLongStreak: "For a whole year without missing a day.",
   cleanSession: "For a batch of reviews with nothing wrong in it, worth more the bigger the batch.",
   burnedItem: "For carrying an item all the way to the top stage.",
+  wellRoundedDay: "For a day with both a lesson and a game in it.",
+  queueCleared: "For taking your review queue all the way to zero.",
+  fiftyReviewDay: "For fifty reviews in a single day.",
+  flawlessDay: "For a day of at least twenty reviews with nothing wrong in it.",
   n5Complete: "For reaching the ladder level that finishes every N5 kanji.",
   n4Complete: "For reaching the ladder level that finishes every N4 kanji.",
   n3Complete: "For reaching the ladder level that finishes every N3 kanji.",

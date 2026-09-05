@@ -18,6 +18,7 @@ import { formatDateTimeShort } from "@/lib/timeFormat";
 import { hasWanikaniConnection } from "@/lib/wanikaniConnection";
 
 import { canViewUserPage, resolveViewerMenuInfo } from "../userPageAuth";
+import DailyQuestsPanel from "./DailyQuestsPanel";
 import JlptCertificates from "./JlptCertificates";
 import { wanikaniFact } from "./profileFacts";
 import type { AgeBand } from "@/lib/srs/ageBand";
@@ -148,6 +149,13 @@ export default async function UserProfilePage({ params }: PageProps) {
           owns its whole card, the way the theme picker below does. */}
       <div className="mb-4">
         <XpRankPanel xp={account.xp} />
+      </div>
+
+      {/* And what today asks for, under the rank it feeds. Its own card, and
+          its own read - the board is derived from the day's XP rows rather
+          than from anything this page already had. */}
+      <div className="mb-4">
+        <DailyQuestsPanel accountId={account.id} />
       </div>
 
       {/* Themes save on their own too, and the picker owns its whole card. */}
