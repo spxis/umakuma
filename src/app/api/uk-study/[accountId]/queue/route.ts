@@ -3,9 +3,10 @@ import { z } from "zod";
 
 import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
-import { QUEUE_TYPES } from "@/lib/domainConstants";
+import { QUEUE_TYPES, SUBJECT_TYPES } from "@/lib/domainConstants";
 import { summariseStudyQueue } from "@/lib/studyQueueSummary";
-import { mapUkQueueItem } from "@/lib/uk/ukExplorerFeed";
+import { mapUkQueueItem, withWanikaniRadicalNames } from "@/lib/uk/ukExplorerFeed";
+import { loadWanikaniRadicalNames } from "@/lib/uk/ukRadicalNamesServer";
 import { ukLessons, ukReviews } from "@/lib/uk/ukStudyQueue";
 
 type RouteContext = { params: Promise<{ accountId: string }> };
@@ -53,9 +54,20 @@ export async function GET(request: Request, context: RouteContext) {
         const pagedItems = limit === null ? allItems : allItems.slice(offset, offset + limit);
         const total = allItems.length;
 
+        /* Only the page being handed over, and only its radicals: a connected
+           member reading 248 reviews needs their names for the fourteen on
+           screen, not for all of them. */
+        const shown = withWanikaniRadicalNames(
+          pagedItems,
+          await loadWanikaniRadicalNames(
+            accountId,
+            pagedItems.filter((item) => item.subjectType === SUBJECT_TYPES.radical).map((item) => item.subjectId),
+          ),
+        );
+
         return NextResponse.json(
           {
-            items: pagedItems,
+            items: shown,
             counts: { reviews: reviews.length, lessons: lessons.length, all: total },
             ...summariseStudyQueue(allItems),
             pagination: { offset, limit: limit ?? total, total, hasMore: limit === null ? false : offset + limit < total },

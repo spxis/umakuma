@@ -2,7 +2,9 @@ import type { ReviewOutcome, StudyReviewSubmitResult } from "../lib/studyExplore
 import { STUDY_REVIEW_MODAL_SECTION_TEXT } from "./StudyExplorer.constants";
 import StudyReviewFlashActionRow from "./StudyReviewFlashActionRow";
 import FieldLabel from "../../../../shared/FieldLabel";
+import CrossSystemName from "@/app/shared/CrossSystemName";
 import { noTranslateClass } from "@/app/shared/japaneseText";
+import { LEVEL_SYSTEMS } from "@/lib/levelBadge";
 
 type Props = {
   allMeanings: string[];
@@ -12,6 +14,8 @@ type Props = {
   secondaryReadingValue: string;
   selectedMeaningExplanation: string;
   selectedReadingExplanationRaw: string;
+  /** WaniKani's own word for this radical, for a member who may read it. */
+  wanikaniName?: string | null;
   isPracticeItem: boolean;
   assignmentId: number;
   selectedOutcome: ReviewOutcome | undefined;
@@ -32,6 +36,7 @@ export default function StudyReviewAnswerPane({
   secondaryReadingValue,
   selectedMeaningExplanation,
   selectedReadingExplanationRaw,
+  wanikaniName,
   isPracticeItem,
   assignmentId,
   selectedOutcome,
@@ -76,6 +81,10 @@ export default function StudyReviewAnswerPane({
           <p className="mt-1 text-2xl font-black leading-tight text-foreground sm:text-4xl">
             {allMeanings[0] ?? fallbackMeaning}
           </p>
+          {/* The same shape under the name a WaniKani member learned it by,
+              directly under ours rather than at the bottom of the card: the
+              two names answer the same question and belong together. */}
+          <CrossSystemName system={LEVEL_SYSTEMS.wanikani} name={wanikaniName} className="mt-2" />
           {hasAltMeanings ? (
             <div className="mt-3">
               <p className="text-[9px] font-bold uppercase tracking-[0.1em] text-foreground/60">

@@ -56,3 +56,23 @@ export function mapUkQueueItem(item: UkStudyItem): StudyQueueItem {
     availableAt: null,
   };
 }
+
+/**
+ * Puts WaniKani's radical name on the items they teach.
+ *
+ * Only the ones already paired, and only for a member the caller has decided
+ * may read them - the gate is `loadWanikaniRadicalNames`, which returns an
+ * empty map for an account with no connection, so this is a plain merge with
+ * nothing to decide. Non-radicals are untouched: the shared curriculum's kanji
+ * and vocabulary content is WaniKani's own already, credited as such.
+ */
+export function withWanikaniRadicalNames(
+  items: readonly StudyQueueItem[],
+  names: ReadonlyMap<number, string>,
+): StudyQueueItem[] {
+  if (names.size === 0) return [...items];
+  return items.map((item) => {
+    const theirs = names.get(item.subjectId);
+    return theirs ? { ...item, wanikaniName: theirs } : item;
+  });
+}

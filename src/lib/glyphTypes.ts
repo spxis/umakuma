@@ -19,6 +19,17 @@ export type LevelItem = {
   ukLevel?: number | null;
   /** Whose meanings and readings these are, for the credit line under them. Absent means WaniKani's. */
   contentSource?: "wanikani" | "kanjidic2" | "radkfile";
+  /*
+   * WaniKani's own name for a radical, where they teach it and the member has
+   * connected an account. A member who spent two years learning this shape as
+   * *toe* is shown "divining" by our curriculum and has no way to know it is
+   * the same radical; this is how the two are said in one place.
+   *
+   * Their invented content, so it is filled server-side only for a connected
+   * account and is absent - not empty - for everybody else. `UkSubject` never
+   * holds it.
+   */
+  wanikaniName?: string | null;
   successRate?: number;
   characters: string;
   meanings: string[];
