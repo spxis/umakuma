@@ -64,6 +64,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 
 import { applyLadderOps, parseLadderOverrides } from "../src/lib/ladder/ladderOps.mjs";
+import { isKanjiCharacter } from "../src/lib/ladder/ladderRules.mjs";
 
 const WK_LEVELS_DIR = path.resolve("src/data/wk-catalog-levels");
 const KANJIDIC_DIR = path.resolve("src/data/kanjidic");
@@ -112,10 +113,6 @@ const KANJI_START_LEVEL = 2;
  */
 const VOCABULARY_RAMP_LEVELS = 26;
 const VOCABULARY_START_SHARE = 0.25;
-const CJK_RANGES = [
-  [0x4e00, 0x9fff],
-  [0x3400, 0x4dbf],
-];
 
 /**
  * Each JLPT level completes on a round ladder level. `shape` is the relative
@@ -351,11 +348,6 @@ async function loadWaniKaniVocabulary() {
     }
   }
   return words;
-}
-
-function isKanjiCharacter(character) {
-  const code = character.codePointAt(0);
-  return CJK_RANGES.some(([low, high]) => code >= low && code <= high);
 }
 
 /**
