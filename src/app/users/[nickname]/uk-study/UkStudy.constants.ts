@@ -11,6 +11,9 @@ export const UK_STUDY_COPY = {
   nothingDue: "Nothing due. Come back when the next batch comes round.",
   nothingToLearn: "Nothing new at this level. Clear your reviews to move up.",
   reveal: "Show me",
+  /* The latch, named. WaniKani has this rule and never says so on screen. */
+  passed: "Passed",
+  passedHint: "Reached Guru once, so it counts toward the level for good - even if it slips back.",
   loading: "Reading your queue…",
   importHeading: "You have WaniKani progress",
   /* Says what it will do before it does it: this raises a floor, and a floor

@@ -30,6 +30,15 @@ export type UkStudyItem = {
   readings: string[];
   /** Null for a lesson, which has no state yet. */
   srsStage: number | null;
+  /**
+   * Whether this item has ever reached Guru - the latch.
+   *
+   * The level gate counts items that have *ever* passed, not items currently
+   * at Guru, so a wrong answer drops the stage without un-learning the level.
+   * This is that fact, made visible: a member seeing an item back at stage 2
+   * with "Passed" beside it knows the level is safe, and knows why.
+   */
+  passed: boolean;
 };
 
 export type UkStudyCounts = {
@@ -80,7 +89,12 @@ async function withContent(rows: LadderRow[]): Promise<Map<number, { meanings: s
   return filled;
 }
 
-function toItem(row: LadderRow, content: Map<number, { meanings: string[]; readings: string[] }>, srsStage: number | null): UkStudyItem {
+function toItem(
+  row: LadderRow,
+  content: Map<number, { meanings: string[]; readings: string[] }>,
+  srsStage: number | null,
+  passed = false,
+): UkStudyItem {
   const resolved = content.get(row.id);
   return {
     subjectId: row.id,
@@ -93,6 +107,7 @@ function toItem(row: LadderRow, content: Map<number, { meanings: string[]; readi
     meanings: row.meanings.length > 0 ? row.meanings : (resolved?.meanings ?? []),
     readings: row.readings.length > 0 ? row.readings : (resolved?.readings ?? []),
     srsStage,
+    passed,
   };
 }
 
@@ -118,7 +133,7 @@ export async function ukLessons(accountId: string, limit = 50): Promise<UkStudyI
 export async function ukReviews(accountId: string, now = new Date(), limit = 100): Promise<UkStudyItem[]> {
   const due = await prisma.ukSrsState.findMany({
     where: { accountId, availableAt: { not: null, lte: now } },
-    select: { subjectId: true, srsStage: true },
+    select: { subjectId: true, srsStage: true, passedAt: true },
     orderBy: { availableAt: "asc" },
     take: limit,
   });
@@ -131,9 +146,12 @@ export async function ukReviews(accountId: string, now = new Date(), limit = 100
       meanings: true, readings: true, wkSubjectId: true,
     },
   });
-  const stageById = new Map(due.map((state) => [state.subjectId, state.srsStage]));
+  const stateById = new Map(due.map((state) => [state.subjectId, state]));
   const content = await withContent(rows);
-  return rows.map((row) => toItem(row, content, stageById.get(row.id) ?? 0));
+  return rows.map((row) => {
+    const state = stateById.get(row.id);
+    return toItem(row, content, state?.srsStage ?? 0, state?.passedAt !== null && state?.passedAt !== undefined);
+  });
 }
 
 export async function ukStudyCounts(accountId: string, now = new Date()): Promise<UkStudyCounts> {

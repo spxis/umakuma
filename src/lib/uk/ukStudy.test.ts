@@ -65,3 +65,41 @@ describe("the shared schedule", () => {
     expect(queue).not.toContain("readingExplanation");
   });
 });
+
+
+describe("the latch, shown", () => {
+  it("carries whether an item has ever passed, separately from its stage", () => {
+    /* John: "We should have a flag that shows if a kanji is latched or not."
+       The level gate already counts items that have ever reached Guru; this
+       makes that fact visible on the item, so a member seeing stage 2 with
+       "Passed" beside it knows the level is safe and knows why. */
+    const queue = readFileSync("src/lib/uk/ukStudyQueue.ts", "utf8");
+    expect(queue).toContain("passed: boolean;");
+    expect(queue).toContain("select: { subjectId: true, srsStage: true, passedAt: true }");
+    const session = readFileSync("src/app/users/[nickname]/uk-study/UkStudySession.tsx", "utf8");
+    expect(session).toContain("item.passed ?");
+  });
+
+  it("derives it from passedAt and nothing else", () => {
+    /* Not from the current stage: an item at stage 6 that was never stamped
+       would be a bug worth seeing, and an item at stage 2 that was stamped is
+       the whole point. */
+    const queue = readFileSync("src/lib/uk/ukStudyQueue.ts", "utf8");
+    expect(queue).toContain("state?.passedAt !== null && state?.passedAt !== undefined");
+  });
+});
+
+describe("the mechanisms log", () => {
+  it("exists, and says what we have and do not have for every category", () => {
+    /* John: "log them and say what we have and what we don't have, that way if
+       we ever revisit our system we can say, oh, why didn't we do that?" */
+    const log = readFileSync("docs/SRS_MECHANISMS.md", "utf8");
+    for (const category of ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"]) {
+      expect(log, `category ${category}`).toMatch(new RegExp(`^\\| ${category} \\|`, "m"));
+    }
+    for (const verdict of ["**have**", "**partial**", "**don't**", "**won't**"]) {
+      expect(log).toContain(verdict);
+    }
+    expect(log).toContain("The one that matters most: the level gate is a latch");
+  });
+});

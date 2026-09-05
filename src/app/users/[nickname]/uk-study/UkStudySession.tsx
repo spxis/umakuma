@@ -20,6 +20,7 @@ type Item = {
   meanings: string[];
   readings: string[];
   srsStage: number | null;
+  passed: boolean;
 };
 
 type ImportOffer = {
@@ -226,6 +227,13 @@ export default function UkStudySession({ accountId }: { accountId: string }) {
             {SUBJECT_TYPE_DISPLAY[item.kind as SubjectType]?.singular ?? item.kind} · UK{item.level}
             {item.srsStage !== null ? (
               <span className={`ml-2 rounded-full px-2 py-0.5 ${srsStageTone(item.srsStage)}`}>SRS {item.srsStage}</span>
+            ) : null}
+            {/* The latch, visible. An item back at stage 2 with this beside it
+                tells a member the level is safe - and why. */}
+            {item.passed ? (
+              <span title={copy.passedHint} className="ml-2 rounded-full bg-emerald-100 px-2 py-0.5 text-emerald-800">
+                {copy.passed}
+              </span>
             ) : null}
           </p>
           <p {...japaneseTextProps(`${glyphTextSizeClass(item.characters)} font-black text-foreground`)}>
