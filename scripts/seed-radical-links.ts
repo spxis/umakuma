@@ -1,7 +1,19 @@
 import { PrismaClient } from "@prisma/client";
 
+import { RADICAL_SHAPE_TWINS } from "../src/lib/ladder/radicalShapes";
+
 /**
- * Pairs our radicals with WaniKani's, by character, and records both names.
+ * Pairs our radicals with WaniKani's, by shape, and records both names.
+ *
+ * By shape rather than by character because the two sources spell three of
+ * them differently - our 卜 is their ト - and matching on the codepoint left
+ * the one John learned as *toe* with no counterpart. `RADICAL_SHAPE_TWINS` is
+ * the same table the seed plan pairs on, so the link table and `wkSubjectId`
+ * cannot disagree about which radicals are the same radical.
+ *
+ * This table is also where WaniKani's own name for a radical lives, and the
+ * only place it may: `UkSubject` holds our names and nothing of theirs, so a
+ * member who has not connected an account never reads their invented content.
  *
  * Idempotent: re-running it updates the names and leaves a `manual` pairing
  * alone, so a link somebody decided by hand is not recomputed away the next
@@ -34,7 +46,8 @@ async function main(): Promise<void> {
   let unpaired = 0;
 
   for (const row of ours) {
-    const match = theirsByChar.get(row.characters);
+    const twin = RADICAL_SHAPE_TWINS[row.characters];
+    const match = theirsByChar.get(row.characters) ?? (twin ? theirsByChar.get(twin) : undefined);
     if (!match) {
       unpaired += 1;
       continue;

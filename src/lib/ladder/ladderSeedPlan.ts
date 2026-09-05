@@ -163,9 +163,26 @@ export type UkSubjectStoredRow = {
   source: string;
   nLevel: number | null;
   schoolGrade: number | null;
+  meanings: string[];
+  readings: string[];
   removedAt: Date | null;
 };
 
+/** Same words in the same order. Order carries meaning: the first is primary. */
+function sameWords(plan: readonly string[], stored: readonly string[]): boolean {
+  return plan.length === stored.length && plan.every((word, index) => word === stored[index]);
+}
+
+/*
+ * What counts as a change.
+ *
+ * `meanings` and `readings` were missing from this comparison and from the
+ * stored row it reads, which made the seeder blind to the only kind of fix
+ * that matters for content: six radicals shipped with no meaning at all, the
+ * plan was corrected to name them, and re-seeding counted every one of them
+ * unchanged and wrote nothing. A row that moved level was updated; a row that
+ * gained a name was not.
+ */
 function differs(plan: UkSubjectPlanRow, stored: UkSubjectStoredRow): boolean {
   return (
     plan.level !== stored.level ||
@@ -175,6 +192,8 @@ function differs(plan: UkSubjectPlanRow, stored: UkSubjectStoredRow): boolean {
     plan.wkSubjectId !== stored.wkSubjectId ||
     plan.nLevel !== stored.nLevel ||
     plan.schoolGrade !== stored.schoolGrade ||
+    !sameWords(plan.meanings, stored.meanings) ||
+    !sameWords(plan.readings, stored.readings) ||
     stored.removedAt !== null
   );
 }

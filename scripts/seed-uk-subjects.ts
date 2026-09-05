@@ -18,7 +18,10 @@ async function main() {
   const stored = await prisma.ukSubject.findMany({
     select: {
       key: true, kind: true, characters: true, level: true,
-      wkSubjectId: true, source: true, nLevel: true, schoolGrade: true, removedAt: true,
+      wkSubjectId: true, source: true, nLevel: true, schoolGrade: true,
+      /* Read back so a name-only correction is seen as a change; without
+         these the seeder counts a newly-named radical unchanged. */
+      meanings: true, readings: true, removedAt: true,
     },
   });
 

@@ -68,7 +68,8 @@ describe("what a seed run would change", () => {
   const rows = buildLadderSeedPlan(input);
   const stored = (over: Partial<Record<string, unknown>> = {}) => ({
     key: "kanji:日", kind: "kanji", characters: "日", level: 1, wkSubjectId: 476,
-    source: "wanikani", nLevel: 5, schoolGrade: 1, removedAt: null, ...over,
+    source: "wanikani", nLevel: 5, schoolGrade: 1, meanings: [], readings: [],
+    removedAt: null, ...over,
   });
 
   it("creates what is missing and leaves what agrees alone", () => {
@@ -76,6 +77,25 @@ describe("what a seed run would change", () => {
     expect(diff.unchanged).toBe(1);
     expect(diff.update).toHaveLength(0);
     expect(diff.create.map((row) => row.key).sort()).toEqual(["kanji:苺", "radical:ノ", "radical:口", "wk:2467"]);
+  });
+
+  /* The bug this comparison was missing: six radicals shipped with no meaning,
+     the plan was corrected to name them, and a re-seed counted every one of
+     them unchanged. A row that gains a name is a row that changed. */
+  it("updates a row whose name has changed", () => {
+    const named = diffLadderSeed(
+      buildLadderSeedPlan({ ...input, radicals: { 口: 1 } }),
+      [{ ...stored(), key: "radical:口", kind: "radical", characters: "口", source: "radkfile", wkSubjectId: null, nLevel: null, schoolGrade: null, meanings: [] }],
+    );
+    expect(named.update.map((row) => row.key)).toContain("radical:口");
+  });
+
+  it("leaves a row alone when the name it holds is the one planned", () => {
+    const same = diffLadderSeed(
+      buildLadderSeedPlan({ ...input, radicals: { 口: 1 } }),
+      [{ ...stored(), key: "radical:口", kind: "radical", characters: "口", source: "radkfile", wkSubjectId: null, nLevel: null, schoolGrade: null, meanings: ["mouth"] }],
+    );
+    expect(same.update).toHaveLength(0);
   });
 
   it("updates a row whose level has moved", () => {

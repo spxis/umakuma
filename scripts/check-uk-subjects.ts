@@ -17,7 +17,8 @@ async function main() {
   const stored = await prisma.ukSubject.findMany({
     select: {
       key: true, kind: true, characters: true, level: true,
-      wkSubjectId: true, source: true, nLevel: true, schoolGrade: true, removedAt: true,
+      wkSubjectId: true, source: true, nLevel: true, schoolGrade: true,
+      meanings: true, readings: true, removedAt: true,
     },
   });
 
