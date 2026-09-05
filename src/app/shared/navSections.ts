@@ -66,7 +66,7 @@ export type NavSection = {
  * shows no second row; the sub-nav would just repeat the header.
  */
 import { UK_STUDY_PAGE } from "@/app/users/[nickname]/uk-study/ukStudyPage";
-import { UK_EXPLORER_PAGE } from "@/app/users/[nickname]/umakuma-explorer/umakumaExplorerPage";
+import { UK_EXPLORER_PAGE } from "@/app/users/[nickname]/umakuma/umakumaAddress";
 
 export const NAV_SECTIONS: NavSection[] = [
   /*
