@@ -496,4 +496,5 @@ export const CODENAMES: readonly ReleaseCodename[] = [
   { romaji: "Ribetsu shita Ran", ja: "離別した欄", reading: "りべつしたらん", gloss: "the panel that took its leave" },
   { romaji: "Ruibetsu no Aoiro", ja: "類別の青色", reading: "るいべつのあおいろ", gloss: "the blue that sorts them" },
   { romaji: "Renkei suru Katagata", ja: "連携する方々", reading: "れんけいするかたがた", gloss: "each side named by the other" },
+  { romaji: "Rousaku no Jibun", ja: "労作の自分", reading: "ろうさくのじぶん", gloss: "words of its own making" },
 ];

@@ -5987,11 +5987,23 @@
     "id": "radical-cross-name-wk",
     "name": "Our name on a WaniKani radical",
     "area": "study",
+    "status": "shipped",
     "kind": "feature",
+    "date": "2026-09-05",
+    "summary": "A WaniKani radical now says what UmaKuma calls the same shape, the mirror of the WaniKani name already shown on ours.",
+    "dateIsEstimate": false,
+    "version": "1.7.0",
+    "releasedAt": "2026-09-05T19:35:14Z"
+  },
+  {
+    "id": "release-writes-summary",
+    "name": "release:take --ticket publishes an agent brief on the public releases page",
+    "area": "platform",
+    "kind": "bug",
     "status": "shipped",
     "date": "2026-09-05",
-    "version": "1.7.0",
-    "releasedAt": "2026-09-05T19:35:14Z",
-    "summary": "A WaniKani radical now says what UmaKuma calls the same shape, the mirror of the WaniKani name already shown on ours."
+    "version": "1.7.1",
+    "releasedAt": "2026-09-05T19:36:01Z",
+    "summary": "A release now states its own one-line summary instead of reusing the words from the request that started it."
   }
 ]
