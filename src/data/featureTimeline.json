@@ -5999,11 +5999,23 @@
     "id": "release-writes-summary",
     "name": "release:take --ticket publishes an agent brief on the public releases page",
     "area": "platform",
+    "status": "shipped",
     "kind": "bug",
+    "date": "2026-09-05",
+    "summary": "A release now states its own one-line summary instead of reusing the words from the request that started it.",
+    "dateIsEstimate": false,
+    "version": "1.7.1",
+    "releasedAt": "2026-09-05T19:36:01Z"
+  },
+  {
+    "id": "release-page-counters",
+    "name": "The release page counters read the board",
+    "area": "admin",
+    "kind": "feature",
     "status": "shipped",
     "date": "2026-09-05",
-    "version": "1.7.1",
-    "releasedAt": "2026-09-05T19:36:01Z",
-    "summary": "A release now states its own one-line summary instead of reusing the words from the request that started it."
+    "version": "1.7.2",
+    "releasedAt": "2026-09-05T19:36:21Z",
+    "summary": "The release page counts what is actually queued and what somebody is holding, instead of reading zero from a file that only records what has shipped."
   }
 ]
