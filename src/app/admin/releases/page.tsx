@@ -16,6 +16,7 @@ import {
   splitPlannedByProgress,
   summarizeFeatureTimeline,
 } from "@/lib/featureTimeline";
+import { isWaitingTicket, TICKET_STATUSES } from "@/lib/tickets";
 import { listTickets } from "@/lib/ticketsServer";
 
 import {
@@ -73,6 +74,23 @@ export default async function AdminReleasesPage() {
   /* Wishes are the only part of this page the database holds; see Ticket. */
   const wishes = await listTickets();
 
+  /*
+   * The queue is the board, so the counters read the board.
+   *
+   * They used to read the file, and the file only holds releases: every one of
+   * its 480 entries is shipped and none has an owner, so Planned and In
+   * progress could report nothing but zero however much work was waiting.
+   * Meanwhile a tab beside them said 157 tickets, and two of those were
+   * claimed. The page was answering "how much is queued" with a number that
+   * had stopped being able to change.
+   *
+   * Planned is what has been asked for and not started. In progress is what
+   * somebody holds. Both are ticket states now, which is where the queue moved
+   * when it left the file.
+   */
+  const waiting = wishes.filter((ticket) => isWaitingTicket(ticket.status)).length;
+  const held = wishes.filter((ticket) => ticket.status === TICKET_STATUSES.inProgress).length;
+
   return (
     <div className="relative px-2 py-1.5 sm:px-6 sm:py-4 lg:px-8">
       <div className="noise-overlay pointer-events-none absolute inset-0" />
@@ -99,8 +117,8 @@ export default async function AdminReleasesPage() {
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             <Stat value={totals.total} label={RELEASE_TIMELINE_COPY.totalsLabel} />
             <Stat value={totals.shipped} label={RELEASE_TIMELINE_COPY.shippedLabel} />
-            <Stat value={totals.planned} label={RELEASE_TIMELINE_COPY.plannedLabel} />
-            <Stat value={totals.inProgress} label={RELEASE_TIMELINE_COPY.inProgressLabel} />
+            <Stat value={waiting} label={RELEASE_TIMELINE_COPY.plannedLabel} />
+            <Stat value={held} label={RELEASE_TIMELINE_COPY.inProgressLabel} />
           </div>
 
           <ReleaseTimelineTabs

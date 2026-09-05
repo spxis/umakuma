@@ -144,6 +144,17 @@ export function openWishes(tickets: readonly Ticket[]): Ticket[] {
   return tickets.filter((ticket) => ticket.status === TICKET_STATUSES.open);
 }
 
+/**
+ * Asked for and not started, whichever word the row uses for it.
+ *
+ * `filed` is the first board's spelling of `open` and rows still carry it, so
+ * a count that asked only about `open` would under-report the queue by however
+ * many of those are left.
+ */
+export function isWaitingTicket(status: TicketStatus): boolean {
+  return status === TICKET_STATUSES.open || status === TICKET_STATUSES.filed;
+}
+
 /*
  * Dropped before an id is cut to length, so the four words kept are four that
  * say something. "Furigana toggle on the reading pages" became
