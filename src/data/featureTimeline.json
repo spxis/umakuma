@@ -6664,12 +6664,25 @@
     "id": "rank-page-title-does-not-say-which-rank-number-it-is",
     "name": "A rank page says which rank it is",
     "area": "account",
+    "status": "shipped",
     "kind": "feature",
+    "date": "2026-09-06",
+    "summary": "A rank's page now says which rank it is. The heading reads L1 Rookie rather than just Rookie, so the number is in the title and in the browser tab.",
+    "dateIsEstimate": false,
+    "release": 534,
+    "version": "1.47.0",
+    "releasedAt": "2026-09-06T12:56:59Z"
+  },
+  {
+    "id": "game-run-xp-recorded",
+    "name": "A game says what it paid",
+    "area": "games",
+    "kind": "bug",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.47.0",
-    "release": 534,
-    "releasedAt": "2026-09-06T12:56:59Z",
-    "summary": "A rank's page now says which rank it is. The heading reads L1 Rookie rather than just Rookie, so the number is in the title and in the browser tab."
+    "version": "1.48.0",
+    "release": 535,
+    "releasedAt": "2026-09-06T12:57:14Z",
+    "summary": "Every game now records what it paid you, and says so when it paid nothing. Two games a day count toward XP at the opening rank, and the third used to earn nothing silently \u2014 which is hard to tell apart from broken."
   }
 ]
