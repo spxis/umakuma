@@ -81,11 +81,6 @@ export function lessonXpAwards(started: number): XpAwardRequest[] {
   return started > 0 ? [{ kind: "lessonLearned", times: started }] : [];
 }
 
-/** What a finished game earned. */
-export function gameXpAwards(): XpAwardRequest[] {
-  return [{ kind: "gameFinished" }];
-}
-
 /**
  * What a review batch answered with nothing wrong earned.
  *
@@ -120,6 +115,13 @@ export const XP_REASONS = {
   review: "Review answered",
   lesson: "Lesson started",
   game: "Game finished",
+  /* The three a game can achieve on top of having happened. Said separately
+     from the finish, because "+55 XP, game finished" hides the fifty that was
+     the interesting half - and because the finish is the one of the four that
+     the day's allowance can silence. */
+  flawlessGame: "Flawless game",
+  personalBest: "Personal best",
+  mapCleared: "Map cleared",
   levelTest: "Level test",
   placement: "Placement",
   today: "Today's bonus",

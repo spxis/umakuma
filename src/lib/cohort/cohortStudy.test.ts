@@ -47,6 +47,7 @@ function member(slug = "learner", floor = 1): CohortMember {
     level: 1,
     placedAt: null,
     ledger: new CohortLedger(),
+    bestScores: new Map(),
     lastActivityAt: null,
   };
 }

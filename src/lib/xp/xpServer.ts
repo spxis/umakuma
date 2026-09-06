@@ -215,19 +215,48 @@ export async function awardXpQuietly({
   requests: XpAwardRequest[];
   now?: Date;
 }): Promise<number> {
-  let total = 0;
+  const results = await awardXpEachQuietly({ accountId, requests, now });
+  return results.reduce((total, result) => total + result.awarded, 0);
+}
+
+/** What one request in a batch came to, and whether anything came of it. */
+export type XpAwardOutcome = { kind: XpAwardKind; awarded: number };
+
+/**
+ * The same awarding, itemised.
+ *
+ * A caller that only needs the total takes `awardXpQuietly`, which is this
+ * with the addition done for it. A caller that has to *say* what happened
+ * needs the parts: a member whose third game of the day was their best ever
+ * earned nothing for finishing it and fifty for beating themselves, and one
+ * toast reading "+50 XP" cannot tell them either half of that. It is also the
+ * only honest way to record why a run paid nothing, since a zero total is the
+ * same number whether the cap bit or the award was never earned.
+ */
+export async function awardXpEachQuietly({
+  accountId,
+  requests,
+  now = new Date(),
+}: {
+  accountId: string;
+  requests: XpAwardRequest[];
+  now?: Date;
+}): Promise<XpAwardOutcome[]> {
+  const outcomes: XpAwardOutcome[] = [];
   for (const request of requests) {
     const times = Math.max(0, Math.trunc(request.times ?? 1));
+    let awarded = 0;
     for (let attempt = 0; attempt < times; attempt += 1) {
       try {
-        const { awarded } = await awardXp({ accountId, kind: request.kind, note: request.note, now });
-        if (awarded <= 0) break;
-        total += awarded;
+        const result = await awardXp({ accountId, kind: request.kind, note: request.note, now });
+        if (result.awarded <= 0) break;
+        awarded += result.awarded;
       } catch (problem) {
         console.error("Could not award XP", request.kind, problem);
         break;
       }
     }
+    outcomes.push({ kind: request.kind, awarded });
   }
-  return total;
+  return outcomes;
 }

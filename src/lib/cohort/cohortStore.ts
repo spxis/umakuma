@@ -14,7 +14,8 @@ import { planGameRun, type GameRunRequest } from "@/lib/gameRunCreate";
 import { prisma } from "@/lib/prisma";
 import { unLevelTotals } from "@/lib/uk/unLevelServer";
 import { USER_TYPES } from "@/lib/userType";
-import { gameXpAwards } from "@/lib/xp/xpStudyAwards";
+import { GAME_KIND_LABELS } from "@/app/game/GameMode.constants";
+import { gameXpAwards } from "@/lib/xp/xpGameAwards";
 
 import { sessionRandom } from "./cohortDays";
 import { playRun } from "./cohortGames";
@@ -116,11 +117,19 @@ export async function loadMember(account: CohortAccountRow, world: CohortWorld):
   const persona = personaFor(account);
   if (!persona) return null;
 
-  const [states, events] = await Promise.all([
+  const [states, events, bests] = await Promise.all([
     prisma.ukSrsState.findMany({ where: { accountId: account.id } }),
     prisma.xpEvent.findMany({
       where: { accountId: account.id },
       select: { kind: true, dayKey: true, amount: true, note: true, createdAt: true, updatedAt: true },
+    }),
+    /* What this member has already scored at each game, so a second run of
+       the simulation does not hand them a personal best for a score they had
+       already beaten. One grouped query rather than a lookup per game. */
+    prisma.gameRun.groupBy({
+      by: ["kind"],
+      where: { accountId: account.id, status: "completed" },
+      _max: { score: true },
     }),
   ]);
 
@@ -149,6 +158,9 @@ export async function loadMember(account: CohortAccountRow, world: CohortWorld):
     level: account.unLevel,
     placedAt: account.unPlacedAt,
     ledger: new CohortLedger(events, account.xp),
+    bestScores: new Map(
+      bests.flatMap((row) => (row._max.score === null ? [] : [[row.kind as string, row._max.score]])),
+    ),
     lastActivityAt: account.lastActivityAt,
   };
   member.level = Math.max(member.level, resolvedLevel(member, world));
@@ -322,8 +334,30 @@ export async function playGame({
   const answerAt = new Map(played.answers.map((answer) => [answer.position, answer]));
 
   /* What the day's allowance lets this game pay, decided before the row is
-     written so the run can say so, the way the answer route records it. */
-  const xpAwarded = member.ledger.awardAll(gameXpAwards(), values.completedAt);
+     written so the run can say so, the way the answer route records it.
+
+     The run's own facts go in, not just the fact that it ended: a simulated
+     member has to earn what a real one would, or the cohort reads low against
+     real play on exactly the boards it exists to populate. `previousBest` is
+     undefined until this member has finished this kind once - null, not zero,
+     because a first run has nothing to beat.
+
+     `clearedMap` stays null. It needs the run's target ids checked against a
+     country's whole region set, and it is only reachable on Japan and Canada;
+     a simulated member missing it costs the boards less than a wrong claim. */
+  const previousBest = member.bestScores.get(request.kind);
+  const xpAwarded = member.ledger.awardAll(
+    gameXpAwards({
+      label: GAME_KIND_LABELS[request.kind],
+      questionCount: plan.questionCount,
+      correctCount: played.correctCount,
+      score: values.score ?? played.accumulatedScore,
+      previousBest: previousBest ?? null,
+      clearedMap: null,
+    }),
+    values.completedAt,
+  );
+  member.bestScores.set(request.kind, Math.max(previousBest ?? 0, values.score ?? played.accumulatedScore));
 
   try {
     await prisma.gameRun.create({

@@ -108,6 +108,25 @@ export const XP_BONUSES = {
   /** Twenty reviews or more in a day with nothing wrong in any of them. */
   flawlessDay: 40,
 
+  /* --- The three a finished game can achieve, as opposed to simply having
+     happened. They came out of `xpProposedAwards.ts` at John's prices, which
+     are his to retune from the admin screen; what is decided here is when each
+     one fires and how often it may.
+
+     **They are not gated on the games-per-day allowance.** That allowance caps
+     `gameFinished`, which pays for turning up, and turning up is the thing
+     worth rationing. Beating your own score is not: it is self-limiting by
+     construction, and a member whose third game of the day is their best ever
+     should not be told nothing happened. The two that *are* grindable carry a
+     daily cap of one instead. */
+
+  /** Every answer right, in a game with enough answers to mean it. */
+  flawlessGame: 50,
+  /** A score past this account's own best at that game. */
+  personalBest: 50,
+  /** Every region of a country named correctly, in one game. */
+  mapCleared: 200,
+
   /** A JLPT band completed on the kanji ladder. The big ones. */
   n5Complete: 300,
   n4Complete: 600,
@@ -148,6 +167,16 @@ export const XP_DAILY_CAPS: Partial<Record<XpAwardKind, number>> = {
   lessonLearned: XP_AWARDS.lessonLearned * 30,
   /* Five units, which a clean batch of twenty-two fills on its own. */
   cleanSession: XP_BONUSES.cleanSession * 5,
+  /* Once a day each, because both are repeatable at the player's convenience.
+     A flawless round of five is a minute's work, and a country of thirteen
+     regions can be cleared as often as somebody cares to. Paying either of
+     them per game would make the games the best XP on the site by a wide
+     margin, which is the one thing the caps in this file exist to prevent.
+
+     `personalBest` is deliberately absent: it cannot be repeated without
+     actually being beaten, so the achievement caps itself. */
+  flawlessGame: XP_BONUSES.flawlessGame,
+  mapCleared: XP_BONUSES.mapCleared,
 };
 
 /*
@@ -240,7 +269,23 @@ export const XP_EVENT_NOTES = {
   jlptComplete: (level: number, nLevel: number) => `Level ${level}, N${nLevel} complete.`,
   streak: (days: number) => `${days} days in a row.`,
   cleanSession: (size: number) => `${size} reviews, none wrong.`,
+  flawlessGame: (label: string, count: number) => `${label}: ${count} out of ${count}.`,
+  personalBest: (label: string, score: number, beaten: number) =>
+    `${label}: ${xpScore(score)}, past your ${xpScore(beaten)}.`,
+  mapCleared: (label: string, regions: number) => `${label}: all ${regions}.`,
 } as const;
+
+/**
+ * A score in a note, grouped the way the site writes numbers everywhere else.
+ *
+ * The locale is named rather than left to the machine on purpose: this string
+ * is written into `XpEvent.note` on a server whose locale is nobody's, and a
+ * note that reads `10520` on one deploy and `10,520` on another is a note the
+ * history cannot be trusted to keep.
+ */
+function xpScore(value: number): string {
+  return value.toLocaleString("en-CA");
+}
 
 /** A batch smaller than this is not a session, and earns nothing for being clean. */
 export const XP_CLEAN_SESSION_MIN = 5;
@@ -322,6 +367,9 @@ export const XP_TYPE_NOTES: Record<string, string> = {
   yearLongStreak: "For a whole year without missing a day.",
   cleanSession: "For a batch of reviews with nothing wrong in it, worth more the bigger the batch.",
   burnedItem: "For carrying an item all the way to the top stage.",
+  flawlessGame: "For a game with every answer right. Once a day.",
+  personalBest: "For beating your own best score at a game.",
+  mapCleared: "For naming every region of a country on the map, in one game. Once a day.",
   wellRoundedDay: "For a day with both a lesson and a game in it.",
   queueCleared: "For taking your review queue all the way to zero.",
   fiftyReviewDay: "For fifty reviews in a single day.",

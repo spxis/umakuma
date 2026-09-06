@@ -139,3 +139,21 @@ export function geoRegionIdFromSubjectId(subjectId: number): string | null {
 
   return null;
 }
+
+/**
+ * Which country a reserved map id belongs to, from the id alone.
+ *
+ * Reads the pinned counts and nothing else, so it works on the server with no
+ * dataset loaded - unlike `geoRegionIdFromSubjectId`, which needs the region
+ * list to name the division. Answering "which country was this run played on"
+ * only needs the band, and asking that of a finished run's stored ids is how
+ * the map clear bonus knows which country it has to have covered.
+ */
+export function geoCountryFromSubjectId(subjectId: number): GameMapCountry | null {
+  return (
+    GAME_MAP_COUNTRIES.find((country) => {
+      const offset = subjectId - GEO_SUBJECT_ID_BASES[country];
+      return offset >= 1 && offset <= GEO_REGION_COUNTS[country];
+    }) ?? null
+  );
+}

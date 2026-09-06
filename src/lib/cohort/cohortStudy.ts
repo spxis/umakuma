@@ -71,6 +71,16 @@ export type CohortMember = {
   level: number;
   placedAt: Date | null;
   ledger: CohortLedger;
+  /**
+   * The best this member has scored at each game so far, for `personalBest`.
+   *
+   * Held per member rather than queried per run, because the simulation plays
+   * a member's whole history in order and already knows every score it wrote.
+   * A kind absent from the map has no previous best, which is not a best of
+   * zero: a first run has nothing to beat, and treating it as zero would pay
+   * fifty XP for merely finishing one of each game.
+   */
+  bestScores: Map<string, number>;
   lastActivityAt: Date | null;
 };
 

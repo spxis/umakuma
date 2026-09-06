@@ -146,10 +146,23 @@ describe("every award a member earns is said out loud", () => {
     ["src/lib/uk/unLevelTestServer.ts", "XP_REASONS.levelTest"],
     ["src/lib/uk/unLevelServer.ts", "XP_REASONS.placement"],
     ["src/lib/uk/ukStudyWrite.ts", "XP_REASONS.lesson"],
-    ["src/app/api/game/[accountId]/runs/[runId]/answer/route.ts", "XP_REASONS.game"],
-    ["src/app/api/game/[accountId]/runs/[runId]/complete/route.ts", "XP_REASONS.game"],
+    ["src/lib/xp/xpGameServer.ts", "XP_REASONS.game"],
   ])("%s names what it paid for", (file, reason) => {
     expect(readFileSync(file, "utf8")).toContain(reason);
+  });
+
+  /* The two game routes name nothing themselves any more: a game can pay four
+     different awards and only the module that decides which ones fired can say
+     which. What they must still do is keep what it handed back - throwing that
+     away is the exact fault this block exists to catch, and it is how the
+     finish toast went missing from the timed games once already. */
+  it.each([
+    "src/app/api/game/[accountId]/runs/[runId]/answer/route.ts",
+    "src/app/api/game/[accountId]/runs/[runId]/complete/route.ts",
+  ])("%s keeps what settleGameXp returned", (file) => {
+    const source = readFileSync(file, "utf8");
+    expect(source).toContain("await settleGameXp(");
+    expect(source).toContain("earned.push(...game.earned)");
   });
 
   /* One map, because the same award is paid from several routes - a review

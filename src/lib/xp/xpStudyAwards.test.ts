@@ -5,7 +5,6 @@ import { levelForJlpt } from "@/lib/kanjiLadder";
 import { XP_BONUSES } from "./xpAwards";
 import {
   cleanSessionXpAwards,
-  gameXpAwards,
   lessonXpAwards,
   reviewXpAwards,
   streakXpAwards,
@@ -77,12 +76,6 @@ describe("what a batch of lessons earns", () => {
   it("pays nothing when a resent request opened nothing", () => {
     expect(lessonXpAwards(0)).toEqual([]);
     expect(lessonXpAwards(-3)).toEqual([]);
-  });
-});
-
-describe("what a finished game earns", () => {
-  it("pays once, and the day's cap does the rest", () => {
-    expect(gameXpAwards()).toEqual([{ kind: "gameFinished" }]);
   });
 });
 

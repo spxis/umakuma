@@ -21,10 +21,9 @@ import { buildAppendedQuestions } from "@/lib/gameRunAppend";
 import { prisma } from "@/lib/prisma";
 import { settleDailyXp } from "@/lib/xp/xpDayServer";
 import { finalizeLevelTestForRun } from "@/lib/uk/unLevelTestServer";
-import { awardXpQuietly } from "@/lib/xp/xpServer";
+import { settleGameXp } from "@/lib/xp/xpGameServer";
 import type { XpEarned } from "@/lib/xp/xpToast";
 import { XP_REASONS } from "@/lib/xp/xpStudyAwards";
-import { gameXpAwards } from "@/lib/xp/xpStudyAwards";
 
 const bodySchema = z.object({
   questionId: z.string().min(1),
@@ -197,13 +196,23 @@ export async function POST(
           earned.push(...(finished?.earned ?? []));
         } else if (outcome.completedNow) {
           /* Kept so the page can say what was earned, one toast per thing:
-             finishing the game is a different fact from the day's sign-in. */
-          const gameXp = await awardXpQuietly({ accountId, requests: gameXpAwards() });
+             finishing the game, being flawless at it and beating your own best
+             are three different facts, and so is the day's sign-in. */
+          const game = await settleGameXp({
+            accountId,
+            run: {
+              id: runId,
+              kind: pendingKind,
+              questionCount: outcome.run.questionCount,
+              correctCount: outcome.run.correctCount,
+              score: outcome.run.score,
+            },
+          });
           /* And what the day has become because of it: the sign-in, a streak
              milestone, the "a lesson and a game" quest. Swallows its own
              failures, like the award above it. */
           const dayXp = await settleDailyXp({ accountId });
-          if (gameXp > 0) earned.push({ xp: gameXp, reason: XP_REASONS.game });
+          earned.push(...game.earned);
           if (dayXp > 0) earned.push({ xp: dayXp, reason: XP_REASONS.today });
         }
 

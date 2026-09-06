@@ -7,11 +7,18 @@
  * site actually gives, and mixing a pile of unfired kinds into them would make it
  * impossible to see at a glance what the economy really is.
  *
- * There were twenty. Four of them - `queueCleared`, `flawlessDay`,
- * `fiftyReviewDay` and `wellRoundedDay` - turned out to be quest-shaped and
- * moved into `XP_BONUSES` when the daily quests were wired, repriced on the
- * way. That is the intended exit from this file: a kind leaves when
- * something fires it.
+ * There were twenty, and seven have left. Four of them - `queueCleared`,
+ * `flawlessDay`, `fiftyReviewDay` and `wellRoundedDay` - turned out to be
+ * quest-shaped and moved into `XP_BONUSES` when the daily quests were wired,
+ * repriced on the way. The three game ones - `personalBest`, `flawlessGame`
+ * and `mapCleared` - followed when a finished game started asking what it had
+ * actually achieved rather than only that it had ended. That is the intended
+ * exit from this file: a kind leaves when something fires it.
+ *
+ * Nine had sat here priced and unfireable for long enough that `/xp/earn`
+ * began advertising 300 XP of game awards nothing could pay. A kind waiting
+ * here is fine; a kind waiting here while a page promises it is not, which is
+ * why that page now lists only what `XP_AWARDS` and `XP_BONUSES` hold.
  *
  * They still seed into `XpType`, so every one appears in the admin screen with
  * its amount and its note, and the amount can be changed there without a
@@ -56,15 +63,6 @@ export const XP_PROPOSED_AWARDS = {
   /** Every radical on a level learned, before its kanji. */
   levelRadicalsCleared: 50,
 
-  // --- Games. Kept modest, since games already pay per finish and the daily
-  // allowance is what a rank buys.
-  /** A personal best on any game. */
-  personalBest: 50,
-  /** A perfect round. */
-  flawlessGame: 50,
-  /** Every prefecture found on the map. */
-  mapCleared: 200,
-
   // --- Coming back, and staying. The ones that matter most on a family site.
   /** Returning after a fortnight or more away. Paid once per absence. */
   comeback: 100,
@@ -88,9 +86,6 @@ export const XP_PROPOSED_NOTES: Record<XpProposedAwardKind, string> = {
   curriculumComplete: "For finishing the curriculum. All hundred levels.",
   hundredBurned: "For carrying a hundred items all the way to the top stage.",
   levelRadicalsCleared: "For learning every radical on a level before meeting its kanji.",
-  personalBest: "For beating your own best score.",
-  flawlessGame: "For a game with every answer right.",
-  mapCleared: "For finding every prefecture on the map.",
   comeback: "For coming back after a fortnight or more away.",
   anniversary: "For a year since you joined.",
   fullWeekend: "For studying on both days of a weekend.",
