@@ -356,10 +356,11 @@ Run `pnpm quality:check` after non-trivial `src/` edits. If lint issues are auto
   gojūon by version minor, so moving a release from 0.263 to 0.264 changes the
   kana its codename must begin with — ろ to わ — and forces a fresh name that
   still describes the release and reuses no word already in the list. So build
-  and test with the entry left `planned`, and do the release in one pass at the
-  end, with the script that does all four together:
+  and test with the work left as a claimed ticket, and do the release in one
+  pass at the end, with the script that does all four together:
 
-      pnpm release:take <entry-id> --romaji "…" --ja "…" --reading "…" --gloss "…"
+      pnpm release:take --ticket <ticket-id> --summary "…" \
+        --romaji "…" --ja "…" --reading "…" --gloss "…"
 
   It asks `origin/main` what has actually been published — not the working
   tree, which is usually behind — takes the next minor, ships the entry through
@@ -370,8 +371,49 @@ Run `pnpm quality:check` after non-trivial `src/` edits. If lint issues are auto
   building. Expect the word gate to reject an ordinary word - five hundred
   names in, `temoto`, `mejirushi`, `nakami`, `nimotsu`, `yajirushi` and
   `takasa` are all spoken for - so have a second word ready rather than
-  reading the refusal as a problem with the release. Then
-  `pnpm quality:check && pnpm preflight:prod`, and push. Anything that is not a release — a docs change,
+  reading the refusal as a problem with the release. Stop guessing after the
+  second rejection and ask the list instead; three attempts at 1.25.0 died one
+  word at a time before this did it in one:
+
+      cat src/lib/releaseCodenameList*.ts | grep -o 'romaji: "[^"]*"' \
+        | sed 's/romaji: "//;s/"//' | tr ' ' '\n' | tr 'A-Z' 'a-z' | sort -u
+
+  Then `pnpm quality:check && pnpm preflight:prod`, and push.
+
+  **"Immediately before pushing" means the push is the next command, not the
+  next twenty minutes.** `preflight:prod` is `quality:check && security:check
+  && build` and takes about twenty minutes, which is easily long enough for
+  another session to take the number you are holding. On 2026-09-06 the theme
+  page took 1.24.0, spent the gate on it, and found out from a rejected push -
+  and renumbering to 1.25.0 moved the kana from の to は, so the codename had
+  to be written again from scratch. The push being rejected as behind is the
+  safe failure and nothing is lost, but the twenty minutes are. So chain it,
+  and let the gate's exit code decide:
+
+      pnpm release:take --ticket … && pnpm preflight:prod \
+        && git fetch origin && git push origin HEAD:main
+
+  The `&&` is the point: a red gate stops the push, and the fetch tells you
+  main moved before the push does.
+
+  **Only one session may hold an unpushed number at a time.** `release:take`
+  cannot arbitrate this and reads as though it can: `publishedVersion()`
+  returns the higher of `origin/main:package.json` and the *local*
+  `package.json`, and the comment above it describes stamping several releases
+  before a push. That defence only works for several takes **in one worktree**,
+  where the local file rises as each is stamped. Across sessions it does
+  nothing - one worktree per session is the rule, so two sessions that have not
+  pushed both read the same remote, both read their own unmoved local, and both
+  take the same minor. Nothing is written anywhere shared until a push lands;
+  the script's only database calls read the ticket and mark it shipped.
+
+  So when several sessions are batching a push, stamp in turn rather than in
+  advance: each session takes its number only once the previous push is on
+  `origin/main`. Pre-stamping the queue means assigning the numbers by hand,
+  and the codename cannot be pre-assigned with them - the kana follows the
+  minor, so a renumber forces a fresh name as well as a fresh number.
+
+  Anything that is not a release — a docs change,
   a rule added to this file — takes no version at all and stays out of the race.
 - After implementation: commit and push. Conventional Commits, subject ≤ 50 chars.
 - **`pnpm db:backup` before every write to the production database.** Schema
