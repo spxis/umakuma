@@ -1,4 +1,5 @@
 import { getAllKanjiDictionaryEntries } from "./kanjiDictionary";
+import { isTaughtKanji } from "./kanjiLadder";
 
 /**
  * Every kanji, by how many strokes it takes to write.
@@ -12,6 +13,24 @@ import { getAllKanjiDictionaryEntries } from "./kanjiDictionary";
  * Commonest first, because that is the order a learner meets them: 12 strokes
  * is nine hundred characters, and the first screen should be the ones they
  * will actually see.
+ *
+ * **The kanji we teach, which is what the site's three types mean.** These
+ * pages were built straight from KANJIDIC - ten thousand characters, of which
+ * 8,150 are neither radical, kanji nor vocabulary in our terms, because they
+ * are not in the curriculum at all. That is why six of the eight one-stroke
+ * entries were components like "katakana no radical (no. 4)" wearing a KANJI
+ * pill: nothing on the page had ever asked our own classification what these
+ * characters were.
+ *
+ * John: "we have 3 things we teach. RADICALS KANJI and VOCAB. If it's not
+ * KANJI, then it should have gone into the RADICALS section. And if it's a
+ * radical, then it should not show up in the strokes."
+ *
+ * So the page asks `isTaughtKanji`, and the three types do the work. No rule
+ * about what a radical looks like, and nothing listed by hand - a radical is
+ * absent because it is not in the kanji ladder, and 人 is present because it
+ * is, being one of the 164 characters the ladder holds twice: once as a
+ * radical, once as a kanji.
  */
 export const STROKE_PAGE_SIZE = 120;
 
@@ -45,10 +64,20 @@ function toEntry(entry: ReturnType<typeof getAllKanjiDictionaryEntries>[number])
   };
 }
 
+/**
+ * Every character the stroke pages will show.
+ *
+ * One filter, read by both the counts and the pages, because a chip saying
+ * "1 8" over a page of four is worse than either number alone.
+ */
+function strokeBrowserEntries() {
+  return getAllKanjiDictionaryEntries().filter((entry) => isTaughtKanji(entry.kanji));
+}
+
 /** How many kanji each stroke count holds, fewest strokes first. */
 export function strokeCounts(): StrokeCount[] {
   const counts = new Map<number, number>();
-  for (const entry of getAllKanjiDictionaryEntries()) {
+  for (const entry of strokeBrowserEntries()) {
     if (entry.strokeCount === null) continue;
     counts.set(entry.strokeCount, (counts.get(entry.strokeCount) ?? 0) + 1);
   }
@@ -65,7 +94,7 @@ export function strokeCounts(): StrokeCount[] {
  * twelve-stroke characters, a couple of hundred are in the frequency list.
  */
 export function kanjiByStrokeCount(strokes: number, options: { commonOnly?: boolean } = {}): StrokeEntry[] {
-  return getAllKanjiDictionaryEntries()
+  return strokeBrowserEntries()
     .filter((entry) => entry.strokeCount === strokes)
     .map(toEntry)
     .filter((entry) => !options.commonOnly || entry.frequencyRank !== null)

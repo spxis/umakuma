@@ -93,6 +93,24 @@ export function kanjiPlacement(kanji: string): KanjiLadderPlacement | null {
 }
 
 /**
+ * Whether the curriculum teaches this character as a kanji.
+ *
+ * **A character can be both a radical and a kanji, and when it is, it is two
+ * items.** 164 of them are: 一, 人, 力, 口, 十 are radicals a member learns as
+ * components and kanji they later learn to read, and the ladder holds each
+ * twice on purpose - the WaniKani model, and the reason `radicalLevel` and
+ * `kanjiLevel` are separate maps rather than one type field. So "is it a
+ * radical" never answers "is it a kanji"; only this does.
+ *
+ * This exists because a surface asking "is this a kanji" was reaching for
+ * KANJIDIC, which is a dictionary of every character and knows nothing about
+ * the three types we teach.
+ */
+export function isTaughtKanji(character: string): boolean {
+  return ladder.kanjiLevel[character] !== undefined;
+}
+
+/**
  * The level a classical radical with no kanji is offered at.
  *
  * Twelve of RADKFILE's 253 appear in no character we teach, so nothing a

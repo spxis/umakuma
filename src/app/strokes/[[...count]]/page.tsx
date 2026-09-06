@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
   return {
     title: `${strokes}-stroke kanji — UmaKuma`,
-    description: `Every kanji written in ${strokes} strokes, commonest first.`,
+    description: `Every kanji we teach written in ${strokes} strokes, commonest first.`,
   };
 }
 

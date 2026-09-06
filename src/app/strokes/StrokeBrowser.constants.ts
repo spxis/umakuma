@@ -1,7 +1,10 @@
 /** Copy for the stroke browser, in one map for the locale layer. */
 export const STROKE_BROWSER_COPY = {
   title: "Strokes",
-  subtitle: "Every kanji, by how many strokes it takes to write.",
+  /* "Every kanji" was true of a dictionary dump of ten thousand characters,
+     most of which the curriculum never teaches and 75 of which were radicals
+     wearing a KANJI pill. The page shows the kanji we teach now, and says so. */
+  subtitle: "Every kanji we teach, by how many strokes it takes to write.",
   heading: "How many strokes?",
   blurb: "Choose a count to see the kanji written in it, commonest first.",
   countLabel: (strokes: number) => `${strokes} strokes`,
