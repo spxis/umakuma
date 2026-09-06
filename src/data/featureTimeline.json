@@ -6508,12 +6508,25 @@
     "id": "promotions-who-climbed-a-rank-this-week",
     "name": "Promotions: who climbed a rank this week",
     "area": "account",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-06",
+    "summary": "Everyone who climbed a rank in the past week, grouped by the rank they reached. A board says who is ahead; this says who moved.",
+    "dateIsEstimate": false,
+    "release": 522,
+    "version": "1.35.0",
+    "releasedAt": "2026-09-06T10:44:04Z"
+  },
+  {
+    "id": "a-rank-reads-one-way-everywhere-and-links-to-its-page",
+    "name": "A rank reads one way everywhere, and links to its page",
+    "area": "account",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.35.0",
-    "release": 522,
-    "releasedAt": "2026-09-06T10:44:04Z",
-    "summary": "Everyone who climbed a rank in the past week, grouped by the rank they reached. A board says who is ahead; this says who moved."
+    "version": "1.36.0",
+    "release": 523,
+    "releasedAt": "2026-09-06T10:44:42Z",
+    "summary": "Ranks read the same everywhere now \u2014 L1 Rookie, wherever you meet it \u2014 and every rank name opens the page showing who is standing there. The ladder chart says how many that is."
   }
 ]

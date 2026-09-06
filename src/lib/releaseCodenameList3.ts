@@ -84,4 +84,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Yaridashi Meikaku", ja: "遣り出し明確", reading: "やりだしめいかく", gloss: "what it pays, said plainly" },
   { romaji: "Yudaneta Isshuu", ja: "委ねた一週", reading: "ゆだねたいっしゅう", gloss: "the week you were given" },
   { romaji: "Yorokobi Soroe", ja: "喜び揃え", reading: "よろこびそろえ", gloss: "the gathering of good news" },
+  { romaji: "Rakuin Yobimei", ja: "落印呼び名", reading: "らくいんよびめい", gloss: "the name that matches its mark" },
 ];
