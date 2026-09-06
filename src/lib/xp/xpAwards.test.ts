@@ -117,10 +117,12 @@ describe("the clean-session bonus", () => {
 
 describe("the daily caps", () => {
   it("stops paying once a cap is full, and never pays a negative", () => {
-    const cap = XP_DAILY_CAPS.burnedItem!;
-    expect(xpAwardValue("burnedItem", 0)).toBe(XP_BONUSES.burnedItem);
-    expect(xpAwardValue("burnedItem", cap)).toBe(0);
-    expect(xpAwardValue("burnedItem", cap + 100)).toBe(0);
+    /* `cleanSession` rather than a burn: burning is deliberately uncapped, so
+       it is no longer an example of a cap. */
+    const cap = XP_DAILY_CAPS.cleanSession!;
+    expect(xpAwardValue("cleanSession", 0)).toBe(XP_BONUSES.cleanSession);
+    expect(xpAwardValue("cleanSession", cap)).toBe(0);
+    expect(xpAwardValue("cleanSession", cap + 100)).toBe(0);
   });
 
   it("pays the part of an award that still fits under the cap", () => {
@@ -131,5 +133,18 @@ describe("the daily caps", () => {
   it("leaves reviews uncapped, because capping study says the work stopped counting", () => {
     expect(XP_DAILY_CAPS.reviewAnswered).toBeUndefined();
     expect(xpAwardValue("reviewAnswered", 10_000)).toBe(XP_AWARDS.reviewAnswered);
+  });
+});
+
+describe("burning is not capped", () => {
+  /* John, pricing the awards: "There is no point in having a cap on Burned
+     Items... that is a big achievement and should be rewarded." It is also the
+     one award nobody can farm - months of correct answers per item, and it
+     happens once, ever, for that item. */
+  it("pays the same however many a member burns in a day", () => {
+    expect(XP_DAILY_CAPS.burnedItem).toBeUndefined();
+    for (const earnedSoFar of [0, 100, 5_000]) {
+      expect(xpAwardValue("burnedItem", earnedSoFar)).toBe(XP_BONUSES.burnedItem);
+    }
   });
 });

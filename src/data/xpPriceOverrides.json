@@ -1,4 +1,9 @@
 {
   "version": 1,
-  "prices": {}
+  "prices": {
+    "burnedItem": {
+      "dailyCap": null,
+      "note": "Burning is uncapped: it takes months of correct answers per item and happens once, ever, for that item. Decided 2026-09-05."
+    }
+  }
 }

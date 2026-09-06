@@ -148,11 +148,22 @@ export const XP_DAILY_CAPS: Partial<Record<XpAwardKind, number>> = {
   lessonLearned: XP_AWARDS.lessonLearned * 30,
   /* Five units, which a clean batch of twenty-two fills on its own. */
   cleanSession: XP_BONUSES.cleanSession * 5,
-  /* Two items. A member in the middle of the curriculum burns roughly as many
-     items a day as they start, so this one is a ceiling in practice rather
-     than in theory - which is the point of it. */
-  burnedItem: XP_BONUSES.burnedItem * 2,
 };
+
+/*
+ * Burning is deliberately uncapped.
+ *
+ * It carried a two-item ceiling on the reasoning that a member in the middle
+ * of the curriculum burns about as many items a day as they start, so the cap
+ * would rarely bite. John's answer, seeing it priced: "There is no point in
+ * having a cap on Burned Items... that is a big achievement and should be
+ * rewarded."
+ *
+ * He is right, and the old reasoning gave itself away - a cap that is supposed
+ * never to bite is not protecting the economy, it is only there to punish the
+ * day it does. Burning is the one award a member cannot farm: it takes months
+ * of correct answers per item and it happens once, ever, for that item.
+ */
 
 /**
  * Awards that may be earned once per period rather than repeatedly.

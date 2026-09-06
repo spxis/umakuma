@@ -384,3 +384,38 @@ button,
     mask-image: none;
   }
 }
+
+/*
+ * The XP cue, dropping in from the top and fading out on its own.
+ *
+ * One animation covering the whole life of the toast rather than a class
+ * swapped part way through: the host removes it on a timer, and an exit
+ * animation that has to be told when to start is an exit animation that gets
+ * out of step with the timer that removes the element.
+ */
+@keyframes xp-toast-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-0.75rem);
+  }
+  10%,
+  80% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-0.35rem);
+  }
+}
+
+.xp-toast {
+  animation: xp-toast-in 2600ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Still appears and still goes: only the movement is dropped. */
+  .xp-toast {
+    animation: none;
+  }
+}

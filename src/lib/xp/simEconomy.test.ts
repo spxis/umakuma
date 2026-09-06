@@ -20,10 +20,13 @@ describe("simDayXp", () => {
     expect(day.reviews).toBe(50 * XP_AWARDS.reviewAnswered + 40 * XP_AWARDS.reviewCorrect);
   });
 
-  it("caps lessons, burns and clean batches, which is what makes them a garnish", () => {
+  it("caps lessons and clean batches, which is what makes them a garnish", () => {
     const heavy = simDayXp({ ...quietDay, lessons: 200, burns: 50, cleanBatches: 40 });
     expect(heavy.lessons).toBe(XP_DAILY_CAPS.lessonLearned);
-    expect(heavy.quality).toBe((XP_DAILY_CAPS.cleanSession ?? 0) + (XP_DAILY_CAPS.burnedItem ?? 0));
+    /* Burning is not capped - John's decision - so a day of fifty burns pays
+       for fifty. The simulator has to model that or the curve is calibrated
+       against an economy the site does not have. */
+    expect(heavy.quality).toBe((XP_DAILY_CAPS.cleanSession ?? 0) + XP_BONUSES.burnedItem * 50);
   });
 
   it("pays the weekly streak on the seventh day and the milestone on top", () => {

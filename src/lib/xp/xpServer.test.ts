@@ -99,10 +99,10 @@ describe("awarding XP quietly", () => {
   });
 
   it("stops looping once the day's cap is full rather than asking a hundred more times", async () => {
-    const cap = XP_DAILY_CAPS.burnedItem!;
-    const total = await awardXpQuietly({ accountId: "acct", requests: [{ kind: "burnedItem", times: 50 }] });
+    const cap = XP_DAILY_CAPS.cleanSession!;
+    const total = await awardXpQuietly({ accountId: "acct", requests: [{ kind: "cleanSession", times: 50 }] });
     expect(total).toBe(cap);
-    expect(cap / XP_BONUSES.burnedItem).toBeLessThan(50);
+    expect(cap / XP_BONUSES.cleanSession).toBeLessThan(50);
   });
 
   it("treats a `times` of zero or nonsense as nothing to do", async () => {
@@ -137,8 +137,8 @@ describe("awarding XP quietly", () => {
  */
 describe("awarding XP as an admin", () => {
   it("pays the whole amount past a cap the member's own earning would meet", async () => {
-    const cap = XP_DAILY_CAPS.burnedItem!;
-    const result = await awardXpAsAdmin({ accountId: "acct", kind: "burnedItem", amount: 500 });
+    const cap = XP_DAILY_CAPS.cleanSession!;
+    const result = await awardXpAsAdmin({ accountId: "acct", kind: "cleanSession", amount: 500 });
 
     expect(result.awarded).toBe(500);
     expect(account.xp).toBe(500);
@@ -159,8 +159,8 @@ describe("awarding XP as an admin", () => {
    * other one, and the cap is read off that row.
    */
   it("fills the day's row for its kind, so the member earns no more of it today", async () => {
-    await awardXpAsAdmin({ accountId: "acct", kind: "burnedItem", amount: 500 });
-    const earned = await awardXp({ accountId: "acct", kind: "burnedItem" });
+    await awardXpAsAdmin({ accountId: "acct", kind: "cleanSession", amount: 500 });
+    const earned = await awardXp({ accountId: "acct", kind: "cleanSession" });
 
     expect(earned.awarded).toBe(0);
   });

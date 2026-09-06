@@ -36,6 +36,14 @@ export const MODAL_LAYERS = {
   /** Transient corner toasts. */
   toast: "z-120",
   /**
+   * The XP a member just earned, dropping in from the top.
+   *
+   * Above the game runner, because XP is most often earned inside it and a
+   * cue that is hidden by the thing that caused it is no cue at all. It takes
+   * no clicks, so nothing below it is unreachable while it shows.
+   */
+  xpToast: "z-[130]",
+  /**
    * The header menu's anchor: the wrapper the panel is positioned from.
    *
    * A wrapper with any z-index starts a stacking context, and the panel's own

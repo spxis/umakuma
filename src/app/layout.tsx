@@ -5,6 +5,7 @@ import { loadFooterModeChips } from "@/lib/featureFlagsServer";
 import ClientApiActivityHint from "./ClientApiActivityHint";
 import ClientErrorReporter from "./ClientErrorReporter";
 import ViewGlyphModalHost from "./shared/ViewGlyphModalHost";
+import XpToastHost from "./shared/XpToastHost";
 import "./globals.css";
 import { SITE_URL } from "@/lib/siteOrigin";
 import {
@@ -108,6 +109,8 @@ export default async function RootLayout({
         <main className="min-w-0 flex-1 overflow-x-clip">{children}</main>
         <AppFooter modeChips={modeChips} />
         <ViewGlyphModalHost />
+        {/* Draws nothing until a member earns something. */}
+        <XpToastHost />
       </body>
     </html>
   );
