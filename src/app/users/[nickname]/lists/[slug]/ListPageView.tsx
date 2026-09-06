@@ -379,6 +379,8 @@ export default function ListPageView({
                * grows a row of "Add a note" under items nobody meant to annotate.
                */
               noteFor={(item) => notes.noteFor(item as ListPageItem)}
+              /* Held open whether or not Edit is on, so pressing it moves nothing. */
+              reserveControls={canEdit}
               onEditNote={editing && canEdit && !list.tag ? (item) => notes.edit(item as ListPageItem) : undefined}
               onOpen={(index) =>
                 openViewGlyphViewer({

@@ -24,6 +24,15 @@ type Props = {
   noteFor?: (item: StudyTagListItem) => string | null;
   /** Offered only where the reader may write one. */
   onEditNote?: (item: StudyTagListItem) => void;
+  /**
+   * Keeps the controls' lane open on a surface whose controls come and go.
+   *
+   * A list page's Edit toggle hands this component its remove and note
+   * callbacks, and without the lane held open the columns jumped sideways the
+   * moment Edit was pressed. Nothing is drawn in it until there is something
+   * to draw.
+   */
+  reserveControls?: boolean;
 };
 
 /** A list row is a subject plus the tagged item it came from. */
@@ -79,45 +88,46 @@ function RemoveButton({
 }
 
 /**
- * The note on an item, and the way to write one.
+ * The note on an item.
  *
- * A list of glyphs says what to study and never why. The note is the reason a
- * member's own list beats a generated one - the mnemonic that finally worked,
- * the sentence it was met in - so it is shown as prose rather than as a pill,
- * and an item without one shows only the invitation to write it, and only to
- * somebody who may.
+ * A list of glyphs says what to study and never says why. The note is the
+ * reason a member's own list beats a generated one - the mnemonic that finally
+ * worked, the sentence it was met in - so it is shown as prose rather than as
+ * a pill, to every reader, whether or not anybody is editing.
+ *
+ * Content only. The invitation to write one is a control and lives with the
+ * other controls, in the row's trailing lane and the card's corner: as a line
+ * under the meaning it appeared when Edit went on and pushed every row open,
+ * so turning a control on moved the whole list under the reader.
  */
-function ItemNote({
-  text,
+function ItemNote({ text }: { text: string | null }) {
+  if (!text) return null;
+  return <span className="block text-[11px] font-semibold italic text-foreground/70">{text}</span>;
+}
+
+/** Writing one, in the space the remove button already occupies. */
+function NoteButton({
   item,
+  hasNote,
   onEdit,
 }: {
-  text: string | null;
   item: StudyTagListItem;
-  onEdit?: (item: StudyTagListItem) => void;
+  hasNote: boolean;
+  onEdit: (item: StudyTagListItem) => void;
 }) {
-  if (!text && !onEdit) return null;
-
-  if (!onEdit) {
-    return <span className="block text-[11px] font-semibold italic text-foreground/70">{text}</span>;
-  }
-
-  /*
-   * A written note is content and is always shown. The invitation to write one
-   * is a control, so it waits for the pointer: a grid of characters with "Add
-   * a note" printed under every one of them reads as a form, not as a list.
-   */
   return (
     <button
       type="button"
       onClick={() => onEdit(item)}
-      className={`mt-1 block w-full rounded-md px-1.5 py-0.5 text-left text-[11px] font-semibold transition ${
-        text
-          ? "italic text-foreground/70 hover:bg-surface-muted hover:text-accent"
-          : "text-foreground/60 opacity-0 hover:bg-surface-muted hover:text-accent group-hover:opacity-100 focus-visible:opacity-100"
+      aria-label={`${hasNote ? STUDY_TAG_LIST_COPY.editNote : STUDY_TAG_LIST_COPY.addNote} ${item.characters}`}
+      title={hasNote ? STUDY_TAG_LIST_COPY.editNote : STUDY_TAG_LIST_COPY.addNote}
+      className={`inline-flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border border-line/70 bg-surface/95 text-foreground/70 shadow-sm transition hover:border-accent hover:text-accent focus-visible:opacity-100 ${
+        hasNote ? "" : "opacity-0 group-hover:opacity-100"
       }`}
     >
-      {text ?? STUDY_TAG_LIST_COPY.addNote}
+      <svg viewBox="0 0 20 20" aria-hidden="true" className="h-3 w-3 fill-current">
+        <path d="M13.6 2.8a1.6 1.6 0 0 1 2.3 0l1.3 1.3a1.6 1.6 0 0 1 0 2.3l-8.1 8.1-3.6.9.9-3.6 8.1-8.1ZM3 16.5h14v1.6H3v-1.6Z" />
+      </svg>
     </button>
   );
 }
@@ -137,11 +147,9 @@ export default function StudyTagListsBody({
   selection,
   noteFor,
   onEditNote,
+  reserveControls = false,
 }: Props) {
   const rows = items.map(toRow);
-  const removeButton = onRemove
-    ? (row: TagRow) => <RemoveButton item={row.item} onRemove={onRemove} />
-    : undefined;
 
   /*
    * The note reads in both densities and is written from either. Drawn once
@@ -149,15 +157,31 @@ export default function StudyTagListsBody({
    * into saying different things about the same item.
    */
   const note = noteFor ?? (() => null);
-  const noteNode = (row: TagRow) => <ItemNote text={note(row.item)} item={row.item} onEdit={onEditNote} />;
-  const showNote = noteFor || onEditNote ? noteNode : undefined;
+  const showNote = noteFor ? (row: TagRow) => <ItemNote text={note(row.item)} /> : undefined;
+
+  /*
+   * Both controls in one slot, and both of them overlays: a row is exactly as
+   * tall with Edit on as with it off, which is the whole point of putting the
+   * note's pencil here rather than under the meaning.
+   */
+  const controls =
+    onRemove || onEditNote || reserveControls
+      ? (row: TagRow) => (
+          <span className="inline-flex items-center gap-1">
+            {onEditNote ? (
+              <NoteButton item={row.item} hasNote={Boolean(note(row.item))} onEdit={onEditNote} />
+            ) : null}
+            {onRemove ? <RemoveButton item={row.item} onRemove={onRemove} /> : null}
+          </span>
+        )
+      : undefined;
 
   if (viewMode === SUBJECT_VIEW_MODES.list) {
     return (
       <SubjectRows<TagRow>
         rows={rows}
         onSelect={(_row, index) => onOpen(index)}
-        renderTrailing={removeButton}
+        renderTrailing={controls}
         renderSubMeta={showNote}
         selection={selection}
       />
@@ -169,7 +193,7 @@ export default function StudyTagListsBody({
       rows={rows}
       renderUnder={showNote}
       onSelect={(_row, index) => onOpen(index)}
-      renderCorner={removeButton}
+      renderCorner={controls}
       selection={selection}
     />
   );

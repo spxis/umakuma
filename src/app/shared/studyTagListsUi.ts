@@ -15,6 +15,7 @@ export const STUDY_TAG_LIST_COPY = {
   noMatches: "Nothing in this list matches that search.",
   remove: "Remove from this list",
   addNote: "Add a note",
+  editNote: "Edit this note",
   noteTitle: "Why it is on this list",
   noteHint: "A mnemonic, the sentence you met it in, the mistake it keeps causing.",
   notePlaceholder: "Why this one?",
