@@ -87,4 +87,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Rakuin Yobimei", ja: "落印呼び名", reading: "らくいんよびめい", gloss: "the name that matches its mark" },
   { romaji: "Rikutsu Tsunagi", ja: "理屈繋ぎ", reading: "りくつつなぎ", gloss: "the joining that makes sense of it" },
   { romaji: "Rufu Sumiwake", ja: "流布住み分け", reading: "るふすみわけ", gloss: "each finding its own place" },
+  { romaji: "Reiretsu Utsushi", ja: "例列写し", reading: "れいれつうつし", gloss: "seeing the row as another does" },
 ];

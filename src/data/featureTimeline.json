@@ -6547,12 +6547,25 @@
     "id": "settings-move-to-their-own-address",
     "name": "Settings move to their own address",
     "area": "account",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-06",
+    "summary": "Your settings have moved to their own address, leaving your profile page free for what other people see.",
+    "dateIsEstimate": false,
+    "release": 525,
+    "version": "1.38.0",
+    "releasedAt": "2026-09-06T11:21:22Z"
+  },
+  {
+    "id": "an-admin-can-preview-a-board-as-anyone-else",
+    "name": "An admin can preview a board as anyone else",
+    "area": "account",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.38.0",
-    "release": 525,
-    "releasedAt": "2026-09-06T11:21:22Z",
-    "summary": "Your settings have moved to their own address, leaving your profile page free for what other people see."
+    "version": "1.39.0",
+    "release": 526,
+    "releasedAt": "2026-09-06T11:21:24Z",
+    "summary": "Admins can now look at a board the way a member or a visitor would, to check who is actually hidden."
   }
 ]
