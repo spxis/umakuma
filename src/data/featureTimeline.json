@@ -6222,12 +6222,25 @@
     "id": "xp-burn-uncapped-toast",
     "name": "Burning is uncapped, and the XP shows itself",
     "area": "account",
-    "kind": "feature",
     "status": "shipped",
+    "kind": "feature",
     "date": "2026-09-05",
-    "version": "1.18.0",
+    "summary": "Burning an item is no longer capped for the day, and the XP you earn now drops in from the top of the page so you can see it as it happens.",
+    "dateIsEstimate": false,
     "release": 500,
-    "releasedAt": "2026-09-06T06:50:57Z",
-    "summary": "Burning an item is no longer capped for the day, and the XP you earn now drops in from the top of the page so you can see it as it happens."
+    "version": "1.18.0",
+    "releasedAt": "2026-09-06T06:50:57Z"
+  },
+  {
+    "id": "lists-the-type-filter-is-the-shared-coloured-one",
+    "name": "The list's kind filter is the one every explorer uses",
+    "area": "study",
+    "kind": "bug",
+    "status": "shipped",
+    "date": "2026-09-06",
+    "version": "1.18.1",
+    "release": 501,
+    "releasedAt": "2026-09-06T07:06:35Z",
+    "summary": "A list page had grown three filter chips of its own - All, Kanji, Words - in the accent colour. It now uses the same chips as the explorers: Radical, Kanji and Vocab, each in its own colour with its own count, and kinds the list does not hold stay out of the row."
   }
 ]
