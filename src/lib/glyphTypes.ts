@@ -15,8 +15,16 @@ export type LevelItem = {
   subjectId: number;
   subjectType?: SubjectType;
   wkLevel?: number;
-  /** Ours, where the feed is ours. Drawn as UK n beside WK n, never as either. */
+  /** Ours, where the feed is ours. Drawn as UN n beside WK n, never as either. */
   ukLevel?: number | null;
+  /*
+   * The two of ours a list looks up for its level lane, and the two bands that
+   * are not ladders. `ukLevel` is the same number as `unLevel` where a feed of
+   * ours filled it; a list fills these from the ladder files server-side.
+   */
+  unLevel?: number | null;
+  ugLevel?: number | null;
+  schoolGrade?: number | null;
   /** Whose meanings and readings these are, for the credit line under them. Absent means WaniKani's. */
   contentSource?: "wanikani" | "kanjidic2" | "radkfile";
   /*

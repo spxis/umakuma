@@ -4,7 +4,7 @@ import type { UpcomingReviewItem } from "../lib/studyExplorerTypes";
 import { shortSubjectTypeLabel } from "../../level-explorer/lib/levelExplorerDisplay";
 import { NeutralPill, SubjectTypePill } from "../../shared/ExplorerPill";
 import { STUDY_PANEL_TEXT } from "./StudyExplorer.constants";
-import { ukLevelBadge, wkLevelBadge } from "@/lib/levelBadge";
+import { unLevelBadge, wkLevelBadge } from "@/lib/levelBadge";
 
 type StudyUpcomingReviewsSectionProps = {
   showUpcomingReviews: boolean;
@@ -57,7 +57,7 @@ export default function StudyUpcomingReviewsSection({
                         <NeutralPill>{wkLevelBadge(item.wkLevel)}</NeutralPill>
                       ) : null}
                       {typeof item.ukLevel === "number" ? (
-                        <NeutralPill>{ukLevelBadge(item.ukLevel)}</NeutralPill>
+                        <NeutralPill>{unLevelBadge(item.ukLevel)}</NeutralPill>
                       ) : null}
                     </div>
                     {(item.primaryMeaning || item.primaryReading) ? (

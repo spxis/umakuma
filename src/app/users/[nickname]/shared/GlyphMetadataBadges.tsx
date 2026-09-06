@@ -3,7 +3,7 @@
 import { NO_TRANSLATE_CLASS } from "@/app/shared/japaneseText";
 
 import { useIsRowDensity } from "./explorerCardDensity";
-import { ukLevelBadge, wkLevelBadge } from "@/lib/levelBadge";
+import { unLevelBadge, wkLevelBadge } from "@/lib/levelBadge";
 
 type Props = {
   level?: number | null;
@@ -63,7 +63,7 @@ export default function GlyphMetadataBadges({
         <span
           translate="no"
           className={`${NO_TRANSLATE_CLASS} ${chipClass} ${inRow ? "" : "right-1.5"}`}
-        >{[wkLevelBadge(level ?? null), ukLevelBadge(ukLevel ?? null)].filter(Boolean).join(" · ")}</span>
+        >{[wkLevelBadge(level ?? null), unLevelBadge(ukLevel ?? null)].filter(Boolean).join(" · ")}</span>
       ) : null}
     </>
   );

@@ -22,6 +22,8 @@ export const LEVEL_SYSTEMS = {
   wanikani: "WK",
   /** Ours, ordered by the exam. A hundred. */
   umakuma: "UN",
+  /** Ours, ordered by Japanese school year. Eighty-seven. */
+  umakumaGrade: "UG",
   /**
    * A member's own uploaded library, which is a third ladder with as many
    * levels as they gave it.
@@ -49,12 +51,34 @@ export function wkLevelBadge(level: number | null | undefined): string | null {
   return levelBadge(LEVEL_SYSTEMS.wanikani, level);
 }
 
-/** Ours. */
-export function ukLevelBadge(level: number | null | undefined): string | null {
+/** Ours, by the exam. Named for what it prints: it used to be `ukLevelBadge`
+ * and return `UN17`, which is one name too many for one number. */
+export function unLevelBadge(level: number | null | undefined): string | null {
   return levelBadge(LEVEL_SYSTEMS.umakuma, level);
+}
+
+/** Ours, by school year. */
+export function ugLevelBadge(level: number | null | undefined): string | null {
+  return levelBadge(LEVEL_SYSTEMS.umakumaGrade, level);
 }
 
 /** A member's own library. */
 export function libraryLevelBadge(level: number | null | undefined): string | null {
   return levelBadge(LEVEL_SYSTEMS.library, level);
+}
+
+/**
+ * The two bands that are not ladders: what the exam calls it, and the year a
+ * Japanese child is taught it.
+ *
+ * Not in `LEVEL_SYSTEMS`, because neither is a ladder a member climbs - there
+ * is no "next level" in N5 - but both are levels a member reads, and both were
+ * being written out by hand as `N${level}` in a dozen files.
+ */
+export function jlptBadge(level: number | null | undefined): string | null {
+  return typeof level === "number" ? `N${level}` : null;
+}
+
+export function schoolGradeBadge(grade: number | null | undefined): string | null {
+  return typeof grade === "number" ? `G${grade}` : null;
 }

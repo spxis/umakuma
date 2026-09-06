@@ -5,7 +5,7 @@ import { SUBJECT_PAGE_COPY } from "@/app/shared/subject-page/SubjectPage.constan
 import { subjectGlyphTone } from "@/app/shared/subjectListView";
 import { SUBJECT_TYPE_DISPLAY } from "@/lib/domainConstants";
 import { SOURCE_KEYS, SOURCE_CREDIT_COPY } from "@/lib/sourceCredits";
-import { ukLevelBadge, wkLevelBadge } from "@/lib/levelBadge";
+import { unLevelBadge, wkLevelBadge } from "@/lib/levelBadge";
 
 /**
  * What a subject is: the glyph, what it means, how it is read.
@@ -90,7 +90,7 @@ export default function SubjectIdentityBlock({ identity }: { identity: SubjectId
             {/* Ours beside theirs, and neither has to be hidden now that both
                 say whose they are. A kanji WaniKani never teaches carries only
                 the UK pill, which is exactly the case worth showing. */}
-            {ukLevel === null || ukLevel === undefined ? null : <Pill>{ukLevelBadge(ukLevel)}</Pill>}
+            {ukLevel === null || ukLevel === undefined ? null : <Pill>{unLevelBadge(ukLevel)}</Pill>}
             {jlptLevel ? <Pill>{SUBJECT_PAGE_COPY.jlpt(jlptLevel)}</Pill> : null}
           </div>
         </div>

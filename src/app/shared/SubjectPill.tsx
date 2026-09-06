@@ -10,7 +10,7 @@ import { subjectGlyphTone } from "./subjectListView";
 import { PILL_LEVEL_MODES } from "./pillWords";
 import { usePillLevels } from "./usePillLevels";
 import { usePillWords } from "./usePillWords";
-import { ukLevelBadge, wkLevelBadge } from "@/lib/levelBadge";
+import { unLevelBadge, wkLevelBadge } from "@/lib/levelBadge";
 
 /**
  * One item, as a pill: the glyph, and the words for it when they are wanted.
@@ -69,7 +69,7 @@ function Meta({
   const [levelMode] = usePillLevels();
   const badges =
     levelMode === PILL_LEVEL_MODES.on
-      ? [wkLevelBadge(level), ukLevelBadge(ukLevel)].filter((badge): badge is string => badge !== null)
+      ? [wkLevelBadge(level), unLevelBadge(ukLevel)].filter((badge): badge is string => badge !== null)
       : [];
   if (rate === null && badges.length === 0) return null;
   return (

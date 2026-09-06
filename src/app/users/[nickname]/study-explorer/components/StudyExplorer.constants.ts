@@ -1,4 +1,4 @@
-import { libraryLevelBadge, ukLevelBadge, wkLevelBadge } from "@/lib/levelBadge";
+import { libraryLevelBadge, unLevelBadge, wkLevelBadge } from "@/lib/levelBadge";
 
 import type { StudySource } from "../lib/studyExplorerTypes";
 
@@ -218,7 +218,7 @@ export const STUDY_REVIEW_MODAL_TOUCH = {
  */
 export function studyLevelHeaderLabel(studySource: StudySource, level: number | null): string {
   const value = Math.max(1, level ?? 1);
-  if (studySource === "umakuma") return ukLevelBadge(value)!;
+  if (studySource === "umakuma") return unLevelBadge(value)!;
   if (studySource === "wanikani") return wkLevelBadge(value)!;
   return libraryLevelBadge(value)!;
 }

@@ -3,7 +3,7 @@ import { execFileSync } from "node:child_process";
 
 import { describe, expect, it } from "vitest";
 
-import { levelBadge, LEVEL_SYSTEMS, libraryLevelBadge, ukLevelBadge, wkLevelBadge } from "./levelBadge";
+import { levelBadge, LEVEL_SYSTEMS, libraryLevelBadge, unLevelBadge, wkLevelBadge } from "./levelBadge";
 
 /**
  * A level with no system in front of it is a number with two possible
@@ -13,7 +13,7 @@ import { levelBadge, LEVEL_SYSTEMS, libraryLevelBadge, ukLevelBadge, wkLevelBadg
 describe("levelBadge", () => {
   it("names the system in front of the number", () => {
     expect(wkLevelBadge(17)).toBe("WK17");
-    expect(ukLevelBadge(17)).toBe("UN17");
+    expect(unLevelBadge(17)).toBe("UN17");
     expect(levelBadge(LEVEL_SYSTEMS.wanikani, 60)).toBe("WK60");
   });
 
@@ -21,7 +21,7 @@ describe("levelBadge", () => {
     /* An unlevelled subject is not on level zero. It is not on the ladder. */
     expect(wkLevelBadge(null)).toBeNull();
     expect(wkLevelBadge(undefined)).toBeNull();
-    expect(ukLevelBadge(null)).toBeNull();
+    expect(unLevelBadge(null)).toBeNull();
   });
 
   it("leaves no bare L{n} drawn anywhere in the app", () => {

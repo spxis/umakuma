@@ -413,3 +413,57 @@ describe("the two reading lanes", () => {
     expect(text()).toContain("おとな");
   });
 });
+
+/**
+ * The level lane, which used to be WaniKani's number or nothing.
+ */
+describe("the level lane", () => {
+  const laneText = (source: Parameters<typeof toSubjectListRow>[0]) => {
+    const doc = render(<SubjectRows rows={[toSubjectListRow(source)]} onSelect={() => {}} />);
+    return doc.body.textContent ?? "";
+  };
+
+  it("leads with ours and keeps WaniKani's beside it", () => {
+    const text = laneText({
+      subjectId: 1,
+      characters: "水",
+      subjectType: SUBJECT_TYPES.kanji,
+      meanings: ["Water"],
+      wkLevel: 2,
+      unLevel: 6,
+      srsStage: 5,
+      status: SRS_BUCKETS.guru,
+    });
+    expect(text).toContain("UN6");
+    expect(text).toContain("WK2");
+  });
+
+  /* The case the lane was blank for: a kanji WaniKani never taught. */
+  it("falls back to the exam's band where no ladder has it", () => {
+    const text = laneText({
+      subjectId: -1,
+      characters: "阜",
+      subjectType: SUBJECT_TYPES.kanji,
+      meanings: ["Hill"],
+      wkLevel: null,
+      jlptLevel: 1,
+      srsStage: 0,
+      status: SRS_BUCKETS.locked,
+    });
+    expect(text).toContain("N1");
+  });
+
+  it("falls back to the school year where even the exam is silent", () => {
+    const text = laneText({
+      subjectId: -2,
+      characters: "阜",
+      subjectType: SUBJECT_TYPES.kanji,
+      meanings: ["Hill"],
+      wkLevel: null,
+      schoolGrade: 4,
+      srsStage: 0,
+      status: SRS_BUCKETS.locked,
+    });
+    expect(text).toContain("G4");
+  });
+});

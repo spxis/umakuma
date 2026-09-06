@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import type { ViewerMenuInfo } from "@/app/users/[nickname]/UserDashboardTabs.types";
-import { ukLevelBadge, wkLevelBadge } from "@/lib/levelBadge";
+import { unLevelBadge, wkLevelBadge } from "@/lib/levelBadge";
 
 import { HEADER_MEMBER_STATS_COPY as copy } from "./headerMemberStatsCopy";
 import { viewerAddress } from "./viewerAddress";
@@ -40,7 +40,7 @@ export default function HeaderMemberStats({
   }
 
   const address = viewerAddress(viewerMenuInfo);
-  const uk = ukLevelBadge(viewerMenuInfo.ukLevel);
+  const uk = unLevelBadge(viewerMenuInfo.ukLevel);
   const wk = wkLevelBadge(viewerMenuInfo.wkLevel);
   const xp = copy.xp(viewerMenuInfo.xp);
 

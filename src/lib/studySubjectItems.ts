@@ -6,6 +6,7 @@ import { prisma } from "./prisma";
 import { getCatalogSubjectDetails, type CatalogSubjectDetail } from "./subjectCatalogDetails";
 import type { StudyListItemRef } from "./studyListRules";
 import { fetchStudyTagRows } from "./studySubjectTags";
+import { subjectLadderLevels } from "./subjectLadderLevels";
 import type { StudyTagListItem } from "./studyTagLists";
 import { parseAssignmentCacheRows, srsLabel } from "./wanikani/helpers";
 
@@ -121,6 +122,15 @@ export type ListSubjectRow = {
   meaning: string;
   reading: string | null;
   wkLevel: number | null;
+  /*
+   * The other ladders this item is on, and the two bands that are not ladders.
+   * Looked up here rather than in the page: they are static files a megabyte
+   * between them and belong nowhere near a bundle.
+   */
+  unLevel?: number | null;
+  ugLevel?: number | null;
+  jlptLevel?: number | null;
+  schoolGrade?: number | null;
   href: string | null;
   /**
    * Why it is on this list, in the words of whoever added it.
@@ -148,7 +158,7 @@ export async function fetchListSubjectRows(items: StudyListItemRef[]): Promise<L
     unnamedKanji.length > 0
       ? prisma.jlptKanji.findMany({
           where: { kanji: { in: unnamedKanji } },
-          select: { kanji: true, primaryMeaning: true, meanings: true, onReadings: true, kunReadings: true },
+          select: { kanji: true, nLevel: true, primaryMeaning: true, meanings: true, onReadings: true, kunReadings: true },
         })
       : Promise.resolve([]),
   ]);
@@ -175,6 +185,12 @@ export async function fetchListSubjectRows(items: StudyListItemRef[]): Promise<L
           meaning: subject.meanings[0] ?? "",
           reading: subject.primaryReadings[0] ?? subject.readings[0] ?? null,
           wkLevel: subject.wkLevel,
+          ...subjectLadderLevels({
+            subjectType: subject.subjectType,
+            characters: subject.characters,
+            subjectId: subject.subjectId,
+          }),
+          jlptLevel: subject.jlptLevel,
           href: subjectHref({ subjectType: subject.subjectType, characters: subject.characters, slug: null }),
           note: item.note ?? null,
         },
@@ -197,6 +213,13 @@ export async function fetchListSubjectRows(items: StudyListItemRef[]): Promise<L
           meaning: jlpt?.primaryMeaning ?? jlpt?.meanings[0] ?? "",
           reading: jlpt?.onReadings[0] ?? jlpt?.kunReadings[0] ?? null,
           wkLevel: null,
+          /* A kanji WaniKani never taught is still on both of our ladders. */
+          ...subjectLadderLevels({
+            subjectType: SUBJECT_TYPES.kanji,
+            characters: item.key,
+            subjectId: null,
+          }),
+          jlptLevel: jlpt?.nLevel ?? null,
           href: subjectHref({ subjectType: SUBJECT_TYPES.kanji, characters: item.key, slug: null }),
           note: item.note ?? null,
         },

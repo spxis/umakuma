@@ -22,7 +22,13 @@ import {
   SUBJECT_VIEW_COPY,
   type SubjectListRow,
 } from "./subjectListView";
-import { wkLevelBadge } from "@/lib/levelBadge";
+import {
+  jlptBadge,
+  schoolGradeBadge,
+  ugLevelBadge,
+  unLevelBadge,
+  wkLevelBadge,
+} from "@/lib/levelBadge";
 
 /**
  * What a list puts in its columns.
@@ -205,7 +211,18 @@ export function typeColumn<TRow extends SubjectListRow>(): SubjectColumn<TRow> {
   };
 }
 
-/** The WaniKani level, where the surface has one. */
+/**
+ * Which levels the item sits on, and whose.
+ *
+ * The lane drew a bare WaniKani number and nothing else, so every kanji
+ * WaniKani never taught - most of what a member can put on a list - had an
+ * empty lane, and a member reading `17` had to know which of three ladders had
+ * spoken. Ours comes first because this is our site, WaniKani's rides beside it
+ * in a quieter weight, and where an item is on neither ladder the lane falls
+ * back to the bands that are not ladders: the exam's N, then the school year's
+ * G. The rest is on the lane's title, which is where a fourth badge would have
+ * gone if the row had another 40px, and it has not.
+ */
 export function levelColumn<TRow extends SubjectListRow>(
   read: (row: TRow) => number | null = (row) => row.wkLevel,
 ): SubjectColumn<TRow> {
@@ -214,14 +231,31 @@ export function levelColumn<TRow extends SubjectListRow>(
     heading: SUBJECT_VIEW_COPY.columnLevel,
     lane: SUBJECT_ROW_LANES.level,
     render: (row) => {
-      const level = read(row);
+      const wk = wkLevelBadge(read(row));
+      const ours = unLevelBadge(row.unLevel) ?? ugLevelBadge(row.ugLevel);
+      const lead = ours ?? wk ?? jlptBadge(row.jlptLevel) ?? schoolGradeBadge(row.schoolGrade);
+      if (!lead) return null;
       return (
-        <span className="block text-xs font-bold text-foreground/70">
-          {wkLevelBadge(level) ?? ""}
+        <span className="flex flex-col leading-tight" title={levelLaneTitle(row)}>
+          <span className="block text-xs font-bold text-foreground/70">{lead}</span>
+          {ours && wk ? <span className="block text-[10px] font-bold text-foreground/60">{wk}</span> : null}
         </span>
       );
     },
   };
+}
+
+/** Every level the row knows, spelled out for the lane's hover. */
+export function levelLaneTitle(row: SubjectListRow): string {
+  return [
+    unLevelBadge(row.unLevel),
+    ugLevelBadge(row.ugLevel),
+    wkLevelBadge(row.wkLevel),
+    jlptBadge(row.jlptLevel),
+    schoolGradeBadge(row.schoolGrade),
+  ]
+    .filter((badge): badge is string => badge !== null)
+    .join(" · ");
 }
 
 /**

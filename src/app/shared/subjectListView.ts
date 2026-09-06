@@ -34,6 +34,17 @@ export type SubjectListRow = {
   onReadings?: string[];
   kunReadings?: string[];
   wkLevel: number | null;
+  /*
+   * The other ladders, and the two bands that are not ladders.
+   *
+   * A level lane that knew only WaniKani's number was blank for everything
+   * WaniKani never taught, which is most of what a member can put on a list.
+   * Absent where a surface has not looked them up.
+   */
+  unLevel?: number | null;
+  ugLevel?: number | null;
+  jlptLevel?: number | null;
+  schoolGrade?: number | null;
   srsStage: number | null;
   srsBucket: SrsBucket;
 };
@@ -57,6 +68,10 @@ export type SubjectListSource = {
   onReadings?: string[] | null;
   kunReadings?: string[] | null;
   wkLevel?: number | null;
+  unLevel?: number | null;
+  ugLevel?: number | null;
+  jlptLevel?: number | null;
+  schoolGrade?: number | null;
   srsStage?: number | null;
   /** Already a bucket where the source has one; derived from the stage where not. */
   status?: SrsBucket | null;
@@ -75,6 +90,10 @@ export function toSubjectListRow(item: SubjectListSource): SubjectListRow {
     onReadings: item.onReadings ?? undefined,
     kunReadings: item.kunReadings ?? undefined,
     wkLevel: typeof item.wkLevel === "number" ? item.wkLevel : null,
+    unLevel: item.unLevel ?? null,
+    ugLevel: item.ugLevel ?? null,
+    jlptLevel: item.jlptLevel ?? null,
+    schoolGrade: item.schoolGrade ?? null,
     srsStage,
     srsBucket: item.status ?? srsBucketFromStage(srsStage),
   };
@@ -153,7 +172,8 @@ export const SUBJECT_ROW_LANES = {
   meaning: "min-w-0 flex-1",
   /* Wide enough for the RADICAL pill, which is the longest of the three. */
   type: "hidden w-20 shrink-0 md:block",
-  level: "hidden w-10 shrink-0 md:block",
+  /* Two badges deep - ours over WaniKani's - so 40px is no longer enough. */
+  level: "hidden w-14 shrink-0 md:block",
   srs: "hidden w-24 shrink-0 lg:block",
   /* Only wide enough to align from `md`, where the headings appear; below that
    * a fixed lane would spend 96px of a 393px screen on a single × button. */
