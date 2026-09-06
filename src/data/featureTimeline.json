@@ -6638,12 +6638,25 @@
     "id": "currency-mascots-and-shop",
     "name": "Currency mascots and the Shop",
     "area": "games",
+    "status": "shipped",
     "kind": "feature",
+    "date": "2026-09-06",
+    "summary": "Three treats to collect - Mochi, Oni and Kane, each with its own face - and a Shop to spend them in: sixteen fun cosmetics, eight for Uma and eight for Kuma. Nothing awards a treat yet and nothing is really for sale; this is the catalogue and the currencies, ahead of the earning.",
+    "dateIsEstimate": false,
+    "release": 532,
+    "version": "1.45.0",
+    "releasedAt": "2026-09-06T12:34:45Z"
+  },
+  {
+    "id": "game-awards-paid",
+    "name": "Games pay what they achieved",
+    "area": "games",
+    "kind": "bug",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.45.0",
-    "release": 532,
-    "releasedAt": "2026-09-06T12:34:45Z",
-    "summary": "Three treats to collect - Mochi, Oni and Kane, each with its own face - and a Shop to spend them in: sixteen fun cosmetics, eight for Uma and eight for Kuma. Nothing awards a treat yet and nothing is really for sale; this is the catalogue and the currencies, ahead of the earning."
+    "version": "1.46.0",
+    "release": 533,
+    "releasedAt": "2026-09-06T12:55:33Z",
+    "summary": "Games now pay for what you actually did in them, not just for finishing. A round with every answer right, a score past your own best, and naming every region of a country on the map each earn on top of the game itself."
   }
 ]
