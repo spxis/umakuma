@@ -6690,12 +6690,25 @@
     "id": "xp-earn-only-what-pays",
     "name": "The earn page offers only what pays",
     "area": "games",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-06",
+    "summary": "How XP is earned now lists only the awards something actually pays. It was showing every priced award, including ones nothing had ever paid out.",
+    "dateIsEstimate": false,
+    "release": 536,
+    "version": "1.49.0",
+    "releasedAt": "2026-09-06T12:57:24Z"
+  },
+  {
+    "id": "the-umakuma-explorer-takes-the-explorer-template-and-its-lev",
+    "name": "The explorer opens where you are",
+    "area": "study",
     "kind": "bug",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.49.0",
-    "release": 536,
-    "releasedAt": "2026-09-06T12:57:24Z",
-    "summary": "How XP is earned now lists only the awards something actually pays. It was showing every priced award, including ones nothing had ever paid out."
+    "version": "1.50.0",
+    "release": 537,
+    "releasedAt": "2026-09-06T12:57:34Z",
+    "summary": "The UmaKuma explorer opens at your own level instead of on a list of all hundred, and its level filter wraps and opens ten at a time. The curriculum papers are linked at the foot."
   }
 ]
