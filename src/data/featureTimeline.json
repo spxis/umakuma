@@ -6443,12 +6443,25 @@
     "id": "the-rank-card-stops-wasting-the-row",
     "name": "The rank card stops wasting the row",
     "area": "account",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-06",
+    "summary": "The rank card puts where you stand and what is next side by side instead of one above the other, and each now leads with its rank number so a name tells you which rung it is.",
+    "dateIsEstimate": false,
+    "release": 517,
+    "version": "1.30.0",
+    "releasedAt": "2026-09-06T09:52:10Z"
+  },
+  {
+    "id": "the-xp-summary-stops-reading-every-event-ever",
+    "name": "The XP summary stops reading every event ever",
+    "area": "platform",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.30.0",
-    "release": 517,
-    "releasedAt": "2026-09-06T09:52:10Z",
-    "summary": "The rank card puts where you stand and what is next side by side instead of one above the other, and each now leads with its rank number so a name tells you which rung it is."
+    "version": "1.31.0",
+    "release": 518,
+    "releasedAt": "2026-09-06T09:52:30Z",
+    "summary": "The XP page loads quickly however long you have been here: it now reads the totals it needs rather than every award you have ever earned."
   }
 ]

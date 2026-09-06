@@ -79,4 +79,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Matomatta Tsuranari", ja: "纏まった連なり", reading: "まとまったつらなり", gloss: "the run that was brought together" },
   { romaji: "Mitoosi Tadori", ja: "見通し辿り", reading: "みとおしたどり", gloss: "following the record back" },
   { romaji: "Mudanonai Haichi", ja: "無駄のない配置", reading: "むだのないはいち", gloss: "the arrangement with nothing wasted" },
+  { romaji: "Medo no Karusa", ja: "目処の軽さ", reading: "めどのかるさ", gloss: "the lightness of a clear view ahead" },
 ];
