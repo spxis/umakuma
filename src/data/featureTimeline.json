@@ -6768,12 +6768,25 @@
     "id": "the-umakuma-level-chips-claim-a-jlpt-band-finishes-on-six-di",
     "name": "A JLPT band finishes on one level",
     "area": "jlpt",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-06",
+    "summary": "The level chips on the UmaKuma explorer now mark only the five levels where a JLPT band actually finishes. They used to claim N5 finished on six different levels.",
+    "dateIsEstimate": false,
+    "release": 542,
+    "version": "1.52.1",
+    "releasedAt": "2026-09-06T14:27:50Z"
+  },
+  {
+    "id": "retire-pnpm-backlog-file-the-way-add-claim-and-release-were-",
+    "name": "Retire pnpm backlog file",
+    "area": "platform",
     "kind": "bug",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.52.1",
-    "release": 542,
-    "releasedAt": "2026-09-06T14:27:50Z",
-    "summary": "The level chips on the UmaKuma explorer now mark only the five levels where a JLPT band actually finishes. They used to claim N5 finished on six different levels."
+    "version": "1.52.2",
+    "release": 543,
+    "releasedAt": "2026-09-06T14:28:02Z",
+    "summary": "An internal command that quietly filed planned work into the shipped release record has been retired, so the two boards cannot drift apart."
   }
 ]
