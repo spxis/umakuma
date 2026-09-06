@@ -34,11 +34,22 @@ export default function XpBoardRows({ entries, viewer }: Props) {
             key={entry.id}
             className={`flex flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3 ${isViewer ? "bg-surface-muted/60" : ""}`}
           >
+            {/*
+              * The repeats of a tie print nothing, the way SPX drew them: two
+              * members on the same total are both 11th, and printing 11 twice
+              * reads as a numbering bug rather than as a shared place. The
+              * place still reaches a screen reader, which cannot see that the
+              * blank belongs to the row above.
+              */}
             <span
               translate="no"
               className="w-10 shrink-0 text-lg font-black tabular-nums text-foreground/60"
             >
-              {`#${entry.place}`}
+              {entry.sharesPlace ? (
+                <span className="sr-only">{copy.sharedPlace(entry.place)}</span>
+              ) : (
+                `#${entry.place}`
+              )}
             </span>
 
             <div className="min-w-0 flex-1 basis-40">
@@ -78,9 +89,24 @@ export default function XpBoardRows({ entries, viewer }: Props) {
               </p>
             </div>
 
-            <p className="shrink-0 text-right text-base font-black tabular-nums text-foreground sm:w-28">
-              {copy.total(entry.xp)}
-            </p>
+            <div className="shrink-0 text-right sm:w-28">
+              <p className="text-base font-black tabular-nums text-foreground">
+                {copy.total(entry.xp)}
+              </p>
+              {/*
+                * What it would take to pass the row above. Null is the leader,
+                * who has nobody above; zero is a member already level with the
+                * one above and needing the next point to break it. Drawing
+                * both as a dash would say "nothing to do" in both cases.
+                */}
+              <p className="text-[11px] font-semibold tabular-nums text-foreground/60">
+                {entry.toPassAbove === null
+                  ? copy.leading
+                  : entry.toPassAbove === 0
+                    ? copy.toPassLevel
+                    : copy.toPass(entry.toPassAbove)}
+              </p>
+            </div>
           </li>
         );
       })}

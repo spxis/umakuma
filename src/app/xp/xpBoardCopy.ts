@@ -11,6 +11,17 @@ export const XP_BOARD_COPY = {
   subtitle: "Everyone who studies here, ranked by XP.",
   blurb:
     "XP starts on day one, so this board has room for everybody — reviews, games, reading and turning up all count, whether or not you have connected WaniKani.",
+  /*
+   * The distance to the member directly above, which is what turns a board
+   * from a list into a target. Three states and they mean different things:
+   * the leader has nobody to pass, a row level with the one above needs the
+   * next point to break the tie, and everybody else has a number.
+   */
+  toPass: (amount: number) => `${amount.toLocaleString()} XP to pass`,
+  toPassLevel: "Level with the one above",
+  leading: "Leading",
+  /* Read out in place of the blank number on the repeat rows of a tie. */
+  sharedPlace: (place: number) => `Joint ${place}`,
   you: "You",
   yourPlace: (place: number, total: number) => `You are ${ordinal(place)} of ${total}.`,
   yourPlaceMissing: "You are not on the board yet. Earn your first XP and you will be.",

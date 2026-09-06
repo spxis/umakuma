@@ -1,4 +1,5 @@
 import { resolveDisplayName } from "@/lib/accountIdentity";
+import { memberPlacement, rankMemberBoard, type MemberPlacing } from "@/lib/memberBoard";
 import { xpRankName } from "@/lib/xp/xpRanks";
 import { xpStanding, type XpStanding } from "@/lib/xp/xpCurve";
 
@@ -25,10 +26,8 @@ export type XpBoardAccount = {
   xp: number;
 };
 
-export type XpBoardEntry = {
+export type XpBoardEntry = MemberPlacing & {
   id: string;
-  /** Competition placing: equal totals share it, and the next one skips. */
-  place: number;
   name: string;
   /** The address their pages live at, or null for an account with neither. */
   address: string | null;
@@ -37,26 +36,28 @@ export type XpBoardEntry = {
   standing: XpStanding;
 };
 
-/** The board, best first. */
+/**
+ * The board, best first.
+ *
+ * The placing itself is `rankMemberBoard`, which every board shares: equal
+ * totals share a place, the next one skips, the repeats of a tie are marked so
+ * the number is not printed twice, and each row carries the distance to the
+ * member above it. What is left here is the XP-specific half - the rank name
+ * and the standing within it.
+ */
 export function rankXpBoard(accounts: readonly XpBoardAccount[]): XpBoardEntry[] {
-  const sorted = [...accounts].sort(
-    (left, right) =>
-      right.xp - left.xp || resolveDisplayName(left).localeCompare(resolveDisplayName(right)),
-  );
+  const placed = rankMemberBoard(accounts, {
+    score: (account) => account.xp,
+    tiebreak: (account) => resolveDisplayName(account),
+  });
 
-  let place = 0;
-  let previousXp: number | null = null;
-
-  return sorted.map((account, index) => {
-    if (previousXp === null || account.xp !== previousXp) {
-      place = index + 1;
-      previousXp = account.xp;
-    }
-
+  return placed.map((account) => {
     const standing = xpStanding(account.xp);
     return {
       id: account.id,
-      place,
+      place: account.place,
+      sharesPlace: account.sharesPlace,
+      toPassAbove: account.toPassAbove,
       name: resolveDisplayName(account),
       address: account.slug ?? account.wkUsername ?? null,
       xp: account.xp,
@@ -71,8 +72,7 @@ export function xpBoardPlacement(
   entries: readonly XpBoardEntry[],
   accountId: string | null,
 ): XpBoardEntry | null {
-  if (!accountId) return null;
-  return entries.find((entry) => entry.id === accountId) ?? null;
+  return memberPlacement(entries, accountId);
 }
 
 /**
