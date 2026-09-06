@@ -6729,12 +6729,25 @@
     "id": "radicals-on-the-stroke-pages-are-labelled-kanji",
     "name": "The stroke pages list the kanji we teach",
     "area": "study",
+    "status": "shipped",
     "kind": "bug",
+    "date": "2026-09-06",
+    "summary": "The stroke pages now list the kanji we teach, rather than every character in the dictionary. Radicals like the kettle lid and the katakana no no longer appear there wearing a kanji label \u2014 they live on the Radicals page instead. Characters that are both a radical and a kanji, like person and power, still appear.",
+    "dateIsEstimate": false,
+    "release": 539,
+    "version": "1.51.0",
+    "releasedAt": "2026-09-06T13:31:14Z"
+  },
+  {
+    "id": "answer-stream-stamp",
+    "name": "An answer is stamped with your own path",
+    "area": "account",
+    "kind": "feature",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.51.0",
-    "release": 539,
-    "releasedAt": "2026-09-06T13:31:14Z",
-    "summary": "The stroke pages now list the kanji we teach, rather than every character in the dictionary. Radicals like the kettle lid and the katakana no no longer appear there wearing a kanji label \u2014 they live on the Radicals page instead. Characters that are both a radical and a kanji, like person and power, still appear."
+    "version": "1.51.1",
+    "release": 540,
+    "releasedAt": "2026-09-06T14:08:26Z",
+    "summary": "Every review answer is now recorded against the path the member is actually on. Answers used to be filed as UN whoever gave them, so anybody following the school-year path had their history labelled with the wrong curriculum."
   }
 ]
