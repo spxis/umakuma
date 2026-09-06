@@ -60,4 +60,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Shinme no Kotodama", ja: "新芽の言霊", reading: "しんめのことだま", gloss: "the words a shoot is named with" },
   { romaji: "Sujimichi no Yurushi", ja: "筋道の許し", reading: "すじみちのゆるし", gloss: "the reasoning, allowed through" },
   { romaji: "Sekkei no Sujigaki", ja: "設計の筋書き", reading: "せっけいのすじがき", gloss: "the plan the design follows" },
+  { romaji: "Sonzai no Aratana", ja: "存在の新たな", reading: "そんざいのあらたな", gloss: "the same thing, newly named" },
 ];

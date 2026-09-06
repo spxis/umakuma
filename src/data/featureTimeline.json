@@ -6196,12 +6196,25 @@
     "id": "subjects-budget-grade-one",
     "name": "Grade one finishes at UK12, and vocabulary fills what the skeleton leaves",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-05",
+    "summary": "Grade one now finishes at level 12 instead of 36 - twelve characters a Japanese six-year-old is taught were stranded behind an exam band. It costs a beginner almost nothing, because a level's budget is now its whole load rather than its words alone: pulling kanji earlier simply pushes their vocabulary later.",
+    "dateIsEstimate": false,
+    "release": 498,
+    "version": "1.16.0",
+    "releasedAt": "2026-09-06T01:54:15Z"
+  },
+  {
+    "id": "exam-ladder-is-un",
+    "name": "The exam ladder is renamed UN",
+    "area": "platform",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-05",
-    "version": "1.16.0",
-    "release": 498,
-    "releasedAt": "2026-09-06T01:54:15Z",
-    "summary": "Grade one now finishes at level 12 instead of 36 - twelve characters a Japanese six-year-old is taught were stranded behind an exam band. It costs a beginner almost nothing, because a level's budget is now its whole load rather than its words alone: pulling kanji earlier simply pushes their vocabulary later."
+    "version": "1.17.0",
+    "release": 499,
+    "releasedAt": "2026-09-06T05:59:09Z",
+    "summary": "The exam ladder is now UN and the school ladder UG, so a level always says which system it came from: UN17, UG17, WK17. Answers already recorded against the old name were migrated, not reinterpreted."
   }
 ]
