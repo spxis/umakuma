@@ -6144,12 +6144,25 @@
     "id": "answer-records-curriculum",
     "name": "Stamp every answer with the curriculum it was given against",
     "area": "platform",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-05",
+    "summary": "Every answer now records which of our two ladders it was given against, and which version of it. Ours move when the evidence says to, and an answer given against one arrangement of levels should still be readable after the arrangement changes.",
+    "dateIsEstimate": false,
+    "release": 494,
+    "version": "1.12.0",
+    "releasedAt": "2026-09-06T00:04:14Z"
+  },
+  {
+    "id": "curriculum-version-is-real",
+    "name": "The curriculum version is real, and stamped on every answer",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-05",
-    "version": "1.12.0",
-    "release": 494,
-    "releasedAt": "2026-09-06T00:04:14Z",
-    "summary": "Every answer now records which of our two ladders it was given against, and which version of it. Ours move when the evidence says to, and an answer given against one arrangement of levels should still be readable after the arrangement changes."
+    "version": "1.13.0",
+    "release": 495,
+    "releasedAt": "2026-09-06T00:16:08Z",
+    "summary": "Both ladders now carry a curriculum version, and every answer records which ladder and which version it was given against - so a level moving under you later is something we can explain rather than guess at. The session shows it faintly; it is a stamp on the work, not a number to read."
   }
 ]
