@@ -82,4 +82,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Medo no Karusa", ja: "目処の軽さ", reading: "めどのかるさ", gloss: "the lightness of a clear view ahead" },
   { romaji: "Motome Dodai", ja: "求め土台", reading: "もとめどだい", gloss: "the footing you were after" },
   { romaji: "Yaridashi Meikaku", ja: "遣り出し明確", reading: "やりだしめいかく", gloss: "what it pays, said plainly" },
+  { romaji: "Yudaneta Isshuu", ja: "委ねた一週", reading: "ゆだねたいっしゅう", gloss: "the week you were given" },
 ];

@@ -6482,12 +6482,25 @@
     "id": "how-xp-is-earned-on-a-page-generated-from-the-price-table",
     "name": "How XP is earned, on a page generated from the price table",
     "area": "account",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-06",
+    "summary": "Every way to earn XP now has a page of its own, listing what each one pays and its daily ceiling \u2014 read from the same table the awards come out of, so it can never say one thing while the site does another.",
+    "dateIsEstimate": false,
+    "release": 520,
+    "version": "1.33.0",
+    "releasedAt": "2026-09-06T10:43:55Z"
+  },
+  {
+    "id": "the-weekly-xp-board-a-newcomer-can-win",
+    "name": "The weekly XP board a newcomer can win",
+    "area": "account",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.33.0",
-    "release": 520,
-    "releasedAt": "2026-09-06T10:43:55Z",
-    "summary": "Every way to earn XP now has a page of its own, listing what each one pays and its daily ceiling \u2014 read from the same table the awards come out of, so it can never say one thing while the site does another."
+    "version": "1.34.0",
+    "release": 521,
+    "releasedAt": "2026-09-06T10:44:02Z",
+    "summary": "A weekly board, ranked by what you earned this week rather than by everything you have ever earned. Somebody who joined last month can win it."
   }
 ]
