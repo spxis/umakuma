@@ -41,15 +41,36 @@ describe("every rank name is written the one way, and is a door", () => {
     expect(read(path)).not.toContain("/xp/rank/");
   });
 
-  /* RankName is the one place that links, and the one place that decides
-     whether it reads "L1 Rookie" or "Rookie (L1)". */
-  it("keeps the link and the arrangement in one component", () => {
+  /* RankName is the one place that links. The arrangement it renders is not
+     its own: a page heading and a browser tab need the same decision as a
+     string, so it lives in `xpRanks.ts` and both read it from there. */
+  it("keeps the link in one component and the arrangement in one constant", () => {
     const component = read("src/app/shared/xp/RankName.tsx");
 
     expect(component).toContain("/xp/rank/");
-    expect(component).toContain("badge-first");
-    expect(component).toContain("name-first");
+    expect(component).toContain("XP_RANK_NAME_ORDER");
     expect(component).toContain("xpRankBadge");
+    /* Not a second copy of the decision, which is what it was before the rank
+       page's own heading needed the same answer in text. */
+    expect(component).not.toMatch(/const ORDER/);
+
+    const ranks = read("src/lib/xp/xpRanks.ts");
+    expect(ranks).toContain("badge-first");
+    expect(ranks).toContain("name-first");
+  });
+
+  /*
+   * The rank page's heading was the one surface that printed a rank without
+   * saying which rank it was - "Rookie", over nine rows that each read "L1
+   * Rookie". John, on /xp/rank/1: "doesn't tell you what NUmber the Rank is."
+   */
+  it("names the rank number in the heading and the tab, through the shared text", () => {
+    const page = read("src/app/xp/rank/[level]/page.tsx");
+
+    expect(page).toContain("xpRankNameText");
+    expect(page).toContain("generateMetadata");
+    /* And does not spell the arrangement out a second time. */
+    expect(page).not.toMatch(/xpRankBadge\(/);
   });
 
   /*

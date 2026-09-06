@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { xpRank, xpRankBadge } from "@/lib/xp/xpRanks";
+import { XP_RANK_NAME_ORDER, xpRank, xpRankBadge } from "@/lib/xp/xpRanks";
 
 /**
  * A rank, written the one way it is written everywhere.
@@ -11,10 +11,12 @@ import { xpRank, xpRankBadge } from "@/lib/xp/xpRanks";
  * it appears - a rank is a place, and a surface that prints it flatly makes
  * the reader hunt the chart for a page that was one word away.
  *
- * **To change how every rank on the site reads, change `ORDER` below.** That
- * is the whole of it: `badge-first` gives `L1 Rookie`, `name-first` gives
- * `Rookie (L1)`. Nothing else needs touching, which is the point of the
- * component existing rather than each surface arranging its own.
+ * **To change how every rank on the site reads, change `XP_RANK_NAME_ORDER`
+ * in `xpRanks.ts`.** That is the whole of it: `badge-first` gives `L1 Rookie`,
+ * `name-first` gives `Rookie (L1)`. It lives there rather than here because a
+ * page heading and a browser tab need the same arrangement as a string, and
+ * `xpRankNameText` writes it from the same constant this renders from - two
+ * spellings of one decision is exactly the drift the component exists to end.
  *
  * The badge comes from `xpRankBadge`, never a typed `L1` - `levelBadge`'s own
  * test greps the source and fails on one.
@@ -24,8 +26,6 @@ import { xpRank, xpRankBadge } from "@/lib/xp/xpRanks";
  * does; it just cannot put them in one cell without losing the alignment that
  * makes a hundred rows scannable.
  */
-const ORDER: "badge-first" | "name-first" = "badge-first";
-
 export default function RankName({
   level,
   linked = true,
@@ -44,7 +44,7 @@ export default function RankName({
   );
 
   const inner =
-    ORDER === "badge-first" ? (
+    XP_RANK_NAME_ORDER === "badge-first" ? (
       <>
         {badge} {name}
       </>

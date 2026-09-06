@@ -116,3 +116,22 @@ export const XP_RANK_PREFIX = "L";
 export function xpRankBadge(level: number): string {
   return XP_RANK_PREFIX + String(xpRank(level).level);
 }
+
+/**
+ * How a rank's badge and name are arranged, wherever the two are printed
+ * together. `badge-first` gives `L1 Rookie`; `name-first` gives `Rookie (L1)`.
+ *
+ * One constant, because before this the site said "Rookie" in some places,
+ * "L1 Rookie" in others and "Rank 1: Rookie" in a third. `RankName` renders
+ * it and `xpRankNameText` writes it, so a surface that needs a string - a page
+ * heading, a browser tab - follows the same decision as one that can mount a
+ * component rather than arranging its own.
+ */
+export const XP_RANK_NAME_ORDER: "badge-first" | "name-first" = "badge-first";
+
+/** `L1 Rookie`. The rank written out, for a heading or a title. */
+export function xpRankNameText(level: number): string {
+  const badge = xpRankBadge(level);
+  const { name } = xpRank(level);
+  return XP_RANK_NAME_ORDER === "badge-first" ? `${badge} ${name}` : `${name} (${badge})`;
+}

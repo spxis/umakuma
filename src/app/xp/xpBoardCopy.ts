@@ -89,8 +89,17 @@ export function ordinal(value: number): string {
  * what it took to arrive, and what it takes to leave.
  */
 export const XP_RANK_BOARD_COPY = {
-  title: (name: string) => `${name}`,
-  subtitle: (level: number, total: number) => `Rank ${level} of ${total}`,
+  /* The scale, not the number again.
+   *
+   * The heading is `xpRankNameText`, so it now reads "L1 Rookie" like every
+   * other rank on the site - it was the bare name until John asked which rank
+   * Rookie actually was, on a page whose own nine rows each said "L1 Rookie"
+   * underneath it. With the number in the heading, a subtitle reading "Rank 1
+   * of 100" prints the 1 a second time in a second format directly beneath the
+   * badge that just said it. What is worth keeping is the "of 100". */
+  subtitle: (total: number) => `One of ${total} ranks`,
+  /** What the browser tab and a pasted link carry, since the address cannot. */
+  tabTitle: (rankName: string) => `${rankName} — UmaKuma`,
   needs: (needs: number) => `This rank starts at ${needs.toLocaleString()} XP.`,
   nextNeeds: (name: string, level: number, needs: number) =>
     `${name} (${level}) starts at ${needs.toLocaleString()} XP.`,

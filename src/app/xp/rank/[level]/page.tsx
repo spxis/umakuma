@@ -15,6 +15,7 @@ import { resolveViewerMenuInfo } from "@/app/users/[nickname]/userPageAuth";
 import { viewerKind } from "@/lib/accountListing";
 import { authOptions, isAdminEmail } from "@/lib/auth";
 import { XP_RANKS } from "@/lib/xp/xpCurve";
+import { xpRankNameText } from "@/lib/xp/xpRanks";
 
 import { canOpenXpBoardRow } from "../../lib/xpBoard";
 import { loadXpBoard } from "../../lib/xpBoardServer";
@@ -24,6 +25,20 @@ import { XP_BOARD_COPY, XP_RANK_BOARD_COPY as copy } from "../../xpBoardCopy";
 export const dynamic = "force-dynamic";
 
 type PageProps = { params: Promise<{ level: string }> };
+
+/**
+ * The tab says which rank this is, because the address does not.
+ *
+ * A rank's address ends in a bare number, which is nothing to read back from a
+ * browser history or a pasted link; the rank has a name and a badge, and both
+ * belong in the title.
+ */
+export async function generateMetadata({ params }: PageProps) {
+  const { level: raw } = await params;
+  if (!isXpRankLevel(raw)) return {};
+  const level = Number(raw);
+  return { title: copy.tabTitle(xpRankNameText(level)) };
+}
 
 /**
  * Who is standing at one rank.
@@ -81,8 +96,8 @@ export default async function XpRankPage({ params }: PageProps) {
         <XpSectionNav current={null} address={address} />
         <MemberPageHeader
           icon={DASHBOARD_PAGE_HEADERS.stats.icon}
-          title={copy.title(rank.name)}
-          subtitle={copy.subtitle(rank.level, XP_RANKS)}
+          title={xpRankNameText(rank.level)}
+          subtitle={copy.subtitle(XP_RANKS)}
           actions={
             <Link
               href="/xp"
