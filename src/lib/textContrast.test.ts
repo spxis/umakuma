@@ -79,8 +79,8 @@ const FAINT_ON_PURPOSE: Record<string, string> = {
   "src/app/releases/MonthSection.tsx": "The month's own disclosure chevron, as above.",
   "src/app/admin/releases/ReleaseTimelineList.tsx": "The disclosure chevron, as above.",
   "src/app/admin/releases/TicketRow.tsx": "The disclosure chevron, as above.",
-  "src/app/users/[nickname]/uk-study/UkStudySession.tsx":
-    "The curriculum stamp, which John asked for at exactly this weight: \"keep it so that you can barely see it - it's not data that the general public needs to see, so it shouldn't stand out.\" It records which arrangement of the ladder these answers were given against, for the day somebody asks why a level moved under them. Reading it is a deliberate act, not part of the session.",
+  "src/app/shared/CurriculumStamp.tsx":
+    "The curriculum stamp, which John asked for at exactly this weight: \"keep it so that you can barely see it - it's not data that the general public needs to see, so it shouldn't stand out.\" It records which arrangement of the ladder a surface was drawn from, for the day somebody asks why a level moved under them. Reading it is a deliberate act, not part of the page. One entry rather than one per surface: it used to be inlined on the study page, and every ladder surface that wanted one would have needed its own line here.",
   "src/app/shared/RecentItems.tsx": "The history icon in the glyph lane, not text.",
   "src/app/shared/SurfacePagination.tsx": "The disabled first/prev/next buttons. Disabled controls are exempt.",
   "src/app/users/[nickname]/shared/GlyphTagOverlay.tsx":

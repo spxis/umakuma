@@ -19,6 +19,8 @@ import GradeKanjiGrid from "./GradeKanjiGrid";
 import { GRADE_REVEAL_MODES, GRADE_VIEW_MODE_STORAGE_KEY, gradeEntryHit, type GradeRevealMode } from "./gradeExplorerView";
 import { useExplorerFiling } from "@/app/shared/useExplorerFiling";
 import { DISPLAY_PREFERENCE_COOKIES, writeDisplayPreferenceCookie } from "@/lib/displayPreferenceCookie";
+import CurriculumStamp from "@/app/shared/CurriculumStamp";
+import { LADDER_STREAMS } from "@/lib/ladder/ladderStreams";
 
 type Props = {
   items: SchoolGradeKanjiEntry[];
@@ -154,6 +156,9 @@ export default function GradeKanjiBoard({ items, practicePath, accountId, initia
         }
       />
 
+      {/* Provenance, last and faint: the grade ladder moves too, and 12 kanji
+          changed level at UG 2.0.0. */}
+      <CurriculumStamp stream={LADDER_STREAMS.ug} className="mt-2 px-1" />
     </>
   );
 }

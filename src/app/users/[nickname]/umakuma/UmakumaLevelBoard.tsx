@@ -15,6 +15,8 @@ import type { LadderLevelGroup, LadderLevelSummary } from "@/lib/ladder/ladderQu
 import UmakumaLevelPicker from "./UmakumaLevelPicker";
 import UmakumaLadderSearch from "./UmakumaLadderSearch";
 import UmakumaPapersNote from "./UmakumaPapersNote";
+import CurriculumStamp from "@/app/shared/CurriculumStamp";
+import { LADDER_STREAMS } from "@/lib/ladder/ladderStreams";
 import { UK_EXPLORER_COPY as copy, UK_VIEW_MODE_STORAGE_KEY } from "./UmakumaExplorer.constants";
 
 const CHIP = "inline-flex h-8 items-center rounded-full border px-3 text-[11px] font-bold transition";
@@ -127,6 +129,9 @@ export default function UmakumaLevelBoard({
       </section>
 
       <UmakumaPapersNote />
+
+      {/* Provenance, last and faint: which arrangement of the ladder this is. */}
+      <CurriculumStamp stream={LADDER_STREAMS.un} className="px-1" />
     </div>
   );
 }

@@ -33,10 +33,22 @@ import type {
   GradeMilestone,
   SchoolGrade,
 } from "./gradeLadder.types";
+import { CURRICULUM_VERSION_START } from "./ladder/curriculumVersion";
 
 const ladder = gradeLadderData as GradeLadder;
 
 export const GRADE_LADDER_LEVELS = ladder.levels;
+
+/**
+ * The version of the UG ladder as shipped, for stamping a figure with it.
+ *
+ * The mirror of `CURRICULUM_VERSION` in `kanjiLadder.ts`: both ladders move
+ * when the evidence says to, and AGENTS.md holds every chart, table and
+ * answer to naming the one it was drawn from. A number nobody can reproduce
+ * is the thing that rule exists to prevent.
+ */
+export const GRADE_CURRICULUM_VERSION: string =
+  (gradeLadderData as { curriculum?: { version?: string } }).curriculum?.version ?? CURRICULUM_VERSION_START;
 
 /** The school years, which is what this ladder is ordered by. */
 export const SCHOOL_GRADES: readonly SchoolGrade[] = [1, 2, 3, 4, 5, 6];

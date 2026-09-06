@@ -40,7 +40,7 @@ describe("every writer stamps the member's own stream", () => {
      row. It takes the stream as a prop rather than naming one. */
   it("shows the member their own stream on the study page", () => {
     const source = read("src/app/users/[nickname]/uk-study/UkStudySession.tsx");
-    expect(source).toContain("copy.curriculumStamp(stream,");
+    expect(source).toContain("<CurriculumStamp stream={stream}");
     expect(source).not.toContain("LADDER_STREAMS.un");
   });
 

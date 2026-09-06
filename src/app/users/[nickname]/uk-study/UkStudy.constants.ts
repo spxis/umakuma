@@ -3,7 +3,6 @@ export const UK_STUDY_COPY = {
   /* Barely visible on purpose: the stamp says which arrangement of the ladder
      an answer was recorded against, for the day somebody asks why a level
      moved. Not a number a member is meant to read every session. */
-  curriculumStamp: (stream: string, version: string) => `${stream} curriculum ${version}`,
   title: "Study as UmaKuma",
   subtitle: "Our own ladder, no WaniKani account needed.",
   level: "UmaKuma level",

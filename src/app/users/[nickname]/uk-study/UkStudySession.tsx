@@ -4,10 +4,10 @@ import { useCallback, useEffect, useState } from "react";
 
 
 import { SUBJECT_TYPE_DISPLAY, type SubjectType } from "@/lib/domainConstants";
-import { CURRICULUM_VERSION } from "@/lib/kanjiLadder";
 import { type LadderStreamValue } from "@/lib/ladder/ladderStreams";
 
 import { UK_STUDY_COPY as copy } from "./UkStudy.constants";
+import CurriculumStamp from "@/app/shared/CurriculumStamp";
 
 type WaitingGate = { kind: "checkpoint" | "jlpt_final"; level: number; nLevel?: number } | null;
 
@@ -191,9 +191,7 @@ export default function UkStudySession({
         * fact about it, there for the moment somebody needs to know why a
         * level moved under them.
         */}
-      <p className="text-[10px] font-medium tracking-[0.08em] text-foreground/35" translate="no">
-        {copy.curriculumStamp(stream, CURRICULUM_VERSION)}
-      </p>
+      <CurriculumStamp stream={stream} />
     </section>
   );
 }
