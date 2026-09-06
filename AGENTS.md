@@ -423,7 +423,17 @@ Run `pnpm quality:check` after non-trivial `src/` edits. If lint issues are auto
   command that writes. The dump lands in `./backups` and the script prints the
   restore line; say in your reply that a backup was taken and where it is. If
   the backup fails, stop - do not proceed on the grounds that the change is
-  small. On 2026-09-05 production was changed four times in one session - two
+  small.
+
+  **From a worktree, set `DIRECT_URL` as well as `DATABASE_URL`.** The script
+  takes `DIRECT_URL ?? DATABASE_URL`, and a worktree's `.env` points
+  `DIRECT_URL` at the local container - so an inline `DATABASE_URL` for Neon
+  is never reached. It used to dump `127.0.0.1` and print "Backup verified: 43
+  table(s) with data", which is how you end up deleting from production
+  holding a backup of nothing. It now refuses a local host unless you pass
+  `--local`, and refuses outright when the two variables name different hosts.
+  The line it prints - `Backing up <hostname> to ...` - comes from the URL
+  handed to `pg_dump` and cannot lie; read it anyway. On 2026-09-05 production was changed four times in one session - two
   columns added, 138 rows backfilled, 1,665 ladder rows seeded, then an enum
   value added and dropped with `--accept-data-loss` - and no backup was taken
   for any of them. John: "WTF - why would you do ANYTHING to a Production

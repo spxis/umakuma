@@ -242,14 +242,76 @@ const commands = {
     pushSchema();
   },
 
-  /** Dump the REMOTE database defined in .env. Never writes to it. */
-  backup() {
+  /**
+   * Dump the REMOTE database defined in .env. Never writes to it.
+   *
+   * **It refuses to dump a local database unless you say `--local`.** This is
+   * the command AGENTS.md makes mandatory before every write to production,
+   * so its whole job is to be the safety net under something irreversible -
+   * and it used to dump the wrong database and call it success. The target is
+   * `DIRECT_URL ?? DATABASE_URL`, and a worktree's .env points DIRECT_URL at
+   * the container: run it there with an inline DATABASE_URL for Neon and
+   * `loadEnvFile` leaves your inline value alone, but the `??` never reaches
+   * it. You get 127.0.0.1 and "Backup verified: 43 table(s) with data."
+   *
+   * Found 2026-09-06, one command before deleting a production account. The
+   * hostname was printed and read; nothing else would have caught it.
+   *
+   * So a local dump has to be asked for, and the two variables disagreeing
+   * about which host they mean is refused outright - that disagreement is
+   * exactly the state a worktree is in, and it is never what somebody wants.
+   */
+  backup(argv = []) {
     loadDotEnv();
-    const url = process.env.DIRECT_URL ?? process.env.DATABASE_URL;
+    const wantsLocal = argv.includes("--local");
+    const direct = process.env.DIRECT_URL;
+    const pooled = process.env.DATABASE_URL;
+    const url = direct ?? pooled;
     if (!url) {
       console.error("DIRECT_URL or DATABASE_URL must be set in .env to take a backup.");
       process.exit(1);
     }
+
+    const hostOf = (value) => {
+      try {
+        return new URL(value).hostname;
+      } catch {
+        return null;
+      }
+    };
+    const isLocalHost = (host) => host === "localhost" || host === "127.0.0.1" || host === "::1";
+    const host = hostOf(url);
+
+    if (!wantsLocal && isLocalHost(host)) {
+      console.error(
+        [
+          `Refusing to back up ${host}: that is the local database, not production.`,
+          "",
+          "This command is the safety net before a production write, so it will not",
+          "quietly dump somewhere else. It takes DIRECT_URL first and a worktree's",
+          ".env points that at the container - so an inline DATABASE_URL is never",
+          "reached.",
+          "",
+          "  For production:  DIRECT_URL=<neon> DATABASE_URL=<neon> pnpm db:backup",
+          "  For local:       pnpm db:backup --local",
+        ].join("\n"),
+      );
+      process.exit(1);
+    }
+
+    const other = hostOf(pooled);
+    if (!wantsLocal && direct && pooled && other && host !== other) {
+      console.error(
+        [
+          `Refusing: DIRECT_URL says ${host} and DATABASE_URL says ${other}.`,
+          "",
+          `Only ${host} would be dumped. Set both to the database you mean, or pass`,
+          "--local if you really want the container.",
+        ].join("\n"),
+      );
+      process.exit(1);
+    }
+
     mkdirSync(BACKUP_DIR, { recursive: true });
     const stamp = new Date().toISOString().replace(/[-:]/g, "").replace(/\..+$/, "").replace("T", "-");
     const out = join(BACKUP_DIR, `umakuma-${stamp}.dump`);
