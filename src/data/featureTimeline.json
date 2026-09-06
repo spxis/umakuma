@@ -6677,12 +6677,25 @@
     "id": "game-run-xp-recorded",
     "name": "A game says what it paid",
     "area": "games",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-06",
+    "summary": "Every game now records what it paid you, and says so when it paid nothing. Two games a day count toward XP at the opening rank, and the third used to earn nothing silently \u2014 which is hard to tell apart from broken.",
+    "dateIsEstimate": false,
+    "release": 535,
+    "version": "1.48.0",
+    "releasedAt": "2026-09-06T12:57:14Z"
+  },
+  {
+    "id": "xp-earn-only-what-pays",
+    "name": "The earn page offers only what pays",
+    "area": "games",
     "kind": "bug",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.48.0",
-    "release": 535,
-    "releasedAt": "2026-09-06T12:57:14Z",
-    "summary": "Every game now records what it paid you, and says so when it paid nothing. Two games a day count toward XP at the opening rank, and the third used to earn nothing silently \u2014 which is hard to tell apart from broken."
+    "version": "1.49.0",
+    "release": 536,
+    "releasedAt": "2026-09-06T12:57:24Z",
+    "summary": "How XP is earned now lists only the awards something actually pays. It was showing every priced award, including ones nothing had ever paid out."
   }
 ]

@@ -97,4 +97,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Otegara Barai", ja: "お手柄払い", reading: "おてがらばらい", gloss: "paying for the feat" },
   { romaji: "Katagaki Meigi", ja: "肩書き名義", reading: "かたがきめいぎ", gloss: "the title in its own name" },
   { romaji: "Kingaku Tsukehyou", ja: "金額付け表", reading: "きんがくつけひょう", gloss: "the amount, entered on the sheet" },
+  { romaji: "Kubari Shinagaki", ja: "配り品書き", reading: "くばりしながき", gloss: "the list of what is handed out" },
 ];
