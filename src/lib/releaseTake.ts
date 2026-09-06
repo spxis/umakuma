@@ -191,6 +191,45 @@ export function releaseSummaryProblems(summary: string): string[] {
   return problems;
 }
 
+/**
+ * Refuses a release the record already holds.
+ *
+ * Two sessions that have both fetched and neither stamped read the same
+ * `origin/main`, compute the same next version, and take it - `publishedVersion`
+ * can only see numbers that have been pushed, so there is nothing to catch it
+ * at take time. This is the next thing that can: the file the take is about to
+ * write already names that version, or already ships that entry.
+ *
+ * It guarded the legacy `<entry-id>` path only, which left the `--ticket`
+ * path - the one the workflow now names as the usual one - with strictly less
+ * protection than the path it replaced. Found by the Deploy Agent on
+ * 2026-09-06, going to check a claim of mine rather than taking it.
+ *
+ * Without it the first refusal is the rejected push, and by then there is a
+ * stamped commit and a codename to redo - and the codename cannot simply be
+ * renumbered, because the kana it must start on follows the minor.
+ */
+export function guardVersionFree(entries: readonly FeatureTimelineEntry[], version: string): void {
+  if (entries.some((entry) => entry.version === version)) {
+    throw new Error(`${version} is already taken; fetch and try again.`);
+  }
+}
+
+/**
+ * And, for the path that *appends*, that it is not appending a second copy.
+ *
+ * The entry-id path updates a row that is already there, so finding the id is
+ * the normal case for it. `--ticket` writes a new row, so finding the id means
+ * the same work is about to be recorded twice - a re-run with the same `--as`,
+ * usually after a push was rejected.
+ */
+export function guardEntryIsNew(entries: readonly FeatureTimelineEntry[], id: string): void {
+  const held = entries.find((entry) => entry.id === id);
+  if (held) {
+    throw new Error(`"${id}" is already in the record as ${held.version ?? "an unshipped entry"}.`);
+  }
+}
+
 export function entryFromTicket(
   ticket: ShippableTicket,
   stamp: ShipStamp,
@@ -233,9 +272,7 @@ export function shipEntry(
   if (found.status === FEATURE_STATUSES.shipped) {
     throw new Error(`"${id}" already shipped as ${found.version ?? "an earlier release"}.`);
   }
-  if (entries.some((entry) => entry.version === stamp.version)) {
-    throw new Error(`${stamp.version} is already taken; fetch and try again.`);
-  }
+  guardVersionFree(entries, stamp.version);
 
   return entries.map((entry) => {
     if (entry.id !== id) return entry;

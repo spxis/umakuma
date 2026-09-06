@@ -15,6 +15,8 @@ import {
   editAppendingCodename,
   editReplacingOnce,
   entryFromTicket,
+  guardEntryIsNew,
+  guardVersionFree,
   higherVersion,
   nextVersion,
   shipEntry,
@@ -142,7 +144,12 @@ async function main(): Promise<void> {
       ? RELEASE_STEPS.tweak
       : RELEASE_STEPS.feature;
   const version = nextVersion(published, step);
-  const release = loadFeatureTimeline().filter((entry) => entry.version).length + 1;
+  const timeline = loadFeatureTimeline();
+  const release = timeline.filter((entry) => entry.version).length + 1;
+  /* Before the codename is asked for, not after: picking a name that satisfies
+     the kana and reuses no word is the expensive part of a take, and being
+     told the number is gone afterwards means doing it twice. */
+  guardVersionFree(timeline, version);
   const { kana, cycle } = codenameKanaForMinor(release);
 
   /* A name may already be planned ahead for this minor; only ask when it is not. */
@@ -202,10 +209,11 @@ async function main(): Promise<void> {
           "Pass the sentence they should read.",
       );
     }
-    entries = [
-      ...loadFeatureTimeline(),
-      entryFromTicket({ ...ticket, id: shippedId }, stamp, { summary, name: flag("name") }),
-    ];
+    const held = loadFeatureTimeline();
+    /* The version was guarded before the codename was asked for; this is the
+       other half, and it only applies to the path that appends a row. */
+    guardEntryIsNew(held, shippedId);
+    entries = [...held, entryFromTicket({ ...ticket, id: shippedId }, stamp, { summary, name: flag("name") })];
 
     const closing = shippedId;
     markTicketShipped = async () => {

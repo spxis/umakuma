@@ -7,6 +7,8 @@ import type { ReleaseCodename } from "./releaseCodenames";
 import {
   codenameProblems,
   entryFromTicket,
+  guardEntryIsNew,
+  guardVersionFree,
   MAX_RELEASE_SUMMARY,
   releaseSummaryProblems,
   higherVersion,
@@ -272,5 +274,65 @@ describe("what a release says on a public page", () => {
   it("is required by the script, not merely available to it", () => {
     const script = readFileSync("scripts/release-take.ts", "utf8");
     expect(script).toContain("--summary is required with --ticket");
+  });
+});
+
+describe("the number cannot be taken twice", () => {
+  const stamp = { version: "1.30.0", releasedAt: "2026-09-06T10:00:00Z", date: "2026-09-06", release: 500 };
+  const held: FeatureTimelineEntry[] = [
+    {
+      id: "a-thing",
+      name: "A thing",
+      area: FEATURE_AREAS.study,
+      kind: "feature",
+      status: FEATURE_STATUSES.shipped,
+      date: "2026-09-06",
+      version: "1.30.0",
+    } as FeatureTimelineEntry,
+  ];
+
+  /* Two sessions that have both fetched and neither stamped read the same
+     origin/main and compute the same next version: publishedVersion can only
+     see numbers that have been pushed, so nothing catches it at take time.
+     This is the next thing that can. */
+  it("refuses a version the record already holds", () => {
+    expect(() => guardVersionFree(held, "1.30.0")).toThrow(/already taken/);
+  });
+
+  it("refuses an entry the record already has", () => {
+    expect(() => guardEntryIsNew(held, "a-thing")).toThrow(/already in the record/);
+  });
+
+  it("allows a release that clashes with neither", () => {
+    expect(() => guardVersionFree(held, "1.31.0")).not.toThrow();
+    expect(() => guardEntryIsNew(held, "a-new-thing")).not.toThrow();
+  });
+
+  /* The entry-id path updates a row that is already there, so finding the id
+     is its normal case - only the appending path may refuse it. */
+  it("does not stop the entry-id path from shipping the entry it names", () => {
+    expect(() => guardVersionFree(held, "1.31.0")).not.toThrow();
+  });
+
+  /* The gap the Deploy Agent found on 2026-09-06: the guard ran on the legacy
+     entry-id path only, so --ticket - the path the workflow names as the usual
+     one - had strictly less protection than the path it replaced. */
+  it("guards the ticket path, not only the entry-id one", () => {
+    const script = readFileSync("scripts/release-take.ts", "utf8");
+    /* The version guard runs before the codename is asked for, so it is not
+       inside the ticket branch; the appending guard is. */
+    expect(script).toContain("guardVersionFree(timeline, version)");
+    expect(script).toContain("guardEntryIsNew(held, shippedId)");
+  });
+
+  it("is the one check both paths run", () => {
+    const lib = readFileSync("src/lib/releaseTake.ts", "utf8");
+    expect(lib).toContain("guardVersionFree(entries, stamp.version)");
+    /* And not a second copy of the comparison living beside it. */
+    expect(lib.match(/already taken; fetch and try again/g)).toHaveLength(1);
+  });
+
+  it("still lets a stamp through when the record is empty", () => {
+    expect(() => guardVersionFree([], stamp.version)).not.toThrow();
   });
 });
