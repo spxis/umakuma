@@ -3,6 +3,7 @@ import "server-only";
 import { wanikaniConnection } from "@/lib/wanikaniConnection";
 import { upsertDailySnapshot } from "@/lib/dailySnapshot";
 import type { Prisma } from "@prisma/client";
+import { rankingWeights } from "@/lib/ladder/rankingWeightsServer";
 import { prisma } from "@/lib/prisma";
 import { LEADERBOARD_REFRESH_INTERVAL_MS } from "@/lib/refreshPolicy";
 import { getLeaderboardStats } from "@/lib/wanikani";
@@ -165,7 +166,7 @@ export async function refreshAccountById(accountId: string, force: boolean, igno
       assignmentCache: account.assignmentCache,
       assignmentCacheUpdatedAt: account.assignmentCacheUpdatedAt,
       wkHttpCache: account.wkHttpCache,
-    });
+    }, await rankingWeights());
 
     const syncedAt = new Date();
 

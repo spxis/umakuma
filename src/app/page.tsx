@@ -1,3 +1,4 @@
+import { rankingWeights } from "@/lib/ladder/rankingWeightsServer";
 import { prisma } from "@/lib/prisma";
 import { viewerKind } from "@/lib/accountListing";
 import { loadLeaderboardAccounts } from "@/lib/leaderboardAccounts";
@@ -18,6 +19,7 @@ import {
   type ReadingSignoffRecord,
 } from "@/lib/readingSignoff";
 import AppTopMenuRow from "./shared/AppTopMenuRow";
+import { LEADERBOARD_COPY } from "./leaderboard/leaderboardCopy";
 import { resolveViewerMenuInfo } from "./users/[nickname]/userPageAuth";
 import LeaderboardTable from "./leaderboard/components/LeaderboardTable";
 import UmaKumaPageBanner from "./shared/UmaKumaPageBanner";
@@ -74,6 +76,7 @@ function formatNumber(input: number): string {
 export default async function Home() {
   const session = await getServerSession(authOptions);
   const viewerEmail = session?.user?.email?.trim().toLowerCase() ?? null;
+  const scoreWeights = await rankingWeights();
   const viewerMenuInfo = await resolveViewerMenuInfo({
     viewerEmail,
     sessionName: session?.user?.name?.trim() ?? null,
@@ -479,7 +482,7 @@ export default async function Home() {
           )}
         </section>
         <p className="mt-3 px-2 text-xs font-semibold uppercase tracking-[0.12em] text-foreground/60">
-          Score formula: level x 1000 + reviewed x 2 + burned x 4 + learned kanji x 3
+          {LEADERBOARD_COPY.formula(scoreWeights)}
         </p>
       </main>
     </div>

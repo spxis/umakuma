@@ -1,3 +1,9 @@
+import {
+  DEFAULT_RANKING_WEIGHTS,
+  rankingScore,
+  type RankingWeights,
+} from "@/lib/ladder/rankingWeights";
+
 import { fetchAllCollectionPages, fetchWaniKani } from "./http";
 import {
   maxAssignmentUpdatedAt,
@@ -29,6 +35,9 @@ import type {
 export async function getLeaderboardStats(
   token: string,
   existing: ExistingLeaderboardState,
+  /* Passed in rather than read here: this module is the WaniKani API surface
+     and has no business touching the database. The caller holds the weights. */
+  weights: RankingWeights = DEFAULT_RANKING_WEIGHTS,
 ): Promise<LeaderboardStats> {
   const httpCache = parseHttpCacheState(existing.wkHttpCache);
 
@@ -296,7 +305,25 @@ export async function getLeaderboardStats(
   const estimatedHoursRemaining = levelSnapshot.estimatedHoursRemaining;
   const levelKanjiItems = levelSnapshot.items;
 
-  const score = wkLevel * 1000 + reviewCount * 2 + burnedCount * 4 + learnedKanjiCount * 3;
+  /*
+   * One formula for both ladders, and the weights are settings rather than
+   * literals. These four numbers were typed inline here, printed as a
+   * hand-written sentence in the home page footer, and contradicted by the
+   * seed script - three copies, two of which were already wrong.
+   *
+   * `reviewCount` is WaniKani's count of items with review statistics, which
+   * is the nearest thing their API gives to "items met", so it prices as
+   * `learned`.
+   */
+  const score = rankingScore(
+    {
+      level: wkLevel,
+      learned: reviewCount,
+      passed: learnedKanjiCount,
+      burned: burnedCount,
+    },
+    weights,
+  );
 
   return {
     wkUserId,

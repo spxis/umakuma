@@ -1,3 +1,4 @@
+import { DEFAULT_RANKING_WEIGHTS, rankingScore } from "../src/lib/ladder/rankingWeights";
 /**
  * Seeds a fully synthetic account into a LOCAL database so the app can be used
  * end to end without a real WaniKani account or token.
@@ -219,7 +220,18 @@ async function main() {
     lastSyncedAt: new Date(),
     nextSyncAllowedAt: PARKED_SYNC_AT,
     lastSyncStatus: "idle",
-    score: options.level * 1000 + counts.reviewCount,
+    /* The same formula production ranks on. This used to be
+       `level * 1000 + reviewCount` - no burns, no kanji - so a seeded board
+       ordered people by rules the site does not use. */
+    score: rankingScore(
+      {
+        level: options.level,
+        learned: counts.reviewCount,
+        passed: counts.guruCount,
+        burned: counts.burnedCount,
+      },
+      DEFAULT_RANKING_WEIGHTS,
+    ),
     ...counts,
   };
 
