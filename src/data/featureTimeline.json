@@ -6469,12 +6469,25 @@
     "id": "every-rank-has-a-board-of-its-own",
     "name": "Every rank has a board of its own",
     "area": "account",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-06",
+    "summary": "Every rank on the ladder now has a page of its own showing who is standing there, what the rank asks for and what the next one asks. Click any rank name in the chart.",
+    "dateIsEstimate": false,
+    "release": 519,
+    "version": "1.32.0",
+    "releasedAt": "2026-09-06T09:52:33Z"
+  },
+  {
+    "id": "how-xp-is-earned-on-a-page-generated-from-the-price-table",
+    "name": "How XP is earned, on a page generated from the price table",
+    "area": "account",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.32.0",
-    "release": 519,
-    "releasedAt": "2026-09-06T09:52:33Z",
-    "summary": "Every rank on the ladder now has a page of its own showing who is standing there, what the rank asks for and what the next one asks. Click any rank name in the chart."
+    "version": "1.33.0",
+    "release": 520,
+    "releasedAt": "2026-09-06T10:43:55Z",
+    "summary": "Every way to earn XP now has a page of its own, listing what each one pays and its daily ceiling \u2014 read from the same table the awards come out of, so it can never say one thing while the site does another."
   }
 ]
