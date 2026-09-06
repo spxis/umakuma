@@ -28,6 +28,7 @@ function account(overrides: Partial<AdminAccount> = {}): AdminAccount {
     inviteCodeUpdatedAt: null,
     createdAt: "2026-04-01T00:00:00.000Z",
     internal: false,
+    userType: "member",
     disabledAt: null,
     ...overrides,
   };

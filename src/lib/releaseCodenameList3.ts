@@ -91,4 +91,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Rojou Totonoe", ja: "路上整え", reading: "ろじょうととのえ", gloss: "set straight along the way" },
   { romaji: "Wariai Settei", ja: "割合設定", reading: "わりあいせってい", gloss: "the proportions, set" },
   { romaji: "Ashidori Wakaremichi", ja: "足取り分かれ道", reading: "あしどりわかれみち", gloss: "your own steps, on either road" },
+  { romaji: "Ichiin no Yakuwari", ja: "一員の役割", reading: "いちいんのやくわり", gloss: "the part each member plays" },
 ];

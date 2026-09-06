@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 
 import { formatDateShort, formatDateTimeShort } from "@/lib/timeFormat";
+import { isTestUser } from "@/lib/userType";
 
 import AdminAccountCards from "./AdminAccountCards";
 import AdminAccountRowActions from "./AdminAccountRowActions";
@@ -151,6 +152,11 @@ export default function AdminAccountsSection({
                         {account.internal ? (
                           <span className="rounded-full border border-line bg-surface-muted px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-foreground/70">
                             {copy.table.internalBadge}
+                          </span>
+                        ) : null}
+                        {isTestUser(account.userType) ? (
+                          <span className="rounded-full border border-dashed border-line bg-surface-muted px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-foreground/70">
+                            {copy.table.testBadge}
                           </span>
                         ) : null}
                         {account.disabledAt ? (

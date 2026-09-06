@@ -9,6 +9,20 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+/// What kind of account this is, as a persisted fact rather than a guess.
+///
+/// `member` is a person. `test` is an account the site runs for itself: the
+/// simulated cohort that studies and plays so the boards are not empty on the
+/// day the first real member arrives. Nothing public reads it - a test member
+/// is meant to look like anybody else - but every admin surface, count and
+/// clean-up can find them by it, which a name convention or an email domain
+/// could not promise. Not `internal`: that flag says "one of us", and a
+/// simulated member is nobody.
+enum UserType {
+  member
+  test
+}
+
 model Account {
   id                       String    @id @default(cuid())
   nickname                 String
@@ -208,6 +222,7 @@ model Account {
   vacationEndsAt    DateTime?
 
   internal               Boolean                 @default(false)
+  userType               UserType                @default(member)
   jlptCertificates       JlptCertificate[]
   studyLists             StudyList[]
   mapRegionMarks         MapRegionMark[]

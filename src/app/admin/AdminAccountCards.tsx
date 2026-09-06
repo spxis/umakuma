@@ -1,6 +1,7 @@
 "use client";
 
 import { formatDateShort, formatDateTimeShort } from "@/lib/timeFormat";
+import { isTestUser } from "@/lib/userType";
 
 import AdminAccountRowActions from "./AdminAccountRowActions";
 import { buildAccountRowActions, lockLabel } from "./AdminAccountsSection.helpers";
@@ -57,6 +58,11 @@ export default function AdminAccountCards({
                   {account.internal ? (
                     <span className="shrink-0 rounded-full border border-line bg-surface-muted px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-foreground/70">
                       {copy.table.internalBadge}
+                    </span>
+                  ) : null}
+                  {isTestUser(account.userType) ? (
+                    <span className="shrink-0 rounded-full border border-dashed border-line bg-surface-muted px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-foreground/70">
+                      {copy.table.testBadge}
                     </span>
                   ) : null}
                   {/* An account switched off is the one thing about a row that

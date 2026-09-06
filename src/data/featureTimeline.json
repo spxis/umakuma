@@ -6599,12 +6599,25 @@
     "id": "a-level-per-path-and-a-run-says-what-it-paid",
     "name": "A level per path, and a run says what it paid",
     "area": "platform",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-06",
+    "summary": "Each learning path now keeps its own level, so choosing the other one no longer overwrites what you earned. Games also record what they paid.",
+    "dateIsEstimate": false,
+    "release": 529,
+    "version": "1.42.0",
+    "releasedAt": "2026-09-06T11:22:41Z"
+  },
+  {
+    "id": "usertype-on-account-member-or-test",
+    "name": "UserType on Account: member or test",
+    "area": "admin",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.42.0",
-    "release": 529,
-    "releasedAt": "2026-09-06T11:22:41Z",
-    "summary": "Each learning path now keeps its own level, so choosing the other one no longer overwrites what you earned. Games also record what they paid."
+    "version": "1.43.0",
+    "release": 530,
+    "releasedAt": "2026-09-06T11:35:05Z",
+    "summary": "Every account now says what it is: a member, or a test account the site runs for itself. A UserType enum on Account, default member, with a Test badge on the admin list and nothing public reading it - the simulated cohort that follows is found, excluded and removed by this column rather than by guessing from an email."
   }
 ]

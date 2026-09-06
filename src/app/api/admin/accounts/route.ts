@@ -103,6 +103,7 @@ try {
                     joinedByEmail: true,
                     inviteCodeUpdatedAt: true,
                     internal: true,
+                    userType: true,
                     disabledAt: true,
                     createdAt: true,
                   },

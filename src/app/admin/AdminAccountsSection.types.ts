@@ -14,6 +14,8 @@ export type AdminAccount = {
   createdAt: string;
   /** The family and the helpers: the members the reading challenge is for. */
   internal: boolean;
+  /** `member` for a person; `test` for an account the site runs for itself. */
+  userType: string;
   /** Switched off by an admin. Null is the ordinary, working state. */
   disabledAt: string | null;
 };

@@ -28,6 +28,7 @@ export const ADMIN_USERS_COPY = {
     actions: "Actions",
     meBadge: "Me",
     internalBadge: "Internal",
+    testBadge: "Test",
     disabledBadge: "Disabled",
     levelPrefix: "Lv",
     joinedByPrefix: "by",
