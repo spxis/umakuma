@@ -6261,12 +6261,25 @@
     "id": "lists-the-reading-column-splits-into-on-and-kun",
     "name": "Both readings, in a lane each",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-06",
+    "summary": "A kanji has an on reading and a kun reading, and every list here showed one of them. Both have a lane now - Kun \u8a13\u8aad\u307f and On \u97f3\u8aad\u307f, written the way a dictionary writes them - and a phone gets both on the line under the meaning. A word has neither kind, so its own reading stays where it was.",
+    "dateIsEstimate": false,
+    "release": 503,
+    "version": "1.20.0",
+    "releasedAt": "2026-09-06T07:07:09Z"
+  },
+  {
+    "id": "lists-a-level-says-which-ladder-it-is-on",
+    "name": "A level says which ladder it is on",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.20.0",
-    "release": 503,
-    "releasedAt": "2026-09-06T07:07:09Z",
-    "summary": "A kanji has an on reading and a kun reading, and every list here showed one of them. Both have a lane now - Kun \u8a13\u8aad\u307f and On \u97f3\u8aad\u307f, written the way a dictionary writes them - and a phone gets both on the line under the meaning. A word has neither kind, so its own reading stays where it was."
+    "version": "1.21.0",
+    "release": 504,
+    "releasedAt": "2026-09-06T07:07:28Z",
+    "summary": "The level lane drew WaniKani's number and nothing else, so a kanji WaniKani never taught had an empty lane. Ours leads now, WaniKani's sits under it, and where an item is on neither ladder the lane falls back to the exam's N and then the school year's G."
   }
 ]

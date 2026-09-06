@@ -65,4 +65,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Chigai no Irowake", ja: "違いの色分け", reading: "ちがいのいろわけ", gloss: "the difference, sorted by colour" },
   { romaji: "Tsumikasane no Furui", ja: "積み重ねの篩", reading: "つみかさねのふるい", gloss: "a sieve over what has been built up" },
   { romaji: "Tekagami no Futayomi", ja: "手鏡の二読み", reading: "てかがみのふたよみ", gloss: "both readings, held up side by side" },
+  { romaji: "Tozan no Danchigai", ja: "登山の段違い", reading: "とざんのだんちがい", gloss: "the climb, and whose steps you are counting" },
 ];
