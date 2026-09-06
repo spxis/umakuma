@@ -6170,12 +6170,25 @@
     "id": "kanji-garden-theme",
     "name": "Kanji Garden theme, for people arriving from there",
     "area": "study",
+    "status": "shipped",
     "kind": "feature",
+    "date": "2026-09-05",
+    "summary": "A Kanji Garden theme, so somebody arriving from there can keep the stage names they already think in - planting through bloomed, with the in-between rungs named for the plant's next step rather than a numbered repeat.",
+    "dateIsEstimate": false,
+    "release": 496,
+    "version": "1.14.0",
+    "releasedAt": "2026-09-06T00:40:46Z"
+  },
+  {
+    "id": "early-moves-allowed",
+    "name": "The move rule refused early moves, and rebuilds ate the version",
+    "area": "study",
+    "kind": "bug",
     "status": "shipped",
     "date": "2026-09-05",
-    "version": "1.14.0",
-    "release": 496,
-    "releasedAt": "2026-09-06T00:40:46Z",
-    "summary": "A Kanji Garden theme, so somebody arriving from there can keep the stage names they already think in - planting through bloomed, with the in-between rungs named for the plant's next step rather than a numbered repeat."
+    "version": "1.15.0",
+    "release": 497,
+    "releasedAt": "2026-09-06T00:54:03Z",
+    "summary": "A character may now be taught earlier than the exam band it belongs to - which keeps every exam promise, since those are deadlines rather than start dates - and a ladder rebuild no longer loses the curriculum version it was stamped with."
   }
 ]
