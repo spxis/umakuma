@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import type { ReactNode } from "react";
 
 import SaveSelectionToList from "./SaveSelectionToList";
 import { SubjectSelectionBar } from "./SubjectSelectionControls";
@@ -25,6 +26,7 @@ export default function KanjiSelectionBar({
   visibleKeys,
   accountId,
   practicePath,
+  children,
 }: {
   selection: SubjectSelection;
   /** The keys on screen now, in the order they are drawn. */
@@ -37,9 +39,16 @@ export default function KanjiSelectionBar({
    * member - and the offer is simply withheld rather than pointing nowhere.
    */
   practicePath: string;
+  /**
+   * What this surface alone can do with the chosen set - a list page can split
+   * the words in it, and nothing else here can. Drawn before the two shared
+   * destinations, since it changes the list the reader is looking at.
+   */
+  children?: ReactNode;
 }) {
   return (
     <SubjectSelectionBar selection={selection} visibleKeys={visibleKeys}>
+      {selection.count > 0 ? children : null}
       {selection.count > 0 && accountId ? (
         <SaveSelectionToList chosen={selection.chosen} accountId={accountId} onSaved={selection.cancel} />
       ) : null}

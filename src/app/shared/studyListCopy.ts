@@ -72,6 +72,11 @@ export const STUDY_LIST_COPY = {
   allKinds: "All",
   /* The stage chips beside the kind chips: every stage, and what to call the row. */
   allStages: "All stages",
+  /* Taking a word apart into the kanji it is written with. */
+  split: "Split",
+  splitting: "Splitting",
+  splitHint: "Add the kanji inside the chosen words to this list",
+  splitFailed: "Could not add those kanji.",
   stageFilters: "Filter by SRS stage",
   searchLists: "Search your lists",
   /* Each shelf names what it holds, so the box says which lists it searches. */

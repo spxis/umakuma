@@ -13,7 +13,7 @@ import { SUBJECT_VIEW_MODES, SUBJECT_VIEW_MODE_VALUES, type SubjectViewMode } fr
 import { useHideBurned } from "@/app/shared/useHideBurned";
 import { useSubjectSelection } from "@/app/shared/useSubjectSelection";
 import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
-import { LIST_ITEM_KINDS, LIST_VISIBILITIES, STUDY_TAGS } from "@/lib/domainConstants";
+import { LIST_ITEM_KINDS, LIST_VISIBILITIES, STUDY_TAGS, SUBJECT_TYPES } from "@/lib/domainConstants";
 import { LIST_ITEM_PAGE_SIZE, LIST_ITEM_SORTS, orderListItems, type ListItemSort } from "@/lib/listItemOrder";
 import { listWorksheetHref } from "../../practice/practiceAddress";
 import { subjectMatchesQuery } from "@/lib/subjectSearch";
@@ -23,6 +23,7 @@ import { SRS_STATUS_FILTER_ALL, type SrsStatusFilter } from "../../shared/SrsSta
 
 import ListContributeBox from "./ListContributeBox";
 import ListPageControls from "./ListPageControls";
+import SplitVocabularyButton from "./SplitVocabularyButton";
 import {
   LIST_TYPE_FILTER_ALL,
   listSrsCounts,
@@ -141,6 +142,19 @@ export default function ListPageView({
   );
 
   const burnedInView = useMemo(() => live.filter((item) => item.studyTags?.burned).length, [live]);
+
+  /*
+   * The chosen items that are words, which are the only ones there is anything
+   * to split. Chosen items are keyed by their glyph, so this is the list's own
+   * rows read back rather than the selection reinterpreted.
+   */
+  const chosenWords = useMemo(
+    () =>
+      live
+        .filter((item) => item.subjectType === SUBJECT_TYPES.vocabulary && selection.chosen.has(item.characters))
+        .map((item) => item.characters),
+    [live, selection.chosen],
+  );
 
   const matched = useMemo(
     () =>
@@ -330,7 +344,22 @@ export default function ListPageView({
               visibleKeys={visible.map((item) => item.characters)}
               accountId={viewer.accountId}
               practicePath={practicePath}
-            />
+            >
+              {/*
+                * Only on a list the reader may change, and only their own
+                * saved lists: Trouble and Favourites are filled by tagging
+                * while you study, so there is nothing here to add a kanji to.
+                */}
+              {canEdit && viewer.accountId && !list.tag ? (
+                <SplitVocabularyButton
+                  accountId={viewer.accountId}
+                  listId={list.id}
+                  words={chosenWords}
+                  existing={live.map((item) => ({ kind: item.listKind, key: item.listKey }))}
+                  onSplit={selection.cancel}
+                />
+              ) : null}
+            </KanjiSelectionBar>
           </div>
         ) : null}
 
