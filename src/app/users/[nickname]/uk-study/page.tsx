@@ -39,7 +39,11 @@ export default async function UkStudyPage({ params }: { params: Promise<{ nickna
         subtitle={copy.subtitle}
         className="mb-3"
       />
-      <UkStudySession accountId={shell.account.id} studyHref={`/users/${encodeURIComponent(nickname)}/study?source=umakuma`} />
+      <UkStudySession
+        accountId={shell.account.id}
+        stream={shell.account.ladderStream}
+        studyHref={`/users/${encodeURIComponent(nickname)}/study?source=umakuma`}
+      />
     </div>
   );
 }

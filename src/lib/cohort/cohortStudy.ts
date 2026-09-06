@@ -1,7 +1,7 @@
 import { REVIEW_RESULTS, SUBJECT_TYPES } from "@/lib/domainConstants";
 import type { RandomSource } from "@/lib/gameRandom";
 import { CURRICULUM_VERSION } from "@/lib/kanjiLadder";
-import { LADDER_STREAMS, type LadderStreamValue } from "@/lib/ladder/ladderStreams";
+import { type LadderStreamValue } from "@/lib/ladder/ladderStreams";
 import { initialLessonState, nextSrsStage, nextStageAvailableAt, SRS_BURNED_STAGE } from "@/lib/srs/srsSchedule";
 import { planPlacementSeed } from "@/lib/uk/placementSeed";
 import { resolveUnLevel, UN_LEVEL_PASS_SRS_STAGE, type UkLevelTotals } from "@/lib/uk/unLevel";
@@ -205,9 +205,11 @@ export function answerReview(
     newSrsStage,
     result: correct ? REVIEW_RESULTS.correct : REVIEW_RESULTS.wrong,
     submittedAt: at,
-    /* What the site stamps today: UN until a member can choose UG, whatever
-       the persona would pick. See `recordUkReview`. */
-    curriculumStream: LADDER_STREAMS.un,
+    /* The persona's own stream, matching what `recordUkReview` now stamps.
+       It mirrored the old hardcoded UN, so two in five simulated members -
+       the UG ones - were filing answers against a ladder they were not on,
+       and the boards reading those rows would have believed it. */
+    curriculumStream: member.persona.stream,
     curriculumVersion: CURRICULUM_VERSION,
   });
 

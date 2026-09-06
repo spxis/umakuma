@@ -10,6 +10,7 @@ import { hasWanikaniConnection } from "@/lib/wanikaniConnection";
 
 import { canViewUserPage, resolveViewerMenuInfo } from "../userPageAuth";
 import type { ViewerMenuInfo } from "../UserDashboardTabs.types";
+import type { LadderStreamValue } from "@/lib/ladder/ladderStreams";
 
 /**
  * The part of a member page every member page needs: who is asking, whose page
@@ -42,6 +43,8 @@ export type UserPageShell = {
     joinedByEmail: string | null;
     lastSyncedAt: Date;
     lastActivityAt: Date | null;
+    /** Which of the two ladders this member follows: UN or UG. */
+    ladderStream: LadderStreamValue;
   };
   /** The viewer is the member, rather than an admin or a guest. */
   viewerMatchesAccount: boolean;
@@ -77,6 +80,10 @@ export async function loadUserPageShell(nickname: string): Promise<UserPageShell
       joinedByEmail: true,
       lastSyncedAt: true,
       lastActivityAt: true,
+      /* Which of the two ladders this member follows. Every page that stamps
+         or counts curriculum work needs it, and it is a column on the row the
+         shell already fetches. */
+      ladderStream: true,
     },
   });
 
@@ -117,6 +124,7 @@ export async function loadUserPageShell(nickname: string): Promise<UserPageShell
       joinedByEmail: account.joinedByEmail,
       lastSyncedAt: account.lastSyncedAt,
       lastActivityAt: account.lastActivityAt,
+      ladderStream: account.ladderStream,
     },
     viewerMatchesAccount: Boolean(viewerEmail && linkedEmail && viewerEmail === linkedEmail),
   };

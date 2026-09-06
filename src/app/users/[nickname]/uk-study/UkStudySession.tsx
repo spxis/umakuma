@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { SUBJECT_TYPE_DISPLAY, type SubjectType } from "@/lib/domainConstants";
 import { CURRICULUM_VERSION } from "@/lib/kanjiLadder";
-import { LADDER_STREAMS } from "@/lib/ladder/ladderStreams";
+import { type LadderStreamValue } from "@/lib/ladder/ladderStreams";
 
 import { UK_STUDY_COPY as copy } from "./UkStudy.constants";
 
@@ -44,7 +44,16 @@ const PRIMARY = `${BUTTON} bg-accent text-white hover:brightness-110`;
  * opens the item, a review moves its stage. So a lesson batch is started in
  * one call and then falls through into reviewing what was just opened.
  */
-export default function UkStudySession({ accountId, studyHref }: { accountId: string; studyHref: string }) {
+export default function UkStudySession({
+  accountId,
+  stream,
+  studyHref,
+}: {
+  accountId: string;
+  /** Which ladder this member follows, and so which one their answers are against. */
+  stream: LadderStreamValue;
+  studyHref: string;
+}) {
   const [queue, setQueue] = useState<Counts | null>(null);
   const [failed, setFailed] = useState(false);
   const [note, setNote] = useState<string | null>(null);
@@ -183,7 +192,7 @@ export default function UkStudySession({ accountId, studyHref }: { accountId: st
         * level moved under them.
         */}
       <p className="text-[10px] font-medium tracking-[0.08em] text-foreground/35" translate="no">
-        {copy.curriculumStamp(LADDER_STREAMS.un, CURRICULUM_VERSION)}
+        {copy.curriculumStamp(stream, CURRICULUM_VERSION)}
       </p>
     </section>
   );

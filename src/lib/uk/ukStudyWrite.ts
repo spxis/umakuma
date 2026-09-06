@@ -119,7 +119,13 @@ export async function recordUkReview({
      be farmed by demoting and re-climbing. */
   const burnedNow = newSrsStage >= SRS_BURNED_STAGE && state.burnedAt === null;
 
-  const before = await prisma.account.findUnique({ where: { id: accountId }, select: { unLevel: true } });
+  /* The member's own stream, read here rather than assumed: it is what the
+     answer is stamped with, and it comes back on the row this already fetches
+     rather than costing a second query. */
+  const before = await prisma.account.findUnique({
+    where: { id: accountId },
+    select: { unLevel: true, ladderStream: true },
+  });
 
   await prisma.$transaction([
     prisma.ukSrsState.update({
@@ -140,8 +146,15 @@ export async function recordUkReview({
        * Stamped with the curriculum it was answered against. The ladders move
        * when the evidence says to - a kanji shifts a level, a word is placed
        * differently - and an answer given against one arrangement should still
-       * be readable after the arrangement changes. The stream is UN until a
-       * member can choose UG; when they can, it is theirs.
+       * be readable after the arrangement changes.
+       *
+       * **The member's own stream, not UN.** It was hardcoded to UN while
+       * nobody could choose UG, and stayed hardcoded after `ladderStream`
+       * shipped - so every UG member's answers claimed to have been given
+       * against a ladder they are not on. The two ladders order the same 2,235
+       * kanji differently, so that is not a label being slightly wrong: it is
+       * an answer filed against the wrong question, and no board reading these
+       * rows could tell.
        */
       data: {
         accountId,
@@ -151,7 +164,7 @@ export async function recordUkReview({
         previousSrsStage,
         newSrsStage,
         submittedAt: now,
-        curriculumStream: LADDER_STREAMS.un,
+        curriculumStream: before?.ladderStream ?? LADDER_STREAMS.un,
         curriculumVersion: CURRICULUM_VERSION,
       },
     }),
