@@ -96,9 +96,9 @@ export default function UmakumaLevelBoard({
         <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
           <h2 className="text-lg font-black text-foreground">
             {copy.levelHeading(group.level)}
-            {group.nLevel !== null ? (
+            {group.completesJlpt !== null ? (
               <span className="ml-2 rounded-full border border-teal-300 bg-teal-100 px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.08em] text-teal-800">
-                {`N${group.nLevel}`}
+                {`N${group.completesJlpt}`}
               </span>
             ) : null}
           </h2>

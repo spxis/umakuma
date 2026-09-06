@@ -1,5 +1,6 @@
 import { SUBJECT_TYPE_VALUES, type SubjectType } from "@/lib/domainConstants";
 import { KANJI_GRADE_BAND_VALUES, type KanjiGradeBand } from "@/lib/kanjiCoverage";
+import { jlptCompletingAt } from "@/lib/kanjiLadder";
 
 import { LADDER_SOURCE_VALUES, type LadderRow, type LadderSource } from "./ladderCrosswalk";
 
@@ -122,7 +123,16 @@ export function queryLadder(rows: readonly LadderRow[], query: LadderQuery): Lad
 
 export type LadderLevelSummary = {
   level: number;
-  nLevel: number | null;
+  /**
+   * The JLPT band that finishes at this level, and null everywhere else.
+   *
+   * It used to be "this level's band", taken from whichever kanji row came
+   * last under a comment claiming a level never mixes two. Three levels do -
+   * 6, 7 and 8 each hold kanji from three different bands - so for those it
+   * was whatever the row order happened to be, and for the rest it made every
+   * level a landmark, which is no landmark at all.
+   */
+  completesJlpt: number | null;
   radicals: number;
   kanji: number;
   vocabulary: number;
@@ -138,7 +148,7 @@ export type LadderLevelSummary = {
 export function summarizeLadderLevels(rows: readonly LadderRow[], levels: number): LadderLevelSummary[] {
   const summaries: LadderLevelSummary[] = Array.from({ length: levels }, (_, index) => ({
     level: index + 1,
-    nLevel: null,
+    completesJlpt: jlptCompletingAt(index + 1),
     radicals: 0,
     kanji: 0,
     vocabulary: 0,
@@ -155,8 +165,6 @@ export function summarizeLadderLevels(rows: readonly LadderRow[], levels: number
     if (row.kind === "kanji") {
       summary.kanji += 1;
       if (row.wkLevel === null) summary.added += 1;
-      /* A level's band is its kanji's, and a level never mixes two. */
-      if (row.nLevel !== null) summary.nLevel = row.nLevel;
     }
   }
 
@@ -165,7 +173,8 @@ export function summarizeLadderLevels(rows: readonly LadderRow[], levels: number
 
 export type LadderLevelGroup = {
   level: number;
-  nLevel: number | null;
+  /** The JLPT band that finishes at this level. See `LadderLevelSummary`. */
+  completesJlpt: number | null;
   radicals: LadderRow[];
   kanji: LadderRow[];
   vocabulary: LadderRow[];
@@ -219,7 +228,7 @@ export function groupLadderByLevel(
 
     groups.push({
       level,
-      nLevel: kanji.find((row) => row.nLevel !== null)?.nLevel ?? null,
+      completesJlpt: jlptCompletingAt(level),
       radicals: held.filter((row) => row.kind === "radical"),
       kanji,
       vocabulary,

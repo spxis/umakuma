@@ -65,7 +65,7 @@ export default function UmakumaLevelPicker({
         const isHere = chip.level === current;
         const tone = isHere
           ? UK_LEVEL_CHIP.here
-          : summary?.nLevel != null
+          : summary?.completesJlpt != null
             ? UK_LEVEL_CHIP.milestone
             : UK_LEVEL_CHIP.idle;
 
@@ -75,16 +75,16 @@ export default function UmakumaLevelPicker({
             href={umakumaLevelHref(nickname, chip.level)}
             aria-current={isHere ? "page" : undefined}
             title={
-              summary?.nLevel != null
-                ? `${copy.levelHeading(chip.level)} — ${copy.jlptAt(summary.nLevel)}`
+              summary?.completesJlpt != null
+                ? `${copy.levelHeading(chip.level)} — ${copy.jlptAt(summary.completesJlpt)}`
                 : copy.levelHeading(chip.level)
             }
             className={`${UK_LEVEL_CHIP.base} ${tone}`}
           >
             {chip.level}
-            {summary?.nLevel != null ? (
+            {summary?.completesJlpt != null ? (
               <span className="ml-1 text-[9px] font-black uppercase tracking-[0.08em] opacity-80">
-                {`N${summary.nLevel}`}
+                {`N${summary.completesJlpt}`}
               </span>
             ) : null}
           </Link>

@@ -9,7 +9,7 @@ import UmakumaLevelPicker from "./UmakumaLevelPicker";
 /** A hundred levels, with a JLPT band finishing on 10 the way the ladder does. */
 const LEVELS: LadderLevelSummary[] = Array.from({ length: 100 }, (_, index) => ({
   level: index + 1,
-  nLevel: index + 1 === 10 ? 5 : null,
+  completesJlpt: index + 1 === 10 ? 5 : null,
   radicals: 3,
   kanji: 12,
   vocabulary: 40,

@@ -73,6 +73,23 @@ export function levelForJlpt(nLevel: JlptNLevel): number | null {
   return ladder.milestones.find((m) => m.nLevel === nLevel)?.completeAtLevel ?? null;
 }
 
+/**
+ * The JLPT band that finishes *at* this level, if one does.
+ *
+ * Five levels in a hundred answer this: N5 at 10, N4 at 20, N3 at 35, N2 at
+ * 50 and N1 at 100. Distinct from `jlptCompletedAt`, which is cumulative and
+ * answers "what does a member hold by here" - true of every level from 10
+ * onward, and so useless as a landmark.
+ *
+ * The distinction is not academic. The level picker marked a level whenever
+ * any kanji on it carried a band, which put "N5 finishes here" on levels 2, 3,
+ * 4, 5, 9 and 10 and "N1 finishes here" on all ten of 71-80. A band finishes
+ * once.
+ */
+export function jlptCompletingAt(level: number): JlptNLevel | null {
+  return ladder.milestones.find((milestone) => milestone.completeAtLevel === level)?.nLevel ?? null;
+}
+
 /** The JLPT level a member has fully covered at `level`, if any. */
 export function jlptCompletedAt(level: number): JlptNLevel | null {
   const reached = ladder.milestones.filter((m) => m.completeAtLevel <= level);

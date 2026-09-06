@@ -1,7 +1,8 @@
+import { KANJI_LADDER_LEVELS } from "@/lib/kanjiLadder";
 import { describe, expect, it } from "vitest";
 
 import { buildLadderCrosswalk } from "./ladderCrosswalk";
-import { groupLadderByLevel, LADDER_LEVELS_PER_PAGE } from "./ladderQuery";
+import { groupLadderByLevel, LADDER_LEVELS_PER_PAGE, summarizeLadderLevels } from "./ladderQuery";
 
 /**
  * The level view and the table read the same rows two different ways, and
@@ -61,11 +62,20 @@ describe("the ladder read a level at a time", () => {
     expect(groups[4].kanji).toHaveLength(0);
   });
 
-  it("names the JLPT band a level teaches, where it teaches one", () => {
+  /*
+   * A band finishes once, and the level it finishes on is a landmark. This
+   * used to be "the band a level teaches", read off whichever kanji row came
+   * last under a comment claiming a level never mixes two - levels 6, 7 and 8
+   * each hold kanji from three bands, so for those it was row order, and for
+   * the rest it made every level a landmark.
+   */
+  it("marks only the level a JLPT band finishes on", () => {
     const { groups } = groupLadderByLevel(rows, 20, 1);
-    expect(groups[1].nLevel).toBe(5);
-    /* A level with no kanji has no band of its own. */
-    expect(groups[0].nLevel).toBeNull();
+    /* N5 completes at ladder level 10, and nowhere else. */
+    expect(groups[9].completesJlpt).toBe(5);
+    expect(groups[1].completesJlpt).toBeNull();
+    expect(groups[0].completesJlpt).toBeNull();
+    expect(groups.filter((group) => group.completesJlpt !== null)).toHaveLength(1);
   });
 
   it("clamps a page past the end rather than returning nothing", () => {
@@ -84,5 +94,45 @@ describe("the ladder read a level at a time", () => {
     expect(payload.groups).toBeTruthy();
     expect(payload.rows).toBeUndefined();
     expect(payload.facets).toBeUndefined();
+  });
+});
+
+/**
+ * A landmark is a landmark because most levels are not one.
+ *
+ * The picker marked a level whenever any kanji on it carried a band, which put
+ * "N5 finishes here" on levels 2, 3, 4, 5, 9 and 10, and "N1 finishes here" on
+ * every one of 71-80. Found 2026-09-06 while reworking the level filter; the
+ * page's own blurb promises "each JLPT level finishes on a level you can point
+ * at" directly above it.
+ */
+describe("the JLPT milestones are five levels, not ninety", () => {
+  it("marks exactly the five completion levels across the whole ladder", () => {
+    const summaries = summarizeLadderLevels([], KANJI_LADDER_LEVELS);
+    const marked = summaries.filter((entry) => entry.completesJlpt !== null);
+    expect(marked.map((entry) => `${entry.level}:N${entry.completesJlpt}`)).toEqual([
+      "10:N5",
+      "20:N4",
+      "35:N3",
+      "50:N2",
+      "100:N1",
+    ]);
+  });
+
+  /* Each band once. Six levels claiming N5 is the bug this replaced. */
+  it("never says one band finishes twice", () => {
+    const bands = summarizeLadderLevels([], KANJI_LADDER_LEVELS)
+      .map((entry) => entry.completesJlpt)
+      .filter((band): band is number => band !== null);
+    expect(new Set(bands).size).toBe(bands.length);
+  });
+
+  /*
+   * And the reason the old rule could not be trusted even in principle: three
+   * levels hold kanji from more than one band, so "this level's band" had no
+   * single answer for them.
+   */
+  it("is independent of the rows, because a level can hold several bands", () => {
+    expect(summarizeLadderLevels([], KANJI_LADDER_LEVELS)[9]!.completesJlpt).toBe(5);
   });
 });

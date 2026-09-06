@@ -27,8 +27,8 @@ export default function AdminLadderLevels({ groups }: { groups: LadderLevelGroup
           <div className="flex gap-3">
             <div className="w-7 shrink-0 pt-0.5">
               <span className="font-mono text-sm font-black tabular-nums text-foreground/70">{group.level}</span>
-              {group.nLevel !== null ? (
-                <span className="mt-0.5 block text-[9px] font-black text-foreground/60">N{group.nLevel}</span>
+              {group.completesJlpt !== null ? (
+                <span className="mt-0.5 block text-[9px] font-black text-foreground/60">N{group.completesJlpt}</span>
               ) : null}
             </div>
 
