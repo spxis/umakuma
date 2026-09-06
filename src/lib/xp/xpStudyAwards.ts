@@ -105,19 +105,22 @@ export function streakXpAwards(days: number): XpAwardRequest[] {
 }
 
 /**
- * What a member is told they earned it for, in their own words.
+ * What a member is told they earned it for, everywhere XP is paid.
  *
- * Beside the awards rather than in a page's copy module, because two surfaces
- * pay the same things - a game finishing through the answer route and through
- * the clock - and a reason spelled twice is a reason that drifts.
+ * One map rather than a phrase at each call site: the same award is paid from
+ * several routes - a review from three feeds, a game from two - and a reason
+ * spelled twice is a reason that drifts.
+ *
+ * `today` covers everything `settleDailyXp` returns: the sign-in, a streak
+ * milestone, a finished quest. They settle together and there is no honest way
+ * to separate them from outside, so they are said together and the XP page
+ * carries the breakdown.
  */
-export const GAME_XP_REASONS = {
-  finished: "Game finished",
-  today: "Today's bonus",
-} as const;
-
-/** The same, for a lesson started. */
-export const LESSON_XP_REASONS = {
-  learned: "Lesson started",
+export const XP_REASONS = {
+  review: "Review answered",
+  lesson: "Lesson started",
+  game: "Game finished",
+  levelTest: "Level test",
+  placement: "Placement",
   today: "Today's bonus",
 } as const;

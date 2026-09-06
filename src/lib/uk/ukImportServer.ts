@@ -40,6 +40,8 @@ function toAssignments(cache: unknown): WanikaniAssignment[] {
 }
 
 export type UkImportResult = UkImportPlan["summary"] & {
+  /** What arriving with this much knowledge paid. Empty when nothing was owed. */
+  xpEarned?: { xp: number; reason: string }[];
   floor: number;
   level: number;
   /** Null when the member has no WaniKani data to import. */
@@ -120,5 +122,7 @@ export async function importWanikaniProgress(accountId: string): Promise<UkImpor
   }
 
   const resolved = await raiseUkLevelFloor({ accountId, floor: plan.floor, source: "wanikani" });
-  return { ...plan.summary, floor: plan.floor, level: resolved.level, wkLevel };
+  /* The placement award rides back with the level, so the page that started
+     the import can say what arriving with this much knowledge was worth. */
+  return { ...plan.summary, floor: plan.floor, level: resolved.level, wkLevel, xpEarned: resolved.earned ?? [] };
 }

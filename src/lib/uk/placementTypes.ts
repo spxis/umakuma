@@ -42,6 +42,8 @@ export type PlacementProbePayload = {
 };
 
 export type PlacementResultPayload = {
+  /** What this paid, so the page can say so. Empty when nothing was owed. */
+  xpEarned?: { xp: number; reason: string }[];
   done: true;
   /** The level they start on. */
   floor: number;

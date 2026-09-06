@@ -7,7 +7,7 @@ import { prisma } from "@/lib/prisma";
 import { initialLessonState, nextSrsStage, nextStageAvailableAt, SRS_BURNED_STAGE } from "@/lib/srs/srsSchedule";
 import { settleDailyXp } from "@/lib/xp/xpDayServer";
 import { awardXpQuietly } from "@/lib/xp/xpServer";
-import { LESSON_XP_REASONS, lessonXpAwards, reviewXpAwards } from "@/lib/xp/xpStudyAwards";
+import { lessonXpAwards, reviewXpAwards, XP_REASONS } from "@/lib/xp/xpStudyAwards";
 import type { XpEarned } from "@/lib/xp/xpToast";
 
 import { syncAccountUkLevel } from "./ukLevelServer";
@@ -45,6 +45,7 @@ export type UkReviewOutcome = {
   levelledUp: boolean;
   /** What this answer paid, so the page can say so on the answer itself. */
   xpAwarded: number;
+  earned: XpEarned;
 };
 
 /** Opens items as lessons. Ignores any the member has already started. */
@@ -81,8 +82,8 @@ export async function startUkLessons({
   const dayXp = await settleDailyXp({ accountId, now });
 
   const earned: XpEarned = [];
-  if (lessonXp > 0) earned.push({ xp: lessonXp, reason: LESSON_XP_REASONS.learned });
-  if (dayXp > 0) earned.push({ xp: dayXp, reason: LESSON_XP_REASONS.today });
+  if (lessonXp > 0) earned.push({ xp: lessonXp, reason: XP_REASONS.lesson });
+  if (dayXp > 0) earned.push({ xp: dayXp, reason: XP_REASONS.today });
   return { started: created.count, earned };
 }
 
@@ -163,7 +164,11 @@ export async function recordUkReview({
     requests: reviewXpAwards({ correct, burnedNow, levelBefore, levelAfter: resolved.level }),
     now,
   });
-  await settleDailyXp({ accountId, now });
+  const dayXp = await settleDailyXp({ accountId, now });
+
+  const earned: XpEarned = [];
+  if (xpAwarded > 0) earned.push({ xp: xpAwarded, reason: XP_REASONS.review });
+  if (dayXp > 0) earned.push({ xp: dayXp, reason: XP_REASONS.today });
 
   return {
     subjectId,
@@ -173,6 +178,7 @@ export async function recordUkReview({
     levelledUp: resolved.level > levelBefore,
     /* What this answer paid, so the page can say so on the answer itself. */
     xpAwarded,
+    earned,
   };
 }
 

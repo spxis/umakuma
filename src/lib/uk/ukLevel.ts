@@ -63,6 +63,13 @@ function hasPassed(row: UkLevelProgressRow): boolean {
 
 export type UkLevelResolution = {
   level: number;
+  /**
+   * What a placement paid, where this resolution came from one.
+   *
+   * Absent everywhere else: `deriveUkLevel` answers a question and pays
+   * nothing, and only `raiseUkLevelFloor` can hand out the placement award.
+   */
+  earned?: { xp: number; reason: string }[];
   /** How far through the level they are, 0-1, for the level it stopped on. */
   ratio: number;
   passed: number;

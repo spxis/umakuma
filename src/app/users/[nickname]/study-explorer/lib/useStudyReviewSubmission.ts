@@ -160,12 +160,20 @@ export function useStudyReviewSubmission({
         const payload = (await response.json()) as {
           error?: string;
           xpAwarded?: number;
+          xpEarned?: XpEarned;
           review?: ReviewSrsTransition;
         };
 
         if (!response.ok) {
           throw new Error(payload.error ?? "Could not submit review.");
         }
+
+        /* Every award this answer paid, including the ones that settle with
+           the day - the sign-in, a streak milestone, a finished quest. Raised
+           here rather than in the modal because the modal only knows about
+           the review's own XP, and a hundred-day streak earned mid-review was
+           being thrown away. */
+        showXpEarned(payload.xpEarned);
 
         /* A stage change is a cue; so is the XP the answer paid, even when
            the stage held - a member who turned up should see it count. */

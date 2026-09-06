@@ -122,3 +122,46 @@ describe("the surfaces that pay XP say so", () => {
     expect(readFileSync(file, "utf8")).toContain("showXpEarned(");
   });
 });
+
+describe("every award a member earns is said out loud", () => {
+  /* John: "you should be doing all rewards that the site has." Twenty-five
+     kinds are defined and twenty-four are paid; `curriculumLevelGained` is
+     deliberately unwired, with its reason written down beside it.
+     
+     The gap this catches is not a missing kind - it is a route that pays and
+     says nothing, which is how ten of them went uncued: `settleDailyXp`
+     returns the sign-in, the streak milestones and the day's quests, and three
+     routes were throwing that number away. */
+  it.each([
+    "src/app/api/study/[accountId]/review/route.ts",
+    "src/app/api/custom-study/[accountId]/review/route.ts",
+    "src/lib/uk/ukStudyWrite.ts",
+  ])("%s keeps what settleDailyXp returned", (file) => {
+    const source = readFileSync(file, "utf8");
+    expect(source).toMatch(/const \w*[Dd]ayXp = await settleDailyXp/);
+    expect(source).toContain("XP_REASONS.today");
+  });
+
+  it.each([
+    ["src/lib/uk/ukLevelTestServer.ts", "XP_REASONS.levelTest"],
+    ["src/lib/uk/ukLevelServer.ts", "XP_REASONS.placement"],
+    ["src/lib/uk/ukStudyWrite.ts", "XP_REASONS.lesson"],
+    ["src/app/api/game/[accountId]/runs/[runId]/answer/route.ts", "XP_REASONS.game"],
+    ["src/app/api/game/[accountId]/runs/[runId]/complete/route.ts", "XP_REASONS.game"],
+  ])("%s names what it paid for", (file, reason) => {
+    expect(readFileSync(file, "utf8")).toContain(reason);
+  });
+
+  /* One map, because the same award is paid from several routes - a review
+     from three feeds, a game from two - and a reason spelled twice drifts. */
+  it("says each reason in one place", async () => {
+    const { XP_REASONS } = await import("./xpStudyAwards");
+    expect(new Set(Object.values(XP_REASONS)).size).toBe(Object.values(XP_REASONS).length);
+  });
+
+  /* The one that is defined and never paid, on purpose. */
+  it("leaves curriculumLevelGained unwired, with its reason written down", async () => {
+    const awards = readFileSync("src/lib/xp/xpStudyAwards.ts", "utf8");
+    expect(awards).toContain("`curriculumLevelGained` is deliberately not awarded here");
+  });
+});

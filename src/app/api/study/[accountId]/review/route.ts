@@ -18,7 +18,8 @@ import { postWaniKani } from "@/lib/wanikani/http";
 import { SRS_BURNED_STAGE } from "@/lib/srs/srsSchedule";
 import { settleDailyXp } from "@/lib/xp/xpDayServer";
 import { awardXpQuietly } from "@/lib/xp/xpServer";
-import { reviewXpAwards } from "@/lib/xp/xpStudyAwards";
+import { reviewXpAwards, XP_REASONS } from "@/lib/xp/xpStudyAwards";
+import type { XpEarned } from "@/lib/xp/xpToast";
 
 type RouteContext = {
   params: Promise<{ accountId: string }>;
@@ -286,11 +287,18 @@ export async function POST(request: Request, context: RouteContext) {
       }),
       now,
     });
-    await settleDailyXp({ accountId, now });
+    /* Kept, not discarded: the sign-in, a streak milestone and the day's
+       quests all settle here, and throwing the number away meant a member
+       could earn a hundred-day streak mid-review and never be told. */
+    const dayXp = await settleDailyXp({ accountId, now });
+    const xpEarned: XpEarned = [];
+    if (xpAwarded > 0) xpEarned.push({ xp: xpAwarded, reason: XP_REASONS.review });
+    if (dayXp > 0) xpEarned.push({ xp: dayXp, reason: XP_REASONS.today });
 
     return NextResponse.json({
       ok: true,
       xpAwarded,
+      xpEarned,
       review: {
         assignmentId: parsed.data.assignmentId,
         subjectId:

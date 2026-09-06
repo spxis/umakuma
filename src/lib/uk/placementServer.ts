@@ -246,6 +246,8 @@ async function applyVerdict({
     probes: verdict.probes,
     seeded: plan.seeded,
     seededMissed: plan.seededMissed,
+    /* What being placed was worth, so the result screen can say it. */
+    xpEarned: resolved.earned ?? [],
   };
 }
 

@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 
 import { resolveUkLevel, type UkLevelResolution, type UkLevelTotals } from "./ukLevel";
 import { awardXpQuietly } from "@/lib/xp/xpServer";
+import { XP_REASONS } from "@/lib/xp/xpStudyAwards";
 
 /**
  * Reading and writing a member's UmaKuma level.
@@ -148,8 +149,18 @@ export async function raiseUkLevelFloor({
      raising a floor, or a member's own bump-up, is not arriving with
      knowledge. Quiet, because a placement that succeeded must not fail on the
      XP it hands out. */
+  let placementXp = 0;
   if (moved && account?.ukPlacedAt === null && EXTERNAL_PLACEMENT_SOURCES.has(source)) {
-    await awardXpQuietly({ accountId, requests: [{ kind: "placementAward", note: `placed at level ${next}` }] });
+    placementXp = await awardXpQuietly({
+      accountId,
+      requests: [{ kind: "placementAward", note: `placed at level ${next}` }],
+    });
   }
-  return syncAccountUkLevel(accountId);
+  const resolution = await syncAccountUkLevel(accountId);
+  /* Carried back rather than paid silently. It is the largest single award on
+     the site and it happens once, ever, at the moment somebody decides
+     whether this place is worth their time - the worst one to leave unsaid. */
+  return placementXp > 0
+    ? { ...resolution, earned: [{ xp: placementXp, reason: XP_REASONS.placement }] }
+    : resolution;
 }

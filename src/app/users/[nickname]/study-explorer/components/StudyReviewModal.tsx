@@ -2,7 +2,6 @@ import type { StudyTag } from "@/lib/domainConstants";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
 import { usePersistedBoolean } from "@/lib/usePersistedBoolean";
-import { showXpToast } from "@/lib/xp/xpToast";
 import type { RelatedReference, StudyReviewModalProps as Props } from "./StudyReviewModal.types";
 import {
   isRadicalSubjectType,
@@ -277,7 +276,6 @@ export default function StudyReviewModal({
         : "";
     const verb = latestReviewTransition.transition === "promoted" ? "Promoted" : "Dropped";
 
-    if (xp > 0) showXpToast({ xp, reason: moved ? `${verb} to ${nextGroupingLabel}` : undefined });
     queueMicrotask(() => {
       const xpCue = xp > 0 ? STUDY_REVIEW_XP_CUE(xp) : null;
       setVisibleTransitionCue({

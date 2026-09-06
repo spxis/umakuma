@@ -8,7 +8,7 @@ import { prisma } from "@/lib/prisma";
 import { settleDailyXp } from "@/lib/xp/xpDayServer";
 import { awardXpQuietly } from "@/lib/xp/xpServer";
 import type { XpEarned } from "@/lib/xp/xpToast";
-import { GAME_XP_REASONS, gameXpAwards } from "@/lib/xp/xpStudyAwards";
+import { gameXpAwards, XP_REASONS } from "@/lib/xp/xpStudyAwards";
 
 /**
  * Closes a timed run when the clock runs out without another answer.
@@ -68,8 +68,8 @@ export async function POST(
              milestone, the "a lesson and a game" quest. Swallows its own
              failures, like the award above it. */
           const dayXp = await settleDailyXp({ accountId });
-          if (gameXp > 0) earned.push({ xp: gameXp, reason: GAME_XP_REASONS.finished });
-          if (dayXp > 0) earned.push({ xp: dayXp, reason: GAME_XP_REASONS.today });
+          if (gameXp > 0) earned.push({ xp: gameXp, reason: XP_REASONS.game });
+          if (dayXp > 0) earned.push({ xp: dayXp, reason: XP_REASONS.today });
         }
 
         return NextResponse.json({ run: toGameRunSummary(outcome.run), xpEarned: earned }, { status: 200 });

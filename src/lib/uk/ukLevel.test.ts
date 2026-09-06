@@ -185,7 +185,20 @@ describe("the placement award", () => {
   it("cannot fail the placement it rides on", async () => {
     const { readFileSync } = await import("node:fs");
     const server = readFileSync("src/lib/uk/ukLevelServer.ts", "utf8");
-    expect(server).toContain("awardXpQuietly({ accountId, requests: [{ kind: \"placementAward\"");
+    /* Quiet: a placement that succeeded must not fail on the XP it hands out. */
+    expect(server).toContain("awardXpQuietly({");
+    expect(server).toContain('requests: [{ kind: "placementAward"');
+  });
+
+  /* It is the largest single award on the site and it happens once, ever, at
+     the moment somebody decides whether this place is worth their time. It was
+     paid in silence; now it rides back so the page that caused it can say so. */
+  it("is carried back rather than paid silently", async () => {
+    const { readFileSync } = await import("node:fs");
+    expect(readFileSync("src/lib/uk/ukLevelServer.ts", "utf8")).toContain("XP_REASONS.placement");
+    for (const caller of ["src/lib/uk/ukImportServer.ts", "src/lib/uk/placementServer.ts"]) {
+      expect(readFileSync(caller, "utf8"), caller).toContain("resolved.earned ?? []");
+    }
   });
 
   it("is priced in fives and exists as a kind", async () => {

@@ -6,6 +6,8 @@ import { GAME_LADDERS, persistGameRun } from "@/lib/gameRunCreate";
 import { CURRICULUM_VERSION } from "@/lib/kanjiLadder";
 import { prisma } from "@/lib/prisma";
 import { awardXpQuietly } from "@/lib/xp/xpServer";
+import { XP_REASONS } from "@/lib/xp/xpStudyAwards";
+import type { XpEarned } from "@/lib/xp/xpToast";
 import { memberStudyPreferences } from "@/lib/srs/studyPreferencesServer";
 
 import { gateAfterLevel, testVerdict, verdictClears, type UkGate, type UkTestVerdict } from "./ukGates";
@@ -123,6 +125,8 @@ export type FinishedLevelTest = {
   answered: number;
   /** Where the member stands now, re-derived with this result counted. */
   level: number;
+  /** What sitting it paid, so the page can say so. */
+  earned: XpEarned;
 };
 
 /**
@@ -145,6 +149,9 @@ export async function finalizeLevelTest(accountId: string, testId: string): Prom
   const correct = run.correctCount;
   const verdict = test.verdict ?? testVerdict(correct, answered, test.threshold);
   const cleared = verdictClears(verdict, test.mustPass);
+  /* Zero on a replay: the award is paid inside the branch that records the
+     verdict, so a second finalize of the same test pays nothing and says so. */
+  let testXp = 0;
 
   if (!test.verdict) {
     await prisma.levelTest.update({
@@ -155,7 +162,7 @@ export async function finalizeLevelTest(accountId: string, testId: string): Prom
        finalize of the same test - a retried request, a replayed hook - pays
        nothing again. Writing pays; passing pays on top. */
     const note = `${test.gateKey} · ${correct}/${answered}`;
-    await awardXpQuietly({
+    testXp = await awardXpQuietly({
       accountId,
       requests: [
         { kind: "levelTestWritten", note },
@@ -167,7 +174,8 @@ export async function finalizeLevelTest(accountId: string, testId: string): Prom
   /* A cleared final may move the level; a checkpoint never does, but the
      re-derivation is cheap and keeps one writer. */
   const standing = await syncAccountUkLevel(accountId);
-  return { verdict, cleared, correct, answered, level: standing.level };
+  const earned: XpEarned = testXp > 0 ? [{ xp: testXp, reason: XP_REASONS.levelTest }] : [];
+  return { verdict, cleared, correct, answered, level: standing.level, earned };
 }
 
 /** The answer route finishes a run knowing only the run; the test is found from it. */
