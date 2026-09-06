@@ -6586,12 +6586,25 @@
     "id": "the-ranking-score-is-tunable-and-self-describing",
     "name": "The ranking score is tunable and self-describing",
     "area": "platform",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-06",
+    "summary": "The leaderboard score can be tuned from the site, and the formula printed under the board always matches what it actually does.",
+    "dateIsEstimate": false,
+    "release": 528,
+    "version": "1.41.0",
+    "releasedAt": "2026-09-06T11:22:08Z"
+  },
+  {
+    "id": "a-level-per-path-and-a-run-says-what-it-paid",
+    "name": "A level per path, and a run says what it paid",
+    "area": "platform",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.41.0",
-    "release": 528,
-    "releasedAt": "2026-09-06T11:22:08Z",
-    "summary": "The leaderboard score can be tuned from the site, and the formula printed under the board always matches what it actually does."
+    "version": "1.42.0",
+    "release": 529,
+    "releasedAt": "2026-09-06T11:22:41Z",
+    "summary": "Each learning path now keeps its own level, so choosing the other one no longer overwrites what you earned. Games also record what they paid."
   }
 ]
