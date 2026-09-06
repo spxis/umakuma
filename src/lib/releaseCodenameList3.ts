@@ -102,4 +102,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Koguchi Kirisoroe", ja: "小口切り揃え", reading: "こぐちきりぞろえ", gloss: "the edges trimmed even" },
   { romaji: "Sadame Wake", ja: "定め分け", reading: "さだめわけ", gloss: "sorted by what each one is" },
   { romaji: "Shiwake Aratame", ja: "仕分け改め", reading: "しわけあらため", gloss: "the filing, put right" },
+  { romaji: "Susumi Kurabe", ja: "進み比べ", reading: "すすみくらべ", gloss: "progress, side by side" },
 ];

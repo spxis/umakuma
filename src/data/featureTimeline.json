@@ -6742,12 +6742,25 @@
     "id": "answer-stream-stamp",
     "name": "An answer is stamped with your own path",
     "area": "account",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-06",
+    "summary": "Every review answer is now recorded against the path the member is actually on. Answers used to be filed as UN whoever gave them, so anybody following the school-year path had their history labelled with the wrong curriculum.",
+    "dateIsEstimate": false,
+    "release": 540,
+    "version": "1.51.1",
+    "releasedAt": "2026-09-06T14:08:26Z"
+  },
+  {
+    "id": "umakuma-ladder-boards",
+    "name": "The UmaKuma ladder boards",
+    "area": "account",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.51.1",
-    "release": 540,
-    "releasedAt": "2026-09-06T14:08:26Z",
-    "summary": "Every review answer is now recorded against the path the member is actually on. Answers used to be filed as UN whoever gave them, so anybody following the school-year path had their history labelled with the wrong curriculum."
+    "version": "1.52.0",
+    "release": 541,
+    "releasedAt": "2026-09-06T14:08:38Z",
+    "summary": "The UmaKuma ladder has a leaderboard: everyone on one board, and one for each path. Each row shows the level in the member's own system and the learned, passed and burned counts the score is built from."
   }
 ]
