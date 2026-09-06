@@ -44,6 +44,42 @@ export const EXTRA_THEMES = [
     ],
   },
   {
+    /*
+     * The other courtesy, matching the one the WaniKani theme extends. Kanji
+     * Garden names its stages after a plant's life, and somebody arriving from
+     * there should be able to keep the words they already think in rather than
+     * learn a second vocabulary on their first day here.
+     *
+     * They publish five names and we have nine rungs, so the gaps are filled
+     * with the plant's own next step - a shoot, a second leaf - rather than by
+     * numbering a bucket twice. English, like the WaniKani theme, because that
+     * is the vocabulary being kept.
+     */
+    id: "kanji-garden",
+    name: "Kanji Garden",
+    sourceName: "Kanji Garden",
+    rating: "all",
+    zero: { term: "Unplanted", reading: "Unplanted", meaning: "Not sown yet", short: "—" },
+    buckets: {
+      1: bucket("Planting", "Planting", "In the soil, looked at within days"),
+      2: bucket("Sprouting", "Sprouting", "Up, and held for a week or two"),
+      3: bucket("Watering", "Watering", "Tended monthly"),
+      4: bucket("Sprouted", "Sprouted", "Standing on its own for months"),
+      5: bucket("Bloomed", "Bloomed", "Grown. UmaKuma still lets you ask again."),
+    },
+    levels: [
+      ["Sown", "Sown", "Four hours until the next look", 1],
+      ["Watered", "Watered", "Eight hours", 1],
+      ["Warm ground", "Warm ground", "A day", 1],
+      ["First shoot", "First shoot", "Two days", 1],
+      ["Sprouting", "Sprouting", "A week — and the stage a level counts", 2],
+      ["Second leaf", "Second leaf", "Two weeks", 2],
+      ["Watering", "Watering", "A month", 3],
+      ["Sprouted", "Sprouted", "Four months", 4],
+      ["Bloomed", "Bloomed", "Grown, and yours to bring back down", 5],
+    ],
+  },
+  {
     id: "amusement-park",
     name: "Thrill Seeker",
     sourceName: "Amusement Park",

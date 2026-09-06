@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-05T01:58:54.936Z",
+  "generatedAt": "2026-09-06T00:39:09.707Z",
   "themes": [
     {
       "id": "academic-system",
@@ -4630,6 +4630,121 @@
         "language",
         "mountain-temple",
         "violence"
+      ]
+    },
+    {
+      "id": "kanji-garden",
+      "name": "Kanji Garden",
+      "sourceName": "Kanji Garden",
+      "renamed": false,
+      "rating": "all",
+      "levels": [
+        {
+          "level": 0,
+          "term": "Unplanted",
+          "reading": "Unplanted",
+          "meaning": "Not sown yet",
+          "short": "—",
+          "bucket": "Unplanted",
+          "bucketReading": "Unplanted",
+          "bucketMeaning": "Not sown yet"
+        },
+        {
+          "level": 1,
+          "term": "Sown",
+          "reading": "Sown",
+          "meaning": "Four hours until the next look",
+          "short": "Sown",
+          "bucket": "Planting",
+          "bucketReading": "Planting",
+          "bucketMeaning": "In the soil, looked at within days"
+        },
+        {
+          "level": 2,
+          "term": "Watered",
+          "reading": "Watered",
+          "meaning": "Eight hours",
+          "short": "Water",
+          "bucket": "Planting",
+          "bucketReading": "Planting",
+          "bucketMeaning": "In the soil, looked at within days"
+        },
+        {
+          "level": 3,
+          "term": "Warm ground",
+          "reading": "Warm ground",
+          "meaning": "A day",
+          "short": "Warm ",
+          "bucket": "Planting",
+          "bucketReading": "Planting",
+          "bucketMeaning": "In the soil, looked at within days"
+        },
+        {
+          "level": 4,
+          "term": "First shoot",
+          "reading": "First shoot",
+          "meaning": "Two days",
+          "short": "First",
+          "bucket": "Planting",
+          "bucketReading": "Planting",
+          "bucketMeaning": "In the soil, looked at within days"
+        },
+        {
+          "level": 5,
+          "term": "Sprouting",
+          "reading": "Sprouting",
+          "meaning": "A week — and the stage a level counts",
+          "short": "Sprou",
+          "bucket": "Sprouting",
+          "bucketReading": "Sprouting",
+          "bucketMeaning": "Up, and held for a week or two"
+        },
+        {
+          "level": 6,
+          "term": "Second leaf",
+          "reading": "Second leaf",
+          "meaning": "Two weeks",
+          "short": "Secon",
+          "bucket": "Sprouting",
+          "bucketReading": "Sprouting",
+          "bucketMeaning": "Up, and held for a week or two"
+        },
+        {
+          "level": 7,
+          "term": "Watering",
+          "reading": "Watering",
+          "meaning": "A month",
+          "short": "Water",
+          "bucket": "Watering",
+          "bucketReading": "Watering",
+          "bucketMeaning": "Tended monthly"
+        },
+        {
+          "level": 8,
+          "term": "Sprouted",
+          "reading": "Sprouted",
+          "meaning": "Four months",
+          "short": "Sprou",
+          "bucket": "Sprouted",
+          "bucketReading": "Sprouted",
+          "bucketMeaning": "Standing on its own for months"
+        },
+        {
+          "level": 9,
+          "term": "Bloomed",
+          "reading": "Bloomed",
+          "meaning": "Grown, and yours to bring back down",
+          "short": "Bloom",
+          "bucket": "Bloomed",
+          "bucketReading": "Bloomed",
+          "bucketMeaning": "Grown. UmaKuma still lets you ask again."
+        }
+      ],
+      "tags": [
+        "english-friendly",
+        "language",
+        "mountain-temple",
+        "turning-up"
       ]
     },
     {

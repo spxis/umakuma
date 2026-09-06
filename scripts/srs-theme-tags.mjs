@@ -137,6 +137,9 @@ export const THEME_TAGS = {
   "traditional-artisan-shokunin": ["work", "travel", "discipline", "turning-up"],
   "train-spotter-s-holy-grail": ["travel", "turning-up", "cleverness"],
   wanikani: ["language", "turning-up", "discipline"],
+  /* The other app somebody may be arriving from, and a garden that is
+     genuinely about tending rather than about plants. */
+  "kanji-garden": ["language", "mountain-temple", "turning-up"],
   "x-men": ["power", "cleverness"],
   "yokai-folklore": ["language", "travel", "mountain-temple", "power", "violence"],
   "yoshiwara-oiran": ["city-night", "discipline", "cleverness", "underworld", "adult-content"],
