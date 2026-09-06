@@ -22,11 +22,25 @@ export default function MemberBoardRows({
   copy: MemberBoardCopy;
 }) {
   return (
-    <ol className="divide-y divide-line/60">
+    /*
+     * A container query, not a viewport one. The board sits in a half-width
+     * column on the XP page and full width elsewhere, and `sm:` asks the
+     * *window* how wide it is - so at 1440 the lanes claimed 536px of a 580px
+     * column and the row broke into three ragged lines with the figure
+     * stranded under the bar. `@container` asks the column.
+     */
+    <ol className="@container divide-y divide-line/60">
       {entries.map((entry) => (
         <li
           key={entry.id}
-          className={`flex flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3 ${
+          /*
+           * Narrow: place, name and figure on one line, the bar spanning
+           * underneath. Wide enough and it is all one line, which is what the
+           * board looked like before and is worth keeping where there is room.
+           * A grid rather than wrapping flex, so the figure stays hard right
+           * at both shapes instead of landing wherever the wrap left it.
+           */
+          className={`grid grid-cols-[2.5rem_minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1.5 px-4 py-3 @[34rem]:grid-cols-[2.5rem_minmax(0,1fr)_14rem_auto] ${
             entry.isViewer ? "bg-surface-muted/60" : ""
           }`}
         >
@@ -68,9 +82,14 @@ export default function MemberBoardRows({
             ) : null}
           </div>
 
-          {entry.detail ? <div className="w-full shrink-0 sm:w-56">{entry.detail}</div> : null}
+          {/* Under the name on a narrow board, in its own lane on a wide one. */}
+          {entry.detail ? (
+            <div className="col-start-2 col-span-2 min-w-0 @[34rem]:col-start-3 @[34rem]:col-span-1">
+              {entry.detail}
+            </div>
+          ) : null}
 
-          <div className="shrink-0 text-right sm:w-28">
+          <div className="col-start-3 row-start-1 shrink-0 text-right @[34rem]:col-start-4 @[34rem]:row-start-1">
             <p className="text-base font-black tabular-nums text-foreground">{entry.figure}</p>
             <p className="text-[11px] font-semibold tabular-nums text-foreground/60">
               {entry.figureNote}
