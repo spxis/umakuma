@@ -124,6 +124,8 @@ export const SUBJECT_VIEW_COPY = {
   grid: "Grid",
   list: "List",
   noMeaning: "—",
+  /* The heading's own checkbox, which takes or clears every row on the page. */
+  chooseAll: "Choose everything on this page",
   /* The column headings. Shown from `md` up, where the lanes are separate. */
   columnItem: "Item",
   columnReading: "Reading",

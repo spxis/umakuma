@@ -5,6 +5,7 @@ import {
   SUBJECT_LIST_DIVIDERS,
   SUBJECT_LIST_SURFACE,
   SUBJECT_ROW_LANES,
+  SUBJECT_VIEW_COPY,
   type SubjectListRow,
 } from "@/app/shared/subjectListView";
 import { READING_KINDS } from "@/lib/domainConstants";
@@ -58,6 +59,8 @@ type Props<TRow extends SubjectListRow> = {
     active: boolean;
     isChosen: (row: TRow) => boolean;
     onPick: (row: TRow, shiftKey: boolean, index: number) => void;
+    /** Everything on this page at once, where the surface can do that. */
+    onPickAll?: (chooseAll: boolean) => void;
   };
   /**
    * Which fields this surface shows.
@@ -100,6 +103,9 @@ function stackedReading(row: SubjectListRow): string {
   return both.length > 0 ? both.join("、") : (row.reading ?? "");
 }
 
+/** Whether the heading's box governs everything, some of it, or nothing yet. */
+type ChooseAllState = "all" | "some" | "none";
+
 type Group<TRow> = { heading: string; rows: Array<{ row: TRow; index: number }> };
 
 /** Groups consecutive rows under a heading, preserving the incoming order. */
@@ -129,16 +135,48 @@ function toGroups<TRow extends SubjectListRow>(
  * Hidden below `md`, where the narrow lanes collapse and a heading reading
  * "Item / Meaning" would name two columns nobody can miss.
  */
-function LaneHeadings<TRow extends SubjectListRow>({ columns, choosing, hasLeading, hasTrailing }: {
+function LaneHeadings<TRow extends SubjectListRow>({ columns, choosing, chooseAll, hasLeading, hasTrailing }: {
   columns: Array<SubjectColumn<TRow>>;
   choosing: boolean;
+  /** Null where the surface's own chooser cannot answer for the whole page. */
+  chooseAll: { state: ChooseAllState; onChange: () => void } | null;
   hasLeading: boolean;
   hasTrailing: boolean;
 }) {
   return (
     <div className="sticky top-0 z-20 hidden items-center gap-2 border-b border-line bg-surface-muted pr-2 md:flex">
       <div className="flex min-w-0 flex-1 items-center gap-3 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.08em] text-foreground/60">
-        {choosing ? <span className={SUBJECT_ROW_LANES.pick} /> : null}
+        {/*
+          * The box that takes the lot.
+          *
+          * The bar above says "All on this page" in words, and the heading is
+          * where a reader of a list of checkboxes looks for the one that
+          * governs them - the same square, in the same lane, over the column
+          * it fills. Half-chosen reads as mixed rather than as either, so the
+          * press that follows is always the one the reader expected: something
+          * chosen means clear, nothing chosen means take everything.
+          */}
+        {choosing ? (
+          chooseAll ? (
+            <button
+              type="button"
+              role="checkbox"
+              aria-checked={chooseAll.state === "all" ? "true" : chooseAll.state === "some" ? "mixed" : "false"}
+              aria-label={SUBJECT_VIEW_COPY.chooseAll}
+              title={SUBJECT_VIEW_COPY.chooseAll}
+              onClick={chooseAll.onChange}
+              className={`${SUBJECT_ROW_LANES.pick} inline-flex h-5 items-center justify-center rounded border text-[11px] font-black leading-none transition ${
+                chooseAll.state === "none"
+                  ? "border-line text-transparent hover:border-accent/60"
+                  : "border-accent bg-accent text-white"
+              }`}
+            >
+              {chooseAll.state === "some" ? "–" : "✓"}
+            </button>
+          ) : (
+            <span className={SUBJECT_ROW_LANES.pick} />
+          )
+        ) : null}
         {hasLeading ? <span className={SUBJECT_ROW_LANES.leading} /> : null}
         {/* The same lane classes the cells use, from the same column objects,
           * so a heading cannot end up a different width from the column under
@@ -217,11 +255,36 @@ export default function SubjectRows<TRow extends SubjectListRow>({
       : null;
   const choosing = chooser !== null;
 
+  /*
+   * Whether the heading's box can answer for the whole page.
+   *
+   * The shared selection can - it takes a set of keys and clears itself - so
+   * every list here gets the box. A surface running its own picking is asked
+   * for the same two acts, and gets no box until it offers them, rather than
+   * being handed a control that ticks one row at a time.
+   */
+  const chosenHere = chooser ? rows.filter((row) => chooser.isChosen(row)).length : 0;
+  const chooseAllState: ChooseAllState = chosenHere === 0 ? "none" : chosenHere === rows.length ? "all" : "some";
+  const chooseAll =
+    !chooser
+      ? null
+      : picking?.active
+        ? picking.onPickAll
+          ? { state: chooseAllState, onChange: (): void => picking.onPickAll?.(chooseAllState !== "all") }
+          : null
+        : selection
+          ? {
+              state: chooseAllState,
+              onChange: () => (chooseAllState === "all" ? selection.clear() : selection.addAll(order)),
+            }
+          : null;
+
   return (
     <div className={SUBJECT_LIST_SURFACE}>
       <LaneHeadings
         columns={columns}
         choosing={choosing}
+        chooseAll={chooseAll}
         hasLeading={hasLeading}
         hasTrailing={hasTrailing}
       />
