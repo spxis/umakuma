@@ -6521,12 +6521,25 @@
     "id": "a-rank-reads-one-way-everywhere-and-links-to-its-page",
     "name": "A rank reads one way everywhere, and links to its page",
     "area": "account",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-06",
+    "summary": "Ranks read the same everywhere now \u2014 L1 Rookie, wherever you meet it \u2014 and every rank name opens the page showing who is standing there. The ladder chart says how many that is.",
+    "dateIsEstimate": false,
+    "release": 523,
+    "version": "1.36.0",
+    "releasedAt": "2026-09-06T10:44:42Z"
+  },
+  {
+    "id": "every-xp-page-reaches-every-other",
+    "name": "Every XP page reaches every other",
+    "area": "account",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.36.0",
-    "release": 523,
-    "releasedAt": "2026-09-06T10:44:42Z",
-    "summary": "Ranks read the same everywhere now \u2014 L1 Rookie, wherever you meet it \u2014 and every rank name opens the page showing who is standing there. The ladder chart says how many that is."
+    "version": "1.37.0",
+    "release": 524,
+    "releasedAt": "2026-09-06T10:44:45Z",
+    "summary": "Every XP page now carries a row to every other, so nothing in the section is reachable only by knowing its address."
   }
 ]
