@@ -194,8 +194,8 @@ export function checkLevelShape(ladder) {
   ladder.ladder.forEach((level, index) => {
     if (level.level !== index + 1) violations.push({ rule: "levels in order", detail: `position ${index + 1} says level ${level.level}` });
     const subjects = level.kanji.length + level.vocabulary + level.radicals;
-    if (subjects === 0) empty.push(`L${level.level}`);
-    if (subjects > MAX_SUBJECTS_PER_LEVEL) heavy.push(`L${level.level}:${subjects}`);
+    if (subjects === 0) empty.push(`level ${level.level}`);
+    if (subjects > MAX_SUBJECTS_PER_LEVEL) heavy.push(`level ${level.level}: ${subjects} subjects`);
   });
   if (empty.length > 0) violations.push({ rule: "no empty level", detail: `${empty.length} hold nothing`, offenders: empty });
   if (heavy.length > 0) {
@@ -257,7 +257,7 @@ export function checkGradePromise(ladder, milestones) {
         .map((kanji) => ladder.kanjiLevel[kanji]?.schoolGrade)
         .filter((grade) => typeof grade === "number" && grade <= 6),
     );
-    if (grades.size > 1) straddling.push(`L${level.level}: ${[...grades].join("+")}`);
+    if (grades.size > 1) straddling.push(`level ${level.level} holds grades ${[...grades].join(" and ")}`);
   }
   if (straddling.length > 0) {
     violations.push({ rule: "a level is one school year", detail: `${straddling.length} straddle two`, offenders: straddling.slice(0, 10) });
