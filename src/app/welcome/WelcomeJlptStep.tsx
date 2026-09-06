@@ -10,7 +10,7 @@ import {
   levelsForSystem,
 } from "@/lib/jlptCertification";
 
-import { JLPT_STATUS_LABELS, PROFILE_COPY } from "../users/[nickname]/profile/profileCopy";
+import { JLPT_STATUS_LABELS, PROFILE_COPY } from "../users/[nickname]/settings/profileCopy";
 import { WELCOME_COPY } from "./welcomeCopy";
 
 type Props = {

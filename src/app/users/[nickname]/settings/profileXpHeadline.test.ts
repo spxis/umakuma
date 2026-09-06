@@ -8,8 +8,8 @@ import { xpRankBadge, xpRankName } from "@/lib/xp/xpRanks";
 import { PROFILE_XP_HEADLINE_COPY as copy } from "./profileCopy";
 
 describe("the XP line in the profile header", () => {
-  const component = readFileSync("src/app/users/[nickname]/profile/ProfileXpHeadline.tsx", "utf8");
-  const page = readFileSync("src/app/users/[nickname]/profile/page.tsx", "utf8");
+  const component = readFileSync("src/app/users/[nickname]/settings/ProfileXpHeadline.tsx", "utf8");
+  const page = readFileSync("src/app/users/[nickname]/settings/page.tsx", "utf8");
 
   it("is in the header rather than only in the card below", () => {
     expect(page).toContain("actions={<ProfileXpHeadline xp={account.xp} />}");

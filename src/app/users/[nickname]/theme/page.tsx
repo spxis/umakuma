@@ -93,7 +93,7 @@ export default async function UserThemePage({ params }: PageProps) {
           subtitle={THEME_PAGE_COPY.subtitle(theme.name)}
           actions={
             <Link
-              href={`/users/${encodeURIComponent(address)}/profile`}
+              href={`/users/${encodeURIComponent(address)}/settings`}
               className="rounded-full border border-line bg-surface px-3 py-1.5 text-xs font-black text-foreground hover:text-accent"
             >
               {THEME_PAGE_COPY.profile}

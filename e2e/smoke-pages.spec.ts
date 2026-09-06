@@ -6,7 +6,7 @@ import { CONNECT_COPY } from "@/app/users/[nickname]/wanikani/connectCopy";
 import { STUDY_PANEL_TEXT } from "@/app/users/[nickname]/study-explorer/components/StudyExplorer.constants";
 import { XP_BOARD_COPY } from "@/app/xp/xpBoardCopy";
 import { XP_HISTORY_COPY } from "@/app/users/[nickname]/xp/xpHistoryCopy";
-import { XP_RANK_COPY } from "@/app/users/[nickname]/profile/profileCopy";
+import { XP_RANK_COPY } from "@/app/users/[nickname]/settings/profileCopy";
 
 import { STORAGE_STATE } from "./sessionState";
 

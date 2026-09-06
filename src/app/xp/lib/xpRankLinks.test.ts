@@ -28,8 +28,8 @@ const SURFACES = [
   "src/app/xp/XpBoardRows.tsx",
   "src/app/xp/rank/[level]/page.tsx",
   "src/app/xp/promotions/page.tsx",
-  "src/app/users/[nickname]/profile/XpRankPanel.tsx",
-  "src/app/users/[nickname]/profile/ProfileXpHeadline.tsx",
+  "src/app/users/[nickname]/settings/XpRankPanel.tsx",
+  "src/app/users/[nickname]/settings/ProfileXpHeadline.tsx",
 ];
 
 describe("every rank name is written the one way, and is a door", () => {

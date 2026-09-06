@@ -166,7 +166,9 @@ export const NAV_SECTIONS: NavSection[] = [
     label: "Settings",
     placement: "menu",
     children: [
-      { label: "Profile", path: "profile" },
+      /* Where you change things about yourself. The page that shows you to
+         other people is "profile" and lives outside this group. */
+      { label: "Settings", path: "settings" },
       /*
          What a member's stages are called, and every theme they could be
          called instead. Owner-only, so a visitor with no page of their own is

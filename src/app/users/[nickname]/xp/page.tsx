@@ -11,7 +11,7 @@ import { authOptions, isAdminEmail } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
 import { MEMBER_PAGE_HEADERS } from "../dashboardPageHeaders";
-import XpRankPanel from "../profile/XpRankPanel";
+import XpRankPanel from "../settings/XpRankPanel";
 import { canViewUserPage, resolveViewerMenuInfo } from "../userPageAuth";
 import XpActivitySummary from "./XpActivitySummary";
 import XpLedgerDays from "./XpLedgerDays";

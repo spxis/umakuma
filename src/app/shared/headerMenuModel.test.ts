@@ -48,9 +48,15 @@ describe("buildHeaderMenu", () => {
     expect(learn?.links.length).toBeGreaterThan(1);
   });
 
-  it("puts Profile under settings, where the account lives", () => {
-    expect(menu().settings.map((link) => link.label)).toContain("Profile");
+  /*
+   * Settings is where you change things about yourself. The page that shows
+   * you to other people is the profile and lives outside this group, so the
+   * menu entry is Settings now - the label moved with the route.
+   */
+  it("puts Settings under settings, where the account lives", () => {
+    expect(menu().settings.map((link) => link.label)).toContain("Settings");
     expect(menu().settings.map((link) => link.label)).toContain("Libraries");
+    expect(menu().settings.map((link) => link.label)).not.toContain("Profile");
   });
 
   /*

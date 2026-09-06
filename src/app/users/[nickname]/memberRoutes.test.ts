@@ -34,7 +34,7 @@ describe("member pages", () => {
     "study/history",
     "lists",
     "libraries",
-    "profile",
+    "settings",
     "wanikani",
     "xp",
     "xp/history",

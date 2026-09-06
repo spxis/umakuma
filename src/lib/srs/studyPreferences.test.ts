@@ -156,7 +156,7 @@ describe("presets", () => {
     expect(suggestedPresetFor("under_13")).toBe(STUDY_PRESETS.gentle);
     expect(suggestedPresetFor("13_17")).toBe(STUDY_PRESETS.steady);
     expect(suggestedPresetFor(null)).toBe(STUDY_PRESETS.steady);
-    const panel = readFileSync("src/app/users/[nickname]/profile/StudyPreferencesPanel.tsx", "utf8");
+    const panel = readFileSync("src/app/users/[nickname]/settings/StudyPreferencesPanel.tsx", "utf8");
     /* Marked with a star, never auto-saved. */
     expect(panel).toContain('preset === suggested ? " ★" : ""');
   });

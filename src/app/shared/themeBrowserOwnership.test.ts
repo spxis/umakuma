@@ -16,7 +16,7 @@ import { describe, expect, it } from "vitest";
 const read = (path: string) => readFileSync(join(process.cwd(), path), "utf8");
 
 const SURFACES = [
-  "src/app/users/[nickname]/profile/ThemePicker.tsx",
+  "src/app/users/[nickname]/settings/ThemePicker.tsx",
   "src/app/users/[nickname]/theme/ThemeStagesPanel.tsx",
 ];
 
