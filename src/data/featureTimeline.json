@@ -6417,12 +6417,25 @@
     "id": "one-row-shape-for-every-member-board",
     "name": "One row shape for every member board",
     "area": "account",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-06",
+    "summary": "Every board now draws the same row, so a placing, a name and a figure look and read the same wherever you meet them.",
+    "dateIsEstimate": false,
+    "release": 515,
+    "version": "1.28.0",
+    "releasedAt": "2026-09-06T09:51:50Z"
+  },
+  {
+    "id": "a-browsable-xp-history-paged-from-a-rest-route",
+    "name": "A browsable XP history, paged from a REST route",
+    "area": "account",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.28.0",
-    "release": 515,
-    "releasedAt": "2026-09-06T09:51:50Z",
-    "summary": "Every board now draws the same row, so a placing, a name and a figure look and read the same wherever you meet them."
+    "version": "1.29.0",
+    "release": 516,
+    "releasedAt": "2026-09-06T09:51:53Z",
+    "summary": "Your whole XP record is now browsable at its own page: sort it by day, by what earned it or by amount, filter to one kind, and page through the lot."
   }
 ]

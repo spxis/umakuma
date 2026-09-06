@@ -77,4 +77,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Hedataru Jiban", ja: "隔たる地盤", reading: "へだたるじばん", gloss: "ground that no longer drifts apart" },
   { romaji: "Honsuji no Juni", ja: "本筋の順位", reading: "ほんすじのじゅんい", gloss: "the placing on the main line" },
   { romaji: "Matomatta Tsuranari", ja: "纏まった連なり", reading: "まとまったつらなり", gloss: "the run that was brought together" },
+  { romaji: "Mitoosi Tadori", ja: "見通し辿り", reading: "みとおしたどり", gloss: "following the record back" },
 ];
