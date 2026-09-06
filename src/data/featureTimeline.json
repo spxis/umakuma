@@ -6131,12 +6131,25 @@
     "id": "ladder-rules-checker",
     "name": "A checker for the two ladders' rules",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-05",
+    "summary": "Both ladders are now checked against the rules they promise - every radical before the character that uses it, every word after its kanji, every band and school year finishing where the ladder says it does - so a rebuild that breaks one cannot ship.",
+    "dateIsEstimate": false,
+    "release": 493,
+    "version": "1.11.0",
+    "releasedAt": "2026-09-05T23:57:55Z"
+  },
+  {
+    "id": "answer-records-curriculum",
+    "name": "Stamp every answer with the curriculum it was given against",
+    "area": "platform",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-05",
-    "version": "1.11.0",
-    "release": 493,
-    "releasedAt": "2026-09-05T23:57:55Z",
-    "summary": "Both ladders are now checked against the rules they promise - every radical before the character that uses it, every word after its kanji, every band and school year finishing where the ladder says it does - so a rebuild that breaks one cannot ship."
+    "version": "1.12.0",
+    "release": 494,
+    "releasedAt": "2026-09-06T00:04:14Z",
+    "summary": "Every answer now records which of our two ladders it was given against, and which version of it. Ours move when the evidence says to, and an answer given against one arrangement of levels should still be readable after the arrangement changes."
   }
 ]
