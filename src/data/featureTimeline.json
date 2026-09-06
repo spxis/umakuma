@@ -6404,12 +6404,25 @@
     "id": "one-placing-rule-for-every-board-and-the-gap-to-the-row-abov",
     "name": "One placing rule for every board, and the gap to the row above",
     "area": "account",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-06",
+    "summary": "Every leaderboard now places people the same way: equal totals share a place and the next one skips, a shared place prints once instead of twice, and each row says what it would take to pass the one above it.",
+    "dateIsEstimate": false,
+    "release": 514,
+    "version": "1.27.0",
+    "releasedAt": "2026-09-06T09:51:29Z"
+  },
+  {
+    "id": "one-row-shape-for-every-member-board",
+    "name": "One row shape for every member board",
+    "area": "account",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.27.0",
-    "release": 514,
-    "releasedAt": "2026-09-06T09:51:29Z",
-    "summary": "Every leaderboard now places people the same way: equal totals share a place and the next one skips, a shared place prints once instead of twice, and each row says what it would take to pass the one above it."
+    "version": "1.28.0",
+    "release": 515,
+    "releasedAt": "2026-09-06T09:51:50Z",
+    "summary": "Every board now draws the same row, so a placing, a name and a figure look and read the same wherever you meet them."
   }
 ]
