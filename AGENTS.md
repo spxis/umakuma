@@ -292,28 +292,30 @@ Run `pnpm quality:check` after non-trivial `src/` edits. If lint issues are auto
   two agents building the same thing is the expensive failure, not two agents
   idle. Re-claiming your own is allowed and does nothing.
 
-- **The timeline is the ticket board for what has shipped, and every agent works from it.** Several
-  sessions work this repository at once and cannot see each other; the JSON is
-  the one thing they all read. So: every request, bug or idea John sends becomes
-  a planned entry *before* the work starts (`pnpm backlog add <id> <area>
-  "<name>" "<summary>" [bug]`), an agent claims an entry *before* building it
-  (`pnpm backlog claim <id> "<who>"`) and puts it down if it stops
-  (`pnpm backlog release <id>`), and `pnpm backlog` shows what is open and who
-  holds it. A claim cannot be taken over; ask the holder to release it. Shipping
-  an entry clears the claim. Use the script rather than editing the JSON by
-  hand - it takes a free release number, today's Vancouver date and the file's
-  own escaping, which are the three things that went wrong by hand.
+- **The timeline is the shipped record; the board that says what is open is
+  `pnpm task`.** Several sessions work this repository at once and cannot see
+  each other, so what has been asked for lives in the database, where a row is
+  true for everybody the moment it is written: every request, bug or idea John
+  sends becomes a ticket *before* the work starts (`pnpm task add "<title>"
+  --detail "…" [--area <area>] [--bug]`), an agent claims it *before* building
+  (`pnpm task claim <id> "<who>"`) and puts it down if it stops (`pnpm task
+  release <id>`). A claim cannot be taken over; ask the holder to release it.
+
+  `pnpm backlog add` is **retired** and exits non-zero saying so: planned work
+  is not written into `featureTimeline.json` any more. That file keeps only
+  what has shipped, and `pnpm release:take --ticket <id> --summary "…"` writes
+  the entry and marks the ticket shipped in one pass, so the two halves cannot
+  drift apart. Never hand-edit the JSON - the script takes a free release
+  number, today's Vancouver date and the file's own escaping, which are the
+  three things that went wrong by hand.
 - **A wish is a request that has not been agreed to yet, and it lives in the
   database, not the file.** The timeline is `src/data/featureTimeline.json`, a
   committed file: an agent can add to it and commit, and the running site
   cannot write to it at all - a deploy would overwrite anything it did. So the
-  admin page's wish list posts to the `FeatureWish` table instead. `pnpm
-  backlog` shows the waiting count on its summary line, `pnpm backlog wishes`
-  lists them with the command to file each one, and `pnpm backlog file <wishId>
-  <area> [entry-id]` writes the planned entry from the wish's own words and
-  marks the wish filed with the id it became. Do not hand-copy a wish into the
-  JSON: the two halves stay linked only if the script does it. A wish is not
-  work until it has been filed and claimed.
+  admin page's wish list posts to the `FeatureWish` table instead, and a wish
+  becomes work by becoming a ticket on the board every agent reads - never by
+  being copied into the JSON, which is the shipped record and nothing else. A
+  wish is not work until it is a claimed ticket.
 - **In progress is not a status; it is a claim.** The board records `owner` and
   `claimedAt`, and that is the only place work-in-progress is written. The
   admin page's In progress tab is the claimed half of Planned, derived. Do not
@@ -349,7 +351,11 @@ Run `pnpm quality:check` after non-trivial `src/` edits. If lint issues are auto
   refuses rather than guesses: a reading that does not start on that minor's
   kana, a romaji word an earlier name already used (only `na` and `no` are
   exempt, so `ga` and `to` collide), a version somebody took while you were
-  building. Then `pnpm quality:check && pnpm preflight:prod`, and push. Anything that is not a release — a docs change,
+  building. Expect the word gate to reject an ordinary word - five hundred
+  names in, `temoto`, `mejirushi`, `nakami`, `nimotsu`, `yajirushi` and
+  `takasa` are all spoken for - so have a second word ready rather than
+  reading the refusal as a problem with the release. Then
+  `pnpm quality:check && pnpm preflight:prod`, and push. Anything that is not a release — a docs change,
   a rule added to this file — takes no version at all and stays out of the race.
 - After implementation: commit and push. Conventional Commits, subject ≤ 50 chars.
 - This repo has no migrations: the schema is applied by hand with `pnpm db:push`, and nothing in the deploy pipeline applies it for you. **Any change to `prisma/schema.prisma` must be pushed to the production database as its own step, or the deploy ships code the database cannot serve.** An added enum value is the easy one to miss: `map` was added to `GameKind`, deployed green, and every Map run failed in production while passing locally, because `db push` had only ever reached the local database. Verify with `pnpm db:drift:check` (read-only; exit 0 clean, exit 2 with the missing SQL). The deploy workflow now runs the same check after `vercel pull` and stops the deploy on drift.
