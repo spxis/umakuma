@@ -6365,12 +6365,25 @@
     "id": "xp-all-awards-cued",
     "name": "Every XP award shows itself",
     "area": "account",
+    "status": "shipped",
     "kind": "feature",
+    "date": "2026-09-06",
+    "summary": "Whatever earns you XP now says so as it happens - a review, a lesson, a game, a level test, a streak milestone, or arriving with progress you already had.",
+    "dateIsEstimate": false,
+    "release": 511,
+    "version": "1.26.0",
+    "releasedAt": "2026-09-06T07:41:58Z"
+  },
+  {
+    "id": "release-take-version-guard",
+    "name": "A release number cannot be taken twice",
+    "area": "platform",
+    "kind": "bug",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.26.0",
-    "release": 511,
-    "releasedAt": "2026-09-06T07:41:58Z",
-    "summary": "Whatever earns you XP now says so as it happens - a review, a lesson, a game, a level test, a streak milestone, or arriving with progress you already had."
+    "version": "1.26.1",
+    "release": 512,
+    "releasedAt": "2026-09-06T07:56:07Z",
+    "summary": "Taking a release number now refuses one the record already holds, whichever way the release is stamped."
   }
 ]
