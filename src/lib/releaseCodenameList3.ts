@@ -108,4 +108,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Tashika Tsugime", ja: "確か継ぎ目", reading: "たしかつぎめ", gloss: "a join that holds" },
   { romaji: "Chihyou Tsukejirushi", ja: "地表付け印", reading: "ちひょうつけじるし", gloss: "the mark that says which ground" },
   { romaji: "Tsutsumi Mihari", ja: "堤見張り", reading: "つつみみはり", gloss: "a watch kept on the embankment" },
+  { romaji: "Tegata Nazuke", ja: "手形名付け", reading: "てがたなづけ", gloss: "the receipt, named" },
 ];

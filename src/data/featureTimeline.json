@@ -6820,12 +6820,25 @@
     "id": "pnpm-db-backup-can-dump-the-wrong-database-and-look-like-suc",
     "name": "The backup command refuses the wrong database",
     "area": "platform",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-06",
+    "summary": "An internal safeguard: the command that backs up the database before any risky change now refuses to quietly back up the wrong one.",
+    "dateIsEstimate": false,
+    "release": 546,
+    "version": "1.53.1",
+    "releasedAt": "2026-09-06T22:28:55Z"
+  },
+  {
+    "id": "backup-is-two-named-commands-db-backup-prod-and-db-backup-de",
+    "name": "Backup names its database",
+    "area": "platform",
     "kind": "bug",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.53.1",
-    "release": 546,
-    "releasedAt": "2026-09-06T22:28:55Z",
-    "summary": "An internal safeguard: the command that backs up the database before any risky change now refuses to quietly back up the wrong one."
+    "version": "1.53.2",
+    "release": 547,
+    "releasedAt": "2026-09-06T23:52:04Z",
+    "summary": "An internal safeguard: backing up the database is now two commands, one for production and one for local, so the wrong one cannot be dumped by accident."
   }
 ]
