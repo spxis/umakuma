@@ -6794,12 +6794,25 @@
     "id": "a-list-page-hydrates-twice-when-you-have-chosen-list-view",
     "name": "A remembered view no longer breaks the page",
     "area": "study",
+    "status": "shipped",
     "kind": "bug",
+    "date": "2026-09-06",
+    "summary": "Pages that remember whether you chose the grid or the list no longer flicker and re-render on load. Every surface that remembers a choice now reads it the same safe way.",
+    "dateIsEstimate": false,
+    "release": 544,
+    "version": "1.52.3",
+    "releasedAt": "2026-09-06T14:28:13Z"
+  },
+  {
+    "id": "the-explorer-names-its-curriculum-version-and-compares-two",
+    "name": "Every ladder surface names its curriculum version",
+    "area": "study",
+    "kind": "feature",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.52.3",
-    "release": 544,
-    "releasedAt": "2026-09-06T14:28:13Z",
-    "summary": "Pages that remember whether you chose the grid or the list no longer flicker and re-render on load. Every surface that remembers a choice now reads it the same safe way."
+    "version": "1.53.0",
+    "release": 545,
+    "releasedAt": "2026-09-06T14:40:45Z",
+    "summary": "The curriculum explorers now say faintly which version of the ladder you are looking at \u2014 UN 2.0.0 or UG 2.0.0. The ladders are rebuilt when the evidence says to, and the version is what tells you whether what you saw last month is still what you are taught."
   }
 ]
