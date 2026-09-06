@@ -149,3 +149,24 @@ export const XP_WEEKLY_COPY = {
   emptyHint: "Answer a review and you will be the first.",
   back: "The whole board",
 } as const;
+
+/**
+ * The promotions chart.
+ *
+ * SPX headed it "Promotion Chart for the Past 7 Days" and grouped by level,
+ * highest first. A seven-day window is what keeps it short and current rather
+ * than an ever-growing list nobody reads to the bottom.
+ */
+export const XP_PROMOTIONS_COPY = {
+  title: "Promotions",
+  subtitle: (days: number) => `Everyone who climbed a rank in the past ${days} days`,
+  blurb:
+    "Grouped by the rank reached, the biggest climb first. A single good day can carry somebody through more than one rank, and each of them is listed.",
+  group: (level: number, name: string) => `Rank ${level}: ${name}`,
+  groupNeeds: (needs: number) => `${needs.toLocaleString()} XP`,
+  on: (day: string) => day,
+  total: (xp: number) => `${xp.toLocaleString()} XP`,
+  empty: "Nobody has climbed a rank this week.",
+  emptyHint: "Ranks get dearer as you go, so a quiet week here is normal.",
+  back: "The whole board",
+} as const;
