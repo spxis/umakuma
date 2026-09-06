@@ -61,6 +61,9 @@ export const XP_RANK_COPY = {
   next: "Next",
   toNext: (amount: number) => `${amount.toLocaleString()} XP to go`,
   atTop: "The top of the ladder. There is nothing above this one.",
+  /* What the next rank asks for in total, so the two boxes both end with a
+     number rather than one carrying a figure and the other a blank. */
+  nextAt: (level: number, at: number) => `Rank ${level} starts at ${at.toLocaleString()} XP`,
   total: (xp: number) => `${xp.toLocaleString()} XP earned in all`,
   equivalents: "Known elsewhere as",
 } as const;

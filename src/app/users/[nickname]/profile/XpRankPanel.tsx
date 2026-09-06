@@ -1,6 +1,6 @@
 import { japaneseTextProps } from "@/app/shared/japaneseText";
-import { XP_RANKS, xpStanding } from "@/lib/xp/xpCurve";
-import { xpRank } from "@/lib/xp/xpRanks";
+import { XP_RANKS, xpForLevel, xpStanding } from "@/lib/xp/xpCurve";
+import { xpRank, xpRankBadge } from "@/lib/xp/xpRanks";
 
 import { XP_RANK_COPY as copy } from "./profileCopy";
 
@@ -33,40 +33,76 @@ export default function XpRankPanel({ xp }: { xp: number }) {
         <p className="mt-1 text-sm font-semibold leading-relaxed text-foreground/70">{copy.blurb}</p>
       </div>
 
-      <div className="rounded-2xl border border-line bg-surface-muted/40 p-3">
-        <p className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/60">{copy.standing}</p>
-        <div className="mt-0.5 flex flex-wrap items-baseline justify-between gap-2">
-          <p className="text-sm font-black text-foreground">{rank.name}</p>
-          <p className="shrink-0 text-[11px] font-black tabular-nums text-foreground/60">
-            {copy.rankOf(standing.level, XP_RANKS)}
+      {/*
+        * Standing and Next side by side, not stacked. They are the two halves
+        * of one question - where you are and what is next - and a card that
+        * ran them down the page left most of a 1440px row empty while the
+        * reader's eye travelled to find the pair.
+        *
+        * `sm:grid-cols-2` rather than a fixed pair: at 393px they still stack,
+        * because two rank names and two figures do not fit on a phone row.
+        */}
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div className="rounded-2xl border border-line bg-surface-muted/40 p-3">
+          <p className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/60">{copy.standing}</p>
+          {/*
+            * The badge before the name, because "Student" alone does not say
+            * which rung it is. SPX printed "All-Star Athlete (Level 13)" for
+            * exactly this reason: a rank name is a label, and the number is
+            * what places it on the ladder. `xpRankBadge` writes it - the
+            * levelBadge test fails on a hand-typed `L7`.
+            */}
+          <div className="mt-0.5 flex flex-wrap items-baseline justify-between gap-2">
+            <p className="text-sm font-black text-foreground">
+              <span translate="no" className="mr-1.5 tabular-nums text-foreground/60">
+                {xpRankBadge(standing.level)}
+              </span>
+              {rank.name}
+            </p>
+            <p className="shrink-0 text-[11px] font-black tabular-nums text-foreground/60">
+              {copy.rankOf(standing.level, XP_RANKS)}
+            </p>
+          </div>
+
+          <div
+            role="progressbar"
+            aria-label={copy.progressLabel}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={percent}
+            className="mt-2 h-2 overflow-hidden rounded-full bg-line"
+          >
+            <div className="h-full rounded-full bg-accent" style={{ width: `${percent}%` }} />
+          </div>
+
+          <p className="mt-1.5 text-[11px] font-semibold text-foreground/60">
+            {atTop ? copy.atTop : copy.into(standing.into, standing.span)}
           </p>
         </div>
 
-        <div
-          role="progressbar"
-          aria-label={copy.progressLabel}
-          aria-valuemin={0}
-          aria-valuemax={100}
-          aria-valuenow={percent}
-          className="mt-2 h-2 overflow-hidden rounded-full bg-line"
-        >
-          <div className="h-full rounded-full bg-accent" style={{ width: `${percent}%` }} />
-        </div>
-
-        <p className="mt-1.5 text-[11px] font-semibold text-foreground/60">
-          {atTop ? copy.atTop : copy.into(standing.into, standing.span)}
-        </p>
-      </div>
-
-      {next ? (
-        <div className="flex flex-wrap items-baseline justify-between gap-2 rounded-2xl border border-line bg-surface p-3">
-          <div>
+        {next ? (
+          <div className="rounded-2xl border border-line bg-surface p-3">
             <p className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/60">{copy.next}</p>
-            <p className="mt-0.5 text-sm font-black text-foreground">{next.name}</p>
+            <div className="mt-0.5 flex flex-wrap items-baseline justify-between gap-2">
+              <p className="text-sm font-black text-foreground">
+                <span translate="no" className="mr-1.5 tabular-nums text-foreground/60">
+                  {xpRankBadge(standing.level + 1)}
+                </span>
+                {next.name}
+              </p>
+              <p className="shrink-0 text-[11px] font-black tabular-nums text-foreground/60">
+                {copy.toNext(standing.toNext)}
+              </p>
+            </div>
+            {/* The bar's twin, so the two boxes are the same height and the
+                pair reads as one row rather than as two loose cards. */}
+            <div className="mt-2 h-2 overflow-hidden rounded-full bg-line/40" aria-hidden="true" />
+            <p className="mt-1.5 text-[11px] font-semibold text-foreground/60">
+              {copy.nextAt(next.level, xpForLevel(next.level))}
+            </p>
           </div>
-          <p className="shrink-0 text-[11px] font-black tabular-nums text-foreground/60">{copy.toNext(standing.toNext)}</p>
-        </div>
-      ) : null}
+        ) : null}
+      </div>
 
       {/* The same rank in the other traditions it was named from. Quiet, and
           absent entirely until the names have been written. */}
