@@ -6651,12 +6651,25 @@
     "id": "game-awards-paid",
     "name": "Games pay what they achieved",
     "area": "games",
+    "status": "shipped",
     "kind": "bug",
+    "date": "2026-09-06",
+    "summary": "Games now pay for what you actually did in them, not just for finishing. A round with every answer right, a score past your own best, and naming every region of a country on the map each earn on top of the game itself.",
+    "dateIsEstimate": false,
+    "release": 533,
+    "version": "1.46.0",
+    "releasedAt": "2026-09-06T12:55:33Z"
+  },
+  {
+    "id": "rank-page-title-does-not-say-which-rank-number-it-is",
+    "name": "A rank page says which rank it is",
+    "area": "account",
+    "kind": "feature",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.46.0",
-    "release": 533,
-    "releasedAt": "2026-09-06T12:55:33Z",
-    "summary": "Games now pay for what you actually did in them, not just for finishing. A round with every answer right, a score past your own best, and naming every region of a country on the map each earn on top of the game itself."
+    "version": "1.47.0",
+    "release": 534,
+    "releasedAt": "2026-09-06T12:56:59Z",
+    "summary": "A rank's page now says which rank it is. The heading reads L1 Rookie rather than just Rookie, so the number is in the title and in the browser tab."
   }
 ]

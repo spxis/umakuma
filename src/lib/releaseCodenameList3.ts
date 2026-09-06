@@ -95,4 +95,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Uchitoketa Nakama", ja: "打ち解けた仲間", reading: "うちとけたなかま", gloss: "the companions who have settled in" },
   { romaji: "Ennichi Baiten", ja: "縁日売店", reading: "えんにちばいてん", gloss: "the festival's shop stall" },
   { romaji: "Otegara Barai", ja: "お手柄払い", reading: "おてがらばらい", gloss: "paying for the feat" },
+  { romaji: "Katagaki Meigi", ja: "肩書き名義", reading: "かたがきめいぎ", gloss: "the title in its own name" },
 ];
