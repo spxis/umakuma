@@ -6352,12 +6352,25 @@
     "id": "theme-page",
     "name": "Theme in the header, and a page of its own",
     "area": "account",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-06",
+    "summary": "Your theme now sits at the end of the header, beside your XP, and it is a link. It opens a page of its own: what your set of names is, the five tiers, and all ten stages with WaniKani's word beside each one. Change it from there or from your profile \u2014 both open the same browser of every theme we offer.",
+    "dateIsEstimate": false,
+    "release": 510,
+    "version": "1.25.0",
+    "releasedAt": "2026-09-06T07:29:38Z"
+  },
+  {
+    "id": "xp-all-awards-cued",
+    "name": "Every XP award shows itself",
+    "area": "account",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.25.0",
-    "release": 510,
-    "releasedAt": "2026-09-06T07:29:38Z",
-    "summary": "Your theme now sits at the end of the header, beside your XP, and it is a link. It opens a page of its own: what your set of names is, the five tiers, and all ten stages with WaniKani's word beside each one. Change it from there or from your profile \u2014 both open the same browser of every theme we offer."
+    "version": "1.26.0",
+    "release": 511,
+    "releasedAt": "2026-09-06T07:41:58Z",
+    "summary": "Whatever earns you XP now says so as it happens - a review, a lesson, a game, a level test, a streak milestone, or arriving with progress you already had."
   }
 ]
