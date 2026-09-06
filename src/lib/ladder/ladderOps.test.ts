@@ -74,8 +74,31 @@ describe("replaying an admin's ladder changes", () => {
   });
 
   /* The promise that every N5 kanji is taught by level 10 is not negotiable. */
-  it("refuses to move a kanji out of the levels its JLPT band occupies", () => {
-    expect(applyLadderOps(levels(), [move("kanji:一", 3)]).refused[0].reason).toBe(LADDER_REFUSALS.leavesItsBand);
+  it("refuses to move a kanji past the level its band is promised complete by", () => {
+    expect(applyLadderOps(levels(), [move("kanji:一", 3)]).refused[0].reason).toBe(
+      LADDER_REFUSALS.landsAfterItsBand,
+    );
+  });
+
+  /*
+   * Early is allowed, and this is the direction the ops exist for. The ladder
+   * promises every N4 kanji by a level, not that none arrives before the block
+   * begins - so pulling one forward keeps the promise exactly, and is how a
+   * school year's characters are gathered early enough for the exam ladder to
+   * carry a grade milestone as well.
+   */
+  it("allows a kanji to be taught earlier than its band", () => {
+    const { levels: after, refused } = applyLadderOps(levels(), [move("kanji:語", 2)]);
+    expect(refused).toEqual([]);
+    expect(after[1].kanji).toContain("語");
+  });
+
+  /* Level 1 is radicals alone; there is nowhere below it for a kanji's parts. */
+  it("refuses a move into the radicals-only level", () => {
+    const withEmptyFirst = [band(1, 5, []), band(2, 5, ["年", "大"]), band(3, 4, ["語", "話"])];
+    expect(applyLadderOps(withEmptyFirst, [move("kanji:年", 1)]).refused[0].reason).toBe(
+      LADDER_REFUSALS.intoTheRadicalLevel,
+    );
   });
 
   it("reports every refusal rather than stopping at the first", () => {

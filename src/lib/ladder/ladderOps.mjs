@@ -56,7 +56,8 @@ export const LADDER_REFUSALS = {
   levelOutOfRange: "that level is not on the ladder",
   wouldEmptyLevel: "the level it is leaving would have no kanji left",
   wouldOverfillLevel: "the level it is joining would be over the size limit",
-  leavesItsBand: "it would land outside the levels its JLPT band is taught in",
+  landsAfterItsBand: "it would land after the level its JLPT band is promised complete by",
+  intoTheRadicalLevel: "level 1 teaches radicals and no kanji",
   alreadyPresent: "the ladder already teaches that kanji",
   noTarget: "an add or move needs a level to go to",
 };
@@ -116,9 +117,34 @@ function applyMove(levels, op) {
     return { id: op.id, key: op.key, reason: LADDER_REFUSALS.wouldOverfillLevel };
   }
 
+  /*
+   * A move may go earlier than its band. It may not go later.
+   *
+   * This refused both directions, which read as symmetry and was not: the
+   * ladder promises "every N2 kanji by level 50", so teaching one at 22 keeps
+   * that promise perfectly and teaching one at 51 breaks it. Refusing the
+   * early direction bought nothing and cost the only thing these ops were
+   * wanted for - pulling a school year's characters forward so the exam
+   * ladder can carry a grade milestone too. Eight characters would have given
+   * it grade one at level 22; the rule said no to all eight.
+   *
+   * Radicals and vocabulary are placed from the final kanji levels, after
+   * every op has been replayed, so a character arriving early still brings its
+   * parts with it.
+   */
   const band = bandRange(levels, from.nLevel);
-  if (band && (to.level < band.first || to.level > band.last)) {
-    return { id: op.id, key: op.key, reason: LADDER_REFUSALS.leavesItsBand };
+  if (band && to.level > band.last) {
+    return { id: op.id, key: op.key, reason: LADDER_REFUSALS.landsAfterItsBand };
+  }
+
+  /*
+   * Level 1 is radicals alone on both ladders, and there is nowhere below it
+   * for a kanji's parts to go. Read off the ladder rather than assumed: a
+   * level 1 that already teaches kanji is a ladder built to a different shape,
+   * and this rule has no business overruling it.
+   */
+  if (to.level === 1 && to.kanji.length === 0) {
+    return { id: op.id, key: op.key, reason: LADDER_REFUSALS.intoTheRadicalLevel };
   }
 
   from.kanji = from.kanji.filter((entry) => entry !== kanji);

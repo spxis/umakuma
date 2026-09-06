@@ -489,6 +489,24 @@ export function gradeLevelSizes(sequence, gradeOf, isTopUp) {
   return sizes;
 }
 
+
+/**
+ * The curriculum stamp already on a ladder, carried through a rebuild.
+ *
+ * The build writes the file whole, so without this every rebuild silently
+ * dropped the version - and `ladder:rules` then refuses to let it ship, which
+ * is the check doing its job and no way to work. The version is moved by
+ * `ladder:version`, deliberately and after the fact; the build's business is
+ * not to invent one but not to lose one either.
+ */
+async function existingCurriculum(file) {
+  try {
+    return JSON.parse(await fs.readFile(file, "utf8")).curriculum ?? null;
+  } catch {
+    return null;
+  }
+}
+
 async function main() {
   const waniKani = await loadWaniKaniOrder();
   const dictionary = await loadDictionary();
@@ -643,6 +661,7 @@ async function main() {
     generatedAt: new Date().toISOString(),
     levels: LADDER_LEVELS,
     totalKanji: everything.length,
+    curriculum: await existingCurriculum(OUTPUT_PATH),
     source: { waniKani: waniKani.length, addedJoyo: missing.length },
     overrides: { applied: overrides.length, lastOpAt: overrides.at(-1)?.at ?? null },
     milestones,
@@ -756,6 +775,7 @@ async function main() {
     generatedAt: new Date().toISOString(),
     levels: LADDER_LEVELS,
     totalKanji: everything.length,
+    curriculum: await existingCurriculum(GRADE_LADDER_PATH),
     stream: "UG",
     source: { waniKani: waniKani.length, addedJoyo: missing.length },
     /* Where each school year finishes, which is the promise this stream makes. */
