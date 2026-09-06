@@ -7,7 +7,9 @@ import { describe, expect, it } from "vitest";
 
 import SubjectRows from "./SubjectRows";
 import { SUBJECT_ROW_LANES, SUBJECT_VIEW_COPY, toSubjectListRow } from "./subjectListView";
-import { SRS_BUCKETS, SUBJECT_TYPES } from "@/lib/domainConstants";
+import { READING_KINDS, SRS_BUCKETS, SUBJECT_TYPES } from "@/lib/domainConstants";
+
+import { readingKindHeading } from "./subjectColumns";
 
 const read = (path: string) => readFileSync(join(process.cwd(), path), "utf8");
 
@@ -62,7 +64,9 @@ describe("the shared subject list", () => {
     const headings = [...doc.querySelectorAll("span")].map((el) => el.textContent);
     for (const column of [
       SUBJECT_VIEW_COPY.columnItem,
-      SUBJECT_VIEW_COPY.columnReading,
+      /* The one reading lane became two: kun and on, each named for itself. */
+      readingKindHeading(READING_KINDS.kun),
+      readingKindHeading(READING_KINDS.on),
       SUBJECT_VIEW_COPY.columnMeaning,
       SUBJECT_VIEW_COPY.columnType,
       SUBJECT_VIEW_COPY.columnLevel,
@@ -361,5 +365,51 @@ describe("the shared adapter", () => {
     expect(
       toSubjectListRow({ subjectId: 9, characters: "上", srsStage: 5, status: SRS_BUCKETS.locked }).srsBucket,
     ).toBe(SRS_BUCKETS.locked);
+  });
+});
+
+/**
+ * Both readings, in two lanes.
+ *
+ * A kanji has an on reading and a kun reading, and every list here drew one of
+ * them - whichever WaniKani marked primary - so a member reading their own
+ * list saw スイ for 水 and had no way to learn みず from it.
+ */
+describe("the two reading lanes", () => {
+  const SPLIT = [
+    toSubjectListRow({
+      subjectId: 1,
+      characters: "水",
+      subjectType: SUBJECT_TYPES.kanji,
+      meanings: ["Water"],
+      primaryReadings: ["すい"],
+      onReadings: ["すい"],
+      kunReadings: ["みず"],
+      wkLevel: 3,
+      srsStage: 5,
+      status: SRS_BUCKETS.guru,
+    }),
+    toSubjectListRow({
+      subjectId: 2,
+      characters: "大人",
+      subjectType: SUBJECT_TYPES.vocabulary,
+      meanings: ["Adult"],
+      readings: ["おとな"],
+      wkLevel: 11,
+      srsStage: 1,
+      status: SRS_BUCKETS.apprentice,
+    }),
+  ];
+
+  const text = () => render(<SubjectRows rows={SPLIT} onSelect={() => {}} />).body.textContent ?? "";
+
+  /* On in katakana, kun in hiragana - the script says which lane it is. */
+  it("shows a kanji's kun reading as well as its on reading", () => {
+    expect(text()).toContain("みず");
+    expect(text()).toContain("スイ");
+  });
+
+  it("keeps a word's single reading, which is neither kind", () => {
+    expect(text()).toContain("おとな");
   });
 });

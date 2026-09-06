@@ -38,6 +38,8 @@ function wanikani(overrides: Partial<CatalogSubjectDetail> = {}): CatalogSubject
     meanings: ["Water"],
     readings: ["すい", "みず"],
     primaryReadings: ["すい"],
+    onReadings: ["すい"],
+    kunReadings: ["みず"],
     radicals: [],
     usedInVocabulary: [],
     componentKanji: [],

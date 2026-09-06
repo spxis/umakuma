@@ -1,10 +1,16 @@
 "use client";
 
 import SubjectRows from "@/app/shared/SubjectRows";
-import { itemColumn, meaningColumn, type SubjectColumn } from "@/app/shared/subjectColumns";
+import {
+  itemColumn,
+  meaningColumn,
+  readingKindHeading,
+  readingKindLane,
+  type SubjectColumn,
+} from "@/app/shared/subjectColumns";
 import { JP_TEXT_CLASS, noTranslateClass } from "@/app/shared/japaneseText";
 import { SUBJECT_ROW_LANES, type SubjectListRow } from "@/app/shared/subjectListView";
-import { READING_KIND_DISPLAY, READING_KINDS, SRS_BUCKETS, SUBJECT_TYPES, type ReadingKind } from "@/lib/domainConstants";
+import { READING_KINDS, SRS_BUCKETS, SUBJECT_TYPES } from "@/lib/domainConstants";
 import { formatReading } from "@/lib/readingDisplay";
 import type { SchoolGradeKanjiEntry } from "@/lib/schoolGrades.types";
 
@@ -36,27 +42,12 @@ export function toGradeRow(entry: SchoolGradeKanjiEntry): GradeRow {
   };
 }
 
-/**
- * On or kun, in the lane the shared reading column would otherwise occupy.
- * On in katakana, kun in hiragana: the script says which lane it is before
- * the heading does.
+/*
+ * The two reading lanes are the shared ones - `readingKindLane` and
+ * `readingKindHeading` - which this file had first and kept to itself while
+ * every WaniKani list showed a single primary reading. Only the quiz's
+ * hiding is local, since nothing else here hides a reading on purpose.
  */
-function readingLane(kind: ReadingKind, readings: string[], hidden: boolean) {
-  return (
-    <span
-      lang="ja"
-      translate="no"
-      className={`block truncate text-sm font-bold text-foreground/80 ${JP_TEXT_CLASS}`}
-    >
-      {hidden ? "" : readings.length > 0 ? readings.map((reading) => formatReading(kind, reading)).join("、") : GRADE_EXPLORER_COPY.noReadings}
-    </span>
-  );
-}
-
-/** "On 音読み", so the heading teaches the word the reading is named by. */
-function readingHeading(kind: ReadingKind): string {
-  return `${READING_KIND_DISPLAY[kind].short} ${READING_KIND_DISPLAY[kind].ja}`;
-}
 
 /**
  * The columns a grade list shows.
@@ -75,15 +66,21 @@ export function gradeColumns(hideReadings: boolean, revealed?: Set<string>): Arr
     meaningColumn<GradeRow>((row) => row.meaning || GRADE_EXPLORER_COPY.noReadings),
     {
       key: "on",
-      heading: readingHeading(READING_KINDS.on),
+      heading: readingKindHeading(READING_KINDS.on),
       lane: SUBJECT_ROW_LANES.reading,
-      render: (row) => readingLane(READING_KINDS.on, readingsForGrade(row.entry).on, hiddenFor(row)),
+      render: (row) =>
+        hiddenFor(row)
+          ? readingKindLane(READING_KINDS.on, [])
+          : readingKindLane(READING_KINDS.on, readingsForGrade(row.entry).on, GRADE_EXPLORER_COPY.noReadings),
     },
     {
       key: "kun",
-      heading: readingHeading(READING_KINDS.kun),
+      heading: readingKindHeading(READING_KINDS.kun),
       lane: SUBJECT_ROW_LANES.reading,
-      render: (row) => readingLane(READING_KINDS.kun, readingsForGrade(row.entry).kun, hiddenFor(row)),
+      render: (row) =>
+        hiddenFor(row)
+          ? readingKindLane(READING_KINDS.kun, [])
+          : readingKindLane(READING_KINDS.kun, readingsForGrade(row.entry).kun, GRADE_EXPLORER_COPY.noReadings),
     },
     {
       /* The `type` lane, not the `level` one: "Strokes" does not fit in 40px,

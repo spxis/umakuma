@@ -178,3 +178,17 @@ describe("the level explorer's status chips", () => {
     expect(source).not.toContain("function wkStatusToneClass");
   });
 });
+
+/*
+ * The reading lane, split. A kanji has two kinds of reading and every list
+ * here showed one of them; both have lanes now, and a word - which has
+ * neither kind - keeps its single reading in the first of them.
+ */
+describe("the reading lanes a list draws", () => {
+  const source = readFileSync(join(process.cwd(), "src/app/shared/subjectColumns.tsx"), "utf8");
+
+  it("gives kun and on a lane each by default", () => {
+    expect(source).toContain("readingKindColumns");
+    expect(source).toContain("...readingKindColumns<TRow>()");
+  });
+});

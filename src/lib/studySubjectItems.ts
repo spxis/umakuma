@@ -78,6 +78,8 @@ export function toStudyTagListItem(
     characters: subject.characters,
     meanings: subject.meanings,
     readings: subject.readings,
+    onReadings: subject.onReadings,
+    kunReadings: subject.kunReadings,
     primaryReadings: subject.primaryReadings,
     jlptLevel: subject.jlptLevel,
     srsStage,
@@ -104,6 +106,13 @@ export type ListSubjectRow = {
   subjectId: number | null;
   /** Every reading the catalogue holds, for the viewer that walks the list. */
   readings: string[];
+  /*
+   * Kept apart for the row's two reading lanes. Empty for a word or a radical,
+   * and absent where the surface building the row is not a catalogue read -
+   * the stroke and radical browsers hand this shape a glyph and a meaning.
+   */
+  onReadings?: string[];
+  kunReadings?: string[];
   meanings: string[];
   subjectType: string;
   /** WaniKani's name for a radical; what the filer keys a radical by. */
@@ -161,6 +170,8 @@ export async function fetchListSubjectRows(items: StudyListItemRef[]): Promise<L
           glyph: subject.characters,
           meanings: subject.meanings,
           readings: subject.readings,
+          onReadings: subject.onReadings,
+          kunReadings: subject.kunReadings,
           meaning: subject.meanings[0] ?? "",
           reading: subject.primaryReadings[0] ?? subject.readings[0] ?? null,
           wkLevel: subject.wkLevel,
@@ -181,6 +192,8 @@ export async function fetchListSubjectRows(items: StudyListItemRef[]): Promise<L
           glyph: item.key,
           meanings: jlpt?.meanings ?? [],
           readings: [...(jlpt?.onReadings ?? []), ...(jlpt?.kunReadings ?? [])],
+          onReadings: jlpt?.onReadings ?? [],
+          kunReadings: jlpt?.kunReadings ?? [],
           meaning: jlpt?.primaryMeaning ?? jlpt?.meanings[0] ?? "",
           reading: jlpt?.onReadings[0] ?? jlpt?.kunReadings[0] ?? null,
           wkLevel: null,

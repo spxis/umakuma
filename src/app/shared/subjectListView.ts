@@ -24,6 +24,15 @@ export type SubjectListRow = {
   glyph: string;
   meaning: string;
   reading: string | null;
+  /*
+   * A kanji's on and kun readings, for the two lanes that show them.
+   *
+   * Absent rather than empty where a source does not know - the history rows
+   * hold an attempt, not a subject - so a lane can tell "this word has none"
+   * from "nobody asked".
+   */
+  onReadings?: string[];
+  kunReadings?: string[];
   wkLevel: number | null;
   srsStage: number | null;
   srsBucket: SrsBucket;
@@ -45,6 +54,8 @@ export type SubjectListSource = {
   meanings?: string[] | null;
   readings?: string[] | null;
   primaryReadings?: string[] | null;
+  onReadings?: string[] | null;
+  kunReadings?: string[] | null;
   wkLevel?: number | null;
   srsStage?: number | null;
   /** Already a bucket where the source has one; derived from the stage where not. */
@@ -61,6 +72,8 @@ export function toSubjectListRow(item: SubjectListSource): SubjectListRow {
     glyph: item.characters,
     meaning: item.meanings?.[0] ?? "",
     reading: item.primaryReadings?.[0] ?? item.readings?.[0] ?? null,
+    onReadings: item.onReadings ?? undefined,
+    kunReadings: item.kunReadings ?? undefined,
     wkLevel: typeof item.wkLevel === "number" ? item.wkLevel : null,
     srsStage,
     srsBucket: item.status ?? srsBucketFromStage(srsStage),

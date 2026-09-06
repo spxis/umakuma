@@ -1,8 +1,19 @@
 import { prisma } from "@/lib/prisma";
-import { SUBJECT_TYPES, isSubjectType, type SubjectType } from "@/lib/domainConstants";
+import { SUBJECT_TYPES, type SubjectType } from "@/lib/domainConstants";
 import type { JlptMeta } from "@/lib/jlptTypes";
 import { getSchoolGradeKanjiByCharacter } from "@/lib/schoolGrades";
-import { resolveSubjectGlyph } from "./radicalGlyphs";
+import {
+  normalizeSubjectType,
+  parseMeanings,
+  parseReadings,
+  subjectLabel,
+  toRelatedReference,
+  type CatalogRelatedReference,
+  type CatalogRow,
+} from "./subjectCatalogRows";
+
+/* Re-exported: a related subject is part of a detail as every caller reads it. */
+export type { CatalogRelatedReference };
 
 const SUBJECT_DETAIL_CACHE_TTL_MS = 15 * 60 * 1000;
 const SUBJECT_DETAIL_CACHE_MAX_ENTRIES = 4000;
@@ -15,22 +26,6 @@ type CachedSubjectDetail = {
 
 const subjectDetailCache = new Map<number, CachedSubjectDetail>();
 
-export type CatalogRelatedReference = {
-  subjectId: number;
-  label: string;
-  wkLevel: number | null;
-  reading: string | null;
-  meaning: string | null;
-  /*
-   * What the reference is and how it is addressed, so a page can link to it.
-   * A radical WaniKani draws has no characters, only a slug, and a chip built
-   * from the label alone would send it to a kanji page that does not exist.
-   */
-  subjectType: SubjectType;
-  characters: string | null;
-  slug: string | null;
-};
-
 export type CatalogSubjectDetail = {
   subjectId: number;
   subjectType: SubjectType;
@@ -39,6 +34,9 @@ export type CatalogSubjectDetail = {
   meanings: string[];
   readings: string[];
   primaryReadings: string[];
+  /** A kanji's two kinds of reading, kept apart. Empty for a word or a radical. */
+  onReadings: string[];
+  kunReadings: string[];
   radicals: CatalogRelatedReference[];
   visuallySimilar: CatalogRelatedReference[];
   usedInVocabulary: CatalogRelatedReference[];
@@ -90,152 +88,6 @@ function writeCachedSubjectDetail(subjectId: number, detail: CatalogSubjectDetai
     cachedAtMs: nowMs,
     expiresAtMs: nowMs + SUBJECT_DETAIL_CACHE_TTL_MS,
   });
-}
-
-type CatalogRow = {
-  wkSubjectId: number;
-  subjectType: string;
-  level: number;
-  slug: string | null;
-  characters: string | null;
-  meanings: unknown;
-  readings: unknown;
-  componentSubjectIds: number[];
-  amalgamationSubjectIds: number[];
-  visuallySimilarSubjectIds: number[];
-  meaningMnemonic: string | null;
-  readingMnemonic: string | null;
-};
-
-function normalizeSubjectType(value: string): SubjectType {
-  if (isSubjectType(value)) {
-    return value;
-  }
-
-  return SUBJECT_TYPES.vocabulary;
-}
-
-function parseMeanings(raw: unknown): string[] {
-  if (!Array.isArray(raw)) {
-    return [];
-  }
-
-  const output: string[] = [];
-  const seen = new Set<string>();
-  const primary: string[] = [];
-  const secondary: string[] = [];
-
-  for (const value of raw) {
-    if (!value || typeof value !== "object") {
-      continue;
-    }
-
-    const row = value as { meaning?: unknown; primary?: unknown };
-    if (typeof row.meaning !== "string") {
-      continue;
-    }
-
-    const meaning = row.meaning.trim();
-    if (!meaning || seen.has(meaning)) {
-      continue;
-    }
-
-    seen.add(meaning);
-    if (row.primary === true) {
-      primary.push(meaning);
-    } else {
-      secondary.push(meaning);
-    }
-  }
-
-  for (const value of [...primary, ...secondary]) {
-    output.push(value);
-  }
-
-  return output;
-}
-
-function parseReadings(raw: unknown): { readings: string[]; primaryReadings: string[] } {
-  if (!Array.isArray(raw)) {
-    return { readings: [], primaryReadings: [] };
-  }
-
-  const readings: string[] = [];
-  const primaryReadings: string[] = [];
-  const seenReadings = new Set<string>();
-  const seenPrimaryReadings = new Set<string>();
-
-  for (const value of raw) {
-    if (!value || typeof value !== "object") {
-      continue;
-    }
-
-    const row = value as { reading?: unknown; primary?: unknown; accepted_answer?: unknown };
-    if (row.accepted_answer === false || typeof row.reading !== "string") {
-      continue;
-    }
-
-    const reading = row.reading.trim();
-    if (!reading) {
-      continue;
-    }
-
-    if (!seenReadings.has(reading)) {
-      seenReadings.add(reading);
-      readings.push(reading);
-    }
-
-    if (row.primary === true && !seenPrimaryReadings.has(reading)) {
-      seenPrimaryReadings.add(reading);
-      primaryReadings.push(reading);
-    }
-  }
-
-  return { readings, primaryReadings };
-}
-
-function primaryMeaning(raw: unknown): string | null {
-  return parseMeanings(raw)[0] ?? null;
-}
-
-function primaryReading(raw: unknown): string | null {
-  const { primaryReadings, readings } = parseReadings(raw);
-  return primaryReadings[0] ?? readings[0] ?? null;
-}
-
-function subjectLabel(row: CatalogRow | undefined): string {
-  if (!row) {
-    return "-";
-  }
-
-  /* Characterless radicals resolve to a glyph; the slug printed "tofu". */
-  const glyph = resolveSubjectGlyph(row);
-  return glyph || row.slug?.trim() || String(row.wkSubjectId);
-}
-
-function toRelatedReference(
-  subjectId: number,
-  rowMap: Map<number, CatalogRow>,
-  options?: { useMeaningForReading?: boolean },
-): CatalogRelatedReference {
-  const row = rowMap.get(subjectId);
-  const meaning = row ? primaryMeaning(row.meanings) : null;
-  const reading = row
-    ? options?.useMeaningForReading
-      ? meaning
-      : primaryReading(row.readings)
-    : null;
-
-  return {
-    subjectId,
-    label: subjectLabel(row),
-    wkLevel: row?.level ?? null,
-    reading,
-    meaning,
-    subjectType: normalizeSubjectType(row?.subjectType ?? ""),
-    characters: row?.characters?.trim() || null,
-    slug: row?.slug?.trim() || null,
-  };
 }
 
 function toJlptMeta(raw: {
@@ -419,7 +271,7 @@ export async function getCatalogSubjectDetails(
     }
 
     const subjectType = normalizeSubjectType(row.subjectType);
-    const { readings, primaryReadings } = parseReadings(row.readings);
+    const { readings, primaryReadings, onReadings, kunReadings } = parseReadings(row.readings);
     const meanings = parseMeanings(row.meanings);
 
     const radicals =
@@ -462,6 +314,13 @@ export async function getCatalogSubjectDetails(
       meanings,
       readings,
       primaryReadings,
+      /*
+       * WaniKani first, the JLPT table second. WaniKani types every kanji
+       * reading it teaches; the JLPT row covers a kanji it never taught, and a
+       * subject that neither knows keeps two empty lanes rather than a guess.
+       */
+      onReadings: onReadings.length > 0 ? onReadings : (jlptRow?.onReadings ?? []),
+      kunReadings: kunReadings.length > 0 ? kunReadings : (jlptRow?.kunReadings ?? []),
       radicals,
       visuallySimilar,
       usedInVocabulary,

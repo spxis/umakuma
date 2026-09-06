@@ -49,6 +49,8 @@ export function toListPageItems(
       characters: row.glyph,
       meanings: row.meanings.length > 0 ? row.meanings : row.meaning ? [row.meaning] : [],
       readings: row.readings,
+      onReadings: row.onReadings ?? [],
+      kunReadings: row.kunReadings ?? [],
       primaryReadings: row.reading ? [row.reading] : [],
       srsStage,
       status: srsLabel(srsStage, srsStage <= 0 || !state?.unlocked),

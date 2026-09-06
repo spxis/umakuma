@@ -41,6 +41,13 @@ export type LevelItem = {
   meanings: string[];
   readings?: string[];
   primaryReadings?: string[];
+  /*
+   * A kanji's two kinds of reading, kept apart, where the source knows them.
+   * A list shows both in their own lanes; a word has neither and a source that
+   * never asked leaves them absent rather than empty.
+   */
+  onReadings?: string[];
+  kunReadings?: string[];
   radicals?: RelatedReference[];
   /*
    * WaniKani's own look-alike list, still what the level browser draws.

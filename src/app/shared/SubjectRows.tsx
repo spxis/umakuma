@@ -7,6 +7,9 @@ import {
   SUBJECT_ROW_LANES,
   type SubjectListRow,
 } from "@/app/shared/subjectListView";
+import { READING_KINDS } from "@/lib/domainConstants";
+import { formatReading } from "@/lib/readingDisplay";
+
 import { JP_TEXT_CLASS } from "./japaneseText";
 import type { SubjectSelection } from "./useSubjectSelection";
 
@@ -77,6 +80,25 @@ type Props<TRow extends SubjectListRow> = {
    */
   renderAfterRow?: (row: TRow, index: number) => ReactNode;
 };
+
+
+/** The lanes a reading may occupy: one for a word, two for a kanji. */
+const READING_LANE_KEYS = ["reading", "kun", "on"];
+
+/**
+ * The reading as a phone shows it, under the meaning.
+ *
+ * Kun then on, in the scripts a dictionary uses, so the one line a narrow
+ * screen has room for says everything the two lanes would have. A word has
+ * neither kind and keeps its single reading.
+ */
+function stackedReading(row: SubjectListRow): string {
+  const both = [
+    ...(row.kunReadings ?? []).map((reading) => formatReading(READING_KINDS.kun, reading)),
+    ...(row.onReadings ?? []).map((reading) => formatReading(READING_KINDS.on, reading)),
+  ];
+  return both.length > 0 ? both.join("、") : (row.reading ?? "");
+}
 
 type Group<TRow> = { heading: string; rows: Array<{ row: TRow; index: number }> };
 
@@ -168,8 +190,12 @@ export default function SubjectRows<TRow extends SubjectListRow>({
 
   const hasLeading = Boolean(renderLeading);
   const hasTrailing = Boolean(renderTrailing);
-  /* The stacked reading is only a stand-in for a reading lane that exists. */
-  const hasReadingLane = columns.some((column) => column.key === "reading");
+  /*
+   * The stacked reading is only a stand-in for a reading lane that exists -
+   * and there may be two of them now, kun and on, which collapse below `md`
+   * exactly as the single lane did.
+   */
+  const hasReadingLane = columns.some((column) => READING_LANE_KEYS.includes(column.key));
   const order = rows.map((row) => row.glyph);
 
   /*
@@ -267,10 +293,12 @@ export default function SubjectRows<TRow extends SubjectListRow>({
                       <span key={column.key} className={`${column.lane} flex flex-col`}>
                         {column.render(row)}
                         <span className="flex items-center gap-1.5 truncate text-xs font-semibold text-foreground/60">
-                          {/* Only where the reading has no lane of its own. */}
-                          {row.reading && hasReadingLane ? (
+                          {/* Only where the reading has no lane of its own.
+                            * Both kinds where the row knows both: a phone gets
+                            * the same two readings the lanes show, in one line. */}
+                          {hasReadingLane ? (
                             <span lang="ja" translate="no" className={`md:hidden ${JP_TEXT_CLASS}`}>
-                              {row.reading}
+                              {stackedReading(row)}
                             </span>
                           ) : null}
                           {renderSubMeta ? renderSubMeta(row) : null}

@@ -6,7 +6,14 @@ import {
   shortSubjectTypeLabel,
   subjectTypePillClass,
 } from "@/app/users/[nickname]/level-explorer/lib/levelExplorerDisplay";
-import { isSubjectType, SRS_BUCKETS } from "@/lib/domainConstants";
+import {
+  isSubjectType,
+  READING_KINDS,
+  READING_KIND_DISPLAY,
+  SRS_BUCKETS,
+  type ReadingKind,
+} from "@/lib/domainConstants";
+import { formatReading } from "@/lib/readingDisplay";
 
 import { JP_TEXT_CLASS } from "./japaneseText";
 import { srsBucketBadgeClass, srsBucketLabel } from "./studyHistoryUi";
@@ -88,6 +95,77 @@ export function readingColumn<TRow extends SubjectListRow>(
       </span>
     ),
   };
+}
+
+/**
+ * One kind of reading, drawn the way a dictionary draws it.
+ *
+ * On in katakana, kun in hiragana - `formatReading` does the conversion, since
+ * the sources disagree and WaniKani writes everything in hiragana - so the
+ * script says which lane this is before the heading is read. Lifted out of the
+ * grade explorer, which had this shape first and kept it to itself.
+ */
+export function readingKindLane(kind: ReadingKind, readings: readonly string[], empty = ""): ReactNode {
+  const written = readings.map((reading) => formatReading(kind, reading)).join("、");
+  return (
+    <span
+      lang="ja"
+      translate="no"
+      /* A kanji with four kun readings does not fit 96px, and the ones past
+       * the ellipsis are still what the reader came for. */
+      title={written || undefined}
+      className={`block truncate text-sm font-semibold text-foreground/70 ${JP_TEXT_CLASS}`}
+    >
+      {written || empty}
+    </span>
+  );
+}
+
+/** "On 音読み", so the heading teaches the word the reading is named by. */
+export function readingKindHeading(kind: ReadingKind): string {
+  return `${READING_KIND_DISPLAY[kind].short} ${READING_KIND_DISPLAY[kind].ja}`;
+}
+
+/**
+ * The two kinds of kanji reading, in two lanes.
+ *
+ * A kanji has an on reading and a kun reading, and every list here showed one
+ * of them - whichever WaniKani had marked primary - so a member reading their
+ * own list saw ON for 手 and had no way to learn て from it. Both lanes now,
+ * and the pair is the default set: a list of kanji is what these surfaces
+ * mostly hold.
+ *
+ * A word has neither. Its single reading is drawn in the first lane, where the
+ * eye already looks for a reading, and is allowed to run into the second -
+ * which is empty for that row - rather than being clipped at 96px.
+ */
+export function readingKindColumns<TRow extends SubjectListRow>(): Array<SubjectColumn<TRow>> {
+  return [
+    {
+      key: "kun",
+      heading: readingKindHeading(READING_KINDS.kun),
+      lane: SUBJECT_ROW_LANES.reading,
+      render: (row) =>
+        (row.kunReadings?.length ?? 0) > 0 || (row.onReadings?.length ?? 0) > 0
+          ? readingKindLane(READING_KINDS.kun, row.kunReadings ?? [])
+          : /* A word's reading, spanning both lanes: the on lane beside it is empty. */
+            (
+              <span
+                lang="ja"
+                translate="no"
+                className={`block whitespace-nowrap text-sm font-semibold text-foreground/70 ${JP_TEXT_CLASS}`}
+              >
+                {row.reading}
+              </span>
+            ),
+    },
+    {
+      key: "on",
+      heading: readingKindHeading(READING_KINDS.on),
+      lane: SUBJECT_ROW_LANES.reading,
+      render: (row) => readingKindLane(READING_KINDS.on, row.onReadings ?? []),
+    },
+  ];
 }
 
 /**
@@ -195,7 +273,7 @@ export function customColumn<TRow extends SubjectListRow>(
 export function defaultSubjectColumns<TRow extends SubjectListRow>(): Array<SubjectColumn<TRow>> {
   return [
     itemColumn<TRow>(),
-    readingColumn<TRow>(),
+    ...readingKindColumns<TRow>(),
     meaningColumn<TRow>(),
     typeColumn<TRow>(),
     levelColumn<TRow>(),
