@@ -6209,12 +6209,25 @@
     "id": "exam-ladder-is-un",
     "name": "The exam ladder is renamed UN",
     "area": "platform",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-05",
+    "summary": "The exam ladder is now UN and the school ladder UG, so a level always says which system it came from: UN17, UG17, WK17. Answers already recorded against the old name were migrated, not reinterpreted.",
+    "dateIsEstimate": false,
+    "release": 499,
+    "version": "1.17.0",
+    "releasedAt": "2026-09-06T05:59:09Z"
+  },
+  {
+    "id": "xp-burn-uncapped-toast",
+    "name": "Burning is uncapped, and the XP shows itself",
+    "area": "account",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-05",
-    "version": "1.17.0",
-    "release": 499,
-    "releasedAt": "2026-09-06T05:59:09Z",
-    "summary": "The exam ladder is now UN and the school ladder UG, so a level always says which system it came from: UN17, UG17, WK17. Answers already recorded against the old name were migrated, not reinterpreted."
+    "version": "1.18.0",
+    "release": 500,
+    "releasedAt": "2026-09-06T06:50:57Z",
+    "summary": "Burning an item is no longer capped for the day, and the XP you earn now drops in from the top of the page so you can see it as it happens."
   }
 ]
