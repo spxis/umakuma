@@ -14,6 +14,7 @@ import type { LadderLevelGroup, LadderLevelSummary } from "@/lib/ladder/ladderQu
 
 import UmakumaLevelPicker from "./UmakumaLevelPicker";
 import UmakumaLadderSearch from "./UmakumaLadderSearch";
+import UmakumaPapersNote from "./UmakumaPapersNote";
 import { UK_EXPLORER_COPY as copy, UK_VIEW_MODE_STORAGE_KEY } from "./UmakumaExplorer.constants";
 
 const CHIP = "inline-flex h-8 items-center rounded-full border px-3 text-[11px] font-bold transition";
@@ -129,6 +130,8 @@ export default function UmakumaLevelBoard({
           })}
         </div>
       </section>
+
+      <UmakumaPapersNote />
     </div>
   );
 }

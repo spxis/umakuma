@@ -22,14 +22,26 @@ export const UK_EXPLORER_COPY = {
   jlptAt: (nLevel: number) => `N${nLevel} finishes here`,
   emptySection: "Nothing at this level.",
   yourLevel: (level: number) => `Go to your level, ${level}`,
-  allLevels: (count: number) => `All ${count} levels`,
+  /* The shut decades in the level filter. A hundred levels read as ten things
+     and open one at a time; see `levelChips.ts`. */
+  levelGroup: (start: number, end: number) => `${start}-${end}`,
+  openGroup: (start: number, end: number) => `Open levels ${start} to ${end}`,
+  /* The published papers. John: "You can link to the articles we have created
+     for UmaKuma as they are interesting." */
+  papersHeading: "How this curriculum was built",
+  papersBlurb:
+    "Seven papers on the two ladders — what a level costs, where the JLPT bands and school years finish, and the rules the build is held to. Every figure names the curriculum version it was drawn from.",
+  papersLink: "Read the papers",
 } as const;
 
-/** How the picker is drawn, so the hundred fit on a phone. */
+/** How the picker is drawn, so the hundred fit on a phone without a drag. */
 export const UK_LEVEL_CHIP = {
   base: "inline-flex h-8 shrink-0 items-center rounded-full border px-3 text-[11px] font-black tabular-nums transition",
   here: "border-accent bg-accent text-white",
   idle: "border-line bg-surface text-foreground/70 hover:bg-surface-muted",
+  /* A decade that is shut. Quieter than a level, because it is a way in
+     rather than somewhere you are. */
+  group: "border-line bg-surface-muted text-foreground/60 hover:bg-surface",
   /* A level that finishes a JLPT band is worth finding in a row of a hundred. */
   milestone: "border-teal-400 bg-teal-50 text-teal-800 hover:bg-teal-100",
 } as const;

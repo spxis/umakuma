@@ -1,23 +1,29 @@
-"use client";
-
 import Link from "next/link";
-import { useEffect, useRef } from "react";
 
+import { ladderLevelChips } from "@/lib/ladder/levelChips";
 import type { LadderLevelSummary } from "@/lib/ladder/ladderQuery";
 
 import { UK_EXPLORER_COPY as copy, UK_LEVEL_CHIP } from "./UmakumaExplorer.constants";
 import { umakumaLevelHref } from "./umakumaAddress";
 
 /**
- * The hundred levels, as one row you can point at.
+ * The hundred levels, as a filter that wraps and opens a decade at a time.
  *
- * A chip per level rather than ten levels a page: the reader can see where
- * they are among the hundred, jump anywhere, and link to it. The row scrolls
- * rather than wrapping, for the reason the header does - a control that grows
- * a second line as the window narrows moves the page under the reader.
+ * It was one row of a hundred chips that would not wrap, on the reasoning the
+ * app header uses - a control that grows a second line moves the page under
+ * the reader. That reasoning does not survive a hundred items: the row
+ * scrolled sideways and showed levels 1 to 21, so the other seventy-nine were
+ * behind a drag nobody makes. John, twice, and the second time with
+ * screenshots: wrap it like the JLPT filter, and group in tens with a group
+ * opening on a click, the way the WaniKani filter's range chips do.
  *
- * Levels that finish a JLPT band are marked, because in a row of a hundred
- * they are the landmarks somebody navigates by.
+ * The open decade is the one holding the level being read, so pressing a shut
+ * group is simply a link to its first level - the page comes back with that
+ * decade open. No client state, which means the arrangement survives a reload
+ * and can be linked to.
+ *
+ * Levels that finish a JLPT band stay marked: in a hundred they are the
+ * landmarks somebody navigates by.
  */
 export default function UmakumaLevelPicker({
   nickname,
@@ -28,45 +34,57 @@ export default function UmakumaLevelPicker({
   levels: LadderLevelSummary[];
   current: number;
 }) {
-  const here = useRef<HTMLAnchorElement>(null);
-
-  /* Level 74 is off screen in a row of a hundred, and the one chip the reader
-     needs to see is the one they are on. */
-  useEffect(() => {
-    here.current?.scrollIntoView({ block: "nearest", inline: "center" });
-  }, [current]);
+  const byLevel = new Map(levels.map((level) => [level.level, level]));
+  const chips = ladderLevelChips(levels.length, current);
 
   return (
     <div
       role="navigation"
       aria-label={copy.levelLabel}
-      className="admin-tab-scroll flex flex-nowrap items-center gap-1.5 overflow-x-auto whitespace-nowrap py-1"
+      className="flex flex-wrap items-center gap-1 rounded-xl border border-line bg-surface px-1.5 py-1"
     >
-      {levels.map((level) => {
-        const isHere = level.level === current;
+      <span className="inline-flex h-7 items-center px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">
+        {copy.levelLabel}
+      </span>
+
+      {chips.map((chip) => {
+        if (chip.kind === "group") {
+          return (
+            <Link
+              key={`group-${chip.startLevel}`}
+              href={umakumaLevelHref(nickname, chip.startLevel)}
+              title={copy.openGroup(chip.startLevel, chip.endLevel)}
+              className={`${UK_LEVEL_CHIP.base} ${UK_LEVEL_CHIP.group}`}
+            >
+              {copy.levelGroup(chip.startLevel, chip.endLevel)}
+            </Link>
+          );
+        }
+
+        const summary = byLevel.get(chip.level);
+        const isHere = chip.level === current;
         const tone = isHere
           ? UK_LEVEL_CHIP.here
-          : level.nLevel !== null
+          : summary?.nLevel != null
             ? UK_LEVEL_CHIP.milestone
             : UK_LEVEL_CHIP.idle;
 
         return (
           <Link
-            key={level.level}
-            ref={isHere ? here : undefined}
-            href={umakumaLevelHref(nickname, level.level)}
+            key={chip.level}
+            href={umakumaLevelHref(nickname, chip.level)}
             aria-current={isHere ? "page" : undefined}
             title={
-              level.nLevel !== null
-                ? `${copy.levelHeading(level.level)} — ${copy.jlptAt(level.nLevel)}`
-                : copy.levelHeading(level.level)
+              summary?.nLevel != null
+                ? `${copy.levelHeading(chip.level)} — ${copy.jlptAt(summary.nLevel)}`
+                : copy.levelHeading(chip.level)
             }
             className={`${UK_LEVEL_CHIP.base} ${tone}`}
           >
-            {level.level}
-            {level.nLevel !== null ? (
+            {chip.level}
+            {summary?.nLevel != null ? (
               <span className="ml-1 text-[9px] font-black uppercase tracking-[0.08em] opacity-80">
-                {`N${level.nLevel}`}
+                {`N${summary.nLevel}`}
               </span>
             ) : null}
           </Link>

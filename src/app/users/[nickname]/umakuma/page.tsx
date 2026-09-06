@@ -5,11 +5,12 @@ import MemberPageHeader from "@/app/shared/MemberPageHeader";
 import { PAGE_SHELL_PADDING } from "@/app/shared/pageShell";
 import { KANJI_LADDER_LEVELS } from "@/lib/kanjiLadder";
 import { loadLadderCrosswalk } from "@/lib/ladder/ladderCrosswalkServer";
+import { ladderLevelPage } from "@/lib/ladder/ladderLevelPage";
 import { deriveUnLevel } from "@/lib/uk/unLevelServer";
 
 import { MEMBER_PAGE_HEADERS } from "../dashboardPageHeaders";
 import { loadUserPageShell } from "../lib/userPageShell";
-import UmakumaLadderIndex from "./UmakumaLadderIndex";
+import UmakumaLevelBoard from "./UmakumaLevelBoard";
 import { clampLadderLevel, UK_EXPLORER_PAGE } from "./umakumaAddress";
 
 /* Prisma-backed through the crosswalk and the member's level, and CI builds
@@ -19,20 +20,32 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: `${UK_EXPLORER_PAGE.title} — UmaKuma` };
 
 /**
- * The curriculum itself, which is a real thing to look at.
+ * The curriculum, opened where the reader is.
  *
- * `/umakuma` is the ladder and `/umakuma/23` is a level of it. It could have
- * redirected to a level the way `/grades` does, and that would make the
- * collection a fiction - the address would name something the site does not
- * have. A hundred levels have a shape worth seeing before you pick one.
+ * It opened on an index instead: a card per level, four across, a hundred of
+ * them, headed "All 100 levels". The argument for it was that a hundred levels
+ * have a shape worth seeing before you pick one. John, looking at it: "The
+ * original page we see with the All 100 Levels is NOT needed. It's weird. Use
+ * the same template we have in WaniKani and JLPT Explorer."
+ *
+ * He is right, and the shape argument was answering the wrong question. The
+ * other two explorers open on filters and results, because that is what an
+ * explorer is - somewhere to look something up. A hundred cards is a table of
+ * contents nobody scrolls, and the ladder's shape is what the curriculum
+ * papers are for, which the foot of the page now links.
+ *
+ * So `/umakuma` is the explorer at the member's own level and `/umakuma/24` is
+ * the explorer at level 24. Same page, same filters; the address only decides
+ * where it opens.
  */
 export default async function UmakumaLadderPage({ params }: { params: Promise<{ nickname: string }> }) {
   const { nickname } = await params;
   const shell = await loadUserPageShell(nickname);
-  const [{ levels }, progress] = await Promise.all([
+  const [{ rows }, progress] = await Promise.all([
     loadLadderCrosswalk(),
     deriveUnLevel(shell.account.id),
   ]);
+  const page = ladderLevelPage(rows, KANJI_LADDER_LEVELS, clampLadderLevel(progress.level));
 
   return (
     <div className={PAGE_SHELL_PADDING}>
@@ -51,10 +64,10 @@ export default async function UmakumaLadderPage({ params }: { params: Promise<{ 
         subtitle={UK_EXPLORER_PAGE.subtitle}
         className="mb-3"
       />
-      <UmakumaLadderIndex
+      <UmakumaLevelBoard
         nickname={decodeURIComponent(nickname)}
-        levels={levels.slice(0, KANJI_LADDER_LEVELS)}
-        current={clampLadderLevel(progress.level)}
+        group={page.group}
+        levels={page.levels}
       />
     </div>
   );
