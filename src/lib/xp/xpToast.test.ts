@@ -1,8 +1,14 @@
+/**
+ * @vitest-environment jsdom
+ *
+ * The raising half of this module talks to `window`; the stacking half does
+ * not, and is tested alongside it rather than in a second file.
+ */
 import { readFileSync } from "node:fs";
 
 import { describe, expect, it } from "vitest";
 
-import { withXpToast, XP_TOAST_COPY, XP_TOAST_MAX, type XpToast } from "./xpToast";
+import { showXpEarned, withXpToast, XP_TOAST_COPY, XP_TOAST_EVENT, XP_TOAST_MAX, type XpToast } from "./xpToast";
 
 const toast = (id: string, xp = 1): XpToast => ({ id, xp });
 
@@ -64,5 +70,55 @@ describe("raising one", () => {
 
   it("is mounted once, where every surface can reach it", () => {
     expect(readFileSync("src/app/layout.tsx", "utf8")).toContain("<XpToastHost />");
+  });
+});
+
+describe("one toast per thing earned", () => {
+  /* A request can pay for several things at once - finishing a game, the
+     day's sign-in, a streak milestone - and a member told "+65 XP" learns
+     less than one told what each part was for. */
+  it("raises nothing for an empty or missing list", () => {
+    const raised: number[] = [];
+    const listener = (event: Event) => raised.push((event as CustomEvent<{ xp: number }>).detail.xp);
+    window.addEventListener(XP_TOAST_EVENT, listener);
+    showXpEarned(undefined);
+    showXpEarned([]);
+    window.removeEventListener(XP_TOAST_EVENT, listener);
+    expect(raised).toEqual([]);
+  });
+
+  it("raises one per award, in the order the route listed them", () => {
+    const raised: { xp: number; reason?: string }[] = [];
+    const listener = (event: Event) => raised.push((event as CustomEvent<{ xp: number; reason?: string }>).detail);
+    window.addEventListener(XP_TOAST_EVENT, listener);
+    showXpEarned([
+      { xp: 5, reason: "Game finished" },
+      { xp: 10, reason: "Today's bonus" },
+    ]);
+    window.removeEventListener(XP_TOAST_EVENT, listener);
+    expect(raised).toEqual([
+      { xp: 5, reason: "Game finished" },
+      { xp: 10, reason: "Today's bonus" },
+    ]);
+  });
+});
+
+describe("the surfaces that pay XP say so", () => {
+  /* Every route that pays hands back what it paid, and every client that
+     calls one raises it. A route that pays silently is a member earning
+     something they never see. */
+  it.each([
+    ["src/app/api/game/[accountId]/runs/[runId]/answer/route.ts", "xpEarned: earned"],
+    ["src/app/api/game/[accountId]/runs/[runId]/complete/route.ts", "xpEarned: earned"],
+    ["src/app/api/uk-study/[accountId]/lesson/start/route.ts", "xpEarned: earned"],
+  ])("%s hands back what it paid", (file, marker) => {
+    expect(readFileSync(file, "utf8")).toContain(marker);
+  });
+
+  it.each([
+    ["src/app/game/useGameSession.ts"],
+    ["src/app/users/[nickname]/study-explorer/lib/useStudyReviewSubmission.ts"],
+  ])("%s raises it", (file) => {
+    expect(readFileSync(file, "utf8")).toContain("showXpEarned(");
   });
 });

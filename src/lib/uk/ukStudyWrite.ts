@@ -7,7 +7,8 @@ import { prisma } from "@/lib/prisma";
 import { initialLessonState, nextSrsStage, nextStageAvailableAt, SRS_BURNED_STAGE } from "@/lib/srs/srsSchedule";
 import { settleDailyXp } from "@/lib/xp/xpDayServer";
 import { awardXpQuietly } from "@/lib/xp/xpServer";
-import { lessonXpAwards, reviewXpAwards } from "@/lib/xp/xpStudyAwards";
+import { LESSON_XP_REASONS, lessonXpAwards, reviewXpAwards } from "@/lib/xp/xpStudyAwards";
+import type { XpEarned } from "@/lib/xp/xpToast";
 
 import { syncAccountUkLevel } from "./ukLevelServer";
 import { UK_LEVEL_PASS_SRS_STAGE } from "./ukLevel";
@@ -55,8 +56,9 @@ export async function startUkLessons({
   accountId: string;
   subjectIds: number[];
   now?: Date;
-}): Promise<number> {
-  if (subjectIds.length === 0) return 0;
+}): Promise<{ started: number; earned: XpEarned }> {
+  const nothing = { started: 0, earned: [] as XpEarned };
+  if (subjectIds.length === 0) return nothing;
 
   /* Only items at or below their level, checked here rather than trusted from
      the request: a crafted body could otherwise open the whole ladder. */
@@ -65,7 +67,7 @@ export async function startUkLessons({
     where: { id: { in: subjectIds }, removedAt: null, level: { lte: account?.ukLevel ?? 1 } },
     select: { id: true },
   });
-  if (open.length === 0) return 0;
+  if (open.length === 0) return nothing;
 
   const state = initialLessonState(now);
   const created = await prisma.ukSrsState.createMany({
@@ -75,9 +77,13 @@ export async function startUkLessons({
 
   /* Per item actually started, not per item asked for: `skipDuplicates` means
      a resent request opens nothing, and it should pay for nothing. */
-  await awardXpQuietly({ accountId, requests: lessonXpAwards(created.count), now });
-  await settleDailyXp({ accountId, now });
-  return created.count;
+  const lessonXp = await awardXpQuietly({ accountId, requests: lessonXpAwards(created.count), now });
+  const dayXp = await settleDailyXp({ accountId, now });
+
+  const earned: XpEarned = [];
+  if (lessonXp > 0) earned.push({ xp: lessonXp, reason: LESSON_XP_REASONS.learned });
+  if (dayXp > 0) earned.push({ xp: dayXp, reason: LESSON_XP_REASONS.today });
+  return { started: created.count, earned };
 }
 
 /**

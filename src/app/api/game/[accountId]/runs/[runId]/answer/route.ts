@@ -22,6 +22,8 @@ import { prisma } from "@/lib/prisma";
 import { settleDailyXp } from "@/lib/xp/xpDayServer";
 import { finalizeLevelTestForRun } from "@/lib/uk/ukLevelTestServer";
 import { awardXpQuietly } from "@/lib/xp/xpServer";
+import type { XpEarned } from "@/lib/xp/xpToast";
+import { GAME_XP_REASONS } from "@/lib/xp/xpStudyAwards";
 import { gameXpAwards } from "@/lib/xp/xpStudyAwards";
 
 const bodySchema = z.object({
@@ -89,6 +91,7 @@ export async function POST(
             )
           : [];
 
+        const earned: XpEarned = [];
         const outcome = await prisma.$transaction(async (tx) => {
           const question = await tx.gameQuestion.findUnique({
             where: { id: parsed.data.questionId },
@@ -192,11 +195,15 @@ export async function POST(
              pays the test's own XP inside that, never the game's. */
           await finalizeLevelTestForRun(accountId, runId);
         } else if (outcome.completedNow) {
-          await awardXpQuietly({ accountId, requests: gameXpAwards() });
+          /* Kept so the page can say what was earned, one toast per thing:
+             finishing the game is a different fact from the day's sign-in. */
+          const gameXp = await awardXpQuietly({ accountId, requests: gameXpAwards() });
           /* And what the day has become because of it: the sign-in, a streak
              milestone, the "a lesson and a game" quest. Swallows its own
              failures, like the award above it. */
-          await settleDailyXp({ accountId });
+          const dayXp = await settleDailyXp({ accountId });
+          if (gameXp > 0) earned.push({ xp: gameXp, reason: GAME_XP_REASONS.finished });
+          if (dayXp > 0) earned.push({ xp: dayXp, reason: GAME_XP_REASONS.today });
         }
 
         const appendedQuestions = outcome.appendedFromPosition === null
@@ -209,6 +216,7 @@ export async function POST(
               pendingRun.direction as GameDirection,
             );
         return NextResponse.json({
+          xpEarned: earned,
           correct: outcome.correct,
           expired: outcome.expired,
           run: toGameRunSummary(outcome.run),

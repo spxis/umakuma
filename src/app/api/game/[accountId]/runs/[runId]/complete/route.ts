@@ -7,7 +7,8 @@ import { completedRunValues, toGameRunSummary } from "@/lib/gameModeServer";
 import { prisma } from "@/lib/prisma";
 import { settleDailyXp } from "@/lib/xp/xpDayServer";
 import { awardXpQuietly } from "@/lib/xp/xpServer";
-import { gameXpAwards } from "@/lib/xp/xpStudyAwards";
+import type { XpEarned } from "@/lib/xp/xpToast";
+import { GAME_XP_REASONS, gameXpAwards } from "@/lib/xp/xpStudyAwards";
 
 /**
  * Closes a timed run when the clock runs out without another answer.
@@ -60,15 +61,18 @@ export async function POST(
 
         /* Only the run that this request actually closed. A replayed request
            finds the run already complete and must not pay for it twice. */
+        const earned: XpEarned = [];
         if (outcome.completedNow) {
-          await awardXpQuietly({ accountId, requests: gameXpAwards() });
+          const gameXp = await awardXpQuietly({ accountId, requests: gameXpAwards() });
           /* And what the day has become because of it: the sign-in, a streak
              milestone, the "a lesson and a game" quest. Swallows its own
              failures, like the award above it. */
-          await settleDailyXp({ accountId });
+          const dayXp = await settleDailyXp({ accountId });
+          if (gameXp > 0) earned.push({ xp: gameXp, reason: GAME_XP_REASONS.finished });
+          if (dayXp > 0) earned.push({ xp: dayXp, reason: GAME_XP_REASONS.today });
         }
 
-        return NextResponse.json({ run: toGameRunSummary(outcome.run) }, { status: 200 });
+        return NextResponse.json({ run: toGameRunSummary(outcome.run), xpEarned: earned }, { status: 200 });
       } catch (error) {
         const message = error instanceof Error ? error.message : "Could not finish the game.";
         const expected = /not found|cannot be finished/.test(message);

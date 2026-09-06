@@ -103,3 +103,21 @@ export function streakXpAwards(days: number): XpAwardRequest[] {
   const kind = streakMilestoneFor(days);
   return kind ? [{ kind, note: XP_EVENT_NOTES.streak(days) }] : [];
 }
+
+/**
+ * What a member is told they earned it for, in their own words.
+ *
+ * Beside the awards rather than in a page's copy module, because two surfaces
+ * pay the same things - a game finishing through the answer route and through
+ * the clock - and a reason spelled twice is a reason that drifts.
+ */
+export const GAME_XP_REASONS = {
+  finished: "Game finished",
+  today: "Today's bonus",
+} as const;
+
+/** The same, for a lesson started. */
+export const LESSON_XP_REASONS = {
+  learned: "Lesson started",
+  today: "Today's bonus",
+} as const;

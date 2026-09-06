@@ -1,3 +1,4 @@
+import { showXpEarned, type XpEarned } from "@/lib/xp/xpToast";
 import { useCallback, useRef } from "react";
 
 import type {
@@ -292,8 +293,9 @@ export function useStudyReviewSubmission({
             ...(customLibraryId ? { libraryId: customLibraryId } : {}),
           }),
         });
-        const payload = (await response.json()) as { error?: string };
+        const payload = (await response.json()) as { error?: string; xpEarned?: XpEarned };
         if (!response.ok) throw new Error(payload.error ?? "Could not start lesson.");
+        showXpEarned(payload.xpEarned);
 
         if (itemForSubmit) {
           onSetModalSessionItemByAssignmentId((prev) => ({ ...prev, [assignmentId]: itemForSubmit }));

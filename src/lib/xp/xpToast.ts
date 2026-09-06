@@ -51,6 +51,21 @@ export function showXpToast(request: XpToastRequest): void {
   window.dispatchEvent(new CustomEvent<XpToastRequest>(XP_TOAST_EVENT, { detail: request }));
 }
 
+/**
+ * What a route hands back so the page can say what was earned.
+ *
+ * A list rather than a total, because one request can pay for several things
+ * at once - finishing a game, the day's sign-in, a streak milestone - and a
+ * member who is told "+65 XP" learns less than one told what each part was
+ * for. The route knows what it paid; nothing downstream has to work it out.
+ */
+export type XpEarned = XpToastRequest[];
+
+/** Raise one toast per thing earned, in the order the route listed them. */
+export function showXpEarned(earned: XpEarned | undefined): void {
+  for (const award of earned ?? []) showXpToast(award);
+}
+
 /** What a toast says. Kept here so the locale layer has one place to look. */
 export const XP_TOAST_COPY = {
   amount: (xp: number) => `+${xp} XP`,

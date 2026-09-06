@@ -1,5 +1,6 @@
 "use client";
 
+import { showXpEarned, type XpEarned } from "@/lib/xp/xpToast";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { gameKindRules, type GameQuestionPayload, type GameRunSummary } from "@/lib/gameMode";
@@ -118,12 +119,16 @@ export function useGameSession({
         expired?: boolean;
         run?: GameRunSummary;
         appendedQuestions?: GameQuestionPayload[];
+        xpEarned?: XpEarned;
         error?: string;
       };
       if (!response.ok || typeof payload.correct !== "boolean" || !payload.run) {
         throw new Error(payload.error ?? "Could not record the answer.");
       }
       const run = payload.run;
+      /* One toast per thing earned - finishing the game is a different fact
+         from the day's sign-in, and a member told "+65 XP" learns less. */
+      showXpEarned(payload.xpEarned);
       setFeedback({ subjectId: selectedSubjectId, correct: payload.correct });
       setActiveGame((current) => current
         ? { ...current, run, questions: [...current.questions, ...(payload.appendedQuestions ?? [])] }

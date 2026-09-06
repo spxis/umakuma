@@ -31,8 +31,8 @@ export async function POST(request: Request, context: RouteContext) {
           return NextResponse.json({ error: "Invalid request." }, { status: 400 });
         }
 
-        const started = await startUkLessons({ accountId, subjectIds: [parsed.data.assignmentId] });
-        return NextResponse.json({ started });
+        const { started, earned } = await startUkLessons({ accountId, subjectIds: [parsed.data.assignmentId] });
+        return NextResponse.json({ started, xpEarned: earned });
       } catch (error) {
         console.error(error);
         return NextResponse.json({ error: "Could not start those lessons." }, { status: 500 });
