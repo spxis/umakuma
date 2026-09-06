@@ -71,4 +71,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Nuguisari no Kazari", ja: "拭い去りの飾り", reading: "ぬぐいさりのかざり", gloss: "the ornament wiped away" },
   { romaji: "Nezuki no Sunpou", ja: "根付きの寸法", reading: "ねづきのすんぽう", gloss: "the measure that stays put" },
   { romaji: "Norikoeru Shirase", ja: "乗り越える知らせ", reading: "のりこえるしらせ", gloss: "word of what you got past" },
+  { romaji: "Haridashita Kuraidori", ja: "貼り出した位取り", reading: "はりだしたくらいどり", gloss: "your ranking, put up where you can see it" },
 ];
