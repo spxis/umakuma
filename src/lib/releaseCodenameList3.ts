@@ -70,4 +70,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Niawase no Hitomatome", ja: "荷合わせの一纏め", reading: "にあわせのひとまとめ", gloss: "the whole load, taken at once" },
   { romaji: "Nuguisari no Kazari", ja: "拭い去りの飾り", reading: "ぬぐいさりのかざり", gloss: "the ornament wiped away" },
   { romaji: "Nezuki no Sunpou", ja: "根付きの寸法", reading: "ねづきのすんぽう", gloss: "the measure that stays put" },
+  { romaji: "Norikoeru Shirase", ja: "乗り越える知らせ", reading: "のりこえるしらせ", gloss: "word of what you got past" },
 ];

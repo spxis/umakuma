@@ -6326,12 +6326,25 @@
     "id": "lists-edit-mode-leaves-the-row-height-alone",
     "name": "Edit mode leaves the row height alone",
     "area": "study",
+    "status": "shipped",
     "kind": "bug",
+    "date": "2026-09-06",
+    "summary": "Pressing Edit on a list made every row taller, because the invitation to write a note appeared under the meaning and pushed the row open. The note is written from a button beside the remove cross now, and the rows do not move.",
+    "dateIsEstimate": false,
+    "release": 508,
+    "version": "1.23.2",
+    "releasedAt": "2026-09-06T07:08:37Z"
+  },
+  {
+    "id": "xp-toast-games-lessons",
+    "name": "Games and lessons show the XP they paid",
+    "area": "account",
+    "kind": "feature",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.23.2",
-    "release": 508,
-    "releasedAt": "2026-09-06T07:08:37Z",
-    "summary": "Pressing Edit on a list made every row taller, because the invitation to write a note appeared under the meaning and pushed the row open. The note is written from a button beside the remove cross now, and the rows do not move."
+    "version": "1.24.0",
+    "release": 509,
+    "releasedAt": "2026-09-06T07:25:51Z",
+    "summary": "Finishing a game or starting a lesson now shows the XP it earned, one cue per thing - the game itself and the day's bonus are said separately."
   }
 ]
