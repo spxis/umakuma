@@ -18,7 +18,7 @@ import { DASHBOARD_TAB_LABELS } from "../users/[nickname]/userReadConfig";
  * Grouping rather than hiding: everything reachable before is still one click
  * away, and the second row tells you where you are.
  */
-export type NavSectionId = "study" | "game" | "explore" | "lists" | "read" | "settings";
+export type NavSectionId = "study" | "game" | "shop" | "explore" | "lists" | "read" | "settings";
 
 export type NavChild = {
   label: string;
@@ -95,6 +95,10 @@ export const NAV_SECTIONS: NavSection[] = [
     ],
   },
   { id: "game", label: "Game", placement: "nav", children: [{ label: "Game", path: "game" }] },
+  /* Global like Maps below, not a member's own page - the currencies it
+     catalogues are not earned yet, so there is nothing account-specific to
+     gate here. */
+  { id: "shop", label: "Shop", placement: "nav", children: [{ label: "Shop", path: "/shop" }] },
   {
     id: "explore",
     label: "Learn",
