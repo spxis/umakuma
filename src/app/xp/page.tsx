@@ -13,7 +13,7 @@ import { authOptions, isAdminEmail } from "@/lib/auth";
 
 import XpBoardRows from "./XpBoardRows";
 import XpLadderChart from "./XpLadderChart";
-import { XP_BOARD_COPY, XP_LADDER_COPY } from "./xpBoardCopy";
+import { XP_BOARD_COPY, XP_EARN_COPY, XP_LADDER_COPY } from "./xpBoardCopy";
 import { loadXpBoard } from "./lib/xpBoardServer";
 import { xpBoardPlacement } from "./lib/xpBoard";
 
@@ -62,14 +62,25 @@ export default async function XpBoardPage() {
           title={XP_BOARD_COPY.title}
           subtitle={XP_BOARD_COPY.subtitle}
           actions={
-            address ? (
+            <>
+              {/* How the numbers on this board are earned, for anybody
+                  wondering why a row moved. Public, so a visitor deciding
+                  whether to join can read it too. */}
               <Link
-                href={`/users/${encodeURIComponent(address)}/xp`}
+                href="/xp/earn"
                 className="rounded-full border border-line bg-surface px-3 py-1.5 text-xs font-black text-foreground hover:text-accent"
               >
-                {XP_BOARD_COPY.history}
+                {XP_EARN_COPY.title}
               </Link>
-            ) : undefined
+              {address ? (
+                <Link
+                  href={`/users/${encodeURIComponent(address)}/xp`}
+                  className="rounded-full border border-line bg-surface px-3 py-1.5 text-xs font-black text-foreground hover:text-accent"
+                >
+                  {XP_BOARD_COPY.history}
+                </Link>
+              ) : null}
+            </>
           }
           className="mb-3"
         />

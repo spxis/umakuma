@@ -98,3 +98,28 @@ export const XP_RANK_BOARD_COPY = {
   back: "The whole board",
   chartLink: "See who is here",
 } as const;
+
+/**
+ * How XP is earned, on its own page.
+ *
+ * SPX wrote its odds down in plain words rather than leaving them to be
+ * inferred, and that is the half worth keeping. Ours goes further: the numbers
+ * are read from the table the awards are paid from, so the page cannot say one
+ * thing while the code does another.
+ */
+export const XP_EARN_COPY = {
+  title: "How XP is earned",
+  subtitle: "Every way, and what each one pays",
+  blurb:
+    "These numbers come from the same table the awards are paid from, so this page cannot drift from what actually happens. Anything not listed here does not pay XP.",
+  columns: { what: "What", amount: "XP", cap: "Most a day" },
+  uncapped: "No limit",
+  capped: (cap: number) => cap.toLocaleString(),
+  /* Reviews are deliberately uncapped and it is worth saying why, since every
+     other repeatable kind has a ceiling. */
+  capNote:
+    "A ceiling stops one kind of activity from crowding out the rest. Reviews have none on purpose — capping study would mean telling somebody their work stopped counting.",
+  count: (live: number) => `${live} ways to earn`,
+  back: "The XP board",
+  empty: "Nothing is priced yet.",
+} as const;
