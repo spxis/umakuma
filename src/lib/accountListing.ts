@@ -34,13 +34,47 @@ export function listableTo<T extends ListableAccount>(accounts: readonly T[], vi
 }
 
 /**
+ * What an admin has asked to be treated as, for this one page load.
+ *
+ * An admin sees private members on every board, and until now had no way to
+ * check what an ordinary member or a stranger sees - which is the only way to
+ * answer "is this person actually hidden". `?as=public` and `?as=member`
+ * answer it.
+ *
+ * **It only ever removes.** The override is read from the query string, which
+ * is whatever somebody typed, so it is gated on `isAdmin` and its values are a
+ * closed set of *lower* standings. Nobody can promote themselves by typing
+ * `?as=admin`; there is no such value, and a non-admin passing anything at all
+ * is ignored.
+ */
+export const VIEWER_PREVIEWS = { public: "anonymous", member: "member" } as const;
+
+export type ViewerPreview = keyof typeof VIEWER_PREVIEWS;
+
+export function isViewerPreview(value: unknown): value is ViewerPreview {
+  return typeof value === "string" && value in VIEWER_PREVIEWS;
+}
+
+/**
  * What kind of viewer is asking.
  *
  * A member is someone with an account of their own, not merely someone signed
  * in: a signed-in visitor with no account has no more claim on other people's
  * names than an anonymous one.
+ *
+ * Every board funnels through here, which is why the preview belongs here
+ * rather than in each of them: one place decides who is asking, so one place
+ * can be asked to pretend.
  */
-export function viewerKind(input: { isAdmin: boolean; hasAccount: boolean }): Viewer {
-  if (input.isAdmin) return "admin";
+export function viewerKind(input: {
+  isAdmin: boolean;
+  hasAccount: boolean;
+  /** Ignored for anyone who is not an admin. */
+  previewAs?: string | null;
+}): Viewer {
+  if (input.isAdmin) {
+    if (isViewerPreview(input.previewAs)) return VIEWER_PREVIEWS[input.previewAs];
+    return "admin";
+  }
   return input.hasAccount ? "member" : "anonymous";
 }

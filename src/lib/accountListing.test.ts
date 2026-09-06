@@ -95,3 +95,39 @@ describe("viewerKind", () => {
     expect(viewerKind({ isAdmin: true, hasAccount: false })).toBe("admin");
   });
 });
+
+/*
+ * An admin sees private members everywhere and had no way to check what an
+ * ordinary member or a stranger sees - which is the only way to answer "is
+ * this person actually hidden". The preview answers it, and the whole of its
+ * safety is that it only ever removes.
+ */
+describe("an admin previewing as somebody else", () => {
+  it("drops an admin to a stranger, and to a member", () => {
+    expect(viewerKind({ isAdmin: true, hasAccount: true, previewAs: "public" })).toBe("anonymous");
+    expect(viewerKind({ isAdmin: true, hasAccount: true, previewAs: "member" })).toBe("member");
+  });
+
+  it("leaves an admin as an admin when nothing is asked for", () => {
+    expect(viewerKind({ isAdmin: true, hasAccount: true })).toBe("admin");
+    expect(viewerKind({ isAdmin: true, hasAccount: true, previewAs: null })).toBe("admin");
+  });
+
+  /*
+   * The value comes off the query string, so anything can arrive. There is no
+   * upward value to ask for and a nonsense one is ignored rather than obeyed.
+   */
+  it("cannot be used to climb", () => {
+    expect(viewerKind({ isAdmin: true, hasAccount: true, previewAs: "admin" })).toBe("admin");
+    expect(viewerKind({ isAdmin: true, hasAccount: true, previewAs: "root" })).toBe("admin");
+    expect(viewerKind({ isAdmin: true, hasAccount: true, previewAs: "" })).toBe("admin");
+  });
+
+  /* And it is not a way in for anybody else. A member asking to be an admin
+     is still a member; a stranger asking is still a stranger. */
+  it("is ignored entirely for anyone who is not an admin", () => {
+    expect(viewerKind({ isAdmin: false, hasAccount: true, previewAs: "admin" })).toBe("member");
+    expect(viewerKind({ isAdmin: false, hasAccount: false, previewAs: "member" })).toBe("anonymous");
+    expect(viewerKind({ isAdmin: false, hasAccount: false, previewAs: "public" })).toBe("anonymous");
+  });
+});

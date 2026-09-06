@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 
 import MemberBoardRows from "@/app/shared/board/MemberBoardRows";
 import { memberBoardGap, type MemberBoardEntry } from "@/app/shared/board/memberBoardView";
+import ViewerPreviewBar from "@/app/shared/board/ViewerPreviewBar";
 import MemberPageHeader from "@/app/shared/MemberPageHeader";
 import XpSectionNav from "../XpSectionNav";
 import PublicPageHeader from "@/app/shared/PublicPageHeader";
@@ -10,7 +11,7 @@ import { PAGE_SHELL_PADDING, PAGE_WIDTH } from "@/app/shared/pageShell";
 import { viewerAddress } from "@/app/shared/viewerAddress";
 import { DASHBOARD_PAGE_HEADERS } from "@/app/users/[nickname]/dashboardPageHeaders";
 import { resolveViewerMenuInfo } from "@/app/users/[nickname]/userPageAuth";
-import { viewerKind } from "@/lib/accountListing";
+import { isViewerPreview, viewerKind } from "@/lib/accountListing";
 import { authOptions, isAdminEmail } from "@/lib/auth";
 import { getVancouverDateKey } from "@/lib/dailySnapshot";
 import { xpWeekBefore } from "@/lib/xp/xpWeek";
@@ -22,7 +23,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata = { title: `${copy.title} — UmaKuma` };
 
-type PageProps = { searchParams: Promise<{ back?: string }> };
+type PageProps = { searchParams: Promise<{ back?: string; as?: string }> };
 
 /**
  * Who earned the most this week.
@@ -37,7 +38,7 @@ type PageProps = { searchParams: Promise<{ back?: string }> };
  * whatever somebody typed.
  */
 export default async function XpWeeklyPage({ searchParams }: PageProps) {
-  const { back } = await searchParams;
+  const { back, as } = await searchParams;
   const stepsBack = Math.min(52, Math.max(0, Math.trunc(Number(back ?? "0")) || 0));
 
   const session = await getServerSession(authOptions);
@@ -52,7 +53,7 @@ export default async function XpWeeklyPage({ searchParams }: PageProps) {
 
   const week = xpWeekBefore(getVancouverDateKey(new Date()), stepsBack);
   const entries = await loadXpWeekly(
-    viewerKind({ isAdmin, hasAccount: Boolean(address) }),
+    viewerKind({ isAdmin, hasAccount: Boolean(address), previewAs: as }),
     week,
   );
 
@@ -75,6 +76,7 @@ export default async function XpWeeklyPage({ searchParams }: PageProps) {
 
       <main className={`${PAGE_WIDTH.reading} space-y-4`}>
         <XpSectionNav current={"/xp/weekly"} address={address} />
+        <ViewerPreviewBar isAdmin={isAdmin} previewAs={isViewerPreview(as) ? as : null} path="/xp/weekly" />
         <MemberPageHeader
           icon={DASHBOARD_PAGE_HEADERS.stats.icon}
           title={copy.title}

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getServerSession } from "next-auth";
 
+import ViewerPreviewBar from "@/app/shared/board/ViewerPreviewBar";
 import MemberPageHeader from "@/app/shared/MemberPageHeader";
 import XpSectionNav from "../XpSectionNav";
 import RankName from "@/app/shared/xp/RankName";
@@ -9,13 +10,15 @@ import { PAGE_SHELL_PADDING, PAGE_WIDTH } from "@/app/shared/pageShell";
 import { viewerAddress } from "@/app/shared/viewerAddress";
 import { DASHBOARD_PAGE_HEADERS } from "@/app/users/[nickname]/dashboardPageHeaders";
 import { resolveViewerMenuInfo } from "@/app/users/[nickname]/userPageAuth";
-import { viewerKind } from "@/lib/accountListing";
+import { isViewerPreview, viewerKind } from "@/lib/accountListing";
 import { authOptions, isAdminEmail } from "@/lib/auth";
 import { getVancouverDateKey } from "@/lib/dailySnapshot";
 import { xpForLevel } from "@/lib/xp/xpCurve";
 
 import { XP_PROMOTION_WINDOW_DAYS, loadXpPromotions } from "../lib/xpPromotionsServer";
 import { XP_PROMOTIONS_COPY as copy } from "../xpBoardCopy";
+
+type PageProps = { searchParams: Promise<{ as?: string }> };
 
 export const dynamic = "force-dynamic";
 
@@ -33,7 +36,8 @@ export const metadata = { title: `${copy.title} — UmaKuma` };
  * exact, and a table for something recomputable would be a second thing to
  * keep true.
  */
-export default async function XpPromotionsPage() {
+export default async function XpPromotionsPage({ searchParams }: PageProps) {
+  const { as } = await searchParams;
   const session = await getServerSession(authOptions);
   const viewerEmail = session?.user?.email?.trim().toLowerCase() ?? null;
   const isAdmin = isAdminEmail(viewerEmail);
@@ -48,7 +52,7 @@ export default async function XpPromotionsPage() {
     new Date(today.getTime() - XP_PROMOTION_WINDOW_DAYS * 86_400_000),
   );
   const groups = await loadXpPromotions(
-    viewerKind({ isAdmin, hasAccount: Boolean(address) }),
+    viewerKind({ isAdmin, hasAccount: Boolean(address), previewAs: as }),
     since,
   );
 
@@ -58,6 +62,7 @@ export default async function XpPromotionsPage() {
 
       <main className={`${PAGE_WIDTH.reading} space-y-4`}>
         <XpSectionNav current={"/xp/promotions"} address={address} />
+        <ViewerPreviewBar isAdmin={isAdmin} previewAs={isViewerPreview(as) ? as : null} path="/xp/promotions" />
         <MemberPageHeader
           icon={DASHBOARD_PAGE_HEADERS.stats.icon}
           title={copy.title}

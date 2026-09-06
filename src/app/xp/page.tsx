@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getServerSession } from "next-auth";
 
+import ViewerPreviewBar from "@/app/shared/board/ViewerPreviewBar";
 import MemberPageHeader from "@/app/shared/MemberPageHeader";
 import XpSectionNav from "./XpSectionNav";
 import PublicPageHeader from "@/app/shared/PublicPageHeader";
@@ -9,7 +10,7 @@ import { PAGE_SHELL_PADDING, PAGE_WIDTH } from "@/app/shared/pageShell";
 import { viewerAddress } from "@/app/shared/viewerAddress";
 import { DASHBOARD_PAGE_HEADERS } from "@/app/users/[nickname]/dashboardPageHeaders";
 import { resolveViewerMenuInfo } from "@/app/users/[nickname]/userPageAuth";
-import { viewerKind } from "@/lib/accountListing";
+import { isViewerPreview, viewerKind } from "@/lib/accountListing";
 import { authOptions, isAdminEmail } from "@/lib/auth";
 
 import XpBoardRows from "./XpBoardRows";
@@ -19,6 +20,8 @@ import { loadXpBoard } from "./lib/xpBoardServer";
 import { xpBoardPlacement } from "./lib/xpBoard";
 
 /* Prisma-backed, and CI builds with no database to prerender against. */
+type PageProps = { searchParams: Promise<{ as?: string }> };
+
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
@@ -41,7 +44,8 @@ export const metadata: Metadata = {
  * as well. That is the same answer `/api/leaderboard` gives, arrived at in the
  * same one tested place rather than restated here.
  */
-export default async function XpBoardPage() {
+export default async function XpBoardPage({ searchParams }: PageProps) {
+  const { as } = await searchParams;
   const session = await getServerSession(authOptions);
   const viewerEmail = session?.user?.email?.trim().toLowerCase() ?? null;
   const viewerMenuInfo = await resolveViewerMenuInfo({
@@ -51,7 +55,7 @@ export default async function XpBoardPage() {
 
   const isAdmin = isAdminEmail(viewerEmail);
   const address = viewerAddress(viewerMenuInfo);
-  const entries = await loadXpBoard(viewerKind({ isAdmin, hasAccount: Boolean(address) }));
+  const entries = await loadXpBoard(viewerKind({ isAdmin, hasAccount: Boolean(address), previewAs: as }));
   const own = xpBoardPlacement(entries, viewerMenuInfo?.accountId ?? null);
 
   /* How many members the reader may see at each rank. Counted from the board
@@ -68,6 +72,7 @@ export default async function XpBoardPage() {
       <PublicPageHeader />
       <main className={PAGE_WIDTH.wide}>
         <XpSectionNav current={"/xp"} address={address} />
+        <ViewerPreviewBar isAdmin={isAdmin} previewAs={isViewerPreview(as) ? as : null} path="/xp" />
         <MemberPageHeader
           icon={DASHBOARD_PAGE_HEADERS.stats.icon}
           title={XP_BOARD_COPY.title}
