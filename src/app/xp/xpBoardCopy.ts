@@ -76,3 +76,25 @@ export function ordinal(value: number): string {
   if (ones === 3) return `${value}rd`;
   return `${value}th`;
 }
+
+/**
+ * One rank's own board.
+ *
+ * SPX named both ends in its blurb - what this level asks for and what the
+ * next one does - and that is the pair a member standing here actually wants:
+ * what it took to arrive, and what it takes to leave.
+ */
+export const XP_RANK_BOARD_COPY = {
+  title: (name: string) => `${name}`,
+  subtitle: (level: number, total: number) => `Rank ${level} of ${total}`,
+  needs: (needs: number) => `This rank starts at ${needs.toLocaleString()} XP.`,
+  nextNeeds: (name: string, level: number, needs: number) =>
+    `${name} (${level}) starts at ${needs.toLocaleString()} XP.`,
+  atTop: "There is nothing above this one.",
+  unlocks: (games: number) => `${games} games a day count toward XP at this rank.`,
+  standing: "Standing here now",
+  empty: "Nobody is standing here right now.",
+  emptyHint: "Ranks empty as people climb past them.",
+  back: "The whole board",
+  chartLink: "See who is here",
+} as const;

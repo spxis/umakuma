@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { XP_RANKS, xpForLevel } from "@/lib/xp/xpCurve";
 import { xpRankBadge } from "@/lib/xp/xpRanks";
 
@@ -128,8 +130,16 @@ function LadderRow({ row }: { row: XpLadderRow }) {
       </span>
 
       <div className="min-w-0 flex-1">
+        {/*
+          * Every rank name is a door to the people standing on it, which is
+          * what SPX's chart did and the reason a table of costs is worth
+          * reading at all: the row says what a rank costs, the page behind it
+          * says who is there.
+          */}
         <p className={`truncate text-[13px] font-black ${ahead ? "text-foreground/70" : "text-foreground"}`}>
-          {row.name}
+          <Link href={`/xp/rank/${row.level}`} className="hover:text-accent hover:underline">
+            {row.name}
+          </Link>
           {here ? (
             <span className="ml-2 rounded-full border border-accent px-1.5 py-0.5 text-[9px] font-black uppercase tracking-[0.08em] text-accent">
               {copy.here}
