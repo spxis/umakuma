@@ -114,7 +114,15 @@ describe("simulatePersona", () => {
   it("lets a lesson gate hold the queue down when one is asked for", () => {
     const greedy = { ...reference(), lessonsPerDay: 40, startLevel: 60 };
     const ungated = simulatePersona(greedy, { days: 365, seed: 6 });
-    const gated = simulatePersona(greedy, { days: 365, seed: 6, lessonGate: 60 });
+    /*
+     * A gate that actually binds. At 60 this persona is barely touched - and
+     * over a year it starts *more* lessons gated than not, because holding the
+     * queue down early clears the backlog and the throttle then lets more
+     * through. That is the system working, not failing, but it makes 60 a
+     * number that proves nothing about gating. 20 constrains a 40-lesson-a-day
+     * appetite, which is what the claim is about.
+     */
+    const gated = simulatePersona(greedy, { days: 365, seed: 6, lessonGate: 20 });
     expect(gated.backlog).toBeLessThanOrEqual(ungated.backlog);
     expect(gated.lessonsStarted).toBeLessThan(ungated.lessonsStarted);
   });

@@ -113,6 +113,14 @@ const KANJI_START_LEVEL = 2;
  */
 const VOCABULARY_RAMP_LEVELS = 26;
 const VOCABULARY_START_SHARE = 0.25;
+/*
+ * The shape of a level's whole load, kanji and radicals and words together.
+ * Read as [opening share, levels to reach full]: a level 1 at 42% of a full
+ * level, climbing over thirty levels and then holding. Measured off the ladder
+ * as it stands, which opens at 34 subjects and settles near 105, so moving to a
+ * total budget keeps a curve members already experience.
+ */
+const SUBJECT_LOAD_SHAPE = [0.42, 30];
 
 /**
  * Each JLPT level completes on a round ladder level. `shape` is the relative
@@ -354,6 +362,48 @@ async function loadWaniKaniVocabulary() {
  * How many words each level should teach: a gentle ramp, then flat. Returned as
  * a running total, which is what the placement actually needs.
  */
+/**
+ * How many subjects a level should hold in total, and therefore how much room
+ * is left for words.
+ *
+ * John, on why the old answer was wrong: "You have to treat each kanji with its
+ * vocabulary as a group. However, the vocabulary can always be taught in later
+ * levels, so for vocabulary it is baseline at the item. And radicals before."
+ *
+ * The kanji and the radicals it needs are a skeleton with a fixed shape - a
+ * character cannot arrive before its parts, and the school year or exam band
+ * decides when it arrives. Vocabulary has one constraint only, a floor: never
+ * before every kanji in it. Above that floor a word may wait as long as we
+ * like.
+ *
+ * So the budget is a level's *total*, and words fill what the skeleton leaves.
+ * The old ramp counted words on their own curve and ignored the skeleton
+ * entirely, which is why pulling a school year's kanji forward made levels
+ * heavier instead of simply pushing their words back - and why a fix that
+ * should have been free looked like it cost a beginner twice the work.
+ */
+export function vocabularyCapacityPerLevel(totalWords, kanjiPerLevel, radicalsPerLevel, [startShare, rampLevels]) {
+  const levelCount = kanjiPerLevel.length;
+  const skeleton = kanjiPerLevel.map((kanji, index) => kanji + (radicalsPerLevel[index] ?? 0));
+  const totalSubjects = totalWords + skeleton.reduce((sum, size) => sum + size, 0);
+
+  /*
+   * Up, then flat - not up all the way. A straight ramp across a hundred levels
+   * has to end near 140 subjects to average the 93 this curriculum holds, which
+   * makes the last third heavier than WaniKani. Climbing over the first stretch
+   * and holding steady keeps the opening gentle and the top reasonable, which is
+   * the shape the ladder already had before the budget was a total.
+   */
+  const weights = [];
+  for (let index = 0; index < levelCount; index += 1) {
+    const progress = Math.min(1, index / Math.max(1, rampLevels - 1));
+    weights.push(startShare + (1 - startShare) * progress);
+  }
+  const weightSum = weights.reduce((sum, weight) => sum + weight, 0);
+  const totals = weights.map((weight) => Math.round((weight / weightSum) * totalSubjects));
+  return totals.map((total, index) => Math.max(0, total - skeleton[index]));
+}
+
 export function vocabularyTargets(total, levelCount) {
   const weights = [];
   for (let index = 0; index < levelCount; index += 1) {
@@ -377,7 +427,7 @@ export function vocabularyTargets(total, levelCount) {
  * teaches everything unlocked and the target catches up later.
  * Longest-waiting words go first, then WaniKani's own order.
  */
-export function placeVocabulary(words, levelOfKanji, kanjiPerLevel, rankOfWord = () => 0) {
+export function placeVocabulary(words, levelOfKanji, kanjiPerLevel, rankOfWord = () => 0, capacityPerLevel = null) {
   const queuedAt = new Map();
   const unplaceable = [];
   for (const entry of words) {
@@ -393,7 +443,14 @@ export function placeVocabulary(words, levelOfKanji, kanjiPerLevel, rankOfWord =
 
   const levelCount = kanjiPerLevel.length;
   const placeable = words.length - unplaceable.length;
-  const targets = vocabularyTargets(placeable, levelCount);
+  /* Room left by the skeleton where a caller has worked it out; the old
+     independent ramp otherwise, which ignores what else a level holds. */
+  const targets = capacityPerLevel
+    ? capacityPerLevel.reduce((running, room) => {
+        running.push((running.at(-1) ?? 0) + room);
+        return running;
+      }, [])
+    : vocabularyTargets(placeable, levelCount);
 
   const placed = [];
   const waiting = [];
@@ -528,8 +585,30 @@ async function main() {
    */
   const teachingBandOf = (kanji) => {
     const n = nLevelOf(kanji);
-    if (n !== NO_JLPT_LEVEL) return n;
-    return GRADE_TO_BAND.get(entryFor(kanji)?.grade) ?? NO_JLPT_LEVEL;
+    const bySchool = GRADE_TO_BAND.get(entryFor(kanji)?.grade) ?? NO_JLPT_LEVEL;
+    if (n === NO_JLPT_LEVEL) return bySchool;
+    if (bySchool === NO_JLPT_LEVEL) return n;
+
+    /*
+     * Where the two syllabuses disagree badly, the school year wins.
+     *
+     * A band is a deadline - "every N2 kanji by level 50" - so teaching one
+     * sooner keeps the promise exactly and there is nothing to protect by
+     * holding it back. There was something to lose: 玉 and 竹 and 林 are given
+     * to Japanese six-year-olds and filed at N2, which left grade one reading
+     * as unfinished until level 36 on a ladder that completes N5 at 10.
+     *
+     * Grade one only, and only where the exam files it two or more bands away.
+     * Measured: this moves twelve characters and finishes grade one at level 12
+     * instead of 36, while level 2 goes from seven kanji to eight and the first
+     * ten levels from 81 to 93 - inside every shape the ladder already holds
+     * itself to. Extending it to grade two buys grade two at 17 and costs 148
+     * kanji across those ten levels, which is a different ladder and a decision
+     * rather than a fix. Bands count N5..N1, so the earlier syllabus is the
+     * higher number.
+     */
+    const grade = entryFor(kanji)?.grade ?? 9;
+    return grade === 1 && bySchool - n >= 2 ? bySchool : n;
   };
 
   const bandRank = (kanji) => {
@@ -635,11 +714,20 @@ async function main() {
   const optionalRadicalLevel = placeUnusedRadicals(unused, LADDER_LEVELS);
   const vocabulary = await loadWaniKaniVocabulary();
   const frequency = JSON.parse(await fs.readFile(WORD_FREQUENCY_PATH, "utf8"));
+  const radicalsPerLevel = levels.map(
+    (entry) => [...radicalLevel.values()].filter((level) => level === entry.level).length,
+  );
   const { placed, unplaceable } = placeVocabulary(
     vocabulary,
     levelOfKanji,
     levels.map((l) => l.kanji.length),
     (id) => frequency.rank[id] ?? Number.MAX_SAFE_INTEGER,
+    vocabularyCapacityPerLevel(
+      vocabulary.length,
+      levels.map((l) => l.kanji.length),
+      radicalsPerLevel,
+      SUBJECT_LOAD_SHAPE,
+    ),
   );
 
   const added = new Set(missing.map((entry) => entry.kanji));
@@ -751,11 +839,20 @@ async function main() {
   const gradeLevelOfKanji = new Map(gradeLevels.flatMap((l) => l.kanji.map((k) => [k, l.level])));
   const gradeRadicals = placeRadicals(radicals, gradeLevelOfKanji);
   const gradeOptionalRadicals = placeUnusedRadicals(gradeRadicals.unused, LADDER_LEVELS);
+  const gradeRadicalsPerLevel = gradeLevels.map(
+    (entry) => [...gradeRadicals.level.values()].filter((level) => level === entry.level).length,
+  );
   const gradeVocabulary = placeVocabulary(
     vocabulary,
     gradeLevelOfKanji,
     gradeLevels.map((l) => l.kanji.length),
     (id) => frequency.rank[id] ?? Number.MAX_SAFE_INTEGER,
+    vocabularyCapacityPerLevel(
+      vocabulary.length,
+      gradeLevels.map((l) => l.kanji.length),
+      gradeRadicalsPerLevel,
+      SUBJECT_LOAD_SHAPE,
+    ),
   );
 
   const completesAt = (matches) => {
