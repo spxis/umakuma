@@ -4,6 +4,8 @@ import { useCallback, useEffect, useState } from "react";
 
 
 import { SUBJECT_TYPE_DISPLAY, type SubjectType } from "@/lib/domainConstants";
+import { CURRICULUM_VERSION } from "@/lib/kanjiLadder";
+import { LADDER_STREAMS } from "@/lib/ladder/ladderStreams";
 
 import { UK_STUDY_COPY as copy } from "./UkStudy.constants";
 
@@ -171,6 +173,18 @@ export default function UkStudySession({ accountId, studyHref }: { accountId: st
           <p className="w-full text-sm font-semibold text-foreground/70">{copy.nothingDue}</p>
         ) : null}
       </div>
+
+      {/*
+        * Which arrangement of the ladder these answers are being recorded
+        * against. John: "keep it so that you can barely see it - it's not data
+        * that the general public needs to see, so it shouldn't stand out."
+        * Faint, small, and last on the page: a stamp on the work rather than a
+        * fact about it, there for the moment somebody needs to know why a
+        * level moved under them.
+        */}
+      <p className="text-[10px] font-medium tracking-[0.08em] text-foreground/35" translate="no">
+        {copy.curriculumStamp(LADDER_STREAMS.uk, CURRICULUM_VERSION)}
+      </p>
     </section>
   );
 }

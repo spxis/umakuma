@@ -15,6 +15,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 
 import {
+  checkCarriesVersion,
   checkEveryKanjiTaughtOnce,
   checkFirstLevelIsRadicalsOnly,
   checkGradePromise,
@@ -65,9 +66,14 @@ async function main() {
   const words = await loadWords();
   const expected = new Set(Object.keys(uk.kanjiLevel));
 
-  console.log(`Checking ${expected.size} kanji, ${radicals.length} radicals, ${words.length} words.\n`);
+  console.log(
+    `Checking ${expected.size} kanji, ${radicals.length} radicals, ${words.length} words.\n` +
+      `UK curriculum ${uk.curriculum?.version ?? "unstamped"}` +
+      (ug ? `, UG curriculum ${ug.curriculum?.version ?? "unstamped"}\n` : "\n"),
+  );
 
   const shared = (ladder) => [
+    ...checkCarriesVersion(ladder),
     ...checkEveryKanjiTaughtOnce(ladder, expected),
     ...checkLevelShape(ladder),
     ...checkFirstLevelIsRadicalsOnly(ladder),

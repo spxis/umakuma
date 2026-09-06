@@ -23738,5 +23738,10 @@
       "vocabulary": 75,
       "radicals": 0
     }
-  ]
+  ],
+  "curriculum": {
+    "version": "1.0.0",
+    "bumpedAt": "2026-09-06T00:11:40.109Z",
+    "changelog": []
+  }
 }

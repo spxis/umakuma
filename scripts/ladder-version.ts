@@ -23,7 +23,18 @@ import {
  * worth having: it removes the fear from `ladder:refresh` by saying what a
  * rebuild would do before it is committed to.
  */
-const FILE = join(process.cwd(), "src/data/kanjiLadder.json");
+/**
+ * Both ladders, each versioned on its own.
+ *
+ * UK and UG move for different reasons and at different times - a school-year
+ * rebalance is not a change to the exam ladder - so one version across both
+ * would say less than nothing. A member's answer records which stream it was
+ * against precisely because the two numbers are independent.
+ */
+const LADDER_FILES = [
+  { stream: "UK", file: join(process.cwd(), "src/data/kanjiLadder.json"), published: "src/data/kanjiLadder.json" },
+  { stream: "UG", file: join(process.cwd(), "src/data/gradeLadder.json"), published: "src/data/gradeLadder.json" },
+];
 
 type LadderFile = LadderShape & {
   kanjiLevel: Record<string, { level: number }>;
@@ -40,11 +51,10 @@ function shapeOf(file: LadderFile): LadderShape {
   };
 }
 
-function publishedLadder(): LadderFile | null {
+function publishedLadder(path: string): LadderFile | null {
   try {
-    execFileSync("git", ["fetch", "origin", "--quiet"], { stdio: "inherit" });
     return JSON.parse(
-      execFileSync("git", ["show", "origin/main:src/data/kanjiLadder.json"], {
+      execFileSync("git", ["show", `origin/main:${path}`], {
         encoding: "utf8",
         maxBuffer: 64 * 1024 * 1024,
       }),
@@ -54,10 +64,10 @@ function publishedLadder(): LadderFile | null {
   }
 }
 
-function main(): void {
-  const dryRun = process.argv.includes("--dry-run");
-  const current = JSON.parse(readFileSync(FILE, "utf8")) as LadderFile;
-  const published = publishedLadder();
+function stamp(stream: string, file: string, publishedPath: string, dryRun: boolean): void {
+  const current = JSON.parse(readFileSync(file, "utf8")) as LadderFile;
+  const published = publishedLadder(publishedPath);
+  console.log(`\n${stream}`);
 
   if (!published) {
     console.log("origin/main has no ladder to compare against; treating this as the first version.");
@@ -67,9 +77,9 @@ function main(): void {
         bumpedAt: new Date().toISOString(),
         changelog: [],
       };
-      writeFileSync(FILE, `${JSON.stringify(current, null, 2)}\n`, "utf8");
+      writeFileSync(file, `${JSON.stringify(current, null, 2)}\n`, "utf8");
     }
-    console.log(`Curriculum ${CURRICULUM_VERSION_START}.`);
+    console.log(`  Curriculum ${CURRICULUM_VERSION_START}.`);
     return;
   }
 
@@ -79,19 +89,28 @@ function main(): void {
   const next = bumpCurriculumVersion(from, bump);
   const summary = describeCurriculumDiff(diff);
 
-  console.log(`Published curriculum: ${from}`);
-  console.log(`Change: ${summary}`);
-  console.log(`Classified: ${bump}${bump === "none" ? "" : ` -> ${next}`}`);
+  console.log(`  Published curriculum: ${from}`);
+  console.log(`  Change: ${summary}`);
+  console.log(`  Classified: ${bump}${bump === "none" ? "" : ` -> ${next}`}`);
   if (diff.kanji.moved.length > 0) {
-    console.log(`Kanji moved: ${diff.kanji.moved.slice(0, 20).join(" ")}${diff.kanji.moved.length > 20 ? " …" : ""}`);
+    console.log(`  Kanji moved: ${diff.kanji.moved.slice(0, 20).join(" ")}${diff.kanji.moved.length > 20 ? " …" : ""}`);
   }
 
   if (dryRun) {
-    console.log("\nDry run: nothing written.");
+    console.log("  Dry run: nothing written.");
     return;
   }
   if (bump === "none") {
-    console.log("\nNothing to bump.");
+    /* A ladder that has never been stamped gets its first version even when
+       nothing moved - which is the case this whole script existed for and
+       never covered, so nothing carried a version at all. */
+    if (!current.curriculum) {
+      current.curriculum = { version: from, bumpedAt: new Date().toISOString(), changelog: [] };
+      writeFileSync(file, `${JSON.stringify(current, null, 2)}\n`, "utf8");
+      console.log(`  Nothing moved, but it carried no version; stamped ${from}.`);
+      return;
+    }
+    console.log("  Nothing to bump.");
     return;
   }
 
@@ -108,8 +127,18 @@ function main(): void {
     ...((published.curriculum?.changelog ?? []) as unknown[]),
   ];
   current.curriculum = { version: next, bumpedAt: new Date().toISOString(), changelog };
-  writeFileSync(FILE, `${JSON.stringify(current, null, 2)}\n`, "utf8");
-  console.log(`\nCurriculum ${from} -> ${next}. Commit the ladder with the change that caused it.`);
+  writeFileSync(file, `${JSON.stringify(current, null, 2)}\n`, "utf8");
+  console.log(`  Curriculum ${from} -> ${next}. Commit the ladder with the change that caused it.`);
+}
+
+function main(): void {
+  const dryRun = process.argv.includes("--dry-run");
+  try {
+    execFileSync("git", ["fetch", "origin", "--quiet"], { stdio: "inherit" });
+  } catch {
+    console.log("Could not reach origin; comparing against nothing.");
+  }
+  for (const ladder of LADDER_FILES) stamp(ladder.stream, ladder.file, ladder.published, dryRun);
 }
 
 main();

@@ -28,6 +28,7 @@
     "level:magic-check": "node scripts/check-level-magic-strings.mjs",
     "loc:check": "node scripts/check-max-loc.mjs",
     "ladder:rules": "node scripts/check-ladders.mjs",
+    "db:backfill:curriculum-stamp": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/backfill-curriculum-stamp.ts",
     "security:check": "pnpm audit --prod --audit-level high",
     "quality:check": "pnpm lint && pnpm constants:check && pnpm study:magic-check && pnpm level:magic-check && pnpm loc:check && pnpm ladder:rules && pnpm glyph:check && pnpm typecheck && pnpm test:unit",
     "quality:fix": "pnpm lint:fix && pnpm quality:check",

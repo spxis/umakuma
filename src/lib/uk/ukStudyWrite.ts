@@ -1,6 +1,8 @@
 import "server-only";
 
 import { REVIEW_RESULTS } from "@/lib/domainConstants";
+import { CURRICULUM_VERSION } from "@/lib/kanjiLadder";
+import { LADDER_STREAMS } from "@/lib/ladder/ladderStreams";
 import { prisma } from "@/lib/prisma";
 import { initialLessonState, nextSrsStage, nextStageAvailableAt, SRS_BURNED_STAGE } from "@/lib/srs/srsSchedule";
 import { settleDailyXp } from "@/lib/xp/xpDayServer";
@@ -127,7 +129,23 @@ export async function recordUkReview({
       },
     }),
     prisma.ukReviewAttempt.create({
-      data: { accountId, stateId: state.id, subjectId, result, previousSrsStage, newSrsStage },
+      /*
+       * Stamped with the curriculum it was answered against. The ladders move
+       * when the evidence says to - a kanji shifts a level, a word is placed
+       * differently - and an answer given against one arrangement should still
+       * be readable after the arrangement changes. The stream is UK until a
+       * member can choose UG; when they can, it is theirs.
+       */
+      data: {
+        accountId,
+        stateId: state.id,
+        subjectId,
+        result,
+        previousSrsStage,
+        newSrsStage,
+        curriculumStream: LADDER_STREAMS.uk,
+        curriculumVersion: CURRICULUM_VERSION,
+      },
     }),
   ]);
 

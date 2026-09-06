@@ -80,6 +80,30 @@ export function isKanjiCharacter(character) {
 
 const kanjiIn = (word) => [...word].filter((c) => isKanjiCharacter(c));
 
+/**
+ * The ladder says which version of itself it is.
+ *
+ * This rule exists because the machinery to answer it was built, committed and
+ * then never run: `ladder:version` classifies a rebuild as major, minor or
+ * patch and stamps the file, and for its whole life nothing called it. The
+ * ladders shipped with no version at all while `CURRICULUM_VERSION` quietly
+ * returned a hardcoded default, so every surface reporting a version was
+ * reporting a constant.
+ *
+ * A member's answers are recorded against a curriculum version. If the ladder
+ * carries none, that record is a lie, so this is a gate rather than a warning.
+ */
+export function checkCarriesVersion(ladder) {
+  const version = ladder.curriculum?.version;
+  if (!version) {
+    return [{ rule: "the ladder is versioned", detail: "no curriculum version — run `pnpm ladder:version`" }];
+  }
+  if (!/^\d+\.\d+\.\d+$/.test(version)) {
+    return [{ rule: "the ladder is versioned", detail: `curriculum version "${version}" is not three numbers` }];
+  }
+  return [];
+}
+
 /** Every kanji the ladder should teach appears exactly once, and nothing else does. */
 export function checkEveryKanjiTaughtOnce(ladder, expected) {
   const violations = [];
