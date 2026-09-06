@@ -195,6 +195,24 @@ export const XP_DAILY_CAPS: Partial<Record<XpAwardKind, number>> = {
  */
 
 /**
+ * Kinds that are defined and priced, and that nothing fires.
+ *
+ * One, and it is deliberate rather than pending: `curriculumLevelGained` has
+ * an obvious trigger and wiring it would put another ~10 XP a day on the
+ * reference learner, taking them under the three-year target the curve was
+ * built against. `reviewXpAwards` says so at the point where it would be
+ * awarded, and `balanceSimulator.ts` models it; it wants doing with the model,
+ * not beside it.
+ *
+ * It is named here because `/xp/earn` reads these two maps as the list of ways
+ * a member can earn, and a promise of 100 XP a level that nothing pays is the
+ * same broken promise as an unwired proposed kind — the page shipped
+ * advertising 300 XP of game awards for exactly that reason. A kind leaves
+ * this list when something starts paying it.
+ */
+export const XP_UNAWARDED_KINDS: XpAwardKind[] = ["curriculumLevelGained"];
+
+/**
  * Awards that may be earned once per period rather than repeatedly.
  *
  * The milestones are here as insurance rather than as policy: their triggers
