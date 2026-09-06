@@ -6183,12 +6183,25 @@
     "id": "early-moves-allowed",
     "name": "The move rule refused early moves, and rebuilds ate the version",
     "area": "study",
+    "status": "shipped",
     "kind": "bug",
+    "date": "2026-09-05",
+    "summary": "A character may now be taught earlier than the exam band it belongs to - which keeps every exam promise, since those are deadlines rather than start dates - and a ladder rebuild no longer loses the curriculum version it was stamped with.",
+    "dateIsEstimate": false,
+    "release": 497,
+    "version": "1.15.0",
+    "releasedAt": "2026-09-06T00:54:03Z"
+  },
+  {
+    "id": "subjects-budget-grade-one",
+    "name": "Grade one finishes at UK12, and vocabulary fills what the skeleton leaves",
+    "area": "study",
+    "kind": "feature",
     "status": "shipped",
     "date": "2026-09-05",
-    "version": "1.15.0",
-    "release": 497,
-    "releasedAt": "2026-09-06T00:54:03Z",
-    "summary": "A character may now be taught earlier than the exam band it belongs to - which keeps every exam promise, since those are deadlines rather than start dates - and a ladder rebuild no longer loses the curriculum version it was stamped with."
+    "version": "1.16.0",
+    "release": 498,
+    "releasedAt": "2026-09-06T01:54:15Z",
+    "summary": "Grade one now finishes at level 12 instead of 36 - twelve characters a Japanese six-year-old is taught were stranded behind an exam band. It costs a beginner almost nothing, because a level's budget is now its whole load rather than its words alone: pulling kanji earlier simply pushes their vocabulary later."
   }
 ]
