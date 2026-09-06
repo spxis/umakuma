@@ -4,24 +4,18 @@ import { join } from "node:path";
 import { PrismaClient } from "@prisma/client";
 
 import { addEntry, claimEntry, formatBoard, releaseEntry, stringifyTimeline } from "../src/lib/backlogBoard";
-import {
-  FEATURE_AREA_VALUES,
-  FEATURE_KIND_VALUES,
-  isFeatureArea,
-  isFeatureKind,
-  type FeatureTimelineEntry,
-} from "../src/lib/featureTimeline";
-import { TICKET_STATUSES, suggestedEntryId } from "../src/lib/tickets";
+import { isFeatureArea, isFeatureKind, type FeatureTimelineEntry } from "../src/lib/featureTimeline";
+import { TICKET_STATUSES } from "../src/lib/tickets";
 
 /**
  * The board, from a terminal.
  *
  *   pnpm backlog                                      what is open, and who has it
- *   pnpm backlog add <id> <area> "<name>" "<summary>" [bug]
- *   pnpm backlog claim <id> "<owner>"                 pick it up
- *   pnpm backlog release <id>                         put it down unshipped
  *   pnpm backlog wishes                               what has been asked for
- *   pnpm backlog file <ticketId> <area> [id]            a wish becomes planned work
+ *
+ * `add`, `claim`, `release` and `file` are retired and exit non-zero naming
+ * the replacement: planned work lives on the board, and this file keeps only
+ * what has shipped.
  *
  * Every request John makes goes in before the work starts; every agent claims
  * before it builds. The timeline JSON is the board; this only edits it safely -
@@ -89,12 +83,12 @@ function usage(): never {
   console.error(
     [
       "usage:",
-      "  pnpm backlog",
-      `  pnpm backlog add <id> <${FEATURE_AREA_VALUES.join("|")}> "<name>" "<summary>" [${FEATURE_KIND_VALUES.join("|")}]`,
-      '  pnpm backlog claim <id> "<owner>"',
-      "  pnpm backlog release <id>",
-      "  pnpm backlog wishes",
-      `  pnpm backlog file <ticketId> <${FEATURE_AREA_VALUES.join("|")}> [entry-id]`,
+      "  pnpm backlog                what has shipped, from the file",
+      "  pnpm backlog wishes         what has been asked for, from the board",
+      "",
+      "add, claim, release and file are retired - planned work lives on the",
+      "board. Use `pnpm task` for those, and `pnpm release:take --ticket` to",
+      "ship one.",
     ].join("\n"),
   );
   process.exit(2);
@@ -122,7 +116,21 @@ async function main(): Promise<void> {
        */
       case "add":
       case "claim":
-      case "release": {
+      case "release":
+      /*
+       * `file` was the one left running, and it was the dangerous one.
+       *
+       * It wrote a `planned` entry into the JSON and marked the ticket filed,
+       * which looks like progress and is not: release ordinals are counted as
+       * the entries that carry a version, and a planned entry carries none -
+       * so the row was invisible on /admin/releases rather than merely early,
+       * and the ticket had left the board. A documented command that succeeds
+       * and leaves the wrong state is worse than one that fails.
+       *
+       * A wish becomes work by becoming a claimed ticket, and reaches this
+       * file when it ships, through `pnpm release:take --ticket`.
+       */
+      case "file": {
         console.error(
           [
             `\`pnpm backlog ${command}\` is retired: planned work lives on the shared board now.`,
@@ -132,7 +140,10 @@ async function main(): Promise<void> {
             '  pnpm task claim <id> "<who>"',
             "  pnpm task release <id>",
             "",
-            "This file keeps the shipped record; `pnpm release:take` still writes it.",
+            "When it ships, `pnpm release:take --ticket <id> --summary \"…\"` writes",
+            "the entry and marks the ticket shipped in one pass.",
+            "",
+            "This file keeps the shipped record, and nothing else.",
           ].join("\n"),
         );
         process.exit(2);
@@ -172,56 +183,11 @@ async function main(): Promise<void> {
           console.log(`${wish.id}  ${wish.kind === "bug" ? "BUG " : "    "} ${wish.title}`);
           console.log(`      area: ${wish.area ?? "unset"} · asked by ${wish.requestedBy ?? "unknown"}`);
           if (wish.detail) console.log(`      ${wish.detail.replace(/\n/g, "\n      ")}`);
-          console.log(`      pnpm backlog file ${wish.id} ${wish.area ?? "<area>"}\n`);
+          /* The command that actually moves it on. This printed `pnpm backlog
+             file …` for months, so the listing taught the retired flow to
+             every agent that read it. */
+          console.log(`      pnpm task claim ${wish.id} "<who>"\n`);
         }
-        break;
-      }
-      /*
-       * A wish becomes real work.
-       *
-       * The entry is written from the wish's own words, so what John asked for is
-       * what the board says, and the wish is marked filed with the id it became -
-       * the two halves stay linked rather than the row being deleted.
-       */
-      case "file": {
-        const [ticketId, areaArg, entryIdArg] = rest;
-        if (!ticketId) usage();
-
-        const wish = await prisma().ticket.findUnique({ where: { id: ticketId } });
-        if (!wish) {
-          console.error(`No wish "${ticketId}". Run: pnpm backlog wishes`);
-          process.exit(1);
-        }
-        if (wish.status !== TICKET_STATUSES.open) {
-          console.error(`"${ticketId}" is ${wish.status}, not open.`);
-          process.exit(1);
-        }
-
-        const area = areaArg ?? wish.area ?? "";
-        if (!isFeatureArea(area)) usage();
-        const kind = isFeatureKind(wish.kind) ? wish.kind : "feature";
-        const entryId = entryIdArg ?? suggestedEntryId(wish.title);
-
-        save(
-          addEntry(
-            load(),
-            {
-              id: entryId,
-              area,
-              kind,
-              name: wish.title,
-              summary: `${wish.detail?.trim() || `${wish.title}.`} Wished ${dateInVancouver(wish.createdAt)}${
-                wish.requestedBy ? ` by ${wish.requestedBy}` : ""
-              }.`,
-            },
-            todayInVancouver(),
-          ),
-        );
-        await prisma().ticket.update({
-          where: { id: ticketId },
-          data: { status: TICKET_STATUSES.filed, filedAs: entryId },
-        });
-        console.log(`filed ${ticketId} as ${entryId} (${area})`);
         break;
       }
       default:

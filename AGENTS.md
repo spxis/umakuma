@@ -310,15 +310,16 @@ Run `pnpm quality:check` after non-trivial `src/` edits. If lint issues are auto
   (`pnpm task claim <id> "<who>"`) and puts it down if it stops (`pnpm task
   release <id>`). A claim cannot be taken over; ask the holder to release it.
 
-  `pnpm backlog add`, `claim` and `release` are **retired** and exit non-zero
-  saying so: planned work is not written into `featureTimeline.json` any more.
-  `pnpm backlog file <ticketId> <area>` is the trap - it is *not* retired, it
-  still runs, and it still writes a `planned` entry into the JSON while
-  marking the ticket `filed`. Do not use it. A versionless entry is invisible
-  rather than merely wrong: `release` counts only entries that carry a
-  version, so nothing on `/admin/releases` will ever show it. To undo one,
+  `pnpm backlog add`, `claim`, `release` and `file` are **retired** and exit
+  non-zero saying so: planned work is not written into `featureTimeline.json`
+  any more. `file` was the last to go and was the one that bit, because it
+  succeeded: it wrote a `planned` entry into the JSON and marked the ticket
+  `filed`, which looks like progress and is not. A versionless entry is
+  invisible rather than merely wrong - `release` counts only entries that
+  carry a version, so nothing on `/admin/releases` would ever show it - and
+  the ticket had left the board. If you find one from before it was retired,
   `git checkout origin/main -- src/data/featureTimeline.json` and re-claim the
-  ticket - `filed` is claimable, since `tickets.ts` reads it as the first
+  ticket; `filed` is claimable, since `tickets.ts` reads it as the first
   board's word for open. That file keeps only
   what has shipped, and `pnpm release:take --ticket <id> --summary "…"` writes
   the entry and marks the ticket shipped in one pass, so the two halves cannot

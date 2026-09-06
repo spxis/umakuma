@@ -153,3 +153,45 @@ describe("saving the file", () => {
     ).toEqual([]);
   });
 });
+
+/**
+ * The four retired commands, and the one that was left running.
+ *
+ * `add`, `claim` and `release` were retired when planned work moved to the
+ * board. `file` was not, and it was the dangerous one: it wrote a `planned`
+ * entry into the JSON and marked the ticket filed, which looks like progress
+ * and is not. Release ordinals count the entries that carry a version, and a
+ * planned entry carries none - so the row was invisible on /admin/releases
+ * rather than merely early, and the ticket had left the board.
+ *
+ * Asserted over the script's source: the fault was a documented command that
+ * succeeded and left the wrong state, so what matters is that it cannot run at
+ * all, and that nothing in the file still teaches it.
+ */
+describe("the retired backlog commands", () => {
+  const script = readFileSync(join(process.cwd(), "scripts/backlog.ts"), "utf8");
+
+  it.each(["add", "claim", "release", "file"])("refuses `%s` rather than running it", (command) => {
+    expect(script).toContain(`case "${command}":`);
+  });
+
+  /* The one that used to write. If `addEntry` is reachable from a command
+     again, planned work is being written into the shipped record again. */
+  it("no longer writes a timeline entry from a ticket", () => {
+    expect(script).not.toContain("TICKET_STATUSES.filed");
+    expect(script).not.toContain("suggestedEntryId(");
+  });
+
+  /* The listing printed `pnpm backlog file …` under every wish, so the board
+     taught the retired flow to whoever read it. */
+  it("points the wish listing at the board, not at itself", () => {
+    expect(script).toContain('pnpm task claim ${wish.id}');
+    expect(script).not.toContain("pnpm backlog file ${wish.id}");
+  });
+
+  it("offers only the two commands that still run", () => {
+    const usage = script.slice(script.indexOf("function usage()"), script.indexOf("function usage()") + 900);
+    expect(usage).toContain("pnpm backlog wishes");
+    expect(usage).not.toMatch(/pnpm backlog (add|claim|release|file) </);
+  });
+});
