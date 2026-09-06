@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getServerSession } from "next-auth";
 
 import MemberPageHeader from "@/app/shared/MemberPageHeader";
+import XpSectionNav from "../XpSectionNav";
 import PublicPageHeader from "@/app/shared/PublicPageHeader";
 import { PAGE_SHELL_PADDING, PAGE_WIDTH } from "@/app/shared/pageShell";
 import { DASHBOARD_PAGE_HEADERS } from "@/app/users/[nickname]/dashboardPageHeaders";
@@ -34,6 +35,7 @@ export default async function XpEarnPage() {
       <PublicPageHeader />
 
       <main className={`${PAGE_WIDTH.reading} space-y-4`}>
+        <XpSectionNav current={"/xp/earn"} address={null} />
         <MemberPageHeader
           icon={DASHBOARD_PAGE_HEADERS.stats.icon}
           title={copy.title}

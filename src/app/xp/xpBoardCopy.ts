@@ -174,3 +174,13 @@ export const XP_PROMOTIONS_COPY = {
   emptyHint: "Ranks get dearer as you go, so a quiet week here is normal.",
   back: "The whole board",
 } as const;
+
+/** The row across the top of every XP page. */
+export const XP_SECTION_NAV_COPY = {
+  label: "XP pages",
+  board: "Board",
+  weekly: "This week",
+  promotions: "Promotions",
+  earn: "How XP is earned",
+  mine: "My XP",
+} as const;

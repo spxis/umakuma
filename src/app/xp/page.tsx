@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getServerSession } from "next-auth";
 
 import MemberPageHeader from "@/app/shared/MemberPageHeader";
+import XpSectionNav from "./XpSectionNav";
 import PublicPageHeader from "@/app/shared/PublicPageHeader";
 import { PAGE_SHELL_PADDING, PAGE_WIDTH } from "@/app/shared/pageShell";
 import { viewerAddress } from "@/app/shared/viewerAddress";
@@ -66,6 +67,7 @@ export default async function XpBoardPage() {
     <div className={`${PAGE_WIDTH.wide} ${PAGE_SHELL_PADDING}`}>
       <PublicPageHeader />
       <main className={PAGE_WIDTH.wide}>
+        <XpSectionNav current={"/xp"} address={address} />
         <MemberPageHeader
           icon={DASHBOARD_PAGE_HEADERS.stats.icon}
           title={XP_BOARD_COPY.title}

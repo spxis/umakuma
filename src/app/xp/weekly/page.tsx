@@ -4,6 +4,7 @@ import { getServerSession } from "next-auth";
 import MemberBoardRows from "@/app/shared/board/MemberBoardRows";
 import { memberBoardGap, type MemberBoardEntry } from "@/app/shared/board/memberBoardView";
 import MemberPageHeader from "@/app/shared/MemberPageHeader";
+import XpSectionNav from "../XpSectionNav";
 import PublicPageHeader from "@/app/shared/PublicPageHeader";
 import { PAGE_SHELL_PADDING, PAGE_WIDTH } from "@/app/shared/pageShell";
 import { viewerAddress } from "@/app/shared/viewerAddress";
@@ -73,6 +74,7 @@ export default async function XpWeeklyPage({ searchParams }: PageProps) {
       <PublicPageHeader />
 
       <main className={`${PAGE_WIDTH.reading} space-y-4`}>
+        <XpSectionNav current={"/xp/weekly"} address={address} />
         <MemberPageHeader
           icon={DASHBOARD_PAGE_HEADERS.stats.icon}
           title={copy.title}

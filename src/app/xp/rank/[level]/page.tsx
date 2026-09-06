@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import MemberBoardRows from "@/app/shared/board/MemberBoardRows";
 import { memberBoardGap, type MemberBoardEntry } from "@/app/shared/board/memberBoardView";
 import MemberPageHeader from "@/app/shared/MemberPageHeader";
+import XpSectionNav from "../../XpSectionNav";
 import RankName from "@/app/shared/xp/RankName";
 import PublicPageHeader from "@/app/shared/PublicPageHeader";
 import { PAGE_SHELL_PADDING, PAGE_WIDTH } from "@/app/shared/pageShell";
@@ -77,6 +78,7 @@ export default async function XpRankPage({ params }: PageProps) {
       <PublicPageHeader />
 
       <main className={`${PAGE_WIDTH.reading} space-y-4`}>
+        <XpSectionNav current={null} address={address} />
         <MemberPageHeader
           icon={DASHBOARD_PAGE_HEADERS.stats.icon}
           title={copy.title(rank.name)}
