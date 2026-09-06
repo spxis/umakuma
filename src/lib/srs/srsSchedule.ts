@@ -14,7 +14,7 @@
  * Its companion, `customLevelUnlock.ts`, deliberately did *not* move. The two
  * ladders gate levels differently — an uploaded library counts every item in a
  * level, ours counts the level's kanji, or its radicals on level 1 where there
- * are none — so `resolveUkLevel` in `uk/ukLevel.ts` is a separate rule rather
+ * are none — so `resolveUnLevel` in `uk/unLevel.ts` is a separate rule rather
  * than a shared one wearing two hats.
  */
 import { WK_STATUSES, srsBucketFromStage, type WkStatus, REVIEW_RESULTS } from "@/lib/domainConstants";

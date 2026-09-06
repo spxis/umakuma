@@ -20,7 +20,7 @@ import { completedRunValues, hydrateGameQuestions, toGameRunSummary } from "@/li
 import { buildAppendedQuestions } from "@/lib/gameRunAppend";
 import { prisma } from "@/lib/prisma";
 import { settleDailyXp } from "@/lib/xp/xpDayServer";
-import { finalizeLevelTestForRun } from "@/lib/uk/ukLevelTestServer";
+import { finalizeLevelTestForRun } from "@/lib/uk/unLevelTestServer";
 import { awardXpQuietly } from "@/lib/xp/xpServer";
 import type { XpEarned } from "@/lib/xp/xpToast";
 import { XP_REASONS } from "@/lib/xp/xpStudyAwards";

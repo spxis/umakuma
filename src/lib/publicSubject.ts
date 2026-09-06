@@ -34,7 +34,7 @@ export type PublicSubject = CatalogSubjectDetail & {
    * this module is server-only, so the file stays out of every bundle that a
    * subject page ships.
    */
-  ukLevel: number | null;
+  unLevel: number | null;
 };
 
 /**
@@ -43,7 +43,7 @@ export type PublicSubject = CatalogSubjectDetail & {
  * build time and is not addressed by character - so those come back null
  * rather than guessing.
  */
-function ukLevelFor(characters: string | null): number | null {
+function unLevelFor(characters: string | null): number | null {
   if (!characters || [...characters].length !== 1) return null;
   return kanjiPlacement(characters)?.level ?? null;
 }
@@ -93,7 +93,7 @@ export async function getPublicSubject(
     select: { slug: true },
   });
 
-  return { ...detail, slug: row?.slug ?? null, ukLevel: ukLevelFor(detail.characters) };
+  return { ...detail, slug: row?.slug ?? null, unLevel: unLevelFor(detail.characters) };
 }
 
 /**

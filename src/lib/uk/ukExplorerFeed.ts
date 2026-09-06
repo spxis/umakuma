@@ -39,7 +39,7 @@ export function mapUkQueueItem(item: UkStudyItem): StudyQueueItem {
     assignmentId: item.subjectId,
     queueType: ukQueueTypeFor(item),
     subjectType: ukSubjectTypeFor(item.kind),
-    ukLevel: item.level,
+    unLevel: item.level,
     contentSource: ukContentSourceFor(item),
     characters: item.characters,
     meanings: item.meanings,

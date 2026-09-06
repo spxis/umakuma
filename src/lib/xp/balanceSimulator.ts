@@ -42,7 +42,7 @@ import { restDaysAllowedAt } from "./xpRest";
  * 3. **The curriculum is the shipped one**, level by level: fifteen radicals
  *    and no kanji at level 1, seven kanji at level 2. The early gates are tiny
  *    and that is exactly where session timing decides anything.
- * 4. **Level progress is a high-water mark.** `resolveUkLevel` counts an item
+ * 4. **Level progress is a high-water mark.** `resolveUnLevel` counts an item
  *    that has *ever* reached Guru, so a demotion does not un-clear a level.
  *
  * It is still a model and wrong in the ways models are: no motivation curve,

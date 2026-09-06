@@ -1,7 +1,7 @@
 import { queueItemLevel } from "@/lib/studyQueueSummary";
 
 /* Levels come from `queueItemLevel`, never `item.wkLevel`: a UmaKuma item has
-   `ukLevel` and no `wkLevel`, so asking WaniKani's skipped every one of them
+   `unLevel` and no `wkLevel`, so asking WaniKani's skipped every one of them
    and the filter row drew "ALL (0)", no chips, and matched nothing. */
 
 import { useMemo } from "react";

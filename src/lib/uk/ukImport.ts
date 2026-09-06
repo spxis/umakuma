@@ -1,6 +1,6 @@
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
 
-import { UK_LEVEL_PASS_SRS_STAGE, type UkLevelTotals } from "./ukLevel";
+import { UN_LEVEL_PASS_SRS_STAGE, type UkLevelTotals } from "./unLevel";
 
 /**
  * Bringing a WaniKani member's progress onto our ladder.
@@ -129,7 +129,7 @@ export function planWanikaniImport({
   for (const target of targets) {
     if (target.kind !== SUBJECT_TYPES.kanji) continue;
     const stage = stageBySubject.get(target.subjectId) ?? existing.get(target.subjectId)?.srsStage ?? 0;
-    if (stage < UK_LEVEL_PASS_SRS_STAGE) continue;
+    if (stage < UN_LEVEL_PASS_SRS_STAGE) continue;
     passedByLevel.set(target.level, (passedByLevel.get(target.level) ?? 0) + 1);
   }
 

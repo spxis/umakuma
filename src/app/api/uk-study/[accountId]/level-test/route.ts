@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
-import { pendingGate } from "@/lib/uk/ukLevelTestServer";
+import { pendingGate } from "@/lib/uk/unLevelTestServer";
 
 type RouteContext = { params: Promise<{ accountId: string }> };
 

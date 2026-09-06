@@ -20,7 +20,7 @@ export type ConfusableView = {
   reading: string | null;
   href: string;
   /** Where the ladder teaches it, which is the useful half of the warning. */
-  ukLevel: number | null;
+  unLevel: number | null;
   sources: ConfusableSource[];
 };
 
@@ -44,7 +44,7 @@ export function confusableViewsFor(character: string): ConfusableView[] {
       meaning: entry?.primaryMeaning ?? null,
       reading: reading ? withoutOkuriganaMark(reading) : null,
       href: kanjiPageHref(neighbour.kanji),
-      ukLevel: kanjiPlacement(neighbour.kanji)?.level ?? null,
+      unLevel: kanjiPlacement(neighbour.kanji)?.level ?? null,
       sources: neighbour.sources,
     };
   });

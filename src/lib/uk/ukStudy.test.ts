@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 
 import { initialLessonState, nextSrsStage, nextStageAvailableAt } from "@/lib/srs/srsSchedule";
 
-import { UK_LEVEL_PASS_SRS_STAGE } from "./ukLevel";
+import { UN_LEVEL_PASS_SRS_STAGE } from "./unLevel";
 
 /**
  * The SRS engine the UmaKuma ladder runs on, which is WaniKani's schedule
@@ -48,13 +48,13 @@ describe("the shared schedule", () => {
        one wrong answer must not un-learn a level. */
     const write = readFileSync("src/lib/uk/ukStudyWrite.ts", "utf8");
     expect(write).toContain("passedAt: state.passedAt ??");
-    expect(UK_LEVEL_PASS_SRS_STAGE).toBe(5);
+    expect(UN_LEVEL_PASS_SRS_STAGE).toBe(5);
   });
 
   it("checks a lesson's level server-side rather than trusting the request", () => {
     /* A crafted body would otherwise open the whole hundred levels at once. */
     const write = readFileSync("src/lib/uk/ukStudyWrite.ts", "utf8");
-    expect(write).toContain("level: { lte: account?.ukLevel ?? 1 }");
+    expect(write).toContain("level: { lte: account?.unLevel ?? 1 }");
   });
 
   it("never copies WaniKani's mnemonics into our rows", () => {

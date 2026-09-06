@@ -50,16 +50,16 @@ const META_PILL = `${NO_TRANSLATE_CLASS} subject-pill border-line bg-surface/85 
  * Two level props rather than one prop naming a system, for the reason
  * `levelBadge` gives: there are exactly two ladders and they are named in the
  * product. A caller holding WaniKani's level passes `level` and one holding
- * ours passes `ukLevel`, so neither can label a number with the wrong system
+ * ours passes `unLevel`, so neither can label a number with the wrong system
  * by accident, and a surface that knows both draws both.
  */
 function Meta({
   level,
-  ukLevel,
+  unLevel,
   successRate,
 }: {
   level?: number | null;
-  ukLevel?: number | null;
+  unLevel?: number | null;
   successRate?: number | null;
 }) {
   const rate =
@@ -69,7 +69,7 @@ function Meta({
   const [levelMode] = usePillLevels();
   const badges =
     levelMode === PILL_LEVEL_MODES.on
-      ? [wkLevelBadge(level), unLevelBadge(ukLevel)].filter((badge): badge is string => badge !== null)
+      ? [wkLevelBadge(level), unLevelBadge(unLevel)].filter((badge): badge is string => badge !== null)
       : [];
   if (rate === null && badges.length === 0) return null;
   return (
@@ -98,7 +98,7 @@ export default function SubjectPill({
   label,
   tone,
   level,
-  ukLevel,
+  unLevel,
   successRate,
   selected,
   trailing,
@@ -117,7 +117,7 @@ export default function SubjectPill({
   /** The WaniKani level, where the surface knows it. */
   level?: number | null;
   /** The UmaKuma level, where the surface knows it. */
-  ukLevel?: number | null;
+  unLevel?: number | null;
   /** The member's own success rate, where the surface knows it. */
   successRate?: number | null;
   /** Lit, for a strip where one pill is the one on screen. */
@@ -144,7 +144,7 @@ export default function SubjectPill({
       {words ? (
         <span className="max-w-28 truncate text-[11px] font-semibold text-foreground/65">{words}</span>
       ) : null}
-      <Meta level={level} ukLevel={ukLevel} successRate={successRate} />
+      <Meta level={level} unLevel={unLevel} successRate={successRate} />
       {trailing}
     </>
   );

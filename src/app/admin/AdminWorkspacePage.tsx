@@ -107,7 +107,7 @@ function AdminWorkspacePageContent({
         // and inventing zeroes would have the workspace reporting an admin's
         // progress as nothing at all.
         xp: null,
-        ukLevel: null,
+        unLevel: null,
         wkLevel: null,
         // And no theme, for the same reason: it is a column on an account row
         // this page never reads, and the strip is collapsed here anyway.

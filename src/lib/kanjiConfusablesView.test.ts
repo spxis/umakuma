@@ -15,7 +15,7 @@ describe("a pairing, ready to draw", () => {
     expect(shi).toBeDefined();
     expect(shi!.href).toBe(`/kanji/${encodeURIComponent("士")}`);
     /* The actionable half: a member meeting 士 has known 土 for 47 levels. */
-    expect(shi!.ukLevel).toBeGreaterThan(20);
+    expect(shi!.unLevel).toBeGreaterThan(20);
   });
 
   it("takes the meaning and the reading from the dictionary", () => {

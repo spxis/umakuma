@@ -10,7 +10,7 @@ import { SUBJECT_TYPES, type SubjectType, type WkStatus } from "@/lib/domainCons
 export type QueueSummaryItem = {
   subjectType?: SubjectType;
   wkLevel?: number | null;
-  ukLevel?: number | null;
+  unLevel?: number | null;
   srsStage: number;
   status: WkStatus;
 };
@@ -25,8 +25,8 @@ export const EMPTY_SRS_COUNTS = { all: 0, locked: 0, apprentice: 0, guru: 0, mas
 export type SrsCounts = { -readonly [K in keyof typeof EMPTY_SRS_COUNTS]: number };
 
 /** The level the explorer files an item under: ours where the feed is ours. */
-export function queueItemLevel(item: Pick<QueueSummaryItem, "wkLevel" | "ukLevel">): number | null {
-  const level = item.ukLevel ?? item.wkLevel ?? null;
+export function queueItemLevel(item: Pick<QueueSummaryItem, "wkLevel" | "unLevel">): number | null {
+  const level = item.unLevel ?? item.wkLevel ?? null;
   return typeof level === "number" && level > 0 ? level : null;
 }
 

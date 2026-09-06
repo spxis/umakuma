@@ -143,8 +143,8 @@ describe("every award a member earns is said out loud", () => {
   });
 
   it.each([
-    ["src/lib/uk/ukLevelTestServer.ts", "XP_REASONS.levelTest"],
-    ["src/lib/uk/ukLevelServer.ts", "XP_REASONS.placement"],
+    ["src/lib/uk/unLevelTestServer.ts", "XP_REASONS.levelTest"],
+    ["src/lib/uk/unLevelServer.ts", "XP_REASONS.placement"],
     ["src/lib/uk/ukStudyWrite.ts", "XP_REASONS.lesson"],
     ["src/app/api/game/[accountId]/runs/[runId]/answer/route.ts", "XP_REASONS.game"],
     ["src/app/api/game/[accountId]/runs/[runId]/complete/route.ts", "XP_REASONS.game"],

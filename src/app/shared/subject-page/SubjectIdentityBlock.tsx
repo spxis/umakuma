@@ -37,7 +37,7 @@ export type SubjectIdentity = {
   readings: string[];
   /** Null where WaniKani does not teach the subject, which is most characters. */
   wkLevel: number | null;
-  ukLevel?: number | null;
+  unLevel?: number | null;
   jlptLevel: number | null;
   /**
    * Whether WaniKani is behind what the card says.
@@ -58,7 +58,7 @@ function Pill({ children }: { children: React.ReactNode }) {
 }
 
 export default function SubjectIdentityBlock({ identity }: { identity: SubjectIdentity }) {
-  const { label, subjectType, name, meanings, readings, wkLevel, ukLevel, jlptLevel, credited } = identity;
+  const { label, subjectType, name, meanings, readings, wkLevel, unLevel, jlptLevel, credited } = identity;
   const display = SUBJECT_TYPE_DISPLAY[subjectType as keyof typeof SUBJECT_TYPE_DISPLAY];
 
   return (
@@ -90,7 +90,7 @@ export default function SubjectIdentityBlock({ identity }: { identity: SubjectId
             {/* Ours beside theirs, and neither has to be hidden now that both
                 say whose they are. A kanji WaniKani never teaches carries only
                 the UK pill, which is exactly the case worth showing. */}
-            {ukLevel === null || ukLevel === undefined ? null : <Pill>{unLevelBadge(ukLevel)}</Pill>}
+            {unLevel === null || unLevel === undefined ? null : <Pill>{unLevelBadge(unLevel)}</Pill>}
             {jlptLevel ? <Pill>{SUBJECT_PAGE_COPY.jlpt(jlptLevel)}</Pill> : null}
           </div>
         </div>

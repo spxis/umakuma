@@ -88,7 +88,7 @@ export type ViewerMenuInfo = {
    */
   xp: number | null;
   /** Ours, out of a hundred. Null for a non-member. */
-  ukLevel: number | null;
+  unLevel: number | null;
   /** WaniKani's, out of sixty. Null for a non-member and for a member who has never connected one. */
   wkLevel: number | null;
   /**

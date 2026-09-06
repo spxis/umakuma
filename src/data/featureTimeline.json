@@ -5302,7 +5302,7 @@
     "status": "shipped",
     "kind": "feature",
     "date": "2026-09-04",
-    "summary": "Account.ukLevel and ukLevelFloor, UkSrsState, UkReviewAttempt, and resolveUkLevel.",
+    "summary": "Account.unLevel and unLevelFloor, UkSrsState, UkReviewAttempt, and resolveUnLevel.",
     "dateIsEstimate": false,
     "release": 429,
     "version": "0.101.3",

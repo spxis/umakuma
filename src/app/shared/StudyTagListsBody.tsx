@@ -50,7 +50,7 @@ function toRow(item: StudyTagListItem): TagRow {
     onReadings: item.onReadings,
     kunReadings: item.kunReadings,
     wkLevel: typeof item.wkLevel === "number" ? item.wkLevel : null,
-    unLevel: item.unLevel ?? item.ukLevel ?? null,
+    unLevel: item.unLevel ?? item.unLevel ?? null,
     ugLevel: item.ugLevel ?? null,
     jlptLevel: item.jlptLevel ?? null,
     schoolGrade: item.schoolGrade ?? null,

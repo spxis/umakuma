@@ -39,7 +39,7 @@ import { reviewEaseScore } from "@/lib/reviewDifficulty";
  * something different from everybody else's. Those stay site-wide.
  *
  * The test that keeps the line honest is in `studyPreferences.test.ts`: no key
- * defined here may appear anywhere in `ukLevel.ts`. If a preference ever needs
+ * defined here may appear anywhere in `unLevel.ts`. If a preference ever needs
  * to, it is not a preference.
  */
 

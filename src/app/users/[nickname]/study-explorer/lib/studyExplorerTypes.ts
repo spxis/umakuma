@@ -77,7 +77,7 @@ export type UpcomingReviewItem = {
   subjectId: number;
   subjectType: SubjectType;
   wkLevel: number | null;
-  ukLevel?: number | null;
+  unLevel?: number | null;
   characters: string;
   primaryMeaning: string | null;
   primaryReading: string | null;

@@ -24,7 +24,7 @@ function viewer(overrides: Partial<ViewerMenuInfo>): ViewerMenuInfo {
     hasWanikani: false,
     internal: false,
     xp: null,
-    ukLevel: null,
+    unLevel: null,
     wkLevel: null,
     themeId: null,
     themeName: null,

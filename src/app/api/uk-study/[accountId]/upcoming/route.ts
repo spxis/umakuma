@@ -45,7 +45,7 @@ export async function GET(request: Request, context: RouteContext) {
           subjectId: row.subject.id,
           subjectType: ukSubjectTypeFor(row.subject.kind),
           wkLevel: null,
-          ukLevel: row.subject.level,
+          unLevel: row.subject.level,
           characters: row.subject.characters,
           primaryMeaning: row.subject.meanings[0] ?? null,
           primaryReading: row.subject.readings[0] ?? null,

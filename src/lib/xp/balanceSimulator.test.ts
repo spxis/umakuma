@@ -83,7 +83,7 @@ describe("simulatePersona", () => {
   });
 
   /**
-   * The gate is a latch, the way `resolveUkLevel` is: `passedAt` is stamped the
+   * The gate is a latch, the way `resolveUnLevel` is: `passedAt` is stamped the
    * first time an item reaches Guru and never cleared. It matters more than it
    * looks. Modelled as a census — kanji *currently* at Guru — a 60% learner
    * never clears a level at all, which is a phase transition rather than a

@@ -40,7 +40,7 @@ export default function HeaderMemberStats({
   }
 
   const address = viewerAddress(viewerMenuInfo);
-  const uk = unLevelBadge(viewerMenuInfo.ukLevel);
+  const uk = unLevelBadge(viewerMenuInfo.unLevel);
   const wk = wkLevelBadge(viewerMenuInfo.wkLevel);
   const xp = copy.xp(viewerMenuInfo.xp);
 
@@ -79,7 +79,7 @@ export default function HeaderMemberStats({
       {uk ? (
         <span
           translate="no"
-          title={copy.umakumaLevelTitle(viewerMenuInfo.ukLevel!)}
+          title={copy.umakumaLevelTitle(viewerMenuInfo.unLevel!)}
           className="hidden text-foreground/60 sm:inline"
         >
           {uk}

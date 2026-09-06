@@ -235,7 +235,7 @@ export default async function KanjiPage({ params }: Props) {
             meanings: [],
             readings: [...(summary?.on ?? []), ...(summary?.kun ?? [])],
             wkLevel: page.wkLevel,
-            ukLevel: page.ukLevel,
+            unLevel: page.unLevel,
             jlptLevel: page.jlptLevel,
             /* The words on this card are the dictionary's, credited below it. */
             credited: false,

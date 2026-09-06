@@ -67,9 +67,9 @@ export type UkStudyCounts = {
 async function unlockedSubjects(accountId: string) {
   const account = await prisma.account.findUnique({
     where: { id: accountId },
-    select: { ukLevel: true },
+    select: { unLevel: true },
   });
-  const level = account?.ukLevel ?? 1;
+  const level = account?.unLevel ?? 1;
   return prisma.ukSubject.findMany({
     where: { removedAt: null, level: { lte: level } },
     select: {

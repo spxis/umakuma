@@ -10,8 +10,8 @@ import { awardXpQuietly } from "@/lib/xp/xpServer";
 import { lessonXpAwards, reviewXpAwards, XP_REASONS } from "@/lib/xp/xpStudyAwards";
 import type { XpEarned } from "@/lib/xp/xpToast";
 
-import { syncAccountUkLevel } from "./ukLevelServer";
-import { UK_LEVEL_PASS_SRS_STAGE } from "./ukLevel";
+import { syncAccountUnLevel } from "./unLevelServer";
+import { UN_LEVEL_PASS_SRS_STAGE } from "./unLevel";
 
 /**
  * Taking a lesson, and answering a review.
@@ -63,9 +63,9 @@ export async function startUkLessons({
 
   /* Only items at or below their level, checked here rather than trusted from
      the request: a crafted body could otherwise open the whole ladder. */
-  const account = await prisma.account.findUnique({ where: { id: accountId }, select: { ukLevel: true } });
+  const account = await prisma.account.findUnique({ where: { id: accountId }, select: { unLevel: true } });
   const open = await prisma.ukSubject.findMany({
-    where: { id: { in: subjectIds }, removedAt: null, level: { lte: account?.ukLevel ?? 1 } },
+    where: { id: { in: subjectIds }, removedAt: null, level: { lte: account?.unLevel ?? 1 } },
     select: { id: true },
   });
   if (open.length === 0) return nothing;
@@ -119,7 +119,7 @@ export async function recordUkReview({
      be farmed by demoting and re-climbing. */
   const burnedNow = newSrsStage >= SRS_BURNED_STAGE && state.burnedAt === null;
 
-  const before = await prisma.account.findUnique({ where: { id: accountId }, select: { ukLevel: true } });
+  const before = await prisma.account.findUnique({ where: { id: accountId }, select: { unLevel: true } });
 
   await prisma.$transaction([
     prisma.ukSrsState.update({
@@ -131,7 +131,7 @@ export async function recordUkReview({
         reviewCount: { increment: 1 },
         correctCount: correct ? { increment: 1 } : undefined,
         wrongCount: correct ? undefined : { increment: 1 },
-        passedAt: state.passedAt ?? (newSrsStage >= UK_LEVEL_PASS_SRS_STAGE ? now : null),
+        passedAt: state.passedAt ?? (newSrsStage >= UN_LEVEL_PASS_SRS_STAGE ? now : null),
         burnedAt: burnedNow ? now : state.burnedAt,
       },
     }),
@@ -156,8 +156,8 @@ export async function recordUkReview({
     }),
   ]);
 
-  const resolved = await syncAccountUkLevel(accountId);
-  const levelBefore = before?.ukLevel ?? 1;
+  const resolved = await syncAccountUnLevel(accountId);
+  const levelBefore = before?.unLevel ?? 1;
 
   const xpAwarded = await awardXpQuietly({
     accountId,
@@ -192,7 +192,7 @@ export async function recordUkReview({
 export async function demoteUkItem({
   accountId,
   subjectId,
-  toStage = UK_LEVEL_PASS_SRS_STAGE,
+  toStage = UN_LEVEL_PASS_SRS_STAGE,
   now = new Date(),
 }: {
   accountId: string;

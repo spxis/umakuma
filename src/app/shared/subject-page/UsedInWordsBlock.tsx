@@ -82,7 +82,7 @@ export default function UsedInWordsBlock({
                       meaning={item.meaning}
                       href={item.href}
                       level={item.level}
-                      ukLevel={item.ukLevel}
+                      unLevel={item.unLevel}
                       selected={item.current}
                     />
                   </li>

@@ -5,7 +5,7 @@ import { srsTransition, summariseStudyQueue } from "./studyQueueSummary";
 describe("one summary for every study feed", () => {
   it("files an item under our level when the feed is ours, else WaniKani's", () => {
     const summary = summariseStudyQueue([
-      { subjectType: "kanji", ukLevel: 9, wkLevel: 12, srsStage: 5, status: "guru" },
+      { subjectType: "kanji", unLevel: 9, wkLevel: 12, srsStage: 5, status: "guru" },
       { subjectType: "vocabulary", wkLevel: 12, srsStage: 1, status: "apprentice" },
       { subjectType: "radical", srsStage: 0, status: "locked" },
     ]);

@@ -20,10 +20,10 @@ import type { AdminUserSectionProps } from "./AdminUserDetail.types";
  */
 export default function AdminUserLadder({ account, busy, setBusy, onChanged }: AdminUserSectionProps) {
   const { showToast, confirmAction } = useAdminFeedback();
-  const [floor, setFloor] = useState(() => String(account.ukLevelFloor));
+  const [floor, setFloor] = useState(() => String(account.unLevelFloor));
 
   const parsed = Number(floor);
-  const usable = Number.isInteger(parsed) && parsed > account.ukLevelFloor && parsed <= KANJI_LADDER_LEVELS;
+  const usable = Number.isInteger(parsed) && parsed > account.unLevelFloor && parsed <= KANJI_LADDER_LEVELS;
 
   async function raise() {
     if (!usable) return;
@@ -49,7 +49,7 @@ export default function AdminUserLadder({ account, busy, setBusy, onChanged }: A
       onChanged(payload);
       showToast({
         tone: "success",
-        message: COPY.ladder.raised(payload.account.ukLevelFloor, payload.account.ukLevel),
+        message: COPY.ladder.raised(payload.account.unLevelFloor, payload.account.unLevel),
       });
     } catch (caught) {
       showToast({ tone: "error", message: caught instanceof Error ? caught.message : COPY.ladder.failed });

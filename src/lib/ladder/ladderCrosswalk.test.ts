@@ -55,7 +55,7 @@ describe("the ladder beside every other scale", () => {
 
   it("carries all four scales onto one line", () => {
     const row = buildLadderCrosswalk(input).find((entry) => entry.key === "kanji:日");
-    expect(row).toMatchObject({ ukLevel: 1, wkLevel: 2, nLevel: 5, schoolGrade: 1, frequencyRank: 1 });
+    expect(row).toMatchObject({ unLevel: 1, wkLevel: 2, nLevel: 5, schoolGrade: 1, frequencyRank: 1 });
   });
 });
 
@@ -74,7 +74,7 @@ describe("searching the crosswalk", () => {
   });
 
   it("bounds by our own level", () => {
-    expect(queryLadder(rows, { ...EMPTY_LADDER_QUERY, ukLevelMin: 3, ukLevelMax: 20 }).total).toBe(2);
+    expect(queryLadder(rows, { ...EMPTY_LADDER_QUERY, unLevelMin: 3, unLevelMax: 20 }).total).toBe(2);
   });
 
   /*
@@ -119,7 +119,7 @@ describe("the shape of the ladder", () => {
     expect(rows.filter((row) => row.kind === SUBJECT_TYPES.radical)).toHaveLength(
       Object.keys(ladderData.radicalLevel).length,
     );
-    for (const row of rows) expect(row.ukLevel).toBeLessThanOrEqual(ladderData.levels);
+    for (const row of rows) expect(row.unLevel).toBeLessThanOrEqual(ladderData.levels);
   });
 
   it("marks exactly the kanji WaniKani never taught", () => {

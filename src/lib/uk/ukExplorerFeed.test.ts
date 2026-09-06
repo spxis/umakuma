@@ -17,7 +17,7 @@ describe("the UK feed, in the explorer's shape", () => {
   it("keys the assignment by subject and files the level as ours, never WaniKani's", () => {
     const mapped = mapUkQueueItem(item());
     expect(mapped.assignmentId).toBe(10_000_440);
-    expect(mapped.ukLevel).toBe(9);
+    expect(mapped.unLevel).toBe(9);
     expect(mapped.wkLevel).toBeUndefined();
     expect(mapped.status).toBe("guru");
     expect(mapped.queueType).toBe("review");

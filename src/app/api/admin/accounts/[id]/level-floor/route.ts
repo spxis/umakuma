@@ -6,7 +6,7 @@ import { adminAccountDetailResponse } from "@/lib/adminAccountDetail";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { KANJI_LADDER_LEVELS } from "@/lib/kanjiLadder";
 import { prisma } from "@/lib/prisma";
-import { raiseUkLevelFloor } from "@/lib/uk/ukLevelServer";
+import { raiseUnLevelFloor } from "@/lib/uk/unLevelServer";
 
 const bodySchema = z.object({
   floor: z.coerce.number().int().min(1).max(KANJI_LADDER_LEVELS),
@@ -16,10 +16,10 @@ const bodySchema = z.object({
  * Raising a member's level floor, which the schema already names an admin as
  * one of the four things that may do.
  *
- * It goes through `raiseUkLevelFloor` rather than writing the column, because
+ * It goes through `raiseUnLevelFloor` rather than writing the column, because
  * the floor is the only stored input to the level and the level is derived
- * from it: that function re-derives and writes `ukLevel` in the same breath,
- * which is the property `syncAccountUkLevel` exists to keep.
+ * from it: that function re-derives and writes `unLevel` in the same breath,
+ * which is the property `syncAccountUnLevel` exists to keep.
  *
  * It never lowers. A floor is what a placement test or a WaniKani import
  * bought, and taking it back is the one thing that would make either of them
@@ -44,12 +44,12 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
           return NextResponse.json({ error: "Invalid request payload." }, { status: 400 });
         }
 
-        const existing = await prisma.account.findUnique({ where: { id }, select: { ukLevelFloor: true } });
+        const existing = await prisma.account.findUnique({ where: { id }, select: { unLevelFloor: true } });
         if (!existing) {
           return NextResponse.json({ error: "No such account." }, { status: 404 });
         }
 
-        await raiseUkLevelFloor({ accountId: id, floor: parsed.data.floor, source: "admin" });
+        await raiseUnLevelFloor({ accountId: id, floor: parsed.data.floor, source: "admin" });
 
         return adminAccountDetailResponse(id);
       } catch (error) {

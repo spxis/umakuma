@@ -15,7 +15,7 @@ const row = (over: Partial<LadderRow> = {}): LadderRow =>
     key: "kanji:日",
     kind: "kanji",
     characters: "日",
-    ukLevel: 3,
+    unLevel: 3,
     wkLevel: 2,
     wkSubjectId: 476,
     nLevel: 5,
@@ -57,9 +57,9 @@ describe("a level has an address", () => {
 
 describe("one level, not ten", () => {
   const rows = [
-    row({ key: "radical:口", kind: "radical", characters: "口", ukLevel: 1, primaryMeaning: "mouth" }),
-    row({ key: "kanji:日", ukLevel: 1 }),
-    row({ key: "kanji:月", characters: "月", ukLevel: 2, primaryMeaning: "moon" }),
+    row({ key: "radical:口", kind: "radical", characters: "口", unLevel: 1, primaryMeaning: "mouth" }),
+    row({ key: "kanji:日", unLevel: 1 }),
+    row({ key: "kanji:月", characters: "月", unLevel: 2, primaryMeaning: "moon" }),
   ];
 
   it("draws the level asked for and nothing else", () => {

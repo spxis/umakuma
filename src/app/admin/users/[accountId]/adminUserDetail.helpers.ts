@@ -55,12 +55,12 @@ export function accountFacts(account: AdminAccountDetail): AdminUserFact[] {
     },
     { label: COPY.facts.wanikani, value: account.wkUsername ?? COPY.facts.notConnected },
     { label: COPY.facts.wanikaniLevel, value: account.wkLevel === null ? none : String(account.wkLevel) },
-    { label: COPY.facts.ukLevel, value: String(account.ukLevel) },
-    { label: COPY.facts.ukLevelFloor, value: String(account.ukLevelFloor) },
+    { label: COPY.facts.unLevel, value: String(account.unLevel) },
+    { label: COPY.facts.unLevelFloor, value: String(account.unLevelFloor) },
     {
       label: COPY.facts.placement,
-      value: account.ukPlacedAt
-        ? `${formatDateTimeShort(account.ukPlacedAt)} (${account.ukPlacementSource ?? none})`
+      value: account.unPlacedAt
+        ? `${formatDateTimeShort(account.unPlacedAt)} (${account.unPlacementSource ?? none})`
         : none,
     },
     { label: COPY.facts.srsTheme, value: account.srsTheme ?? COPY.facts.defaultTheme },

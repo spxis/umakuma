@@ -41,7 +41,7 @@ export type RelatedSubject = {
   reading: string | null;
   level: number;
   /** Ours, for a kanji the ladder carries; a word's UK level lives in the database. */
-  ukLevel: number | null;
+  unLevel: number | null;
   href: string;
 };
 
@@ -98,7 +98,7 @@ export function toRelatedSubject(row: RelatedRow): RelatedSubject | null {
     meaning: row.meaning?.trim() || null,
     reading: row.reading?.trim() || null,
     level: row.level,
-    ukLevel: row.subjectType === SUBJECT_TYPES.kanji ? (kanjiPlacement(label)?.level ?? null) : null,
+    unLevel: row.subjectType === SUBJECT_TYPES.kanji ? (kanjiPlacement(label)?.level ?? null) : null,
     href,
   };
 }

@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
 
 import { planWanikaniImport, type UkImportTarget, type WanikaniAssignment } from "./ukImport";
-import type { UkLevelTotals } from "./ukLevel";
+import type { UkLevelTotals } from "./unLevel";
 
 /* Three levels of two kanji each, plus a radicals-only level 1 — the real
    ladder's shape in miniature. */

@@ -52,8 +52,8 @@ describe("the words a kanji appears in", () => {
           pronounced: "すいようび",
           gloss: "Wednesday",
           kanji: [
-            { label: "水", href: null, reading: "すい", meaning: "Water", level: 1, ukLevel: null, current: true },
-            { label: "曜", href: "/kanji/%E6%9B%9C", reading: "よう", meaning: "Weekday", level: 5, ukLevel: null, current: false },
+            { label: "水", href: null, reading: "すい", meaning: "Water", level: 1, unLevel: null, current: true },
+            { label: "曜", href: "/kanji/%E6%9B%9C", reading: "よう", meaning: "Weekday", level: 5, unLevel: null, current: false },
           ],
         },
       ]}
@@ -87,8 +87,8 @@ describe("a group of related subjects", () => {
       group={{
         id: RELATED_GROUPS.builtFrom,
         items: [
-          { subjectId: 8769, subjectType: SUBJECT_TYPES.radical, label: "leaf", meaning: "Leaf", reading: null, level: 23, ukLevel: null, href: "/radicals/leaf" },
-          { subjectId: 479, subjectType: SUBJECT_TYPES.kanji, label: "水", meaning: "Water", reading: "すい", level: 2, ukLevel: null, href: "/kanji/%E6%B0%B4" },
+          { subjectId: 8769, subjectType: SUBJECT_TYPES.radical, label: "leaf", meaning: "Leaf", reading: null, level: 23, unLevel: null, href: "/radicals/leaf" },
+          { subjectId: 479, subjectType: SUBJECT_TYPES.kanji, label: "水", meaning: "Water", reading: "すい", level: 2, unLevel: null, href: "/kanji/%E6%B0%B4" },
         ],
       }}
     />,

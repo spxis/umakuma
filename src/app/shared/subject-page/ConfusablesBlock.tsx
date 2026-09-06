@@ -59,7 +59,7 @@ export default function ConfusablesBlock({
               reading={item.reading}
               meaning={item.meaning}
               href={item.href}
-              ukLevel={item.ukLevel}
+              unLevel={item.unLevel}
             />
           </li>
         ))}

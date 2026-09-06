@@ -22,10 +22,10 @@ import { blockedByGate, jlptCompletedAtLevel } from "./ukGates";
  * which is why it is named here rather than typed as 0.9 in three files.
  */
 
-export const UK_LEVEL_UNLOCK_THRESHOLD = 0.9;
+export const UN_LEVEL_UNLOCK_THRESHOLD = 0.9;
 /** Guru. The stage at which an item counts as learned for a level gate. */
-export const UK_LEVEL_PASS_SRS_STAGE = 5;
-export const UK_FIRST_LEVEL = 1;
+export const UN_LEVEL_PASS_SRS_STAGE = 5;
+export const UN_FIRST_LEVEL = 1;
 
 export type UkLevelTotals = {
   level: number;
@@ -58,7 +58,7 @@ function gateTotalFor(totals: UkLevelTotals): number {
 
 /** An item counts once it has ever reached Guru, not only while it sits there. */
 function hasPassed(row: UkLevelProgressRow): boolean {
-  return row.passedAt !== null || row.srsStage >= UK_LEVEL_PASS_SRS_STAGE;
+  return row.passedAt !== null || row.srsStage >= UN_LEVEL_PASS_SRS_STAGE;
 }
 
 export type UkLevelResolution = {
@@ -66,8 +66,8 @@ export type UkLevelResolution = {
   /**
    * What a placement paid, where this resolution came from one.
    *
-   * Absent everywhere else: `deriveUkLevel` answers a question and pays
-   * nothing, and only `raiseUkLevelFloor` can hand out the placement award.
+   * Absent everywhere else: `deriveUnLevel` answers a question and pays
+   * nothing, and only `raiseUnLevelFloor` can hand out the placement award.
    */
   earned?: { xp: number; reason: string }[];
   /** How far through the level they are, 0-1, for the level it stopped on. */
@@ -91,7 +91,7 @@ export type UkLevelResolution = {
  * does not. A level with no items at all does not block: an empty level is a
  * gap in the curriculum, not an obstacle a member can do anything about.
  */
-export function resolveUkLevel({
+export function resolveUnLevel({
   rows,
   totals,
   floor,
@@ -121,7 +121,7 @@ export function resolveUkLevel({
     passedByLevel.set(row.level, (passedByLevel.get(row.level) ?? 0) + 1);
   }
 
-  const start = Math.min(Math.max(UK_FIRST_LEVEL, floor), maxLevel);
+  const start = Math.min(Math.max(UN_FIRST_LEVEL, floor), maxLevel);
   let level = start;
 
   for (let candidate = start; candidate <= maxLevel; candidate += 1) {
@@ -132,7 +132,7 @@ export function resolveUkLevel({
       level = Math.min(candidate + 1, maxLevel);
       continue;
     }
-    if (has / need >= UK_LEVEL_UNLOCK_THRESHOLD) {
+    if (has / need >= UN_LEVEL_UNLOCK_THRESHOLD) {
       /* The kanji are done; a milestone still has to be certified. Level 35
          says N3 was verified, and it may not say that on the strength of the
          reviews alone. */

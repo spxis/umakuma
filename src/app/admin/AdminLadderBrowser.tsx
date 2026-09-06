@@ -115,8 +115,8 @@ export default function AdminLadderBrowser({
     if (source) params.set("source", source);
     if (band) params.set("band", band);
     if (level !== null) {
-      params.set("ukLevelMin", String(level));
-      params.set("ukLevelMax", String(level));
+      params.set("unLevelMin", String(level));
+      params.set("unLevelMax", String(level));
     }
     if (missingOnly) params.set("missingFromWanikani", "1");
     return `/api/admin/ladder/items?${params.toString()}`;
@@ -280,7 +280,7 @@ export default function AdminLadderBrowser({
                 </td>
                 <td className="py-1.5 pr-3 text-right font-mono font-black tabular-nums text-foreground">
                   {copy.ukPrefix}
-                  {row.ukLevel}
+                  {row.unLevel}
                 </td>
                 <td className="py-1.5 pr-3 text-right font-mono tabular-nums text-foreground/70">
                   {row.wkLevel === null ? copy.notTaught : `${copy.wkPrefix}${row.wkLevel}`}

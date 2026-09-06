@@ -7,7 +7,7 @@ import { unLevelBadge, wkLevelBadge } from "@/lib/levelBadge";
 
 type Props = {
   level?: number | null;
-  ukLevel?: number | null;
+  unLevel?: number | null;
   successRate?: number | null;
   hoverGroup?: "glyph-tile" | "explorer-card";
 };
@@ -31,7 +31,7 @@ function hoverClass(group: NonNullable<Props["hoverGroup"]>): string {
 
 export default function GlyphMetadataBadges({
   level,
-  ukLevel,
+  unLevel,
   successRate,
   hoverGroup = "explorer-card",
 }: Props) {
@@ -59,11 +59,11 @@ export default function GlyphMetadataBadges({
           className={`${NO_TRANSLATE_CLASS} ${chipClass} ${inRow ? "" : "left-1.5"}`}
         >{`${validRate}%`}</span>
       ) : null}
-      {typeof level === "number" || typeof ukLevel === "number" ? (
+      {typeof level === "number" || typeof unLevel === "number" ? (
         <span
           translate="no"
           className={`${NO_TRANSLATE_CLASS} ${chipClass} ${inRow ? "" : "right-1.5"}`}
-        >{[wkLevelBadge(level ?? null), unLevelBadge(ukLevel ?? null)].filter(Boolean).join(" · ")}</span>
+        >{[wkLevelBadge(level ?? null), unLevelBadge(unLevel ?? null)].filter(Boolean).join(" · ")}</span>
       ) : null}
     </>
   );

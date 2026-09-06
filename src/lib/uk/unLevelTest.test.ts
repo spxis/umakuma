@@ -3,7 +3,7 @@ import path from "node:path";
 
 import { describe, expect, it } from "vitest";
 
-const SERVER = readFileSync("src/lib/uk/ukLevelTestServer.ts", "utf8");
+const SERVER = readFileSync("src/lib/uk/unLevelTestServer.ts", "utf8");
 
 /**
  * What a level test must hold onto, pinned to the source: the logic is all
@@ -67,7 +67,7 @@ describe("a level test is a run the runner plays, not a game", () => {
 
 describe("a gate is sat once", () => {
   it("stops offering a gate the record says has been passed or written", () => {
-    const source = readFileSync(path.join(process.cwd(), "src/lib/uk/ukLevelTestServer.ts"), "utf8");
+    const source = readFileSync(path.join(process.cwd(), "src/lib/uk/unLevelTestServer.ts"), "utf8");
     const pending = source.slice(source.indexOf("export async function pendingGate"));
     expect(pending).toContain("gateKey: gate.gateKey");
     expect(pending).toMatch(/verdict: gate\.mustPass \? \{ in: \["solid", "passed"\] \} : \{ not: null \}/);

@@ -2,7 +2,7 @@ export const CUSTOM_LEVEL_UNLOCK_THRESHOLD = 0.9;
 export const CUSTOM_LEVEL_COMPLETE_SRS_STAGE = 5;
 
 export type CustomLevelUnlockState = {
-  ukLevel: number;
+  unLevel: number;
   srsStage: number;
   passedAt?: Date | null;
 };
@@ -29,7 +29,7 @@ export function resolveCurrentCustomLevel(states: CustomLevelUnlockState[]): {
   let maxLevel = 1;
 
   for (const state of states) {
-    const level = normalizeLevel(state.ukLevel);
+    const level = normalizeLevel(state.unLevel);
     if (level > maxLevel) {
       maxLevel = level;
     }

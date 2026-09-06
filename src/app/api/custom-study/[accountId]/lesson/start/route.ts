@@ -95,7 +95,7 @@ export async function POST(request: Request, context: RouteContext) {
         const validLevelStates = levelStates.filter((row) => Boolean(row.item));
         const { currentLevel } = resolveCurrentCustomLevel(
           validLevelStates.map((row) => ({
-            ukLevel: resolveCustomItemLevel(row.item),
+            unLevel: resolveCustomItemLevel(row.item),
             srsStage: row.srsStage,
             passedAt: row.passedAt,
           })),

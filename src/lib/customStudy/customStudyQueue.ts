@@ -78,7 +78,7 @@ export function mapCustomQueueItem(row: CustomStateQueueRow, now: Date) {
     queueType: customQueueTypeFromState({ stage: row.srsStage, now, availableAt: row.availableAt }),
     subjectType,
     wkLevel: level,
-    ukLevel: level,
+    unLevel: level,
     characters: row.item.characters,
     meanings: row.item.meanings,
     readings: row.item.readings,

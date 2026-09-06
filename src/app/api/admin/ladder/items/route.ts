@@ -23,8 +23,8 @@ const querySchema = z.object({
   source: z.enum(LADDER_SOURCE_VALUES as [string, ...string[]]).nullish(),
   band: z.enum(KANJI_GRADE_BAND_VALUES as [string, ...string[]]).nullish(),
   nLevel: z.coerce.number().int().min(1).max(5).nullish(),
-  ukLevelMin: z.coerce.number().int().min(1).max(KANJI_LADDER_LEVELS).nullish(),
-  ukLevelMax: z.coerce.number().int().min(1).max(KANJI_LADDER_LEVELS).nullish(),
+  unLevelMin: z.coerce.number().int().min(1).max(KANJI_LADDER_LEVELS).nullish(),
+  unLevelMax: z.coerce.number().int().min(1).max(KANJI_LADDER_LEVELS).nullish(),
   missingFromWanikani: z.enum(["1", "0"]).nullish(),
   /* A table answers "where is this kanji"; the level view answers "what is
      a level made of". Same rows, grouped rather than paged. */
@@ -76,8 +76,8 @@ export async function GET(request: Request) {
           source: (parsed.data.source ?? null) as never,
           band: (parsed.data.band ?? null) as never,
           nLevel: parsed.data.nLevel ?? null,
-          ukLevelMin: parsed.data.ukLevelMin ?? null,
-          ukLevelMax: parsed.data.ukLevelMax ?? null,
+          unLevelMin: parsed.data.unLevelMin ?? null,
+          unLevelMax: parsed.data.unLevelMax ?? null,
           onlyMissingFromWanikani: parsed.data.missingFromWanikani === "1",
         });
 

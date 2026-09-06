@@ -89,7 +89,7 @@ export default function UmakumaLadderSearch({ className }: { className?: string 
                   glyph={row.characters}
                   subjectType={row.kind}
                   meaning={row.primaryMeaning}
-                  ukLevel={row.ukLevel}
+                  unLevel={row.unLevel}
                   level={row.wkLevel}
                 />
               ))}

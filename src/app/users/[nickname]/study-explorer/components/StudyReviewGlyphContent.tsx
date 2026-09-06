@@ -21,7 +21,7 @@ export default function StudyReviewGlyphContent({
 }: Props) {
   return (
     <>
-      <GlyphMetadataBadges level={item.wkLevel} ukLevel={item.ukLevel} successRate={item.successRate} />
+      <GlyphMetadataBadges level={item.wkLevel} unLevel={item.unLevel} successRate={item.successRate} />
       {onToggleStudyTag ? (
         <GlyphTagOverlay
           subjectType={item.subjectType}

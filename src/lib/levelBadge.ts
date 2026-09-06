@@ -51,7 +51,7 @@ export function wkLevelBadge(level: number | null | undefined): string | null {
   return levelBadge(LEVEL_SYSTEMS.wanikani, level);
 }
 
-/** Ours, by the exam. Named for what it prints: it used to be `ukLevelBadge`
+/** Ours, by the exam. Named for what it prints: it used to be `unLevelBadge`
  * and return `UN17`, which is one name too many for one number. */
 export function unLevelBadge(level: number | null | undefined): string | null {
   return levelBadge(LEVEL_SYSTEMS.umakuma, level);

@@ -159,17 +159,39 @@ model Account {
   /// Derived from `UkSrsState` by `resolveUkLevel` and written by exactly one
   /// function, `syncAccountUkLevel`. It is a copy on purpose: deriving it per
   /// render would mean reading thousands of state rows for every badge.
-  ukLevel             Int                @default(1)
+  unLevel             Int                @default(1)
   /// The floor a member can never fall below. Placement, a WaniKani import, a
   /// bump-up test and an admin raise it; nothing lowers it. This is the only
   /// stored input to the level — everything else is derived, so a curriculum
   /// rebuild that moves a kanji cannot cost anybody a level.
-  ukLevelFloor        Int                @default(1)
-  ukPlacedAt          DateTime?
-  ukPlacementSource   UkPlacementSource?
+  unLevelFloor        Int                @default(1)
+  unPlacedAt          DateTime?
+  unPlacementSource   UkPlacementSource?
   /// Which curriculum version this member was last reconciled against.
-  ukCurriculumVersion String?
-  ukLevelUpdatedAt    DateTime?
+  unCurriculumVersion String?
+  unLevelUpdatedAt    DateTime?
+
+  /// The school ladder's half of the same story.
+  ///
+  /// A level is progress *read against an ordering*, and the two ladders order
+  /// the same 2,235 kanji differently - so one column cannot hold both. Before
+  /// this, switching path would have recomputed `ukLevel` against the other
+  /// curriculum and overwritten the level you had earned on the first.
+  ///
+  /// The progress itself is shared and stays shared: `UkSrsState` is keyed by
+  /// subject, so what you know about a character is what you know about it on
+  /// either path. Only these derived numbers are per-path.
+  ugLevel             Int                @default(1)
+  ugLevelFloor        Int                @default(1)
+  ugPlacedAt          DateTime?
+  ugPlacementSource   UkPlacementSource?
+  ugCurriculumVersion String?
+  ugLevelUpdatedAt    DateTime?
+
+  /// Which ladder this member is walking. One at a time, never both: two
+  /// queues over one subject set would let an item finished in one silently
+  /// complete in the other.
+  ladderStream        LadderStream       @default(UN)
 
   /// The second ladder: earned by turning up rather than by learning. Kept
   /// apart from ukLevel on purpose - neither can be bought with the other.
@@ -551,6 +573,18 @@ model GameRun {
   startedAt        DateTime            @default(now())
   completedAt      DateTime?
   completedDatePst String?
+  /// What this run actually paid, recorded at the moment it was decided.
+  ///
+  /// Derived later it would be wrong: the games-per-day allowance rises with
+  /// rank, so replaying last month's runs against today's allowance would
+  /// credit XP that was never paid.
+  xpAwarded        Int                 @default(0)
+  /// Why it paid nothing, where it did. Null when it paid.
+  ///
+  /// A run that earns nothing and says nothing is indistinguishable from a
+  /// broken one - four games were played, two paid, and the player was told
+  /// neither fact.
+  xpSkipped        String?
   createdAt        DateTime            @default(now())
   updatedAt        DateTime            @updatedAt
 

@@ -67,8 +67,8 @@ export function confusableWarnings(
   for (const neighbour of confusablesFor(character)) {
     const placement = kanjiPlacement(neighbour.kanji);
     const wkLevel = placement?.waniKaniLevel ?? null;
-    const ukLevel = placement?.level ?? null;
-    const standing = standingOf(system === LEVEL_SYSTEMS.wanikani ? wkLevel : ukLevel, viewerLevel);
+    const unLevel = placement?.level ?? null;
+    const standing = standingOf(system === LEVEL_SYSTEMS.wanikani ? wkLevel : unLevel, viewerLevel);
     if (!standing) continue;
 
     const entry = getKanjiDictionaryEntry(neighbour.kanji);
@@ -79,7 +79,7 @@ export function confusableWarnings(
       /* KANJIDIC2 marks okurigana with a dot; a reader wants the reading. */
       reading: reading ? reading.replace(/\./g, "") : null,
       wkLevel,
-      ukLevel,
+      unLevel,
       standing,
     });
   }

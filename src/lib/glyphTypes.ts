@@ -15,14 +15,16 @@ export type LevelItem = {
   subjectId: number;
   subjectType?: SubjectType;
   wkLevel?: number;
-  /** Ours, where the feed is ours. Drawn as UN n beside WK n, never as either. */
-  ukLevel?: number | null;
   /*
-   * The two of ours a list looks up for its level lane, and the two bands that
-   * are not ladders. `ukLevel` is the same number as `unLevel` where a feed of
-   * ours filled it; a list fills these from the ladder files server-side.
+   * Ours, drawn as UN n beside WK n and never as either. Two fields held this
+   * one number before the ladders were named apart - `ukLevel` from a feed of
+   * ours and `unLevel` from a list looking it up server-side - and the type's
+   * own comment said they were the same. Renaming the account column made them
+   * literally the same, so they are one field.
    */
   unLevel?: number | null;
+  /* The other ladder, and the two bands that are not ladders. A list fills
+     these from the ladder files server-side. */
   ugLevel?: number | null;
   schoolGrade?: number | null;
   /** Whose meanings and readings these are, for the credit line under them. Absent means WaniKani's. */

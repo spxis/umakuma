@@ -23,7 +23,7 @@ import {
 } from "./placementStaircase";
 import { createPlacementTicket, readPlacementTicket, type PlacementTicket } from "./placementTicket";
 import type { PlacementQuestion, PlacementStepPayload } from "./placementTypes";
-import { raiseUkLevelFloor } from "./ukLevelServer";
+import { raiseUnLevelFloor } from "./unLevelServer";
 
 /**
  * Running a placement test.
@@ -39,7 +39,7 @@ import { raiseUkLevelFloor } from "./ukLevelServer";
  *   showing the same English, and prefers confusable distractors, and a
  *   placement test that disagreed with the games about what "hard" means would
  *   be measuring something the site does not teach.
- * - **The verdict** raises the floor through `raiseUkLevelFloor`, the one
+ * - **The verdict** raises the floor through `raiseUnLevelFloor`, the one
  *   writer, and seeds what sits below it. Raise-only throughout: a member who
  *   sits the test twice keeps the better result, and one who imported WaniKani
  *   first keeps every row that import wrote.
@@ -203,7 +203,7 @@ async function issueProbe({
  * `createMany` with `skipDuplicates`, which is what makes this raise-only
  * without a comparison: a row that already exists — from a WaniKani import, or
  * from a first sitting — is left exactly as it was. The floor goes through
- * `raiseUkLevelFloor`, which re-derives the level and stamps how they got here.
+ * `raiseUnLevelFloor`, which re-derives the level and stamps how they got here.
  */
 async function applyVerdict({
   accountId,
@@ -236,7 +236,7 @@ async function applyVerdict({
     });
   }
 
-  const resolved = await raiseUkLevelFloor({ accountId, floor: verdict.floor, source: "placement_test" });
+  const resolved = await raiseUnLevelFloor({ accountId, floor: verdict.floor, source: "placement_test" });
 
   return {
     done: true,

@@ -1,4 +1,4 @@
-import { UK_LEVEL_PASS_SRS_STAGE } from "./ukLevel";
+import { UN_LEVEL_PASS_SRS_STAGE } from "./unLevel";
 
 /**
  * What a placement result writes into a member's reviews.
@@ -21,7 +21,7 @@ import { UK_LEVEL_PASS_SRS_STAGE } from "./ukLevel";
  */
 
 /** Guru. What "we think you already know this" is worth on the SRS. */
-export const PLACEMENT_SEED_STAGE = UK_LEVEL_PASS_SRS_STAGE;
+export const PLACEMENT_SEED_STAGE = UN_LEVEL_PASS_SRS_STAGE;
 /** The bottom stage, for what the test saw them miss. */
 export const PLACEMENT_MISSED_STAGE = 1;
 /** Long enough that the seed is not a wall of reviews on day one. */

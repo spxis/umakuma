@@ -56,8 +56,8 @@ export default function StudyUpcomingReviewsSection({
                       {typeof item.wkLevel === "number" ? (
                         <NeutralPill>{wkLevelBadge(item.wkLevel)}</NeutralPill>
                       ) : null}
-                      {typeof item.ukLevel === "number" ? (
-                        <NeutralPill>{unLevelBadge(item.ukLevel)}</NeutralPill>
+                      {typeof item.unLevel === "number" ? (
+                        <NeutralPill>{unLevelBadge(item.unLevel)}</NeutralPill>
                       ) : null}
                     </div>
                     {(item.primaryMeaning || item.primaryReading) ? (

@@ -24,8 +24,8 @@ export type LadderQuery = {
   band: KanjiGradeBand | null;
   nLevel: number | null;
   /** Inclusive bounds on our own level. */
-  ukLevelMin: number | null;
-  ukLevelMax: number | null;
+  unLevelMin: number | null;
+  unLevelMax: number | null;
   /** Rows WaniKani does not teach, which is the gap the ladder had to fill. */
   onlyMissingFromWanikani: boolean;
 };
@@ -52,8 +52,8 @@ export const EMPTY_LADDER_QUERY: LadderQuery = {
   source: null,
   band: null,
   nLevel: null,
-  ukLevelMin: null,
-  ukLevelMax: null,
+  unLevelMin: null,
+  unLevelMax: null,
   onlyMissingFromWanikani: false,
 };
 
@@ -74,8 +74,8 @@ function passes(row: LadderRow, query: LadderQuery): boolean {
   if (query.source && row.source !== query.source) return false;
   if (query.band && row.band !== query.band) return false;
   if (query.nLevel !== null && row.nLevel !== query.nLevel) return false;
-  if (query.ukLevelMin !== null && row.ukLevel < query.ukLevelMin) return false;
-  if (query.ukLevelMax !== null && row.ukLevel > query.ukLevelMax) return false;
+  if (query.unLevelMin !== null && row.unLevel < query.unLevelMin) return false;
+  if (query.unLevelMax !== null && row.unLevel > query.unLevelMax) return false;
   if (query.onlyMissingFromWanikani && row.wkLevel !== null) return false;
   return matches(row, query.search.trim());
 }
@@ -147,7 +147,7 @@ export function summarizeLadderLevels(rows: readonly LadderRow[], levels: number
   }));
 
   for (const row of rows) {
-    const summary = summaries[row.ukLevel - 1];
+    const summary = summaries[row.unLevel - 1];
     if (!summary) continue;
     summary.total += 1;
     if (row.kind === "radical") summary.radicals += 1;
@@ -193,9 +193,9 @@ export function groupLadderByLevel(
 ): { groups: LadderLevelGroup[]; page: number; pageCount: number } {
   const byLevel = new Map<number, LadderRow[]>();
   for (const row of rows) {
-    const held = byLevel.get(row.ukLevel);
+    const held = byLevel.get(row.unLevel);
     if (held) held.push(row);
-    else byLevel.set(row.ukLevel, [row]);
+    else byLevel.set(row.unLevel, [row]);
   }
 
   const pageCount = Math.max(1, Math.ceil(levels / pageSize));

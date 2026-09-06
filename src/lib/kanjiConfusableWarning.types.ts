@@ -26,6 +26,6 @@ export type ConfusableWarning = {
   /** WaniKani's level for the twin, which is the ladder a study surface is on. */
   wkLevel: number | null;
   /** Ours, for a surface that teaches from the UmaKuma ladder. */
-  ukLevel: number | null;
+  unLevel: number | null;
   standing: ConfusableStanding;
 };

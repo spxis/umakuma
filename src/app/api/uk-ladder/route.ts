@@ -67,8 +67,8 @@ export async function GET(request: Request) {
           source: null as never,
           band: null as never,
           nLevel: parsed.data.nLevel ?? null,
-          ukLevelMin: parsed.data.level ?? null,
-          ukLevelMax: parsed.data.level ?? null,
+          unLevelMin: parsed.data.level ?? null,
+          unLevelMax: parsed.data.level ?? null,
           onlyMissingFromWanikani: false,
         });
         return NextResponse.json({ ...result, levels, ladderLevels: KANJI_LADDER_LEVELS }, { headers });

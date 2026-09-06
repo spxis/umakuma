@@ -22,11 +22,11 @@ import {
  */
 describe("what a preference may not touch", () => {
   it("has no preference key anywhere in the level gate", () => {
-    /* The load-bearing test. If a preference ever needs to reach ukLevel.ts,
+    /* The load-bearing test. If a preference ever needs to reach unLevel.ts,
        it is not a preference - it is a change to what UmaKuma level 40 means,
        and that has to be the same for everybody or the badges, the
        leaderboard and the JLPT milestones stop meaning anything. */
-    const gate = readFileSync("src/lib/uk/ukLevel.ts", "utf8");
+    const gate = readFileSync("src/lib/uk/unLevel.ts", "utf8");
     for (const key of Object.keys(DEFAULT_STUDY_PREFERENCES)) {
       expect(gate, `${key} must not reach the level gate`).not.toContain(key);
     }
@@ -168,7 +168,7 @@ describe("presets", () => {
   });
 
   it("holds no preset that reaches past the line", () => {
-    const gate = readFileSync("src/lib/uk/ukLevel.ts", "utf8");
+    const gate = readFileSync("src/lib/uk/unLevel.ts", "utf8");
     for (const values of Object.values(STUDY_PRESET_VALUES)) {
       for (const key of Object.keys(values)) {
         expect(gate, `${key} must not reach the level gate`).not.toContain(key);

@@ -1,6 +1,6 @@
 import { SUBJECT_TYPES, type SubjectType } from "@/lib/domainConstants";
 import { KANJI_LADDER_LEVELS, kanjiLadderLevels } from "@/lib/kanjiLadder";
-import { UK_LEVEL_UNLOCK_THRESHOLD } from "@/lib/uk/ukLevel";
+import { UN_LEVEL_UNLOCK_THRESHOLD } from "@/lib/uk/unLevel";
 
 /**
  * The curriculum, as the simulator meets it: level by level, item by item.
@@ -32,7 +32,7 @@ export type SimLevelShape = {
 
 function shapeOf(level: { level: number; radicals: number; kanji: string[]; vocabulary: number }): SimLevelShape {
   const kanji = level.kanji.length;
-  /* Mirrors `resolveUkLevel`: level 1 is radicals only, so counting kanji
+  /* Mirrors `resolveUnLevel`: level 1 is radicals only, so counting kanji
      there would divide by zero and hand every new member level 2 on day one. */
   const gateKind = kanji > 0 ? SUBJECT_TYPES.kanji : SUBJECT_TYPES.radical;
   const gateTotal = kanji > 0 ? kanji : level.radicals;
@@ -43,7 +43,7 @@ function shapeOf(level: { level: number; radicals: number; kanji: string[]; voca
     vocabulary: level.vocabulary,
     items: level.radicals + kanji + level.vocabulary,
     gateKind,
-    gateNeed: Math.ceil(gateTotal * UK_LEVEL_UNLOCK_THRESHOLD),
+    gateNeed: Math.ceil(gateTotal * UN_LEVEL_UNLOCK_THRESHOLD),
   };
 }
 
@@ -104,7 +104,7 @@ export function curriculumItemAt(index: number): { level: number; kind: SubjectT
 /**
  * Whether a level clears, given how many of its gate items have ever passed.
  *
- * "Ever" is the real rule, not a simplification: `resolveUkLevel` counts an
+ * "Ever" is the real rule, not a simplification: `resolveUnLevel` counts an
  * item that has *reached* Guru, not one that is sitting there, so a kanji
  * knocked back to Apprentice does not un-clear a level somebody already
  * cleared. Getting that wrong would have invented a demotion the site does

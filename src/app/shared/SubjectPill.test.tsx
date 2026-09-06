@@ -49,7 +49,7 @@ describe("what a surface may put on it", () => {
   });
 
   it("draws both ladders when the surface knows both", () => {
-    const text = draw(<SubjectPill glyph="語" level={12} ukLevel={9} />).body.textContent ?? "";
+    const text = draw(<SubjectPill glyph="語" level={12} unLevel={9} />).body.textContent ?? "";
     expect(text).toContain("WK12");
     expect(text).toContain("UN9");
   });

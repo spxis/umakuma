@@ -3,17 +3,17 @@ import "server-only";
 import { KANJI_LADDER_LEVELS } from "@/lib/kanjiLadder";
 import { prisma } from "@/lib/prisma";
 
-import { resolveUkLevel, type UkLevelResolution, type UkLevelTotals } from "./ukLevel";
+import { resolveUnLevel, type UkLevelResolution, type UkLevelTotals } from "./unLevel";
 import { awardXpQuietly } from "@/lib/xp/xpServer";
 import { XP_REASONS } from "@/lib/xp/xpStudyAwards";
 
 /**
  * Reading and writing a member's UmaKuma level.
  *
- * `Account.ukLevel` is a materialised copy, and this file is the only place
+ * `Account.unLevel` is a materialised copy, and this file is the only place
  * that writes it. Every path that can change a member's standing — a review,
  * a placement, a WaniKani import, a reconcile after a curriculum bump — ends
- * by calling `syncAccountUkLevel`, so there is one answer to "how did this
+ * by calling `syncAccountUnLevel`, so there is one answer to "how did this
  * number get here" rather than six.
  */
 
@@ -26,7 +26,7 @@ let totalsHeld: { totals: UkLevelTotals[]; builtAtMs: number } | null = null;
  * a level gate computed from a stale file would disagree with what a member
  * is actually being shown.
  */
-export async function ukLevelTotals(): Promise<UkLevelTotals[]> {
+export async function unLevelTotals(): Promise<UkLevelTotals[]> {
   if (totalsHeld && Date.now() - totalsHeld.builtAtMs <= TTL_MS) return totalsHeld.totals;
 
   const grouped = await prisma.ukSubject.groupBy({
@@ -57,10 +57,10 @@ export function clearUkLevelTotalsCache(): void {
 }
 
 /** What a member's level would be right now, without writing it. */
-export async function deriveUkLevel(accountId: string): Promise<UkLevelResolution> {
+export async function deriveUnLevel(accountId: string): Promise<UkLevelResolution> {
   const [account, totals, states, passedFinals] = await Promise.all([
-    prisma.account.findUnique({ where: { id: accountId }, select: { ukLevelFloor: true } }),
-    ukLevelTotals(),
+    prisma.account.findUnique({ where: { id: accountId }, select: { unLevelFloor: true } }),
+    unLevelTotals(),
     prisma.ukSrsState.findMany({
       where: { accountId },
       select: { srsStage: true, passedAt: true, subject: { select: { level: true, kind: true } } },
@@ -74,7 +74,7 @@ export async function deriveUkLevel(accountId: string): Promise<UkLevelResolutio
     }),
   ]);
 
-  return resolveUkLevel({
+  return resolveUnLevel({
     rows: states.map((state) => ({
       level: state.subject.level,
       kind: state.subject.kind,
@@ -82,7 +82,7 @@ export async function deriveUkLevel(accountId: string): Promise<UkLevelResolutio
       passedAt: state.passedAt,
     })),
     totals,
-    floor: account?.ukLevelFloor ?? 1,
+    floor: account?.unLevelFloor ?? 1,
     passedGateKeys: passedFinals.map((row) => row.gateKey),
   });
 }
@@ -93,11 +93,11 @@ export async function deriveUkLevel(accountId: string): Promise<UkLevelResolutio
  * Returns what it wrote, so a caller that has just taken a review can tell a
  * member they levelled up without asking again.
  */
-export async function syncAccountUkLevel(accountId: string): Promise<UkLevelResolution> {
-  const resolved = await deriveUkLevel(accountId);
+export async function syncAccountUnLevel(accountId: string): Promise<UkLevelResolution> {
+  const resolved = await deriveUnLevel(accountId);
   await prisma.account.update({
     where: { id: accountId },
-    data: { ukLevel: resolved.level, ukLevelUpdatedAt: new Date() },
+    data: { unLevel: resolved.level, unLevelUpdatedAt: new Date() },
   });
   return resolved;
 }
@@ -110,7 +110,7 @@ const EXTERNAL_PLACEMENT_SOURCES = new Set<string>(["placement_test", "wanikani"
  * test or a WaniKani import bought, and taking it back is the one thing that
  * would make either of them not worth sitting.
  */
-export async function raiseUkLevelFloor({
+export async function raiseUnLevelFloor({
   accountId,
   floor,
   source,
@@ -121,9 +121,9 @@ export async function raiseUkLevelFloor({
 }): Promise<UkLevelResolution> {
   const account = await prisma.account.findUnique({
     where: { id: accountId },
-    select: { ukLevelFloor: true, ukPlacedAt: true },
+    select: { unLevelFloor: true, unPlacedAt: true },
   });
-  const current = account?.ukLevelFloor ?? 1;
+  const current = account?.unLevelFloor ?? 1;
   const next = Math.min(Math.max(floor, current), KANJI_LADDER_LEVELS);
 
   /* Only record who placed them when the floor actually moved.
@@ -139,24 +139,24 @@ export async function raiseUkLevelFloor({
   await prisma.account.update({
     where: { id: accountId },
     data: moved
-      ? { ukLevelFloor: next, ukPlacedAt: new Date(), ukPlacementSource: source }
-      : { ukLevelFloor: next },
+      ? { unLevelFloor: next, unPlacedAt: new Date(), unPlacementSource: source }
+      : { unLevelFloor: next },
   });
 
   /* The placement award: once, ever, and only for knowledge that came from
-     somewhere else. `ukPlacedAt` being null before this call is what makes it
+     somewhere else. `unPlacedAt` being null before this call is what makes it
      the first placement; the source is what makes it external - an admin
      raising a floor, or a member's own bump-up, is not arriving with
      knowledge. Quiet, because a placement that succeeded must not fail on the
      XP it hands out. */
   let placementXp = 0;
-  if (moved && account?.ukPlacedAt === null && EXTERNAL_PLACEMENT_SOURCES.has(source)) {
+  if (moved && account?.unPlacedAt === null && EXTERNAL_PLACEMENT_SOURCES.has(source)) {
     placementXp = await awardXpQuietly({
       accountId,
       requests: [{ kind: "placementAward", note: `placed at level ${next}` }],
     });
   }
-  const resolution = await syncAccountUkLevel(accountId);
+  const resolution = await syncAccountUnLevel(accountId);
   /* Carried back rather than paid silently. It is the largest single award on
      the site and it happens once, ever, at the moment somebody decides
      whether this place is worth their time - the worst one to leave unsaid. */

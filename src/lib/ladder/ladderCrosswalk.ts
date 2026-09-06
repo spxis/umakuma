@@ -46,7 +46,7 @@ export type LadderRow = {
   kind: SubjectType;
   characters: string;
   /** Ours. 1-100. */
-  ukLevel: number;
+  unLevel: number;
   /** WaniKani's, where they teach it. */
   wkLevel: number | null;
   wkSubjectId: number | null;
@@ -96,7 +96,7 @@ function kanjiRow(
     key: `kanji:${characters}`,
     kind: SUBJECT_TYPES.kanji,
     characters,
-    ukLevel: placement.level,
+    unLevel: placement.level,
     wkLevel: placement.waniKaniLevel,
     /* The ladder records WaniKani's level, not its subject id; a row that needs
        the id joins on the character through `words` or the catalogue. */
@@ -119,7 +119,7 @@ function radicalRow(characters: string, level: number, input: LadderCrosswalkInp
     key: `radical:${characters}`,
     kind: SUBJECT_TYPES.radical,
     characters,
-    ukLevel: level,
+    unLevel: level,
     wkLevel: null,
     wkSubjectId: null,
     nLevel: null,
@@ -139,7 +139,7 @@ function wordRow(id: number, level: number, input: LadderCrosswalkInput): Ladder
     key: `wk:${id}`,
     kind: SUBJECT_TYPES.vocabulary,
     characters: word.characters,
-    ukLevel: level,
+    unLevel: level,
     wkLevel: word.wkLevel,
     wkSubjectId: id,
     nLevel: null,
@@ -179,7 +179,7 @@ export function buildLadderCrosswalk(input: LadderCrosswalkInput): LadderRow[] {
 
   return rows.sort(
     (left, right) =>
-      left.ukLevel - right.ukLevel ||
+      left.unLevel - right.unLevel ||
       kindOrder[left.kind] - kindOrder[right.kind] ||
       (left.frequencyRank ?? Number.MAX_SAFE_INTEGER) - (right.frequencyRank ?? Number.MAX_SAFE_INTEGER) ||
       left.characters.localeCompare(right.characters),

@@ -71,7 +71,7 @@ export const SUBJECT_SECTION_BLOCKS: readonly SubjectSectionBlock[] = [
           meanings: view.subject.meanings,
           readings: view.subject.readings,
           wkLevel: view.subject.wkLevel,
-          ukLevel: view.subject.ukLevel ?? null,
+          unLevel: view.subject.unLevel ?? null,
           jlptLevel: view.subject.jlptLevel ?? null,
           /* Everything on the card is WaniKani's, for these two. */
           credited: true,

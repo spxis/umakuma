@@ -55,7 +55,7 @@ describe("who gets warned about what", () => {
     expect(first?.meaning?.length).toBeGreaterThan(0);
     expect(first?.reading).not.toContain(".");
     expect(typeof first?.wkLevel).toBe("number");
-    expect(typeof first?.ukLevel).toBe("number");
+    expect(typeof first?.unLevel).toBe("number");
   });
 
   /*

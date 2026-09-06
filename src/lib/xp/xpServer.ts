@@ -13,7 +13,7 @@ import { xpLevelFor } from "./xpCurve";
  *
  * Every award goes through here so the caps cannot be bypassed by a caller
  * that forgot them, and so `Account.xp` and `Account.xpLevel` are written in
- * one place — the same reasoning as `syncAccountUkLevel`, and for the same
+ * one place — the same reasoning as `syncAccountUnLevel`, and for the same
  * reason: a materialised number with several writers eventually disagrees with
  * what it was derived from.
  */

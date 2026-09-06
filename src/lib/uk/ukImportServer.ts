@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { parseAssignmentCacheRows } from "@/lib/wanikani/helpers";
 
 import { planWanikaniImport, type UkImportPlan, type WanikaniAssignment } from "./ukImport";
-import { raiseUkLevelFloor, ukLevelTotals } from "./ukLevelServer";
+import { raiseUnLevelFloor, unLevelTotals } from "./unLevelServer";
 
 /**
  * Reading a member's WaniKani progress off the cache and onto our ladder.
@@ -64,7 +64,7 @@ export async function planUkImport(accountId: string): Promise<{ plan: UkImportP
       where: { wkSubjectId: { not: null }, removedAt: null },
       select: { id: true, wkSubjectId: true, kind: true, level: true },
     }),
-    ukLevelTotals(),
+    unLevelTotals(),
     prisma.ukSrsState.findMany({
       where: { accountId },
       select: { subjectId: true, srsStage: true, lastReviewedAt: true },
@@ -121,7 +121,7 @@ export async function importWanikaniProgress(accountId: string): Promise<UkImpor
     );
   }
 
-  const resolved = await raiseUkLevelFloor({ accountId, floor: plan.floor, source: "wanikani" });
+  const resolved = await raiseUnLevelFloor({ accountId, floor: plan.floor, source: "wanikani" });
   /* The placement award rides back with the level, so the page that started
      the import can say what arriving with this much knowledge was worth. */
   return { ...plan.summary, floor: plan.floor, level: resolved.level, wkLevel, xpEarned: resolved.earned ?? [] };

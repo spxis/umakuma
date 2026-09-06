@@ -25,10 +25,10 @@ export type AdminAccountDetail = {
   inviteCodeUpdatedAt: string | null;
   wkUsername: string | null;
   wkLevel: number | null;
-  ukLevel: number;
-  ukLevelFloor: number;
-  ukPlacedAt: string | null;
-  ukPlacementSource: string | null;
+  unLevel: number;
+  unLevelFloor: number;
+  unPlacedAt: string | null;
+  unPlacementSource: string | null;
   srsTheme: string | null;
   ageBand: string | null;
   jlptStatus: string | null;

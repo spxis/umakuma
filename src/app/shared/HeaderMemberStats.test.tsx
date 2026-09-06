@@ -17,7 +17,7 @@ function viewer(overrides: Partial<ViewerMenuInfo> = {}): ViewerMenuInfo {
     hasWanikani: false,
     internal: true,
     xp: 1240,
-    ukLevel: 23,
+    unLevel: 23,
     wkLevel: 17,
     themeId: "samurai",
     themeName: "Samurai",
@@ -62,7 +62,7 @@ describe("the header's member strip", () => {
    * to read that as "no account" rather than drawing a stranger a zero.
    */
   it("collapses to nothing for a signed-in non-member", () => {
-    const document = draw(viewer({ xp: null, ukLevel: null, wkLevel: null, accountId: null, themeId: null, themeName: null }));
+    const document = draw(viewer({ xp: null, unLevel: null, wkLevel: null, accountId: null, themeId: null, themeName: null }));
 
     expect(document.body.innerHTML).toBe("");
   });
