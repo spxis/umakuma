@@ -7,12 +7,12 @@ import {
   toSubjectListRow,
   type SubjectViewMode,
 } from "@/app/shared/subjectListView";
-import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
+import { usePersistedEnum } from "@/lib/usePersistedEnum";
 
 /** Grid or list on the WaniKani explorer, remembered per surface. */
 const LEVEL_VIEW_MODE_STORAGE_KEY = "wr:level-explorer:view-mode";
 
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 
 import { usePracticePath } from "@/app/shared/userBasePath";
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
@@ -72,8 +72,7 @@ export default function LevelExplorerItemsGrid({
   onJumpToKanji,
 }: Props) {
   const practicePath = usePracticePath();
-  const [viewMode, setViewMode] = useState<SubjectViewMode>(() =>
-    getStoredEnum(LEVEL_VIEW_MODE_STORAGE_KEY, SUBJECT_VIEW_MODE_VALUES, SUBJECT_VIEW_MODES.grid));
+  const [viewMode, setViewMode] = usePersistedEnum<SubjectViewMode>(LEVEL_VIEW_MODE_STORAGE_KEY, SUBJECT_VIEW_MODE_VALUES, SUBJECT_VIEW_MODES.grid);
   /*
    * Lists only: the card carries trouble and favourite inside its glyph, and a
    * second pair beside them asks whether the two mean the same thing.
@@ -166,10 +165,7 @@ export default function LevelExplorerItemsGrid({
             {filing.toggle}
             <SubjectViewModeToggle
               value={viewMode}
-              onChange={(next) => {
-                setViewMode(next);
-                setStoredEnum(LEVEL_VIEW_MODE_STORAGE_KEY, next);
-              }}
+              onChange={setViewMode}
             />
           </div>
           {/* One surface with hairlines in rows; a shelf of boxes in the grid. */}

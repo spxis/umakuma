@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Fragment, useMemo, useState } from "react";
+import { Fragment, useMemo } from "react";
 
 import { ListRow } from "@/app/shared/ListSubjectRows";
 import SubjectCards from "@/app/shared/SubjectCards";
@@ -11,7 +11,7 @@ import SubjectViewModeToggle from "@/app/shared/SubjectViewModeToggle";
 import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
 import { useFilerOpen, useSubjectFiler } from "@/app/shared/useSubjectFiler";
 import { SUBJECT_VIEW_MODES, SUBJECT_VIEW_MODE_VALUES, type SubjectListRow, type SubjectViewMode } from "@/app/shared/subjectListView";
-import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
+import { usePersistedEnum } from "@/lib/usePersistedEnum";
 import type { FilerHit } from "@/lib/subjectFiler";
 import { LIST_ITEM_KINDS, SUBJECT_TYPES, srsBucketFromStage } from "@/lib/domainConstants";
 import { radicalsHref, togglePart } from "@/lib/radicalBrowser";
@@ -82,9 +82,7 @@ export default function RadicalBrowserView({
   names: Record<string, string>;
   accountId: string | null;
 }) {
-  const [viewMode, setViewMode] = useState<SubjectViewMode>(() =>
-    getStoredEnum(VIEW_MODE_KEY, SUBJECT_VIEW_MODE_VALUES, SUBJECT_VIEW_MODES.grid),
-  );
+  const [viewMode, setViewMode] = usePersistedEnum<SubjectViewMode>(VIEW_MODE_KEY, SUBJECT_VIEW_MODE_VALUES, SUBJECT_VIEW_MODES.grid);
   const [filerOpen, setFilerOpen] = useFilerOpen();
   const rows = useMemo(() => matches.map(toRow), [matches]);
   const filing = Boolean(accountId) && filerOpen;
@@ -192,10 +190,7 @@ export default function RadicalBrowserView({
               ) : null}
               <SubjectViewModeToggle
                 value={viewMode}
-                onChange={(next) => {
-                  setViewMode(next);
-                  setStoredEnum(VIEW_MODE_KEY, next);
-                }}
+                onChange={setViewMode}
               />
             </span>
           </div>

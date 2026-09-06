@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 
 import { ListRow } from "@/app/shared/ListSubjectRows";
 import SubjectFilerCell from "@/app/shared/SubjectFilerCell";
@@ -14,7 +14,7 @@ import {
   type SubjectViewMode,
 } from "@/app/shared/subjectListView";
 import { useFilerOpen, useSubjectFiler } from "@/app/shared/useSubjectFiler";
-import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
+import { usePersistedEnum } from "@/lib/usePersistedEnum";
 import { LIST_ITEM_KINDS, SUBJECT_TYPES } from "@/lib/domainConstants";
 import { strokesHref } from "@/lib/strokeAddress";
 import type { StrokeCount, StrokeEntry } from "@/lib/strokeBrowser";
@@ -85,12 +85,10 @@ export default function StrokeBrowserView({
   total: number;
   accountId: string | null;
 }) {
-  const [viewMode, setViewMode] = useState<SubjectViewMode>(() =>
-    getStoredEnum(
-      VIEW_MODE_KEY,
-      SUBJECT_VIEW_MODE_VALUES,
-      SUBJECT_VIEW_MODES.grid,
-    ),
+  const [viewMode, setViewMode] = usePersistedEnum<SubjectViewMode>(
+    VIEW_MODE_KEY,
+    SUBJECT_VIEW_MODE_VALUES,
+    SUBJECT_VIEW_MODES.grid,
   );
   const [filerOpen, setFilerOpen] = useFilerOpen();
   const rows = useMemo(() => entries.map(toRow), [entries]);
@@ -169,7 +167,6 @@ export default function StrokeBrowserView({
               value={viewMode}
               onChange={(next) => {
                 setViewMode(next);
-                setStoredEnum(VIEW_MODE_KEY, next);
               }}
             />
           </span>

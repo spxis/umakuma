@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 import jlptReadings from "@/data/jlptReadings.json";
-import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
+import { usePersistedEnum } from "@/lib/usePersistedEnum";
 import type { NewsArticleBlock } from "@/lib/news/newsTypes";
 
 import {
@@ -48,18 +48,10 @@ export function countUniqueArticleKanji(blocks: NewsArticleBlock[]): number {
 export default function NewsKanjiOverviewPanel({ blocks }: NewsKanjiOverviewPanelProps) {
   const [refreshKey, setRefreshKey] = useState(0);
   const [levelVersion, setLevelVersion] = useState(0);
-  const [groupMode, setGroupMode] = useState<GroupMode>(() =>
-    getStoredEnum<GroupMode>(GROUP_MODE_STORAGE_KEY, GROUP_MODE_OPTIONS, "all"),
-  );
-  const [entrySortMode, setEntrySortMode] = useState<EntrySortMode>(() =>
-    getStoredEnum<EntrySortMode>(ENTRY_SORT_STORAGE_KEY, ENTRY_SORT_OPTIONS, "article"),
-  );
-  const [allCountFilter, setAllCountFilter] = useState<AllCountFilter>(() =>
-    getStoredEnum<AllCountFilter>(ALL_COUNT_FILTER_STORAGE_KEY, ALL_COUNT_FILTER_OPTIONS, "all"),
-  );
-  const [allCoverageFilter, setAllCoverageFilter] = useState<AllCoverageFilter>(() =>
-    getStoredEnum<AllCoverageFilter>(ALL_COVERAGE_FILTER_STORAGE_KEY, ALL_COVERAGE_FILTER_OPTIONS, "all"),
-  );
+  const [groupMode, setGroupMode] = usePersistedEnum<GroupMode>(GROUP_MODE_STORAGE_KEY, GROUP_MODE_OPTIONS, "all");
+  const [entrySortMode, setEntrySortMode] = usePersistedEnum<EntrySortMode>(ENTRY_SORT_STORAGE_KEY, ENTRY_SORT_OPTIONS, "article");
+  const [allCountFilter, setAllCountFilter] = usePersistedEnum<AllCountFilter>(ALL_COUNT_FILTER_STORAGE_KEY, ALL_COUNT_FILTER_OPTIONS, "all");
+  const [allCoverageFilter, setAllCoverageFilter] = usePersistedEnum<AllCoverageFilter>(ALL_COVERAGE_FILTER_STORAGE_KEY, ALL_COVERAGE_FILTER_OPTIONS, "all");
 
   const { orderedChars, countsByChar } = useMemo(() => extractArticleKanjiData(blocks), [blocks]);
   const charsKey = useMemo(() => orderedChars.join(""), [orderedChars]);
@@ -169,22 +161,18 @@ export default function NewsKanjiOverviewPanel({ blocks }: NewsKanjiOverviewPane
 
   const updateGroupMode = (nextMode: GroupMode) => {
     setGroupMode(nextMode);
-    setStoredEnum(GROUP_MODE_STORAGE_KEY, nextMode);
   };
 
   const updateEntrySortMode = (nextMode: EntrySortMode) => {
     setEntrySortMode(nextMode);
-    setStoredEnum(ENTRY_SORT_STORAGE_KEY, nextMode);
   };
 
   const updateAllCountFilter = (nextFilter: AllCountFilter) => {
     setAllCountFilter(nextFilter);
-    setStoredEnum(ALL_COUNT_FILTER_STORAGE_KEY, nextFilter);
   };
 
   const updateAllCoverageFilter = (nextFilter: AllCoverageFilter) => {
     setAllCoverageFilter(nextFilter);
-    setStoredEnum(ALL_COVERAGE_FILTER_STORAGE_KEY, nextFilter);
   };
 
   return (

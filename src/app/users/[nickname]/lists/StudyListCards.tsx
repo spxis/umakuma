@@ -13,7 +13,7 @@ import {
   SUBJECT_VIEW_MODE_VALUES,
   type SubjectViewMode,
 } from "@/app/shared/subjectListView";
-import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
+import { usePersistedEnum } from "@/lib/usePersistedEnum";
 import {
   LIST_SHELF_SORTS,
   LIST_SHELF_SORT_VALUES,
@@ -66,8 +66,7 @@ export default function StudyListCards({
   const [edited, setEdited] = useState<Record<string, StudyListItemRef[]>>({});
   /* Searchable and sortable, like every list of data here; remembered per browser. */
   const [query, setQuery] = useState("");
-  const [sort, setSort] = useState<ListShelfSort>(() =>
-    getStoredEnum(LIST_SORT_STORAGE_KEY, LIST_SHELF_SORT_VALUES, LIST_SHELF_SORTS.updated));
+  const [sort, setSort] = usePersistedEnum<ListShelfSort>(LIST_SORT_STORAGE_KEY, LIST_SHELF_SORT_VALUES, LIST_SHELF_SORTS.updated);
   const [reversed, setReversed] = useState(false);
   const [page, setPage] = useState(1);
   const [error, setError] = useState<string | null>(null);
@@ -76,8 +75,7 @@ export default function StudyListCards({
    * Cards to browse what a week holds, rows to scan many lists at once - the
    * same pair every subject surface offers, remembered for this one.
    */
-  const [viewMode, setViewMode] = useState<SubjectViewMode>(() =>
-    getStoredEnum(LIST_VIEW_MODE_STORAGE_KEY, SUBJECT_VIEW_MODE_VALUES, SUBJECT_VIEW_MODES.grid));
+  const [viewMode, setViewMode] = usePersistedEnum<SubjectViewMode>(LIST_VIEW_MODE_STORAGE_KEY, SUBJECT_VIEW_MODE_VALUES, SUBJECT_VIEW_MODES.grid);
 
   /*
    * Two kinds, kept apart.
@@ -223,16 +221,12 @@ export default function StudyListCards({
         sort={sort}
         onSort={(next) => {
           setSort(next);
-          setStoredEnum(LIST_SORT_STORAGE_KEY, next);
           setPage(1);
         }}
         reversed={reversed}
         onReversed={setReversed}
         viewMode={viewMode}
-        onViewMode={(next) => {
-          setViewMode(next);
-          setStoredEnum(LIST_VIEW_MODE_STORAGE_KEY, next);
-        }}
+        onViewMode={setViewMode}
       />
 
       {error ? <p className="mb-3 text-xs font-semibold text-rose-600">{error}</p> : null}

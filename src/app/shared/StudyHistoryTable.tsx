@@ -17,7 +17,7 @@ import {
   SUBJECT_VIEW_MODE_VALUES,
   type SubjectViewMode,
 } from "@/app/shared/subjectListView";
-import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
+import { usePersistedEnum } from "@/lib/usePersistedEnum";
 import type { ReviewResult } from "@/lib/domainConstants";
 import { usePracticePath } from "@/app/shared/userBasePath";
 
@@ -73,8 +73,7 @@ export default function StudyHistoryTable({
   const [levelFilter, setLevelFilter] = useState<number | "all">("all");
   const [srsBucketFilter, setSrsBucketFilter] = useState<HistorySrsBucket | "all">("all");
   const [selectedAttemptId, setSelectedAttemptId] = useState<string | null>(null);
-  const [viewMode, setViewMode] = useState<SubjectViewMode>(() =>
-    getStoredEnum(HISTORY_VIEW_MODE_STORAGE_KEY, SUBJECT_VIEW_MODE_VALUES, SUBJECT_VIEW_MODES.list));
+  const [viewMode, setViewMode] = usePersistedEnum<SubjectViewMode>(HISTORY_VIEW_MODE_STORAGE_KEY, SUBJECT_VIEW_MODE_VALUES, SUBJECT_VIEW_MODES.list);
   const [filtersOpen, setFiltersOpen] = usePersistedBoolean(`wr:study-history:filters-open:${endpoint}`, { defaultValue: true });
 
   /*
@@ -234,10 +233,7 @@ export default function StudyHistoryTable({
             <SubjectSelectionToggle selection={selection} className="ml-auto" />
             <SubjectViewModeToggle
               value={viewMode}
-              onChange={(next) => {
-                setViewMode(next);
-                setStoredEnum(HISTORY_VIEW_MODE_STORAGE_KEY, next);
-              }}
+              onChange={setViewMode}
               className="inline-flex items-center rounded-full border border-line bg-surface p-1"
             />
           </div>

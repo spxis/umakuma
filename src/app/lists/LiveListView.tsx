@@ -14,7 +14,7 @@ import { SUBJECT_VIEW_MODES, SUBJECT_VIEW_MODE_VALUES, type SubjectViewMode } fr
 import { useFilerOpen, useSubjectFiler } from "@/app/shared/useSubjectFiler";
 import { useHideBurned } from "@/app/shared/useHideBurned";
 import { withoutBurned } from "@/lib/burnList";
-import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
+import { usePersistedEnum } from "@/lib/usePersistedEnum";
 import { LIST_ITEM_KIND_DISPLAY, type ListItemKind } from "@/lib/domainConstants";
 import { LIVE_LISTS_HREF } from "@/lib/liveLists";
 import { subjectMatchesQuery } from "@/lib/subjectSearch";
@@ -36,9 +36,7 @@ const ALL = "all";
 export default function LiveListView({ live, rows, viewer, burnedIds }: LiveListViewProps) {
   const [kind, setKind] = useState<string>(ALL);
   const [search, setSearch] = useState("");
-  const [viewMode, setViewMode] = useState<SubjectViewMode>(() =>
-    getStoredEnum(VIEW_MODE_KEY, SUBJECT_VIEW_MODE_VALUES, SUBJECT_VIEW_MODES.grid),
-  );
+  const [viewMode, setViewMode] = usePersistedEnum<SubjectViewMode>(VIEW_MODE_KEY, SUBJECT_VIEW_MODE_VALUES, SUBJECT_VIEW_MODES.grid);
   const [filerOpen, setFilerOpen] = useFilerOpen();
   const [hideBurned] = useHideBurned();
 
@@ -144,10 +142,7 @@ export default function LiveListView({ live, rows, viewer, burnedIds }: LiveList
           ) : null}
           <SubjectViewModeToggle
             value={viewMode}
-            onChange={(next) => {
-              setViewMode(next);
-              setStoredEnum(VIEW_MODE_KEY, next);
-            }}
+            onChange={setViewMode}
           />
         </div>
 

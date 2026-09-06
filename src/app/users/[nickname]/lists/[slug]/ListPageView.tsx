@@ -12,7 +12,7 @@ import { STUDY_LIST_COPY } from "@/app/shared/studyListCopy";
 import { SUBJECT_VIEW_MODES, SUBJECT_VIEW_MODE_VALUES, type SubjectViewMode } from "@/app/shared/subjectListView";
 import { useHideBurned } from "@/app/shared/useHideBurned";
 import { useSubjectSelection } from "@/app/shared/useSubjectSelection";
-import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
+import { usePersistedEnum } from "@/lib/usePersistedEnum";
 import { LIST_ITEM_KINDS, LIST_VISIBILITIES, STUDY_TAGS, SUBJECT_TYPES } from "@/lib/domainConstants";
 import { LIST_ITEM_PAGE_SIZE, LIST_ITEM_SORTS, orderListItems, type ListItemSort } from "@/lib/listItemOrder";
 import { listWorksheetHref } from "../../practice/practiceAddress";
@@ -79,9 +79,7 @@ export default function ListPageView({
   const [editing, setEditing] = useState(false);
   const [removed, setRemoved] = useState<Set<number>>(new Set());
   const [applied, setApplied] = useState(0);
-  const [viewMode, setViewMode] = useState<SubjectViewMode>(() =>
-    getStoredEnum(VIEW_MODE_KEY, SUBJECT_VIEW_MODE_VALUES, SUBJECT_VIEW_MODES.grid),
-  );
+  const [viewMode, setViewMode] = usePersistedEnum<SubjectViewMode>(VIEW_MODE_KEY, SUBJECT_VIEW_MODE_VALUES, SUBJECT_VIEW_MODES.grid);
   const [hideBurned] = useHideBurned();
   const selection = useSubjectSelection(`list:${list.id}`);
 
@@ -324,10 +322,7 @@ export default function ListPageView({
           selection={selection}
           showSelection={Boolean(viewer.accountId)}
           viewMode={viewMode}
-          onViewMode={(next) => {
-            setViewMode(next);
-            setStoredEnum(VIEW_MODE_KEY, next);
-          }}
+          onViewMode={setViewMode}
         />
 
         {viewer.isOwner && viewer.accountId && list.tag === STUDY_TAGS.burned ? (

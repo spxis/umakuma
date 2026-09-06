@@ -4,7 +4,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { DiscoverPayload } from "@/lib/news/newsDiscover";
 import type { NewsArticle } from "@/lib/news/newsTypes";
-import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
+import { usePersistedEnum } from "@/lib/usePersistedEnum";
 import NewsArticleView from "./NewsArticleView";
 import type { ArticlePanelTab } from "./NewsArticleView.types";
 import NewsDiscoverSessions from "./NewsDiscoverSessions";
@@ -64,12 +64,8 @@ export default function NewsReader({
   const initialUrlParam = searchParams.get("url") ?? "";
   const initialSiteParam = searchParams.get("site") ?? "";
 
-  const [mode, setMode] = useState<Mode>(() =>
-    getStoredEnum<Mode>(NEWS_READER_MODE_KEY, ["article", "site"], "article"),
-  );
-  const [activeTab, setActiveTab] = useState<ArticlePanelTab>(() =>
-    getStoredEnum<ArticlePanelTab>(NEWS_READER_TAB_KEY, ["article", "kanji", "history", "stats"], "article"),
-  );
+  const [mode, setMode] = usePersistedEnum<Mode>(NEWS_READER_MODE_KEY, ["article", "site"], "article");
+  const [activeTab, setActiveTab] = usePersistedEnum<ArticlePanelTab>(NEWS_READER_TAB_KEY, ["article", "kanji", "history", "stats"], "article");
   const [url, setUrl] = useState(initialUrlParam);
   const [article, setArticle] = useState<NewsArticle | null>(null);
   const [loading, setLoading] = useState(false);
@@ -96,11 +92,9 @@ export default function NewsReader({
   }, [refreshDiscoverSessions]);
 
   useEffect(() => {
-    setStoredEnum(NEWS_READER_MODE_KEY, mode);
   }, [mode]);
 
   useEffect(() => {
-    setStoredEnum(NEWS_READER_TAB_KEY, activeTab);
   }, [activeTab]);
 
   useEffect(() => {
@@ -321,7 +315,7 @@ export default function NewsReader({
     setUrl(param);
     setMode("article");
     void fetchArticle(param, "replace");
-  }, [searchParams, fetchArticle]);
+  }, [searchParams, fetchArticle, setMode]);
 
   async function handleSubmit(explicitSubmit: boolean) {
     if (!explicitSubmit) {

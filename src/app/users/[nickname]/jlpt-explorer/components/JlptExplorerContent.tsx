@@ -4,7 +4,7 @@ import {
   SUBJECT_VIEW_MODE_VALUES,
   type SubjectViewMode,
 } from "@/app/shared/subjectListView";
-import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
+import { usePersistedEnum } from "@/lib/usePersistedEnum";
 
 /** Grid or list on the JLPT explorer, remembered per surface. */
 const JLPT_VIEW_MODE_STORAGE_KEY = "wr:jlpt-explorer:view-mode";
@@ -79,8 +79,7 @@ export default function JlptExplorerContent({
   onSetSelectedKanji,
 }: Props) {
   /* Remembered per surface, like the other listing pages. */
-  const [viewMode, setViewMode] = useState<SubjectViewMode>(() =>
-    getStoredEnum(JLPT_VIEW_MODE_STORAGE_KEY, SUBJECT_VIEW_MODE_VALUES, SUBJECT_VIEW_MODES.grid));
+  const [viewMode, setViewMode] = usePersistedEnum<SubjectViewMode>(JLPT_VIEW_MODE_STORAGE_KEY, SUBJECT_VIEW_MODE_VALUES, SUBJECT_VIEW_MODES.grid);
   const [showClassic, setShowClassic] = useState(false);
 
   /*
@@ -354,10 +353,7 @@ export default function JlptExplorerContent({
             <SubjectSelectionToggle selection={selection} />
             <SubjectViewModeToggle
               value={viewMode}
-              onChange={(next) => {
-                setViewMode(next);
-                setStoredEnum(JLPT_VIEW_MODE_STORAGE_KEY, next);
-              }}
+              onChange={setViewMode}
             />
           </div>
         </div>

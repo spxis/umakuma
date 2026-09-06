@@ -6,7 +6,7 @@ import PillWordsToggle from "@/app/shared/PillWordsToggle";
 import SubjectCards from "@/app/shared/SubjectCards";
 import SubjectRows from "@/app/shared/SubjectRows";
 import SubjectViewModeToggle from "@/app/shared/SubjectViewModeToggle";
-import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
+import { usePersistedEnum } from "@/lib/usePersistedEnum";
 import { SUBJECT_VIEW_MODES, SUBJECT_VIEW_MODE_VALUES, type SubjectViewMode } from "@/app/shared/subjectListView";
 import { SUBJECT_TYPE_DISPLAY, type SubjectType } from "@/lib/domainConstants";
 import { ladderLevelSections, ladderRowAsSubject } from "@/lib/ladder/ladderLevelPage";
@@ -42,9 +42,7 @@ export default function UmakumaLevelBoard({
   levels: LadderLevelSummary[];
 }) {
   const [kind, setKind] = useState<SubjectType | null>(null);
-  const [viewMode, setViewMode] = useState<SubjectViewMode>(() =>
-    getStoredEnum(UK_VIEW_MODE_STORAGE_KEY, SUBJECT_VIEW_MODE_VALUES, SUBJECT_VIEW_MODES.grid),
-  );
+  const [viewMode, setViewMode] = usePersistedEnum<SubjectViewMode>(UK_VIEW_MODE_STORAGE_KEY, SUBJECT_VIEW_MODE_VALUES, SUBJECT_VIEW_MODES.grid);
 
   const sections = useMemo(
     () => ladderLevelSections(group).filter((section) => kind === null || section.type === kind),
@@ -79,10 +77,7 @@ export default function UmakumaLevelBoard({
             <PillWordsToggle />
             <SubjectViewModeToggle
               value={viewMode}
-              onChange={(next) => {
-                setViewMode(next);
-                setStoredEnum(UK_VIEW_MODE_STORAGE_KEY, next);
-              }}
+              onChange={setViewMode}
             />
           </span>
         </div>

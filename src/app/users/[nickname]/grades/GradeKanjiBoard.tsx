@@ -11,7 +11,7 @@ import {
   SUBJECT_VIEW_MODE_VALUES,
   type SubjectViewMode,
 } from "@/app/shared/subjectListView";
-import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
+import { usePersistedEnum } from "@/lib/usePersistedEnum";
 import type { SchoolGradeKanjiEntry } from "@/lib/schoolGrades.types";
 
 import { GRADE_EXPLORER_COPY } from "./GradeExplorer.constants";
@@ -53,8 +53,7 @@ export default function GradeKanjiBoard({ items, practicePath, accountId, initia
    */
   const [mode, setMode] = useState<GradeRevealMode>(initialRevealMode);
   const [revealed, setRevealed] = useState<Set<string>>(new Set());
-  const [viewMode, setViewMode] = useState<SubjectViewMode>(() =>
-    getStoredEnum(GRADE_VIEW_MODE_STORAGE_KEY, SUBJECT_VIEW_MODE_VALUES, SUBJECT_VIEW_MODES.grid));
+  const [viewMode, setViewMode] = usePersistedEnum<SubjectViewMode>(GRADE_VIEW_MODE_STORAGE_KEY, SUBJECT_VIEW_MODE_VALUES, SUBJECT_VIEW_MODES.grid);
 
   function changeMode(next: GradeRevealMode) {
     setMode(next);
@@ -113,10 +112,7 @@ export default function GradeKanjiBoard({ items, practicePath, accountId, initia
 
         <SubjectViewModeToggle
           value={viewMode}
-          onChange={(next) => {
-            setViewMode(next);
-            setStoredEnum(GRADE_VIEW_MODE_STORAGE_KEY, next);
-          }}
+          onChange={setViewMode}
         />
       </div>
 

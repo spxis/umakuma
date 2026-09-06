@@ -51,7 +51,7 @@ import {
   toSubjectListRow,
   type SubjectViewMode,
 } from "@/app/shared/subjectListView";
-import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
+import { usePersistedEnum } from "@/lib/usePersistedEnum";
 import GlyphMetadataBadges from "../../shared/GlyphMetadataBadges";
 import FieldLabel from "../../../../shared/FieldLabel";
 import { useExplorerFiling } from "@/app/shared/useExplorerFiling";
@@ -136,9 +136,8 @@ export default function StudyExplorerPanel({
   const showFilterPagingState = queueMode === STUDY_QUEUE_TYPES.lesson && viewedLevel !== null && hasMoreMatchingItems && filteredItems.length === 0;
   const hideControlsDuringInitialLoad = (showLoadingIndicator || showFilterPagingState) && filteredItems.length === 0;
   const { toggle: toggleGlyphFont } = useGlyphFontPreference();
-  const [viewMode, setViewMode] = useState<SubjectViewMode>(() =>
-    getStoredEnum(STUDY_VIEW_MODE_STORAGE_KEY, SUBJECT_VIEW_MODE_VALUES, SUBJECT_VIEW_MODES.grid));
-  const changeViewMode = (next: SubjectViewMode) => { setViewMode(next); setStoredEnum(STUDY_VIEW_MODE_STORAGE_KEY, next); };
+  const [viewMode, setViewMode] = usePersistedEnum<SubjectViewMode>(STUDY_VIEW_MODE_STORAGE_KEY, SUBJECT_VIEW_MODE_VALUES, SUBJECT_VIEW_MODES.grid);
+  const changeViewMode = setViewMode;
   const showLoadingOverlay = hideControlsDuringInitialLoad;
   const loadingSkeletonCardCount = Math.max(4, gridColumns * 2);
   const loadingFillCount = shouldShowLoadMoreUi && isLoadingMore && gridColumns > 1
