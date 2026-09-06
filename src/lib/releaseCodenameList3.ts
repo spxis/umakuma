@@ -89,4 +89,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Rufu Sumiwake", ja: "流布住み分け", reading: "るふすみわけ", gloss: "each finding its own place" },
   { romaji: "Reiretsu Utsushi", ja: "例列写し", reading: "れいれつうつし", gloss: "seeing the row as another does" },
   { romaji: "Rojou Totonoe", ja: "路上整え", reading: "ろじょうととのえ", gloss: "set straight along the way" },
+  { romaji: "Wariai Settei", ja: "割合設定", reading: "わりあいせってい", gloss: "the proportions, set" },
 ];
