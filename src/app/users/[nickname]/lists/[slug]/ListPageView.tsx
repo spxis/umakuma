@@ -18,19 +18,23 @@ import { SUBJECT_VIEW_MODES, SUBJECT_VIEW_MODE_VALUES, type SubjectViewMode } fr
 import { useHideBurned } from "@/app/shared/useHideBurned";
 import { useSubjectSelection } from "@/app/shared/useSubjectSelection";
 import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
-import {
-  LIST_ITEM_KINDS,
-  LIST_ITEM_KIND_DISPLAY,
-  LIST_VISIBILITIES,
-  STUDY_TAGS,
-  type ListItemKind,
-} from "@/lib/domainConstants";
+import { LIST_ITEM_KINDS, LIST_VISIBILITIES, STUDY_TAGS, type SubjectType } from "@/lib/domainConstants";
 import { LIST_ITEM_PAGE_SIZE, LIST_ITEM_SORTS, orderListItems, type ListItemSort } from "@/lib/listItemOrder";
 import { listWorksheetHref } from "../../practice/practiceAddress";
 import { subjectMatchesQuery } from "@/lib/subjectSearch";
 import { openViewGlyphViewer } from "@/lib/viewGlyphViewer";
 
+import SubjectTypeFilterGroup from "../../shared/SubjectTypeFilterGroup";
+
 import ListContributeBox from "./ListContributeBox";
+import {
+  LIST_TYPE_FILTER_ALL,
+  listHasMixedTypes,
+  listTypeChipStates,
+  listTypeCounts,
+  matchesListTypeFilter,
+  type ListTypeFilter,
+} from "./listPageFilters";
 import ListItemNoteEditor from "./ListItemNoteEditor";
 import ListItemSortControl from "./ListItemSortControl";
 import type { ListPageViewProps } from "./ListPage.types";
@@ -53,8 +57,6 @@ import ListSourceUpdates from "./ListSourceUpdates";
  */
 const VIEW_MODE_KEY = "wr:list-page:view-mode";
 
-const ALL = "all";
-
 /** The same shape as the Edit toggle beside it, since they are the same kind of thing. */
 const ACTION_PILL =
   "inline-flex h-9 shrink-0 items-center rounded-full border border-line bg-surface px-3 text-xs font-bold uppercase tracking-[0.08em] text-foreground/70 transition hover:bg-surface-muted";
@@ -72,7 +74,7 @@ export default function ListPageView({
   progress,
   grade,
 }: ListPageViewProps) {
-  const [kind, setKind] = useState<string>(ALL);
+  const [typeFilter, setTypeFilter] = useState<ListTypeFilter>(LIST_TYPE_FILTER_ALL);
   const [search, setSearch] = useState("");
   /*
    * The list's own order by default, because somebody arranged it. Every
@@ -121,11 +123,7 @@ export default function ListPageView({
     return worksheet ? { worksheet } : null;
   }, [list.name, list.tag, listKey, live, owner.key, practicePath, viewer.isOwner]);
 
-  const kinds = useMemo(() => {
-    const counts = new Map<ListItemKind, number>();
-    for (const item of live) counts.set(item.listKind, (counts.get(item.listKind) ?? 0) + 1);
-    return [...counts.entries()];
-  }, [live]);
+  const typeCounts = useMemo(() => listTypeCounts(live), [live]);
 
   const burnedInView = useMemo(() => live.filter((item) => item.studyTags?.burned).length, [live]);
 
@@ -133,7 +131,7 @@ export default function ListPageView({
     () =>
       orderListItems(
         live
-          .filter((item) => kind === ALL || item.listKind === kind)
+          .filter((item) => matchesListTypeFilter(item, typeFilter))
           .filter((item) => list.tag === STUDY_TAGS.burned || !hideBurned || !item.studyTags?.burned)
           .filter((item) =>
             subjectMatchesQuery(search, { glyph: item.characters, meanings: item.meanings, readings: item.readings ?? [] }),
@@ -142,7 +140,7 @@ export default function ListPageView({
         sort,
         reversed,
       ),
-    [hideBurned, kind, list.tag, live, reversed, search, sort],
+    [hideBurned, list.tag, live, reversed, search, sort, typeFilter],
   );
 
   /*
@@ -185,11 +183,6 @@ export default function ListPageView({
     },
     [list.id, list.tag, viewer.accountId],
   );
-
-  const CHIP =
-    "inline-flex h-7 items-center rounded-full border px-2.5 text-[11px] font-black uppercase tracking-[0.08em] transition";
-  const chipClass = (on: boolean) =>
-    `${CHIP} ${on ? "border-accent bg-accent text-white" : "border-line bg-surface text-foreground/70 hover:bg-surface-muted"}`;
 
   return (
     <div className="space-y-4">
@@ -268,17 +261,33 @@ export default function ListPageView({
 
       <section className="rounded-2xl border border-line bg-surface p-3 sm:p-4">
         <div className="flex flex-wrap items-center gap-2">
-          {kinds.length > 1 ? (
-            <>
-              <button type="button" aria-pressed={kind === ALL} onClick={() => setKind(ALL)} className={chipClass(kind === ALL)}>
-                {STUDY_LIST_COPY.allKinds} · {live.length}
-              </button>
-              {kinds.map(([value, count]) => (
-                <button key={value} type="button" aria-pressed={kind === value} onClick={() => setKind(value)} className={chipClass(kind === value)}>
-                  {LIST_ITEM_KIND_DISPLAY[value].plural} · {count}
-                </button>
-              ))}
-            </>
+          {/*
+            * The same chips the explorers filter by, in the subject colours.
+            *
+            * This row used to hold three of its own in the accent colour -
+            * ALL, KANJI, WORDS - which is a second answer to a question the
+            * site had already answered, and the worse one: a list holding
+            * radicals had no chip to say so, and a word was a Word here and
+            * VOCAB on every other surface. Kinds the list does not hold are
+            * left out rather than drawn as a zero nobody can press.
+            */}
+          {listHasMixedTypes(typeCounts) ? (
+            <SubjectTypeFilterGroup
+              counts={typeCounts}
+              allLabel={STUDY_LIST_COPY.allKinds}
+              allActive={typeFilter === LIST_TYPE_FILTER_ALL}
+              activeTypes={listTypeChipStates(typeFilter)}
+              onClickAll={() => {
+                setTypeFilter(LIST_TYPE_FILTER_ALL);
+                setItemPage(1);
+              }}
+              onClickType={(type: SubjectType) => {
+                setTypeFilter((current) => (current === type ? LIST_TYPE_FILTER_ALL : type));
+                setItemPage(1);
+              }}
+              className="flex flex-wrap items-center gap-2"
+              hideZeroInactive
+            />
           ) : null}
           {/*
             * A line of its own on a phone. Squeezed in beside the kind chips
