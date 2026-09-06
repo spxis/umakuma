@@ -11,10 +11,10 @@
  * agree with `package.json` and the record, so a forgotten bump fails
  * `quality:check` rather than shipping a stale number.
  */
-export const APP_VERSION = "1.44.0";
+export const APP_VERSION = "1.45.0";
 
 /** Which release this is, counting from the first. */
-export const APP_VERSION_RELEASE = 531;
+export const APP_VERSION_RELEASE = 532;
 
 /** The calendar day APP_VERSION shipped, `YYYY-MM-DD`. */
 export const APP_VERSION_DATE = "2026-09-06";

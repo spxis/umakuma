@@ -6625,12 +6625,25 @@
     "id": "simulated-members-32-lifelike-accounts-on-un-and-ug-with-a-u",
     "name": "Simulated members: 32 lifelike accounts on UN and UG, with a UserType",
     "area": "admin",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-06",
+    "summary": "A simulated cohort that studies and plays the way students do, so the boards have somebody on them: real student names from six countries, lessons and reviews on the shared schedule, XP through the same caps, games planned and scored by the site. Every one is a test account, found and removed by that type.",
+    "dateIsEstimate": false,
+    "release": 531,
+    "version": "1.44.0",
+    "releasedAt": "2026-09-06T12:21:10Z"
+  },
+  {
+    "id": "currency-mascots-and-shop",
+    "name": "Currency mascots and the Shop",
+    "area": "games",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.44.0",
-    "release": 531,
-    "releasedAt": "2026-09-06T12:21:10Z",
-    "summary": "A simulated cohort that studies and plays the way students do, so the boards have somebody on them: real student names from six countries, lessons and reviews on the shared schedule, XP through the same caps, games planned and scored by the site. Every one is a test account, found and removed by that type."
+    "version": "1.45.0",
+    "release": 532,
+    "releasedAt": "2026-09-06T12:34:45Z",
+    "summary": "Three treats to collect - Mochi, Oni and Kane, each with its own face - and a Shop to spend them in: sixteen fun cosmetics, eight for Uma and eight for Kuma. Nothing awards a treat yet and nothing is really for sale; this is the catalogue and the currencies, ahead of the earning."
   }
 ]
