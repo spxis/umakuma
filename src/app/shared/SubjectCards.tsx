@@ -113,7 +113,25 @@ export default function SubjectCards<TRow extends SubjectListRow>({
             <span className={`font-black leading-none ${JP_TEXT_CLASS} ${glyphTextSizeClass(row.glyph)}`}>
               {row.glyph}
             </span>
-            <span className="line-clamp-2 text-xs font-bold text-foreground/75">
+            {/*
+              * One line, clipped, with the whole meaning on the title.
+              *
+              * It wrapped to two, which made a card with a long meaning taller
+              * than the cards beside it - so a row of them had a ragged bottom
+              * edge and the filing rail under each card sat at a different
+              * height across one row. John, on the stroke pages: "Kanji blocks
+              * grow in height! also we should probably force text to NOT wrap.
+              * use ellipsis and then title tag to show entire text."
+              *
+              * Clipping is only honest because nothing is lost: the title
+              * carries the full text, the same bargain `pillWordsTitle` makes
+              * for the half a chip does not print. `w-full` and `min-w-0` are
+              * what let it clip at all inside a centred flex column.
+              */}
+            <span
+              title={row.meaning || undefined}
+              className="w-full min-w-0 truncate text-xs font-bold text-foreground/75"
+            >
               {row.meaning || SUBJECT_VIEW_COPY.noMeaning}
             </span>
             {renderDetail ? renderDetail(row) : null}

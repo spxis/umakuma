@@ -104,3 +104,42 @@ describe("what a surface may add to the card", () => {
     expect(dense.querySelector("ul")?.getAttribute("class")).toContain("grid-cols-6");
   });
 });
+
+/*
+ * Every card in a row is the same height, which means the meaning gets one
+ * line however long it is.
+ *
+ * It had two, so "katakana no radical (no. 4)" stood taller than the seven
+ * cards beside it and the filing rail under each one sat at a different
+ * height across the row. John, on the stroke pages: "Kanji blocks grow in
+ * height! also we should probably force text to NOT wrap. use ellipsis and
+ * then title tag to show entire text."
+ */
+describe("the meaning is one line, and nothing is lost to clipping it", () => {
+  const longMeaning = { ...row("丿"), meaning: "katakana no radical (no. 4)" };
+
+  it("clips rather than wrapping", () => {
+    const doc = draw(<SubjectCards rows={[longMeaning]} onSelect={() => undefined} />);
+    const meaning = [...doc.querySelectorAll("span")].find(
+      (span) => span.textContent === longMeaning.meaning,
+    );
+    expect(meaning?.className).toContain("truncate");
+    expect(meaning?.className).not.toContain("line-clamp");
+  });
+
+  it("keeps the whole meaning on the title, so the clip costs nothing", () => {
+    const doc = draw(<SubjectCards rows={[longMeaning]} onSelect={() => undefined} />);
+    const meaning = [...doc.querySelectorAll("span")].find(
+      (span) => span.textContent === longMeaning.meaning,
+    );
+    expect(meaning?.getAttribute("title")).toBe(longMeaning.meaning);
+  });
+
+  /* A card with no meaning shows the stand-in and must not offer a tooltip
+     that repeats it - a title saying the same words twice is noise. */
+  it("offers no title when there is no meaning to show", () => {
+    const doc = draw(<SubjectCards rows={[{ ...row("丿"), meaning: "" }]} onSelect={() => undefined} />);
+    const withTitle = [...doc.querySelectorAll("span[title]")];
+    expect(withTitle).toHaveLength(0);
+  });
+});
