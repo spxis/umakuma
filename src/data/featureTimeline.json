@@ -6560,12 +6560,25 @@
     "id": "an-admin-can-preview-a-board-as-anyone-else",
     "name": "An admin can preview a board as anyone else",
     "area": "account",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-06",
+    "summary": "Admins can now look at a board the way a member or a visitor would, to check who is actually hidden.",
+    "dateIsEstimate": false,
+    "release": 526,
+    "version": "1.39.0",
+    "releasedAt": "2026-09-06T11:21:24Z"
+  },
+  {
+    "id": "the-standings-row-asks-its-column-not-the-window",
+    "name": "The standings row asks its column, not the window",
+    "area": "account",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.39.0",
-    "release": 526,
-    "releasedAt": "2026-09-06T11:21:24Z",
-    "summary": "Admins can now look at a board the way a member or a visitor would, to check who is actually hidden."
+    "version": "1.40.0",
+    "release": 527,
+    "releasedAt": "2026-09-06T11:22:05Z",
+    "summary": "The standings read properly in a narrow column instead of breaking into ragged lines."
   }
 ]
