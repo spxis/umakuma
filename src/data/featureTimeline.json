@@ -6157,12 +6157,25 @@
     "id": "curriculum-version-is-real",
     "name": "The curriculum version is real, and stamped on every answer",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-05",
+    "summary": "Both ladders now carry a curriculum version, and every answer records which ladder and which version it was given against - so a level moving under you later is something we can explain rather than guess at. The session shows it faintly; it is a stamp on the work, not a number to read.",
+    "dateIsEstimate": false,
+    "release": 495,
+    "version": "1.13.0",
+    "releasedAt": "2026-09-06T00:16:08Z"
+  },
+  {
+    "id": "kanji-garden-theme",
+    "name": "Kanji Garden theme, for people arriving from there",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-05",
-    "version": "1.13.0",
-    "release": 495,
-    "releasedAt": "2026-09-06T00:16:08Z",
-    "summary": "Both ladders now carry a curriculum version, and every answer records which ladder and which version it was given against - so a level moving under you later is something we can explain rather than guess at. The session shows it faintly; it is a stamp on the work, not a number to read."
+    "version": "1.14.0",
+    "release": 496,
+    "releasedAt": "2026-09-06T00:40:46Z",
+    "summary": "A Kanji Garden theme, so somebody arriving from there can keep the stage names they already think in - planting through bloomed, with the in-between rungs named for the plant's next step rather than a numbered repeat."
   }
 ]
