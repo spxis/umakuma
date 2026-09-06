@@ -37,6 +37,7 @@ describe("member pages", () => {
     "profile",
     "wanikani",
     "xp",
+    "xp/history",
     "theme",
   ];
 

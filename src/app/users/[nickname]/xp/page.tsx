@@ -15,7 +15,7 @@ import XpRankPanel from "../profile/XpRankPanel";
 import { canViewUserPage, resolveViewerMenuInfo } from "../userPageAuth";
 import XpActivitySummary from "./XpActivitySummary";
 import XpLedgerDays from "./XpLedgerDays";
-import { XP_HISTORY_COPY } from "./xpHistoryCopy";
+import { XP_HISTORY_COPY, XP_LEDGER_HISTORY_COPY } from "./xpHistoryCopy";
 import { loadXpHistory } from "./xpLedgerServer";
 
 /* Prisma-backed, and CI builds with no database to prerender against. */
@@ -98,12 +98,21 @@ export default async function UserXpPage({ params }: PageProps) {
           title={XP_HISTORY_COPY.title}
           subtitle={XP_HISTORY_COPY.subtitle(name)}
           actions={
-            <Link
-              href="/xp"
-              className="rounded-full border border-line bg-surface px-3 py-1.5 text-xs font-black text-foreground hover:text-accent"
-            >
-              {XP_HISTORY_COPY.board}
-            </Link>
+            <>
+              {/* The whole record, which this page only summarises. */}
+              <Link
+                href={`/users/${encodeURIComponent(userKey)}/xp/history`}
+                className="rounded-full border border-line bg-surface px-3 py-1.5 text-xs font-black text-foreground hover:text-accent"
+              >
+                {XP_LEDGER_HISTORY_COPY.title}
+              </Link>
+              <Link
+                href="/xp"
+                className="rounded-full border border-line bg-surface px-3 py-1.5 text-xs font-black text-foreground hover:text-accent"
+              >
+                {XP_HISTORY_COPY.board}
+              </Link>
+            </>
           }
         />
 
