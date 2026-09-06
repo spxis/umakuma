@@ -32,7 +32,7 @@ import {
  * against precisely because the two numbers are independent.
  */
 const LADDER_FILES = [
-  { stream: "UK", file: join(process.cwd(), "src/data/kanjiLadder.json"), published: "src/data/kanjiLadder.json" },
+  { stream: "UN", file: join(process.cwd(), "src/data/kanjiLadder.json"), published: "src/data/kanjiLadder.json" },
   { stream: "UG", file: join(process.cwd(), "src/data/gradeLadder.json"), published: "src/data/gradeLadder.json" },
 ];
 

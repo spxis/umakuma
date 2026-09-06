@@ -20,8 +20,8 @@
 export const LEVEL_SYSTEMS = {
   /** WaniKani's sixty. */
   wanikani: "WK",
-  /** Ours. A hundred. */
-  umakuma: "UK",
+  /** Ours, ordered by the exam. A hundred. */
+  umakuma: "UN",
   /**
    * A member's own uploaded library, which is a third ladder with as many
    * levels as they gave it.

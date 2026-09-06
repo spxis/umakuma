@@ -34,7 +34,7 @@ describe("the header's member strip", () => {
     const text = draw(viewer()).body.textContent ?? "";
 
     expect(text).toContain("1,240 XP");
-    expect(text).toContain("UK23");
+    expect(text).toContain("UN23");
     expect(text).toContain("WK17");
   });
 
@@ -76,7 +76,7 @@ describe("the header's member strip", () => {
     const text = draw(viewer({ wkLevel: null })).body.textContent ?? "";
 
     expect(text).toContain("1,240 XP");
-    expect(text).toContain("UK23");
+    expect(text).toContain("UN23");
     expect(text).not.toContain("WK");
   });
 

@@ -1186,12 +1186,18 @@ enum UkPlacementSource {
 
 /// Why a state row exists. A row seeded by a placement test is not the same
 /// evidence as one a member earned by answering, and the profile says so.
-/// The two orderings UmaKuma teaches the same subjects in: UK is the exam
+/// The two orderings UmaKuma teaches the same subjects in: UN is the exam
 /// ladder, UG the Japanese school one. Ours, both of them, which is why they
 /// carry a version and WaniKani's levels do not.
 enum LadderStream {
-  UK
+  UN
   UG
+  /// Retired. The exam ladder was called UK until the rename, and the 138
+  /// answers stamped with it have been migrated to UN, so nothing holds this
+  /// value any more. It stays in the enum only because dropping a Postgres
+  /// enum value needs `prisma db push --accept-data-loss`, and an unused
+  /// value costs nothing. Nothing may write it.
+  UK
 }
 
 enum UkStateOrigin {
@@ -1253,7 +1259,7 @@ model UkReviewAttempt {
   newSrsStage       Int?
   submittedAt       DateTime          @default(now())
   /// Which of our two ladders the member was following when they answered.
-  /// Null on every attempt recorded before there were two, which were all UK.
+  /// Null on every attempt recorded before there were two, which were all UN.
   curriculumStream  LadderStream?
   /// The curriculum version this answer was given against - not the site's
   /// release number, which answers a different question. We move the ladder

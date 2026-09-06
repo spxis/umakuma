@@ -33,7 +33,7 @@ describe("the look-alike block", () => {
 
   /* The point of the block: the member is told where they met the twin. */
   it("says which level teaches the twin, in our own numbering", () => {
-    expect(draw([EARTH]).body.textContent).toContain("UK52");
+    expect(draw([EARTH]).body.textContent).toContain("UN52");
   });
 
   it("names both holders when both fed the list", () => {

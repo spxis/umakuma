@@ -28,7 +28,7 @@ export const ADMIN_LADDER_COPY = {
   columns: {
     glyph: "Item",
     kind: "Kind",
-    uk: "UK",
+    uk: "UN",
     wk: "WK",
     jlpt: "JLPT",
     grade: "Grade",
@@ -43,7 +43,7 @@ export const ADMIN_LADDER_COPY = {
     known: "known",
     hint: "Radicals in cyan, then that level's kanji, then its words.",
   },
-  ukPrefix: "UK",
+  ukPrefix: "UN",
   wkPrefix: "WK",
   notTaught: "—",
 } as const;

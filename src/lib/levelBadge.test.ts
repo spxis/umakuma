@@ -13,7 +13,7 @@ import { levelBadge, LEVEL_SYSTEMS, libraryLevelBadge, ukLevelBadge, wkLevelBadg
 describe("levelBadge", () => {
   it("names the system in front of the number", () => {
     expect(wkLevelBadge(17)).toBe("WK17");
-    expect(ukLevelBadge(17)).toBe("UK17");
+    expect(ukLevelBadge(17)).toBe("UN17");
     expect(levelBadge(LEVEL_SYSTEMS.wanikani, 60)).toBe("WK60");
   });
 
@@ -26,7 +26,7 @@ describe("levelBadge", () => {
 
   it("leaves no bare L{n} drawn anywhere in the app", () => {
     /* John, on seeing the UmaKuma Explorer: "WK levels should now read
-       WK17... umakuma is UK17. No more L17 anywhere." Grepped rather than
+       WK17... umakuma is UN17. No more L17 anywhere." Grepped rather than
        asserted per file, because the failure this catches is a *new* surface
        reaching for the old form, which no per-file test would see. */
     const found = execFileSync(

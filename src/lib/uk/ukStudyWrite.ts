@@ -133,7 +133,7 @@ export async function recordUkReview({
        * Stamped with the curriculum it was answered against. The ladders move
        * when the evidence says to - a kanji shifts a level, a word is placed
        * differently - and an answer given against one arrangement should still
-       * be readable after the arrangement changes. The stream is UK until a
+       * be readable after the arrangement changes. The stream is UN until a
        * member can choose UG; when they can, it is theirs.
        */
       data: {
@@ -143,7 +143,7 @@ export async function recordUkReview({
         result,
         previousSrsStage,
         newSrsStage,
-        curriculumStream: LADDER_STREAMS.uk,
+        curriculumStream: LADDER_STREAMS.un,
         curriculumVersion: CURRICULUM_VERSION,
       },
     }),

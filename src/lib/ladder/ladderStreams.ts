@@ -1,16 +1,16 @@
 /**
  * The two ladders UmaKuma teaches its own curriculum in.
  *
- * UK orders by JLPT band, UG by Japanese school year, over one set of subjects.
+ * UN orders by JLPT band, UG by Japanese school year, over one set of subjects.
  * Both are ours, which is why both carry a curriculum version and WaniKani's
  * levels do not — theirs move when they decide, and we are not told.
  *
  * The values match the `LadderStream` enum in the schema, because an answer
- * records which of the two it was given against and a second spelling of "UK"
+ * records which of the two it was given against and a second spelling of "UN"
  * would make that record unreadable.
  */
 export const LADDER_STREAMS = {
-  uk: "UK",
+  un: "UN",
   ug: "UG",
 } as const;
 

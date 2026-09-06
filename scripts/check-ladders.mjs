@@ -68,7 +68,7 @@ async function main() {
 
   console.log(
     `Checking ${expected.size} kanji, ${radicals.length} radicals, ${words.length} words.\n` +
-      `UK curriculum ${uk.curriculum?.version ?? "unstamped"}` +
+      `UN curriculum ${uk.curriculum?.version ?? "unstamped"}` +
       (ug ? `, UG curriculum ${ug.curriculum?.version ?? "unstamped"}\n` : "\n"),
   );
 
@@ -82,8 +82,8 @@ async function main() {
   ];
 
   let broken = 0;
-  console.log("UK · the exam ladder");
-  broken += report("UK", [...shared(uk), ...checkJlptPromise(uk)]);
+  console.log("UN · the exam ladder");
+  broken += report("UN", [...shared(uk), ...checkJlptPromise(uk)]);
 
   if (ug) {
     console.log("\nUG · the school ladder");

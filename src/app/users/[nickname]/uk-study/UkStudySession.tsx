@@ -183,7 +183,7 @@ export default function UkStudySession({ accountId, studyHref }: { accountId: st
         * level moved under them.
         */}
       <p className="text-[10px] font-medium tracking-[0.08em] text-foreground/35" translate="no">
-        {copy.curriculumStamp(LADDER_STREAMS.uk, CURRICULUM_VERSION)}
+        {copy.curriculumStamp(LADDER_STREAMS.un, CURRICULUM_VERSION)}
       </p>
     </section>
   );

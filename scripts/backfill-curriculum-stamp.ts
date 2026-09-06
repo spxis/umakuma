@@ -19,7 +19,7 @@ import { PrismaClient } from "@prisma/client";
  */
 const prisma = new PrismaClient();
 
-const ORIGINAL_STREAM = "UK" as const;
+const ORIGINAL_STREAM = "UN" as const;
 const ORIGINAL_VERSION = "1.0.0";
 
 async function main(): Promise<void> {
