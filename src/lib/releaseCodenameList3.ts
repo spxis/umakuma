@@ -74,4 +74,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Haridashita Kuraidori", ja: "貼り出した位取り", reading: "はりだしたくらいどり", gloss: "your ranking, put up where you can see it" },
   { romaji: "Hibiku Koe", ja: "響く声", reading: "ひびくこえ", gloss: "the voice that carries" },
   { romaji: "Fusegu Kamae", ja: "防ぐ構え", reading: "ふせぐかまえ", gloss: "the stance that prevents it" },
+  { romaji: "Hedataru Jiban", ja: "隔たる地盤", reading: "へだたるじばん", gloss: "ground that no longer drifts apart" },
 ];

@@ -6378,12 +6378,25 @@
     "id": "release-take-version-guard",
     "name": "A release number cannot be taken twice",
     "area": "platform",
+    "status": "shipped",
     "kind": "bug",
+    "date": "2026-09-06",
+    "summary": "Taking a release number now refuses one the record already holds, whichever way the release is stamped.",
+    "dateIsEstimate": false,
+    "release": 512,
+    "version": "1.26.1",
+    "releasedAt": "2026-09-06T07:56:07Z"
+  },
+  {
+    "id": "take-guards-origin",
+    "name": "A release number is checked against what is published",
+    "area": "platform",
+    "kind": "feature",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.26.1",
-    "release": 512,
-    "releasedAt": "2026-09-06T07:56:07Z",
-    "summary": "Taking a release number now refuses one the record already holds, whichever way the release is stamped."
+    "version": "1.26.2",
+    "release": 513,
+    "releasedAt": "2026-09-06T08:06:28Z",
+    "summary": "Taking a release number now checks it against the published record as well as the local copy, so two people cannot take the same one."
   }
 ]
