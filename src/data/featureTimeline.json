@@ -6313,12 +6313,25 @@
     "id": "lists-the-search-box-loses-its-dropdown-arrow",
     "name": "The search box drops its dropdown arrow",
     "area": "study",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-06",
+    "summary": "A search box that offers suggestions was drawing the browser's own dropdown arrow at its end, which read as a menu it is not. The arrow is gone; the suggestions still appear as you type.",
+    "dateIsEstimate": false,
+    "release": 507,
+    "version": "1.23.1",
+    "releasedAt": "2026-09-06T07:08:21Z"
+  },
+  {
+    "id": "lists-edit-mode-leaves-the-row-height-alone",
+    "name": "Edit mode leaves the row height alone",
+    "area": "study",
     "kind": "bug",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.23.1",
-    "release": 507,
-    "releasedAt": "2026-09-06T07:08:21Z",
-    "summary": "A search box that offers suggestions was drawing the browser's own dropdown arrow at its end, which read as a menu it is not. The arrow is gone; the suggestions still appear as you type."
+    "version": "1.23.2",
+    "release": 508,
+    "releasedAt": "2026-09-06T07:08:37Z",
+    "summary": "Pressing Edit on a list made every row taller, because the invitation to write a note appeared under the meaning and pushed the row open. The note is written from a button beside the remove cross now, and the rows do not move."
   }
 ]

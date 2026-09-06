@@ -69,4 +69,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Naifu no Kirikuchi", ja: "ナイフの切り口", reading: "ないふのきりくち", gloss: "the cut, and what it opens" },
   { romaji: "Niawase no Hitomatome", ja: "荷合わせの一纏め", reading: "にあわせのひとまとめ", gloss: "the whole load, taken at once" },
   { romaji: "Nuguisari no Kazari", ja: "拭い去りの飾り", reading: "ぬぐいさりのかざり", gloss: "the ornament wiped away" },
+  { romaji: "Nezuki no Sunpou", ja: "根付きの寸法", reading: "ねづきのすんぽう", gloss: "the measure that stays put" },
 ];
