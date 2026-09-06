@@ -67,4 +67,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Tekagami no Futayomi", ja: "手鏡の二読み", reading: "てかがみのふたよみ", gloss: "both readings, held up side by side" },
   { romaji: "Tozan no Danchigai", ja: "登山の段違い", reading: "とざんのだんちがい", gloss: "the climb, and whose steps you are counting" },
   { romaji: "Naifu no Kirikuchi", ja: "ナイフの切り口", reading: "ないふのきりくち", gloss: "the cut, and what it opens" },
+  { romaji: "Niawase no Hitomatome", ja: "荷合わせの一纏め", reading: "にあわせのひとまとめ", gloss: "the whole load, taken at once" },
 ];

@@ -6287,12 +6287,25 @@
     "id": "lists-a-vocabulary-row-splits-into-its-kanji",
     "name": "Split a word into its kanji",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-06",
+    "summary": "Choose words on a list you own and Split adds the kanji inside them that the list has not got. It says how many it will add before you press it, and the okurigana drops out on its own - \u501f\u308a\u308b gives \u501f.",
+    "dateIsEstimate": false,
+    "release": 505,
+    "version": "1.22.0",
+    "releasedAt": "2026-09-06T07:07:44Z"
+  },
+  {
+    "id": "lists-choose-every-row-from-the-header",
+    "name": "Choose every row from the heading",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.22.0",
-    "release": 505,
-    "releasedAt": "2026-09-06T07:07:44Z",
-    "summary": "Choose words on a list you own and Split adds the kanji inside them that the list has not got. It says how many it will add before you press it, and the okurigana drops out on its own - \u501f\u308a\u308b gives \u501f."
+    "version": "1.23.0",
+    "release": 506,
+    "releasedAt": "2026-09-06T07:08:01Z",
+    "summary": "While choosing, the heading row now carries the box that governs the column under it. Half-chosen shows as mixed, so the next press is always the one you expected: something chosen means clear, nothing chosen means take the page."
   }
 ]
