@@ -123,3 +123,29 @@ export const XP_EARN_COPY = {
   back: "The XP board",
   empty: "Nothing is priced yet.",
 } as const;
+
+/**
+ * The weekly board.
+ *
+ * SPX headed it "Weekly XP Leaders: Week 23 of 2003" and sorted by the week
+ * rather than the lifetime total, which is the one decision that makes it
+ * worth having beside the other board.
+ */
+export const XP_WEEKLY_COPY = {
+  title: "This week",
+  subtitle: (year: number, week: number) => `Week ${week} of ${year}`,
+  blurb:
+    "Ranked by what was earned this week, not by what anybody has earned in all. A week is a fresh start, so this is the board somebody who joined last month can win.",
+  range: (start: string, end: string) => `${start} to ${end}`,
+  earned: (amount: number) => `${amount.toLocaleString()} XP`,
+  lifetime: (amount: number) => `${amount.toLocaleString()} XP in all`,
+  /* The distance line, in the week's own units rather than the lifetime's. */
+  leading: "Leading this week",
+  level: "Tied",
+  toPass: (amount: number) => `${amount.toLocaleString()} XP to pass`,
+  previous: "Last week",
+  current: "This week",
+  empty: "Nobody has earned anything this week yet.",
+  emptyHint: "Answer a review and you will be the first.",
+  back: "The whole board",
+} as const;
