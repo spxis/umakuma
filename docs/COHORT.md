@@ -39,7 +39,7 @@ a day already played comes out the same way and is never played twice.
 Against any other database the script **refuses** without `--allow-remote`,
 because these accounts land on leaderboards.
 
-A production run takes `pnpm db:backup` first, like every other write - see the
+A production run takes `pnpm db:backup:prod` first, like every other write - see the
 backup rule in `AGENTS.md`. Say in your reply that a backup was taken and where
 it is.
 

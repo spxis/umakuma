@@ -108,7 +108,9 @@
     "ladder:version": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/ladder-version.ts",
     "glyph:check": "node scripts/check-glyph-sizes.mjs",
     "xp:types:seed": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/seed-xp-types.ts",
-    "xp:prices:export": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/export-xp-prices.ts"
+    "xp:prices:export": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/export-xp-prices.ts",
+    "db:backup:prod": "node scripts/local-db.mjs backup:prod",
+    "db:backup:dev": "node scripts/local-db.mjs backup:dev"
   },
   "dependencies": {
     "@mozilla/readability": "^0.6.0",

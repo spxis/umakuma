@@ -11,7 +11,8 @@
  *   pnpm dev:local            run the dev server against the local database
  *   pnpm local:db:down        stop the container (keeps data)
  *   pnpm local:db:reset       destroy and recreate it empty
- *   pnpm db:backup            dump the REMOTE database into ./backups
+ *   pnpm db:backup:prod       dump PRODUCTION into ./backups
+ *   pnpm db:backup:dev        dump the local container into ./backups
  *
  * The same script also reaches the DS1 staging snapshot, a nightly copy of
  * production that both Macs share — see deploy/staging/README.md:
@@ -24,7 +25,7 @@
  */
 import { spawnSync } from "node:child_process";
 import { chmodSync, existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
-import { basename, join, resolve } from "node:path";
+import { basename, dirname, join, resolve } from "node:path";
 import process from "node:process";
 
 const COMPOSE_FILE = "docker-compose.local.yml";
@@ -189,6 +190,63 @@ function stagingEnv() {
   };
 }
 
+
+/** The main working tree's .env, which is where production credentials live. */
+function mainCheckoutEnv() {
+  const common = capture("git", ["rev-parse", "--path-format=absolute", "--git-common-dir"]);
+  if (common.status !== 0) return null;
+  const path = join(dirname(common.stdout.trim()), ".env");
+  return existsSync(path) ? path : null;
+}
+
+function isLocalUrl(value) {
+  try {
+    const host = new URL(value).hostname;
+    return host === "localhost" || host === "127.0.0.1" || host === "::1";
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * The production URL, from the environment if it is there and from the main
+ * checkout's .env if a worktree has overridden it to the container.
+ */
+function productionUrl() {
+  for (const value of [process.env.DIRECT_URL, process.env.DATABASE_URL]) {
+    if (value && !isLocalUrl(value)) return value;
+  }
+  const envPath = mainCheckoutEnv();
+  if (!envPath) return null;
+  const text = readFileSync(envPath, "utf8");
+  for (const key of ["DIRECT_URL", "DATABASE_URL"]) {
+    const line = text.split("\n").find((entry) => entry.startsWith(`${key}=`));
+    const value = line?.slice(key.length + 1).trim().replace(/^["']|["']$/g, "");
+    if (value && !isLocalUrl(value)) return value;
+  }
+  return null;
+}
+
+/** The dump itself, once somebody has said which database. */
+function dumpTo(url) {
+  mkdirSync(BACKUP_DIR, { recursive: true });
+  const stamp = new Date().toISOString().replace(/[-:]/g, "").replace(/\..+$/, "").replace("T", "-");
+  const out = join(BACKUP_DIR, `umakuma-${stamp}.dump`);
+  /* Printed from the URL handed to pg_dump, so it cannot disagree with what
+     was actually dumped. Reading it was the only thing that caught the old
+     bug; it stays, as the receipt rather than as the defence. */
+  console.log(`Backing up ${new URL(url).hostname} to ${out} ...`);
+  run("pg_dump", ["--dbname", url, "--format=custom", "--no-owner", "--no-privileges", "--file", out]);
+  const listed = capture("pg_restore", ["--list", out]);
+  if (listed.status !== 0) {
+    console.error("Backup wrote a file but it did not verify. Do not rely on it.");
+    process.exit(1);
+  }
+  const tables = listed.stdout.split("\n").filter((line) => line.includes("TABLE DATA")).length;
+  console.log(`\nBackup verified: ${tables} table(s) with data.`);
+  console.log(`Restore with: pnpm local:db:restore -- ${out}`);
+}
+
 const commands = {
   up() {
     compose("up", "-d", "--wait");
@@ -216,7 +274,7 @@ const commands = {
     const dump = rest[0] ? resolve(rest[0]) : newestDump();
     if (!dump || !existsSync(dump)) {
       console.error(
-        "No dump found. Take one with `pnpm db:backup`, pull DS1's newest with `pnpm staging:pull`,\n" +
+        "No dump found. Take one with `pnpm db:backup:prod`, pull DS1's newest with `pnpm staging:pull`,\n" +
           "or pass a path: pnpm local:db:restore -- <file.dump>",
       );
       process.exit(1);
@@ -261,70 +319,59 @@ const commands = {
    * about which host they mean is refused outright - that disagreement is
    * exactly the state a worktree is in, and it is never what somebody wants.
    */
-  backup(argv = []) {
+  /**
+   * Backing up, with the database named in the command rather than inferred.
+   *
+   * There was one `backup`, and it took `DIRECT_URL ?? DATABASE_URL`. A
+   * worktree's `.env` points DIRECT_URL at the local container, so running it
+   * there with an inline DATABASE_URL for Neon never reached that value: you
+   * got 127.0.0.1 and "Backup verified: 43 table(s) with data." That is the
+   * command AGENTS.md makes mandatory before every irreversible write to
+   * production, so it was a safety net that could quietly catch nothing.
+   *
+   * John's fix, and it is the right one: name them. `db:backup:prod` and
+   * `db:backup:dev` say which database in the words you type, so there is no
+   * precedence to get wrong and nothing to infer. The bare `db:backup` is kept
+   * only to refuse and point at the two, because it is in older habits and in
+   * every agent's memory.
+   */
+  "backup:prod"() {
     loadDotEnv();
-    const wantsLocal = argv.includes("--local");
-    const direct = process.env.DIRECT_URL;
-    const pooled = process.env.DATABASE_URL;
-    const url = direct ?? pooled;
+    const url = productionUrl();
     if (!url) {
-      console.error("DIRECT_URL or DATABASE_URL must be set in .env to take a backup.");
-      process.exit(1);
-    }
-
-    const hostOf = (value) => {
-      try {
-        return new URL(value).hostname;
-      } catch {
-        return null;
-      }
-    };
-    const isLocalHost = (host) => host === "localhost" || host === "127.0.0.1" || host === "::1";
-    const host = hostOf(url);
-
-    if (!wantsLocal && isLocalHost(host)) {
       console.error(
         [
-          `Refusing to back up ${host}: that is the local database, not production.`,
+          "Could not find the production database URL.",
           "",
-          "This command is the safety net before a production write, so it will not",
-          "quietly dump somewhere else. It takes DIRECT_URL first and a worktree's",
-          ".env points that at the container - so an inline DATABASE_URL is never",
-          "reached.",
+          "Looked at DIRECT_URL and DATABASE_URL here, then at the main checkout's",
+          `.env (${mainCheckoutEnv() ?? "not found"}). All of them are local or unset.`,
           "",
-          "  For production:  DIRECT_URL=<neon> DATABASE_URL=<neon> pnpm db:backup",
-          "  For local:       pnpm db:backup --local",
+          "Set DIRECT_URL to the Neon URL, or run this from the main checkout.",
         ].join("\n"),
       );
       process.exit(1);
     }
+    dumpTo(url);
+  },
 
-    const other = hostOf(pooled);
-    if (!wantsLocal && direct && pooled && other && host !== other) {
-      console.error(
-        [
-          `Refusing: DIRECT_URL says ${host} and DATABASE_URL says ${other}.`,
-          "",
-          `Only ${host} would be dumped. Set both to the database you mean, or pass`,
-          "--local if you really want the container.",
-        ].join("\n"),
-      );
-      process.exit(1);
-    }
+  "backup:dev"() {
+    dumpTo(LOCAL_DATABASE_URL);
+  },
 
-    mkdirSync(BACKUP_DIR, { recursive: true });
-    const stamp = new Date().toISOString().replace(/[-:]/g, "").replace(/\..+$/, "").replace("T", "-");
-    const out = join(BACKUP_DIR, `umakuma-${stamp}.dump`);
-    console.log(`Backing up ${new URL(url).hostname} to ${out} ...`);
-    run("pg_dump", ["--dbname", url, "--format=custom", "--no-owner", "--no-privileges", "--file", out]);
-    const listed = capture("pg_restore", ["--list", out]);
-    if (listed.status !== 0) {
-      console.error("Backup wrote a file but it did not verify. Do not rely on it.");
-      process.exit(1);
-    }
-    const tables = (listed.stdout.match(/TABLE DATA/g) ?? []).length;
-    console.log(`\nBackup verified: ${tables} table(s) with data.`);
-    console.log(`Restore with: pnpm local:db:restore -- ${out}`);
+  backup() {
+    console.error(
+      [
+        "`pnpm db:backup` no longer guesses which database you mean.",
+        "",
+        "  pnpm db:backup:prod    the production database on Neon",
+        "  pnpm db:backup:dev     the local container",
+        "",
+        "It used to take DIRECT_URL ?? DATABASE_URL, and in a worktree that is the",
+        "local container - so it could dump the wrong database and still print",
+        "\"Backup verified\". Before a production write you want db:backup:prod.",
+      ].join("\n"),
+    );
+    process.exit(1);
   },
 
   psql(args) {

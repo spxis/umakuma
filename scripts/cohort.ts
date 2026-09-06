@@ -24,7 +24,7 @@
  * last recorded activity are played.
  *
  * Refuses a remote database without `--allow-remote`, and expects
- * `pnpm db:backup` before a production run - these accounts land on
+ * `pnpm db:backup:prod` before a production run - these accounts land on
  * leaderboards.
  */
 
@@ -213,7 +213,7 @@ async function main(): Promise<void> {
   if (!isLocalDatabase(process.env.DATABASE_URL) && !options.allowRemote) {
     console.error(
       "Refusing to run: DATABASE_URL is not local.\n" +
-        "These accounts land on leaderboards. Take `pnpm db:backup` first, then pass --allow-remote to mean it,\n" +
+        "These accounts land on leaderboards. Take `pnpm db:backup:prod` first, then pass --allow-remote to mean it,\n" +
         "or run `pnpm cohort:local ...` to use the local database.",
     );
     process.exitCode = 1;
