@@ -62,6 +62,30 @@ This file is the single source of truth for agent behavior in this repo.
 - Required sweep includes runtime comparisons, duplicated inline type unions, and duplicated canonical domain display labels for the same domain values.
 - If hits are found in the same domain area, fix them in the same pass and re-run quality checks before commit.
 
+### The Curriculum Papers (Mandatory)
+
+- **The two ladders are documented, and the documents are part of the change.**
+  UmaKuma teaches one curriculum in two orders: **UN**, ordered by JLPT band,
+  and **UG**, ordered by Japanese school year. The published explanations of
+  how they work are not marketing left to rot - they state the promises the
+  build is held to, and a reader checks them against the site. They live at
+  `docs/CURRICULUM_PAPERS.md`, which lists each paper, its URL and the figures
+  in it.
+- **When a curriculum rule changes, update the papers in the same pass.** A
+  moved milestone, a changed level shape, a new ordering rule, a renamed
+  system: whatever changed, the pages that describe it change with it, before
+  the work is called done. A paper describing a ladder we no longer build is
+  worse than no paper, because somebody will act on it.
+- **Every chart and table names the curriculum version it was drawn from.**
+  `UN 2.0.0` / `UG 2.0.0`, taken from `curriculum.version` in each ladder file,
+  printed with the figure. The ladders are rebuilt from their sources and move
+  when the evidence says to, so a chart without a version is a number nobody
+  can reproduce - and the version is exactly what tells a reader whether the
+  picture still matches what a member is being taught.
+- `pnpm ladder:rules` checks the promises those papers state. If a paper claims
+  something the checker does not enforce, either the checker is missing a rule
+  or the paper is making a claim we cannot keep. Both are bugs.
+
 ### Self-Improvement Loop (Mandatory)
 
 - After any user-reported miss or correction, record a concise, reusable rule in repository memory (`/memories/repo/umakuma-conventions.md`) before ending the task.
