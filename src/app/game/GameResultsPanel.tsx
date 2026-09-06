@@ -1,6 +1,7 @@
 import { GAME_KINDS, formatGameDuration, type GameRunSummary } from "@/lib/gameMode";
 import { formatGameScore } from "@/lib/gameScoring";
 import GameCategoryPill from "./GameCategoryPill";
+import GameResultXp from "./GameResultXp";
 import {
   GAME_COPY,
   GAME_KIND_ACCENT,
@@ -61,6 +62,8 @@ export default function GameResultsPanel({
           <p className="mt-1 text-xl font-black sm:text-3xl">{run.bestStreak}</p>
         </div>
       </div>
+      <GameResultXp run={run} />
+
       <div className="mt-7 flex flex-wrap items-center justify-center gap-2">
         {replayable ? (
           <button

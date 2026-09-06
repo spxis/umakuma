@@ -62,6 +62,9 @@ export async function POST(
         /* Only the run that this request actually closed. A replayed request
            finds the run already complete and must not pay for it twice. */
         const earned: XpEarned = [];
+        /* What closing the run paid, for the summary sent back with it: the
+           run row was read before the XP was settled onto it. */
+        let settledXp: { xpAwarded: number; xpSkipped: string | null } | null = null;
         if (outcome.completedNow) {
           const game = await settleGameXp({
             accountId,
@@ -73,6 +76,7 @@ export async function POST(
               score: outcome.run.score,
             },
           });
+          settledXp = { xpAwarded: game.awarded, xpSkipped: game.skipped };
           /* And what the day has become because of it: the sign-in, a streak
              milestone, the "a lesson and a game" quest. Swallows its own
              failures, like the award above it. */
@@ -81,7 +85,10 @@ export async function POST(
           if (dayXp > 0) earned.push({ xp: dayXp, reason: XP_REASONS.today });
         }
 
-        return NextResponse.json({ run: toGameRunSummary(outcome.run), xpEarned: earned }, { status: 200 });
+        return NextResponse.json(
+          { run: toGameRunSummary({ ...outcome.run, ...(settledXp ?? {}) }), xpEarned: earned },
+          { status: 200 },
+        );
       } catch (error) {
         const message = error instanceof Error ? error.message : "Could not finish the game.";
         const expected = /not found|cannot be finished/.test(message);

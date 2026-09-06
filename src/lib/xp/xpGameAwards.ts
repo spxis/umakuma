@@ -87,3 +87,27 @@ export function isFlawless(game: Pick<FinishedGame, "questionCount" | "correctCo
     game.correctCount === game.questionCount
   );
 }
+
+/**
+ * Why a finished run paid nothing, where it paid nothing.
+ *
+ * A code rather than a sentence, because it is written into `GameRun.xpSkipped`
+ * and read back by pages that have to word it for whoever is reading — the
+ * copy lives in `GAME_COPY` with the rest of the game's words, so the locale
+ * layer has one place to look and an old row does not carry last year's
+ * phrasing.
+ *
+ * There is one, and it is the one that was silent: `awardXp` returns
+ * `{ awarded: 0 }` before writing anything once the day's allowance is full,
+ * so the third and fourth games of a day paid nothing and said nothing, which
+ * is indistinguishable from broken. John played four and saw ten XP.
+ */
+export const GAME_XP_SKIP_REASONS = {
+  dailyAllowance: "daily-allowance",
+} as const;
+
+export type GameXpSkipReason = (typeof GAME_XP_SKIP_REASONS)[keyof typeof GAME_XP_SKIP_REASONS];
+
+export function isGameXpSkipReason(value: string): value is GameXpSkipReason {
+  return (Object.values(GAME_XP_SKIP_REASONS) as string[]).includes(value);
+}

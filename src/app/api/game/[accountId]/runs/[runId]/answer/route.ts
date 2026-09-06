@@ -91,6 +91,10 @@ export async function POST(
           : [];
 
         const earned: XpEarned = [];
+        /* What the finished run paid, for the summary sent back with it. A run
+           that is not finished by this answer paid nothing yet, and its stored
+           zeroes are the truth. */
+        let settledXp: { xpAwarded: number; xpSkipped: string | null } | null = null;
         const outcome = await prisma.$transaction(async (tx) => {
           const question = await tx.gameQuestion.findUnique({
             where: { id: parsed.data.questionId },
@@ -208,6 +212,7 @@ export async function POST(
               score: outcome.run.score,
             },
           });
+          settledXp = { xpAwarded: game.awarded, xpSkipped: game.skipped };
           /* And what the day has become because of it: the sign-in, a streak
              milestone, the "a lesson and a game" quest. Swallows its own
              failures, like the award above it. */
@@ -229,7 +234,9 @@ export async function POST(
           xpEarned: earned,
           correct: outcome.correct,
           expired: outcome.expired,
-          run: toGameRunSummary(outcome.run),
+          /* The XP is settled after the transaction that completed the run,
+             so the row read there predates it; merged rather than re-read. */
+          run: toGameRunSummary({ ...outcome.run, ...(settledXp ?? {}) }),
           appendedQuestions,
         }, { status: 200 });
       } catch (error) {

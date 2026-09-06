@@ -66,6 +66,16 @@ export type GameRunSummary = {
   status: "active" | "completed" | "abandoned";
   startedAt: string;
   completedAt: string | null;
+  /** What this run paid, recorded when it was decided rather than re-derived. */
+  xpAwarded: number;
+  /**
+   * Why it paid nothing, where it did — a `GAME_XP_SKIP_REASONS` code.
+   *
+   * A run that earns nothing and says nothing is indistinguishable from a
+   * broken one, which is exactly how it read: the day's game allowance is two
+   * at the opening rank, so a third game paid nothing and the page went quiet.
+   */
+  xpSkipped: string | null;
 };
 
 export type GameLeaderboardEntry = {

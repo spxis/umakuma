@@ -91,6 +91,17 @@ export const GAME_COPY = {
   dailyOneAttempt: "One attempt per day. Everyone gets the same questions.",
   resumedDaily: "Picking up today's unfinished attempt.",
   ultraRule: "Keep going until the first wrong answer, or three full rounds of the pool. Time and streak keep running.",
+
+  /* What a finished game paid, and - the half that was missing - what it did
+     not. Two games a day count toward XP at the opening rank, so the third and
+     fourth paid nothing and said nothing, which reads as broken rather than as
+     a rule. John played four in a row and saw ten XP. */
+  xpEarned: (xp: number) => `+${xp.toLocaleString()} XP`,
+  xpNone: "No XP for this one",
+  xpSkipReasons: {
+    "daily-allowance": "You have played your games for today. The allowance grows with your rank.",
+  } as Record<string, string>,
+  xpHowItWorks: "How XP is earned",
 } as const;
 
 export const GAME_STORAGE_KEYS = {

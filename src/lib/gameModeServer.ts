@@ -245,6 +245,8 @@ export function toGameRunSummary(run: {
   status: GameRunStatus;
   startedAt: Date;
   completedAt: Date | null;
+  xpAwarded: number;
+  xpSkipped: string | null;
 }): GameRunSummary {
   // Built field by field on purpose: callers pass runs with `questions`
   // included, and spreading would ship every targetSubjectId to the client.
@@ -270,6 +272,8 @@ export function toGameRunSummary(run: {
     status: run.status,
     startedAt: run.startedAt.toISOString(),
     completedAt: run.completedAt?.toISOString() ?? null,
+    xpAwarded: run.xpAwarded,
+    xpSkipped: run.xpSkipped,
   };
 }
 

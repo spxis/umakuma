@@ -7,7 +7,12 @@ import { MAP_COUNTRIES_ALL } from "@/lib/mapCountries";
 import { prisma } from "@/lib/prisma";
 import type { XpEarned } from "@/lib/xp/xpToast";
 
-import { gameXpAwards, type FinishedGame } from "./xpGameAwards";
+import {
+  GAME_XP_SKIP_REASONS,
+  gameXpAwards,
+  type FinishedGame,
+  type GameXpSkipReason,
+} from "./xpGameAwards";
 import { awardXpEachQuietly } from "./xpServer";
 import { XP_REASONS } from "./xpStudyAwards";
 import type { XpAwardKind } from "./xpAwards";
@@ -25,8 +30,10 @@ import type { XpAwardKind } from "./xpAwards";
 export type SettledGameXp = {
   /** One entry per thing earned, for the toasts the page raises. */
   earned: XpEarned;
-  /** What this run paid in total, for recording on the run itself. */
+  /** What this run paid in total. */
   awarded: number;
+  /** Why it paid nothing, where it did. Null when it paid. */
+  skipped: GameXpSkipReason | null;
 };
 
 type FinishedRun = {
@@ -53,7 +60,47 @@ export async function settleGameXp({
     .filter((outcome) => outcome.awarded > 0)
     .map((outcome) => ({ xp: outcome.awarded, reason: GAME_XP_REASONS[outcome.kind] ?? XP_REASONS.game }));
 
-  return { earned, awarded: outcomes.reduce((total, outcome) => total + outcome.awarded, 0) };
+  const awarded = outcomes.reduce((total, outcome) => total + outcome.awarded, 0);
+  /* The finish is the one award the day's allowance can silence; the other
+     three are achievements and are not rationed. So the allowance is what a
+     run of nothing has to be explained by, and it is asked of the finish
+     rather than of the total - a run that paid fifty for a personal best and
+     nothing for finishing has still used somebody's third game of the day. */
+  const finish = outcomes.find((outcome) => outcome.kind === "gameFinished");
+  const skipped = finish && finish.awarded <= 0 ? GAME_XP_SKIP_REASONS.dailyAllowance : null;
+
+  await recordGameXp({ runId: run.id, awarded, skipped });
+  return { earned, awarded, skipped };
+}
+
+/**
+ * Writing onto the run what it actually paid, at the moment it was decided.
+ *
+ * Not derivable afterwards, which is why it is a column and not a query: the
+ * games-per-day allowance rises with rank, so replaying a run from last month
+ * against today's allowance would credit XP that was never paid. John asked
+ * for 0 XP runs to be logged so people could see why - right instinct, wrong
+ * table, since `XpEvent` is one accumulating row per kind per day and a zero
+ * would collide with the day's real `gameFinished` row without distinguishing
+ * four games from two. `GameRun` is already the log of every run.
+ *
+ * Quiet, like the awarding above it: a game that was played and scored is not
+ * failed by a bookkeeping write falling over.
+ */
+async function recordGameXp({
+  runId,
+  awarded,
+  skipped,
+}: {
+  runId: string;
+  awarded: number;
+  skipped: GameXpSkipReason | null;
+}): Promise<void> {
+  try {
+    await prisma.gameRun.update({ where: { id: runId }, data: { xpAwarded: awarded, xpSkipped: skipped } });
+  } catch (problem) {
+    console.error("Could not record what a game paid", runId, problem);
+  }
 }
 
 /** What each award a game can pay is called, in the words a member reads. */
