@@ -86,4 +86,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Yorokobi Soroe", ja: "喜び揃え", reading: "よろこびそろえ", gloss: "the gathering of good news" },
   { romaji: "Rakuin Yobimei", ja: "落印呼び名", reading: "らくいんよびめい", gloss: "the name that matches its mark" },
   { romaji: "Rikutsu Tsunagi", ja: "理屈繋ぎ", reading: "りくつつなぎ", gloss: "the joining that makes sense of it" },
+  { romaji: "Rufu Sumiwake", ja: "流布住み分け", reading: "るふすみわけ", gloss: "each finding its own place" },
 ];

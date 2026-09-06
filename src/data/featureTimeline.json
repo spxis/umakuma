@@ -6534,12 +6534,25 @@
     "id": "every-xp-page-reaches-every-other",
     "name": "Every XP page reaches every other",
     "area": "account",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-06",
+    "summary": "Every XP page now carries a row to every other, so nothing in the section is reachable only by knowing its address.",
+    "dateIsEstimate": false,
+    "release": 524,
+    "version": "1.37.0",
+    "releasedAt": "2026-09-06T10:44:45Z"
+  },
+  {
+    "id": "settings-move-to-their-own-address",
+    "name": "Settings move to their own address",
+    "area": "account",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.37.0",
-    "release": 524,
-    "releasedAt": "2026-09-06T10:44:45Z",
-    "summary": "Every XP page now carries a row to every other, so nothing in the section is reachable only by knowing its address."
+    "version": "1.38.0",
+    "release": 525,
+    "releasedAt": "2026-09-06T11:21:22Z",
+    "summary": "Your settings have moved to their own address, leaving your profile page free for what other people see."
   }
 ]
