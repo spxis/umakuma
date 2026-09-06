@@ -6703,12 +6703,25 @@
     "id": "the-umakuma-explorer-takes-the-explorer-template-and-its-lev",
     "name": "The explorer opens where you are",
     "area": "study",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-06",
+    "summary": "The UmaKuma explorer opens at your own level instead of on a list of all hundred, and its level filter wraps and opens ten at a time. The curriculum papers are linked at the foot.",
+    "dateIsEstimate": false,
+    "release": 537,
+    "version": "1.50.0",
+    "releasedAt": "2026-09-06T12:57:34Z"
+  },
+  {
+    "id": "stroke-cards-grow-in-height-and-the-meaning-wraps-instead-of",
+    "name": "A card's meaning gets one line",
+    "area": "study",
     "kind": "bug",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.50.0",
-    "release": 537,
-    "releasedAt": "2026-09-06T12:57:34Z",
-    "summary": "The UmaKuma explorer opens at your own level instead of on a list of all hundred, and its level filter wraps and opens ten at a time. The curriculum papers are linked at the foot."
+    "version": "1.50.1",
+    "release": 538,
+    "releasedAt": "2026-09-06T12:57:44Z",
+    "summary": "A subject card's meaning now gets one line, clipped with the full text on hover, so every card in a row is the same height."
   }
 ]

@@ -99,4 +99,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Kingaku Tsukehyou", ja: "金額付け表", reading: "きんがくつけひょう", gloss: "the amount, entered on the sheet" },
   { romaji: "Kubari Shinagaki", ja: "配り品書き", reading: "くばりしながき", gloss: "the list of what is handed out" },
   { romaji: "Keitou Dandan", ja: "系統段々", reading: "けいとうだんだん", gloss: "the ladder, ten at a time" },
+  { romaji: "Koguchi Kirisoroe", ja: "小口切り揃え", reading: "こぐちきりぞろえ", gloss: "the edges trimmed even" },
 ];
