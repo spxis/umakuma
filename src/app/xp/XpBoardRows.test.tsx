@@ -61,7 +61,7 @@ describe("the XP board", () => {
       .map((row) => row.textContent ?? "");
 
     expect(rows[0]).toContain("Leading");
-    expect(rows[1]).toContain("Level with the one above");
+    expect(rows[1]).toContain("Tied");
     expect(rows[2]).toContain("900 XP to pass");
   });
 

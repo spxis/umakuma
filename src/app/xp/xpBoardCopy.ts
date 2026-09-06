@@ -18,7 +18,7 @@ export const XP_BOARD_COPY = {
    * next point to break the tie, and everybody else has a number.
    */
   toPass: (amount: number) => `${amount.toLocaleString()} XP to pass`,
-  toPassLevel: "Level with the one above",
+  toPassLevel: "Tied",
   leading: "Leading",
   /* Read out in place of the blank number on the repeat rows of a tie. */
   sharedPlace: (place: number) => `Joint ${place}`,
