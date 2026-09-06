@@ -75,4 +75,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Hibiku Koe", ja: "響く声", reading: "ひびくこえ", gloss: "the voice that carries" },
   { romaji: "Fusegu Kamae", ja: "防ぐ構え", reading: "ふせぐかまえ", gloss: "the stance that prevents it" },
   { romaji: "Hedataru Jiban", ja: "隔たる地盤", reading: "へだたるじばん", gloss: "ground that no longer drifts apart" },
+  { romaji: "Honsuji no Juni", ja: "本筋の順位", reading: "ほんすじのじゅんい", gloss: "the placing on the main line" },
 ];
