@@ -63,4 +63,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Sonzai no Aratana", ja: "存在の新たな", reading: "そんざいのあらたな", gloss: "the same thing, newly named" },
   { romaji: "Tadaima no Houbi", ja: "ただいまの褒美", reading: "ただいまのほうび", gloss: "the reward, right now" },
   { romaji: "Chigai no Irowake", ja: "違いの色分け", reading: "ちがいのいろわけ", gloss: "the difference, sorted by colour" },
+  { romaji: "Tsumikasane no Furui", ja: "積み重ねの篩", reading: "つみかさねのふるい", gloss: "a sieve over what has been built up" },
 ];

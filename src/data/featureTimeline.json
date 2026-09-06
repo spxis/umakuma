@@ -6235,12 +6235,25 @@
     "id": "lists-the-type-filter-is-the-shared-coloured-one",
     "name": "The list's kind filter is the one every explorer uses",
     "area": "study",
+    "status": "shipped",
     "kind": "bug",
+    "date": "2026-09-06",
+    "summary": "A list page had grown three filter chips of its own - All, Kanji, Words - in the accent colour. It now uses the same chips as the explorers: Radical, Kanji and Vocab, each in its own colour with its own count, and kinds the list does not hold stay out of the row.",
+    "dateIsEstimate": false,
+    "release": 501,
+    "version": "1.18.1",
+    "releasedAt": "2026-09-06T07:06:35Z"
+  },
+  {
+    "id": "lists-an-srs-filter-from-the-same-chips-the-explorers-use",
+    "name": "Filter a list by SRS stage",
+    "area": "study",
+    "kind": "feature",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.18.1",
-    "release": 501,
-    "releasedAt": "2026-09-06T07:06:35Z",
-    "summary": "A list page had grown three filter chips of its own - All, Kanji, Words - in the accent colour. It now uses the same chips as the explorers: Radical, Kanji and Vocab, each in its own colour with its own count, and kinds the list does not hold stay out of the row."
+    "version": "1.19.0",
+    "release": 502,
+    "releasedAt": "2026-09-06T07:06:50Z",
+    "summary": "A list has shown an SRS badge on every row since it was built and had no way to ask for one stage. The same status chips the explorers use now sit beside the kind chips - Appr, Guru, Master, Enlight, Burned, Locked - each counted against whatever else you have narrowed to."
   }
 ]
