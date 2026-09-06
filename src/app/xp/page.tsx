@@ -53,6 +53,15 @@ export default async function XpBoardPage() {
   const entries = await loadXpBoard(viewerKind({ isAdmin, hasAccount: Boolean(address) }));
   const own = xpBoardPlacement(entries, viewerMenuInfo?.accountId ?? null);
 
+  /* How many members the reader may see at each rank. Counted from the board
+     this page already loaded rather than queried again, and from the placed
+     entries rather than `Account.xpLevel`, for the same reason everything else
+     here derives the rank from the total. */
+  const standingAt = new Map<number, number>();
+  for (const entry of entries) {
+    standingAt.set(entry.standing.level, (standingAt.get(entry.standing.level) ?? 0) + 1);
+  }
+
   return (
     <div className={`${PAGE_WIDTH.wide} ${PAGE_SHELL_PADDING}`}>
       <PublicPageHeader />
@@ -123,7 +132,7 @@ export default async function XpBoardPage() {
             )}
           </section>
 
-          <XpLadderChart xp={own?.xp ?? null} />
+          <XpLadderChart xp={own?.xp ?? null} standingAt={standingAt} />
         </div>
       </main>
     </div>

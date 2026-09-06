@@ -18,6 +18,17 @@ function draw(viewer: { isAdmin: boolean; address: string | null; accountId: str
   return new JSDOM(`<!doctype html><body>${markup}</body>`).window.document;
 }
 
+/*
+ * Links to a member's own pages, not every link on the row. Each row also
+ * carries a link on its rank name now, so counting every anchor would answer
+ * a different question than "who may open whose pages".
+ */
+function memberLinks(document: Document): HTMLAnchorElement[] {
+  return [...document.querySelectorAll("a")].filter((link) =>
+    link.getAttribute("href")?.startsWith("/users/"),
+  ) as HTMLAnchorElement[];
+}
+
 describe("the XP board", () => {
   it("draws a row for every member, including one with no XP at all", () => {
     const rows = draw({ isAdmin: false, address: null, accountId: null }).querySelectorAll("li");
@@ -66,14 +77,14 @@ describe("the XP board", () => {
   });
 
   it("links a viewer to their own row and to nobody else's", () => {
-    const links = draw({ isAdmin: false, address: "ada", accountId: "a" }).querySelectorAll("a");
+    const links = memberLinks(draw({ isAdmin: false, address: "ada", accountId: "a" }));
 
     expect(links).toHaveLength(1);
     expect(links[0].getAttribute("href")).toBe("/users/ada/xp");
   });
 
   it("links every row for an admin", () => {
-    expect(draw({ isAdmin: true, address: null, accountId: null }).querySelectorAll("a")).toHaveLength(3);
+    expect(memberLinks(draw({ isAdmin: true, address: null, accountId: null }))).toHaveLength(3);
   });
 
   /* A control never contains another control: a row is a plain `li` with a

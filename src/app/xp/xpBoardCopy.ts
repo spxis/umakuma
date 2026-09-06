@@ -42,6 +42,10 @@ export const XP_BOARD_COPY = {
  * layer will want to move one without reading the other.
  */
 export const XP_LADDER_COPY = {
+  /* The count beside a rank, read out rather than left as a bare number. */
+  standingTitle: (count: number, name: string) =>
+    `${count} ${count === 1 ? "member is" : "members are"} standing at ${name}`,
+
   title: "The ladder",
   blurb:
     "Every rank and what it asks for. The cost is that rank alone; the total is everything it took to stand there.",

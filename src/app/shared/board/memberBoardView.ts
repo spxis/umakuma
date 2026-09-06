@@ -24,8 +24,14 @@ export type MemberBoardEntry = MemberPlacing & {
   href: string | null;
   /** Draws the row as the reader's own. */
   isViewer: boolean;
-  /** The second fact, under the name: a rank name, a level badge, a streak. */
-  caption: string | null;
+  /**
+   * The second fact, under the name: a rank name, a level badge, a streak.
+   *
+   * A node rather than a string, because on the XP boards it is a rank and a
+   * rank is a place you can go. A board that prints the name and does not link
+   * it makes the reader hunt the chart for a page that was one word away.
+   */
+  caption: ReactNode;
   /** The board's own middle lane - a progress bar, a spread, or nothing at all. */
   detail?: ReactNode;
   /** The number this board ranks by, already formatted for reading. */

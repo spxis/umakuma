@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import MemberBoardRows from "@/app/shared/board/MemberBoardRows";
 import { memberBoardGap, type MemberBoardEntry } from "@/app/shared/board/memberBoardView";
 import MemberPageHeader from "@/app/shared/MemberPageHeader";
+import RankName from "@/app/shared/xp/RankName";
 import PublicPageHeader from "@/app/shared/PublicPageHeader";
 import { PAGE_SHELL_PADDING, PAGE_WIDTH } from "@/app/shared/pageShell";
 import { viewerAddress } from "@/app/shared/viewerAddress";
@@ -62,7 +63,7 @@ export default async function XpRankPage({ params }: PageProps) {
       canOpenXpBoardRow(entry, viewer) && entry.address
         ? `/users/${encodeURIComponent(entry.address)}/xp`
         : null,
-    caption: entry.rankName,
+    caption: <RankName level={entry.standing.level} />,
     figure: XP_BOARD_COPY.total(entry.xp),
     figureNote: memberBoardGap(entry.toPassAbove, {
       leading: XP_BOARD_COPY.leading,

@@ -1,7 +1,8 @@
 import Link from "next/link";
 
 import { XP_RANKS, xpStanding } from "@/lib/xp/xpCurve";
-import { xpRank, xpRankBadge } from "@/lib/xp/xpRanks";
+import RankName from "@/app/shared/xp/RankName";
+import { xpRank } from "@/lib/xp/xpRanks";
 
 import { PROFILE_XP_HEADLINE_COPY as copy } from "./profileCopy";
 
@@ -40,7 +41,9 @@ export default function ProfileXpHeadline({ xp }: { xp: number }) {
         {copy.total(xp)}
       </p>
       <p className="text-xs font-black leading-tight text-accent">
-        {copy.rank(xpRankBadge(standing.level), rank.name)}
+        {/* Not a link: this whole card already is one, and a control inside
+            a control is what `nested-interactive` fails on. */}
+        <RankName level={standing.level} linked={false} />
       </p>
       <p className="text-[11px] font-semibold tabular-nums leading-tight text-foreground/60">
         {next ? copy.toNext(standing.toNext, next.name) : copy.atTop}

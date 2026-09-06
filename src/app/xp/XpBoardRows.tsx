@@ -1,5 +1,6 @@
 import MemberBoardRows from "@/app/shared/board/MemberBoardRows";
 import { memberBoardGap, type MemberBoardEntry } from "@/app/shared/board/memberBoardView";
+import RankName from "@/app/shared/xp/RankName";
 import { XP_RANKS } from "@/lib/xp/xpCurve";
 
 import { canOpenXpBoardRow, type XpBoardEntry } from "./lib/xpBoard";
@@ -30,7 +31,7 @@ export default function XpBoardRows({ entries, viewer }: Props) {
         canOpenXpBoardRow(entry, viewer) && entry.address
           ? `/users/${encodeURIComponent(entry.address)}/xp`
           : null,
-      caption: entry.rankName,
+      caption: <RankName level={entry.standing.level} />,
       figure: copy.total(entry.xp),
       figureNote: memberBoardGap(entry.toPassAbove, {
         leading: copy.leading,

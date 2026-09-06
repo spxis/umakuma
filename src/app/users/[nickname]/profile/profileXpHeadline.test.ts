@@ -17,7 +17,9 @@ describe("the XP line in the profile header", () => {
 
   it("says the total, the rung and what is left", () => {
     expect(component).toContain("copy.total(xp)");
-    expect(component).toContain("xpRankBadge(standing.level)");
+    /* The rung comes through `RankName` now, which owns the badge and the
+       arrangement for every surface. Still shown; no longer arranged here. */
+    expect(component).toContain("<RankName level={standing.level}");
     expect(component).toContain("copy.toNext(standing.toNext, next.name)");
   });
 

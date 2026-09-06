@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getServerSession } from "next-auth";
 
 import MemberPageHeader from "@/app/shared/MemberPageHeader";
+import RankName from "@/app/shared/xp/RankName";
 import PublicPageHeader from "@/app/shared/PublicPageHeader";
 import { PAGE_SHELL_PADDING, PAGE_WIDTH } from "@/app/shared/pageShell";
 import { viewerAddress } from "@/app/shared/viewerAddress";
@@ -86,9 +87,7 @@ export default async function XpPromotionsPage() {
             >
               <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-line bg-surface-muted px-4 py-2.5">
                 <h2 className="text-sm font-black text-foreground">
-                  <Link href={`/xp/rank/${group.level}`} className="hover:text-accent">
-                    {copy.group(group.level, group.rankName)}
-                  </Link>
+                  <RankName level={group.level} />
                 </h2>
                 <p className="text-[11px] font-black tabular-nums text-foreground/60">
                   {copy.groupNeeds(xpForLevel(group.level))}

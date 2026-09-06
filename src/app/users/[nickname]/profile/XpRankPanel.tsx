@@ -1,6 +1,7 @@
 import { japaneseTextProps } from "@/app/shared/japaneseText";
+import RankName from "@/app/shared/xp/RankName";
 import { XP_RANKS, xpForLevel, xpStanding } from "@/lib/xp/xpCurve";
-import { xpRank, xpRankBadge } from "@/lib/xp/xpRanks";
+import { xpRank } from "@/lib/xp/xpRanks";
 
 import { XP_RANK_COPY as copy } from "./profileCopy";
 
@@ -54,10 +55,7 @@ export default function XpRankPanel({ xp }: { xp: number }) {
             */}
           <div className="mt-0.5 flex flex-wrap items-baseline justify-between gap-2">
             <p className="text-sm font-black text-foreground">
-              <span translate="no" className="mr-1.5 tabular-nums text-foreground/60">
-                {xpRankBadge(standing.level)}
-              </span>
-              {rank.name}
+              <RankName level={standing.level} />
             </p>
             <p className="shrink-0 text-[11px] font-black tabular-nums text-foreground/60">
               {copy.rankOf(standing.level, XP_RANKS)}
@@ -85,10 +83,7 @@ export default function XpRankPanel({ xp }: { xp: number }) {
             <p className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/60">{copy.next}</p>
             <div className="mt-0.5 flex flex-wrap items-baseline justify-between gap-2">
               <p className="text-sm font-black text-foreground">
-                <span translate="no" className="mr-1.5 tabular-nums text-foreground/60">
-                  {xpRankBadge(standing.level + 1)}
-                </span>
-                {next.name}
+                <RankName level={standing.level + 1} />
               </p>
               <p className="shrink-0 text-[11px] font-black tabular-nums text-foreground/60">
                 {copy.toNext(standing.toNext)}

@@ -25,7 +25,26 @@ import { XP_LADDER_COPY as copy } from "./xpBoardCopy";
  * A list rather than a table for the same reason `XpBoardRows` is one - four
  * short facts and a bar, in one shape at 393px and at 1440px.
  */
-export default function XpLadderChart({ xp }: { xp: number | null }) {
+export default function XpLadderChart({
+  xp,
+  standingAt,
+}: {
+  xp: number | null;
+  /**
+   * How many members the reader may see at each rank, keyed by level.
+   *
+   * Absent levels are empty, and an empty rank prints nothing rather than a
+   * zero: ninety-seven zeroes down a hundred-row chart is noise, and the
+   * handful of inhabited rungs is the whole of what is interesting. The count
+   * also turns a link into a promise - you click a rank because somebody is
+   * there rather than to find out that nobody is.
+   *
+   * Counted from the board this page already loaded, so it costs no query, and
+   * from the placed entries rather than from `Account.xpLevel` - the same
+   * reason the rest of the page derives the rank from the total.
+   */
+  standingAt?: ReadonlyMap<number, number>;
+}) {
   const rows = xpLadderRows(xp);
   const near = xpLadderNeighbours(rows);
 
@@ -64,7 +83,7 @@ export default function XpLadderChart({ xp }: { xp: number | null }) {
           standings beside it stay on the same screen. */}
       <ol className="max-h-[28rem] divide-y divide-line/50 overflow-y-auto">
         {rows.map((row) => (
-          <LadderRow key={row.level} row={row} />
+          <LadderRow key={row.level} row={row} here={standingAt?.get(row.level) ?? 0} />
         ))}
       </ol>
     </section>
@@ -107,7 +126,7 @@ function NearRung({ label, row }: { label: string; row: XpLadderRow }) {
   );
 }
 
-function LadderRow({ row }: { row: XpLadderRow }) {
+function LadderRow({ row, here: standing }: { row: XpLadderRow; here: number }) {
   const here = row.state === "here";
   const ahead = row.state === "ahead";
 
@@ -140,6 +159,14 @@ function LadderRow({ row }: { row: XpLadderRow }) {
           <Link href={`/xp/rank/${row.level}`} className="hover:text-accent hover:underline">
             {row.name}
           </Link>
+          {standing > 0 ? (
+            <span
+              title={copy.standingTitle(standing, row.name)}
+              className="ml-2 rounded-full border border-line px-1.5 py-0.5 text-[9px] font-black tabular-nums text-foreground/60"
+            >
+              {standing}
+            </span>
+          ) : null}
           {here ? (
             <span className="ml-2 rounded-full border border-accent px-1.5 py-0.5 text-[9px] font-black uppercase tracking-[0.08em] text-accent">
               {copy.here}
