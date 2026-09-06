@@ -5,6 +5,7 @@ import type { ReactNode, RefObject } from "react";
 import { SEARCH_PAGE_COPY } from "@/app/search/searchCopy";
 import type { SearchCombobox } from "@/lib/useSearchCombobox";
 import { suggestOptionId } from "./GlobalSearchSuggestList";
+import { SEARCH_INPUT_CHROME_CLASS } from "./searchFieldChrome";
 
 /**
  * Every size a search box comes in shares one anatomy: ghost text behind a
@@ -93,7 +94,7 @@ export default function SearchComboboxField({
               aria-activedescendant={
                 cbx.activeOption >= 0 ? suggestOptionId(listboxId, cbx.activeOption) : undefined
               }
-              className={`relative h-full w-full min-w-0 bg-transparent text-foreground outline-none placeholder:text-foreground/60 [&::-webkit-search-cancel-button]:hidden ${sizing.text}`}
+              className={`relative h-full w-full min-w-0 bg-transparent text-foreground outline-none placeholder:text-foreground/60 ${SEARCH_INPUT_CHROME_CLASS} ${sizing.text}`}
               {...cbx.inputProps(listboxId)}
             />
           </div>

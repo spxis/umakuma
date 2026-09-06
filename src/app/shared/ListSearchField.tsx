@@ -2,6 +2,7 @@
 
 import { useId } from "react";
 
+import { SEARCH_INPUT_CHROME_CLASS } from "./searchFieldChrome";
 import { STUDY_TAG_LIST_COPY } from "./studyTagListsUi";
 
 /**
@@ -38,7 +39,7 @@ export default function ListSearchField({
         list={options.length > 0 ? listId : undefined}
         placeholder={label}
         aria-label={label}
-        className="h-9 w-full rounded-full border border-line bg-surface pl-4 pr-9 text-sm font-semibold text-foreground [&::-webkit-search-cancel-button]:hidden"
+        className={`h-9 w-full rounded-full border border-line bg-surface pl-4 pr-9 text-sm font-semibold text-foreground ${SEARCH_INPUT_CHROME_CLASS}`}
       />
       {value ? (
         <button

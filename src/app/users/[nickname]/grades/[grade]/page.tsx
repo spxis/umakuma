@@ -1,4 +1,5 @@
 import { PAGE_SHELL_PADDING, PAGE_WIDTH } from "@/app/shared/pageShell";
+import { SEARCH_INPUT_CHROME_CLASS } from "@/app/shared/searchFieldChrome";
 import { cookies } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
@@ -179,7 +180,7 @@ export default async function UserGradesPage({ params, searchParams }: PageProps
               defaultValue={search}
               list={suggestions.length > 0 ? SEARCH_LIST_ID : undefined}
               placeholder={GRADE_EXPLORER_COPY.searchPlaceholder}
-              className="h-9 min-w-0 flex-1 rounded-full border border-line bg-surface px-4 text-sm text-foreground outline-none placeholder:text-foreground/60 focus-visible:ring-2 focus-visible:ring-accent/40"
+              className={`h-9 min-w-0 flex-1 rounded-full border border-line bg-surface px-4 text-sm text-foreground outline-none placeholder:text-foreground/60 focus-visible:ring-2 focus-visible:ring-accent/40 ${SEARCH_INPUT_CHROME_CLASS}`}
             />
             {suggestions.length > 0 ? (
               <datalist id={SEARCH_LIST_ID}>
