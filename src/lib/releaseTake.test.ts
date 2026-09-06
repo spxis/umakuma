@@ -336,3 +336,32 @@ describe("the number cannot be taken twice", () => {
     expect(() => guardVersionFree([], stamp.version)).not.toThrow();
   });
 });
+
+describe("guarding against what has actually been published", () => {
+  /* The local timeline is the file on disk, which is stale from the moment
+     another session pushes a stamp. Guarding on it alone catches a number
+     this worktree has already used and nothing else - which is the one case
+     that could not collide anyway. */
+  it("reads origin's timeline as well as the local one", () => {
+    const script = readFileSync("scripts/release-take.ts", "utf8");
+    expect(script).toContain("guardVersionFree(timeline, version)");
+    expect(script).toContain("guardVersionFree(publishedTimeline(), version)");
+    expect(script).toContain('"origin/main:src/data/featureTimeline.json"');
+  });
+
+  /* A malformed or missing remote file must not stop a release that is
+     otherwise fine; the local guard still runs either way. */
+  it("does not let a bad read from origin block a release", () => {
+    const script = readFileSync("scripts/release-take.ts", "utf8");
+    const helper = script.slice(script.indexOf("function publishedTimeline"));
+    expect(helper.slice(0, helper.indexOf("\n}"))).toContain("catch");
+  });
+
+  /* Both run before the codename is asked for, which is the expensive part. */
+  it("refuses before a name is chosen", () => {
+    const script = readFileSync("scripts/release-take.ts", "utf8");
+    expect(script.indexOf("guardVersionFree(publishedTimeline(), version)")).toBeLessThan(
+      script.indexOf("has no codename yet"),
+    );
+  });
+});

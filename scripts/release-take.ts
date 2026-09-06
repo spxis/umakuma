@@ -4,7 +4,7 @@ import { join } from "node:path";
 
 import { stringifyTimeline } from "../src/lib/backlogBoard";
 import { getVancouverDateKey } from "../src/lib/dailySnapshot";
-import { loadFeatureTimeline } from "../src/lib/featureTimeline";
+import { loadFeatureTimeline, type FeatureTimelineEntry } from "../src/lib/featureTimeline";
 import { RELEASE_STEPS } from "../src/lib/releaseOrdinal";
 import { CODENAMES, codenameKanaForMinor, type ReleaseCodename } from "../src/lib/releaseCodenames";
 import { PrismaClient } from "@prisma/client";
@@ -89,6 +89,22 @@ function flag(name: string): string | undefined {
  * Still fetches first: main moving under a local run is the other half of the
  * same question, and it is the half that already bit us three times.
  */
+/**
+ * The timeline as `origin/main` holds it, for guarding against other sessions.
+ *
+ * Read from git rather than from disk, and forgiving of a parse failure: a
+ * malformed remote file must not stop a release that is otherwise fine, and
+ * the local guard still runs either way.
+ */
+function publishedTimeline(): FeatureTimelineEntry[] {
+  try {
+    const raw = execFileSync("git", ["show", "origin/main:src/data/featureTimeline.json"], { encoding: "utf8" });
+    return JSON.parse(raw) as FeatureTimelineEntry[];
+  } catch {
+    return [];
+  }
+}
+
 function publishedVersion(): string {
   execFileSync("git", ["fetch", "origin", "--quiet"], { stdio: "inherit" });
   const raw = execFileSync("git", ["show", "origin/main:package.json"], { encoding: "utf8" });
@@ -150,6 +166,20 @@ async function main(): Promise<void> {
      the kana and reuses no word is the expensive part of a take, and being
      told the number is gone afterwards means doing it twice. */
   guardVersionFree(timeline, version);
+  /*
+   * And against what has actually been published, not only against the copy in
+   * this working tree.
+   *
+   * `loadFeatureTimeline` reads the file on disk, which is stale from the
+   * moment another session pushes a stamp - so guarding on it alone catches a
+   * number this worktree has already used and nothing else. `publishedVersion`
+   * has just fetched, so origin's own timeline is sitting there unread.
+   *
+   * This is most of what a reserved-version lock was proposed for, without a
+   * schema change: the window it leaves is the seconds between this fetch and
+   * the push, rather than everything up to the next rebase.
+   */
+  guardVersionFree(publishedTimeline(), version);
   const { kana, cycle } = codenameKanaForMinor(release);
 
   /* A name may already be planned ahead for this minor; only ask when it is not. */
