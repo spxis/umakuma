@@ -5,6 +5,12 @@ import type { StudyTag } from "@/lib/domainConstants";
 import type { ListPageItem } from "@/lib/listPageItems";
 import type { ListGradeFacts } from "@/lib/listGradeServer";
 import type { MemberStandings } from "@/lib/listProgress";
+import type { ListItemSort } from "@/lib/listItemOrder";
+import type { SubjectViewMode } from "@/app/shared/subjectListView";
+import type { SubjectSelection } from "@/app/shared/useSubjectSelection";
+
+import type { SrsStatusCounts, SrsStatusFilter } from "../../shared/SrsStatusFilterGroup";
+import type { ListTypeCounts, ListTypeFilter } from "./listPageFilters";
 
 /** What the list's page knows about the list, apart from its rows. */
 export type ListPageList = {
@@ -74,4 +80,42 @@ export type ListShareControlsProps = {
   visibility: ListVisibility;
   contributions: ListContributions;
   shareHref: string;
+};
+
+/**
+ * The row of controls over a list.
+ *
+ * Every field is either what a control shows or what it does; nothing here
+ * knows about the list, the viewer or the account. That is deliberate - the
+ * row is drawn once and the page decides who may see which control, so a
+ * control cannot quietly grow a second rule about who it is for.
+ */
+export type ListPageControlsProps = {
+  typeFilter: ListTypeFilter;
+  onTypeFilter: (next: ListTypeFilter) => void;
+  typeCounts: ListTypeCounts;
+  srsFilter: SrsStatusFilter;
+  onSrsFilter: (next: SrsStatusFilter) => void;
+  srsCounts: SrsStatusCounts;
+  search: string;
+  onSearch: (next: string) => void;
+  /** What the list holds, offered as the reader types. */
+  searchOptions: Array<{ value: string; label: string }>;
+  hideBurned: boolean;
+  burnedInView: number;
+  showHideBurned: boolean;
+  canEdit: boolean;
+  editing: boolean;
+  onEditing: (next: boolean) => void;
+  /** The sheet this list prints to, or null where there is nothing to print. */
+  worksheetHref: string | null;
+  sort: ListItemSort;
+  onSort: (next: ListItemSort) => void;
+  reversed: boolean;
+  onReversed: (next: boolean) => void;
+  showSort: boolean;
+  selection: SubjectSelection;
+  showSelection: boolean;
+  viewMode: SubjectViewMode;
+  onViewMode: (next: SubjectViewMode) => void;
 };

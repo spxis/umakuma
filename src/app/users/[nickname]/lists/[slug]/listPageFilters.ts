@@ -1,5 +1,19 @@
-import { SUBJECT_TYPES, SUBJECT_TYPE_VALUES, isSubjectType, type SubjectType } from "@/lib/domainConstants";
+import {
+  SRS_BUCKETS,
+  SUBJECT_TYPES,
+  SUBJECT_TYPE_VALUES,
+  isSubjectType,
+  srsBucketFromStage,
+  type SrsBucket,
+  type SubjectType,
+} from "@/lib/domainConstants";
 import type { ListPageItem } from "@/lib/listPageItems";
+import {
+  SRS_STATUS_FILTER_ALL,
+  SRS_STATUS_FILTER_ORDER,
+  type SrsStatusCounts,
+  type SrsStatusFilter,
+} from "../../shared/SrsStatusFilterGroup";
 
 /**
  * What a reader has narrowed a list down to.
@@ -70,4 +84,42 @@ export function listTypeChipStates(filter: ListTypeFilter): Record<SubjectType, 
  */
 export function listHasMixedTypes(counts: ListTypeCounts): boolean {
   return SUBJECT_TYPE_VALUES.filter((type) => counts[type] > 0).length > 1;
+}
+
+/**
+ * How far along the reader is with an item, as the chips and the SRS badge
+ * both read it. One derivation, so a row badged GURU cannot sit outside the
+ * Guru chip.
+ */
+export function listItemSrsBucket(item: ListPageItem): SrsBucket {
+  return srsBucketFromStage(typeof item.srsStage === "number" ? item.srsStage : null);
+}
+
+/** Whether an item survives the chosen stage. */
+export function matchesListSrsFilter(item: ListPageItem, filter: SrsStatusFilter): boolean {
+  return filter === SRS_STATUS_FILTER_ALL || listItemSrsBucket(item) === filter;
+}
+
+/**
+ * How many sit at each stage.
+ *
+ * Counted over the items the *other* filters have already kept, never over the
+ * whole list: a chip that says 12 and yields 3 rows is the bug the study
+ * explorer's own rule was written about.
+ */
+export function listSrsCounts(items: readonly ListPageItem[]): SrsStatusCounts {
+  const counts = { all: items.length } as SrsStatusCounts;
+  for (const status of SRS_STATUS_FILTER_ORDER) counts[status] = 0;
+
+  for (const item of items) {
+    const bucket = listItemSrsBucket(item);
+    if (bucket !== SRS_BUCKETS.unknown) counts[bucket] += 1;
+  }
+
+  return counts;
+}
+
+/** Whether the stage filter is worth drawing: a list all at one stage is not. */
+export function listHasMixedStages(counts: SrsStatusCounts): boolean {
+  return SRS_STATUS_FILTER_ORDER.filter((status) => counts[status] > 0).length > 1;
 }

@@ -7,6 +7,7 @@ import {
   REVIEW_TIMING_ALLOWED,
   SRS_FILTER_ALLOWED,
 } from "../lib/levelExplorerState";
+import { srsBucketBadgeClass } from "@/app/shared/studyHistoryUi";
 import ExplorerSearchBar from "../../ExplorerSearchBar";
 import FilterChipButton from "../../shared/FilterChipButton";
 import LevelExplorerLevelFilters from "./LevelExplorerLevelFilters";
@@ -14,13 +15,12 @@ import { LEVEL_EXPLORER_JLPT_FILTER_LABELS, LEVEL_EXPLORER_REVIEW_TIMING_LABELS 
 import type { LevelExplorerFilterPanelProps as Props } from "./LevelExplorerFilterPanel.types";
 import FieldLabel from "../../../../shared/FieldLabel";
 
-function wkStatusToneClass(status: (typeof SRS_FILTER_ALLOWED)[number], active: boolean): string {
-  if (status === LEVEL_SRS_FILTERS.apprentice) return active ? "border-pink-300 bg-pink-100 text-pink-700" : "border-pink-200 bg-pink-50/70 text-pink-700 hover:bg-pink-100";
-  if (status === LEVEL_SRS_FILTERS.guru) return active ? "border-violet-300 bg-violet-100 text-violet-700" : "border-violet-200 bg-violet-50/70 text-violet-700 hover:bg-violet-100";
-  if (status === LEVEL_SRS_FILTERS.master) return active ? "border-sky-300 bg-sky-100 text-sky-700" : "border-sky-200 bg-sky-50/70 text-sky-700 hover:bg-sky-100";
-  if (status === LEVEL_SRS_FILTERS.enlightened) return active ? "border-amber-300 bg-amber-100 text-amber-700" : "border-amber-200 bg-amber-50/70 text-amber-700 hover:bg-amber-100";
-  return active ? "border-line bg-surface-muted text-foreground" : "border-line bg-surface text-foreground/75 hover:bg-surface-muted";
-}
+/*
+ * The status chip's colours come from the badge it filters - `srsBucketBadgeClass`
+ * - rather than from a copy kept here. This file had its own `wkStatusToneClass`,
+ * identical to the study explorer's `studySrsToneClass` line for line, which is
+ * two files that have to be edited together to stay one colour scheme.
+ */
 
 export default function LevelExplorerFilterPanel({
   levelOptions,
@@ -108,7 +108,7 @@ export default function LevelExplorerFilterPanel({
                 const active = srsFilter === status;
                 if (disabled && !active) return null;
                 return (
-                  <FilterChipButton key={status} type="button" onClick={() => onSetSrsFilter(status)} disabled={disabled} toneClassName={disabled ? disabledBadgeClass() : status === LEVEL_SRS_FILTERS.all ? badgeClass(active) : wkStatusToneClass(status, active)} label={srsFilterButtonLabel(status)} count={count} />
+                  <FilterChipButton key={status} type="button" onClick={() => onSetSrsFilter(status)} disabled={disabled} toneClassName={disabled ? disabledBadgeClass() : status === LEVEL_SRS_FILTERS.all ? badgeClass(active) : srsBucketBadgeClass(status, active)} label={srsFilterButtonLabel(status)} count={count} />
                 );
               })}
             </div>

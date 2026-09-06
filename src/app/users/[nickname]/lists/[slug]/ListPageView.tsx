@@ -4,39 +4,34 @@ import Link from "next/link";
 import { useCallback, useMemo, useState } from "react";
 
 import ApplyWanikaniBurned from "@/app/shared/ApplyWanikaniBurned";
-import HideBurnedToggle from "@/app/shared/HideBurnedToggle";
 import KanjiSelectionBar from "@/app/shared/KanjiSelectionBar";
-import ListSearchField from "@/app/shared/ListSearchField";
 import StudyTagListsBody from "@/app/shared/StudyTagListsBody";
 import SurfacePagination from "@/app/shared/SurfacePagination";
 import type { ListPageItem } from "@/lib/listPageItems";
-import { SubjectSelectionToggle } from "@/app/shared/SubjectSelectionControls";
-import SubjectViewModeToggle from "@/app/shared/SubjectViewModeToggle";
 import { STUDY_LIST_COPY } from "@/app/shared/studyListCopy";
-import { STUDY_TAG_LIST_COPY } from "@/app/shared/studyTagListsUi";
 import { SUBJECT_VIEW_MODES, SUBJECT_VIEW_MODE_VALUES, type SubjectViewMode } from "@/app/shared/subjectListView";
 import { useHideBurned } from "@/app/shared/useHideBurned";
 import { useSubjectSelection } from "@/app/shared/useSubjectSelection";
 import { getStoredEnum, setStoredEnum } from "@/lib/clientStorage";
-import { LIST_ITEM_KINDS, LIST_VISIBILITIES, STUDY_TAGS, type SubjectType } from "@/lib/domainConstants";
+import { LIST_ITEM_KINDS, LIST_VISIBILITIES, STUDY_TAGS } from "@/lib/domainConstants";
 import { LIST_ITEM_PAGE_SIZE, LIST_ITEM_SORTS, orderListItems, type ListItemSort } from "@/lib/listItemOrder";
 import { listWorksheetHref } from "../../practice/practiceAddress";
 import { subjectMatchesQuery } from "@/lib/subjectSearch";
 import { openViewGlyphViewer } from "@/lib/viewGlyphViewer";
 
-import SubjectTypeFilterGroup from "../../shared/SubjectTypeFilterGroup";
+import { SRS_STATUS_FILTER_ALL, type SrsStatusFilter } from "../../shared/SrsStatusFilterGroup";
 
 import ListContributeBox from "./ListContributeBox";
+import ListPageControls from "./ListPageControls";
 import {
   LIST_TYPE_FILTER_ALL,
-  listHasMixedTypes,
-  listTypeChipStates,
+  listSrsCounts,
   listTypeCounts,
+  matchesListSrsFilter,
   matchesListTypeFilter,
   type ListTypeFilter,
 } from "./listPageFilters";
 import ListItemNoteEditor from "./ListItemNoteEditor";
-import ListItemSortControl from "./ListItemSortControl";
 import type { ListPageViewProps } from "./ListPage.types";
 import { useListItemNote } from "./useListItemNote";
 import ListProposalsPanel from "./ListProposalsPanel";
@@ -57,10 +52,6 @@ import ListSourceUpdates from "./ListSourceUpdates";
  */
 const VIEW_MODE_KEY = "wr:list-page:view-mode";
 
-/** The same shape as the Edit toggle beside it, since they are the same kind of thing. */
-const ACTION_PILL =
-  "inline-flex h-9 shrink-0 items-center rounded-full border border-line bg-surface px-3 text-xs font-bold uppercase tracking-[0.08em] text-foreground/70 transition hover:bg-surface-muted";
-
 export default function ListPageView({
   list,
   items,
@@ -75,6 +66,7 @@ export default function ListPageView({
   grade,
 }: ListPageViewProps) {
   const [typeFilter, setTypeFilter] = useState<ListTypeFilter>(LIST_TYPE_FILTER_ALL);
+  const [srsFilter, setSrsFilter] = useState<SrsStatusFilter>(SRS_STATUS_FILTER_ALL);
   const [search, setSearch] = useState("");
   /*
    * The list's own order by default, because somebody arranged it. Every
@@ -123,24 +115,44 @@ export default function ListPageView({
     return worksheet ? { worksheet } : null;
   }, [list.name, list.tag, listKey, live, owner.key, practicePath, viewer.isOwner]);
 
-  const typeCounts = useMemo(() => listTypeCounts(live), [live]);
+  /*
+   * Everything the chips are counted against: the list, less what is burned
+   * and hidden, less what the search excluded. Each row of chips then counts
+   * over this with its *own* filter left out, so a chip reading 3 yields three
+   * rows - the rule the study explorer's counts were fixed to obey.
+   */
+  const searched = useMemo(
+    () =>
+      live
+        .filter((item) => list.tag === STUDY_TAGS.burned || !hideBurned || !item.studyTags?.burned)
+        .filter((item) =>
+          subjectMatchesQuery(search, { glyph: item.characters, meanings: item.meanings, readings: item.readings ?? [] }),
+        ),
+    [hideBurned, list.tag, live, search],
+  );
+
+  const typeCounts = useMemo(
+    () => listTypeCounts(searched.filter((item) => matchesListSrsFilter(item, srsFilter))),
+    [searched, srsFilter],
+  );
+  const srsCounts = useMemo(
+    () => listSrsCounts(searched.filter((item) => matchesListTypeFilter(item, typeFilter))),
+    [searched, typeFilter],
+  );
 
   const burnedInView = useMemo(() => live.filter((item) => item.studyTags?.burned).length, [live]);
 
   const matched = useMemo(
     () =>
       orderListItems(
-        live
+        searched
           .filter((item) => matchesListTypeFilter(item, typeFilter))
-          .filter((item) => list.tag === STUDY_TAGS.burned || !hideBurned || !item.studyTags?.burned)
-          .filter((item) =>
-            subjectMatchesQuery(search, { glyph: item.characters, meanings: item.meanings, readings: item.readings ?? [] }),
-          ),
+          .filter((item) => matchesListSrsFilter(item, srsFilter)),
         (item) => ({ glyph: item.characters, meaning: item.meanings[0] ?? "", level: item.wkLevel ?? null }),
         sort,
         reversed,
       ),
-    [hideBurned, list.tag, live, reversed, search, sort, typeFilter],
+    [reversed, searched, sort, srsFilter, typeFilter],
   );
 
   /*
@@ -260,109 +272,49 @@ export default function ListPageView({
       ) : null}
 
       <section className="rounded-2xl border border-line bg-surface p-3 sm:p-4">
-        <div className="flex flex-wrap items-center gap-2">
-          {/*
-            * The same chips the explorers filter by, in the subject colours.
-            *
-            * This row used to hold three of its own in the accent colour -
-            * ALL, KANJI, WORDS - which is a second answer to a question the
-            * site had already answered, and the worse one: a list holding
-            * radicals had no chip to say so, and a word was a Word here and
-            * VOCAB on every other surface. Kinds the list does not hold are
-            * left out rather than drawn as a zero nobody can press.
-            */}
-          {listHasMixedTypes(typeCounts) ? (
-            <SubjectTypeFilterGroup
-              counts={typeCounts}
-              allLabel={STUDY_LIST_COPY.allKinds}
-              allActive={typeFilter === LIST_TYPE_FILTER_ALL}
-              activeTypes={listTypeChipStates(typeFilter)}
-              onClickAll={() => {
-                setTypeFilter(LIST_TYPE_FILTER_ALL);
-                setItemPage(1);
-              }}
-              onClickType={(type: SubjectType) => {
-                setTypeFilter((current) => (current === type ? LIST_TYPE_FILTER_ALL : type));
-                setItemPage(1);
-              }}
-              className="flex flex-wrap items-center gap-2"
-              hideZeroInactive
-            />
-          ) : null}
-          {/*
-            * A line of its own on a phone. Squeezed in beside the kind chips
-            * and five controls, the box was down to four characters of its own
-            * placeholder - "Sea" - which is not a search field.
-            */}
-          <ListSearchField
-            value={search}
-            onChange={(next) => {
-              setSearch(next);
-              /* A new search is a new list; it starts at its first page again. */
-              setItemPage(1);
-            }}
-            label={STUDY_LIST_COPY.searchItems}
-            options={live.map((item) => ({ value: item.characters, label: item.meanings[0] ?? "" }))}
-            className="w-full basis-full sm:w-auto sm:basis-48"
-          />
-          {viewer.accountId && list.tag !== STUDY_TAGS.burned ? (
-            <HideBurnedToggle hidden={hideBurned ? burnedInView : 0} burnedInView={burnedInView} />
-          ) : null}
-          {canEdit ? (
-            <button
-              type="button"
-              aria-pressed={editing}
-              onClick={() => setEditing((was) => !was)}
-              className={`inline-flex h-9 shrink-0 items-center rounded-full border px-3 text-xs font-bold uppercase tracking-[0.08em] transition ${
-                editing ? "border-accent bg-accent text-white" : "border-line bg-surface text-foreground/70 hover:bg-surface-muted"
-              }`}
-            >
-              {editing ? STUDY_TAG_LIST_COPY.editingDone : STUDY_TAG_LIST_COPY.edit}
-            </button>
-          ) : null}
-          {/*
-            * The worksheet, from the page that shows the list.
-            *
-            * It was reachable only from the card on the shelf, and only as a
-            * sheet of hand-picked characters - so the page you read a list on
-            * could not print it, and the link the card built went stale as
-            * soon as the list changed.
-            */}
-          {/*
-            * Worksheet goes to the sheet; Print lives on the sheet and opens
-            * the dialog there. A Print here that changed the page was a
-            * button that did not do what it said.
-            */}
-          {sheetLinks ? (
-            <Link href={sheetLinks.worksheet} className={ACTION_PILL} title={STUDY_LIST_COPY.worksheetHint}>
-              {STUDY_LIST_COPY.worksheet}
-            </Link>
-          ) : null}
-          {/*
-            * Offered only where there is something to sort. On a list of four
-            * a sort control is a control that cannot change anything, and the
-            * row is already carrying five.
-            */}
-          {live.length > 1 ? (
-            <ListItemSortControl
-              sort={sort}
-              onSort={(next) => {
-                setSort(next);
-                setItemPage(1);
-              }}
-              reversed={reversed}
-              onReversed={setReversed}
-            />
-          ) : null}
-          {viewer.accountId ? <SubjectSelectionToggle selection={selection} /> : null}
-          <SubjectViewModeToggle
-            value={viewMode}
-            onChange={(next) => {
-              setViewMode(next);
-              setStoredEnum(VIEW_MODE_KEY, next);
-            }}
-          />
-        </div>
+        <ListPageControls
+          typeFilter={typeFilter}
+          onTypeFilter={(next) => {
+            setTypeFilter(next);
+            setItemPage(1);
+          }}
+          typeCounts={typeCounts}
+          srsFilter={srsFilter}
+          onSrsFilter={(next) => {
+            setSrsFilter(next);
+            setItemPage(1);
+          }}
+          srsCounts={srsCounts}
+          search={search}
+          onSearch={(next) => {
+            setSearch(next);
+            /* A new search is a new list; it starts at its first page again. */
+            setItemPage(1);
+          }}
+          searchOptions={live.map((item) => ({ value: item.characters, label: item.meanings[0] ?? "" }))}
+          hideBurned={hideBurned}
+          burnedInView={burnedInView}
+          showHideBurned={Boolean(viewer.accountId) && list.tag !== STUDY_TAGS.burned}
+          canEdit={canEdit}
+          editing={editing}
+          onEditing={setEditing}
+          worksheetHref={sheetLinks?.worksheet ?? null}
+          sort={sort}
+          onSort={(next) => {
+            setSort(next);
+            setItemPage(1);
+          }}
+          reversed={reversed}
+          onReversed={setReversed}
+          showSort={live.length > 1}
+          selection={selection}
+          showSelection={Boolean(viewer.accountId)}
+          viewMode={viewMode}
+          onViewMode={(next) => {
+            setViewMode(next);
+            setStoredEnum(VIEW_MODE_KEY, next);
+          }}
+        />
 
         {viewer.isOwner && viewer.accountId && list.tag === STUDY_TAGS.burned ? (
           <div className="mt-2 overflow-hidden rounded-xl border border-line">

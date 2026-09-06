@@ -70,6 +70,9 @@ export const STUDY_LIST_COPY = {
   removeCharacterLabel: "Remove",
   /* The kind chips, on a card and in the viewer. */
   allKinds: "All",
+  /* The stage chips beside the kind chips: every stage, and what to call the row. */
+  allStages: "All stages",
+  stageFilters: "Filter by SRS stage",
   searchLists: "Search your lists",
   /* Each shelf names what it holds, so the box says which lists it searches. */
   searchFollowed: "Search lists you follow",
