@@ -6300,12 +6300,25 @@
     "id": "lists-choose-every-row-from-the-header",
     "name": "Choose every row from the heading",
     "area": "study",
+    "status": "shipped",
     "kind": "feature",
+    "date": "2026-09-06",
+    "summary": "While choosing, the heading row now carries the box that governs the column under it. Half-chosen shows as mixed, so the next press is always the one you expected: something chosen means clear, nothing chosen means take the page.",
+    "dateIsEstimate": false,
+    "release": 506,
+    "version": "1.23.0",
+    "releasedAt": "2026-09-06T07:08:01Z"
+  },
+  {
+    "id": "lists-the-search-box-loses-its-dropdown-arrow",
+    "name": "The search box drops its dropdown arrow",
+    "area": "study",
+    "kind": "bug",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.23.0",
-    "release": 506,
-    "releasedAt": "2026-09-06T07:08:01Z",
-    "summary": "While choosing, the heading row now carries the box that governs the column under it. Half-chosen shows as mixed, so the next press is always the one you expected: something chosen means clear, nothing chosen means take the page."
+    "version": "1.23.1",
+    "release": 507,
+    "releasedAt": "2026-09-06T07:08:21Z",
+    "summary": "A search box that offers suggestions was drawing the browser's own dropdown arrow at its end, which read as a menu it is not. The arrow is gone; the suggestions still appear as you type."
   }
 ]
