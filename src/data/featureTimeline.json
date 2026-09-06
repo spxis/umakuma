@@ -6430,12 +6430,25 @@
     "id": "a-browsable-xp-history-paged-from-a-rest-route",
     "name": "A browsable XP history, paged from a REST route",
     "area": "account",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-06",
+    "summary": "Your whole XP record is now browsable at its own page: sort it by day, by what earned it or by amount, filter to one kind, and page through the lot.",
+    "dateIsEstimate": false,
+    "release": 516,
+    "version": "1.29.0",
+    "releasedAt": "2026-09-06T09:51:53Z"
+  },
+  {
+    "id": "the-rank-card-stops-wasting-the-row",
+    "name": "The rank card stops wasting the row",
+    "area": "account",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.29.0",
-    "release": 516,
-    "releasedAt": "2026-09-06T09:51:53Z",
-    "summary": "Your whole XP record is now browsable at its own page: sort it by day, by what earned it or by amount, filter to one kind, and page through the lot."
+    "version": "1.30.0",
+    "release": 517,
+    "releasedAt": "2026-09-06T09:52:10Z",
+    "summary": "The rank card puts where you stand and what is next side by side instead of one above the other, and each now leads with its rank number so a name tells you which rung it is."
   }
 ]
