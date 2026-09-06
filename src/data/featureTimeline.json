@@ -6456,12 +6456,25 @@
     "id": "the-xp-summary-stops-reading-every-event-ever",
     "name": "The XP summary stops reading every event ever",
     "area": "platform",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-06",
+    "summary": "The XP page loads quickly however long you have been here: it now reads the totals it needs rather than every award you have ever earned.",
+    "dateIsEstimate": false,
+    "release": 518,
+    "version": "1.31.0",
+    "releasedAt": "2026-09-06T09:52:30Z"
+  },
+  {
+    "id": "every-rank-has-a-board-of-its-own",
+    "name": "Every rank has a board of its own",
+    "area": "account",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.31.0",
-    "release": 518,
-    "releasedAt": "2026-09-06T09:52:30Z",
-    "summary": "The XP page loads quickly however long you have been here: it now reads the totals it needs rather than every award you have ever earned."
+    "version": "1.32.0",
+    "release": 519,
+    "releasedAt": "2026-09-06T09:52:33Z",
+    "summary": "Every rank on the ladder now has a page of its own showing who is standing there, what the rank asks for and what the next one asks. Click any rank name in the chart."
   }
 ]
