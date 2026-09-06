@@ -3,7 +3,7 @@ import "server-only";
 import { prisma } from "@/lib/prisma";
 
 import { ratingFor } from "./ageBand";
-import { DEFAULT_SRS_THEME_ID, srsTheme, srsThemesFor, type SrsTheme } from "./srsThemes";
+import { DEFAULT_SRS_THEME_ID, srsTheme, srsThemeForRating, srsThemesFor, type SrsTheme } from "./srsThemes";
 
 /**
  * The theme a member sees, and the ones they may choose from.
@@ -18,9 +18,8 @@ export async function memberTheme(accountId: string): Promise<{ theme: SrsTheme;
     .findUnique({ where: { id: accountId }, select: { srsTheme: true, ageBand: true } })
     .catch(() => null);
 
-  const choices = srsThemesFor(ratingFor(account?.ageBand));
-  const chosen = choices.find((theme) => theme.id === account?.srsTheme);
-  return { theme: chosen ?? srsTheme(DEFAULT_SRS_THEME_ID), choices };
+  const rating = ratingFor(account?.ageBand);
+  return { theme: srsThemeForRating(account?.srsTheme, rating), choices: srsThemesFor(rating) };
 }
 
 /**

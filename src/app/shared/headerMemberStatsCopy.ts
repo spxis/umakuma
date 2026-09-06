@@ -14,4 +14,10 @@ export const HEADER_MEMBER_STATS_COPY = {
   xpTitle: "Your XP history",
   umakumaLevelTitle: (level: number) => `UmaKuma level ${level}`,
   wanikaniLevelTitle: (level: number) => `WaniKani level ${level}`,
+  /*
+   * The theme is a name, not a number, so unlike the ladders it says what it
+   * is on the way past. A screen reader gets the whole sentence in the title;
+   * the strip itself has room for the name alone.
+   */
+  themeTitle: (name: string) => `Your stages are named after ${name}. Read the whole theme, or switch.`,
 } as const;

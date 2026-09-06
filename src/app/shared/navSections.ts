@@ -168,6 +168,11 @@ export const NAV_SECTIONS: NavSection[] = [
     children: [
       { label: "Profile", path: "profile" },
       /*
+         What a member's stages are called, and every theme they could be
+         called instead. Owner-only, so a visitor with no page of their own is
+         not offered it - the same rule XP takes. */
+      { label: "Theme", path: "theme", memberOnly: true },
+      /*
        * The connection is settings, not a place to study. It stays listed
        * whether or not one exists: without it this is the only door, and with
        * it, it is where a dead token gets replaced.

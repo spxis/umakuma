@@ -16,6 +16,8 @@ function viewer(overrides: Partial<ViewerMenuInfo> = {}): ViewerMenuInfo {
     xp: null,
     ukLevel: null,
     wkLevel: null,
+    themeId: null,
+    themeName: null,
     isAdmin: false,
     ...overrides,
   };

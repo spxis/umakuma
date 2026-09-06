@@ -173,6 +173,7 @@ export default async function UserProfilePage({ params }: PageProps) {
       <div className="mb-4">
         <ThemePicker
           accountId={account.id}
+          themeHref={`/users/${encodeURIComponent(account.slug ?? account.wkUsername ?? "")}/theme`}
           initialTheme={memberThemeChoices.theme}
           initialChoices={memberThemeChoices.choices}
           initialAgeBand={(account.ageBand as AgeBand | null) ?? null}

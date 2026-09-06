@@ -1,10 +1,10 @@
 "use client";
 
-import { japaneseTextProps } from "@/app/shared/japaneseText";
+import { japaneseTextProps } from "./japaneseText";
 import { srsStageTone } from "@/lib/srs/srsStageTone";
 import { srsThemeBuckets, type SrsTheme } from "@/lib/srs/srsThemes";
 
-import { THEME_PICKER_COPY as copy } from "./profileCopy";
+import { THEME_PICKER_COPY as copy } from "./themeCopy";
 
 /**
  * A theme drawn as the two-tier ladder it actually is.
@@ -22,15 +22,21 @@ import { THEME_PICKER_COPY as copy } from "./profileCopy";
  */
 export default function ThemeLadder({ theme }: { theme: SrsTheme }) {
   const buckets = srsThemeBuckets(theme);
-  /* Proportional tracks, so the tier holding four stages is visibly the wide
-     one. `fr` over a fixed column count is what keeps it full width at every
-     breakpoint without a media query per theme shape. */
-  const columns = buckets.map((bucket) => `${bucket.levels.length}fr`).join(" ");
 
   return (
-    <ol className="grid gap-2" style={{ gridTemplateColumns: columns }}>
+    /* Proportional and wrapping, which is one rule rather than two. Five
+       tracks sized `4fr 2fr 1fr 1fr 1fr` gave the four-rung tier its width on
+       a laptop and squeezed the one-rung tiers to about forty pixels on a
+       phone, where 関脇 came out as a letter and an ellipsis. Growing by rung
+       count off a floor keeps the same proportions wherever there is room and
+       drops the row to two lines where there is not. */
+    <ol className="flex flex-wrap gap-2">
       {buckets.map((bucket) => (
-        <li key={bucket.bucket} className="min-w-0 rounded-xl border border-line bg-surface p-2">
+        <li
+          key={bucket.bucket}
+          style={{ flex: `${bucket.levels.length} 1 8rem` }}
+          className="min-w-0 rounded-xl border border-line bg-surface p-2"
+        >
           <p className="flex items-baseline justify-between gap-1">
             <span {...japaneseTextProps("truncate text-[11px] font-black text-foreground")}>{bucket.bucket}</span>
             <span className="shrink-0 text-[9px] font-black tabular-nums text-foreground/60">

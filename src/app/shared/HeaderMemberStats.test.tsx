@@ -19,6 +19,8 @@ function viewer(overrides: Partial<ViewerMenuInfo> = {}): ViewerMenuInfo {
     xp: 1240,
     ukLevel: 23,
     wkLevel: 17,
+    themeId: "samurai",
+    themeName: "Samurai",
     isAdmin: false,
     ...overrides,
   };
@@ -60,7 +62,7 @@ describe("the header's member strip", () => {
    * to read that as "no account" rather than drawing a stranger a zero.
    */
   it("collapses to nothing for a signed-in non-member", () => {
-    const document = draw(viewer({ xp: null, ukLevel: null, wkLevel: null, accountId: null }));
+    const document = draw(viewer({ xp: null, ukLevel: null, wkLevel: null, accountId: null, themeId: null, themeName: null }));
 
     expect(document.body.innerHTML).toBe("");
   });
@@ -84,6 +86,25 @@ describe("the header's member strip", () => {
     const link = draw(viewer({ slug: "testkuma" })).querySelector("a");
 
     expect(link?.getAttribute("href")).toBe("/users/testkuma/xp");
+  });
+
+  /*
+   * The theme was put here to be a door. It is the one entry in the strip that
+   * is a name rather than a number, and the name alone answers nothing - so
+   * unlike XP it is drawn only when there is a page to send them to.
+   */
+  it("sends the theme to the viewer's own theme page", () => {
+    const links = [...draw(viewer()).querySelectorAll("a")];
+    const theme = links.find((link) => link.getAttribute("href")?.endsWith("/theme"));
+
+    expect(theme?.getAttribute("href")).toBe("/users/testkuma/theme");
+    expect(theme?.textContent).toBe("Samurai");
+  });
+
+  it("leaves the theme out when there is nowhere to send them", () => {
+    const document = draw(viewer({ slug: null, wkUsername: null }));
+
+    expect(document.body.textContent).not.toContain("Samurai");
   });
 
   /* An account with no address yet has nowhere to send them; the number stays. */

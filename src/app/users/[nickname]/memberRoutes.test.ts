@@ -37,6 +37,7 @@ describe("member pages", () => {
     "profile",
     "wanikani",
     "xp",
+    "theme",
   ];
 
   it.each(segments)("/%s is a route with a page of its own", (segment) => {

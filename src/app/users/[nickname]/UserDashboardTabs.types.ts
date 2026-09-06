@@ -91,6 +91,14 @@ export type ViewerMenuInfo = {
   ukLevel: number | null;
   /** WaniKani's, out of sixty. Null for a non-member and for a member who has never connected one. */
   wkLevel: number | null;
+  /**
+   * What this viewer's SRS stages are called, resolved against their age band
+   * rather than read raw off the row: a member whose band has since dropped is
+   * on the default again, and the header must say the words they will actually
+   * meet in a review. Null for anyone who is not a member, like the numbers.
+   */
+  themeId: string | null;
+  themeName: string | null;
   isAdmin: boolean;
 };
 

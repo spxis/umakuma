@@ -4,6 +4,8 @@ import { isAccountBarred } from "@/lib/accountStanding";
 import { isAdminEmail } from "@/lib/auth";
 import { INVITE_SESSION_COOKIE_NAME, verifyInviteSessionToken } from "@/lib/inviteSession";
 import { prisma } from "@/lib/prisma";
+import { ratingFor } from "@/lib/srs/ageBand";
+import { srsThemeForRating } from "@/lib/srs/srsThemes";
 import { hasWanikaniConnection } from "@/lib/wanikaniConnection";
 import type { ViewerMenuInfo } from "./UserDashboardTabs.types";
 
@@ -45,6 +47,18 @@ export function canViewUserPage(input: {
 }
 
 /**
+ * What a member's stages are called, from the two columns that decide it.
+ *
+ * The band is not a preference the header may skip: it is what says which
+ * themes exist on the account at all, so a saved id is filtered through it
+ * here exactly as `memberTheme` does on the server. Written once rather than
+ * inline in both branches below, which is where the two would drift.
+ */
+function viewerThemeFor(account: { srsTheme: string | null; ageBand: string | null }) {
+  return srsThemeForRating(account.srsTheme, ratingFor(account.ageBand));
+}
+
+/**
  * Which account, if any, this viewer is.
  *
  * A rejected account resolves to nothing, on both paths. That is the whole of
@@ -83,6 +97,8 @@ export async function resolveViewerMenuInfo(input: {
         xp: true,
         ukLevel: true,
         wkLevel: true,
+        srsTheme: true,
+        ageBand: true,
       },
     });
 
@@ -92,6 +108,7 @@ export async function resolveViewerMenuInfo(input: {
      * them a way to sign out of it.
      */
     const viewerIsMember = viewerAccount !== null && !isAccountBarred(viewerAccount);
+    const viewerTheme = viewerIsMember ? viewerThemeFor(viewerAccount) : null;
 
     return {
       provider: "google",
@@ -109,6 +126,8 @@ export async function resolveViewerMenuInfo(input: {
       xp: viewerIsMember ? viewerAccount.xp : null,
       ukLevel: viewerIsMember ? viewerAccount.ukLevel : null,
       wkLevel: viewerIsMember ? viewerAccount.wkLevel : null,
+      themeId: viewerTheme?.id ?? null,
+      themeName: viewerTheme?.name ?? null,
       isAdmin: viewerIsAdmin,
     };
   }
@@ -137,6 +156,8 @@ export async function resolveViewerMenuInfo(input: {
       xp: true,
       ukLevel: true,
       wkLevel: true,
+      srsTheme: true,
+      ageBand: true,
     },
   });
 
@@ -151,6 +172,8 @@ export async function resolveViewerMenuInfo(input: {
     return null;
   }
 
+  const inviteTheme = viewerThemeFor(inviteAccount);
+
   return {
     provider: "invite",
     name: inviteAccount.nickname,
@@ -163,6 +186,8 @@ export async function resolveViewerMenuInfo(input: {
     xp: inviteAccount.xp,
     ukLevel: inviteAccount.ukLevel,
     wkLevel: inviteAccount.wkLevel,
+    themeId: inviteTheme.id,
+    themeName: inviteTheme.name,
     isAdmin: false,
   };
 }

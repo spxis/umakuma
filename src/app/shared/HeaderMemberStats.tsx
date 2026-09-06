@@ -95,6 +95,26 @@ export default function HeaderMemberStats({
           {wk}
         </span>
       ) : null}
+
+      {/*
+        * What this member's stages are called, and the way in to the page that
+        * reads the whole theme out. It gives way with the levels rather than
+        * with the XP: a name is wider than a badge, and the strip has one line
+        * at 393px like everything else in these two rows.
+        *
+        * Only ever a link. Unlike XP there is nothing worth printing when
+        * there is no address to send them to - the name alone answers a
+        * question nobody asked, and the point of putting it here was the door.
+        */}
+      {address && viewerMenuInfo.themeName ? (
+        <Link
+          href={`/users/${encodeURIComponent(address)}/theme`}
+          title={copy.themeTitle(viewerMenuInfo.themeName)}
+          className="hidden max-w-[9rem] truncate rounded-md text-foreground/60 transition hover:text-accent sm:inline-block"
+        >
+          {viewerMenuInfo.themeName}
+        </Link>
+      ) : null}
     </div>
   );
 }

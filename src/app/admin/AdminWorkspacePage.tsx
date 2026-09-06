@@ -109,6 +109,10 @@ function AdminWorkspacePageContent({
         xp: null,
         ukLevel: null,
         wkLevel: null,
+        // And no theme, for the same reason: it is a column on an account row
+        // this page never reads, and the strip is collapsed here anyway.
+        themeId: null,
+        themeName: null,
         isAdmin: emailAllowed,
       }
     : null;

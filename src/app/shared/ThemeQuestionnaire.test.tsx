@@ -8,7 +8,7 @@ import { srsThemesFor } from "@/lib/srs/srsThemes";
 import { FORCED_AVOID_TAGS, THEME_QUIZ_OPTIONS } from "@/lib/srs/srsThemeTags";
 
 import ThemeQuestionnaire from "./ThemeQuestionnaire";
-import { THEME_QUIZ_COPY } from "./profileCopy";
+import { THEME_QUIZ_COPY } from "./themeCopy";
 
 function draw(ageBand: AgeBand | null): Document {
   const themes = srsThemesFor(ratingFor(ageBand));

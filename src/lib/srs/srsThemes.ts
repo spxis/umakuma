@@ -128,3 +128,16 @@ export function srsThemeBuckets(theme: SrsTheme): SrsThemeBucket[] {
   }
   return groups;
 }
+
+/**
+ * The theme an account is actually on, given what its age band may see.
+ *
+ * The saved id is checked on the way out as well as on the way in: an account
+ * whose band later says under 13 stops being shown an adult theme rather than
+ * keeping whatever it was holding. Pure, and takes the rating rather than the
+ * band, because `ageBand.ts` reads this module and the cycle would close.
+ */
+export function srsThemeForRating(id: string | null | undefined, rating: SrsThemeRating): SrsTheme {
+  const allowed = srsThemesFor(rating);
+  return allowed.find((theme) => theme.id === id) ?? srsTheme(DEFAULT_SRS_THEME_ID);
+}

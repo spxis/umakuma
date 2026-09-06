@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 
-import { japaneseTextProps } from "@/app/shared/japaneseText";
+import { japaneseTextProps } from "./japaneseText";
 import type { AgeBand } from "@/lib/srs/ageBand";
 import { answeredThemeQuiz, forcedAvoidTags, themeQuizSuggestions } from "@/lib/srs/srsThemeMatch";
 import { srsThemeBuckets, type SrsTheme } from "@/lib/srs/srsThemes";
@@ -15,7 +15,7 @@ import {
   type ThemeQuizQuestion,
 } from "@/lib/srs/srsThemeTags";
 
-import { THEME_CHIP, THEME_QUIZ_COPY as copy } from "./profileCopy";
+import { THEME_CHIP, THEME_QUIZ_COPY as copy } from "./themeCopy";
 
 /**
  * Five questions instead of scrolling ninety cards.
