@@ -1404,3 +1404,33 @@ way is that the card takes the explorer's slots (level pill, badge corner,
 selection tick, a note under it) and the pill takes none, so a merged
 component would carry every slot everywhere. Do it when a third shape turns
 up despite the rule, not before.
+
+### 53 — UG, as built (supersedes the ticket's own detail)
+
+`cmtovh9l8` was written on 2026-09-05, before the ladder existed, and its
+detail is now wrong in five ways. The build is the truth; the papers describe
+it (`docs/CURRICULUM_PAPERS.md`). Corrections, so nobody works from the ticket:
+
+- **UG runs 1–100, not 1–87.** Both paths share one level shape — 43 subjects
+  opening, ramping to a flat 102 — because the shape is a workload promise and
+  has nothing to do with ordering. The 87-level plan came from letting kanji
+  set the ladder's length; vocabulary sets it (see `cmtozmqfc`).
+- **The grades complete later than planned, because level 1 teaches no kanji.**
+  G1 at UG5, G2 13, G3 23, G4 33, G5 42, G6 51 — not 4/12/22/32/41/50. The
+  divisions per grade are unchanged at 4/8/10/10/9/9.
+- **The name kanji are taught, not skipped.** The "OPEN" question at the foot of
+  the ticket — whether grade 9 is catalogue noise — is answered: those 78
+  characters are jinmeiyō, they are on both ladders on purpose, and both paths
+  teach them last (UN from 51, UG from 94), where 34 of them being in no JLPT
+  band means no milestone depends on them.
+- **UK is UN.** Renamed throughout in 1.17.0, including the persisted enum value
+  and 138 existing answers.
+- **The alignment moves are mostly gone.** Grade one is fixed in the ordering
+  itself rather than by 12 override ops, which cost nothing: level 2 went from
+  7 kanji to 8, the first ten levels from 81 to 93, and every JLPT milestone
+  held. `applyLadderOps` now refuses only moves that land *after* a character's
+  band, since moving one earlier is what alignment means.
+
+What remains unbuilt is the member-facing half: a stream on the account, the
+switch, and the per-item "push this to the end" pile. The ladder data, the
+reader, the checker and the papers are shipped.

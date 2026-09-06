@@ -82,6 +82,14 @@ This file is the single source of truth for agent behavior in this repo.
   when the evidence says to, so a chart without a version is a number nobody
   can reproduce - and the version is exactly what tells a reader whether the
   picture still matches what a member is being taught.
+- **Every answer records the curriculum it was answered against.**
+  `UkReviewAttempt.curriculumStream` and `.curriculumVersion` are written at
+  submission from the member's stream and the shipped ladder's version, never
+  defaulted in the schema and never inferred later. A review answered against
+  UN 1.0.0 and one answered against UN 2.0.0 are answers to different
+  questions, because 95 kanji changed level between them; without the stamp
+  neither can be read back honestly. Surfaces show it faintly - it is a
+  provenance record, not something a member is being asked to think about.
 - `pnpm ladder:rules` checks the promises those papers state. If a paper claims
   something the checker does not enforce, either the checker is missing a rule
   or the paper is making a claim we cannot keep. Both are bugs.
@@ -366,6 +374,20 @@ Run `pnpm quality:check` after non-trivial `src/` edits. If lint issues are auto
   `pnpm quality:check && pnpm preflight:prod`, and push. Anything that is not a release — a docs change,
   a rule added to this file — takes no version at all and stays out of the race.
 - After implementation: commit and push. Conventional Commits, subject ≤ 50 chars.
+- **`pnpm db:backup` before every write to the production database.** Schema
+  push, seed, backfill, enum change - all of them, every time, before the
+  command that writes. The dump lands in `./backups` and the script prints the
+  restore line; say in your reply that a backup was taken and where it is. If
+  the backup fails, stop - do not proceed on the grounds that the change is
+  small. On 2026-09-05 production was changed four times in one session - two
+  columns added, 138 rows backfilled, 1,665 ladder rows seeded, then an enum
+  value added and dropped with `--accept-data-loss` - and no backup was taken
+  for any of them. John: "WTF - why would you do ANYTHING to a Production
+  Database without taking backups? Especially when changing the schema. Even if
+  you know it's safe." "I verified it was safe" is reasoning, not a safety net,
+  and it is exactly the reasoning that is wrong in the case that matters. The
+  cost of a backup is seconds; the cost of being wrong once is the family's
+  whole history.
 - This repo has no migrations: the schema is applied by hand with `pnpm db:push`, and nothing in the deploy pipeline applies it for you. **Any change to `prisma/schema.prisma` must be pushed to the production database as its own step, or the deploy ships code the database cannot serve.** An added enum value is the easy one to miss: `map` was added to `GameKind`, deployed green, and every Map run failed in production while passing locally, because `db push` had only ever reached the local database. Verify with `pnpm db:drift:check` (read-only; exit 0 clean, exit 2 with the missing SQL). The deploy workflow now runs the same check after `vercel pull` and stops the deploy on drift.
 - **Push the schema commit to `main` first, then `db:push` to production.** The
   drift check fails in *both* directions and neither side is cheap: while the
