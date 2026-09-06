@@ -55,40 +55,72 @@ function daysBetween(from: string, to: string): number {
  *   account, which is the sort of disagreement nobody can debug from a
  *   screenshot.
  */
-export function summariseXpActivity(
-  rows: readonly XpDay[],
+/**
+ * The same summary, from totals rather than from every row.
+ *
+ * Everything `XpActivity` reports is a fold over two groupings - XP per day
+ * and XP per kind - so a caller that can get those from the database does not
+ * have to read the events themselves. `XpEvent` is one row per kind per day,
+ * so a member three years in has thousands of them and the page that only
+ * wanted a streak was reading all of them.
+ *
+ * `summariseXpActivity` below is this function with the fold done in memory,
+ * kept for the callers that already hold the rows.
+ */
+export function summariseXpTotals(
+  totals: {
+    perDay: readonly { dayKey: string; amount: number }[];
+    perKind: readonly { kind: string; amount: number }[];
+  },
   today: string,
   protectedDays: readonly string[] = [],
 ): XpActivity {
   const streak = resolveStreak(
-    rows.map((row) => row.dayKey),
+    totals.perDay.map((row) => row.dayKey),
     today,
     protectedDays,
   );
 
-  const perDay = new Map<string, number>();
-  const perKind = new Map<string, number>();
-  let totalXp = 0;
-  for (const row of rows) {
-    perDay.set(row.dayKey, (perDay.get(row.dayKey) ?? 0) + row.amount);
-    perKind.set(row.kind, (perKind.get(row.kind) ?? 0) + row.amount);
-    totalXp += row.amount;
-  }
+  const totalXp = totals.perDay.reduce((sum, row) => sum + row.amount, 0);
 
-  const byKind = [...perKind.entries()]
-    .map(([kind, amount]) => ({ kind, amount, share: totalXp === 0 ? 0 : amount / totalXp }))
+  const byKind = [...totals.perKind]
+    .map((row) => ({ ...row, share: totalXp === 0 ? 0 : row.amount / totalXp }))
     .sort((a, b) => b.amount - a.amount);
 
-  const best = [...perDay.entries()].sort((a, b) => b[1] - a[1])[0];
-  const daysActive = perDay.size;
+  const best = [...totals.perDay].sort((a, b) => b.amount - a.amount)[0];
+  const daysActive = totals.perDay.length;
 
   return {
     streak,
     daysActive,
     totalXp,
     byKind,
-    bestDay: best ? { dayKey: best[0], amount: best[1] } : null,
+    bestDay: best ? { dayKey: best.dayKey, amount: best.amount } : null,
     averagePerActiveDay: daysActive === 0 ? 0 : Math.round(totalXp / daysActive),
     daysSinceLastActive: streak.lastActiveDay ? daysBetween(streak.lastActiveDay, today) : null,
   };
 }
+
+/** The summary from the raw events, for callers that already hold them. */
+export function summariseXpActivity(
+  rows: readonly XpDay[],
+  today: string,
+  protectedDays: readonly string[] = [],
+): XpActivity {
+  const perDay = new Map<string, number>();
+  const perKind = new Map<string, number>();
+  for (const row of rows) {
+    perDay.set(row.dayKey, (perDay.get(row.dayKey) ?? 0) + row.amount);
+    perKind.set(row.kind, (perKind.get(row.kind) ?? 0) + row.amount);
+  }
+
+  return summariseXpTotals(
+    {
+      perDay: [...perDay.entries()].map(([dayKey, amount]) => ({ dayKey, amount })),
+      perKind: [...perKind.entries()].map(([kind, amount]) => ({ kind, amount })),
+    },
+    today,
+    protectedDays,
+  );
+}
+

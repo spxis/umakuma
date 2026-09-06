@@ -66,7 +66,18 @@ export function formatXpDay(dayKey: string): string {
 }
 
 /** The ledger: newest day first, each day's kinds largest first. */
-export function buildXpLedger(rows: readonly XpLedgerRow[]): XpLedgerDay[] {
+export function buildXpLedger(
+  rows: readonly XpLedgerRow[],
+  /**
+   * Everything earned before the first day shown.
+   *
+   * The ledger is windowed now - the page shows recent days, not all of them -
+   * and a running total that restarted at the window's edge would tell a
+   * member three years in that they were on four hundred XP. The loader knows
+   * the lifetime total and the window's own sum, so it hands the difference.
+   */
+  openingTotal = 0,
+): XpLedgerDay[] {
   const byDay = new Map<string, XpLedgerEntry[]>();
   for (const row of rows) {
     const entries = byDay.get(row.dayKey) ?? [];
@@ -83,7 +94,7 @@ export function buildXpLedger(rows: readonly XpLedgerRow[]): XpLedgerDay[] {
   /* Ascending first, because a running total only means anything forwards. */
   const ascending = [...byDay.entries()].sort(([left], [right]) => left.localeCompare(right));
 
-  let runningTotal = 0;
+  let runningTotal = openingTotal;
   const days = ascending.map(([dayKey, entries]) => {
     const total = entries.reduce((sum, entry) => sum + entry.amount, 0);
     runningTotal += total;

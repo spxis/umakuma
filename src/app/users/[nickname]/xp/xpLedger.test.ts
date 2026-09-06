@@ -127,3 +127,33 @@ describe("labelXpKinds", () => {
     expect(labelXpKinds(activity.byKind, new Map())[0].label).toBe("retired");
   });
 });
+
+/*
+ * The ledger on the summary page shows a window of recent days, not all of
+ * them, so its running total has to start from what came before rather than
+ * from zero. Without this a member three years in is told they are on four
+ * hundred XP, because the count restarted at the edge of the page.
+ */
+describe("a windowed ledger", () => {
+  const rows = [
+    { kind: "review", dayKey: "2026-03-02", amount: 30, note: null, label: "Reviews", typeNote: "" },
+    { kind: "review", dayKey: "2026-03-01", amount: 20, note: null, label: "Reviews", typeNote: "" },
+  ];
+
+  it("counts up from what came before the window", () => {
+    const days = buildXpLedger(rows, 1_000);
+
+    expect(days.map((day) => day.runningTotal)).toEqual([1_050, 1_020]);
+  });
+
+  it("still counts from zero when the window is the whole record", () => {
+    const days = buildXpLedger(rows);
+
+    expect(days.map((day) => day.runningTotal)).toEqual([50, 20]);
+  });
+
+  /* The day totals are the window's own, never the lifetime's. */
+  it("leaves each day's own total alone", () => {
+    expect(buildXpLedger(rows, 9_999).map((day) => day.total)).toEqual([30, 20]);
+  });
+});

@@ -46,6 +46,19 @@ export const XP_HISTORY_COPY = {
  * shape as Study history on purpose - a member should not have to learn two
  * ways of reading their own record.
  */
+/**
+ * What the summary's ledger is not showing.
+ *
+ * A windowed list that says nothing about its window is a list a member reads
+ * as the whole truth, and then wonders where their first month went.
+ */
+export const XP_LEDGER_WINDOW_COPY = {
+  windowed: (shown: number, total: number) =>
+    `The last ${shown.toLocaleString()} of ${total.toLocaleString()} active days.`,
+  all: "Every day you have earned anything.",
+  browse: "Browse it all",
+} as const;
+
 export const XP_LEDGER_HISTORY_COPY = {
   title: "XP history",
   subtitle: (name: string) => `Everything ${name} has earned, day by day`,

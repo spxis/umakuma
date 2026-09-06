@@ -2,7 +2,7 @@ import "server-only";
 
 import { getVancouverDateKey } from "@/lib/dailySnapshot";
 import { prisma } from "@/lib/prisma";
-import { summariseXpActivity, type XpActivity } from "@/lib/xp/xpActivity";
+import { summariseXpTotals, type XpActivity } from "@/lib/xp/xpActivity";
 import { protectedDayKeys } from "@/lib/xp/xpRestServer";
 
 import { buildXpLedger, labelXpKinds, type XpKindShare, type XpLedgerDay } from "./xpLedger";
@@ -26,39 +26,82 @@ import { buildXpLedger, labelXpKinds, type XpKindShare, type XpLedgerDay } from 
  * over a day the site itself held for them.
  */
 
+/**
+ * How many days of ledger the summary page draws.
+ *
+ * A window, not a limit on the truth: the totals above it are still the whole
+ * account, and the whole record is browsable at `/xp/history`. Sixty days is
+ * about as far back as anybody scrolls on a page whose job is "how am I
+ * doing", and it is what stops this read growing forever.
+ */
+export const XP_LEDGER_WINDOW_DAYS = 60;
+
 export type XpHistory = {
-  /** Newest day first. */
+  /** Newest day first, and only the most recent `XP_LEDGER_WINDOW_DAYS` of them. */
   days: XpLedgerDay[];
   activity: XpActivity;
   /** The activity's split by kind, with the labels a member reads. */
   byKind: XpKindShare[];
+  /** Days the account has ever been active, so the page can say what it is not showing. */
+  totalDays: number;
 };
 
 export async function loadXpHistory(accountId: string, now = new Date()): Promise<XpHistory> {
-  const [rows, protectedDays] = await Promise.all([
-    prisma.xpEvent.findMany({
+  /*
+   * Three reads instead of one, and all three are bounded by something that
+   * grows slowly. This used to be a single `findMany` with no `take` at all:
+   * `XpEvent` is one row per kind per day, so a member three years in had
+   * thousands of rows read on every render of a page that mostly wanted a
+   * streak and a bar chart.
+   *
+   * Per-day and per-kind totals are what the summary is a fold over, so the
+   * database does the folding; the ledger then reads only the window it draws.
+   */
+  const [perDay, perKind, protectedDays] = await Promise.all([
+    prisma.xpEvent.groupBy({
+      by: ["dayKey"],
       where: { accountId },
-      orderBy: [{ dayKey: "desc" }],
-      select: {
-        kind: true,
-        dayKey: true,
-        amount: true,
-        note: true,
-        type: { select: { label: true, note: true } },
-      },
+      _sum: { amount: true },
+      orderBy: { dayKey: "desc" },
     }),
+    prisma.xpEvent.groupBy({ by: ["kind"], where: { accountId }, _sum: { amount: true } }),
     protectedDayKeys(accountId),
   ]);
+
+  const dayTotals = perDay.map((row) => ({ dayKey: row.dayKey, amount: row._sum.amount ?? 0 }));
+  const window = dayTotals.slice(0, XP_LEDGER_WINDOW_DAYS);
+  const oldestShown = window.at(-1)?.dayKey ?? null;
+
+  const rows = oldestShown
+    ? await prisma.xpEvent.findMany({
+        where: { accountId, dayKey: { gte: oldestShown } },
+        orderBy: [{ dayKey: "desc" }],
+        select: {
+          kind: true,
+          dayKey: true,
+          amount: true,
+          note: true,
+          type: { select: { label: true, note: true } },
+        },
+      })
+    : [];
 
   /* A kind with no type row left falls back to its id: legible, and it does
      not hide a day's earning behind a blank. */
   const labels = new Map(rows.map((row) => [row.kind, row.type?.label ?? row.kind]));
 
-  const activity: XpActivity = summariseXpActivity(
-    rows.map((row) => ({ dayKey: row.dayKey, kind: row.kind, amount: row.amount })),
+  const activity: XpActivity = summariseXpTotals(
+    {
+      perDay: dayTotals,
+      perKind: perKind.map((row) => ({ kind: row.kind, amount: row._sum.amount ?? 0 })),
+    },
     getVancouverDateKey(now),
     protectedDays,
   );
+
+  /* What the window does not show, so its running total still counts from
+     the member's first day rather than from the edge of the page. */
+  const shown = window.reduce((sum, day) => sum + day.amount, 0);
 
   return {
     days: buildXpLedger(
@@ -70,8 +113,10 @@ export async function loadXpHistory(accountId: string, now = new Date()): Promis
         label: labels.get(row.kind) ?? row.kind,
         typeNote: row.type?.note ?? "",
       })),
+      activity.totalXp - shown,
     ),
     activity,
     byKind: labelXpKinds(activity.byKind, labels),
+    totalDays: dayTotals.length,
   };
 }

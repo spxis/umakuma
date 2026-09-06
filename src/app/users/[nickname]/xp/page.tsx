@@ -15,7 +15,7 @@ import XpRankPanel from "../profile/XpRankPanel";
 import { canViewUserPage, resolveViewerMenuInfo } from "../userPageAuth";
 import XpActivitySummary from "./XpActivitySummary";
 import XpLedgerDays from "./XpLedgerDays";
-import { XP_HISTORY_COPY, XP_LEDGER_HISTORY_COPY } from "./xpHistoryCopy";
+import { XP_HISTORY_COPY, XP_LEDGER_HISTORY_COPY, XP_LEDGER_WINDOW_COPY } from "./xpHistoryCopy";
 import { loadXpHistory } from "./xpLedgerServer";
 
 /* Prisma-backed, and CI builds with no database to prerender against. */
@@ -130,11 +130,29 @@ export default async function UserXpPage({ params }: PageProps) {
             <XpActivitySummary activity={history.activity} byKind={history.byKind} />
 
             <section className="space-y-2">
-              <div>
-                <h2 className="text-lg font-black text-foreground">{XP_HISTORY_COPY.ledger}</h2>
-                <p className="text-xs font-semibold leading-relaxed text-foreground/60">
-                  {XP_HISTORY_COPY.ledgerHint}
-                </p>
+              <div className="flex flex-wrap items-baseline justify-between gap-2">
+                <div>
+                  <h2 className="text-lg font-black text-foreground">{XP_HISTORY_COPY.ledger}</h2>
+                  <p className="text-xs font-semibold leading-relaxed text-foreground/60">
+                    {XP_HISTORY_COPY.ledgerHint}
+                  </p>
+                  {/* The ledger is a window on to the record, and says so: a
+                      windowed list that stays quiet about its window is read
+                      as the whole truth. */}
+                  <p className="text-xs font-semibold leading-relaxed text-foreground/60">
+                    {history.totalDays > history.days.length
+                      ? XP_LEDGER_WINDOW_COPY.windowed(history.days.length, history.totalDays)
+                      : XP_LEDGER_WINDOW_COPY.all}
+                  </p>
+                </div>
+                {history.totalDays > history.days.length ? (
+                  <Link
+                    href={`/users/${encodeURIComponent(userKey)}/xp/history`}
+                    className="shrink-0 text-xs font-black text-accent hover:underline"
+                  >
+                    {XP_LEDGER_WINDOW_COPY.browse}
+                  </Link>
+                ) : null}
               </div>
               <XpLedgerDays days={history.days} />
             </section>

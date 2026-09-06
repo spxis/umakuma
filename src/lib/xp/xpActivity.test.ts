@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { summariseXpActivity, type XpDay } from "./xpActivity";
+import { summariseXpActivity, summariseXpTotals, type XpDay } from "./xpActivity";
 
 const day = (dayKey: string, kind = "reviewAnswered", amount = 10): XpDay => ({ dayKey, kind, amount });
 
@@ -64,5 +64,47 @@ describe("summariseXpActivity", () => {
     expect(summary.streak.lastActiveDay).toBe("2026-09-01");
     expect(summary.streak.activeToday).toBe(false);
     expect(summary.daysSinceLastActive).toBe(3);
+  });
+});
+
+/*
+ * The summary is a fold over two groupings, so a caller that can get those
+ * from the database need not read the events. Same answers either way, or the
+ * XP page and the admin page would disagree about a member's streak.
+ */
+describe("summarising from totals rather than rows", () => {
+  const rows = [
+    { dayKey: "2026-03-01", kind: "review", amount: 20 },
+    { dayKey: "2026-03-01", kind: "game", amount: 10 },
+    { dayKey: "2026-03-02", kind: "review", amount: 40 },
+  ];
+
+  it("agrees with the row-based summary it replaces", () => {
+    const fromRows = summariseXpActivity(rows, "2026-03-02");
+    const fromTotals = summariseXpTotals(
+      {
+        perDay: [
+          { dayKey: "2026-03-01", amount: 30 },
+          { dayKey: "2026-03-02", amount: 40 },
+        ],
+        perKind: [
+          { kind: "review", amount: 60 },
+          { kind: "game", amount: 10 },
+        ],
+      },
+      "2026-03-02",
+    );
+
+    expect(fromTotals).toEqual(fromRows);
+  });
+
+  it("reports nothing at all for an account that has never earned", () => {
+    const empty = summariseXpTotals({ perDay: [], perKind: [] }, "2026-03-02");
+
+    expect(empty.totalXp).toBe(0);
+    expect(empty.daysActive).toBe(0);
+    expect(empty.bestDay).toBeNull();
+    expect(empty.averagePerActiveDay).toBe(0);
+    expect(empty.daysSinceLastActive).toBeNull();
   });
 });
