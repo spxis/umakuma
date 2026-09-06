@@ -1192,12 +1192,6 @@ enum UkPlacementSource {
 enum LadderStream {
   UN
   UG
-  /// Retired. The exam ladder was called UK until the rename, and the 138
-  /// answers stamped with it have been migrated to UN, so nothing holds this
-  /// value any more. It stays in the enum only because dropping a Postgres
-  /// enum value needs `prisma db push --accept-data-loss`, and an unused
-  /// value costs nothing. Nothing may write it.
-  UK
 }
 
 enum UkStateOrigin {
