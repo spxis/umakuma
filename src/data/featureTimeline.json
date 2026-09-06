@@ -6755,12 +6755,25 @@
     "id": "umakuma-ladder-boards",
     "name": "The UmaKuma ladder boards",
     "area": "account",
+    "status": "shipped",
     "kind": "feature",
+    "date": "2026-09-06",
+    "summary": "The UmaKuma ladder has a leaderboard: everyone on one board, and one for each path. Each row shows the level in the member's own system and the learned, passed and burned counts the score is built from.",
+    "dateIsEstimate": false,
+    "release": 541,
+    "version": "1.52.0",
+    "releasedAt": "2026-09-06T14:08:38Z"
+  },
+  {
+    "id": "the-umakuma-level-chips-claim-a-jlpt-band-finishes-on-six-di",
+    "name": "A JLPT band finishes on one level",
+    "area": "jlpt",
+    "kind": "bug",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.52.0",
-    "release": 541,
-    "releasedAt": "2026-09-06T14:08:38Z",
-    "summary": "The UmaKuma ladder has a leaderboard: everyone on one board, and one for each path. Each row shows the level in the member's own system and the learned, passed and burned counts the score is built from."
+    "version": "1.52.1",
+    "release": 542,
+    "releasedAt": "2026-09-06T14:27:50Z",
+    "summary": "The level chips on the UmaKuma explorer now mark only the five levels where a JLPT band actually finishes. They used to claim N5 finished on six different levels."
   }
 ]
