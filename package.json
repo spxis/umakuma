@@ -1,6 +1,6 @@
 {
   "name": "umakuma",
-  "version": "1.43.0",
+  "version": "1.44.0",
   "private": true,
   "packageManager": "pnpm@10.33.0",
   "engines": {
@@ -62,6 +62,8 @@
     "db:backfill:jlpt-word-kanji": "pnpm dlx tsx scripts/backfill-jlpt-word-example-kanji.ts",
     "db:backfill:jlpt-word-kanji:dry": "pnpm db:backfill:jlpt-word-kanji --dry-run",
     "test-account:run": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/automate-test-account.ts",
+    "cohort": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/cohort.ts",
+    "cohort:local": "node scripts/local-db.mjs run -- pnpm cohort",
     "test-members": "NODE_OPTIONS='--conditions=react-server' node scripts/local-db.mjs run -- pnpm dlx tsx scripts/seed-test-members.ts",
     "test:news:candidates": "node scripts/news-candidate-analysis.mjs",
     "db:backup": "node scripts/local-db.mjs backup",

@@ -17,7 +17,13 @@
  * covers it.
  */
 
+import { XP_EVENT_NOTES, XP_STREAK_MILESTONES } from "./xpAwards";
+import type { XpAwardRequest } from "./xpStudyAwards";
+
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
+
+/** Days in the week `weeklyStreak` is paid for. */
+const DAYS_IN_WEEK = 7;
 
 export type StreakStanding = {
   /** Consecutive days up to and including today, or ending yesterday. */
@@ -99,4 +105,32 @@ export function streakMilestoneReached(
   milestones: readonly { days: number; kind: string }[],
 ): { days: number; kind: string } | null {
   return milestones.find((milestone) => milestone.days === current) ?? null;
+}
+
+/**
+ * What a streak of exactly this many days has just earned.
+ *
+ * Two different things, and they are meant to overlap. The milestones match
+ * **exactly** — the award is for a streak *becoming* thirty, not for being
+ * past it — while `weeklyStreak` is the routine one that comes round every
+ * seventh day for as long as somebody keeps going. Day seven pays both, which
+ * is deliberate: it is the first one that takes any holding.
+ *
+ * Pure, so the arithmetic is testable without a database - and so the cohort
+ * simulation, which replays a member's days in memory, prices them the same
+ * way the settlement does.
+ */
+export function streakDayAwards(current: number): XpAwardRequest[] {
+  const awards: XpAwardRequest[] = [];
+  const milestone = streakMilestoneReached(current, XP_STREAK_MILESTONES);
+  if (milestone) {
+    awards.push({
+      kind: milestone.kind as XpAwardRequest["kind"],
+      note: XP_EVENT_NOTES.streak(milestone.days),
+    });
+  }
+  if (current > 0 && current % DAYS_IN_WEEK === 0) {
+    awards.push({ kind: "weeklyStreak", note: XP_EVENT_NOTES.streak(current) });
+  }
+  return awards;
 }

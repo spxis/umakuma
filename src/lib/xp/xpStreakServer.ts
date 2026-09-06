@@ -3,11 +3,9 @@ import "server-only";
 import { getVancouverDateKey } from "@/lib/dailySnapshot";
 import { prisma } from "@/lib/prisma";
 
-import { XP_EVENT_NOTES, XP_STREAK_MILESTONES } from "./xpAwards";
 import { protectedDayKeys } from "./xpRestServer";
 import { awardXp, awardXpQuietly } from "./xpServer";
-import { resolveStreak, streakMilestoneReached, type StreakStanding } from "./xpStreak";
-import type { XpAwardRequest } from "./xpStudyAwards";
+import { resolveStreak, streakDayAwards, type StreakStanding } from "./xpStreak";
 
 /**
  * Making the streak awards actually fire.
@@ -39,9 +37,6 @@ import type { XpAwardRequest } from "./xpStudyAwards";
  * every failure is logged and swallowed.
  */
 
-/** Days in the week `weeklyStreak` is paid for. */
-const DAYS_IN_WEEK = 7;
-
 /** Where a member stands, derived from the days that exist rather than stored. */
 export async function memberStreak(accountId: string, now = new Date()): Promise<StreakStanding> {
   const [days, protectedDays] = await Promise.all([
@@ -51,31 +46,10 @@ export async function memberStreak(accountId: string, now = new Date()): Promise
   return resolveStreak(days.map((row) => row.dayKey), getVancouverDateKey(now), protectedDays);
 }
 
-/**
- * What a streak of exactly this many days has just earned.
- *
- * Two different things, and they are meant to overlap. The milestones match
- * **exactly** — the award is for a streak *becoming* thirty, not for being
- * past it — while `weeklyStreak` is the routine one that comes round every
- * seventh day for as long as somebody keeps going. Day seven pays both, which
- * is deliberate: it is the first one that takes any holding.
- *
- * Pure, so the arithmetic is testable without a database.
- */
-export function streakDayAwards(current: number): XpAwardRequest[] {
-  const awards: XpAwardRequest[] = [];
-  const milestone = streakMilestoneReached(current, XP_STREAK_MILESTONES);
-  if (milestone) {
-    awards.push({
-      kind: milestone.kind as XpAwardRequest["kind"],
-      note: XP_EVENT_NOTES.streak(milestone.days),
-    });
-  }
-  if (current > 0 && current % DAYS_IN_WEEK === 0) {
-    awards.push({ kind: "weeklyStreak", note: XP_EVENT_NOTES.streak(current) });
-  }
-  return awards;
-}
+/* `streakDayAwards` lives in `xpStreak.ts` now, beside the streak it prices,
+   so the cohort simulation can price a day without a database. Re-exported
+   for the callers that knew it here. */
+export { streakDayAwards };
 
 /**
  * The day's first XP-earning action: sign the member in, then pay the streak.

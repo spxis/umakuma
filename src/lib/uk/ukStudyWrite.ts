@@ -150,6 +150,7 @@ export async function recordUkReview({
         result,
         previousSrsStage,
         newSrsStage,
+        submittedAt: now,
         curriculumStream: LADDER_STREAMS.un,
         curriculumVersion: CURRICULUM_VERSION,
       },

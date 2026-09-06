@@ -368,6 +368,7 @@ export function completedRunValues({
   level,
   timeLimitMs,
   accumulatedScore,
+  now = new Date(),
 }: {
   kind: GameKindValue;
   startedAt: Date;
@@ -377,8 +378,10 @@ export function completedRunValues({
   level: number | null;
   timeLimitMs: number | null;
   accumulatedScore?: number;
+  /** When it finished. Now, unless a caller is replaying a round that was played earlier. */
+  now?: Date;
 }) {
-  const completedAt = new Date();
+  const completedAt = now;
   const elapsedMs = Math.max(0, completedAt.getTime() - startedAt.getTime());
   // Time Attack always ran the full clock, so record the limit rather than the
   // moment the last answer happened to land.

@@ -92,4 +92,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Wariai Settei", ja: "割合設定", reading: "わりあいせってい", gloss: "the proportions, set" },
   { romaji: "Ashidori Wakaremichi", ja: "足取り分かれ道", reading: "あしどりわかれみち", gloss: "your own steps, on either road" },
   { romaji: "Ichiin no Yakuwari", ja: "一員の役割", reading: "いちいんのやくわり", gloss: "the part each member plays" },
+  { romaji: "Uchitoketa Nakama", ja: "打ち解けた仲間", reading: "うちとけたなかま", gloss: "the companions who have settled in" },
 ];
