@@ -6248,12 +6248,25 @@
     "id": "lists-an-srs-filter-from-the-same-chips-the-explorers-use",
     "name": "Filter a list by SRS stage",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-06",
+    "summary": "A list has shown an SRS badge on every row since it was built and had no way to ask for one stage. The same status chips the explorers use now sit beside the kind chips - Appr, Guru, Master, Enlight, Burned, Locked - each counted against whatever else you have narrowed to.",
+    "dateIsEstimate": false,
+    "release": 502,
+    "version": "1.19.0",
+    "releasedAt": "2026-09-06T07:06:50Z"
+  },
+  {
+    "id": "lists-the-reading-column-splits-into-on-and-kun",
+    "name": "Both readings, in a lane each",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.19.0",
-    "release": 502,
-    "releasedAt": "2026-09-06T07:06:50Z",
-    "summary": "A list has shown an SRS badge on every row since it was built and had no way to ask for one stage. The same status chips the explorers use now sit beside the kind chips - Appr, Guru, Master, Enlight, Burned, Locked - each counted against whatever else you have narrowed to."
+    "version": "1.20.0",
+    "release": 503,
+    "releasedAt": "2026-09-06T07:07:09Z",
+    "summary": "A kanji has an on reading and a kun reading, and every list here showed one of them. Both have a lane now - Kun \u8a13\u8aad\u307f and On \u97f3\u8aad\u307f, written the way a dictionary writes them - and a phone gets both on the line under the meaning. A word has neither kind, so its own reading stays where it was."
   }
 ]
