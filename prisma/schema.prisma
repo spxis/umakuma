@@ -57,7 +57,6 @@ model Account {
   approvedAt               DateTime?
   /**
    * Switched off by an admin, and why, and by whom.
-   *
    * Not `approvalStatus`, deliberately. Rejection answers "should this person
    * be let in", asked once at the door, and `approvedAt` is the record of that
    * answer. Disabling happens to somebody already inside - an account being
@@ -66,7 +65,6 @@ model Account {
    * Overloading `rejected` would have made re-enabling indistinguishable from
    * approving, and would have told an established member on their own page
    * that they were never let in.
-   *
    * Null means enabled: a column added under existing rows must not switch
    * anybody off, and the absence of a timestamp is the honest way to say
    * nobody has ever done this. The reason is for the admin reading the account
@@ -175,17 +173,17 @@ model Account {
 
   /// The second ladder: earned by turning up rather than by learning. Kept
   /// apart from ukLevel on purpose - neither can be bought with the other.
-  xp                  Int                @default(0)
-  xpLevel             Int                @default(1)
-  xpEvents            XpEvent[]
-  restDays            MemberRest[]
-  levelTests          LevelTest[]
-  restGrants          MemberRestGrant[]
+  xp                Int               @default(0)
+  xpLevel           Int               @default(1)
+  xpEvents          XpEvent[]
+  restDays          MemberRest[]
+  levelTests        LevelTest[]
+  restGrants        MemberRestGrant[]
   /// While set, the member is away: the streak is held and SRS due dates move
   /// with them rather than piling up. Cleared on return, which is when the
   /// queue is shifted forward by the length of the absence.
-  vacationStartedAt   DateTime?
-  vacationEndsAt      DateTime?
+  vacationStartedAt DateTime?
+  vacationEndsAt    DateTime?
 
   internal               Boolean                 @default(false)
   jlptCertificates       JlptCertificate[]
@@ -1115,8 +1113,8 @@ model UkSubject {
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt
 
-  states          UkSrsState[]
-  radicalLink     UkRadicalLink?
+  states      UkSrsState[]
+  radicalLink UkRadicalLink?
 
   @@index([kind, level])
   @@index([level])
@@ -1178,7 +1176,6 @@ enum LadderOpType {
   remove
 }
 
-
 /// How a member arrived at the level they start on.
 enum UkPlacementSource {
   placement_test
@@ -1189,6 +1186,14 @@ enum UkPlacementSource {
 
 /// Why a state row exists. A row seeded by a placement test is not the same
 /// evidence as one a member earned by answering, and the profile says so.
+/// The two orderings UmaKuma teaches the same subjects in: UK is the exam
+/// ladder, UG the Japanese school one. Ours, both of them, which is why they
+/// carry a version and WaniKani's levels do not.
+enum LadderStream {
+  UK
+  UG
+}
+
 enum UkStateOrigin {
   lesson
   placement
@@ -1239,14 +1244,23 @@ model UkSrsState {
 /// One answer, kept. The state row holds where a member is; this holds how
 /// they got there, which is what a history page and a trouble list read.
 model UkReviewAttempt {
-  id               String            @id @default(cuid())
-  accountId        String
-  stateId          Int
-  subjectId        Int
-  result           StudyReviewResult
-  previousSrsStage Int?
-  newSrsStage      Int?
-  submittedAt      DateTime          @default(now())
+  id                String            @id @default(cuid())
+  accountId         String
+  stateId           Int
+  subjectId         Int
+  result            StudyReviewResult
+  previousSrsStage  Int?
+  newSrsStage       Int?
+  submittedAt       DateTime          @default(now())
+  /// Which of our two ladders the member was following when they answered.
+  /// Null on every attempt recorded before there were two, which were all UK.
+  curriculumStream  LadderStream?
+  /// The curriculum version this answer was given against - not the site's
+  /// release number, which answers a different question. We move the ladder
+  /// when the evidence says to, and an answer given against one arrangement of
+  /// levels should still be readable after the arrangement changes. Null on
+  /// attempts recorded before the stamp existed, which were all 1.0.0.
+  curriculumVersion String?
 
   account Account    @relation(fields: [accountId], references: [id], onDelete: Cascade)
   state   UkSrsState @relation(fields: [stateId], references: [id], onDelete: Cascade)
@@ -1254,7 +1268,6 @@ model UkReviewAttempt {
   @@index([accountId, submittedAt])
   @@index([accountId, subjectId, submittedAt])
 }
-
 
 /// How a pair was established, so a hand-made link is not silently recomputed.
 enum UkRadicalMatch {
@@ -1308,7 +1321,6 @@ model UkRadicalLink {
   @@index([characters])
 }
 
-
 /// A kind of XP that can be earned, and what it is worth.
 ///
 /// A string on the event would have carried the pointer and nothing else. This
@@ -1329,7 +1341,7 @@ model UkRadicalLink {
 /// amount and the note already say.
 model XpType {
   /// Matches the key in XP_AWARDS.
-  id        String   @id
+  id        String    @id
   /// What a member reads on their history.
   label     String
   /// Why it exists, in a sentence, for the same reader.
@@ -1347,8 +1359,8 @@ model XpType {
   pricedAt  DateTime?
   /// Retired kinds keep their rows, so old events still explain themselves.
   retiredAt DateTime?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
   events XpEvent[]
 }
@@ -1393,7 +1405,6 @@ model XpEvent {
   @@unique([accountId, kind, dayKey])
   @@index([accountId, createdAt])
 }
-
 
 /// Why a day with no study still counted.
 enum MemberRestKind {
@@ -1475,7 +1486,6 @@ model MemberRest {
   @@index([accountId, kind])
   @@index([periodId])
 }
-
 
 enum LevelTestKind {
   /// Written, not passed. Opens the level whatever the score.
