@@ -6274,12 +6274,25 @@
     "id": "lists-a-level-says-which-ladder-it-is-on",
     "name": "A level says which ladder it is on",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-06",
+    "summary": "The level lane drew WaniKani's number and nothing else, so a kanji WaniKani never taught had an empty lane. Ours leads now, WaniKani's sits under it, and where an item is on neither ladder the lane falls back to the exam's N and then the school year's G.",
+    "dateIsEstimate": false,
+    "release": 504,
+    "version": "1.21.0",
+    "releasedAt": "2026-09-06T07:07:28Z"
+  },
+  {
+    "id": "lists-a-vocabulary-row-splits-into-its-kanji",
+    "name": "Split a word into its kanji",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.21.0",
-    "release": 504,
-    "releasedAt": "2026-09-06T07:07:28Z",
-    "summary": "The level lane drew WaniKani's number and nothing else, so a kanji WaniKani never taught had an empty lane. Ours leads now, WaniKani's sits under it, and where an item is on neither ladder the lane falls back to the exam's N and then the school year's G."
+    "version": "1.22.0",
+    "release": 505,
+    "releasedAt": "2026-09-06T07:07:44Z",
+    "summary": "Choose words on a list you own and Split adds the kanji inside them that the list has not got. It says how many it will add before you press it, and the okurigana drops out on its own - \u501f\u308a\u308b gives \u501f."
   }
 ]
