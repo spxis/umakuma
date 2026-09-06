@@ -6807,12 +6807,25 @@
     "id": "the-explorer-names-its-curriculum-version-and-compares-two",
     "name": "Every ladder surface names its curriculum version",
     "area": "study",
+    "status": "shipped",
     "kind": "feature",
+    "date": "2026-09-06",
+    "summary": "The curriculum explorers now say faintly which version of the ladder you are looking at \u2014 UN 2.0.0 or UG 2.0.0. The ladders are rebuilt when the evidence says to, and the version is what tells you whether what you saw last month is still what you are taught.",
+    "dateIsEstimate": false,
+    "release": 545,
+    "version": "1.53.0",
+    "releasedAt": "2026-09-06T14:40:45Z"
+  },
+  {
+    "id": "pnpm-db-backup-can-dump-the-wrong-database-and-look-like-suc",
+    "name": "The backup command refuses the wrong database",
+    "area": "platform",
+    "kind": "bug",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.53.0",
-    "release": 545,
-    "releasedAt": "2026-09-06T14:40:45Z",
-    "summary": "The curriculum explorers now say faintly which version of the ladder you are looking at \u2014 UN 2.0.0 or UG 2.0.0. The ladders are rebuilt when the evidence says to, and the version is what tells you whether what you saw last month is still what you are taught."
+    "version": "1.53.1",
+    "release": 546,
+    "releasedAt": "2026-09-06T22:28:55Z",
+    "summary": "An internal safeguard: the command that backs up the database before any risky change now refuses to quietly back up the wrong one."
   }
 ]
