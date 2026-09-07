@@ -1,5 +1,7 @@
 import type { SubjectType, WkStatus } from "@/lib/domainConstants";
 
+import type { ReviewStatRow } from "./reviewStatDeltas";
+
 export type WaniKaniUserResponse = {
   data: {
     id: string;
@@ -77,6 +79,8 @@ export type ExistingLeaderboardState = {
   lastVocabularyGuruedItem: unknown;
   assignmentCache: unknown;
   assignmentCacheUpdatedAt: Date | null;
+  /** When the review counters were last read, so only what moved is fetched. */
+  reviewStatsUpdatedAt: Date | null;
   wkHttpCache: unknown;
 };
 
@@ -84,6 +88,14 @@ export type LeaderboardSyncCache = {
   assignmentCache: AssignmentCacheRow[];
   assignmentCacheUpdatedAt: Date;
   reviewsUpdatedAt: Date | null;
+  /**
+   * The counters that moved since the last look, and the clock to ask from
+   * next time. What a member answered in WaniKani's own app is worked out
+   * from these: their `/reviews` collection holds only what was submitted
+   * through the API, so it is empty for anybody who reviews in the app.
+   */
+  reviewStatRows: ReviewStatRow[];
+  reviewStatsUpdatedAt: Date | null;
   wkHttpCache: HttpCacheState;
 };
 

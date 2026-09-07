@@ -7,6 +7,7 @@ import { rankingWeights } from "@/lib/ladder/rankingWeightsServer";
 import { prisma } from "@/lib/prisma";
 import { LEADERBOARD_REFRESH_INTERVAL_MS } from "@/lib/refreshPolicy";
 import { getLeaderboardStats } from "@/lib/wanikani";
+import { recordWanikaniReviews } from "@/lib/wanikaniReviewHistory";
 
 const SYNC_LOCK_MS = 5 * 60 * 1000;
 const FAILURE_COOLDOWN_MS = 30 * 60 * 1000;
@@ -177,6 +178,8 @@ export async function refreshAccountById(accountId: string, force: boolean, igno
       lastVocabularyGuruedItem: true,
       assignmentCache: true,
       assignmentCacheUpdatedAt: true,
+      reviewStatsCache: true,
+      reviewStatsUpdatedAt: true,
       wkHttpCache: true,
     },
   });
@@ -223,10 +226,28 @@ export async function refreshAccountById(accountId: string, force: boolean, igno
       lastVocabularyGuruedItem: account.lastVocabularyGuruedItem,
       assignmentCache: account.assignmentCache,
       assignmentCacheUpdatedAt: account.assignmentCacheUpdatedAt,
+      reviewStatsUpdatedAt: account.reviewStatsUpdatedAt,
       wkHttpCache: account.wkHttpCache,
     }, await rankingWeights());
 
     const syncedAt = new Date();
+
+    /*
+     * What they answered on WaniKani, written into their history.
+     *
+     * The counters are all the API gives: a review taken in WaniKani's own
+     * app is in no collection we can read, so `recordWanikaniReviews` works
+     * out what happened from what moved. The snapshot is saved in the same
+     * update as the rest of the sync, so a failure between the two cannot
+     * leave the counters banked and the attempts unwritten.
+     */
+    const derived = await recordWanikaniReviews({
+      accountId: account.id,
+      previous: account.reviewStatsCache,
+      rows: stats.cache.reviewStatRows,
+      assignments: stats.cache.assignmentCache,
+      seenAt: syncedAt,
+    });
 
     await prisma.account.update({
       where: { id: account.id },
@@ -255,6 +276,8 @@ export async function refreshAccountById(accountId: string, force: boolean, igno
         assignmentCache: stats.cache.assignmentCache as Prisma.InputJsonValue,
         assignmentCacheUpdatedAt: stats.cache.assignmentCacheUpdatedAt,
         reviewsUpdatedAt: stats.cache.reviewsUpdatedAt,
+        reviewStatsCache: derived.snapshot as Prisma.InputJsonValue,
+        reviewStatsUpdatedAt: stats.cache.reviewStatsUpdatedAt,
         lastRadicalGuruedAt: stats.lastRadicalGuruedAt,
         lastKanjiGuruedAt: stats.lastKanjiGuruedAt,
         lastVocabularyGuruedAt: stats.lastVocabularyGuruedAt,

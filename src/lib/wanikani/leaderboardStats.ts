@@ -19,6 +19,7 @@ import {
   srsLabel,
 } from "./helpers";
 import { getLevelKanjiSnapshot } from "./levelSnapshot";
+import { toReviewStatRows } from "./reviewStatDeltas";
 import { loadSubjectSummaries, loadSubjectTypes } from "./subjects";
 import { computeJlptKanjiProgress } from "./leaderboardJlpt";
 import { SUBJECT_TYPE_VALUES, SUBJECT_TYPES, WK_STATUSES, type SubjectType } from "@/lib/domainConstants";
@@ -236,6 +237,26 @@ export async function getLeaderboardStats(
   const reviewsUpdatedAt =
     maxDate([existing.reviewsUpdatedAt, reviewsCheckpointDate(reviewCollection)]) ?? existing.reviewsUpdatedAt;
 
+  /*
+   * The counters, and only the ones that moved.
+   *
+   * This is what a review taken in WaniKani's own app leaves behind: their
+   * `/reviews` collection logs only what was submitted through the API, so it
+   * comes back empty for anybody who reviews in the app - measured at
+   * total_count 0 on a level 17 account with 2,774 review statistics. The
+   * first pass for an account has no checkpoint and reads the lot, which is
+   * three pages and becomes the snapshot; every pass after that asks for what
+   * changed and usually gets a handful.
+   */
+  const reviewStatsPath = existing.reviewStatsUpdatedAt
+    ? `/review_statistics?updated_after=${encodeURIComponent(existing.reviewStatsUpdatedAt.toISOString())}`
+    : "/review_statistics";
+  const reviewStatsCollection = await fetchAllCollectionPages(reviewStatsPath, token);
+  const reviewStatRows = toReviewStatRows(reviewStatsCollection.data);
+  const reviewStatsUpdatedAt =
+    maxDate([existing.reviewStatsUpdatedAt, reviewsCheckpointDate(reviewStatsCollection)]) ??
+    existing.reviewStatsUpdatedAt;
+
   const lastActivityAt = allAssignmentData
     .flatMap((assignment) => [
       assignment.started_at,
@@ -358,6 +379,8 @@ export async function getLeaderboardStats(
       assignmentCache: assignmentRows,
       assignmentCacheUpdatedAt: assignmentCacheUpdatedAt ?? new Date(),
       reviewsUpdatedAt,
+      reviewStatRows,
+      reviewStatsUpdatedAt,
       wkHttpCache: {
         user: mergeHttpCacheEntry(httpCache.user, userResponse.headers),
         reviewStats: mergeHttpCacheEntry(httpCache.reviewStats, reviewStatsResponse.headers),

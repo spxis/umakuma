@@ -30,6 +30,7 @@ export async function saveAccountFromToken({
     reviewCount: 0,
     burnedCount: 0,
     reviewsUpdatedAt: null,
+    reviewStatsUpdatedAt: null,
     lastRadicalGuruedAt: null,
     lastKanjiGuruedAt: null,
     lastVocabularyGuruedAt: null,

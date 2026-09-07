@@ -125,6 +125,12 @@ model Account {
   assignmentCache          Json?
   assignmentCacheUpdatedAt DateTime?
   reviewsUpdatedAt         DateTime?
+  /// The four WaniKani counters per subject at the last sync, so the next one
+  /// can tell what was reviewed in their app. Their /reviews collection holds
+  /// only reviews submitted through the API, so this diff is the only way a
+  /// review answered on WaniKani itself can reach a member's history.
+  reviewStatsCache         Json?
+  reviewStatsUpdatedAt     DateTime?
   lastRadicalGuruedAt      DateTime?
   lastKanjiGuruedAt        DateTime?
   lastVocabularyGuruedAt   DateTime?
@@ -448,6 +454,12 @@ model WkCatalogSyncRun {
   @@index([status, startedAt])
 }
 
+/// Who saw the answer given: this site, or WaniKani's own app.
+enum StudyAttemptSource {
+  umakuma
+  wanikani
+}
+
 enum StudyReviewResult {
   correct
   wrong
@@ -557,6 +569,10 @@ model StudyReviewAttempt {
   subjectId    Int
   subjectType  String
   result       StudyReviewResult
+  /// Where the answer was given. `umakuma` is answered here and posted to
+  /// WaniKani; `wanikani` is worked out from their counters afterwards,
+  /// because a review taken in their app is in no collection we can read.
+  source       StudyAttemptSource @default(umakuma)
   submittedAt  DateTime          @default(now())
 
   @@index([accountId, subjectId, submittedAt])
