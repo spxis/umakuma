@@ -113,4 +113,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Narai Kubun", ja: "習い区分", reading: "ならいくぶん", gloss: "study, sorted by its path" },
   { romaji: "niramekko", ja: "睨めっこ", reading: "にらめっこ", gloss: "the funny-face staring game" },
   { romaji: "nunome", ja: "布目", reading: "ぬのめ", gloss: "the weave of the cloth" },
+  { romaji: "Nemoto Hirogari", ja: "根元広がり", reading: "ねもとひろがり", gloss: "spreading out from the root" },
 ];

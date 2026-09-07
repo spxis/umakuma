@@ -6885,12 +6885,25 @@
     "id": "favicon-and-app-icon-kuma-replaces-the-vercel-triangle",
     "name": "Favicon and app icon: Kuma replaces the Vercel triangle",
     "area": "platform",
+    "status": "shipped",
     "kind": "feature",
+    "date": "2026-09-06",
+    "summary": "Kuma is in the browser tab now. The site's icon was still the blank starter triangle; from this release the tab, the bookmark and the phone home screen all show the bear's face.",
+    "dateIsEstimate": false,
+    "release": 551,
+    "version": "1.57.0",
+    "releasedAt": "2026-09-07T00:43:42Z"
+  },
+  {
+    "id": "ug-board-is-flat-every-member-reads-ug1-and-the-cohort-engin",
+    "name": "Simulated members climb their own ladder",
+    "area": "admin",
+    "kind": "bug",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.57.0",
-    "release": 551,
-    "releasedAt": "2026-09-07T00:43:42Z",
-    "summary": "Kuma is in the browser tab now. The site's icon was still the blank starter triangle; from this release the tab, the bookmark and the phone home screen all show the bear's face."
+    "version": "1.58.0",
+    "release": 552,
+    "releasedAt": "2026-09-07T01:11:09Z",
+    "summary": "The simulated members now follow their own path and sit the tests that gate it, so the boards show a real spread of levels instead of everyone stacked on the same rung."
   }
 ]
