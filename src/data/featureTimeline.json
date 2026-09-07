@@ -7028,12 +7028,25 @@
     "id": "a-stroke-filter-under-the-radical-grid-live-narrowed-the-sam",
     "name": "A stroke filter under the radical grid, live-narrowed the same way",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-07",
+    "summary": "The radicals page can now be narrowed by stroke count. Once you have picked a part or two, the counts your answers actually take appear under the grid, each saying how many it would leave - \u4eba and \u5341 give 21 kanji over eight counts, and 11 strokes leaves seven of them. The two filters narrow each other, so a part with nothing left at the chosen count is dimmed before you click it.",
+    "dateIsEstimate": false,
+    "release": 562,
+    "version": "1.66.0",
+    "releasedAt": "2026-09-07T09:56:42Z"
+  },
+  {
+    "id": "the-stroke-count-on-a-kanji-page-is-not-a-link-to-that-strok",
+    "name": "The stroke count on a kanji page is not a link to that stroke page",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-07",
-    "version": "1.66.0",
-    "release": 562,
-    "releasedAt": "2026-09-07T09:56:42Z",
-    "summary": "The radicals page can now be narrowed by stroke count. Once you have picked a part or two, the counts your answers actually take appear under the grid, each saying how many it would leave - \u4eba and \u5341 give 21 kanji over eight counts, and 11 strokes leaves seven of them. The two filters narrow each other, so a part with nothing left at the chosen count is dimmed before you click it."
+    "version": "1.67.0",
+    "release": 563,
+    "releasedAt": "2026-09-07T10:16:32Z",
+    "summary": "The stroke panel on a kanji page now links to the rest of its stroke count. \u7ac3 takes 17 strokes, and More 17-stroke opens the page of every other kanji written in 17 - with no parts pre-picked, because the interesting thing is the rest of them."
   }
 ]

@@ -124,4 +124,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Minarai Michibiki", ja: "見習い導き", reading: "みならいみちびき", gloss: "shown how, whatever you looked up" },
   { romaji: "Mushimegane", ja: "虫眼鏡", reading: "むしめがね", gloss: "held over the page until the one you want is left" },
   { romaji: "Mekiki", ja: "目利き", reading: "めきき", gloss: "an eye for which ones you actually wanted" },
+  { romaji: "Monomi", ja: "物見", reading: "ものみ", gloss: "a look out from where you are standing" },
 ];
