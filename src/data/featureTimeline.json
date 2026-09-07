@@ -6989,12 +6989,25 @@
     "id": "item-chips-print-un-levels-to-a-member-on-the-ug-ladder",
     "name": "Item chips print UN levels to a member on the UG ladder",
     "area": "study",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-07",
+    "summary": "The level on a chip now names the ladder you are actually climbing. A member on the school-year ordering was shown UN numbers everywhere - a standing from a curriculum they are not being taught against, under a prefix saying they were. Kanji pages now take the level from your own stream and label it with your own prefix; signed out, it is the exam ladder as before.",
+    "dateIsEstimate": false,
+    "release": 559,
+    "version": "1.63.0",
+    "releasedAt": "2026-09-07T09:33:21Z"
+  },
+  {
+    "id": "stroke-order-stops-at-the-kanji-we-teach-so-most-characters-",
+    "name": "Stroke order stops at the kanji we teach, so most characters have none",
+    "area": "study",
     "kind": "bug",
     "status": "shipped",
     "date": "2026-09-07",
-    "version": "1.63.0",
-    "release": 559,
-    "releasedAt": "2026-09-07T09:33:21Z",
-    "summary": "The level on a chip now names the ladder you are actually climbing. A member on the school-year ordering was shown UN numbers everywhere - a standing from a curriculum they are not being taught against, under a prefix saying they were. Kanji pages now take the level from your own stream and label it with your own prefix; signed out, it is the exam ladder as before."
+    "version": "1.64.0",
+    "release": 560,
+    "releasedAt": "2026-09-07T09:41:03Z",
+    "summary": "Stroke order now covers 6,415 characters instead of 2,919. Any character the dictionary can describe and KanjiVG draws is animated on its page, so a rare kanji met inside a word - \u7ac3 in \u4e03\u7ac3, say - can be watched being written like any other. Nothing changed about which characters the curriculum teaches; this is what a page can show you when you look one up."
   }
 ]
