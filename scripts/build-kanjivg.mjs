@@ -31,6 +31,7 @@ const KANJIVG_COMMIT = "61e39cfc29724132a6f8823b166296932985a0ff";
 const TARBALL = `https://codeload.github.com/KanjiVG/kanjivg/tar.gz/${KANJIVG_COMMIT}`;
 const OUT_DIR = path.join(process.cwd(), "src", "data", "stroke-order");
 const GRADES_DIR = path.join(process.cwd(), "src", "data", "school-grades");
+const KANJIDIC_DIR = path.join(process.cwd(), "src", "data", "kanjidic");
 const WK_DIR = path.join(process.cwd(), "src", "data", "wk-catalog-levels");
 
 const ATTRIBUTION = {
@@ -40,6 +41,16 @@ const ATTRIBUTION = {
   licenceUrl: "https://creativecommons.org/licenses/by-sa/3.0/",
   commit: KANJIVG_COMMIT,
 };
+
+/**
+ * How many characters share one file outside the school grades.
+ *
+ * The grade files are the school's own buckets and stay as they are. What is
+ * left is a few thousand characters with no grade to sort them into, and one
+ * file of those is several megabytes that a lookup would have to open to find
+ * a single character. Split at a size in the same range as the grade files.
+ */
+const OTHER_BUCKET_SIZE = 900;
 
 /** The characters worth shipping: everything our own catalogues teach. */
 async function wantedKanji() {
@@ -85,6 +96,28 @@ async function wanikaniExtras(alreadyCovered) {
   return extras;
 }
 
+/**
+ * Everything else KanjiVG draws that our dictionary can describe.
+ *
+ * The build shipped only what our own catalogues teach - 2,919 characters -
+ * and every other page said "No stroke order for this character". Jisho draws
+ * 竃 from this same source at this same commit; we simply were not asking for
+ * it. John, comparing the two: "we are using the same sources. i think that's
+ * a miss for us."
+ *
+ * Bounded by KANJIDIC rather than by the directory: KanjiVG also draws kana
+ * and a scattering of characters no dictionary here holds, and a page that
+ * cannot say what a character means has no business animating it.
+ */
+async function dictionaryCharacters() {
+  const index = JSON.parse(await fs.readFile(path.join(KANJIDIC_DIR, "index.json"), "utf8"));
+  const characters = new Set();
+  for (const file of index.files) {
+    for (const character of file.characters) characters.add(character);
+  }
+  return characters;
+}
+
 function codepointName(kanji) {
   return kanji.codePointAt(0).toString(16).padStart(5, "0");
 }
@@ -128,7 +161,10 @@ async function main() {
   let missing = 0;
   const index = [];
 
-  for (const [grade, characters] of [...byGrade.entries()].sort((a, b) => a[0] - b[0])) {
+  /* One file, and what the index has to say about it. The `characters` string
+     is what makes a lookup open one file rather than walk the buckets, the
+     same shape the KANJIDIC index uses for the same reason. */
+  async function writeBucket(outFile, grade, characters) {
     const entries = [];
 
     for (const kanji of characters) {
@@ -152,18 +188,49 @@ async function main() {
       written += 1;
     }
 
-    const outFile = `grade-${String(grade).padStart(2, "0")}.json`;
+    if (entries.length === 0) return;
+
     await fs.writeFile(
       path.join(OUT_DIR, outFile),
       `${JSON.stringify({ grade, viewBox: "0 0 109 109", attribution: ATTRIBUTION, kanji: entries }, null, 2)}\n`,
     );
-    index.push({ grade, file: outFile, count: entries.length });
-    console.log(`  grade ${grade}: ${entries.length} characters -> ${outFile}`);
+    index.push({
+      grade,
+      file: outFile,
+      count: entries.length,
+      characters: entries.map((entry) => entry.kanji).join(""),
+    });
+    console.log(`  ${outFile}: ${entries.length} characters`);
+  }
+
+  for (const [grade, characters] of [...byGrade.entries()].sort((a, b) => a[0] - b[0])) {
+    await writeBucket(`grade-${String(grade).padStart(2, "0")}.json`, grade, characters);
+  }
+
+  /*
+   * Everything else the dictionary describes, in buckets of its own.
+   *
+   * Sorted by codepoint so a rebuild puts the same character in the same file
+   * and the diff is readable. They carry no grade - that is what they have in
+   * common - so the index answers for them by character rather than by number.
+   */
+  const covered = new Set([...byGrade.values()].flat());
+  const rest = [...(await dictionaryCharacters())]
+    .filter((character) => !covered.has(character))
+    .sort((one, other) => one.codePointAt(0) - other.codePointAt(0));
+
+  for (let at = 0; at < rest.length; at += OTHER_BUCKET_SIZE) {
+    const bucket = Math.floor(at / OTHER_BUCKET_SIZE) + 1;
+    await writeBucket(
+      `other-${String(bucket).padStart(2, "0")}.json`,
+      null,
+      rest.slice(at, at + OTHER_BUCKET_SIZE),
+    );
   }
 
   await fs.writeFile(
     path.join(OUT_DIR, "index.json"),
-    `${JSON.stringify({ viewBox: "0 0 109 109", attribution: ATTRIBUTION, grades: index }, null, 2)}\n`,
+    `${JSON.stringify({ viewBox: "0 0 109 109", attribution: ATTRIBUTION, files: index }, null, 2)}\n`,
   );
 
   await fs.rm(tmp, { recursive: true, force: true });

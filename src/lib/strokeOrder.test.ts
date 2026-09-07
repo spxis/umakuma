@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { STROKE_ORDER_GRADES, getStrokeOrder, strokeOrderAttribution } from "./strokeOrder";
+import { STROKE_ORDER_GRADES, getStrokeOrder, strokeOrderAttribution, strokeOrderSummary } from "./strokeOrder";
 
 /*
  * The generated data is what the animation draws, so these pin the shape the
@@ -74,5 +74,23 @@ describe("coverage", () => {
     for (const [kanji, grade] of [["一", 1], ["引", 2], ["曲", 3]] as const) {
       expect(getStrokeOrder(kanji, grade)?.strokes.length).toBeGreaterThan(0);
     }
+  });
+
+  /*
+   * The set was the 2,919 characters our own catalogues teach, so every other
+   * page said "No stroke order for this character" while Jisho drew the same
+   * character from the same KanjiVG commit. John, comparing the two pages for
+   * 竃: "we are using the same sources. i think that's a miss for us."
+   */
+  it("draws a character no list of ours teaches", () => {
+    /* 竃 and 竈 are the two stoves - 17 strokes and 21, each the other's
+       variant, and neither is joyo, jinmeiyo, JLPT or WaniKani. */
+    expect(getStrokeOrder("竃")?.strokeCount).toBe(17);
+    expect(getStrokeOrder("竈")?.strokeCount).toBe(21);
+  });
+
+  it("reaches well past what the curriculum teaches", () => {
+    /* 2,919 before, when the build asked only what our catalogues teach. */
+    expect(strokeOrderSummary()?.characterCount).toBeGreaterThan(6000);
   });
 });

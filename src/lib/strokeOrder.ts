@@ -22,37 +22,64 @@ export type StrokeOrderPayload = StrokeOrderEntry & {
   attribution: StrokeOrderAttribution;
 };
 
-type GradeFile = {
-  grade: number;
+type StrokeFile = {
+  /** The school year these belong to, or null for the characters no year covers. */
+  grade: number | null;
   viewBox: string;
   attribution: StrokeOrderAttribution;
   kanji: StrokeOrderEntry[];
 };
 
+type StrokeIndexFile = {
+  grade: number | null;
+  file: string;
+  count: number;
+  /** Every character in that file, so a lookup opens one file and no more. */
+  characters: string;
+};
+
+type StrokeIndex = {
+  viewBox: string;
+  attribution: StrokeOrderAttribution;
+  files: StrokeIndexFile[];
+};
+
 const DATA_DIR = path.join(process.cwd(), "src", "data", "stroke-order");
 
 /**
- * One grade's strokes, kept once loaded.
+ * One file's strokes, kept once loaded.
  *
- * The whole set is about 3MB and the secondary-school file alone is 1.3MB, far
- * too much to hand a page. A character's grade is already known from the school
- * catalogue, so only the grade that was asked for is ever read, and a viewer
- * looking at first-grade kanji never pays for the rest.
+ * The whole set is 7.4MB and the secondary-school file alone is 1.3MB, far too
+ * much to hand a page. The index says which file holds a character, so a
+ * lookup reads one of eighteen and a viewer looking at first-grade kanji never
+ * pays for the rest.
  */
-const cache = new Map<number, Map<string, StrokeOrderEntry>>();
+const cache = new Map<string, Map<string, StrokeOrderEntry>>();
+let cachedIndex: StrokeIndex | null = null;
 let cachedViewBox: string | null = null;
 let cachedAttribution: StrokeOrderAttribution | null = null;
 
-function loadGrade(grade: number): Map<string, StrokeOrderEntry> | null {
-  const cached = cache.get(grade);
-  if (cached) {
-    return cached;
+function loadIndex(): StrokeIndex | null {
+  if (cachedIndex) return cachedIndex;
+
+  try {
+    cachedIndex = JSON.parse(fs.readFileSync(path.join(DATA_DIR, "index.json"), "utf8")) as StrokeIndex;
+  } catch {
+    return null;
   }
 
-  const file = path.join(DATA_DIR, `grade-${String(grade).padStart(2, "0")}.json`);
-  let parsed: GradeFile;
+  cachedViewBox ??= cachedIndex.viewBox;
+  cachedAttribution ??= cachedIndex.attribution;
+  return cachedIndex;
+}
+
+function loadFile(file: string): Map<string, StrokeOrderEntry> | null {
+  const cached = cache.get(file);
+  if (cached) return cached;
+
+  let parsed: StrokeFile;
   try {
-    parsed = JSON.parse(fs.readFileSync(file, "utf8")) as GradeFile;
+    parsed = JSON.parse(fs.readFileSync(path.join(DATA_DIR, file), "utf8")) as StrokeFile;
   } catch {
     return null;
   }
@@ -60,31 +87,37 @@ function loadGrade(grade: number): Map<string, StrokeOrderEntry> | null {
   cachedViewBox = parsed.viewBox;
   cachedAttribution = parsed.attribution;
   const byKanji = new Map(parsed.kanji.map((entry) => [entry.kanji, entry]));
-  cache.set(grade, byKanji);
+  cache.set(file, byKanji);
   return byKanji;
 }
 
-/**
- * Every stroke file, in lookup order.
- *
- * Bucket 0 holds the characters WaniKani teaches that no school grade covers -
- * 嘘, 鰐, 壺 and the like. It is searched first because it is the smallest file
- * by far, so a character that is in it costs almost nothing to find.
- */
+/** The school years that have a file of their own. Bucket 0 is the WaniKani
+ * extras no year covers; everything else with no year is in `other-NN`. */
 export const STROKE_ORDER_GRADES = [0, 1, 2, 3, 4, 5, 6, 8, 9] as const;
 
 /**
- * The strokes for one character, searched grade by grade.
+ * The strokes for one character, from the one file that holds it.
  *
- * Callers that know the grade should pass it: without one this walks the files
- * in school order, which finds a first-grade character immediately and only
- * reaches the large secondary file for characters that are actually in it.
+ * The index is asked first and answers for all 6,415, so the grade argument is
+ * a hint rather than a route: it is kept because callers know a character's
+ * year and it costs nothing, and because it is the fallback if the index is
+ * ever missing.
+ *
+ * The set used to be the 2,919 characters our own catalogues teach, so every
+ * other page said "No stroke order for this character" - while Jisho drew the
+ * same character from this same KanjiVG commit. It is now every character
+ * KANJIDIC describes that KanjiVG draws.
  */
 export function getStrokeOrder(kanji: string, grade?: number): StrokeOrderPayload | null {
-  const order = typeof grade === "number" ? [grade, ...STROKE_ORDER_GRADES] : STROKE_ORDER_GRADES;
+  const holder = loadIndex()?.files.find((file) => file.characters.includes(kanji));
+  const files = holder
+    ? [holder.file]
+    : (typeof grade === "number" ? [grade, ...STROKE_ORDER_GRADES] : STROKE_ORDER_GRADES).map(
+        (candidate) => `grade-${String(candidate).padStart(2, "0")}.json`,
+      );
 
-  for (const candidate of order) {
-    const entry = loadGrade(candidate)?.get(kanji);
+  for (const file of files) {
+    const entry = loadFile(file)?.get(kanji);
     if (entry && cachedViewBox && cachedAttribution) {
       return { ...entry, viewBox: cachedViewBox, attribution: cachedAttribution };
     }
@@ -93,28 +126,19 @@ export function getStrokeOrder(kanji: string, grade?: number): StrokeOrderPayloa
   return null;
 }
 
-type StrokeIndex = {
-  attribution: StrokeOrderAttribution;
-  grades: Array<{ grade: number; count: number }>;
-};
-
 /** How many characters have strokes, and which KanjiVG commit drew them. */
 export function strokeOrderSummary(): { characterCount: number; commit: string } | null {
-  try {
-    const index = JSON.parse(fs.readFileSync(path.join(DATA_DIR, "index.json"), "utf8")) as StrokeIndex;
-    return {
-      characterCount: index.grades.reduce((total, grade) => total + grade.count, 0),
-      commit: index.attribution.commit,
-    };
-  } catch {
-    return null;
-  }
+  const index = loadIndex();
+  if (!index) return null;
+
+  return {
+    characterCount: index.files.reduce((total, file) => total + file.count, 0),
+    commit: index.attribution.commit,
+  };
 }
 
 /** The credit KanjiVG's licence requires, for the surfaces that show strokes. */
 export function strokeOrderAttribution(): StrokeOrderAttribution | null {
-  if (!cachedAttribution) {
-    loadGrade(1);
-  }
+  if (!cachedAttribution) loadIndex();
   return cachedAttribution;
 }
