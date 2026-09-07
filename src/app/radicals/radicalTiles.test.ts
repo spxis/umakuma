@@ -5,7 +5,10 @@ import { describe, expect, it } from "vitest";
 import { RADICAL_TILE_CLASS } from "@/app/shared/radicalTileClass";
 
 describe("the radical picker is blue", () => {
-  const view = readFileSync("src/app/radicals/RadicalBrowserView.tsx", "utf8");
+  /* The tiles moved into the shared grid when the stroke pages grew a parts
+     filter of their own: three surfaces draw them now, so the colour rules
+     are pinned where the tiles actually are. */
+  const view = readFileSync("src/app/shared/RadicalPartsGrid.tsx", "utf8");
 
   /* John: "these radicals in our radical builder should be a very light blue.
      and blue when selected... since radicals are blue in our site. now its
@@ -60,5 +63,14 @@ describe("the radical picker is blue", () => {
     expect(grid).toContain("RADICAL_TILE_CLASS.chosen");
     expect(grid).toContain("RADICAL_TILE_CLASS.rest");
     expect(view).toContain("RADICAL_TILE_CLASS.rest");
+  });
+
+  /* The browser page draws the same tiles as the stroke pages' parts filter,
+     through the one grid, so a rule proved here holds on both. */
+  it("is what the radicals page itself draws", () => {
+    const browser = readFileSync("src/app/radicals/RadicalBrowserView.tsx", "utf8");
+    expect(browser).toContain("RadicalPartsGrid");
+    const strokes = readFileSync("src/app/strokes/StrokeBrowserView.tsx", "utf8");
+    expect(strokes).toContain("RadicalPartsGrid");
   });
 });

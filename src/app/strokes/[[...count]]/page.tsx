@@ -8,7 +8,10 @@ import { PAGE_SHELL_PADDING, PAGE_WIDTH } from "@/app/shared/pageShell";
 import { resolveViewerMenuInfo } from "@/app/users/[nickname]/userPageAuth";
 import { DASHBOARD_PAGE_HEADERS } from "@/app/users/[nickname]/dashboardPageHeaders";
 import { authOptions } from "@/lib/auth";
-import { readCommonOnly, readPage, strokesFromPath, strokesIndexHref } from "@/lib/strokeAddress";
+import { readParts } from "@/lib/radicalBrowser";
+import { radicalDisplayNames } from "@/lib/radicalNames";
+import { narrowByRadicals } from "@/lib/radicalSearchServer";
+import { STROKE_PARAMS, readCommonOnly, readPage, strokesFromPath, strokesIndexHref } from "@/lib/strokeAddress";
 import { isStrokeCount, kanjiByStrokeCount, strokeCounts, strokePage } from "@/lib/strokeBrowser";
 
 import StrokeBrowserView from "../StrokeBrowserView";
@@ -56,8 +59,22 @@ export default async function StrokesPage({ params, searchParams }: Props) {
   const query = await searchParams;
   const commonOnly = readCommonOnly(query.common);
   const all = kanjiByStrokeCount(strokes);
-  const shown = kanjiByStrokeCount(strokes, { commonOnly });
+  const atCount = kanjiByStrokeCount(strokes, { commonOnly });
+
+  /*
+   * The second filter, over what the first one left.
+   *
+   * Everything the grid offers is measured against these kanji rather than
+   * against the dictionary, so a part that would empty the page is drawn as a
+   * dead end before it is clicked. Nine hundred kanji at one stroke count is
+   * a page to scroll; a part cuts it to something a reader can look at.
+   */
+  const parts = readParts(query[STROKE_PARAMS.parts]);
+  const narrowed = narrowByRadicals(atCount.map((entry) => entry.kanji), parts);
+  const keptSet = new Set(narrowed.kept);
+  const shown = parts.length > 0 ? atCount.filter((entry) => keptSet.has(entry.kanji)) : atCount;
   const { rows, pageCount } = strokePage(shown, readPage(query.page));
+  const names = await radicalDisplayNames(narrowed.groups.flatMap((group) => group.radicals));
 
   const session = await getServerSession(authOptions);
   const viewerMenuInfo = await resolveViewerMenuInfo({
@@ -83,6 +100,10 @@ export default async function StrokesPage({ params, searchParams }: Props) {
         commonOnly={commonOnly}
         shownTotal={shown.length}
         total={all.length}
+        groups={narrowed.groups}
+        chosenParts={narrowed.chosen}
+        usableParts={[...narrowed.usable]}
+        partNames={Object.fromEntries(names)}
         accountId={viewerMenuInfo?.accountId ?? null}
       />
     </div>

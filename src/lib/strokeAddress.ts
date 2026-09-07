@@ -4,18 +4,27 @@
  * A stroke count is a place - `/strokes/12` - so it can be linked, reloaded
  * and walked with the back button, the way the maps are. What is on the page
  * rather than what the page is stays in the query: which page of a long count
- * you are reading, and whether the uncommon characters are shown.
+ * you are reading, whether the uncommon characters are shown, and which parts
+ * it has been narrowed to.
+ *
+ * The parts are in the address for the same reason the count is in the path:
+ * "the 17-stroke kanji with a mouth in them" is an answer somebody wants to
+ * send to somebody else. Spelled the way `/radicals` spells it - one
+ * character each, no separator - so the two pages read the same query.
  */
 export const STROKES_HREF = "/strokes";
-export const STROKE_PARAMS = { common: "common", page: "page" } as const;
+export const STROKE_PARAMS = { common: "common", page: "page", parts: "parts" } as const;
 
 export function strokesHref(
   strokes: number | null,
-  options: { commonOnly?: boolean; page?: number } = {},
+  options: { commonOnly?: boolean; page?: number; parts?: readonly string[] } = {},
 ): string {
   if (strokes === null) return STROKES_HREF;
   const params = new URLSearchParams();
   if (options.commonOnly) params.set(STROKE_PARAMS.common, "1");
+  /* Never carried forward: narrowing changes what is on page one, so page
+     four of the old set is a page of nothing. */
+  if (options.parts && options.parts.length > 0) params.set(STROKE_PARAMS.parts, options.parts.join(""));
   if (options.page && options.page > 1) params.set(STROKE_PARAMS.page, String(options.page));
   const search = params.toString();
   return `${STROKES_HREF}/${strokes}${search ? `?${search}` : ""}`;

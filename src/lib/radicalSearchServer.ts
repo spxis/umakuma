@@ -112,6 +112,48 @@ export async function runRadicalSearch(requested: readonly string[]): Promise<Ra
   };
 }
 
+/**
+ * A second filter over a page that already has one.
+ *
+ * The stroke pages hold up to nine hundred kanji at one count, which is a
+ * page to scroll rather than a page to read. John, looking at 17 strokes:
+ * "we have a massive amount of results still... this will be great if
+ * browsing kanji and you wanted to find all the 17 stroke kanji with a MOUTH
+ * radical."
+ *
+ * The pool comes in from whatever the page already narrowed to - the stroke
+ * count, common-only, both - and everything here is computed against that,
+ * which is the whole promise: **nothing offered can return nothing.** A
+ * radical in none of those forty-nine kanji is a dead end whether or not it
+ * is a dead end in the dictionary at large.
+ *
+ * Chosen radicals stay usable however far the pool has narrowed. Taking one
+ * back must always be possible - the same rule `usableRadicals` keeps.
+ */
+export function narrowByRadicals(
+  pool: readonly string[],
+  requested: readonly string[],
+): { chosen: string[]; kept: string[]; usable: Set<string>; groups: RadicalGroup[] } {
+  const file = load();
+  const chosen = orderChosen(file.radicals, requested);
+  const matched = chosen.length > 0 ? new Set(kanjiForRadicals(file.radicals, chosen)) : null;
+  const kept = matched ? pool.filter((kanji) => matched.has(kanji)) : [...pool];
+
+  const remaining = new Set(kept);
+  const usable = new Set(chosen);
+  for (const entry of file.radicals) {
+    if (usable.has(entry.radical)) continue;
+    for (const kanji of entry.kanji) {
+      if (remaining.has(kanji)) {
+        usable.add(entry.radical);
+        break;
+      }
+    }
+  }
+
+  return { chosen, kept, usable, groups: radicalGroups(file.radicals) };
+}
+
 /** What the sources page reports about the radical index. */
 export function radicalIndexSummary(): { radicalCount: number; kanjiCount: number } {
   const file = load();

@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 
+import { readParts } from "./radicalBrowser";
+
 import { readCommonOnly, readPage, strokesFromPath, strokesHref, strokesIndexHref } from "./strokeAddress";
 import { kanjiByStrokeCount, strokeCounts } from "./strokeBrowser";
 
@@ -56,5 +58,31 @@ describe("where the index opens", () => {
   /* Nothing to open on is the index itself, rather than a broken address. */
   it("stays put when there are no counts at all", () => {
     expect(strokesIndexHref([])).toBe("/strokes");
+  });
+});
+
+/*
+ * "the 17-stroke kanji with a mouth in them" is an answer somebody wants to
+ * send to somebody else, so the parts are in the address and not in a hook.
+ */
+describe("the parts a stroke page has been narrowed to", () => {
+  it("carries them the way /radicals spells them", () => {
+    expect(strokesHref(17, { parts: ["口"] })).toBe("/strokes/17?parts=%E5%8F%A3");
+    expect(strokesHref(17, { parts: ["口", "土"] })).toBe("/strokes/17?parts=%E5%8F%A3%E5%9C%9F");
+  });
+
+  it("leaves them out when nothing is picked", () => {
+    expect(strokesHref(17, { parts: [] })).toBe("/strokes/17");
+    expect(strokesHref(17)).toBe("/strokes/17");
+  });
+
+  it("keeps them beside the other two", () => {
+    expect(strokesHref(17, { commonOnly: true, parts: ["口"], page: 2 })).toBe(
+      "/strokes/17?common=1&parts=%E5%8F%A3&page=2",
+    );
+  });
+
+  it("reads back what it wrote, through the radicals page's own reader", () => {
+    expect(readParts("口土")).toEqual(["口", "土"]);
   });
 });

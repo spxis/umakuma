@@ -16,8 +16,5 @@ export const RADICAL_BROWSER_COPY = {
   matches: (shown: number, total: number) =>
     shown === total ? `${total} kanji` : `${shown} of ${total} kanji`,
   noMatches: "No kanji in the dictionary have all of those parts.",
-  /* A radical that cannot narrow what is left is dimmed rather than removed. */
-  deadEnd: "No remaining kanji have this part",
-  strokeTitle: (strokes: number) => (strokes === 1 ? "1 stroke" : `${strokes} strokes`),
 } as const;
 

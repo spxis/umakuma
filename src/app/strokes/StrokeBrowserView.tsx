@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useMemo } from "react";
 
 import { ListRow } from "@/app/shared/ListSubjectRows";
+import RadicalPartsGrid from "@/app/shared/RadicalPartsGrid";
+import { RADICAL_PARTS_COPY } from "@/app/shared/radicalPartsCopy";
 import SubjectFilerCell from "@/app/shared/SubjectFilerCell";
 import SubjectFilerToggle from "@/app/shared/SubjectFilerToggle";
 import SubjectViewModeToggle from "@/app/shared/SubjectViewModeToggle";
@@ -17,6 +19,7 @@ import { useFilerOpen, useSubjectFiler } from "@/app/shared/useSubjectFiler";
 import { usePersistedEnum } from "@/lib/usePersistedEnum";
 import { LIST_ITEM_KINDS, SUBJECT_TYPES } from "@/lib/domainConstants";
 import { strokesHref } from "@/lib/strokeAddress";
+import type { RadicalGroup } from "@/lib/radicalSearch";
 import type { StrokeCount, StrokeEntry } from "@/lib/strokeBrowser";
 import type { ListSubjectRow } from "@/lib/studySubjectItems";
 
@@ -70,6 +73,10 @@ export default function StrokeBrowserView({
   commonOnly,
   shownTotal,
   total,
+  groups,
+  chosenParts,
+  usableParts,
+  partNames,
   accountId,
 }: {
   counts: StrokeCount[];
@@ -83,6 +90,12 @@ export default function StrokeBrowserView({
   shownTotal: number;
   /** Every kanji at this count, before the common-only filter. */
   total: number;
+  /** Every radical there is, for the second filter under the counts. */
+  groups: RadicalGroup[];
+  chosenParts: string[];
+  /** The parts still present in what is on the page. The rest are dead ends. */
+  usableParts: string[];
+  partNames: Record<string, string>;
   accountId: string | null;
 }) {
   const [viewMode, setViewMode] = usePersistedEnum<SubjectViewMode>(
@@ -94,6 +107,7 @@ export default function StrokeBrowserView({
   const rows = useMemo(() => entries.map(toRow), [entries]);
   const filing = Boolean(accountId) && filerOpen;
   const filer = useSubjectFiler(accountId, rows, filing);
+  const usableSet = useMemo(() => new Set(usableParts), [usableParts]);
 
   return (
     <div className="space-y-4">
@@ -129,6 +143,44 @@ export default function StrokeBrowserView({
             );
           })}
         </ul>
+
+        {/*
+          * The second filter, under the first one and inside the same card.
+          *
+          * Nine hundred kanji at one stroke count is a page to scroll rather
+          * than a page to read, and the part somebody has in mind - a mouth,
+          * a hand - is the way they would narrow it by hand. Everything
+          * offered is measured against what is on the page, so nothing here
+          * leads to an empty one.
+          *
+          * The counts above are deliberately untouched by it: they say how
+          * many kanji each stroke count holds, which is a fact about the
+          * ladder rather than about this page.
+          */}
+        <div className="mt-4 border-t border-line/60 pt-3">
+          <div className="flex flex-wrap items-center gap-2">
+            <h3 className="text-[11px] font-black uppercase tracking-[0.12em] text-foreground/60">
+              {RADICAL_PARTS_COPY.partsHeading}
+            </h3>
+            <p className="text-xs text-foreground/60">{RADICAL_PARTS_COPY.partsBlurb}</p>
+            {chosenParts.length > 0 ? (
+              <Link
+                href={strokesHref(strokes, { commonOnly })}
+                className="ml-auto inline-flex h-7 items-center rounded-full border border-line bg-surface px-2.5 text-[10px] font-black uppercase tracking-[0.08em] text-foreground/60 transition hover:bg-surface-muted"
+              >
+                {RADICAL_PARTS_COPY.clear}
+              </Link>
+            ) : null}
+          </div>
+          <RadicalPartsGrid
+            className="mt-2 max-h-[32vh] overflow-y-auto"
+            groups={groups}
+            chosen={chosenParts}
+            usable={usableSet}
+            names={partNames}
+            hrefFor={(parts) => strokesHref(strokes, { commonOnly, parts })}
+          />
+        </div>
       </section>
 
       <section className="rounded-2xl border border-line bg-surface p-3 sm:p-4">
@@ -139,12 +191,14 @@ export default function StrokeBrowserView({
               : STROKE_BROWSER_COPY.countLabel(strokes)}
           </span>
           <span className="text-[11px] font-semibold text-foreground/60">
-            {commonOnly
-              ? STROKE_BROWSER_COPY.showingCommon(shownTotal, total)
-              : STROKE_BROWSER_COPY.showingAll(total)}
+            {chosenParts.length > 0
+              ? STROKE_BROWSER_COPY.showingParts(shownTotal, total)
+              : commonOnly
+                ? STROKE_BROWSER_COPY.showingCommon(shownTotal, total)
+                : STROKE_BROWSER_COPY.showingAll(total)}
           </span>
           <Link
-            href={strokesHref(strokes, { commonOnly: !commonOnly })}
+            href={strokesHref(strokes, { commonOnly: !commonOnly, parts: chosenParts })}
             aria-pressed={commonOnly}
             title={STROKE_BROWSER_COPY.commonHint}
             className={`inline-flex h-7 items-center rounded-full border px-2.5 text-[10px] font-black uppercase tracking-[0.08em] transition ${
@@ -233,7 +287,7 @@ export default function StrokeBrowserView({
           pageCount={pageCount}
           slot="bottom"
           placement="bottom"
-          hrefFor={(next) => strokesHref(strokes, { commonOnly, page: next })}
+          hrefFor={(next) => strokesHref(strokes, { commonOnly, parts: chosenParts, page: next })}
         />
       </section>
     </div>

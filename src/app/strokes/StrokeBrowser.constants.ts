@@ -13,5 +13,9 @@ export const STROKE_BROWSER_COPY = {
   commonHint: "The ones a newspaper uses.",
   showingAll: (count: number) => `${count} kanji`,
   showingCommon: (count: number, total: number) => `${count} common of ${total}`,
+  /* With a part picked, the line has to follow the filter: a header reading
+     "49 kanji" over a page of seven is the count saying one thing and the
+     page another. */
+  showingParts: (count: number, total: number) => `${count} of ${total} kanji`,
   empty: "No kanji are written in that many strokes.",
 } as const;

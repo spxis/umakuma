@@ -1,25 +1,22 @@
 "use client";
 
 import Link from "next/link";
-import { Fragment, useMemo } from "react";
+import { useMemo } from "react";
 
 import { ListRow } from "@/app/shared/ListSubjectRows";
 import SubjectCards from "@/app/shared/SubjectCards";
 import SubjectFilerCell from "@/app/shared/SubjectFilerCell";
 import SubjectFilerToggle from "@/app/shared/SubjectFilerToggle";
+import RadicalPartsGrid from "@/app/shared/RadicalPartsGrid";
 import SubjectViewModeToggle from "@/app/shared/SubjectViewModeToggle";
-import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
 import { useFilerOpen, useSubjectFiler } from "@/app/shared/useSubjectFiler";
 import { SUBJECT_VIEW_MODES, SUBJECT_VIEW_MODE_VALUES, type SubjectListRow, type SubjectViewMode } from "@/app/shared/subjectListView";
 import { usePersistedEnum } from "@/lib/usePersistedEnum";
 import type { FilerHit } from "@/lib/subjectFiler";
 import { LIST_ITEM_KINDS, SUBJECT_TYPES, srsBucketFromStage } from "@/lib/domainConstants";
-import { radicalsHref, togglePart } from "@/lib/radicalBrowser";
-import { RADICAL_GRID_CLASSES, RADICAL_GRID_DEFAULT } from "@/lib/radicalGridSize";
+import { radicalsHref } from "@/lib/radicalBrowser";
 import type { RadicalGroup } from "@/lib/radicalSearch";
 import type { RadicalMatch } from "@/lib/radicalSearchServer";
-
-import { RADICAL_TILE_CLASS } from "@/app/shared/radicalTileClass";
 
 import { RADICAL_BROWSER_COPY } from "./RadicalBrowser.constants";
 
@@ -87,9 +84,10 @@ export default function RadicalBrowserView({
   const rows = useMemo(() => matches.map(toRow), [matches]);
   const filing = Boolean(accountId) && filerOpen;
   const filer = useSubjectFiler(accountId, rows, filing);
+  /* Everything pickable, which on this page means "can still narrow" - plus
+     every radical when nothing is picked yet, since nothing is a dead end
+     until something has been chosen. */
   const usableSet = useMemo(() => new Set(usable), [usable]);
-  /* The same cell and marker sizes the picker draws, so the two match. */
-  const { cell, marker } = RADICAL_GRID_CLASSES[RADICAL_GRID_DEFAULT];
 
   return (
     <div className="space-y-4">
@@ -125,53 +123,13 @@ export default function RadicalBrowserView({
           * must not push the answers off the page.
           */}
         <div className="mt-3 max-h-[42vh] overflow-y-auto">
-          <div className="flex flex-wrap items-center gap-1">
-            {groups.map((group) => (
-              <Fragment key={group.strokes}>
-                <span
-                  title={RADICAL_BROWSER_COPY.strokeTitle(group.strokes)}
-                  className={`inline-flex items-center justify-center rounded bg-foreground/70 px-1 font-black leading-none text-surface ${marker}`}
-                >
-                  {group.strokes}
-                </span>
-                {group.radicals.map((radical) => {
-                  const on = chosen.includes(radical);
-                  const dead = chosen.length > 0 && !on && !usableSet.has(radical);
-                  const box = `inline-flex items-center justify-center rounded border leading-none transition ${cell} ${JP_TEXT_CLASS}`;
-                  const glyph = (
-                    <span lang="ja" translate="no">
-                      {radical}
-                    </span>
-                  );
-
-                  /*
-                   * A dead end is not a destination, so it is not a link. The
-                   * dimming matches the picker: faint enough to read as
-                   * unavailable, dark enough to still be a character.
-                   */
-                  return dead ? (
-                    <span
-                      key={radical}
-                      title={RADICAL_BROWSER_COPY.deadEnd}
-                      className={`${box} ${RADICAL_TILE_CLASS.deadEnd}`}
-                    >
-                      {glyph}
-                    </span>
-                  ) : (
-                    <Link
-                      key={radical}
-                      href={radicalsHref({ parts: togglePart(chosen, radical) })}
-                      aria-pressed={on}
-                      title={names[radical] ?? RADICAL_BROWSER_COPY.strokeTitle(group.strokes)}
-                      className={`${box} ${on ? RADICAL_TILE_CLASS.chosen : RADICAL_TILE_CLASS.rest}`}
-                    >
-                      {glyph}
-                    </Link>
-                  );
-                })}
-              </Fragment>
-            ))}
-          </div>
+          <RadicalPartsGrid
+            groups={groups}
+            chosen={chosen}
+            usable={usableSet}
+            names={names}
+            hrefFor={(parts) => radicalsHref({ parts })}
+          />
         </div>
       </section>
 
