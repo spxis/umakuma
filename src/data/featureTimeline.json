@@ -6898,12 +6898,25 @@
     "id": "ug-board-is-flat-every-member-reads-ug1-and-the-cohort-engin",
     "name": "Simulated members climb their own ladder",
     "area": "admin",
+    "status": "shipped",
     "kind": "bug",
+    "date": "2026-09-06",
+    "summary": "The simulated members now follow their own path and sit the tests that gate it, so the boards show a real spread of levels instead of everyone stacked on the same rung.",
+    "dateIsEstimate": false,
+    "release": 552,
+    "version": "1.58.0",
+    "releasedAt": "2026-09-07T01:11:09Z"
+  },
+  {
+    "id": "run-cohort-play-on-a-schedule-without-half-writing-a-member",
+    "name": "A killed cohort run cannot write twice",
+    "area": "platform",
+    "kind": "feature",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.58.0",
-    "release": 552,
-    "releasedAt": "2026-09-07T01:11:09Z",
-    "summary": "The simulated members now follow their own path and sit the tests that gate it, so the boards show a real spread of levels instead of everyone stacked on the same rung."
+    "version": "1.58.1",
+    "release": 553,
+    "releasedAt": "2026-09-07T01:53:47Z",
+    "summary": "Internal: the simulated-member script can now be interrupted safely, so it is fit to run on a schedule. A run that dies partway can no longer record the same study twice."
   }
 ]
