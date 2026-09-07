@@ -6859,12 +6859,25 @@
     "id": "every-level-reader-picks-its-column-by-stream-and-levels-are",
     "name": "Every level reader picks its ladder",
     "area": "platform",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-06",
+    "summary": "Members on the school-year path are now taught, gated and ranked on that path. Before this every UG member was served the JLPT ordering and shown as level 1 on the UG board. Levels are also recomputed for everyone after a curriculum rebalance, so nobody carries a number from an older ladder.",
+    "dateIsEstimate": false,
+    "release": 549,
+    "version": "1.55.0",
+    "releasedAt": "2026-09-07T00:33:18Z"
+  },
+  {
+    "id": "currency-reaction-stickers-generator-and-nine-reactions",
+    "name": "Currency reaction stickers: generator and nine reactions",
+    "area": "games",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.55.0",
-    "release": 549,
-    "releasedAt": "2026-09-07T00:33:18Z",
-    "summary": "Members on the school-year path are now taught, gated and ranked on that path. Before this every UG member was served the JLPT ordering and shown as level 1 on the UG board. Levels are also recomputed for everyone after a curriculum rebalance, so nobody carries a number from an older ladder."
+    "version": "1.56.0",
+    "release": 550,
+    "releasedAt": "2026-09-07T00:38:39Z",
+    "summary": "Mochi, Oni and Kane can each pull three faces now: laughing, cool and in love; curious, smug and over the moon; shocked, partying and unimpressed. Every face comes in the same sizes and the same light and dark versions as the mascots themselves, so wherever a mascot fits, its expressions fit too. Nothing hands them out yet; that comes with the shop."
   }
 ]

@@ -1,6 +1,6 @@
 {
   "name": "umakuma",
-  "version": "1.55.0",
+  "version": "1.56.0",
   "private": true,
   "packageManager": "pnpm@10.33.0",
   "engines": {
@@ -52,6 +52,7 @@
     "db:seed:kanji-levels": "node scripts/build-kanji-levels.mjs",
     "db:build:school-grades": "node scripts/build-school-grade-kanji.mjs",
     "db:seed:school-grades": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/seed-school-grade-kanji.ts",
+    "currency:build": "node scripts/build-currency-assets.mjs",
     "map:build": "node scripts/build-geo-jp-map.mjs",
     "map:build:meta": "node scripts/build-geo-jp-meta.mjs",
     "map:build:us": "node scripts/build-geo-us.mjs",
