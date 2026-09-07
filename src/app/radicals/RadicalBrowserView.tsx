@@ -7,6 +7,7 @@ import { ListRow } from "@/app/shared/ListSubjectRows";
 import SubjectCards from "@/app/shared/SubjectCards";
 import SubjectFilerCell from "@/app/shared/SubjectFilerCell";
 import SubjectFilerToggle from "@/app/shared/SubjectFilerToggle";
+import KanjiSourceFilterRow from "@/app/shared/KanjiSourceFilterRow";
 import RadicalPartsGrid from "@/app/shared/RadicalPartsGrid";
 import SubjectViewModeToggle from "@/app/shared/SubjectViewModeToggle";
 import { useFilerOpen, useSubjectFiler } from "@/app/shared/useSubjectFiler";
@@ -14,6 +15,7 @@ import { SUBJECT_VIEW_MODES, SUBJECT_VIEW_MODE_VALUES, type SubjectListRow, type
 import { usePersistedEnum } from "@/lib/usePersistedEnum";
 import type { FilerHit } from "@/lib/subjectFiler";
 import { LIST_ITEM_KINDS, SUBJECT_TYPES, srsBucketFromStage } from "@/lib/domainConstants";
+import type { KanjiSource } from "@/lib/kanjiSourceFilters";
 import { radicalsHref } from "@/lib/radicalBrowser";
 import type { RadicalGroup } from "@/lib/radicalSearch";
 import type { RadicalMatch } from "@/lib/radicalSearchServer";
@@ -75,6 +77,8 @@ export default function RadicalBrowserView({
   poolMatches,
   strokeChoices,
   strokes,
+  sources,
+  sourceCounts,
   names,
   accountId,
 }: {
@@ -92,6 +96,9 @@ export default function RadicalBrowserView({
   strokeChoices: { strokes: number; count: number }[];
   /** The count narrowed to, or null for all of them. */
   strokes: number | null;
+  /** Which lists the answers were narrowed to, and what each would leave. */
+  sources: KanjiSource[];
+  sourceCounts: Record<KanjiSource, number>;
   /** The English name for each radical, where one is known. */
   names: Record<string, string>;
   accountId: string | null;
@@ -145,7 +152,7 @@ export default function RadicalBrowserView({
             chosen={chosen}
             usable={usableSet}
             names={names}
-            hrefFor={(parts) => radicalsHref({ parts, strokes })}
+            hrefFor={(parts) => radicalsHref({ parts, strokes, sources })}
           />
         </div>
 
@@ -169,7 +176,7 @@ export default function RadicalBrowserView({
             <ul className="mt-2 flex flex-wrap gap-1.5">
               <li>
                 <Link
-                  href={radicalsHref({ parts: chosen })}
+                  href={radicalsHref({ parts: chosen, sources })}
                   aria-current={strokes === null ? "page" : undefined}
                   className={chipClass(strokes === null)}
                 >
@@ -181,7 +188,7 @@ export default function RadicalBrowserView({
                 return (
                   <li key={choice.strokes}>
                     <Link
-                      href={radicalsHref({ parts: chosen, strokes: on ? null : choice.strokes })}
+                      href={radicalsHref({ parts: chosen, strokes: on ? null : choice.strokes, sources })}
                       aria-current={on ? "page" : undefined}
                       title={RADICAL_BROWSER_COPY.strokeChip(choice.strokes)}
                       className={chipClass(on)}
@@ -213,6 +220,18 @@ export default function RadicalBrowserView({
                 ? RADICAL_BROWSER_COPY.matches(rows.length, totalMatches)
                 : RADICAL_BROWSER_COPY.matches(totalMatches, poolMatches)}
             </span>
+            {/*
+              * The same five chips the stroke pages carry, in the same place
+              * relative to the count. John asked for them on both: "Strokes
+              * browser and Radicals browser should both have Common Only
+              * filter... it should probably also have a filter for JLPT Only,
+              * WK only, UK only, Grade School Only."
+              */}
+            <KanjiSourceFilterRow
+              chosen={sources}
+              counts={sourceCounts}
+              hrefFor={(next) => radicalsHref({ parts: chosen, strokes, sources: next })}
+            />
             <span className="ml-auto flex items-center gap-2">
               {accountId ? (
                 <SubjectFilerToggle open={filerOpen} onToggle={() => setFilerOpen((was) => !was)} error={filing ? filer.error : null} />

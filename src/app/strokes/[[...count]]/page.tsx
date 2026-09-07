@@ -11,7 +11,8 @@ import { authOptions } from "@/lib/auth";
 import { readParts } from "@/lib/radicalBrowser";
 import { radicalDisplayNames } from "@/lib/radicalNames";
 import { narrowByRadicals } from "@/lib/radicalSearchServer";
-import { STROKE_PARAMS, readCommonOnly, readPage, strokesFromPath, strokesIndexHref } from "@/lib/strokeAddress";
+import { narrowBySources, readSources } from "@/lib/kanjiSourceFilters";
+import { STROKE_PARAMS, readPage, strokesFromPath, strokesIndexHref } from "@/lib/strokeAddress";
 import { isStrokeCount, kanjiByStrokeCount, strokeCounts, strokePage } from "@/lib/strokeBrowser";
 
 import StrokeBrowserView from "../StrokeBrowserView";
@@ -57,9 +58,16 @@ export default async function StrokesPage({ params, searchParams }: Props) {
   if (strokes === null) redirect(strokesIndexHref(counts));
 
   const query = await searchParams;
-  const commonOnly = readCommonOnly(query.common);
   const all = kanjiByStrokeCount(strokes);
-  const atCount = kanjiByStrokeCount(strokes, { commonOnly });
+
+  /*
+   * The first filter, and the one John asked for last: which list teaches the
+   * character. Common only was a flag of its own until four more questions of
+   * exactly the same kind arrived beside it.
+   */
+  const sources = readSources(query[STROKE_PARAMS.sources]);
+  const narrowedBySource = narrowBySources(all, sources);
+  const atCount = narrowedBySource.kept;
 
   /*
    * The second filter, over what the first one left.
@@ -97,7 +105,8 @@ export default async function StrokesPage({ params, searchParams }: Props) {
         entries={rows}
         page={readPage(query.page)}
         pageCount={pageCount}
-        commonOnly={commonOnly}
+        sources={sources}
+        sourceCounts={narrowedBySource.counts}
         shownTotal={shown.length}
         total={all.length}
         groups={narrowed.groups}

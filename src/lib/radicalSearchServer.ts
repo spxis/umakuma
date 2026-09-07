@@ -4,6 +4,7 @@ import fs from "node:fs";
 import path from "node:path";
 
 import { getKanjiDictionaryEntry } from "./kanjiDictionary";
+import { KANJI_SOURCE_VALUES, narrowBySources, type KanjiSource } from "./kanjiSourceFilters";
 import { radicalsHref } from "./radicalBrowser";
 import { radicalDisplayNames, resolveRadicalTokens } from "./radicalNames";
 import {
@@ -73,6 +74,9 @@ export type RadicalSearchResult = {
   strokeChoices: { strokes: number; count: number }[];
   /** The count a reader narrowed to, or null for all of them. */
   strokes: number | null;
+  /** Which lists the answers were narrowed to, and what each would leave. */
+  sources: KanjiSource[];
+  sourceCounts: Record<KanjiSource, number>;
   attribution: RadicalFile["attribution"];
 };
 
@@ -92,7 +96,7 @@ function byUsefulness(left: RadicalMatch, right: RadicalMatch): number {
 
 export async function runRadicalSearch(
   requested: readonly string[],
-  options: { strokes?: number | null } = {},
+  options: { strokes?: number | null; sources?: readonly KanjiSource[] } = {},
 ): Promise<RadicalSearchResult> {
   const file = load();
   /* A name is resolved to its character before anything is intersected. */
@@ -118,6 +122,17 @@ export async function runRadicalSearch(
   matches.sort(byUsefulness);
 
   /*
+   * Which list teaches it, asked before the stroke count so both the counts
+   * and the grid are measured against the same set. The radicals page needs
+   * this more than the stroke pages do: it matches anything the dictionary
+   * knows, so a part can turn up two hundred characters most of which no
+   * curriculum teaches.
+   */
+  const chosenSources = options.sources ?? [];
+  const bySource = narrowBySources(matches, chosenSources);
+  const inScope = bySource.kept;
+
+  /*
    * Counted before the count is applied, so a chip says how many it would
    * leave rather than how many are left. John, asking for this half after the
    * parts filter on the stroke pages: "do the same for the Radicals viewer!
@@ -125,7 +140,7 @@ export async function runRadicalSearch(
    * see."
    */
   const tally = new Map<number, number>();
-  for (const match of matches) {
+  for (const match of inScope) {
     if (match.strokeCount === null) continue;
     tally.set(match.strokeCount, (tally.get(match.strokeCount) ?? 0) + 1);
   }
@@ -137,7 +152,7 @@ export async function runRadicalSearch(
   const strokes = strokeChoices.some((choice) => choice.strokes === options.strokes)
     ? (options.strokes as number)
     : null;
-  const kept = strokes === null ? matches : matches.filter((match) => match.strokeCount === strokes);
+  const kept = strokes === null ? inScope : inScope.filter((match) => match.strokeCount === strokes);
 
   /*
    * Measured against what the stroke count left, so the two filters narrow
@@ -157,7 +172,9 @@ export async function runRadicalSearch(
     matches: kept.slice(0, RADICAL_MATCH_LIMIT),
     totalMatches: kept.length,
     /** Before the stroke count was applied, for the line that says "7 of 21". */
-    poolMatches: matches.length,
+    poolMatches: inScope.length,
+    sources: chosenSources.filter((source) => KANJI_SOURCE_VALUES.includes(source)),
+    sourceCounts: bySource.counts,
     strokeChoices,
     strokes,
     attribution: file.attribution,

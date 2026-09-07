@@ -7,6 +7,7 @@ import { PAGE_SHELL_PADDING, PAGE_WIDTH } from "@/app/shared/pageShell";
 import { DASHBOARD_PAGE_HEADERS } from "@/app/users/[nickname]/dashboardPageHeaders";
 import { resolveViewerMenuInfo } from "@/app/users/[nickname]/userPageAuth";
 import { authOptions } from "@/lib/auth";
+import { readSources } from "@/lib/kanjiSourceFilters";
 import { orderedGroups, radicalsShown, readParts, readStrokes } from "@/lib/radicalBrowser";
 import { radicalDisplayNames } from "@/lib/radicalNames";
 import { runRadicalSearch } from "@/lib/radicalSearchServer";
@@ -47,7 +48,10 @@ export default async function RadicalsPage({ searchParams }: Props) {
   /* The second filter, and the mirror of the parts filter on the stroke
      pages: the counts are taken from the answers, so every one offered has
      kanji behind it. */
-  const result = await runRadicalSearch(chosen, { strokes: readStrokes(query.strokes) });
+  const result = await runRadicalSearch(chosen, {
+    strokes: readStrokes(query.strokes),
+    sources: readSources(query.sources),
+  });
 
   const groups = orderedGroups(result.groups);
   const names = await radicalDisplayNames(groups.flatMap((group) => group.radicals));
@@ -77,6 +81,8 @@ export default async function RadicalsPage({ searchParams }: Props) {
         poolMatches={result.poolMatches}
         strokeChoices={result.strokeChoices}
         strokes={result.strokes}
+        sources={result.sources}
+        sourceCounts={result.sourceCounts}
         names={Object.fromEntries(names)}
         accountId={viewerMenuInfo?.accountId ?? null}
       />

@@ -19,6 +19,8 @@ import { useFilerOpen, useSubjectFiler } from "@/app/shared/useSubjectFiler";
 import { usePersistedEnum } from "@/lib/usePersistedEnum";
 import { LIST_ITEM_KINDS, SUBJECT_TYPES } from "@/lib/domainConstants";
 import { strokesHref } from "@/lib/strokeAddress";
+import KanjiSourceFilterRow from "@/app/shared/KanjiSourceFilterRow";
+import type { KanjiSource } from "@/lib/kanjiSourceFilters";
 import type { RadicalGroup } from "@/lib/radicalSearch";
 import type { StrokeCount, StrokeEntry } from "@/lib/strokeBrowser";
 import type { ListSubjectRow } from "@/lib/studySubjectItems";
@@ -70,7 +72,8 @@ export default function StrokeBrowserView({
   entries,
   page,
   pageCount,
-  commonOnly,
+  sources,
+  sourceCounts,
   shownTotal,
   total,
   groups,
@@ -85,7 +88,10 @@ export default function StrokeBrowserView({
   entries: StrokeEntry[];
   page: number;
   pageCount: number;
-  commonOnly: boolean;
+  /** Which lists the page has been narrowed to. */
+  sources: KanjiSource[];
+  /** What each of those filters would leave, with the others still applied. */
+  sourceCounts: Record<KanjiSource, number>;
   /** How many the filter leaves, which is not how many fit on one page. */
   shownTotal: number;
   /** Every kanji at this count, before the common-only filter. */
@@ -165,7 +171,7 @@ export default function StrokeBrowserView({
             <p className="text-xs text-foreground/60">{RADICAL_PARTS_COPY.partsBlurb}</p>
             {chosenParts.length > 0 ? (
               <Link
-                href={strokesHref(strokes, { commonOnly })}
+                href={strokesHref(strokes, { sources })}
                 className="ml-auto inline-flex h-7 items-center rounded-full border border-line bg-surface px-2.5 text-[10px] font-black uppercase tracking-[0.08em] text-foreground/60 transition hover:bg-surface-muted"
               >
                 {RADICAL_PARTS_COPY.clear}
@@ -178,7 +184,7 @@ export default function StrokeBrowserView({
             chosen={chosenParts}
             usable={usableSet}
             names={partNames}
-            hrefFor={(parts) => strokesHref(strokes, { commonOnly, parts })}
+            hrefFor={(parts) => strokesHref(strokes, { sources, parts })}
           />
         </div>
       </section>
@@ -191,24 +197,21 @@ export default function StrokeBrowserView({
               : STROKE_BROWSER_COPY.countLabel(strokes)}
           </span>
           <span className="text-[11px] font-semibold text-foreground/60">
-            {chosenParts.length > 0
-              ? STROKE_BROWSER_COPY.showingParts(shownTotal, total)
-              : commonOnly
-                ? STROKE_BROWSER_COPY.showingCommon(shownTotal, total)
-                : STROKE_BROWSER_COPY.showingAll(total)}
+            {shownTotal === total
+              ? STROKE_BROWSER_COPY.showingAll(total)
+              : STROKE_BROWSER_COPY.showingParts(shownTotal, total)}
           </span>
-          <Link
-            href={strokesHref(strokes, { commonOnly: !commonOnly, parts: chosenParts })}
-            aria-pressed={commonOnly}
-            title={STROKE_BROWSER_COPY.commonHint}
-            className={`inline-flex h-7 items-center rounded-full border px-2.5 text-[10px] font-black uppercase tracking-[0.08em] transition ${
-              commonOnly
-                ? "border-accent bg-accent text-white"
-                : "border-line bg-surface text-foreground/60 hover:bg-surface-muted"
-            }`}
-          >
-            {STROKE_BROWSER_COPY.commonOnly}
-          </Link>
+          {/*
+            * Five questions of the same kind, in one row. Common only was a
+            * button of its own until John asked for the other four: "useful
+            * for someone browsing all kanji and wanting to get rid of things
+            * they don't need to recognize/know."
+            */}
+          <KanjiSourceFilterRow
+            chosen={sources}
+            counts={sourceCounts}
+            hrefFor={(next) => strokesHref(strokes, { sources: next, parts: chosenParts })}
+          />
           <span className="ml-auto flex items-center gap-2">
             {accountId ? (
               <SubjectFilerToggle
@@ -287,7 +290,7 @@ export default function StrokeBrowserView({
           pageCount={pageCount}
           slot="bottom"
           placement="bottom"
-          hrefFor={(next) => strokesHref(strokes, { commonOnly, parts: chosenParts, page: next })}
+          hrefFor={(next) => strokesHref(strokes, { sources, parts: chosenParts, page: next })}
         />
       </section>
     </div>

@@ -90,15 +90,15 @@ export function strokeCounts(): StrokeCount[] {
 /**
  * The kanji written in this many strokes, commonest first.
  *
- * `commonOnly` keeps the ones a newspaper actually uses, which is the
- * difference between a page to study and a page to scroll: of the 925
- * twelve-stroke characters, a couple of hundred are in the frequency list.
+ * Everything, in one order. Which of them a reader wants to see - the common
+ * ones, the ones WaniKani teaches, the ones on a JLPT list - is a question
+ * `narrowBySources` answers over this, because the answer has to compose with
+ * the parts filter and be counted against it.
  */
-export function kanjiByStrokeCount(strokes: number, options: { commonOnly?: boolean } = {}): StrokeEntry[] {
+export function kanjiByStrokeCount(strokes: number): StrokeEntry[] {
   return strokeBrowserEntries()
     .filter((entry) => entry.strokeCount === strokes)
     .map(toEntry)
-    .filter((entry) => !options.commonOnly || entry.frequencyRank !== null)
     .sort(byFrequencyThenKanji);
 }
 

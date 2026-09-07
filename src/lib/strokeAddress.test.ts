@@ -2,7 +2,8 @@ import { describe, expect, it } from "vitest";
 
 import { readParts } from "./radicalBrowser";
 
-import { readCommonOnly, readPage, strokesFromPath, strokesHref, strokesIndexHref } from "./strokeAddress";
+import { KANJI_SOURCES, readSources } from "./kanjiSourceFilters";
+import { readPage, strokesFromPath, strokesHref, strokesIndexHref } from "./strokeAddress";
 import { kanjiByStrokeCount, strokeCounts, strokesPageHref } from "./strokeBrowser";
 
 describe("the stroke browser's address", () => {
@@ -13,9 +14,9 @@ describe("the stroke browser's address", () => {
 
   /* What the page is goes in the path; what is on it goes in the query. */
   it("keeps the view's own state out of the path", () => {
-    expect(strokesHref(12, { commonOnly: true })).toBe("/strokes/12?common=1");
+    expect(strokesHref(12, { sources: [KANJI_SOURCES.common] })).toBe("/strokes/12?sources=common");
     expect(strokesHref(12, { page: 2 })).toBe("/strokes/12?page=2");
-    expect(strokesHref(12, { commonOnly: true, page: 3 })).toBe("/strokes/12?common=1&page=3");
+    expect(strokesHref(12, { sources: [KANJI_SOURCES.common], page: 3 })).toBe("/strokes/12?sources=common&page=3");
     expect(strokesHref(12, { page: 1 })).toBe("/strokes/12");
   });
 
@@ -29,8 +30,8 @@ describe("the stroke browser's address", () => {
   });
 
   it("reads what the query says about the page", () => {
-    expect(readCommonOnly("1")).toBe(true);
-    expect(readCommonOnly(undefined)).toBe(false);
+    expect(readSources("common,wk")).toEqual([KANJI_SOURCES.common, KANJI_SOURCES.wanikani]);
+    expect(readSources(undefined)).toEqual([]);
     expect(readPage("3")).toBe(3);
     expect(readPage("nonsense")).toBe(1);
   });
@@ -77,8 +78,8 @@ describe("the parts a stroke page has been narrowed to", () => {
   });
 
   it("keeps them beside the other two", () => {
-    expect(strokesHref(17, { commonOnly: true, parts: ["口"], page: 2 })).toBe(
-      "/strokes/17?common=1&parts=%E5%8F%A3&page=2",
+    expect(strokesHref(17, { sources: [KANJI_SOURCES.common], parts: ["口"], page: 2 })).toBe(
+      "/strokes/17?sources=common&parts=%E5%8F%A3&page=2",
     );
   });
 

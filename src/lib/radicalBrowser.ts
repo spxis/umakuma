@@ -1,3 +1,4 @@
+import { writeSources, type KanjiSource } from "./kanjiSourceFilters";
 import { RADICAL_BROWSER_PARAMS } from "./radicalBrowserParams";
 import type { RadicalGroup } from "./radicalSearch";
 
@@ -44,13 +45,18 @@ export function radicalsShown(groups: readonly RadicalGroup[]): number {
  * A stroke count with no parts is dropped rather than kept, because there is
  * nothing for it to narrow - the page has no answers until a part is picked.
  */
-export function radicalsHref(input: { parts?: readonly string[]; strokes?: number | null } = {}): string {
+export function radicalsHref(
+  input: { parts?: readonly string[]; strokes?: number | null; sources?: readonly KanjiSource[] } = {},
+): string {
   const parts = input.parts ?? [];
   if (parts.length === 0) return "/radicals";
 
   const params = new URLSearchParams();
   params.set(RADICAL_BROWSER_PARAMS.parts, parts.join(""));
   if (typeof input.strokes === "number") params.set(RADICAL_BROWSER_PARAMS.strokes, String(input.strokes));
+  if (input.sources && input.sources.length > 0) {
+    params.set(RADICAL_BROWSER_PARAMS.sources, writeSources(input.sources));
+  }
   return `/radicals?${params.toString()}`;
 }
 

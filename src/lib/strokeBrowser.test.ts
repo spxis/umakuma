@@ -93,11 +93,13 @@ describe("kanji by how many strokes they take", () => {
     expect(twelve.slice(0, firstUnranked).every((entry) => entry.frequencyRank !== null)).toBe(true);
   });
 
-  it("can keep only the common ones, which is a page rather than a scroll", () => {
-    const all = kanjiByStrokeCount(12);
-    const common = kanjiByStrokeCount(12, { commonOnly: true });
-    expect(common.length).toBeLessThan(all.length);
-    expect(common.every((entry) => entry.frequencyRank !== null)).toBe(true);
+  /* Keeping only the common ones is one of five filters now, and they have to
+     compose and be counted against each other - so the narrowing lives in
+     narrowBySources and this hands it everything at the count. */
+  it("hands over every kanji at the count, for the filters to narrow", () => {
+    const twelve = kanjiByStrokeCount(12);
+    expect(twelve.some((entry) => entry.frequencyRank === null)).toBe(true);
+    expect(twelve.some((entry) => entry.frequencyRank !== null)).toBe(true);
   });
 
   it("pages them, and clamps a page number that does not exist", () => {
