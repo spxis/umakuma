@@ -33,8 +33,13 @@ export const ADMIN_USER_DETAIL_COPY = {
     inviteCodeUnset: "Not set",
     wanikani: "WaniKani",
     wanikaniLevel: "WaniKani level",
-    unLevel: "UmaKuma level",
-    unLevelFloor: "Level floor",
+    /* Both ladders are named, because "UmaKuma level" is two numbers now and
+       an admin looking at a member cannot tell which they follow otherwise. */
+    ladderStream: "Path",
+    unLevel: "UN level (JLPT order)",
+    unLevelFloor: "UN floor",
+    ugLevel: "UG level (school year)",
+    ugLevelFloor: "UG floor",
     placement: "Placed",
     srsTheme: "SRS theme",
     ageBand: "Age band",

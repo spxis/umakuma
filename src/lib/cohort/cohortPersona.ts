@@ -260,7 +260,23 @@ export function inventCohort({
     if (slug === null) continue;
     claimed.add(slug);
 
-    const daysAgo = 2 + Math.floor((joinWindowDays - 2) * Math.pow(random(), 1.4));
+    /*
+     * Spread evenly across the window, and deliberately rather than by luck.
+     *
+     * It was `2 + (window - 2) * random()^1.4`, which bends hard toward
+     * recent: over a year most members would have joined in the last few
+     * months and almost nobody would be a veteran, so the boards read flat.
+     * John: "I want a more balance on levels... should be new (just started
+     * this week, last week, last month) etc... go back up to 1 year."
+     *
+     * So each member takes their own slice of the window - the nth of count
+     * gets the nth slice - and jitters inside it. Sixteen members over a year
+     * is one joining roughly every three weeks, from a couple of days ago to
+     * nearly twelve months, which is what puts real distance between the top
+     * of the board and the bottom.
+     */
+    const slice = (joinWindowDays - 2) / Math.max(1, count);
+    const daysAgo = Math.round(2 + slice * (members.length + random()));
     const hour = pick(SESSION_HOURS, random);
     const joined = new Date(now.getTime() - daysAgo * DAY_MS);
     joined.setUTCHours(hour, Math.floor(random() * 60), Math.floor(random() * 60), 0);

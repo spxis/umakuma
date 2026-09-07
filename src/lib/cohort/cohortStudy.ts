@@ -9,6 +9,8 @@ import { lessonXpAwards, reviewXpAwards } from "@/lib/xp/xpStudyAwards";
 
 import type { CohortLedger } from "./cohortLedger";
 import type { CohortPersona } from "./cohortPersona";
+import { ladderColumns } from "@/lib/uk/ladderColumns";
+import { testVerdict, verdictClears, UK_JLPT_QUESTIONS, UK_TEST_PASS_THRESHOLD, type UkTestVerdict } from "@/lib/uk/ukGates";
 
 /**
  * A simulated member studying, in memory.
@@ -21,12 +23,36 @@ import type { CohortPersona } from "./cohortPersona";
  * make too slow to replay over a hundred days for thirty members.
  *
  * What the site does not do, this does not do either. The clean-session
- * bonus has no caller on the site, so nobody here earns it. Level tests are
- * not sat, so a member who reaches a JLPT gate stays on it, the way a member
- * who has not clicked "sit the test" does.
+ * bonus has no caller on the site, so nobody here earns it.
+ *
+ * Level tests **are** sat, because not sitting them made the simulation stop.
+ * A JLPT final is mandatory, so a member who reached UN level 10 stayed there
+ * for ever however long they studied - six of eleven members piled onto that
+ * one rung and no simulated member could ever exist above it. A real member
+ * sits the test; so does this one, at the accuracy their persona reads and
+ * with a retake when they fall short.
  */
 
-export type CohortSubject = { id: number; kind: string; level: number };
+/** A curriculum item and where it sits on each ladder. */
+export type CohortSubject = { id: number; kind: string; level: number; ugLevel: number };
+
+/**
+ * A level test this member sat, waiting to be written.
+ *
+ * Only the finals are recorded. A checkpoint opens its level whatever the
+ * score, so it changes nothing about where anybody stands and a row for it
+ * would be noise in a table the gate check reads.
+ */
+export type CohortTest = {
+  gateKey: string;
+  level: number;
+  attempt: number;
+  questionCount: number;
+  correctCount: number;
+  threshold: number;
+  verdict: UkTestVerdict;
+  satAt: Date;
+};
 
 export type CohortStateRow = {
   /** Null until the row has been written. */
@@ -59,7 +85,13 @@ export type CohortAttempt = {
 
 export type CohortWorld = {
   subjects: readonly CohortSubject[];
-  totals: readonly UkLevelTotals[];
+  /**
+   * How many kanji and radicals each level holds, per ladder.
+   *
+   * Both, because a member's standing is derived on both and the two ladders
+   * put different subjects on a given level - UN's level 7 is not UG's.
+   */
+  totals: Readonly<Record<LadderStreamValue, readonly UkLevelTotals[]>>;
 };
 
 export type CohortMember = {
@@ -67,6 +99,10 @@ export type CohortMember = {
   states: Map<number, CohortStateRow>;
   /** Answers given this run, not yet written. */
   attempts: CohortAttempt[];
+  /** Finals sat this run, not yet written. */
+  tests: CohortTest[];
+  /** Gate keys already cleared, as `jlpt:5`. What lets the walk past a final. */
+  passedGates: Set<string>;
   floor: number;
   level: number;
   placedAt: Date | null;
@@ -87,15 +123,84 @@ export type CohortMember = {
 export type SessionOutcome = { reviews: number; correct: number; lessons: number; levelledUp: boolean };
 
 /** Mirrors `deriveUnLevel`: the level the rows imply, from the floor up. */
-export function resolvedLevel(member: CohortMember, world: CohortWorld): number {
+/**
+ * Where this member stands, in full - including whether a gate is holding them.
+ *
+ * `resolvedLevel` is this with the level taken off the front; the sitting of
+ * a final needs the rest, because "held at 10 by jlpt:5" and "at 10 with more
+ * to learn" are the same number and different situations.
+ */
+export function memberStanding(member: CohortMember, world: CohortWorld) {
+  /*
+   * On the ladder this member follows, which the site has done since 1.55.0.
+   *
+   * It resolved every member against UN: their subjects' UN levels, UN's
+   * per-level totals and, by omission, UN's JLPT gates - so a UG persona was
+   * simulated climbing the JLPT ordering and gated at UN's milestone levels,
+   * where N4 finishes at 20 rather than UG's 43. `ladderColumns` is the same
+   * lookup `deriveLadderLevel` uses, so the simulation and the site cannot
+   * answer this differently.
+   */
+  const columns = ladderColumns(member.persona.stream);
   const byId = new Map(world.subjects.map((subject) => [subject.id, subject]));
   const rows = [...member.states.values()].flatMap((state) => {
     const subject = byId.get(state.subjectId);
     return subject
-      ? [{ level: subject.level, kind: subject.kind, srsStage: state.srsStage, passedAt: state.passedAt }]
+      ? [{
+          level: subject[columns.subjectLevel],
+          kind: subject.kind,
+          srsStage: state.srsStage,
+          passedAt: state.passedAt,
+        }]
       : [];
   });
-  return resolveUnLevel({ rows, totals: world.totals, floor: member.floor }).level;
+  return resolveUnLevel({
+    rows,
+    totals: world.totals[columns.stream],
+    floor: member.floor,
+    maxLevel: columns.maxLevel,
+    milestones: columns.jlptMilestones,
+    passedGateKeys: [...member.passedGates],
+  });
+}
+
+export function resolvedLevel(member: CohortMember, world: CohortWorld): number {
+  return memberStanding(member, world).level;
+}
+
+/**
+ * Sits the final that is holding this member, if one is.
+ *
+ * Their persona's accuracy is what they bring to it, softened a little because
+ * a test samples the whole band rather than what they revised yesterday. A
+ * failure is kept as a row and retaken on a later session, exactly as the
+ * cooldown intends - so a weak member takes several goes at N5 and a strong
+ * one passes first time, which is the spread the boards should show.
+ */
+export function sitHeldGate(member: CohortMember, world: CohortWorld, at: Date, random: RandomSource): boolean {
+  const standing = memberStanding(member, world);
+  if (!standing.heldByGate) return false;
+
+  const attempt = member.tests.filter((test) => test.gateKey === standing.heldByGate).length + 1;
+  const accuracy = Math.max(0, Math.min(1, member.persona.accuracy - 0.05 + random() * 0.1));
+  const correct = Math.round(UK_JLPT_QUESTIONS * accuracy);
+  const verdict = testVerdict(correct, UK_JLPT_QUESTIONS, UK_TEST_PASS_THRESHOLD);
+
+  member.tests.push({
+    gateKey: standing.heldByGate,
+    level: standing.level,
+    attempt,
+    questionCount: UK_JLPT_QUESTIONS,
+    correctCount: correct,
+    threshold: UK_TEST_PASS_THRESHOLD,
+    verdict,
+    satAt: at,
+  });
+
+  if (!verdictClears(verdict, true)) return false;
+  member.passedGates.add(standing.heldByGate);
+  member.level = resolvedLevel(member, world);
+  return true;
 }
 
 /**
@@ -287,6 +392,12 @@ export function studySession({
     if (correct) outcome.correct += 1;
     member.ledger.settleDay(when, dueStates(member, when).length);
   }
+
+  /* Before lessons, because passing the final is what opens the next level's
+     items - a member held at a gate has nothing new to learn until they sit
+     it. Only after some reviews: nobody sits a final on a day they did not
+     study, and the retake cooldown is a day, so one attempt per session. */
+  if (outcome.reviews > 0 && sitHeldGate(member, world, tick(), random)) outcome.levelledUp = true;
 
   if (withLessons) {
     const wanted = Math.max(0, Math.round(member.persona.lessonsPerDay * (0.5 + random() * 0.7)));

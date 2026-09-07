@@ -22,6 +22,9 @@ import { playRun } from "./cohortGames";
 import { CohortLedger } from "./cohortLedger";
 import { derivePersona, personaFor, type CohortPersona, type NewCohortMember } from "./cohortPersona";
 import { dueStates, resolvedLevel, type CohortMember, type CohortStateRow, type CohortWorld } from "./cohortStudy";
+import { LADDER_STREAMS } from "@/lib/ladder/ladderStreams";
+import { ladderColumns } from "@/lib/uk/ladderColumns";
+import { CURRICULUM_VERSION } from "@/lib/kanjiLadder";
 
 /**
  * The cohort's rows: reading a member out of the database and writing what
@@ -37,15 +40,18 @@ import { dueStates, resolvedLevel, type CohortMember, type CohortStateRow, type 
 const CHUNK = 1_000;
 
 export async function loadWorld(): Promise<CohortWorld> {
-  const [subjects, totals] = await Promise.all([
+  const [subjects, un, ug] = await Promise.all([
     prisma.ukSubject.findMany({
       where: { removedAt: null },
-      select: { id: true, kind: true, level: true },
+      /* Both levels: a member's standing is derived on both ladders, and the
+         two put different subjects on a given level. */
+      select: { id: true, kind: true, level: true, ugLevel: true },
       orderBy: { id: "asc" },
     }),
-    unLevelTotals(),
+    unLevelTotals(LADDER_STREAMS.un),
+    unLevelTotals(LADDER_STREAMS.ug),
   ]);
-  return { subjects, totals };
+  return { subjects, totals: { [LADDER_STREAMS.un]: un, [LADDER_STREAMS.ug]: ug } };
 }
 
 export type CohortAccountRow = {
@@ -58,6 +64,9 @@ export type CohortAccountRow = {
   unLevel: number;
   unLevelFloor: number;
   unPlacedAt: Date | null;
+  ugLevel: number;
+  ugLevelFloor: number;
+  ugPlacedAt: Date | null;
   xp: number;
   xpLevel: number;
   lastActivityAt: Date | null;
@@ -65,7 +74,9 @@ export type CohortAccountRow = {
 
 const ACCOUNT_SELECT = {
   id: true, slug: true, nickname: true, displayName: true, joinedByEmail: true, createdAt: true,
-  unLevel: true, unLevelFloor: true, unPlacedAt: true, xp: true, xpLevel: true, lastActivityAt: true,
+  unLevel: true, unLevelFloor: true, unPlacedAt: true,
+  ugLevel: true, ugLevelFloor: true, ugPlacedAt: true,
+  xp: true, xpLevel: true, lastActivityAt: true,
 } as const;
 
 /** Every simulated account, oldest first. */
@@ -117,7 +128,7 @@ export async function loadMember(account: CohortAccountRow, world: CohortWorld):
   const persona = personaFor(account);
   if (!persona) return null;
 
-  const [states, events, bests] = await Promise.all([
+  const [states, events, bests, clearedGates] = await Promise.all([
     prisma.ukSrsState.findMany({ where: { accountId: account.id } }),
     prisma.xpEvent.findMany({
       where: { accountId: account.id },
@@ -131,8 +142,14 @@ export async function loadMember(account: CohortAccountRow, world: CohortWorld):
       where: { accountId: account.id, status: "completed" },
       _max: { score: true },
     }),
+    prisma.levelTest.findMany({
+      where: { accountId: account.id, mustPass: true, verdict: { in: ["solid", "passed"] } },
+      select: { gateKey: true },
+      distinct: ["gateKey"],
+    }),
   ]);
 
+  const onUg = persona.stream === LADDER_STREAMS.ug;
   const member: CohortMember = {
     persona,
     states: new Map(
@@ -154,9 +171,18 @@ export async function loadMember(account: CohortAccountRow, world: CohortWorld):
       } satisfies CohortStateRow]),
     ),
     attempts: [],
-    floor: account.unLevelFloor,
-    level: account.unLevel,
-    placedAt: account.unPlacedAt,
+    tests: [],
+    /* Finals they have already cleared, so a re-run does not sit them again
+       and the walk still gets past the gates they earned. */
+    passedGates: new Set(clearedGates.map((row) => row.gateKey)),
+    /* On the ladder this member follows. Seeding all three from the UN
+       columns put a UG member's UN level into `member.level`, which the
+       `Math.max` below then kept whenever it was the higher of the two - so
+       a UG member could be simulated as standing above where their own
+       ladder puts them. */
+    floor: onUg ? account.ugLevelFloor : account.unLevelFloor,
+    level: onUg ? account.ugLevel : account.unLevel,
+    placedAt: onUg ? account.ugPlacedAt : account.unPlacedAt,
     ledger: new CohortLedger(events, account.xp),
     bestScores: new Map(
       bests.flatMap((row) => (row._max.score === null ? [] : [[row.kind as string, row._max.score]])),
@@ -245,8 +271,35 @@ export async function saveStudy(accountId: string, member: CohortMember): Promis
   for (let at = 0; at < attempts.length; at += CHUNK) {
     await prisma.ukReviewAttempt.createMany({ data: attempts.slice(at, at + CHUNK) });
   }
-  const written = { states: fresh.length + moved.length, attempts: attempts.length };
+
+  /* The finals they sat. `skipDuplicates` because a re-run replays no day
+     twice but a member's cleared gates are loaded back, so the same attempt
+     number must not be written again. */
+  if (member.tests.length > 0) {
+    await prisma.levelTest.createMany({
+      data: member.tests.map((test) => ({
+        accountId,
+        kind: "jlpt_final" as const,
+        gateKey: test.gateKey,
+        attempt: test.attempt,
+        level: test.level,
+        questionCount: test.questionCount,
+        threshold: test.threshold,
+        mustPass: true,
+        answeredCount: test.questionCount,
+        correctCount: test.correctCount,
+        verdict: test.verdict,
+        curriculumVersion: CURRICULUM_VERSION,
+        startedAt: test.satAt,
+        completedAt: test.satAt,
+      })),
+      skipDuplicates: true,
+    });
+  }
+
+  const written = { states: fresh.length + moved.length, attempts: attempts.length, tests: member.tests.length };
   member.attempts = [];
+  member.tests = [];
   return written;
 }
 
@@ -275,9 +328,13 @@ export async function saveStanding(accountId: string, member: CohortMember): Pro
     data: {
       xp: member.ledger.xp,
       xpLevel: member.ledger.xpLevel,
-      unLevelFloor: member.floor,
-      unPlacedAt: member.placedAt,
-      unPlacementSource: member.placedAt ? "placement_test" : undefined,
+      /* The floor and the placement are inputs, and they belong to the ladder
+         this member follows - a placement on UG says nothing about where they
+         would start on UN. `syncAccountLevels` below derives both standings,
+         each against its own floor. */
+      ...(ladderColumns(member.persona.stream).stream === LADDER_STREAMS.ug
+        ? { ugLevelFloor: member.floor, ugPlacedAt: member.placedAt }
+        : { unLevelFloor: member.floor, unPlacedAt: member.placedAt, unPlacementSource: member.placedAt ? "placement_test" as const : undefined }),
       lastActivityAt: member.lastActivityAt,
     },
   });

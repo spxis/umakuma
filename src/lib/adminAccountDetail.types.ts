@@ -27,6 +27,10 @@ export type AdminAccountDetail = {
   wkLevel: number | null;
   unLevel: number;
   unLevelFloor: number;
+  ugLevel: number;
+  ugLevelFloor: number;
+  /** Which of the two ladders this member follows. */
+  ladderStream: string;
   unPlacedAt: string | null;
   unPlacementSource: string | null;
   srsTheme: string | null;

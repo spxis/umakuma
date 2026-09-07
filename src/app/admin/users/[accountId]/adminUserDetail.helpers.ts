@@ -55,8 +55,11 @@ export function accountFacts(account: AdminAccountDetail): AdminUserFact[] {
     },
     { label: COPY.facts.wanikani, value: account.wkUsername ?? COPY.facts.notConnected },
     { label: COPY.facts.wanikaniLevel, value: account.wkLevel === null ? none : String(account.wkLevel) },
+    { label: COPY.facts.ladderStream, value: account.ladderStream },
     { label: COPY.facts.unLevel, value: String(account.unLevel) },
     { label: COPY.facts.unLevelFloor, value: String(account.unLevelFloor) },
+    { label: COPY.facts.ugLevel, value: String(account.ugLevel) },
+    { label: COPY.facts.ugLevelFloor, value: String(account.ugLevelFloor) },
     {
       label: COPY.facts.placement,
       value: account.unPlacedAt

@@ -13,9 +13,11 @@ import {
   dueStates,
   openLessons,
   resolvedLevel,
+  sitHeldGate,
   studySession,
   takeLessons,
   type CohortMember,
+  type CohortSubject,
   type CohortWorld,
 } from "./cohortStudy";
 
@@ -23,18 +25,21 @@ const JOINED = new Date("2026-08-01T12:00:00Z");
 
 /** Five small levels: radicals only on 1, then two kanji and two words a level. */
 function world(): CohortWorld {
-  const subjects: { id: number; kind: string; level: number }[] = [];
+  const subjects: CohortSubject[] = [];
   let id = 1;
   for (let level = 1; level <= 5; level += 1) {
     const kinds = level === 1 ? ["radical", "radical", "radical"] : ["radical", "kanji", "kanji", "vocabulary", "vocabulary"];
-    for (const kind of kinds) subjects.push({ id: id++, kind, level });
+    /* The same shape on both ladders here: this fixture is about the walk,
+       not about the two orderings differing. `ladderColumns` picks the column
+       and a UG member reads `ugLevel`, so both must be present. */
+    for (const kind of kinds) subjects.push({ id: id++, kind, level, ugLevel: level });
   }
-  const totals = [1, 2, 3, 4, 5].map((level) => ({
+  const perLevel = [1, 2, 3, 4, 5].map((level) => ({
     level,
     kanji: subjects.filter((s) => s.level === level && s.kind === "kanji").length,
     radicals: subjects.filter((s) => s.level === level && s.kind === "radical").length,
   }));
-  return { subjects, totals };
+  return { subjects, totals: { UN: perLevel, UG: perLevel } };
 }
 
 function member(slug = "learner", floor = 1): CohortMember {
@@ -43,6 +48,8 @@ function member(slug = "learner", floor = 1): CohortMember {
     persona: { ...persona, placementFloor: floor },
     states: new Map(),
     attempts: [],
+    tests: [],
+    passedGates: new Set<string>(),
     floor: 1,
     level: 1,
     placedAt: null,
@@ -168,5 +175,117 @@ describe("studySession", () => {
       return { xp: m.ledger.xp, attempts: m.attempts, states: [...m.states.values()] };
     };
     expect(run()).toEqual(run());
+  });
+});
+
+/**
+ * A simulated member climbs the ladder they follow.
+ *
+ * `resolvedLevel` resolved everybody against UN - their subjects' UN levels,
+ * UN's totals and, by omission, UN's JLPT gates - so a UG persona was
+ * simulated climbing the JLPT ordering. It is the same lookup the site uses
+ * now, so the two cannot answer differently.
+ */
+describe("which ladder a simulated member climbs", () => {
+  /* Two orderings that disagree: a subject on UN level 1 sits on UG level 5,
+     and vice versa. A member who has passed only the UN-level-1 items has
+     cleared UN 1 and nothing on UG. */
+  const split: CohortWorld = {
+    subjects: [
+      { id: 1, kind: "radical", level: 1, ugLevel: 5 },
+      { id: 2, kind: "radical", level: 5, ugLevel: 1 },
+    ],
+    totals: {
+      UN: [1, 2, 3, 4, 5].map((level) => ({ level, kanji: 0, radicals: level === 1 || level === 5 ? 1 : 0 })),
+      UG: [1, 2, 3, 4, 5].map((level) => ({ level, kanji: 0, radicals: level === 1 || level === 5 ? 1 : 0 })),
+    },
+  };
+
+  const passed = (subjectId: number) =>
+    new Map([[subjectId, { id: null, subjectId, srsStage: 9, availableAt: null, unlockedAt: JOINED, startedAt: JOINED, passedAt: JOINED, burnedAt: null, lastReviewedAt: JOINED, reviewCount: 5, correctCount: 5, wrongCount: 0, origin: "lesson" as const, dirty: false }]]);
+
+  it("reads the UN column for a UN member", () => {
+    const un = { ...member(), persona: { ...member().persona, stream: "UN" as const }, states: passed(1) };
+    /* Cleared UN level 1. Levels 2-4 hold nothing, and an empty level does
+       not block the walk, so they come to rest on 5 - the next level that
+       actually asks for something. */
+    expect(resolvedLevel(un, split)).toBe(5);
+  });
+
+  it("reads the UG column for a UG member, and gets a different answer", () => {
+    const ug = { ...member(), persona: { ...member().persona, stream: "UG" as const }, states: passed(1) };
+    /* The same subject is UG level 5, so UG level 1 is still unmet and they
+       have not left the bottom. Same states, same world, different ladder. */
+    expect(resolvedLevel(ug, split)).toBe(1);
+  });
+
+  it("puts the same member on different rungs depending on their path", () => {
+    const states = passed(2);
+    const un = { ...member(), persona: { ...member().persona, stream: "UN" as const }, states };
+    const ug = { ...member(), persona: { ...member().persona, stream: "UG" as const }, states };
+    expect(resolvedLevel(un, split)).not.toBe(resolvedLevel(ug, split));
+  });
+});
+
+/**
+ * A simulated member sits the final that holds them.
+ *
+ * They did not, and the simulation stopped dead at the first mandatory gate:
+ * six of eleven members piled onto UN level 10 and no simulated member could
+ * exist above it however long they studied, so the board read flat exactly
+ * where it should have spread out.
+ */
+describe("sitting the gate that holds a member", () => {
+  /* One level, one kanji, and a final standing on it. */
+  const gated: CohortWorld = {
+    subjects: [{ id: 1, kind: "kanji", level: 1, ugLevel: 1 }],
+    totals: { UN: [{ level: 1, kanji: 1, radicals: 0 }], UG: [{ level: 1, kanji: 1, radicals: 0 }] },
+  };
+  const held = () => {
+    const m = member();
+    m.persona = { ...m.persona, stream: "UN" as const };
+    m.states.set(1, { id: null, subjectId: 1, srsStage: 9, availableAt: null, unlockedAt: JOINED, startedAt: JOINED, passedAt: JOINED, burnedAt: null, lastReviewedAt: JOINED, reviewCount: 5, correctCount: 5, wrongCount: 0, origin: "lesson", dirty: false });
+    return m;
+  };
+
+  it("records the attempt whether it clears or not", () => {
+    const m = held();
+    /* The gate here is whatever the ladder puts on level 1; if none, nothing
+       is sat and nothing is recorded, which is also correct. */
+    sitHeldGate(m, gated, JOINED, () => 0.5);
+    for (const test of m.tests) {
+      expect(test.questionCount).toBeGreaterThan(0);
+      expect(test.correctCount).toBeLessThanOrEqual(test.questionCount);
+      expect(test.attempt).toBeGreaterThanOrEqual(1);
+    }
+  });
+
+  it("does nothing when no gate is holding them", () => {
+    const free = member();
+    free.passedGates = new Set<string>();
+    expect(sitHeldGate(free, world(), JOINED, () => 0.5)).toBe(false);
+    expect(free.tests).toEqual([]);
+  });
+
+  /* A member who already cleared a gate does not sit it again on a re-run -
+     the cleared set is loaded back from the database for exactly this. */
+  it("leaves a cleared gate alone", () => {
+    const m = held();
+    m.passedGates = new Set(["jlpt:5"]);
+    const before = m.tests.length;
+    sitHeldGate(m, gated, JOINED, () => 0.5);
+    expect(m.tests.filter((t) => t.gateKey === "jlpt:5").length).toBe(before);
+  });
+
+  /* A weak member fails and comes back to it; the attempt number climbs so
+     the rows do not collide on (account, gate, attempt). */
+  it("numbers a retake after a failure", () => {
+    const m = held();
+    const weak = () => 0;
+    m.persona = { ...m.persona, accuracy: 0.2 };
+    sitHeldGate(m, gated, JOINED, weak);
+    sitHeldGate(m, gated, JOINED, weak);
+    const attempts = m.tests.map((t) => t.attempt);
+    expect(new Set(attempts).size).toBe(attempts.length);
   });
 });
