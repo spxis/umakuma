@@ -6,4 +6,4 @@
  * `server-only`. Importing the reader for one string took Prisma into the
  * client bundle once already, on the practice sheet.
  */
-export const RADICAL_BROWSER_PARAMS = { parts: "parts" } as const;
+export const RADICAL_BROWSER_PARAMS = { parts: "parts", strokes: "strokes" } as const;

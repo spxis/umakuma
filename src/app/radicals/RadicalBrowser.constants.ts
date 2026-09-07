@@ -9,6 +9,11 @@ export const RADICAL_BROWSER_COPY = {
   countLabelOne: "1 stroke",
   showing: (count: number) => `${count} radicals`,
   showingOne: "1 radical",
+  /* The second filter, under the grid, once there are answers to narrow. */
+  strokesHeading: "Narrow by strokes",
+  strokesBlurb: "Keep only the kanji written in that many strokes.",
+  strokesAll: "Any",
+  strokeChip: (strokes: number) => (strokes === 1 ? "1 stroke" : `${strokes} strokes`),
   /* The second half of the page, which only appears once something is picked. */
   pickedHeading: "Kanji with these parts",
   clear: "Clear",

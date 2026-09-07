@@ -61,6 +61,18 @@ export type RadicalSearchResult = {
   matches: RadicalMatch[];
   /** How many kanji match in total, which is not how many are returned. */
   totalMatches: number;
+  /** How many the parts alone match, before any stroke count narrowed them. */
+  poolMatches: number;
+  /**
+   * The stroke counts the answers actually take, with how many take each.
+   *
+   * The second filter on this page, and the mirror of the parts filter on the
+   * stroke pages: every count offered has kanji behind it, because it was
+   * counted from the answers rather than from the dictionary.
+   */
+  strokeChoices: { strokes: number; count: number }[];
+  /** The count a reader narrowed to, or null for all of them. */
+  strokes: number | null;
   attribution: RadicalFile["attribution"];
 };
 
@@ -78,7 +90,10 @@ function byUsefulness(left: RadicalMatch, right: RadicalMatch): number {
   return (left.strokeCount ?? 99) - (right.strokeCount ?? 99) || left.kanji.localeCompare(right.kanji, "ja");
 }
 
-export async function runRadicalSearch(requested: readonly string[]): Promise<RadicalSearchResult> {
+export async function runRadicalSearch(
+  requested: readonly string[],
+  options: { strokes?: number | null } = {},
+): Promise<RadicalSearchResult> {
   const file = load();
   /* A name is resolved to its character before anything is intersected. */
   const named = await resolveRadicalTokens(requested, file.radicals.map((entry) => entry.radical));
@@ -102,14 +117,80 @@ export async function runRadicalSearch(requested: readonly string[]): Promise<Ra
   }
   matches.sort(byUsefulness);
 
+  /*
+   * Counted before the count is applied, so a chip says how many it would
+   * leave rather than how many are left. John, asking for this half after the
+   * parts filter on the stroke pages: "do the same for the Radicals viewer!
+   * Add a stroke filter that can further help reduce the number of kanji you
+   * see."
+   */
+  const tally = new Map<number, number>();
+  for (const match of matches) {
+    if (match.strokeCount === null) continue;
+    tally.set(match.strokeCount, (tally.get(match.strokeCount) ?? 0) + 1);
+  }
+  const strokeChoices = [...tally.entries()]
+    .map(([strokes, count]) => ({ strokes, count }))
+    .sort((left, right) => left.strokes - right.strokes);
+
+  /* A count nothing takes is not offered, so this can only ever narrow. */
+  const strokes = strokeChoices.some((choice) => choice.strokes === options.strokes)
+    ? (options.strokes as number)
+    : null;
+  const kept = strokes === null ? matches : matches.filter((match) => match.strokeCount === strokes);
+
+  /*
+   * Measured against what the stroke count left, so the two filters narrow
+   * each other rather than each pretending the other is not there. With
+   * nothing picked at all, `usableRadicals` answers over the whole index,
+   * which is the plain page: everything is still a live question.
+   */
+  const usable =
+    chosen.length === 0
+      ? usableRadicals(file.radicals, chosen)
+      : presentRadicals(file.radicals, new Set(kept.map((match) => match.kanji)), chosen);
+
   return {
     groups: radicalGroups(file.radicals),
     chosen,
-    usable: [...usableRadicals(file.radicals, chosen)],
-    matches: matches.slice(0, RADICAL_MATCH_LIMIT),
-    totalMatches: matches.length,
+    usable: [...usable],
+    matches: kept.slice(0, RADICAL_MATCH_LIMIT),
+    totalMatches: kept.length,
+    /** Before the stroke count was applied, for the line that says "7 of 21". */
+    poolMatches: matches.length,
+    strokeChoices,
+    strokes,
     attribution: file.attribution,
   };
+}
+
+/**
+ * The radicals present in a set of kanji, plus the ones already chosen.
+ *
+ * The promise both pages make: nothing offered can return nothing. That is
+ * only true if it is measured against what is actually left after every other
+ * filter - the stroke count as well as the parts - so both callers hand in
+ * the kanji that survive and ask this the same question.
+ *
+ * The chosen ones stay in the answer however far the pool has narrowed:
+ * taking one back must always be possible.
+ */
+function presentRadicals(
+  entries: readonly RadicalEntry[],
+  remaining: ReadonlySet<string>,
+  chosen: readonly string[],
+): Set<string> {
+  const present = new Set(chosen);
+  for (const entry of entries) {
+    if (present.has(entry.radical)) continue;
+    for (const kanji of entry.kanji) {
+      if (remaining.has(kanji)) {
+        present.add(entry.radical);
+        break;
+      }
+    }
+  }
+  return present;
 }
 
 /**
@@ -139,17 +220,7 @@ export function narrowByRadicals(
   const matched = chosen.length > 0 ? new Set(kanjiForRadicals(file.radicals, chosen)) : null;
   const kept = matched ? pool.filter((kanji) => matched.has(kanji)) : [...pool];
 
-  const remaining = new Set(kept);
-  const usable = new Set(chosen);
-  for (const entry of file.radicals) {
-    if (usable.has(entry.radical)) continue;
-    for (const kanji of entry.kanji) {
-      if (remaining.has(kanji)) {
-        usable.add(entry.radical);
-        break;
-      }
-    }
-  }
+  const usable = presentRadicals(file.radicals, new Set(kept), chosen);
 
   return { chosen, kept, usable, groups: radicalGroups(file.radicals) };
 }

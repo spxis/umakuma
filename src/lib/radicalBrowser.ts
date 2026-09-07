@@ -37,14 +37,32 @@ export function radicalsShown(groups: readonly RadicalGroup[]): number {
 /**
  * The page's own address.
  *
- * Only the picked parts, since nothing else narrows the page. A reader who
- * has picked 水 can send exactly that; the plain page is `/radicals`.
+ * The picked parts and, once there are answers to narrow, how many strokes
+ * they take. Both are in the address for the same reason: "the 17-stroke
+ * kanji with a mouth" is a thing to send to somebody, from either direction.
+ *
+ * A stroke count with no parts is dropped rather than kept, because there is
+ * nothing for it to narrow - the page has no answers until a part is picked.
  */
-export function radicalsHref(input: { parts?: readonly string[] } = {}): string {
+export function radicalsHref(input: { parts?: readonly string[]; strokes?: number | null } = {}): string {
   const parts = input.parts ?? [];
-  return parts.length > 0
-    ? `/radicals?${RADICAL_BROWSER_PARAMS.parts}=${encodeURIComponent(parts.join(""))}`
-    : "/radicals";
+  if (parts.length === 0) return "/radicals";
+
+  const params = new URLSearchParams();
+  params.set(RADICAL_BROWSER_PARAMS.parts, parts.join(""));
+  if (typeof input.strokes === "number") params.set(RADICAL_BROWSER_PARAMS.strokes, String(input.strokes));
+  return `/radicals?${params.toString()}`;
+}
+
+/**
+ * The stroke count a reader has narrowed to, or null for all of them.
+ *
+ * Null rather than zero: "every count" is a real answer and the commonest
+ * one, and a zero would sort into the chips as though it were a count.
+ */
+export function readStrokes(value: string | string[] | undefined): number | null {
+  const raw = Number(Array.isArray(value) ? value[0] : value);
+  return Number.isInteger(raw) && raw > 0 && raw < 100 ? raw : null;
 }
 
 /**

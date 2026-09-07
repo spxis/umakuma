@@ -34,6 +34,14 @@ const VIEW_MODE_KEY = "wr:radicals:view-mode";
  * stroke counts are, and the whole state is in the address.
  */
 
+/* The same chip the stroke counts are drawn as on /strokes, so the two
+   filters read as one control in two places. */
+function chipClass(on: boolean): string {
+  return `inline-flex h-8 items-center gap-1.5 rounded-full border px-3 text-xs font-bold transition ${
+    on ? "border-accent bg-accent text-white" : "border-line bg-surface text-foreground/80 hover:bg-surface-muted"
+  }`;
+}
+
 /** A matched kanji as the shared grid wants it. */
 function toRow(match: RadicalMatch): SubjectListRow & FilerHit & { href: string; reading: string | null } {
   return {
@@ -64,6 +72,9 @@ export default function RadicalBrowserView({
   usable,
   matches,
   totalMatches,
+  poolMatches,
+  strokeChoices,
+  strokes,
   names,
   accountId,
 }: {
@@ -75,6 +86,12 @@ export default function RadicalBrowserView({
   usable: string[];
   matches: RadicalMatch[];
   totalMatches: number;
+  /** How many the parts alone match, before a stroke count narrowed them. */
+  poolMatches: number;
+  /** The stroke counts the answers take, with how many take each. */
+  strokeChoices: { strokes: number; count: number }[];
+  /** The count narrowed to, or null for all of them. */
+  strokes: number | null;
   /** The English name for each radical, where one is known. */
   names: Record<string, string>;
   accountId: string | null;
@@ -128,9 +145,58 @@ export default function RadicalBrowserView({
             chosen={chosen}
             usable={usableSet}
             names={names}
-            hrefFor={(parts) => radicalsHref({ parts })}
+            hrefFor={(parts) => radicalsHref({ parts, strokes })}
           />
         </div>
+
+        {/*
+          * The second filter, under the parts and inside the same card - the
+          * mirror of the parts filter under the stroke counts on /strokes.
+          *
+          * Only once something is picked: with no parts there are no answers,
+          * so a stroke count would have nothing to narrow. Every count here
+          * was tallied from the answers, so none of them leads to an empty
+          * page, and each says how many it would leave.
+          */}
+        {chosen.length > 0 && strokeChoices.length > 1 ? (
+          <div className="mt-3 border-t border-line/60 pt-3">
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 className="text-[11px] font-black uppercase tracking-[0.12em] text-foreground/60">
+                {RADICAL_BROWSER_COPY.strokesHeading}
+              </h3>
+              <p className="text-xs text-foreground/60">{RADICAL_BROWSER_COPY.strokesBlurb}</p>
+            </div>
+            <ul className="mt-2 flex flex-wrap gap-1.5">
+              <li>
+                <Link
+                  href={radicalsHref({ parts: chosen })}
+                  aria-current={strokes === null ? "page" : undefined}
+                  className={chipClass(strokes === null)}
+                >
+                  {RADICAL_BROWSER_COPY.strokesAll}
+                </Link>
+              </li>
+              {strokeChoices.map((choice) => {
+                const on = choice.strokes === strokes;
+                return (
+                  <li key={choice.strokes}>
+                    <Link
+                      href={radicalsHref({ parts: chosen, strokes: on ? null : choice.strokes })}
+                      aria-current={on ? "page" : undefined}
+                      title={RADICAL_BROWSER_COPY.strokeChip(choice.strokes)}
+                      className={chipClass(on)}
+                    >
+                      {choice.strokes}
+                      <span className={`text-[10px] font-semibold ${on ? "text-white/80" : "text-foreground/60"}`}>
+                        {choice.count}
+                      </span>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        ) : null}
       </section>
 
       {chosen.length > 0 ? (
@@ -140,7 +206,12 @@ export default function RadicalBrowserView({
               {RADICAL_BROWSER_COPY.pickedHeading}
             </span>
             <span className="text-[11px] font-semibold text-foreground/60">
-              {RADICAL_BROWSER_COPY.matches(rows.length, totalMatches)}
+              {/* With a count picked the line says what the count left, not
+                  what the parts alone found: a header reading 21 over a page
+                  of seven is the two halves disagreeing. */}
+              {strokes === null
+                ? RADICAL_BROWSER_COPY.matches(rows.length, totalMatches)
+                : RADICAL_BROWSER_COPY.matches(totalMatches, poolMatches)}
             </span>
             <span className="ml-auto flex items-center gap-2">
               {accountId ? (

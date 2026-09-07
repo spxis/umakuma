@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { kanjiByStrokeCount } from "./strokeBrowser";
-import { narrowByRadicals } from "./radicalSearchServer";
+import { narrowByRadicals, runRadicalSearch } from "./radicalSearchServer";
 
 /*
  * John, on /strokes/17 with 49 kanji on it and 226 at twelve strokes: "we
@@ -70,5 +70,51 @@ describe("a second filter over what the first one left", () => {
   it("hands back the pool untouched when nothing is picked", () => {
     const pool = seventeen();
     expect(narrowByRadicals(pool, []).kept).toEqual(pool);
+  });
+});
+
+/*
+ * The mirror, on /radicals: parts chosen first, then a stroke count. John:
+ * "and do the same for the Radicals viewer! Add a stroke filter that can
+ * further help reduce the number of kanji you see."
+ */
+describe("the same idea, the other way round", () => {
+  it("offers only the counts its answers actually take", async () => {
+    const { strokeChoices, poolMatches } = await runRadicalSearch(["人", "十"]);
+
+    expect(strokeChoices.length).toBeGreaterThan(1);
+    for (const choice of strokeChoices) expect(choice.count).toBeGreaterThan(0);
+    /* Every answer is counted exactly once, so the chips add up to the page. */
+    expect(strokeChoices.reduce((total, choice) => total + choice.count, 0)).toBe(poolMatches);
+  });
+
+  it("keeps only the kanji written in the count that was picked", async () => {
+    const all = await runRadicalSearch(["人", "十"]);
+    const first = all.strokeChoices[0]!;
+    const narrowed = await runRadicalSearch(["人", "十"], { strokes: first.strokes });
+
+    expect(narrowed.totalMatches).toBe(first.count);
+    expect(narrowed.poolMatches).toBe(all.totalMatches);
+    for (const match of narrowed.matches) expect(match.strokeCount).toBe(first.strokes);
+  });
+
+  it("ignores a count nothing takes rather than emptying the page", async () => {
+    const narrowed = await runRadicalSearch(["人", "十"], { strokes: 29 });
+    expect(narrowed.strokes).toBeNull();
+    expect(narrowed.totalMatches).toBeGreaterThan(0);
+  });
+
+  /* The two filters narrow each other. A part that has nothing left at the
+     chosen count is a dead end there, whatever the dictionary says. */
+  it("dims the parts that have nothing left at the chosen count", async () => {
+    const all = await runRadicalSearch(["人", "十"]);
+    const one = all.strokeChoices[0]!;
+    const narrowed = await runRadicalSearch(["人", "十"], { strokes: one.strokes });
+
+    expect(narrowed.usable.length).toBeLessThanOrEqual(all.usable.length);
+    for (const radical of narrowed.usable.slice(0, 12)) {
+      const next = await runRadicalSearch(["人", "十", radical], { strokes: one.strokes });
+      expect(next.totalMatches).toBeGreaterThan(0);
+    }
   });
 });
