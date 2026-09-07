@@ -115,4 +115,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "nunome", ja: "布目", reading: "ぬのめ", gloss: "the weave of the cloth" },
   { romaji: "Nemoto Hirogari", ja: "根元広がり", reading: "ねもとひろがり", gloss: "spreading out from the root" },
   { romaji: "Nobashi Wakedome", ja: "延ばし分け止め", reading: "のばしわけどめ", gloss: "carried on, stopped cleanly" },
+  { romaji: "Hakari Tashikame", ja: "計り確かめ", reading: "はかりたしかめ", gloss: "measure, then make sure" },
 ];

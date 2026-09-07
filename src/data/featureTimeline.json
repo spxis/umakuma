@@ -6911,12 +6911,25 @@
     "id": "run-cohort-play-on-a-schedule-without-half-writing-a-member",
     "name": "A killed cohort run cannot write twice",
     "area": "platform",
+    "status": "shipped",
     "kind": "feature",
+    "date": "2026-09-06",
+    "summary": "Internal: the simulated-member script can now be interrupted safely, so it is fit to run on a schedule. A run that dies partway can no longer record the same study twice.",
+    "dateIsEstimate": false,
+    "release": 553,
+    "version": "1.58.1",
+    "releasedAt": "2026-09-07T01:53:47Z"
+  },
+  {
+    "id": "the-cohort-tool-misread-its-own-arguments",
+    "name": "The cohort tool reads its arguments strictly",
+    "area": "platform",
+    "kind": "bug",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.58.1",
-    "release": 553,
-    "releasedAt": "2026-09-07T01:53:47Z",
-    "summary": "Internal: the simulated-member script can now be interrupted safely, so it is fit to run on a schedule. A run that dies partway can no longer record the same study twice."
+    "version": "1.58.2",
+    "release": 554,
+    "releasedAt": "2026-09-07T02:39:29Z",
+    "summary": "Internal tooling: the script that manages the simulated members now checks its own arguments, and every command can say what it would do before doing it."
   }
 ]
