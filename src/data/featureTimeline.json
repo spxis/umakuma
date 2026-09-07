@@ -7067,12 +7067,25 @@
     "id": "reviews-done-in-the-wanikani-app-never-reach-study-history",
     "name": "Reviews done in the WaniKani app never reach Study History",
     "area": "study",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-07",
+    "summary": "WaniKani syncing had stopped for everyone on 5 September and nothing said so. The queue refreshes the accounts that went longest without a sync, and two accounts with no WaniKani connection could never be refreshed - so they stayed at the head of the queue and were the only two ever picked. Accounts without a connection are no longer queued, and stale locks are released.",
+    "dateIsEstimate": false,
+    "release": 565,
+    "version": "1.69.0",
+    "releasedAt": "2026-09-07T10:16:55Z"
+  },
+  {
+    "id": "sync-queue-whole-token",
+    "name": "Reviews done in the WaniKani app never reach Study History",
+    "area": "study",
     "kind": "bug",
     "status": "shipped",
     "date": "2026-09-07",
-    "version": "1.69.0",
-    "release": 565,
-    "releasedAt": "2026-09-07T10:16:55Z",
-    "summary": "WaniKani syncing had stopped for everyone on 5 September and nothing said so. The queue refreshes the accounts that went longest without a sync, and two accounts with no WaniKani connection could never be refreshed - so they stayed at the head of the queue and were the only two ever picked. Accounts without a connection are no longer queued, and stale locks are released."
+    "version": "1.69.1",
+    "release": 566,
+    "releasedAt": "2026-09-07T10:21:46Z",
+    "summary": "A follow-up to the sync fix: an account whose stored token is only half present is treated as unconnected, so it cannot hold the head of the sync queue either."
   }
 ]
