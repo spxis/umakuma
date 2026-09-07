@@ -52,8 +52,8 @@ describe("the words a kanji appears in", () => {
           pronounced: "すいようび",
           gloss: "Wednesday",
           kanji: [
-            { label: "水", href: null, reading: "すい", meaning: "Water", level: 1, unLevel: null, listing: null, current: true },
-            { label: "曜", href: "/kanji/%E6%9B%9C", reading: "よう", meaning: "Weekday", level: 5, unLevel: null, listing: null, current: false },
+            { label: "水", href: null, reading: "すい", meaning: "Water", level: 1, unLevel: null, ugLevel: null, listing: null, current: true },
+            { label: "曜", href: "/kanji/%E6%9B%9C", reading: "よう", meaning: "Weekday", level: 5, unLevel: null, ugLevel: null, listing: null, current: false },
           ],
         },
       ]}

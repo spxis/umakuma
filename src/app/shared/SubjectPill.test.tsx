@@ -132,3 +132,22 @@ describe("a character on no list", () => {
     );
   });
 });
+
+/*
+ * The chip drew `UN` at everybody because it chose the badge itself. It does
+ * not choose any more: the surface knows which ladder its reader climbs and
+ * hands over that level, and the chip draws what it is handed.
+ */
+describe("whose level a chip prints", () => {
+  it("draws the school ladder for a caller that hands it one", () => {
+    const pill = draw(<SubjectPill glyph="後" level={6} ugLevel={6} />);
+    expect(pill.body.textContent).toContain("UG6");
+    expect(pill.body.textContent).not.toContain("UN");
+  });
+
+  it("draws the exam ladder for a caller that hands it one", () => {
+    const pill = draw(<SubjectPill glyph="後" level={6} unLevel={9} />);
+    expect(pill.body.textContent).toContain("UN9");
+    expect(pill.body.textContent).not.toContain("UG");
+  });
+});

@@ -128,12 +128,18 @@ export default async function KanjiPage({ params }: Props) {
   const entry = getSchoolGradeKanjiByCharacter(character);
   const readings = entry ? readingsForGrade(entry) : null;
   const dictionary = getKanjiDictionaryEntry(character);
-  const page = await loadKanjiPage(character);
   const session = await getServerSession(authOptions);
   const viewerMenuInfo = await resolveViewerMenuInfo({
     viewerEmail: session?.user?.email?.trim().toLowerCase() ?? null,
     sessionName: session?.user?.name?.trim() ?? null,
   });
+  /*
+   * The reader's own ladder decides which of our levels this page prints. A
+   * member on the school ordering was being shown UN numbers on every chip -
+   * a standing they are not taught against, under a prefix claiming they are.
+   * Signed out, it is the exam ladder, which is the site's headline ordering.
+   */
+  const page = await loadKanjiPage(character, viewerMenuInfo?.ladderStream ?? null);
 
   /*
    * The school catalogue covers what schools teach; the dictionary covers the
@@ -236,6 +242,7 @@ export default async function KanjiPage({ params }: Props) {
             readings: [...(summary?.on ?? []), ...(summary?.kun ?? [])],
             wkLevel: page.wkLevel,
             unLevel: page.unLevel,
+            ugLevel: page.ugLevel,
             jlptLevel: page.jlptLevel,
             listing: page.listing,
             /* The words on this card are the dictionary's, credited below it. */

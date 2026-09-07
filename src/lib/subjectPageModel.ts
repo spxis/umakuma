@@ -2,7 +2,9 @@ import { WORD_EXAMPLE_LIMIT } from "@/app/shared/subject-page/SubjectPage.consta
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import { subjectHref } from "@/lib/globalSearch";
 import { getKanjiDictionaryEntry, primaryKanjiReading } from "@/lib/kanjiDictionary";
+import { gradePlacement } from "@/lib/gradeLadder";
 import { kanjiPlacement } from "@/lib/kanjiLadder";
+import { LADDER_STREAMS, type LadderStreamValue } from "@/lib/ladder/ladderStreams";
 import { kanjiListingNote } from "@/lib/kanjiListingServer";
 import type { KanjiListingNote } from "@/lib/kanjiListing";
 import { parseJlptWordExamples } from "@/lib/jlptWordExamples";
@@ -39,6 +41,15 @@ export type JlptKanjiFacts = {
 
 export type KanjiPageSources = {
   character: string;
+  /**
+   * Which of our two ladders the reader is climbing.
+   *
+   * Null for anyone who is not a member, which is most of the traffic on a
+   * page a shared link opens - they are shown the exam ladder, the site's
+   * headline ordering. Answered once here rather than in each block, so a
+   * page cannot end up printing UN in one row and UG in another.
+   */
+  stream: LadderStreamValue | null;
   grade: SchoolGradeKanjiEntry | null;
   dictionary: KanjiDictionaryEntry | null;
   jlpt: JlptKanjiFacts | null;
@@ -53,7 +64,9 @@ export type WordExampleKanji = {
   reading: string | null;
   meaning: string | null;
   level: number | null;
+  /** Ours, on whichever ladder the reader climbs. The other stays null. */
   unLevel: number | null;
+  ugLevel: number | null;
   /** Why it carries no level, for a character no list teaches. Null otherwise. */
   listing: KanjiListingNote | null;
   /** The kanji the page is about, marked rather than missing. */
@@ -80,7 +93,9 @@ export type KanjiPageModel = {
   mnemonics: { meaning: string; reading: string } | null;
   /** WaniKani's level, for the header pill. */
   wkLevel: number | null;
+  /** Ours, on whichever ladder the reader climbs. The other stays null. */
   unLevel: number | null;
+  ugLevel: number | null;
   /** Why the card carries no level at all, where no list teaches the character. */
   listing: KanjiListingNote | null;
   /** WaniKani's id, where it teaches the character: what the tag marks need. */
@@ -98,7 +113,11 @@ export type KanjiPageModel = {
  * The page's own character is left out of the chips. It is the page being
  * read, and a link back to where you are is a chip that does nothing.
  */
-export function toWordExamples(raw: unknown, character: string): WordExample[] {
+export function toWordExamples(
+  raw: unknown,
+  character: string,
+  stream: LadderStreamValue | null,
+): WordExample[] {
   return parseJlptWordExamples(raw)
     .slice(0, WORD_EXAMPLE_LIMIT)
     .map((example) => ({
@@ -141,7 +160,7 @@ export function toWordExamples(raw: unknown, character: string): WordExample[] {
         reading: chip.reading ?? primaryKanjiReading(getKanjiDictionaryEntry(chip.label)),
         meaning: chip.meaning ?? getKanjiDictionaryEntry(chip.label)?.primaryMeaning ?? null,
         level: chip.level,
-        unLevel: kanjiPlacement(chip.label)?.level ?? null,
+        ...ourLevels(chip.label, stream),
         listing: kanjiListingNote(chip.label),
         current: chip.current,
       })),
@@ -215,6 +234,24 @@ export function neighbourReferences(kanji: CatalogSubjectDetail[]): CatalogRelat
   return gathered;
 }
 
+/**
+ * Where this character sits on the reader's own ladder, and nowhere else.
+ *
+ * Both placements are static maps and either is a lookup, so the cost of
+ * answering is not the reason only one is filled. A chip carrying UN9 and UG6
+ * at once is three ladders in a space that fits one, and the member is being
+ * taught against exactly one of them.
+ */
+function ourLevels(
+  character: string,
+  stream: LadderStreamValue | null,
+): { unLevel: number | null; ugLevel: number | null } {
+  if (stream === LADDER_STREAMS.ug) {
+    return { unLevel: null, ugLevel: gradePlacement(character)?.level ?? null };
+  }
+  return { unLevel: kanjiPlacement(character)?.level ?? null, ugLevel: null };
+}
+
 export function assembleKanjiPage(sources: KanjiPageSources): KanjiPageModel {
   const { character, jlpt, wanikani } = sources;
   const related = wanikani ? relatedGroupsForSubject(wanikani) : [];
@@ -226,15 +263,15 @@ export function assembleKanjiPage(sources: KanjiPageSources): KanjiPageModel {
     character,
     jlptLevel: jlpt?.nLevel ?? null,
     heisigKeyword: jlpt?.heisigKeyword?.trim() || null,
-    words: jlpt ? toWordExamples(jlpt.wordExamples, character) : [],
+    words: jlpt ? toWordExamples(jlpt.wordExamples, character, sources.stream) : [],
     related,
     mnemonics:
       meaningMnemonic || readingMnemonic ? { meaning: meaningMnemonic, reading: readingMnemonic } : null,
     wkLevel: wanikani?.wkLevel ?? null,
-    /* Ours, beside theirs. The whole reason a level now carries a prefix: a
-       reader can see 生 is WaniKani 5 and UmaKuma 7 without either number
-       having to be hidden or explained. */
-    unLevel: kanjiPlacement(character)?.level ?? null,
+    /* Ours, beside theirs, on the ladder this reader climbs. The whole reason
+       a level carries a prefix: 生 is WaniKani 5 and UmaKuma 7, and neither
+       number has to be hidden or explained to sit next to the other. */
+    ...ourLevels(character, sources.stream),
     /* 竈 is not WaniKani 0 and not UmaKuma 0; it is on nothing, and the card
        says which of the two silences this is. */
     listing: kanjiListingNote(character),

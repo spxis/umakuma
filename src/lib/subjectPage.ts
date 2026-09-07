@@ -4,6 +4,7 @@ import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import { getKanjiDictionaryEntry } from "@/lib/kanjiDictionary";
 import { prisma } from "@/lib/prisma";
 import { getPublicSubject } from "@/lib/publicSubject";
+import type { LadderStreamValue } from "@/lib/ladder/ladderStreams";
 import { getSchoolGradeKanjiByCharacter } from "@/lib/schoolGrades";
 import { assembleKanjiPage, type JlptKanjiFacts, type KanjiPageModel } from "@/lib/subjectPageModel";
 import { fetchSentencesForKanji, type ExampleSentence } from "@/lib/tatoebaSentences";
@@ -35,7 +36,10 @@ async function loadJlptFacts(character: string): Promise<JlptKanjiFacts | null> 
 
 export type KanjiPage = KanjiPageModel & { sentences: ExampleSentence[] };
 
-export async function loadKanjiPage(character: string): Promise<KanjiPage> {
+export async function loadKanjiPage(
+  character: string,
+  stream: LadderStreamValue | null,
+): Promise<KanjiPage> {
   const [jlpt, wanikani, sentences] = await Promise.all([
     loadJlptFacts(character),
     getPublicSubject(SUBJECT_TYPES.kanji, character),
@@ -45,6 +49,7 @@ export async function loadKanjiPage(character: string): Promise<KanjiPage> {
   return {
     ...assembleKanjiPage({
       character,
+      stream,
       grade: getSchoolGradeKanjiByCharacter(character),
       dictionary: getKanjiDictionaryEntry(character),
       jlpt,

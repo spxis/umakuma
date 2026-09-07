@@ -5,7 +5,7 @@ import { SUBJECT_PAGE_COPY } from "@/app/shared/subject-page/SubjectPage.constan
 import { subjectGlyphTone } from "@/app/shared/subjectListView";
 import { SUBJECT_TYPE_DISPLAY } from "@/lib/domainConstants";
 import { SOURCE_KEYS, SOURCE_CREDIT_COPY } from "@/lib/sourceCredits";
-import { unLevelBadge, wkLevelBadge } from "@/lib/levelBadge";
+import { ugLevelBadge, unLevelBadge, wkLevelBadge } from "@/lib/levelBadge";
 import { KANJI_LISTING_NOTE_DISPLAY, type KanjiListingNote } from "@/lib/kanjiListing";
 
 /**
@@ -38,7 +38,9 @@ export type SubjectIdentity = {
   readings: string[];
   /** Null where WaniKani does not teach the subject, which is most characters. */
   wkLevel: number | null;
+  /** Ours, on whichever of the two ladders the reader climbs. */
   unLevel?: number | null;
+  ugLevel?: number | null;
   jlptLevel: number | null;
   /**
    * Why the row of pills is otherwise empty.
@@ -67,7 +69,8 @@ function Pill({ children }: { children: React.ReactNode }) {
 }
 
 export default function SubjectIdentityBlock({ identity }: { identity: SubjectIdentity }) {
-  const { label, subjectType, name, meanings, readings, wkLevel, unLevel, jlptLevel, listing, credited } = identity;
+  const { label, subjectType, name, meanings, readings, wkLevel, unLevel, ugLevel, jlptLevel, listing, credited } =
+    identity;
   const note = listing ? KANJI_LISTING_NOTE_DISPLAY[listing] : null;
   const display = SUBJECT_TYPE_DISPLAY[subjectType as keyof typeof SUBJECT_TYPE_DISPLAY];
 
@@ -101,6 +104,7 @@ export default function SubjectIdentityBlock({ identity }: { identity: SubjectId
                 say whose they are. A kanji WaniKani never teaches carries only
                 the UK pill, which is exactly the case worth showing. */}
             {unLevel === null || unLevel === undefined ? null : <Pill>{unLevelBadge(unLevel)}</Pill>}
+            {ugLevel === null || ugLevel === undefined ? null : <Pill>{ugLevelBadge(ugLevel)}</Pill>}
             {jlptLevel ? <Pill>{SUBJECT_PAGE_COPY.jlpt(jlptLevel)}</Pill> : null}
             {note ? <span title={note.title}><Pill>{note.label}</Pill></span> : null}
           </div>

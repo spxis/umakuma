@@ -6,6 +6,7 @@ import type { CatalogRelatedReference, CatalogSubjectDetail } from "./subjectCat
 import { assembleKanjiPage, neighbourReferences, relatedGroupsForSubject, toWordExamples, type KanjiPageSources } from "./subjectPageModel";
 import { WORD_EXAMPLE_LIMIT } from "@/app/shared/subject-page/SubjectPage.constants";
 import { KANJI_LISTING_NOTES } from "./kanjiListing";
+import { LADDER_STREAMS } from "./ladder/ladderStreams";
 
 /**
  * A kanji page, assembled from whatever knows the character.
@@ -70,7 +71,7 @@ const WORD_EXAMPLES = [
 ];
 
 function sources(overrides: Partial<KanjiPageSources> = {}): KanjiPageSources {
-  return { character: "水", grade: null, dictionary: null, jlpt: null, wanikani: null, ...overrides };
+  return { character: "水", stream: null, grade: null, dictionary: null, jlpt: null, wanikani: null, ...overrides };
 }
 
 describe("a kanji WaniKani has never taught", () => {
@@ -147,7 +148,7 @@ describe("the words a kanji appears in", () => {
    * lands on "Nothing here by that name". The kanji inside it always resolve.
    */
   it("links the kanji inside a word, never the word", () => {
-    const [wednesday] = toWordExamples(WORD_EXAMPLES, "水");
+    const [wednesday] = toWordExamples(WORD_EXAMPLES, "水", null);
     expect(wednesday!.kanji.filter((item) => item.href).map((item) => item.href)).toEqual([
       `/kanji/${encodeURIComponent("曜")}`,
       `/kanji/${encodeURIComponent("日")}`,
@@ -164,7 +165,7 @@ describe("the words a kanji appears in", () => {
    * instead, with no href, so it still leads nowhere and says so.
    */
   it("shows the page's own character among the chips, unlinked", () => {
-    const [wednesday] = toWordExamples(WORD_EXAMPLES, "水");
+    const [wednesday] = toWordExamples(WORD_EXAMPLES, "水", null);
     const own = wednesday!.kanji.find((item) => item.label === "水");
     expect(own).toBeDefined();
     expect(own!.href).toBeNull();
@@ -172,7 +173,7 @@ describe("the words a kanji appears in", () => {
   });
 
   it("draws a chip for every character in the word", () => {
-    const [wednesday] = toWordExamples(WORD_EXAMPLES, "水");
+    const [wednesday] = toWordExamples(WORD_EXAMPLES, "水", null);
     expect(wednesday!.kanji).toHaveLength([...wednesday!.written].length);
   });
 
@@ -182,7 +183,7 @@ describe("the words a kanji appears in", () => {
    * decides what is in it, and the stored items only answer for what they know.
    */
   it("draws a word's characters even when nothing was stored about them", () => {
-    const [, swimming] = toWordExamples(WORD_EXAMPLES, "水");
+    const [, swimming] = toWordExamples(WORD_EXAMPLES, "水", null);
     expect(swimming!.written).toBe("水泳");
     expect(swimming!.kanji.map((item) => item.label)).toEqual(["水", "泳"]);
     expect(swimming!.kanji[0]!.current).toBe(true);
@@ -196,12 +197,12 @@ describe("the words a kanji appears in", () => {
       pronounced: "いち",
       gloss: "one",
     }));
-    expect(toWordExamples(many, "一")).toHaveLength(WORD_EXAMPLE_LIMIT);
+    expect(toWordExamples(many, "一", null)).toHaveLength(WORD_EXAMPLE_LIMIT);
   });
 
   it("reads nothing into a column that holds nothing", () => {
-    expect(toWordExamples(null, "水")).toEqual([]);
-    expect(toWordExamples("not an array", "水")).toEqual([]);
+    expect(toWordExamples(null, "水", null)).toEqual([]);
+    expect(toWordExamples("not an array", "水", null)).toEqual([]);
   });
 
   /*
@@ -213,6 +214,7 @@ describe("the words a kanji appears in", () => {
     const [rowan] = toWordExamples(
       [{ written: "七竈", pronounced: "ななかまど", gloss: "Japanese rowan" }],
       "七",
+      null,
     );
     const seven = rowan!.kanji.find((item) => item.label === "七");
     const stove = rowan!.kanji.find((item) => item.label === "竈");
@@ -235,12 +237,37 @@ describe("the words a kanji appears in", () => {
     const [rowan] = toWordExamples(
       [{ written: "七竈", pronounced: "ななかまど", gloss: "Japanese rowan" }],
       "七",
+      null,
     );
     const stove = rowan!.kanji.find((item) => item.label === "竈");
     expect(stove!.meaning).toBe("hearth");
     /* The character's own reading, not the one it takes in this word: the
        dictionary knows 竈 is ソウ and only the enrichment knows かまど. */
     expect(stove!.reading).toBe("ソウ");
+  });
+
+  /*
+   * The chips printed UN at everybody, so a member on the school ladder read a
+   * standing they are not taught against under a prefix claiming they were -
+   * the same bug the header carried until viewerLadderFor. 七 is UN3 and UG3;
+   * 後 is UN9 and UG6, which is where the two orderings visibly disagree.
+   */
+  it("gives the reader the level from their own ladder, and only that one", () => {
+    const word = [{ written: "七後", pronounced: "しちご", gloss: "not a word, two levels" }];
+
+    const [onTheExamLadder] = toWordExamples(word, "七", LADDER_STREAMS.un);
+    const behindOnUn = onTheExamLadder!.kanji.find((item) => item.label === "後");
+    expect(behindOnUn!.unLevel).toBe(9);
+    expect(behindOnUn!.ugLevel).toBeNull();
+
+    const [onTheSchoolLadder] = toWordExamples(word, "七", LADDER_STREAMS.ug);
+    const behindOnUg = onTheSchoolLadder!.kanji.find((item) => item.label === "後");
+    expect(behindOnUg!.ugLevel).toBe(6);
+    expect(behindOnUg!.unLevel).toBeNull();
+
+    /* Signed out: the exam ladder, which is the site's headline ordering. */
+    const [signedOut] = toWordExamples(word, "七", null);
+    expect(signedOut!.kanji.find((item) => item.label === "後")!.unLevel).toBe(9);
   });
 });
 

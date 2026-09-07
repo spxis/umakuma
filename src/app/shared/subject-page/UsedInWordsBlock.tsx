@@ -83,6 +83,7 @@ export default function UsedInWordsBlock({
                       href={item.href}
                       level={item.level}
                       unLevel={item.unLevel}
+                      ugLevel={item.ugLevel}
                       listing={item.listing}
                       selected={item.current}
                     />
