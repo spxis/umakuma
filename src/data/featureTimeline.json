@@ -7080,12 +7080,25 @@
     "id": "sync-queue-whole-token",
     "name": "Reviews done in the WaniKani app never reach Study History",
     "area": "study",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-07",
+    "summary": "A follow-up to the sync fix: an account whose stored token is only half present is treated as unconnected, so it cannot hold the head of the sync queue either.",
+    "dateIsEstimate": false,
+    "release": 566,
+    "version": "1.69.1",
+    "releasedAt": "2026-09-07T10:21:46Z"
+  },
+  {
+    "id": "history-from-wanikani-review-statistic-deltas",
+    "name": "History from WaniKani review statistic deltas",
+    "area": "study",
     "kind": "bug",
     "status": "shipped",
     "date": "2026-09-07",
-    "version": "1.69.1",
-    "release": 566,
-    "releasedAt": "2026-09-07T10:21:46Z",
-    "summary": "A follow-up to the sync fix: an account whose stored token is only half present is treated as unconnected, so it cannot hold the head of the sync queue either."
+    "version": "1.70.0",
+    "release": 567,
+    "releasedAt": "2026-09-07T10:35:10Z",
+    "summary": "Reviews you answer in the WaniKani app now appear in your Study History. WaniKani does not publish the reviews themselves - that list holds only what was submitted through the API - so each one is worked out from the per-subject counters at the next sync: what moved, which way, and when."
   }
 ]
