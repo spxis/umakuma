@@ -4,7 +4,6 @@ import {
   Prisma,
   type GameKind as PrismaGameKind,
   type GameSubjectCategory,
-  type StudyReviewResult,
 } from "@prisma/client";
 
 import { ACCOUNT_APPROVAL } from "@/lib/accountApproval";
@@ -12,7 +11,7 @@ import { getVancouverDateKey } from "@/lib/dailySnapshot";
 import { completedRunValues } from "@/lib/gameModeServer";
 import { planGameRun, type GameRunRequest } from "@/lib/gameRunCreate";
 import { prisma } from "@/lib/prisma";
-import { syncAccountLevels, unLevelTotals } from "@/lib/uk/unLevelServer";
+import { unLevelTotals } from "@/lib/uk/unLevelServer";
 import { USER_TYPES } from "@/lib/userType";
 import { GAME_KIND_LABELS } from "@/app/game/GameMode.constants";
 import { gameXpAwards } from "@/lib/xp/xpGameAwards";
@@ -23,8 +22,6 @@ import { CohortLedger } from "./cohortLedger";
 import { derivePersona, personaFor, type CohortPersona, type NewCohortMember } from "./cohortPersona";
 import { dueStates, resolvedLevel, type CohortMember, type CohortStateRow, type CohortWorld } from "./cohortStudy";
 import { LADDER_STREAMS } from "@/lib/ladder/ladderStreams";
-import { ladderColumns } from "@/lib/uk/ladderColumns";
-import { CURRICULUM_VERSION } from "@/lib/kanjiLadder";
 
 /**
  * The cohort's rows: reading a member out of the database and writing what
@@ -37,7 +34,7 @@ import { CURRICULUM_VERSION } from "@/lib/kanjiLadder";
  * per chunk, and a day's XP is replaced whole rather than patched.
  */
 
-const CHUNK = 1_000;
+
 
 export async function loadWorld(): Promise<CohortWorld> {
   const [subjects, un, ug] = await Promise.all([
@@ -193,166 +190,8 @@ export async function loadMember(account: CohortAccountRow, world: CohortWorld):
   return member;
 }
 
-function stateCreate(accountId: string, state: CohortStateRow): Prisma.UkSrsStateCreateManyInput {
-  return {
-    accountId,
-    subjectId: state.subjectId,
-    srsStage: state.srsStage,
-    availableAt: state.availableAt,
-    unlockedAt: state.unlockedAt,
-    startedAt: state.startedAt,
-    passedAt: state.passedAt,
-    burnedAt: state.burnedAt,
-    lastReviewedAt: state.lastReviewedAt,
-    reviewCount: state.reviewCount,
-    correctCount: state.correctCount,
-    wrongCount: state.wrongCount,
-    origin: state.origin,
-    createdAt: state.startedAt,
-    updatedAt: state.lastReviewedAt ?? state.startedAt,
-  };
-}
-
-/** One statement per chunk, however many rows moved. */
-async function updateStates(rows: readonly CohortStateRow[]): Promise<void> {
-  for (let at = 0; at < rows.length; at += CHUNK) {
-    const chunk = rows.slice(at, at + CHUNK);
-    await prisma.$executeRaw`
-      UPDATE "UkSrsState" AS s SET
-        "srsStage" = v.stage, "availableAt" = v.available_at, "passedAt" = v.passed_at,
-        "burnedAt" = v.burned_at, "lastReviewedAt" = v.last_reviewed_at, "reviewCount" = v.review_count,
-        "correctCount" = v.correct_count, "wrongCount" = v.wrong_count, "updatedAt" = v.updated_at
-      FROM (VALUES ${Prisma.join(chunk.map((row) => Prisma.sql`(
-        ${row.id}::int, ${row.srsStage}::int, ${row.availableAt}::timestamptz, ${row.passedAt}::timestamptz,
-        ${row.burnedAt}::timestamptz, ${row.lastReviewedAt}::timestamptz, ${row.reviewCount}::int,
-        ${row.correctCount}::int, ${row.wrongCount}::int, ${row.lastReviewedAt ?? row.startedAt}::timestamptz
-      )`))}) AS v(id, stage, available_at, passed_at, burned_at, last_reviewed_at, review_count, correct_count, wrong_count, updated_at)
-      WHERE s.id = v.id`;
-  }
-}
-
-/** Writes the study half: state rows and the answers that produced them. */
-export async function saveStudy(accountId: string, member: CohortMember): Promise<{ states: number; attempts: number }> {
-  const fresh = [...member.states.values()].filter((state) => state.id === null);
-  const moved = [...member.states.values()].filter((state) => state.id !== null && state.dirty);
-
-  for (let at = 0; at < fresh.length; at += CHUNK) {
-    await prisma.ukSrsState.createMany({
-      data: fresh.slice(at, at + CHUNK).map((state) => stateCreate(accountId, state)),
-      skipDuplicates: true,
-    });
-  }
-  await updateStates(moved);
-
-  if (fresh.length > 0) {
-    const ids = await prisma.ukSrsState.findMany({ where: { accountId }, select: { id: true, subjectId: true } });
-    for (const row of ids) {
-      const state = member.states.get(row.subjectId);
-      if (state) state.id = row.id;
-    }
-  }
-  for (const state of member.states.values()) state.dirty = false;
-
-  const attempts = member.attempts.flatMap((attempt) => {
-    const stateId = member.states.get(attempt.subjectId)?.id;
-    if (!stateId) return [];
-    return [{
-      accountId,
-      stateId,
-      subjectId: attempt.subjectId,
-      result: attempt.result as StudyReviewResult,
-      previousSrsStage: attempt.previousSrsStage,
-      newSrsStage: attempt.newSrsStage,
-      submittedAt: attempt.submittedAt,
-      curriculumStream: attempt.curriculumStream,
-      curriculumVersion: attempt.curriculumVersion,
-    }];
-  });
-  for (let at = 0; at < attempts.length; at += CHUNK) {
-    await prisma.ukReviewAttempt.createMany({ data: attempts.slice(at, at + CHUNK) });
-  }
-
-  /* The finals they sat. `skipDuplicates` because a re-run replays no day
-     twice but a member's cleared gates are loaded back, so the same attempt
-     number must not be written again. */
-  if (member.tests.length > 0) {
-    await prisma.levelTest.createMany({
-      data: member.tests.map((test) => ({
-        accountId,
-        kind: "jlpt_final" as const,
-        gateKey: test.gateKey,
-        attempt: test.attempt,
-        level: test.level,
-        questionCount: test.questionCount,
-        threshold: test.threshold,
-        mustPass: true,
-        answeredCount: test.questionCount,
-        correctCount: test.correctCount,
-        verdict: test.verdict,
-        curriculumVersion: CURRICULUM_VERSION,
-        startedAt: test.satAt,
-        completedAt: test.satAt,
-      })),
-      skipDuplicates: true,
-    });
-  }
-
-  const written = { states: fresh.length + moved.length, attempts: attempts.length, tests: member.tests.length };
-  member.attempts = [];
-  member.tests = [];
-  return written;
-}
-
-/** Writes the XP half and the account's standing. Every day this run touched is replaced whole. */
-export async function saveStanding(accountId: string, member: CohortMember): Promise<number> {
-  const days = [...member.ledger.touchedDays];
-  const rows = member.ledger.touchedRows();
-  if (days.length > 0) {
-    await prisma.xpEvent.deleteMany({ where: { accountId, dayKey: { in: days } } });
-    for (let at = 0; at < rows.length; at += CHUNK) {
-      await prisma.xpEvent.createMany({
-        data: rows.slice(at, at + CHUNK).map((row) => ({ accountId, ...row })),
-      });
-    }
-  }
-
-  /* The inputs only. The floor, the placement and when they placed are
-     things a member did; the level is derived from them and from the states
-     written above, and it has exactly one writer - which used to be two,
-     because this block set `unLevel` itself and the guard for that matched
-     only a block that *opened* with it. Floor first, then the sync, since the
-     resolver reads the floor. The sync writes both ladders' standings, so a
-     cohort run no longer leaves `ugLevel` stale beside a fresh `unLevel`. */
-  await prisma.account.update({
-    where: { id: accountId },
-    data: {
-      xp: member.ledger.xp,
-      xpLevel: member.ledger.xpLevel,
-      /* The floor and the placement are inputs, and they belong to the ladder
-         this member follows - a placement on UG says nothing about where they
-         would start on UN. `syncAccountLevels` below derives both standings,
-         each against its own floor. */
-      ...(ladderColumns(member.persona.stream).stream === LADDER_STREAMS.ug
-        ? { ugLevelFloor: member.floor, ugPlacedAt: member.placedAt }
-        : { unLevelFloor: member.floor, unPlacedAt: member.placedAt, unPlacementSource: member.placedAt ? "placement_test" as const : undefined }),
-      lastActivityAt: member.lastActivityAt,
-    },
-  });
-  await syncAccountLevels(accountId);
-  member.ledger.touchedDays.clear();
-  return rows.length;
-}
-
 export type PlayedGame = { kind: string; score: number; correct: number; answered: number };
 
-/**
- * One round: planned by the site, played by the persona, scored by the site.
- *
- * Written in one statement with its answers already in, dated when it was
- * played. A pool that cannot fill a round - a category with nothing in it at
- * that level, a Daily Challenge already taken - is a round not played, which
- * is what it would have been for a person too.
- */
 export async function playGame({
   accountId,
   member,

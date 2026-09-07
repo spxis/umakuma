@@ -14,8 +14,8 @@
  * listed and removed. Nothing public reads that column.
  *
  *   pnpm cohort list
- *   pnpm cohort add 32 [--seed autumn] [--window 120]   invent members, dated over the window
- *   pnpm cohort play [--until <iso>]                    carry everyone forward to now
+ *   pnpm cohort add 16 [--seed autumn] [--window 365]   invent members, dated over the window
+ *   pnpm cohort play [--until <iso>] [--max-sessions 14]  carry everyone forward
  *   pnpm cohort remove
  *
  * `play` is the one to run on a schedule. It is safe to run any time: a
@@ -44,11 +44,10 @@ import {
   loadWorld,
   playGame,
   removeCohort,
-  saveStanding,
-  saveStudy,
   takenSlugs,
   type CohortAccountRow,
 } from "../src/lib/cohort/cohortStore";
+import { saveStanding, saveStudy } from "../src/lib/cohort/cohortWrite";
 import { applyPlacement, studySession, type CohortWorld } from "../src/lib/cohort/cohortStudy";
 import { resolveStreak } from "../src/lib/xp/xpStreak";
 import type { GameRunRequest } from "../src/lib/gameRunCreate";
@@ -62,6 +61,8 @@ type Options = {
   windowDays: number;
   until: Date;
   allowRemote: boolean;
+  /** Most sessions one run replays per member. Null for all of them. */
+  maxSessions: number | null;
 };
 
 function parseArgs(argv: string[]): Options {
@@ -76,6 +77,10 @@ function parseArgs(argv: string[]): Options {
   const count = command === "add" ? Number(rest.find((arg) => /^\d+$/.test(arg)) ?? "0") : 0;
   if (command === "add" && (!Number.isInteger(count) || count <= 0)) throw new Error("add needs a count: pnpm cohort add 32");
   const until = value("--until");
+  const maxSessions = value("--max-sessions");
+  if (maxSessions !== null && (!Number.isInteger(Number(maxSessions)) || Number(maxSessions) <= 0)) {
+    throw new Error("--max-sessions needs a positive whole number of sessions.");
+  }
   return {
     command: command as Command,
     count,
@@ -83,6 +88,7 @@ function parseArgs(argv: string[]): Options {
     windowDays: Number(value("--window") ?? "120"),
     until: until ? new Date(until) : new Date(),
     allowRemote: rest.includes("--allow-remote"),
+    maxSessions: maxSessions === null ? null : Number(maxSessions),
   };
 }
 
@@ -119,7 +125,7 @@ async function list(): Promise<void> {
         `last ${member.lastActivityAt?.toISOString().slice(0, 10) ?? "never"}`,
     );
   }
-  if (accounts.length === 0) console.log("  (none yet - try: pnpm cohort add 32, then pnpm cohort play)");
+  if (accounts.length === 0) console.log("  (none yet - try: pnpm cohort add 16, then pnpm cohort play)");
 }
 
 async function add(options: Options): Promise<CohortAccountRow[]> {
@@ -141,15 +147,32 @@ async function add(options: Options): Promise<CohortAccountRow[]> {
 type PendingGame = { at: Date; request: GameRunRequest };
 
 /** Everything one member does between their last recorded session and `until`. */
-async function playMember(account: CohortAccountRow, world: CohortWorld, until: Date): Promise<void> {
+async function playMember(
+  account: CohortAccountRow,
+  world: CohortWorld,
+  until: Date,
+  maxSessions: number | null,
+): Promise<void> {
   const member = await loadMember(account, world);
   if (!member) return;
   const persona = member.persona;
-  const sessions = sessionsBetween(persona, member.lastActivityAt, until);
-  if (sessions.length === 0) {
+  const all = sessionsBetween(persona, member.lastActivityAt, until);
+  if (all.length === 0) {
     console.log(`  ${persona.displayName}: nothing new`);
     return;
   }
+
+  /*
+   * At most `maxSessions` of them this time.
+   *
+   * A tick that has months to replay cannot finish inside a request, and the
+   * one that gets killed is the one that half-writes. Capping turns "catch up
+   * a year in one go, or die trying" into "catch up over several ticks", each
+   * of which completes. Uncapped by default, because the first build of a
+   * cohort is meant to replay everything in one long run from a terminal.
+   */
+  const sessions = maxSessions === null ? all : all.slice(0, maxSessions);
+  const remaining = all.length - sessions.length;
 
   const games: PendingGame[] = [];
   const todayKey = getVancouverDateKey(until);
@@ -177,6 +200,8 @@ async function playMember(account: CohortAccountRow, world: CohortWorld, until: 
     }
   }
 
+  /* The study rows and the resume point, in one commit. Everything after this
+     is either idempotent or safe to lose - see `saveStudy`. */
   const study = await saveStudy(account.id, member);
   const played: string[] = [];
   for (const game of games) {
@@ -190,6 +215,7 @@ async function playMember(account: CohortAccountRow, world: CohortWorld, until: 
     `  ${persona.displayName.padEnd(22)} ${sessions.length} session(s) to ${local}: ` +
       `${totals.reviews} reviews (${totals.correct} right), ${totals.lessons} lessons, ${played.length} game(s), ` +
       `level ${member.level}, xp ${member.ledger.xp} · wrote ${study.states} states, ${study.attempts} answers, ${xpRows} xp rows` +
+      (remaining > 0 ? ` · ${remaining} session(s) left for the next run` : "") +
       (played.length > 0 ? `\n      ${played.join("; ")}` : ""),
   );
 }
@@ -203,7 +229,7 @@ async function play(options: Options): Promise<void> {
     return;
   }
   console.log(`Playing ${accounts.length} member(s) up to ${options.until.toISOString()}:`);
-  for (const account of accounts) await playMember(account, world, options.until);
+  for (const account of accounts) await playMember(account, world, options.until, options.maxSessions);
 }
 
 async function main(): Promise<void> {
