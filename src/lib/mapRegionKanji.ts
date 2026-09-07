@@ -5,7 +5,7 @@ import "server-only";
 import "./geoRegionServer";
 
 import { GEO_DATASETS, type CountryCode } from "./geoRegion";
-import { getKanjiDictionaryEntry } from "./kanjiDictionary";
+import { getKanjiDictionaryEntry, primaryKanjiReading } from "./kanjiDictionary";
 import { regionKanji } from "./mapStudy";
 
 /**
@@ -41,8 +41,7 @@ export function mapRegionKanjiFacts(): MapKanjiFacts {
            * one that must not be dropped here, of all the pages that show a
            * kanji.
            */
-          reading:
-            entry?.readings.on[0] ?? entry?.readings.kun[0] ?? entry?.readings.nanori[0] ?? null,
+          reading: primaryKanjiReading(entry, { nanori: true }),
         };
       }
     }

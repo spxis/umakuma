@@ -1,4 +1,4 @@
-import { getAllKanjiDictionaryEntries } from "./kanjiDictionary";
+import { getAllKanjiDictionaryEntries, primaryKanjiReading } from "./kanjiDictionary";
 import { isTaughtKanji } from "./kanjiLadder";
 
 /**
@@ -57,7 +57,7 @@ function toEntry(entry: ReturnType<typeof getAllKanjiDictionaryEntries>[number])
   return {
     kanji: entry.kanji,
     meaning: entry.primaryMeaning || entry.meanings[0] || "",
-    reading: entry.readings.on[0] ?? entry.readings.kun[0] ?? null,
+    reading: primaryKanjiReading(entry),
     strokeCount: entry.strokeCount ?? 0,
     frequencyRank: entry.frequencyRank,
     grade: entry.grade,

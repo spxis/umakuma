@@ -102,6 +102,41 @@ export function getAllKanjiDictionaryEntries(): KanjiDictionaryEntry[] {
   return entries;
 }
 
+/**
+ * A reading as a reader wants it, not as the file writes it.
+ *
+ * KANJIDIC2 marks okurigana with a dot and a prefix form with a hyphen, so 込
+ * arrives as `-こ.む` and 行 as `おこな.う`. Both marks belong to the
+ * dictionary's own grammar and neither belongs on a chip.
+ */
+export function readingWithoutMarks(reading: string): string {
+  return reading.replace(/[.\-]/g, "");
+}
+
+/**
+ * The one reading to print where there is room for one.
+ *
+ * On'yomi first, because a character is nearly always met inside a compound -
+ * 士 and 土 are シ and ド long before anybody needs つち - then kun, then the
+ * name readings for the callers that ask, since a place name is often the
+ * third: 埼 reads さき only in names.
+ *
+ * Five surfaces wrote this expression out, two of them stripped the okurigana
+ * dot afterwards and neither stripped the hyphen, so the stroke pages have
+ * been drawing 込 as `-こ.む`.
+ */
+export function primaryKanjiReading(
+  entry: KanjiDictionaryEntry | null | undefined,
+  options?: { nanori?: boolean },
+): string | null {
+  const reading =
+    entry?.readings.on[0] ??
+    entry?.readings.kun[0] ??
+    (options?.nanori ? entry?.readings.nanori[0] : undefined) ??
+    null;
+  return reading ? readingWithoutMarks(reading) : null;
+}
+
 /** Drops what is held, so a test can read the files again. */
 export function clearKanjiDictionaryCache(): void {
   cachedIndex = null;

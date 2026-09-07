@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 
 import {
   clearKanjiDictionaryCache,
+  primaryKanjiReading,
+  readingWithoutMarks,
   getAllKanjiDictionaryEntries,
   getKanjiDictionaryAttribution,
   getKanjiDictionaryEntry,
@@ -90,5 +92,32 @@ describe("getAllKanjiDictionaryEntries", () => {
   it("gives every entry a meaning to show", () => {
     const empty = getAllKanjiDictionaryEntries().filter((entry) => !entry.primaryMeaning);
     expect(empty).toEqual([]);
+  });
+});
+
+describe("the one reading a chip has room for", () => {
+  it("takes the on reading before the kun", () => {
+    /* 士 and 土 are シ and ド long before anybody needs つち. */
+    expect(primaryKanjiReading(getKanjiDictionaryEntry("士"))).toBe("シ");
+    /* 竈 has one on reading and three kun; the chip gets the on. */
+    expect(primaryKanjiReading(getKanjiDictionaryEntry("竈"))).toBe("ソウ");
+  });
+
+  /*
+   * KANJIDIC2's own grammar, which no reader asked for: 込 is stored as
+   * `-こ.む`, and the stroke pages drew it that way because the two callers
+   * that stripped the dot both left the hyphen.
+   */
+  it("drops the dictionary's okurigana dot and prefix hyphen", () => {
+    expect(readingWithoutMarks("-こ.む")).toBe("こむ");
+    expect(readingWithoutMarks("おこな.う")).toBe("おこなう");
+    expect(primaryKanjiReading(getKanjiDictionaryEntry("込"))).toBe("こむ");
+  });
+
+  it("reaches the name readings only for a caller that asks", () => {
+    /* 埼 reads さき only in names, which is exactly what a place name needs. */
+    const saki = getKanjiDictionaryEntry("埼");
+    expect(primaryKanjiReading(saki, { nanori: true })).not.toBeNull();
+    expect(primaryKanjiReading(null)).toBeNull();
   });
 });

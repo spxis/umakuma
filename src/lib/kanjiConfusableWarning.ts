@@ -23,7 +23,7 @@ import {
   type ConfusableStanding,
   type ConfusableWarning,
 } from "./kanjiConfusableWarning.types";
-import { getKanjiDictionaryEntry } from "./kanjiDictionary";
+import { getKanjiDictionaryEntry, primaryKanjiReading } from "./kanjiDictionary";
 import { kanjiPlacement } from "./kanjiLadder";
 import { LEVEL_SYSTEMS, type LevelSystem } from "./levelBadge";
 
@@ -72,12 +72,10 @@ export function confusableWarnings(
     if (!standing) continue;
 
     const entry = getKanjiDictionaryEntry(neighbour.kanji);
-    const reading = entry?.readings.on[0] ?? entry?.readings.kun[0] ?? null;
     warnings.push({
       kanji: neighbour.kanji,
       meaning: entry?.primaryMeaning ?? null,
-      /* KANJIDIC2 marks okurigana with a dot; a reader wants the reading. */
-      reading: reading ? reading.replace(/\./g, "") : null,
+      reading: primaryKanjiReading(entry),
       wkLevel,
       unLevel,
       standing,

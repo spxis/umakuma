@@ -10,7 +10,7 @@
 import { kanjiPageHref } from "@/app/shared/subject-page/subjectSectionAddress";
 
 import { confusablesFor, type ConfusableSource } from "./kanjiConfusables";
-import { getKanjiDictionaryEntry } from "./kanjiDictionary";
+import { getKanjiDictionaryEntry, primaryKanjiReading } from "./kanjiDictionary";
 import { kanjiPlacement } from "./kanjiLadder";
 
 export type ConfusableView = {
@@ -24,11 +24,6 @@ export type ConfusableView = {
   sources: ConfusableSource[];
 };
 
-/** KANJIDIC2 marks okurigana with a dot — `かんが.える`. A reader wants the reading. */
-function withoutOkuriganaMark(reading: string): string {
-  return reading.replace(/\./g, "");
-}
-
 /**
  * The characters this one is mistaken for, in the order the file ranks them.
  *
@@ -38,11 +33,11 @@ function withoutOkuriganaMark(reading: string): string {
 export function confusableViewsFor(character: string): ConfusableView[] {
   return confusablesFor(character).map((neighbour) => {
     const entry = getKanjiDictionaryEntry(neighbour.kanji);
-    const reading = entry?.readings.on[0] ?? entry?.readings.kun[0] ?? null;
+
     return {
       kanji: neighbour.kanji,
       meaning: entry?.primaryMeaning ?? null,
-      reading: reading ? withoutOkuriganaMark(reading) : null,
+      reading: primaryKanjiReading(entry),
       href: kanjiPageHref(neighbour.kanji),
       unLevel: kanjiPlacement(neighbour.kanji)?.level ?? null,
       sources: neighbour.sources,

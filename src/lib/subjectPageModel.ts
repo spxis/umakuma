@@ -1,7 +1,7 @@
 import { WORD_EXAMPLE_LIMIT } from "@/app/shared/subject-page/SubjectPage.constants";
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import { subjectHref } from "@/lib/globalSearch";
-import { getKanjiDictionaryEntry } from "@/lib/kanjiDictionary";
+import { getKanjiDictionaryEntry, primaryKanjiReading } from "@/lib/kanjiDictionary";
 import { kanjiPlacement } from "@/lib/kanjiLadder";
 import { kanjiListingNote } from "@/lib/kanjiListingServer";
 import type { KanjiListingNote } from "@/lib/kanjiListing";
@@ -127,7 +127,18 @@ export function toWordExamples(raw: unknown, character: string): WordExample[] {
         href: chip.current
           ? null
           : subjectHref({ subjectType: SUBJECT_TYPES.kanji, characters: chip.label, slug: null }),
-        reading: chip.reading,
+        /*
+         * The dictionary answers for both halves or for neither.
+         *
+         * The meaning has fallen through to KANJIDIC since the row learned to
+         * draw every character of a word; the reading never did, so 竈 came
+         * out as "kitchen stove" alone in a row of "しち / Seven". The
+         * dictionary knows a character's own readings and not the one it
+         * takes inside this compound - which is what the enrichment knows -
+         * so this is the character's reading, offered where there was
+         * nothing rather than in place of anything.
+         */
+        reading: chip.reading ?? primaryKanjiReading(getKanjiDictionaryEntry(chip.label)),
         meaning: chip.meaning ?? getKanjiDictionaryEntry(chip.label)?.primaryMeaning ?? null,
         level: chip.level,
         unLevel: kanjiPlacement(chip.label)?.level ?? null,

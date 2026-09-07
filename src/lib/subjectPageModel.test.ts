@@ -224,6 +224,24 @@ describe("the words a kanji appears in", () => {
     expect(stove!.unLevel).toBeNull();
     expect(stove!.listing).toBe(KANJI_LISTING_NOTES.off);
   });
+
+  /*
+   * The other half of the same chip. The meaning has fallen through to
+   * KANJIDIC since the row learned to draw every character of a word; the
+   * reading never did, so 竈 drew "kitchen stove" alone in a row of
+   * "しち / Seven".
+   */
+  it("gives a character the dictionary's reading where nothing was stored", () => {
+    const [rowan] = toWordExamples(
+      [{ written: "七竈", pronounced: "ななかまど", gloss: "Japanese rowan" }],
+      "七",
+    );
+    const stove = rowan!.kanji.find((item) => item.label === "竈");
+    expect(stove!.meaning).toBe("hearth");
+    /* The character's own reading, not the one it takes in this word: the
+       dictionary knows 竈 is ソウ and only the enrichment knows かまど. */
+    expect(stove!.reading).toBe("ソウ");
+  });
 });
 
 describe("a subject's relations on the other two pages", () => {
