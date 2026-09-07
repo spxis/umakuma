@@ -29,6 +29,13 @@ export async function loadExplorerPage(
 
   return {
     accountId: account.id,
+    /*
+     * Which of our two ladders this member climbs, carried down rather than
+     * re-derived: the explorer prints their standing, and it printed `UN` at
+     * everybody - a number from a curriculum a UG member is not taught
+     * against, under a prefix saying they are.
+     */
+    ladderStream: account.ladderStream,
     maxLevel: wkLevel,
     accountPendingReviews: account.pendingReviews,
     levelItemCountsByLevel: progress.levelItemCountsByLevel,

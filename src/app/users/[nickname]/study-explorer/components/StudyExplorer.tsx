@@ -30,7 +30,7 @@ import type {
 import { fetchStudyQueue, fetchUpcomingReviews, readStoredQueue, readStoredQueueMeta, sortStudyItemsByWait } from "../lib/studyExplorerUtils";
 import { normalizeSrsStageFilter } from "../lib/studyExplorerSrs";
 import { resolveEffectiveViewedLevel } from "../lib/studyExplorerLevelBounds";
-import { buildStudyExplorerStorageKeys, deriveInitialQueueState, readStoredStudyCounts } from "../lib/studyExplorerState";
+import { buildStudyExplorerStorageKeys, deriveInitialQueueState, effectiveQueueFilters, readStoredStudyCounts, usableWaitSortOrder } from "../lib/studyExplorerState";
 import {
   buildStudyApiBasePath,
   buildStudyUpcomingRequestUrl,
@@ -48,8 +48,10 @@ import { useStudyCloseOnExplorerPageChange, useStudyModalSessionSync, useStudyTo
 import { useStudyTagSync } from "../lib/useStudyTagSync";
 import { useStudyCardTagToggle } from "../lib/useStudyCardTagToggle";
 import { useStudyWaitSort } from "../lib/useStudyWaitSort";
+import { LadderStreamProvider } from "@/app/shared/ladderStream";
 export default function StudyExplorer({
   accountId,
+  ladderStream,
   studySource,
   customLibraryId,
   studySourceHeaderLabel,
@@ -111,16 +113,11 @@ export default function StudyExplorer({
     waitSortStorageKey: storageKeys.waitSort,
     waitRandomOrderStorageKey: storageKeys.waitRandomOrder,
   });
-  const supportsDifficultySort = !studySourceIsCustom && queueMode === STUDY_QUEUE_TYPES.review;
-  const effectiveWaitSortOrder = !supportsDifficultySort && (waitSortOrder === "easiest" || waitSortOrder === "hardest")
-    ? "oldest_wait"
-    : waitSortOrder;
-  const effectiveSrsFilter: StudySrsFilter =
-    queueMode === STUDY_QUEUE_TYPES.lesson ? STUDY_SRS_FILTERS.all : srsFilter;
-  const effectiveRecentOnly = queueMode === STUDY_QUEUE_TYPES.lesson ? false : recentOnly;
-  const effectiveShowLocked = queueMode === STUDY_QUEUE_TYPES.lesson ? true : showLocked;
-  const effectiveSrsStageFilter: StudySrsStageFilter | null =
-    queueMode === STUDY_QUEUE_TYPES.lesson ? null : normalizeSrsStageFilter(srsFilter, srsStageFilter);
+  /* A lesson queue answers the review filters differently; the rule is in one place. */
+  /* Memoised because the sorted list is memoised on it, and the compiler will
+     not carry a memo across a value it cannot prove is unchanged. */
+  const effectiveWaitSortOrder = useMemo(() => usableWaitSortOrder(waitSortOrder, { queueMode, studySourceIsCustom }), [queueMode, studySourceIsCustom, waitSortOrder]);
+  const { srsFilter: effectiveSrsFilter, srsStageFilter: effectiveSrsStageFilter, recentOnly: effectiveRecentOnly, showLocked: effectiveShowLocked } = effectiveQueueFilters({ queueMode, srsFilter, srsStageFilter, recentOnly, showLocked, normalizeSrsStageFilter });
   const initialPageSize = useMemo(() => (queueMode === STUDY_QUEUE_TYPES.lesson ? gridColumns * 24 : gridColumns * 12), [gridColumns, queueMode]);
   const queueRequestUrl = hasHydratedWaitSort ? buildStudyQueueRequestUrl({
     studyApiBasePath,
@@ -440,6 +437,8 @@ export default function StudyExplorer({
   });
   const handleToggleStudyTag = useStudyCardTagToggle(accountId, mutateQueue, setLoadedItems);
   return (
+    /* Their own ladder, once, for every level this tree prints. */
+    <LadderStreamProvider stream={ladderStream}>
     <section className="space-y-3">
       {hasMounted ? (
         <>
@@ -495,5 +494,6 @@ export default function StudyExplorer({
         </section>
       )}
     </section>
+    </LadderStreamProvider>
   );
 }

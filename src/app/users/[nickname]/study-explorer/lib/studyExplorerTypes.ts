@@ -1,6 +1,7 @@
 import type { SrsFilter } from "../../explorerTypes";
 import { type SubjectType, type WkStatus, type ReviewResult, type StudyTag } from "@/lib/domainConstants";
 import type { StudyQueueItem } from "@/lib/studyQueueTypes";
+import type { LadderStreamValue } from "@/lib/ladder/ladderStreams";
 
 export type { StudyQueueItem } from "@/lib/studyQueueTypes";
 
@@ -126,6 +127,8 @@ export type StudyReviewSubmitResult = Extract<ReviewOutcome, "correct" | "wrong"
 
 export type StudyExplorerProps = {
   accountId: string;
+  /** Which of our two ladders this member climbs; null for a visitor. */
+  ladderStream: LadderStreamValue | null;
   studySource: StudySource;
   customLibraryId: string | null;
   studySourceHeaderLabel: string;

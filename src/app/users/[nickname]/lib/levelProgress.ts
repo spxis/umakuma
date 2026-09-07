@@ -103,6 +103,7 @@ export async function loadLevelProgress(userKey: string, options: { withJlpt?: b
       reviewCount: true,
       burnedCount: true,
       pendingReviews: true,
+      ladderStream: true,
       radicalCount: true,
       vocabularyCount: true,
       apprenticeCount: true,

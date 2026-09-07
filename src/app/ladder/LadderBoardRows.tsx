@@ -1,7 +1,7 @@
 import MemberBoardRows from "@/app/shared/board/MemberBoardRows";
 import { memberBoardGap, type MemberBoardEntry } from "@/app/shared/board/memberBoardView";
-import { LADDER_STREAMS, type LadderStreamValue } from "@/lib/ladder/ladderStreams";
-import { ugLevelBadge, unLevelBadge } from "@/lib/levelBadge";
+import type { LadderStreamValue } from "@/lib/ladder/ladderStreams";
+import { ourLevelBadge } from "@/lib/levelBadge";
 
 import type { LadderBoardEntry } from "./lib/ladderBoard";
 import { LADDER_BOARD_COPY as copy } from "./ladderBoardCopy";
@@ -52,7 +52,7 @@ export default function LadderBoardRows({ entries, viewer }: Props) {
 
 /** The level, written in the system the member is actually climbing. */
 function badgeFor(stream: LadderStreamValue, level: number): string {
-  return (stream === LADDER_STREAMS.ug ? ugLevelBadge(level) : unLevelBadge(level)) ?? "";
+  return ourLevelBadge(stream, level) ?? "";
 }
 
 /**

@@ -20,9 +20,13 @@ import type {
   StudyTypeFilter,
 } from "./study-explorer/lib/studyExplorerTypes";
 import { QUEUE_TYPES, type QueueType } from "@/lib/domainConstants";
+import { studySourceView } from "./explorerTabsView";
+import type { LadderStreamValue } from "@/lib/ladder/ladderStreams";
 
 type Props = {
   accountId: string;
+  /** Which of our two ladders this member climbs; null for a visitor. */
+  ladderStream: LadderStreamValue | null;
   viewedWkUsername: string;
   maxLevel: number;
   accountPendingReviews: number;
@@ -54,6 +58,7 @@ type Props = {
 
 export default function ExplorerTabs({
   accountId,
+  ladderStream,
   viewedWkUsername,
   maxLevel,
   accountPendingReviews,
@@ -324,21 +329,8 @@ export default function ExplorerTabs({
   }, [effectiveActiveTab, isHydrated]);
 
 
-  const studySourceHeaderLabel = studySource === "custom"
-    ? (activeCustomLibraryName?.trim() || "Custom")
-    : studySource === "umakuma"
-      ? "UmaKuma"
-      : "WaniKani";
-  const studySourceIsCustom = studySource === "custom";
-  const studySourceLevel = studySource === "custom" || studySource === "umakuma"
-    ? (typeof studyCounts?.currentLevel === "number" ? studyCounts.currentLevel : 1)
-    : (typeof studyCounts?.currentLevel === "number" ? studyCounts.currentLevel : maxLevel);
-  const effectiveStudyMaxLevel = studySource === "custom" || studySource === "umakuma"
-    ? Math.max(
-      typeof studyCounts?.maxLevel === "number" ? studyCounts.maxLevel : 1,
-      typeof studySourceLevel === "number" ? studySourceLevel : 1,
-    )
-    : maxLevel;
+  const { studySourceHeaderLabel, studySourceIsCustom, studySourceLevel, effectiveStudyMaxLevel } =
+    studySourceView({ studySource, activeCustomLibraryName, studyCounts, maxLevel });
   /*
    * The library, not the page. This read "Library Explorer - WaniKani" while
    * the page header two rows above already said Library Explorer; what the
@@ -435,6 +427,7 @@ export default function ExplorerTabs({
       {effectiveActiveTab === "study" ? (
         <StudyExplorer
           accountId={accountId}
+          ladderStream={ladderStream}
           studySource={studySource}
           customLibraryId={customLibraryId}
           studySourceHeaderLabel={studySourceHeaderLabel}

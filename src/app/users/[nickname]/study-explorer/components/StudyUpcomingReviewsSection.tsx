@@ -4,7 +4,8 @@ import type { UpcomingReviewItem } from "../lib/studyExplorerTypes";
 import { shortSubjectTypeLabel } from "../../level-explorer/lib/levelExplorerDisplay";
 import { NeutralPill, SubjectTypePill } from "../../shared/ExplorerPill";
 import { STUDY_PANEL_TEXT } from "./StudyExplorer.constants";
-import { unLevelBadge, wkLevelBadge } from "@/lib/levelBadge";
+import { useLadderStream } from "@/app/shared/ladderStream";
+import { ourLevelBadge, wkLevelBadge } from "@/lib/levelBadge";
 
 type StudyUpcomingReviewsSectionProps = {
   showUpcomingReviews: boolean;
@@ -21,6 +22,7 @@ export default function StudyUpcomingReviewsSection({
   upcomingErrorMessage,
   onToggleShowUpcomingReviews,
 }: StudyUpcomingReviewsSectionProps) {
+  const ladderStream = useLadderStream();
   return (
     <div className="mt-3 rounded-xl border border-line bg-surface px-3 py-3">
       <label className="inline-flex cursor-pointer items-center gap-2 text-xs font-semibold text-foreground/85">
@@ -57,7 +59,7 @@ export default function StudyUpcomingReviewsSection({
                         <NeutralPill>{wkLevelBadge(item.wkLevel)}</NeutralPill>
                       ) : null}
                       {typeof item.unLevel === "number" ? (
-                        <NeutralPill>{unLevelBadge(item.unLevel)}</NeutralPill>
+                        <NeutralPill>{ourLevelBadge(ladderStream, item.unLevel)}</NeutralPill>
                       ) : null}
                     </div>
                     {(item.primaryMeaning || item.primaryReading) ? (

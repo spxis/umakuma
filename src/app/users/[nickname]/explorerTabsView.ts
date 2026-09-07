@@ -21,3 +21,48 @@ export function formatReviewCountLabel(studyCounts: { reviews?: number; reviewsT
     : studyCounts.reviews;
   return `${studyCounts.reviews}/${total}`;
 }
+
+/**
+ * What the study source is called, where it stands, and how far it goes.
+ *
+ * Four answers to the same question - which library is being studied - and
+ * they have to agree: a header reading "UmaKuma (UN3)" over a level picker
+ * that stops at 60 is the source saying one thing and the range another.
+ * Pure, and out of the component, because the component was at the file
+ * limit and this is the part of it that is arithmetic rather than markup.
+ */
+export function studySourceView(input: {
+  studySource: "wanikani" | "umakuma" | "custom";
+  activeCustomLibraryName: string | null | undefined;
+  studyCounts: { currentLevel?: number | null; maxLevel?: number | null } | null | undefined;
+  maxLevel: number;
+}): {
+  studySourceHeaderLabel: string;
+  studySourceIsCustom: boolean;
+  studySourceLevel: number;
+  effectiveStudyMaxLevel: number;
+} {
+  const { studySource, activeCustomLibraryName, studyCounts, maxLevel } = input;
+  /* Ours and an upload both carry their own levels; WaniKani's range is the
+     member's own level, which the page already knows. */
+  const ownLadder = studySource === "custom" || studySource === "umakuma";
+
+  const studySourceLevel = typeof studyCounts?.currentLevel === "number"
+    ? studyCounts.currentLevel
+    : ownLadder
+      ? 1
+      : maxLevel;
+
+  return {
+    studySourceHeaderLabel: studySource === "custom"
+      ? (activeCustomLibraryName?.trim() || "Custom")
+      : studySource === "umakuma"
+        ? "UmaKuma"
+        : "WaniKani",
+    studySourceIsCustom: studySource === "custom",
+    studySourceLevel,
+    effectiveStudyMaxLevel: ownLadder
+      ? Math.max(typeof studyCounts?.maxLevel === "number" ? studyCounts.maxLevel : 1, studySourceLevel)
+      : maxLevel,
+  };
+}

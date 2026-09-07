@@ -1,4 +1,5 @@
-import { libraryLevelBadge, unLevelBadge, wkLevelBadge } from "@/lib/levelBadge";
+import { libraryLevelBadge, ourLevelBadge, wkLevelBadge } from "@/lib/levelBadge";
+import type { LadderStreamValue } from "@/lib/ladder/ladderStreams";
 
 import type { StudySource } from "../lib/studyExplorerTypes";
 
@@ -213,12 +214,20 @@ export const STUDY_REVIEW_MODAL_TOUCH = {
  * The level in the panel header, prefixed by the ladder it belongs to.
  *
  * Bare only for a member's own uploaded library, which is on neither ladder -
- * for the other two, "WK3" or "UK3" says which one, since a bare number has
+ * for the other two, "WK3" or "UN3" says which one, since a bare number has
  * meant two things since UmaKuma got a ladder of its own.
+ *
+ * And ours is two: the stream decides whether this member's standing is on
+ * the exam ordering or the school one. It printed `UN` at everybody, which is
+ * the wrong prefix on a real number for anybody on UG.
  */
-export function studyLevelHeaderLabel(studySource: StudySource, level: number | null): string {
+export function studyLevelHeaderLabel(
+  studySource: StudySource,
+  level: number | null,
+  stream: LadderStreamValue | null,
+): string {
   const value = Math.max(1, level ?? 1);
-  if (studySource === "umakuma") return unLevelBadge(value)!;
+  if (studySource === "umakuma") return ourLevelBadge(stream, value)!;
   if (studySource === "wanikani") return wkLevelBadge(value)!;
   return libraryLevelBadge(value)!;
 }

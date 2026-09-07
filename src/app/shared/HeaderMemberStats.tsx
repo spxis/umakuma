@@ -3,8 +3,7 @@ import Link from "next/link";
 import { ladderBoardPath } from "@/app/ladder/lib/ladderAddress";
 import { WANIKANI_BOARD_HREF } from "@/app/leaderboard/lib/leaderboardAddress";
 import type { ViewerMenuInfo } from "@/app/users/[nickname]/UserDashboardTabs.types";
-import { LADDER_STREAMS } from "@/lib/ladder/ladderStreams";
-import { ugLevelBadge, unLevelBadge, wkLevelBadge } from "@/lib/levelBadge";
+import { ourLevelBadge, wkLevelBadge } from "@/lib/levelBadge";
 
 import { HEADER_MEMBER_STATS_COPY as copy } from "./headerMemberStatsCopy";
 import { viewerAddress } from "./viewerAddress";
@@ -67,7 +66,7 @@ export default function HeaderMemberStats({
    */
   const stream = viewerMenuInfo.ladderStream;
   const level = viewerMenuInfo.ladderLevel;
-  const uk = stream === LADDER_STREAMS.ug ? ugLevelBadge(level) : unLevelBadge(level);
+  const uk = ourLevelBadge(stream, level);
   const wk = wkLevelBadge(viewerMenuInfo.wkLevel);
   const xp = copy.xp(viewerMenuInfo.xp);
 

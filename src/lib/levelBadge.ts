@@ -17,6 +17,8 @@
  * A fourth prefix lives elsewhere: `L` is the XP rank, in `xpRanks.ts`, and it
  * is bare because it only ever appears beside the XP total that names it.
  */
+import { LADDER_STREAMS, type LadderStreamValue } from "@/lib/ladder/ladderStreams";
+
 export const LEVEL_SYSTEMS = {
   /** WaniKani's sixty. */
   wanikani: "WK",
@@ -60,6 +62,23 @@ export function unLevelBadge(level: number | null | undefined): string | null {
 /** Ours, by school year. */
 export function ugLevelBadge(level: number | null | undefined): string | null {
   return levelBadge(LEVEL_SYSTEMS.umakumaGrade, level);
+}
+
+/**
+ * Ours, on whichever of the two ladders this member climbs.
+ *
+ * Written once because it was written four times: the header, the ladder
+ * board, the study explorer and the subject pages each chose between `UN` and
+ * `UG` with their own ternary, and three of them chose `UN` unconditionally -
+ * so a member on the school ordering read their own standing under a prefix
+ * that belonged to a curriculum they are not taught against.
+ *
+ * The stream is asked for rather than defaulted, and null means nobody is
+ * signed in: the exam ladder is the site's headline ordering and what a
+ * visitor is shown.
+ */
+export function ourLevelBadge(stream: LadderStreamValue | null, level: number | null | undefined): string | null {
+  return stream === LADDER_STREAMS.ug ? ugLevelBadge(level) : unLevelBadge(level);
 }
 
 /** A member's own library. */

@@ -10,6 +10,7 @@ import StudyLevelFilters from "./StudyLevelFilters";
 import StudyStatusFilters from "./StudyStatusFilters";
 import StudyUpcomingReviewsSection from "./StudyUpcomingReviewsSection";
 import StudyLoadingShimmerOverlay from "./StudyLoadingShimmerOverlay";
+import { useLadderStream } from "@/app/shared/ladderStream";
 import {
   studyLevelHeaderLabel,
   isAllStudyTypeFilter,
@@ -130,7 +131,8 @@ export default function StudyExplorerPanel({
   const totalReviewsInVisibleLevels = Object.values(reviewLevelCounts).reduce((sum, count) => sum + count, 0);
   const totalLessonsInVisibleLevels = lessonLevelOptions.reduce((sum, [, count]) => sum + count, 0);
   const allTypeCount = queueMode === STUDY_QUEUE_TYPES.lesson ? (viewedLevel === null ? totalItems : (lessonLevelCounts[viewedLevel] ?? typeCounts.all)) : typeCounts.all;
-  const studyHeaderLabel = `${studySourceHeaderLabel} (${studyLevelHeaderLabel(studySource, studySourceLevel)})`;
+  const ladderStream = useLadderStream();
+  const studyHeaderLabel = `${studySourceHeaderLabel} (${studyLevelHeaderLabel(studySource, studySourceLevel, ladderStream)})`;
   const hasMoreMatchingItems = hasMorePages && filteredItems.length < allTypeCount;
   const shouldShowLoadMoreUi = hasMoreMatchingItems && filteredItems.length > 1;
   const showFilterPagingState = queueMode === STUDY_QUEUE_TYPES.lesson && viewedLevel !== null && hasMoreMatchingItems && filteredItems.length === 0;

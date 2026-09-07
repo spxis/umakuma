@@ -3,7 +3,8 @@
 import { NO_TRANSLATE_CLASS } from "@/app/shared/japaneseText";
 
 import { useIsRowDensity } from "./explorerCardDensity";
-import { unLevelBadge, wkLevelBadge } from "@/lib/levelBadge";
+import { useLadderStream } from "@/app/shared/ladderStream";
+import { ourLevelBadge, wkLevelBadge } from "@/lib/levelBadge";
 
 type Props = {
   level?: number | null;
@@ -37,6 +38,8 @@ export default function GlyphMetadataBadges({
 }: Props) {
   const interactionClass = hoverClass(hoverGroup);
   const inRow = useIsRowDensity();
+  /* Ours is two ladders; this prints the one the reader is on. */
+  const ladderStream = useLadderStream();
   const validRate =
     typeof successRate === "number" && Number.isFinite(successRate)
       ? Math.max(0, Math.min(100, Math.round(successRate)))
@@ -63,7 +66,7 @@ export default function GlyphMetadataBadges({
         <span
           translate="no"
           className={`${NO_TRANSLATE_CLASS} ${chipClass} ${inRow ? "" : "right-1.5"}`}
-        >{[wkLevelBadge(level ?? null), unLevelBadge(unLevel ?? null)].filter(Boolean).join(" · ")}</span>
+        >{[wkLevelBadge(level ?? null), ourLevelBadge(ladderStream, unLevel ?? null)].filter(Boolean).join(" · ")}</span>
       ) : null}
     </>
   );
