@@ -7002,12 +7002,25 @@
     "id": "stroke-order-stops-at-the-kanji-we-teach-so-most-characters-",
     "name": "Stroke order stops at the kanji we teach, so most characters have none",
     "area": "study",
+    "status": "shipped",
     "kind": "bug",
+    "date": "2026-09-07",
+    "summary": "Stroke order now covers 6,415 characters instead of 2,919. Any character the dictionary can describe and KanjiVG draws is animated on its page, so a rare kanji met inside a word - \u7ac3 in \u4e03\u7ac3, say - can be watched being written like any other. Nothing changed about which characters the curriculum teaches; this is what a page can show you when you look one up.",
+    "dateIsEstimate": false,
+    "release": 560,
+    "version": "1.64.0",
+    "releasedAt": "2026-09-07T09:41:03Z"
+  },
+  {
+    "id": "a-radical-filter-under-the-stroke-chips-live-narrowed-to-wha",
+    "name": "A radical filter under the stroke chips, live-narrowed to what can still match",
+    "area": "study",
+    "kind": "feature",
     "status": "shipped",
     "date": "2026-09-07",
-    "version": "1.64.0",
-    "release": 560,
-    "releasedAt": "2026-09-07T09:41:03Z",
-    "summary": "Stroke order now covers 6,415 characters instead of 2,919. Any character the dictionary can describe and KanjiVG draws is animated on its page, so a rare kanji met inside a word - \u7ac3 in \u4e03\u7ac3, say - can be watched being written like any other. Nothing changed about which characters the curriculum teaches; this is what a page can show you when you look one up."
+    "version": "1.65.0",
+    "release": 561,
+    "releasedAt": "2026-09-07T09:56:17Z",
+    "summary": "A stroke count can now be narrowed by the parts inside the kanji. Under the stroke chips sits the full radical grid: pick a mouth on the 17-stroke page and the 49 kanji become nine. Only parts that appear in what is on the page can be picked - anything that would leave nothing is dimmed - and the line above the results follows the filter, so the header and the page always agree."
   }
 ]
