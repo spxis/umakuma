@@ -11,6 +11,12 @@ This is the runbook for that. The rules an agent must follow are in `AGENTS.md`
 under the cohort bullet; this is how to actually run it, what it does, and what
 is still open.
 
+**Production holds sixteen, not the thirty-two of that first message, and they
+are spread across a year.** John, 2026-09-06, after seeing the first set stacked
+on one rung: *"16 new people are fine. I want a more balance on levels... go
+back up to 1 year."* The count is an argument, so it is whatever you pass; the
+figures below are the sixteen that are actually there.
+
 ## The one idea
 
 **Scores are played, not invented.** A number written straight into
@@ -31,7 +37,7 @@ a day already played comes out the same way and is never played twice.
 ## Commands
 
     pnpm cohort list                     who is there and where they stand
-    pnpm cohort add 32 [--seed autumn] [--window 120]
+    pnpm cohort add 16 [--seed autumn] [--window 365]
     pnpm cohort play [--until <iso>]     carry everyone forward to now
     pnpm cohort remove                   delete every one of them
 
@@ -54,22 +60,32 @@ you. `ListAgents` then `SendMessage`.
 Names come from per-country pools of ordinary student names, in the proportions
 of `COHORT_DEFAULT_MIX`:
 
-| Country | Of 32 |
+`COHORT_DEFAULT_MIX` is a set of weights (CA 8, US 8, VN 5, FR 4, AU 4, TH 3),
+so the split scales with whatever count you pass. The sixteen that production
+currently holds came out as:
+
+| Country | Of 16 |
 |---|---|
-| Canada | 8 |
-| United States | 8 |
-| Vietnam | 5 |
-| France | 4 |
-| Australia | 4 |
-| Thailand | 3 |
+| Canada | 4 |
+| United States | 4 |
+| Vietnam | 3 |
+| France | 2 |
+| Australia | 2 |
+| Thailand | 1 |
 
 They must not stand out, which is a stronger requirement than being plausible
-one at a time. Thirty-two tidy "First Last" rows is exactly what a generated
+one at a time. A column of tidy "First Last" rows is exactly what a generated
 leaderboard looks like, so half go by a full name, a fifth by "Camille L.", and
 the rest by a handle - `aiden_71`, `isabelle.bouchard`, `calebp`. The Canadian
 pool carries the francophone and immigrant names a Canadian class actually has.
-Joins are spread over the window with a lean toward recently, so nobody arrived
-in a batch.
+
+**Joins are spread evenly across the window, not clustered.** Each member takes
+their own slice of it and jitters inside, so sixteen over a year is one joining
+roughly every three weeks - from a couple of days ago to nearly twelve months.
+It leaned toward recent before (`random()^1.4`), which meant a year-long window
+still produced almost no veterans and the boards read flat. John, 2026-09-06:
+*"I want a more balance on levels... should be new (just started this week,
+last week, last month) etc... go back up to 1 year."*
 
 The country is the one fact a name cannot carry, so it rides in the sign-in
 address: `<slug>@<cc>.umakuma.invalid`. `.invalid` is the TLD reserved for
@@ -131,15 +147,22 @@ whole rather than patched.
 
 ## What is open
 
-- **One member, Léa M. (`/le-a-m`), has no history.** Her state rows were
-  deleted by hand during the first production run, so she is a clean, never
-  played account. The next `pnpm cohort play --allow-remote` gives her a history
-  like everybody else. Nothing else needs doing to her.
+- **Léa M. is gone**, deleted 2026-09-06 on John's instruction rather than
+  backfilled: her state rows had been removed by hand and she read as a clean
+  never-played account. The roster was rebuilt from scratch afterwards, so
+  nothing of her remains.
 - **Nothing runs this on a schedule.** The members go stale from the day the
   last `play` finished. A daily or weekly `pnpm cohort play` is what keeps the
   boards moving, and the script was built to be run that way.
 - **`clearedMap` is not passed** where the game awards want it. It needs a run's
   target ids checked against a country's full region set.
+
+Closed since, and worth knowing because each hid the next: the engine resolved
+every member against UN whatever path they followed; `loadMember` seeded the
+level and floor from the UN columns for everyone; and **no simulated member
+ever sat a level test**, so a JLPT final held them for ever - six of eleven
+piled onto UN 10 and nobody could exist above it. `sitHeldGate` sits the held
+final now, at the persona's accuracy, and retakes after a failure.
 
 ## What this is not
 
