@@ -6976,12 +6976,25 @@
     "id": "a-word-chip-keeps-its-meaning-but-loses-its-reading",
     "name": "A word chip keeps its meaning but loses its reading",
     "area": "study",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-07",
+    "summary": "A character in a compound now carries its reading as well as its meaning. The dictionary has filled in the meaning for characters our catalogues do not teach for a while; it fills in the reading too, so a chip no longer shows half of what its neighbours show. The dictionary's own okurigana marks are dropped, so \u8fbc reads \u3053\u3080 rather than -\u3053.\u3080 on the stroke pages.",
+    "dateIsEstimate": false,
+    "release": 558,
+    "version": "1.62.0",
+    "releasedAt": "2026-09-07T09:32:46Z"
+  },
+  {
+    "id": "item-chips-print-un-levels-to-a-member-on-the-ug-ladder",
+    "name": "Item chips print UN levels to a member on the UG ladder",
+    "area": "study",
     "kind": "bug",
     "status": "shipped",
     "date": "2026-09-07",
-    "version": "1.62.0",
-    "release": 558,
-    "releasedAt": "2026-09-07T09:32:46Z",
-    "summary": "A character in a compound now carries its reading as well as its meaning. The dictionary has filled in the meaning for characters our catalogues do not teach for a while; it fills in the reading too, so a chip no longer shows half of what its neighbours show. The dictionary's own okurigana marks are dropped, so \u8fbc reads \u3053\u3080 rather than -\u3053.\u3080 on the stroke pages."
+    "version": "1.63.0",
+    "release": 559,
+    "releasedAt": "2026-09-07T09:33:21Z",
+    "summary": "The level on a chip now names the ladder you are actually climbing. A member on the school-year ordering was shown UN numbers everywhere - a standing from a curriculum they are not being taught against, under a prefix saying they were. Kanji pages now take the level from your own stream and label it with your own prefix; signed out, it is the exam ladder as before."
   }
 ]

@@ -120,4 +120,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Furikaeri Daichou", ja: "振り返り台帳", reading: "ふりかえりだいちょう", gloss: "the ledger you look back through" },
   { romaji: "Hedategaki", ja: "隔て書き", reading: "へだてがき", gloss: "written apart, because it is apart" },
   { romaji: "Hoki", ja: "補記", reading: "ほき", gloss: "the note that fills in what was left out" },
+  { romaji: "Makoto no Mochimae", ja: "真の持ち前", reading: "まことのもちまえ", gloss: "the standing that is genuinely yours" },
 ];
