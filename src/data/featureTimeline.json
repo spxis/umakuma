@@ -7015,12 +7015,25 @@
     "id": "a-radical-filter-under-the-stroke-chips-live-narrowed-to-wha",
     "name": "A radical filter under the stroke chips, live-narrowed to what can still match",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-07",
+    "summary": "A stroke count can now be narrowed by the parts inside the kanji. Under the stroke chips sits the full radical grid: pick a mouth on the 17-stroke page and the 49 kanji become nine. Only parts that appear in what is on the page can be picked - anything that would leave nothing is dimmed - and the line above the results follows the filter, so the header and the page always agree.",
+    "dateIsEstimate": false,
+    "release": 561,
+    "version": "1.65.0",
+    "releasedAt": "2026-09-07T09:56:17Z"
+  },
+  {
+    "id": "a-stroke-filter-under-the-radical-grid-live-narrowed-the-sam",
+    "name": "A stroke filter under the radical grid, live-narrowed the same way",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-07",
-    "version": "1.65.0",
-    "release": 561,
-    "releasedAt": "2026-09-07T09:56:17Z",
-    "summary": "A stroke count can now be narrowed by the parts inside the kanji. Under the stroke chips sits the full radical grid: pick a mouth on the 17-stroke page and the 49 kanji become nine. Only parts that appear in what is on the page can be picked - anything that would leave nothing is dimmed - and the line above the results follows the filter, so the header and the page always agree."
+    "version": "1.66.0",
+    "release": 562,
+    "releasedAt": "2026-09-07T09:56:42Z",
+    "summary": "The radicals page can now be narrowed by stroke count. Once you have picked a part or two, the counts your answers actually take appear under the grid, each saying how many it would leave - \u4eba and \u5341 give 21 kanji over eight counts, and 11 strokes leaves seven of them. The two filters narrow each other, so a part with nothing left at the chosen count is dimmed before you click it."
   }
 ]
