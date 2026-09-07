@@ -7054,12 +7054,25 @@
     "id": "a-word-only-appears-on-the-pages-of-the-kanji-the-table-know",
     "name": "A word only appears on the pages of the kanji the table knows",
     "area": "study",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-07",
+    "summary": "A word now appears on the page of every kanji written in it. \u4e03\u7ac3 was listed under \u4e03 and nowhere else, so \u7ac3's own page showed no words at all; it now shows the three it is written in. A page with a full list of its own is unchanged.",
+    "dateIsEstimate": false,
+    "release": 564,
+    "version": "1.68.0",
+    "releasedAt": "2026-09-07T10:16:42Z"
+  },
+  {
+    "id": "reviews-done-in-the-wanikani-app-never-reach-study-history",
+    "name": "Reviews done in the WaniKani app never reach Study History",
+    "area": "study",
     "kind": "bug",
     "status": "shipped",
     "date": "2026-09-07",
-    "version": "1.68.0",
-    "release": 564,
-    "releasedAt": "2026-09-07T10:16:42Z",
-    "summary": "A word now appears on the page of every kanji written in it. \u4e03\u7ac3 was listed under \u4e03 and nowhere else, so \u7ac3's own page showed no words at all; it now shows the three it is written in. A page with a full list of its own is unchanged."
+    "version": "1.69.0",
+    "release": 565,
+    "releasedAt": "2026-09-07T10:16:55Z",
+    "summary": "WaniKani syncing had stopped for everyone on 5 September and nothing said so. The queue refreshes the accounts that went longest without a sync, and two accounts with no WaniKani connection could never be refreshed - so they stayed at the head of the queue and were the only two ever picked. Accounts without a connection are no longer queued, and stale locks are released."
   }
 ]
