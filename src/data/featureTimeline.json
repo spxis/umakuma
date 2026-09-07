@@ -6963,12 +6963,25 @@
     "id": "a-chip-for-a-kanji-no-system-teaches-says-nothing-at-all",
     "name": "A chip for a kanji no system teaches says nothing at all",
     "area": "study",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-07",
+    "summary": "A character no system teaches now says so. Where a chip would carry its WaniKani or UmaKuma level, one outside every list we hold - \u7ac3 in \u4e03\u7ac3, say - shows a short Off-list tag instead of an empty space, and the hover names the lists it was checked against. Characters kept only for names are marked as such.",
+    "dateIsEstimate": false,
+    "release": 557,
+    "version": "1.61.0",
+    "releasedAt": "2026-09-07T09:32:33Z"
+  },
+  {
+    "id": "a-word-chip-keeps-its-meaning-but-loses-its-reading",
+    "name": "A word chip keeps its meaning but loses its reading",
+    "area": "study",
     "kind": "bug",
     "status": "shipped",
     "date": "2026-09-07",
-    "version": "1.61.0",
-    "release": 557,
-    "releasedAt": "2026-09-07T09:32:33Z",
-    "summary": "A character no system teaches now says so. Where a chip would carry its WaniKani or UmaKuma level, one outside every list we hold - \u7ac3 in \u4e03\u7ac3, say - shows a short Off-list tag instead of an empty space, and the hover names the lists it was checked against. Characters kept only for names are marked as such."
+    "version": "1.62.0",
+    "release": 558,
+    "releasedAt": "2026-09-07T09:32:46Z",
+    "summary": "A character in a compound now carries its reading as well as its meaning. The dictionary has filled in the meaning for characters our catalogues do not teach for a while; it fills in the reading too, so a chip no longer shows half of what its neighbours show. The dictionary's own okurigana marks are dropped, so \u8fbc reads \u3053\u3080 rather than -\u3053.\u3080 on the stroke pages."
   }
 ]

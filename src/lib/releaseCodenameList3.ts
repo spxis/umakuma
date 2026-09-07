@@ -119,4 +119,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Hyousatsu Hiraki", ja: "表札開き", reading: "ひょうさつひらき", gloss: "the nameplate says whose ladder it is, and opens it" },
   { romaji: "Furikaeri Daichou", ja: "振り返り台帳", reading: "ふりかえりだいちょう", gloss: "the ledger you look back through" },
   { romaji: "Hedategaki", ja: "隔て書き", reading: "へだてがき", gloss: "written apart, because it is apart" },
+  { romaji: "Hoki", ja: "補記", reading: "ほき", gloss: "the note that fills in what was left out" },
 ];
