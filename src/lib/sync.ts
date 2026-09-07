@@ -26,11 +26,27 @@ function nowPlus(ms: number): Date {
   return new Date(Date.now() + ms);
 }
 
+/** Hands back a claim without pretending a sync happened. */
+async function releaseClaim(accountId: string, status: string): Promise<void> {
+  await prisma.account.update({
+    where: { id: accountId },
+    data: { isSyncing: false, syncLockUntil: null, lastSyncStatus: status },
+  });
+}
+
+/**
+ * Every claim that can no longer be doing anything, released.
+ *
+ * A claim with no lock on it is the one this used to miss: it asked for locks
+ * that had expired, and a row marked syncing with `syncLockUntil` null has
+ * nothing to expire, so it stayed syncing for ever. That is how Johnny came
+ * to have been "syncing" since 2026-09-02.
+ */
 export async function clearExpiredSyncLocks(now: Date = new Date()): Promise<void> {
   await prisma.account.updateMany({
     where: {
       isSyncing: true,
-      syncLockUntil: { lt: now },
+      OR: [{ syncLockUntil: { lt: now } }, { syncLockUntil: null }],
     },
     data: {
       isSyncing: false,
@@ -40,21 +56,44 @@ export async function clearExpiredSyncLocks(now: Date = new Date()): Promise<voi
   });
 }
 
+/**
+ * Who the sweep may pick, and it is only ever somebody with a connection.
+ *
+ * **An account with no token can never be refreshed, so it must never be in
+ * the queue.** It was, and it starved every real one: the sweep takes the two
+ * oldest `lastSyncedAt` and a disconnected account fails before that column is
+ * written, so it stays the oldest for ever and is picked again on the next
+ * call, and the one after. Two tokenless accounts sat at the head from
+ * 2026-09-02 and every connected member - John included - stopped syncing on
+ * 2026-09-05, which is what he found in his history: "my reviews are not
+ * showing up in my History!!!"
+ *
+ * Exported so the rule is a thing that can be tested rather than a clause
+ * buried in a query, because the failure it prevents is invisible: nothing
+ * errors, nothing logs, the sweep reports two accounts refreshed - it just
+ * refreshes the same two nothings for ever.
+ */
+export function syncQueueWhere(now: Date, staleBefore: Date): Prisma.AccountWhereInput {
+  return {
+    /* No connection, nothing to pull, never in the queue. */
+    tokenEncrypted: { not: null },
+    AND: [
+      { lastSyncedAt: { lt: staleBefore } },
+      { nextSyncAllowedAt: { lte: now } },
+      {
+        OR: [{ isSyncing: false }, { syncLockUntil: { lt: now } }, { syncLockUntil: null }],
+      },
+    ],
+  };
+}
+
 export async function refreshDueAccounts(maxAccounts = 2): Promise<RefreshBatchResult> {
   const now = new Date();
   await clearExpiredSyncLocks(now);
   const staleBefore = new Date(Date.now() - LEADERBOARD_REFRESH_INTERVAL_MS);
 
   const due = await prisma.account.findMany({
-    where: {
-      AND: [
-        { lastSyncedAt: { lt: staleBefore } },
-        { nextSyncAllowedAt: { lte: now } },
-        {
-          OR: [{ isSyncing: false }, { syncLockUntil: { lt: now } }, { syncLockUntil: null }],
-        },
-      ],
-    },
+    where: syncQueueWhere(now, staleBefore),
     orderBy: { lastSyncedAt: "asc" },
     select: { id: true },
     take: maxAccounts,
@@ -144,6 +183,15 @@ export async function refreshAccountById(accountId: string, force: boolean, igno
    */
   const connection = wanikaniConnection(account);
   if (!connection) {
+    /*
+     * Put the claim down before leaving.
+     *
+     * The claim above marks the account syncing and locks it for five
+     * minutes; returning through here left it that way, so a disconnected
+     * account read as "syncing" for days - Johnny had been syncing since
+     * 2026-09-02. Nothing to do is not nothing to undo.
+     */
+    await releaseClaim(accountId, "idle");
     return { refreshed: false, reason: "disconnected" };
   }
 
