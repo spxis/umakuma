@@ -7093,12 +7093,25 @@
     "id": "history-from-wanikani-review-statistic-deltas",
     "name": "History from WaniKani review statistic deltas",
     "area": "study",
+    "status": "shipped",
     "kind": "bug",
+    "date": "2026-09-07",
+    "summary": "Reviews you answer in the WaniKani app now appear in your Study History. WaniKani does not publish the reviews themselves - that list holds only what was submitted through the API - so each one is worked out from the per-subject counters at the next sync: what moved, which way, and when.",
+    "dateIsEstimate": false,
+    "release": 567,
+    "version": "1.70.0",
+    "releasedAt": "2026-09-07T10:35:10Z"
+  },
+  {
+    "id": "both-browsers-need-a-row-of-source-filters-beside-common-onl",
+    "name": "Both browsers need a row of source filters beside Common only",
+    "area": "study",
+    "kind": "feature",
     "status": "shipped",
     "date": "2026-09-07",
-    "version": "1.70.0",
-    "release": 567,
-    "releasedAt": "2026-09-07T10:35:10Z",
-    "summary": "Reviews you answer in the WaniKani app now appear in your Study History. WaniKani does not publish the reviews themselves - that list holds only what was submitted through the API - so each one is worked out from the per-subject counters at the next sync: what moved, which way, and when."
+    "version": "1.71.0",
+    "release": 568,
+    "releasedAt": "2026-09-07T14:26:13Z",
+    "summary": "Both browsers can now be narrowed to the kanji you actually need. Common only has moved onto the radicals page and gained four companions - JLPT, WK, UN and UG - and each chip says how many it would leave with your other filters still applied."
   }
 ]
