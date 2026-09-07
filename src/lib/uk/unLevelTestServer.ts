@@ -12,7 +12,8 @@ import { memberStudyPreferences } from "@/lib/srs/studyPreferencesServer";
 
 import { gateAfterLevel, testVerdict, verdictClears, type UkGate, type UkTestVerdict } from "./ukGates";
 import { loadUmakumaGamePool } from "./ukGamePool";
-import { deriveUnLevel, syncAccountUnLevel } from "./unLevelServer";
+import { deriveLadderLevel, syncAccountLevels } from "./unLevelServer";
+import { LADDER_STREAMS } from "@/lib/ladder/ladderStreams";
 
 /**
  * Sitting a level test.
@@ -40,7 +41,7 @@ export type StartedLevelTest = {
 
 /** The gate waiting for this member, if their standing has reached one. */
 export async function pendingGate(accountId: string): Promise<UkGate | null> {
-  const [standing, preferences] = await Promise.all([deriveUnLevel(accountId), memberStudyPreferences(accountId)]);
+  const [standing, preferences] = await Promise.all([deriveLadderLevel(accountId, LADDER_STREAMS.un), memberStudyPreferences(accountId)]);
   /* Held by a final: that gate. Otherwise, a checkpoint at the level just
      cleared if the member asked for one at this interval. */
   const gate = standing.heldByGate
@@ -173,7 +174,7 @@ export async function finalizeLevelTest(accountId: string, testId: string): Prom
 
   /* A cleared final may move the level; a checkpoint never does, but the
      re-derivation is cheap and keeps one writer. */
-  const standing = await syncAccountUnLevel(accountId);
+  const standing = await syncAccountLevels(accountId);
   const earned: XpEarned = testXp > 0 ? [{ xp: testXp, reason: XP_REASONS.levelTest }] : [];
   return { verdict, cleared, correct, answered, level: standing.level, earned };
 }

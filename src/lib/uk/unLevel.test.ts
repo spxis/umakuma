@@ -133,6 +133,10 @@ describe("the schema behind it", () => {
     const schema = readFileSync("prisma/schema.prisma", "utf8");
     expect(schema).toContain("unLevel             Int                @default(1)");
     expect(schema).toContain("unLevelFloor        Int                @default(1)");
+    /* And the same pair for the other ladder, so neither is a column nothing
+       writes - which is what ugLevel was until the sync wrote both. */
+    expect(schema).toContain("ugLevel             Int                @default(1)");
+    expect(schema).toContain("ugLevelFloor        Int                @default(1)");
   });
 
   it("has exactly one writer for the materialised level", () => {
@@ -145,7 +149,22 @@ describe("the schema behind it", () => {
     const files = readdirSync("src", { recursive: true, encoding: "utf8" })
       .map((entry) => `src/${entry}`)
       .filter((file) => /\.tsx?$/.test(file) && !file.includes(".test."));
-    const writers = files.filter((file) => readFileSync(file, "utf8").includes("data: { unLevel:"));
+    /* A Prisma `data:` block that names either materialised level. Matched as
+       a block rather than as the literal `data: { unLevel:` because the one
+       writer now writes both columns in one update, and the second column
+       sits after the first. Selects (`ugLevel: true`) do not match: they are
+       not inside a `data:` block. */
+    const writes = /data:\s*\{[^}]*\b(unLevel|ugLevel)\s*:/;
+    const writers = files.filter((file) => writes.test(readFileSync(file, "utf8")));
+    /*
+     * One. The simulated cohort was a second for a while without anyone
+     * knowing: it set `unLevel` inside a block that opened with `xp:`, and
+     * the guard matched only a block that opened with `unLevel:`. It writes
+     * the inputs now - floor, placement - and calls the sync for the level,
+     * which is how the number stays derived from exactly one place. No
+     * exemptions here on purpose: an exemption is permanent, and it is what
+     * a third writer gets argued in behind.
+     */
     expect(writers).toEqual(["src/lib/uk/unLevelServer.ts"]);
   });
 });
@@ -244,5 +263,38 @@ describe("a JLPT final holding a member at a milestone", () => {
        is still a milestone, so with the default the member IS held there. */
     const held = resolveUnLevel({ rows: allDone, totals, floor: 1, maxLevel: 12 });
     expect(held.heldByGate).toBeDefined();
+  });
+});
+
+/**
+ * The resolver walks whichever ladder it is handed, and gates on that
+ * ladder's milestones.
+ *
+ * With UN's milestones a member is held at 20 for the N4 final. With UG's the
+ * same walk passes 20 - N4's last kanji is not taught until 43 there - which
+ * is the difference between a UG member studying and a UG member stuck on a
+ * final about characters they have never seen.
+ */
+describe("the resolver takes the ladder's own milestones", () => {
+  /* Twenty-five levels of one kanji each, all passed, so the walk reaches the
+     top unless a gate stops it. */
+  const totals = Array.from({ length: 25 }, (_, i) => ({ level: i + 1, kanji: 1, radicals: 0 }));
+  const rows = totals.map((t) => ({ level: t.level, kind: "kanji", srsStage: 9, passedAt: new Date() }));
+
+  it("holds at UN's N4 level when given UN's milestones", () => {
+    const held = resolveUnLevel({ rows, totals, floor: 1, maxLevel: 25, milestones: [{ nLevel: 4, completeAtLevel: 20 }] });
+    expect(held.level).toBe(20);
+    expect(held.heldByGate).toBe("jlpt:4");
+  });
+
+  it("walks straight past 20 when the ladder finishes N4 at 43", () => {
+    const free = resolveUnLevel({ rows, totals, floor: 1, maxLevel: 25, milestones: [{ nLevel: 4, completeAtLevel: 43 }] });
+    expect(free.level).toBe(25);
+    expect(free.heldByGate).toBeUndefined();
+  });
+
+  it("lets a passed final through on either ladder", () => {
+    const passed = resolveUnLevel({ rows, totals, floor: 1, maxLevel: 25, milestones: [{ nLevel: 4, completeAtLevel: 20 }], passedGateKeys: ["jlpt:4"] });
+    expect(passed.level).toBe(25);
   });
 });

@@ -19,7 +19,7 @@ const bodySchema = z.object({
  * It goes through `raiseUnLevelFloor` rather than writing the column, because
  * the floor is the only stored input to the level and the level is derived
  * from it: that function re-derives and writes `unLevel` in the same breath,
- * which is the property `syncAccountUnLevel` exists to keep.
+ * which is the property `syncAccountLevels` exists to keep.
  *
  * It never lowers. A floor is what a placement test or a WaniKani import
  * bought, and taking it back is the one thing that would make either of them

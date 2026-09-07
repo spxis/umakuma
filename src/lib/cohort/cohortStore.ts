@@ -12,7 +12,7 @@ import { getVancouverDateKey } from "@/lib/dailySnapshot";
 import { completedRunValues } from "@/lib/gameModeServer";
 import { planGameRun, type GameRunRequest } from "@/lib/gameRunCreate";
 import { prisma } from "@/lib/prisma";
-import { unLevelTotals } from "@/lib/uk/unLevelServer";
+import { syncAccountLevels, unLevelTotals } from "@/lib/uk/unLevelServer";
 import { USER_TYPES } from "@/lib/userType";
 import { GAME_KIND_LABELS } from "@/app/game/GameMode.constants";
 import { gameXpAwards } from "@/lib/xp/xpGameAwards";
@@ -263,19 +263,25 @@ export async function saveStanding(accountId: string, member: CohortMember): Pro
     }
   }
 
+  /* The inputs only. The floor, the placement and when they placed are
+     things a member did; the level is derived from them and from the states
+     written above, and it has exactly one writer - which used to be two,
+     because this block set `unLevel` itself and the guard for that matched
+     only a block that *opened* with it. Floor first, then the sync, since the
+     resolver reads the floor. The sync writes both ladders' standings, so a
+     cohort run no longer leaves `ugLevel` stale beside a fresh `unLevel`. */
   await prisma.account.update({
     where: { id: accountId },
     data: {
       xp: member.ledger.xp,
       xpLevel: member.ledger.xpLevel,
-      unLevel: member.level,
       unLevelFloor: member.floor,
-      unLevelUpdatedAt: member.lastActivityAt ?? undefined,
       unPlacedAt: member.placedAt,
       unPlacementSource: member.placedAt ? "placement_test" : undefined,
       lastActivityAt: member.lastActivityAt,
     },
   });
+  await syncAccountLevels(accountId);
   member.ledger.touchedDays.clear();
   return rows.length;
 }

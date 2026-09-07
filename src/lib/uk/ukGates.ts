@@ -28,6 +28,18 @@ export const UK_JLPT_QUESTIONS = 30;
 /** Hours before a failed JLPT final may be sat again, with a fresh sample. */
 export const UK_JLPT_RETAKE_COOLDOWN_HOURS = 24;
 
+/**
+ * Where a JLPT band finishes on some ordering of the ladder.
+ *
+ * Every function below takes a list of these and defaults to UN's, so the
+ * callers that existed before UG had levels keep working unchanged, and the
+ * ones that know their stream pass `ladderColumns(stream).jlptMilestones`.
+ * The gates sit on different levels per ordering - N4 completes at 20 on UN
+ * and 43 on UG - so a hardwired list would hold a UG member for a final
+ * covering kanji they have not been taught yet.
+ */
+export type JlptMilestone = { nLevel: number; completeAtLevel: number };
+
 export type UkGateKind = "checkpoint" | "jlpt_final";
 
 export type UkGate = {
@@ -47,13 +59,16 @@ export type UkGate = {
 };
 
 /** The JLPT level that completes at this level, if any. */
-export function jlptCompletedAtLevel(level: number): number | null {
-  return kanjiLadderMilestones().find((milestone) => milestone.completeAtLevel === level)?.nLevel ?? null;
+export function jlptCompletedAtLevel(
+  level: number,
+  milestones: readonly JlptMilestone[] = kanjiLadderMilestones(),
+): number | null {
+  return milestones.find((milestone) => milestone.completeAtLevel === level)?.nLevel ?? null;
 }
 
 /** The level at which the previous JLPT band ended, so a final draws from its whole band. */
-function bandStartFor(level: number): number {
-  const earlier = kanjiLadderMilestones()
+function bandStartFor(level: number, milestones: readonly JlptMilestone[] = kanjiLadderMilestones()): number {
+  const earlier = milestones
     .map((milestone) => milestone.completeAtLevel)
     .filter((at) => at < level);
   return earlier.length === 0 ? 1 : Math.max(...earlier) + 1;
@@ -67,8 +82,12 @@ function bandStartFor(level: number): number {
  * have asked twelve questions of the same material the thirty-question test is
  * about to cover.
  */
-export function gateAfterLevel(level: number, preferences: StudyPreferences): UkGate | null {
-  const nLevel = jlptCompletedAtLevel(level);
+export function gateAfterLevel(
+  level: number,
+  preferences: StudyPreferences,
+  milestones: readonly JlptMilestone[] = kanjiLadderMilestones(),
+): UkGate | null {
+  const nLevel = jlptCompletedAtLevel(level, milestones);
   if (nLevel !== null) {
     return {
       kind: "jlpt_final",
@@ -79,7 +98,7 @@ export function gateAfterLevel(level: number, preferences: StudyPreferences): Uk
       mustPass: true,
       nLevel,
       /* The whole band, because that is what the claim covers. */
-      drawsFrom: { firstLevel: bandStartFor(level), lastLevel: level },
+      drawsFrom: { firstLevel: bandStartFor(level, milestones), lastLevel: level },
     };
   }
 
@@ -98,8 +117,8 @@ export function gateAfterLevel(level: number, preferences: StudyPreferences): Uk
 }
 
 /** Every level that carries a must-pass gate, whatever a member has chosen. */
-export function mandatoryGateLevels(): number[] {
-  return kanjiLadderMilestones().map((milestone) => milestone.completeAtLevel).sort((a, b) => a - b);
+export function mandatoryGateLevels(milestones: readonly JlptMilestone[] = kanjiLadderMilestones()): number[] {
+  return milestones.map((milestone) => milestone.completeAtLevel).sort((a, b) => a - b);
 }
 
 /**
@@ -109,8 +128,12 @@ export function mandatoryGateLevels(): number[] {
  * holds anybody: it opens the level whatever the score, so refusing to
  * advance somebody who declined one would make it a gate after all.
  */
-export function blockedByGate(level: number, passedGateKeys: readonly string[]): boolean {
-  const nLevel = jlptCompletedAtLevel(level);
+export function blockedByGate(
+  level: number,
+  passedGateKeys: readonly string[],
+  milestones: readonly JlptMilestone[] = kanjiLadderMilestones(),
+): boolean {
+  const nLevel = jlptCompletedAtLevel(level, milestones);
   if (nLevel === null) return false;
   return !passedGateKeys.includes(`jlpt:${nLevel}`);
 }

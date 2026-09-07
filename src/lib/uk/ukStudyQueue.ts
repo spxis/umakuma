@@ -6,6 +6,8 @@ import { getCatalogSubjectDetails } from "@/lib/subjectCatalogDetails";
 import { srsScoringRules } from "@/lib/srs/srsScoringRules";
 import { orderReviews, throttleAppliesTo } from "@/lib/srs/studyPreferences";
 import { memberStudyPreferences } from "@/lib/srs/studyPreferencesServer";
+import { LADDER_STREAMS } from "@/lib/ladder/ladderStreams";
+import { ladderColumns, type LadderColumns } from "./ladderColumns";
 
 /**
  * What a member has to do on the UmaKuma ladder right now.
@@ -63,21 +65,44 @@ export type UkStudyCounts = {
   upcoming: number;
 };
 
-/** The ladder rows a member may work on: everything at or below their level. */
-async function unlockedSubjects(accountId: string) {
+/**
+ * Which ladder a member follows, and so which level column is theirs.
+ *
+ * Every UG member was being taught in UN order before this: the queue read
+ * `unLevel` and filtered on `level` for everyone, so the fourteen members who
+ * chose the school-year path were served the JLPT ordering and never told.
+ */
+async function memberColumns(accountId: string) {
   const account = await prisma.account.findUnique({
     where: { id: accountId },
-    select: { unLevel: true },
+    select: { ladderStream: true, unLevel: true, ugLevel: true },
   });
-  const level = account?.unLevel ?? 1;
-  return prisma.ukSubject.findMany({
-    where: { removedAt: null, level: { lte: level } },
+  const columns = ladderColumns(account?.ladderStream ?? LADDER_STREAMS.un);
+  return { columns, level: account?.[columns.accountLevel] ?? 1 };
+}
+
+/**
+ * A subject row with `level` meaning the level on the member's own ladder.
+ *
+ * Both columns are fetched and the member's is the one every consumer reads,
+ * so the sort, the display and the gate all agree on which ordering this is.
+ */
+function onOwnLadder<T extends { level: number; ugLevel: number }>(row: T, columns: LadderColumns): T {
+  return { ...row, level: row[columns.subjectLevel] };
+}
+
+/** The ladder rows a member may work on: everything at or below their level. */
+async function unlockedSubjects(accountId: string) {
+  const { columns, level } = await memberColumns(accountId);
+  const rows = await prisma.ukSubject.findMany({
+    where: { removedAt: null, [columns.subjectLevel]: { lte: level } },
     select: {
-      id: true, key: true, kind: true, characters: true, level: true,
+      id: true, key: true, kind: true, characters: true, level: true, ugLevel: true,
       meanings: true, readings: true, wkSubjectId: true,
     },
-    orderBy: [{ level: "asc" }, { kind: "asc" }, { id: "asc" }],
+    orderBy: [{ [columns.subjectLevel]: "asc" }, { kind: "asc" }, { id: "asc" }],
   });
+  return rows.map((row) => onOwnLadder(row, columns));
 }
 
 type LadderRow = Awaited<ReturnType<typeof unlockedSubjects>>[number];
@@ -196,13 +221,17 @@ export async function ukReviews(accountId: string, now = new Date(), limit = 100
   const due = orderReviews(dueRows, preferences.reviewOrder);
   if (due.length === 0) return [];
 
-  const rows = await prisma.ukSubject.findMany({
-    where: { id: { in: due.map((state) => state.subjectId) } },
-    select: {
-      id: true, key: true, kind: true, characters: true, level: true,
-      meanings: true, readings: true, wkSubjectId: true,
-    },
-  });
+  const [{ columns }, fetched] = await Promise.all([
+    memberColumns(accountId),
+    prisma.ukSubject.findMany({
+      where: { id: { in: due.map((state) => state.subjectId) } },
+      select: {
+        id: true, key: true, kind: true, characters: true, level: true, ugLevel: true,
+        meanings: true, readings: true, wkSubjectId: true,
+      },
+    }),
+  ]);
+  const rows = fetched.map((row) => onOwnLadder(row, columns));
   const content = await withContent(rows);
   /* Walk `due`, not `rows`. The subjects come back in whatever order the
      database chose, so mapping over them would have thrown the member's

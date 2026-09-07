@@ -1,8 +1,10 @@
 import "server-only";
 
 import { KANJI_LADDER_LEVELS } from "@/lib/kanjiLadder";
+import { LADDER_STREAMS, type LadderStreamValue } from "@/lib/ladder/ladderStreams";
 import { prisma } from "@/lib/prisma";
 
+import { ladderColumns } from "./ladderColumns";
 import { resolveUnLevel, type UkLevelResolution, type UkLevelTotals } from "./unLevel";
 import { awardXpQuietly } from "@/lib/xp/xpServer";
 import { XP_REASONS } from "@/lib/xp/xpStudyAwards";
@@ -10,15 +12,23 @@ import { XP_REASONS } from "@/lib/xp/xpStudyAwards";
 /**
  * Reading and writing a member's UmaKuma level.
  *
- * `Account.unLevel` is a materialised copy, and this file is the only place
- * that writes it. Every path that can change a member's standing — a review,
- * a placement, a WaniKani import, a reconcile after a curriculum bump — ends
- * by calling `syncAccountUnLevel`, so there is one answer to "how did this
- * number get here" rather than six.
+ * `Account.unLevel` and `Account.ugLevel` are materialised copies, and this
+ * file is the only place that writes them. Every path that can change a
+ * member's standing — a review, a placement, a WaniKani import, a level test —
+ * ends by calling `syncAccountLevels`, which writes **both**, so there is one
+ * answer to "how did this number get here" rather than six.
+ *
+ * **They are a cache, and they go stale.** Deriving costs 412ms for one member
+ * and 2.3s for everyone, measured, which is why they are stored at all - but
+ * a stored level is computed against the ladder as it stood, and the ladders
+ * are rebuilt when the evidence says to. Nothing here runs on a rebuild; only
+ * a review does. `pnpm ladder:relevel` recomputes everybody, and the rebalance
+ * runbook is refresh, seed, relevel. Before that existed, every member who had
+ * not reviewed since UN 2.0.0 moved 95 kanji was carrying a 1.0.0 level.
  */
 
 const TTL_MS = 10 * 60_000;
-let totalsHeld: { totals: UkLevelTotals[]; builtAtMs: number } | null = null;
+const totalsHeld = new Map<LadderStreamValue, { totals: UkLevelTotals[]; builtAtMs: number }>();
 
 /**
  * How many kanji and radicals each level teaches, counted from the curriculum
@@ -26,44 +36,56 @@ let totalsHeld: { totals: UkLevelTotals[]; builtAtMs: number } | null = null;
  * a level gate computed from a stale file would disagree with what a member
  * is actually being shown.
  */
-export async function unLevelTotals(): Promise<UkLevelTotals[]> {
-  if (totalsHeld && Date.now() - totalsHeld.builtAtMs <= TTL_MS) return totalsHeld.totals;
+export async function unLevelTotals(stream: LadderStreamValue = LADDER_STREAMS.un): Promise<UkLevelTotals[]> {
+  const held = totalsHeld.get(stream);
+  if (held && Date.now() - held.builtAtMs <= TTL_MS) return held.totals;
 
+  const columns = ladderColumns(stream);
+  /* Grouped by whichever column is this ladder's. The two share a table, so
+     the level a kanji sits on is a different number on each. */
   const grouped = await prisma.ukSubject.groupBy({
-    by: ["level", "kind"],
+    by: [columns.subjectLevel, "kind"],
     where: { removedAt: null },
     _count: { _all: true },
   });
 
   const byLevel = new Map<number, UkLevelTotals>();
-  for (let level = 1; level <= KANJI_LADDER_LEVELS; level += 1) {
+  for (let level = 1; level <= columns.maxLevel; level += 1) {
     byLevel.set(level, { level, kanji: 0, radicals: 0 });
   }
   for (const row of grouped) {
-    const entry = byLevel.get(row.level);
+    const entry = byLevel.get(row[columns.subjectLevel]);
     if (!entry) continue;
     if (row.kind === "kanji") entry.kanji = row._count._all;
     if (row.kind === "radical") entry.radicals = row._count._all;
   }
 
   const totals = [...byLevel.values()];
-  totalsHeld = { totals, builtAtMs: Date.now() };
+  totalsHeld.set(stream, { totals, builtAtMs: Date.now() });
   return totals;
 }
 
 /** Forgets the counts, for after a seed or an admin edit. */
 export function clearUkLevelTotalsCache(): void {
-  totalsHeld = null;
+  totalsHeld.clear();
 }
 
-/** What a member's level would be right now, without writing it. */
-export async function deriveUnLevel(accountId: string): Promise<UkLevelResolution> {
+/**
+ * What a member's level on one ladder would be right now, without writing it.
+ *
+ * The stream is explicit rather than read from the account, because the two
+ * questions are different and both get asked: the study page wants the level
+ * on the ladder the member follows, and the UN explorer wants the UN level
+ * whoever is looking. `deriveMemberLevel` answers the first.
+ */
+export async function deriveLadderLevel(accountId: string, stream: LadderStreamValue): Promise<UkLevelResolution> {
+  const columns = ladderColumns(stream);
   const [account, totals, states, passedFinals] = await Promise.all([
-    prisma.account.findUnique({ where: { id: accountId }, select: { unLevelFloor: true } }),
-    unLevelTotals(),
+    prisma.account.findUnique({ where: { id: accountId }, select: { [columns.accountFloor]: true } }),
+    unLevelTotals(stream),
     prisma.ukSrsState.findMany({
       where: { accountId },
-      select: { srsStage: true, passedAt: true, subject: { select: { level: true, kind: true } } },
+      select: { srsStage: true, passedAt: true, subject: { select: { level: true, ugLevel: true, kind: true } } },
     }),
     /* Only finals that must be passed, and only the ones that were. A
        checkpoint never holds anybody, so it is not asked about here. */
@@ -76,30 +98,55 @@ export async function deriveUnLevel(accountId: string): Promise<UkLevelResolutio
 
   return resolveUnLevel({
     rows: states.map((state) => ({
-      level: state.subject.level,
+      level: state.subject[columns.subjectLevel],
       kind: state.subject.kind,
       srsStage: state.srsStage,
       passedAt: state.passedAt,
     })),
     totals,
-    floor: account?.unLevelFloor ?? 1,
+    floor: (account as Record<string, number> | null)?.[columns.accountFloor] ?? 1,
+    maxLevel: columns.maxLevel,
     passedGateKeys: passedFinals.map((row) => row.gateKey),
+    milestones: columns.jlptMilestones,
   });
 }
 
+/** The member's level on the ladder they follow. */
+export async function deriveMemberLevel(accountId: string): Promise<UkLevelResolution> {
+  const account = await prisma.account.findUnique({ where: { id: accountId }, select: { ladderStream: true } });
+  return deriveLadderLevel(accountId, account?.ladderStream ?? LADDER_STREAMS.un);
+}
+
 /**
- * Recomputes and stores the level. The one writer.
+ * Recomputes and stores the level on every ladder. The one writer.
  *
- * Returns what it wrote, so a caller that has just taken a review can tell a
- * member they levelled up without asking again.
+ * Both at once, because a review answers a question about a subject and the
+ * subject sits on both ladders - the member's standing on each moved, whether
+ * or not they follow it. Writing only the one they follow is how
+ * `Account.ugLevel` came to be a column nothing wrote.
+ *
+ * Returns the standing on the ladder the member follows, so a caller that has
+ * just taken a review can tell them they levelled up without asking again.
  */
-export async function syncAccountUnLevel(accountId: string): Promise<UkLevelResolution> {
-  const resolved = await deriveUnLevel(accountId);
+export async function syncAccountLevels(accountId: string): Promise<UkLevelResolution> {
+  const account = await prisma.account.findUnique({ where: { id: accountId }, select: { ladderStream: true } });
+  const own = account?.ladderStream ?? LADDER_STREAMS.un;
+
+  const [un, ug] = await Promise.all([
+    deriveLadderLevel(accountId, LADDER_STREAMS.un),
+    deriveLadderLevel(accountId, LADDER_STREAMS.ug),
+  ]);
+  /* Spelled out rather than built from `ladderColumns`, on purpose: the test
+     that keeps this the only writer of these columns reads the source for the
+     literal field names, and a write assembled from a lookup is one it cannot
+     see. Two ladders, four fields, and every one of them named where it is
+     written. */
+  const now = new Date();
   await prisma.account.update({
     where: { id: accountId },
-    data: { unLevel: resolved.level, unLevelUpdatedAt: new Date() },
+    data: { unLevel: un.level, unLevelUpdatedAt: now, ugLevel: ug.level, ugLevelUpdatedAt: now },
   });
-  return resolved;
+  return own === LADDER_STREAMS.ug ? ug : un;
 }
 
 /** The sources that mean "knowledge from somewhere else", which is what the placement award is for. */
@@ -156,7 +203,7 @@ export async function raiseUnLevelFloor({
       requests: [{ kind: "placementAward", note: `placed at level ${next}` }],
     });
   }
-  const resolution = await syncAccountUnLevel(accountId);
+  const resolution = await syncAccountLevels(accountId);
   /* Carried back rather than paid silently. It is the largest single award on
      the site and it happens once, ever, at the moment somebody decides
      whether this place is worth their time - the worst one to leave unsaid. */

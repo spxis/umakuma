@@ -10,7 +10,8 @@ import { awardXpQuietly } from "@/lib/xp/xpServer";
 import { lessonXpAwards, reviewXpAwards, XP_REASONS } from "@/lib/xp/xpStudyAwards";
 import type { XpEarned } from "@/lib/xp/xpToast";
 
-import { syncAccountUnLevel } from "./unLevelServer";
+import { ladderColumns } from "./ladderColumns";
+import { syncAccountLevels } from "./unLevelServer";
 import { UN_LEVEL_PASS_SRS_STAGE } from "./unLevel";
 
 /**
@@ -61,11 +62,17 @@ export async function startUkLessons({
   const nothing = { started: 0, earned: [] as XpEarned };
   if (subjectIds.length === 0) return nothing;
 
-  /* Only items at or below their level, checked here rather than trusted from
-     the request: a crafted body could otherwise open the whole ladder. */
-  const account = await prisma.account.findUnique({ where: { id: accountId }, select: { unLevel: true } });
+  /* Only items at or below their level on the ladder they follow, checked
+     here rather than trusted from the request: a crafted body could otherwise
+     open the whole ladder. It read `unLevel` and `level` for everyone before,
+     so a UG member's lessons were gated by the JLPT ordering. */
+  const account = await prisma.account.findUnique({
+    where: { id: accountId },
+    select: { ladderStream: true, unLevel: true, ugLevel: true },
+  });
+  const columns = ladderColumns(account?.ladderStream ?? LADDER_STREAMS.un);
   const open = await prisma.ukSubject.findMany({
-    where: { id: { in: subjectIds }, removedAt: null, level: { lte: account?.unLevel ?? 1 } },
+    where: { id: { in: subjectIds }, removedAt: null, [columns.subjectLevel]: { lte: account?.[columns.accountLevel] ?? 1 } },
     select: { id: true },
   });
   if (open.length === 0) return nothing;
@@ -124,8 +131,9 @@ export async function recordUkReview({
      rather than costing a second query. */
   const before = await prisma.account.findUnique({
     where: { id: accountId },
-    select: { unLevel: true, ladderStream: true },
+    select: { unLevel: true, ugLevel: true, ladderStream: true },
   });
+  const columns = ladderColumns(before?.ladderStream ?? LADDER_STREAMS.un);
 
   await prisma.$transaction([
     prisma.ukSrsState.update({
@@ -170,8 +178,10 @@ export async function recordUkReview({
     }),
   ]);
 
-  const resolved = await syncAccountUnLevel(accountId);
-  const levelBefore = before?.unLevel ?? 1;
+  /* Both standings move; the one reported back is on the ladder they follow,
+     and so is the "before" it is compared with. */
+  const resolved = await syncAccountLevels(accountId);
+  const levelBefore = before?.[columns.accountLevel] ?? 1;
 
   const xpAwarded = await awardXpQuietly({
     accountId,

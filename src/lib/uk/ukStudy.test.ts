@@ -52,9 +52,13 @@ describe("the shared schedule", () => {
   });
 
   it("checks a lesson's level server-side rather than trusting the request", () => {
-    /* A crafted body would otherwise open the whole hundred levels at once. */
+    /* A crafted body would otherwise open the whole hundred levels at once.
+       The column is the member's own ladder's, picked by stream - it was
+       `level` and `unLevel` for everyone, which taught every UG member in UN
+       order - but it is still the server that picks it. */
     const write = readFileSync("src/lib/uk/ukStudyWrite.ts", "utf8");
-    expect(write).toContain("level: { lte: account?.unLevel ?? 1 }");
+    expect(write).toContain("[columns.subjectLevel]: { lte: account?.[columns.accountLevel] ?? 1 }");
+    expect(write).toContain("ladderColumns(account?.ladderStream");
   });
 
   it("never copies WaniKani's mnemonics into our rows", () => {

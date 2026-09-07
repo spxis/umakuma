@@ -104,3 +104,35 @@ describe("what a score is called", () => {
     expect(testVerdict(0, 0, 70)).toBe("not_yet");
   });
 });
+
+/**
+ * A final stands where the band finishes on the ladder being climbed.
+ *
+ * The gate functions defaulted to UN's milestones and nothing could tell them
+ * otherwise, so the UG ordering - where N4 finishes at 43, not 20 - would have
+ * had its N4 final at level 20, twenty-three levels before its kanji.
+ */
+describe("gates follow the ladder's milestones", () => {
+  const ug = [{ nLevel: 5, completeAtLevel: 7 }, { nLevel: 4, completeAtLevel: 43 }];
+
+  it("puts the N4 final at 43 on UG and nowhere near 20", () => {
+    expect(gateAfterLevel(43, DEFAULT_STUDY_PREFERENCES, ug)?.gateKey).toBe("jlpt:4");
+    expect(gateAfterLevel(20, DEFAULT_STUDY_PREFERENCES, ug)?.kind).not.toBe("jlpt_final");
+  });
+
+  it("draws the UG final from the UG band, not UN's", () => {
+    const final = gateAfterLevel(43, DEFAULT_STUDY_PREFERENCES, ug);
+    expect(final?.drawsFrom).toEqual({ firstLevel: 8, lastLevel: 43 });
+  });
+
+  it("blocks on UG's level and not on UN's", () => {
+    expect(blockedByGate(43, [], ug)).toBe(true);
+    expect(blockedByGate(20, [], ug)).toBe(false);
+    expect(blockedByGate(43, ["jlpt:4"], ug)).toBe(false);
+  });
+
+  it("keeps UN as the default so the older callers are unchanged", () => {
+    expect(mandatoryGateLevels()).toEqual([10, 20, 35, 50, 100]);
+    expect(mandatoryGateLevels(ug)).toEqual([7, 43]);
+  });
+});

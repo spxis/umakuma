@@ -6,6 +6,7 @@ import { parseAssignmentCacheRows } from "@/lib/wanikani/helpers";
 
 import { planWanikaniImport, type UkImportPlan, type WanikaniAssignment } from "./ukImport";
 import { raiseUnLevelFloor, unLevelTotals } from "./unLevelServer";
+import { LADDER_STREAMS } from "@/lib/ladder/ladderStreams";
 
 /**
  * Reading a member's WaniKani progress off the cache and onto our ladder.
@@ -64,7 +65,7 @@ export async function planUkImport(accountId: string): Promise<{ plan: UkImportP
       where: { wkSubjectId: { not: null }, removedAt: null },
       select: { id: true, wkSubjectId: true, kind: true, level: true },
     }),
-    unLevelTotals(),
+    unLevelTotals(LADDER_STREAMS.un),
     prisma.ukSrsState.findMany({
       where: { accountId },
       select: { subjectId: true, srsStage: true, lastReviewedAt: true },

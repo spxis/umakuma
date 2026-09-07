@@ -6,7 +6,8 @@ import { PAGE_SHELL_PADDING } from "@/app/shared/pageShell";
 import { KANJI_LADDER_LEVELS } from "@/lib/kanjiLadder";
 import { loadLadderCrosswalk } from "@/lib/ladder/ladderCrosswalkServer";
 import { ladderLevelPage } from "@/lib/ladder/ladderLevelPage";
-import { deriveUnLevel } from "@/lib/uk/unLevelServer";
+import { deriveLadderLevel } from "@/lib/uk/unLevelServer";
+import { LADDER_STREAMS } from "@/lib/ladder/ladderStreams";
 
 import { MEMBER_PAGE_HEADERS } from "../dashboardPageHeaders";
 import { loadUserPageShell } from "../lib/userPageShell";
@@ -43,7 +44,8 @@ export default async function UmakumaLadderPage({ params }: { params: Promise<{ 
   const shell = await loadUserPageShell(nickname);
   const [{ rows }, progress] = await Promise.all([
     loadLadderCrosswalk(),
-    deriveUnLevel(shell.account.id),
+    /* The UN level whoever is looking: this page browses the UN ladder. */
+    deriveLadderLevel(shell.account.id, LADDER_STREAMS.un),
   ]);
   const page = ladderLevelPage(rows, KANJI_LADDER_LEVELS, clampLadderLevel(progress.level));
 

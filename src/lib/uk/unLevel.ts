@@ -1,6 +1,6 @@
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import { KANJI_LADDER_LEVELS } from "@/lib/kanjiLadder";
-import { blockedByGate, jlptCompletedAtLevel } from "./ukGates";
+import { blockedByGate, jlptCompletedAtLevel, type JlptMilestone } from "./ukGates";
 
 /**
  * Where a member stands on our hundred levels.
@@ -66,7 +66,7 @@ export type UkLevelResolution = {
   /**
    * What a placement paid, where this resolution came from one.
    *
-   * Absent everywhere else: `deriveUnLevel` answers a question and pays
+   * Absent everywhere else: `deriveLadderLevel` answers a question and pays
    * nothing, and only `raiseUnLevelFloor` can hand out the placement award.
    */
   earned?: { xp: number; reason: string }[];
@@ -97,6 +97,7 @@ export function resolveUnLevel({
   floor,
   maxLevel = KANJI_LADDER_LEVELS,
   passedGateKeys = [],
+  milestones,
 }: {
   rows: readonly UkLevelProgressRow[];
   totals: readonly UkLevelTotals[];
@@ -112,6 +113,13 @@ export function resolveUnLevel({
    * a member is never held by a gate nobody has asked about.
    */
   passedGateKeys?: readonly string[];
+  /**
+   * Where the JLPT bands finish on the ordering being walked. UN's by
+   * default, so the callers from before UG had levels are unchanged; a
+   * stream-aware caller passes `ladderColumns(stream).jlptMilestones`, because
+   * the same band finishes on a different level on each ladder.
+   */
+  milestones?: readonly JlptMilestone[];
 }): UkLevelResolution {
   const totalsByLevel = new Map(totals.map((entry) => [entry.level, entry]));
   const passedByLevel = new Map<number, number>();
@@ -136,14 +144,14 @@ export function resolveUnLevel({
       /* The kanji are done; a milestone still has to be certified. Level 35
          says N3 was verified, and it may not say that on the strength of the
          reviews alone. */
-      if (blockedByGate(candidate, passedGateKeys)) {
+      if (blockedByGate(candidate, passedGateKeys, milestones)) {
         return {
           level: candidate,
           ratio: 1,
           passed: has,
           total: need,
           gate: gateKindFor(levelTotals!),
-          heldByGate: `jlpt:${jlptCompletedAtLevel(candidate)}`,
+          heldByGate: `jlpt:${jlptCompletedAtLevel(candidate, milestones)}`,
         };
       }
       level = Math.min(candidate + 1, maxLevel);

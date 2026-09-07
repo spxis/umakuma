@@ -93,6 +93,27 @@ This file is the single source of truth for agent behavior in this repo.
 - `pnpm ladder:rules` checks the promises those papers state. If a paper claims
   something the checker does not enforce, either the checker is missing a rule
   or the paper is making a claim we cannot keep. Both are bugs.
+- **A rebalance is three steps, and the third is the one that was missing:
+  `pnpm ladder:refresh`, then `pnpm ladder:seed`, then `pnpm ladder:relevel`.**
+  A member's level on each ladder is stored on `Account` because deriving it
+  costs 412ms a member and 2.3s for everyone, measured - but a stored level is
+  a cache computed against the ladder as it stood, and nothing recomputed it
+  when the ladder moved. Only a review did. So after UN 2.0.0 shifted 95
+  kanji, every member who had not reviewed since carried a 1.0.0 level on
+  their profile, in the header badge and on the boards, and no test could see
+  it. `relevel` recomputes every member on every ladder; against production it
+  wants `pnpm db:backup:prod` first and `--allow-remote` to mean it.
+- **A subject has a level on each ladder, and every reader picks the column by
+  stream.** `UkSubject.level` is UN's and `UkSubject.ugLevel` is UG's; the
+  member's standing, floor and updated-at are likewise a column per ladder on
+  `Account`. `ladderColumns(stream)` in `src/lib/uk/ladderColumns.ts` is the
+  one place that says which is which - two cases, deliberately not a registry,
+  because there will be at most one more ladder. The queue, the lesson gate,
+  the resolver's totals and the JLPT gates all ask it; before they did, every
+  UG member was taught in UN order and gated on UN's milestone levels (N4
+  finishes at 20 on UN and 43 on UG). `syncAccountLevels` writes both
+  standings on every review, so neither column can drift into "nothing writes
+  this". A third ladder costs one column, one seed line and one case.
 
 ### Self-Improvement Loop (Mandatory)
 

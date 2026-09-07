@@ -140,7 +140,9 @@ describe("a kanji here looks like a kanji everywhere else", () => {
    */
   it("opens the explorer where the reader is, with no index of a hundred cards", () => {
     const page = readFileSync(`${DIR}/page.tsx`, "utf8");
-    expect(page).toContain("deriveUnLevel");
+    /* The UN level explicitly, whoever is looking: this page browses the UN
+       ladder, so a UG member's own standing is the wrong number to open on. */
+    expect(page).toContain("deriveLadderLevel(shell.account.id, LADDER_STREAMS.un)");
     expect(page).toContain("clampLadderLevel");
     expect(existsSync(`${DIR}/UmakumaLadderIndex.tsx`)).toBe(false);
   });

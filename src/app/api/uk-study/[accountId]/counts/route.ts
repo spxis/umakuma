@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { KANJI_LADDER_LEVELS } from "@/lib/kanjiLadder";
-import { deriveUnLevel } from "@/lib/uk/unLevelServer";
+import { deriveMemberLevel } from "@/lib/uk/unLevelServer";
 import { ukStudyCounts } from "@/lib/uk/ukStudyQueue";
 
 type RouteContext = { params: Promise<{ accountId: string }> };
@@ -25,7 +25,7 @@ export async function GET(request: Request, context: RouteContext) {
         if (!(await canAccessAccount(request, accountId))) {
           return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
         }
-        const [counts, progress] = await Promise.all([ukStudyCounts(accountId), deriveUnLevel(accountId)]);
+        const [counts, progress] = await Promise.all([ukStudyCounts(accountId), deriveMemberLevel(accountId)]);
         return NextResponse.json(
           {
             reviews: counts.reviews,
