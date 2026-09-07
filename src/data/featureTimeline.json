@@ -6924,12 +6924,25 @@
     "id": "the-cohort-tool-misread-its-own-arguments",
     "name": "The cohort tool reads its arguments strictly",
     "area": "platform",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-06",
+    "summary": "Internal tooling: the script that manages the simulated members now checks its own arguments, and every command can say what it would do before doing it.",
+    "dateIsEstimate": false,
+    "release": 554,
+    "version": "1.58.2",
+    "releasedAt": "2026-09-07T02:39:29Z"
+  },
+  {
+    "id": "header-level-badges-are-not-links-and-the-umakuma-one-always",
+    "name": "Header level badges are not links, and the UmaKuma one always says UN",
+    "area": "platform",
     "kind": "bug",
     "status": "shipped",
-    "date": "2026-09-06",
-    "version": "1.58.2",
-    "release": 554,
-    "releasedAt": "2026-09-07T02:39:29Z",
-    "summary": "Internal tooling: the script that manages the simulated members now checks its own arguments, and every command can say what it would do before doing it."
+    "date": "2026-09-07",
+    "version": "1.59.0",
+    "release": 555,
+    "releasedAt": "2026-09-07T08:45:54Z",
+    "summary": "The two level badges in the header are doors now. The UmaKuma one opens the ladder board for the path you are following, and the WaniKani one opens the family board. It also names the right path at last: it read UN to everybody, including members climbing in school-year order."
   }
 ]

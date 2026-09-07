@@ -1,7 +1,10 @@
 import Link from "next/link";
 
+import { ladderBoardPath } from "@/app/ladder/lib/ladderAddress";
+import { WANIKANI_BOARD_HREF } from "@/app/leaderboard/lib/leaderboardAddress";
 import type { ViewerMenuInfo } from "@/app/users/[nickname]/UserDashboardTabs.types";
-import { unLevelBadge, wkLevelBadge } from "@/lib/levelBadge";
+import { LADDER_STREAMS } from "@/lib/ladder/ladderStreams";
+import { ugLevelBadge, unLevelBadge, wkLevelBadge } from "@/lib/levelBadge";
 
 import { HEADER_MEMBER_STATS_COPY as copy } from "./headerMemberStatsCopy";
 import { viewerAddress } from "./viewerAddress";
@@ -22,6 +25,17 @@ import { viewerAddress } from "./viewerAddress";
  * A signed-out visitor gets nothing at all. Drawing `0 XP` to a stranger states
  * a fact about an account that does not exist, and the row is better short.
  */
+/*
+ * The two level badges, which are the same thing twice: a quiet number that
+ * lights up on hover like the XP and the theme beside it. Written once so the
+ * pair cannot end up looking like two different kinds of control - they sit
+ * next to each other and are read together.
+ *
+ * `hidden ... sm:inline` is the giving-way rule below, kept here with the rest
+ * of the badge's look rather than repeated at both call sites.
+ */
+const badgeClassName = "hidden rounded-md text-foreground/60 transition hover:text-accent sm:inline";
+
 export default function HeaderMemberStats({
   viewerMenuInfo,
   className = "",
@@ -40,7 +54,20 @@ export default function HeaderMemberStats({
   }
 
   const address = viewerAddress(viewerMenuInfo);
-  const uk = unLevelBadge(viewerMenuInfo.unLevel);
+  /*
+   * The badge names the ladder the member is actually on. It said `UN` at
+   * everybody for as long as it existed - it read `Account.unLevel` whoever
+   * was asking - so a UG member was shown a standing they are not taught
+   * against, under a prefix claiming they were.
+   *
+   * One answer decides the prefix and the board both, which is the point of
+   * taking it from the stream rather than from the column: a badge reading
+   * `UG23` that opens the UN board would be a worse bug than the one it
+   * replaced, because it would look right.
+   */
+  const stream = viewerMenuInfo.ladderStream;
+  const level = viewerMenuInfo.ladderLevel;
+  const uk = stream === LADDER_STREAMS.ug ? ugLevelBadge(level) : unLevelBadge(level);
   const wk = wkLevelBadge(viewerMenuInfo.wkLevel);
   const xp = copy.xp(viewerMenuInfo.xp);
 
@@ -76,24 +103,32 @@ export default function HeaderMemberStats({
         * knows can wait for the width that fits it, and 393px is the narrowest
         * screen in the family.
         */}
-      {uk ? (
-        <span
+      {uk && stream ? (
+        <Link
+          href={ladderBoardPath(stream)}
           translate="no"
-          title={copy.umakumaLevelTitle(viewerMenuInfo.unLevel!)}
-          className="hidden text-foreground/60 sm:inline"
+          title={copy.umakumaLevelTitle(stream, level!)}
+          className={badgeClassName}
         >
           {uk}
-        </span>
+        </Link>
       ) : null}
 
+      {/*
+        * WaniKani's board is the home page, so this one link leaves for an
+        * address that is not a page of its own - see `WANIKANI_BOARD_HREF`.
+        * Unlike the UmaKuma badge it needs no address of the member's: the
+        * board is the whole household and every row on it is public.
+        */}
       {wk ? (
-        <span
+        <Link
+          href={WANIKANI_BOARD_HREF}
           translate="no"
           title={copy.wanikaniLevelTitle(viewerMenuInfo.wkLevel!)}
-          className="hidden text-foreground/60 sm:inline"
+          className={badgeClassName}
         >
           {wk}
-        </span>
+        </Link>
       ) : null}
 
       {/*

@@ -22,6 +22,7 @@ import AppTopMenuRow from "./shared/AppTopMenuRow";
 import { LEADERBOARD_COPY } from "./leaderboard/leaderboardCopy";
 import { resolveViewerMenuInfo } from "./users/[nickname]/userPageAuth";
 import LeaderboardTable from "./leaderboard/components/LeaderboardTable";
+import { WANIKANI_BOARD_ANCHOR } from "./leaderboard/lib/leaderboardAddress";
 import UmaKumaPageBanner from "./shared/UmaKumaPageBanner";
 import { viewerAddress } from "@/app/shared/viewerAddress";
 import { newcomerLanding } from "./authAccess";
@@ -443,7 +444,7 @@ export default async function Home() {
           </section>
         ) : null}
 
-        <section className="animate-enter animate-enter-delay-2 mt-6 overflow-hidden rounded-2xl border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
+        <section id={WANIKANI_BOARD_ANCHOR} className="animate-enter animate-enter-delay-2 mt-6 overflow-hidden rounded-2xl border border-line bg-surface/90 shadow-[0_20px_55px_rgba(8,16,36,0.12)]">
           {runtimeError ? (
             <div className="border-b border-amber-200 bg-amber-50 px-6 py-4 text-sm text-amber-900">
               <p className="font-bold uppercase tracking-[0.08em]">Runtime error detected</p>

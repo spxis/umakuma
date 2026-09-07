@@ -3,9 +3,11 @@ import { cookies } from "next/headers";
 import { isAccountBarred } from "@/lib/accountStanding";
 import { isAdminEmail } from "@/lib/auth";
 import { INVITE_SESSION_COOKIE_NAME, verifyInviteSessionToken } from "@/lib/inviteSession";
+import type { LadderStreamValue } from "@/lib/ladder/ladderStreams";
 import { prisma } from "@/lib/prisma";
 import { ratingFor } from "@/lib/srs/ageBand";
 import { srsThemeForRating } from "@/lib/srs/srsThemes";
+import { ladderColumns } from "@/lib/uk/ladderColumns";
 import { hasWanikaniConnection } from "@/lib/wanikaniConnection";
 import type { ViewerMenuInfo } from "./UserDashboardTabs.types";
 
@@ -59,6 +61,28 @@ function viewerThemeFor(account: { srsTheme: string | null; ageBand: string | nu
 }
 
 /**
+ * The ladder this viewer is climbing, and where they stand on it.
+ *
+ * Both standings are stored on the account and only one of them is the
+ * member's own: `ladderColumns` names the column, exactly as the queue, the
+ * lesson gate and the resolver ask it. The header used to take `unLevel`
+ * outright, which printed a UG member's UN standing under a `UN` prefix -
+ * a number they are not being taught against, labelled as one they are.
+ *
+ * Written once for the same reason `viewerThemeFor` is: two branches resolve a
+ * viewer and two copies of this would drift. Exported for the test that pins
+ * the column choice, which is the whole of what went wrong.
+ */
+export function viewerLadderFor(account: {
+  ladderStream: LadderStreamValue;
+  unLevel: number | null;
+  ugLevel: number | null;
+}): { stream: LadderStreamValue; level: number | null } {
+  const stream = account.ladderStream;
+  return { stream, level: account[ladderColumns(stream).accountLevel] };
+}
+
+/**
  * Which account, if any, this viewer is.
  *
  * A rejected account resolves to nothing, on both paths. That is the whole of
@@ -95,7 +119,9 @@ export async function resolveViewerMenuInfo(input: {
         tokenIv: true,
         tokenTag: true,
         xp: true,
+        ladderStream: true,
         unLevel: true,
+        ugLevel: true,
         wkLevel: true,
         srsTheme: true,
         ageBand: true,
@@ -109,6 +135,7 @@ export async function resolveViewerMenuInfo(input: {
      */
     const viewerIsMember = viewerAccount !== null && !isAccountBarred(viewerAccount);
     const viewerTheme = viewerIsMember ? viewerThemeFor(viewerAccount) : null;
+    const viewerLadder = viewerIsMember ? viewerLadderFor(viewerAccount) : null;
 
     return {
       provider: "google",
@@ -124,7 +151,8 @@ export async function resolveViewerMenuInfo(input: {
       hasWanikani: viewerIsMember && hasWanikaniConnection(viewerAccount),
       internal: viewerIsMember ? viewerAccount.internal : false,
       xp: viewerIsMember ? viewerAccount.xp : null,
-      unLevel: viewerIsMember ? viewerAccount.unLevel : null,
+      ladderStream: viewerLadder?.stream ?? null,
+      ladderLevel: viewerLadder?.level ?? null,
       wkLevel: viewerIsMember ? viewerAccount.wkLevel : null,
       themeId: viewerTheme?.id ?? null,
       themeName: viewerTheme?.name ?? null,
@@ -154,7 +182,9 @@ export async function resolveViewerMenuInfo(input: {
       tokenIv: true,
       tokenTag: true,
       xp: true,
+      ladderStream: true,
       unLevel: true,
+      ugLevel: true,
       wkLevel: true,
       srsTheme: true,
       ageBand: true,
@@ -173,6 +203,7 @@ export async function resolveViewerMenuInfo(input: {
   }
 
   const inviteTheme = viewerThemeFor(inviteAccount);
+  const inviteLadder = viewerLadderFor(inviteAccount);
 
   return {
     provider: "invite",
@@ -184,7 +215,8 @@ export async function resolveViewerMenuInfo(input: {
     hasWanikani: hasWanikaniConnection(inviteAccount),
     internal: inviteAccount.internal,
     xp: inviteAccount.xp,
-    unLevel: inviteAccount.unLevel,
+    ladderStream: inviteLadder.stream,
+    ladderLevel: inviteLadder.level,
     wkLevel: inviteAccount.wkLevel,
     themeId: inviteTheme.id,
     themeName: inviteTheme.name,

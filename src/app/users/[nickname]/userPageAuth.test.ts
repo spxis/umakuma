@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 
-import { canViewUserPage } from "./userPageAuth";
+import { LADDER_STREAMS } from "@/lib/ladder/ladderStreams";
+
+import { canViewUserPage, viewerLadderFor } from "./userPageAuth";
 import type { ViewerMenuInfo } from "./UserDashboardTabs.types";
 
 function viewer(overrides: Partial<ViewerMenuInfo> = {}): ViewerMenuInfo {
@@ -14,7 +16,8 @@ function viewer(overrides: Partial<ViewerMenuInfo> = {}): ViewerMenuInfo {
     hasWanikani: false,
     internal: false,
     xp: null,
-    unLevel: null,
+    ladderStream: null,
+    ladderLevel: null,
     wkLevel: null,
     themeId: null,
     themeName: null,
@@ -125,5 +128,44 @@ describe("canViewUserPage", () => {
         targetWkUsername: "",
       }),
     ).toBe(false);
+  });
+});
+
+/*
+ * Which of the two standings on an account is the member's own.
+ *
+ * The header took `unLevel` outright and printed it under a `UN` prefix at
+ * everybody, so a member on the school-year path was shown a number from a
+ * ladder they are not taught against. It is the same fault the queue, the
+ * lesson gate and the JLPT gates each had, fixed in the same way: ask
+ * `ladderColumns` which column, never name one.
+ */
+describe("viewerLadderFor", () => {
+  const standings = { unLevel: 23, ugLevel: 41 };
+
+  it("reads the UN column for a member on the JLPT path", () => {
+    expect(viewerLadderFor({ ladderStream: LADDER_STREAMS.un, ...standings })).toEqual({
+      stream: LADDER_STREAMS.un,
+      level: 23,
+    });
+  });
+
+  it("reads the UG column for a member on the school-year path", () => {
+    expect(viewerLadderFor({ ladderStream: LADDER_STREAMS.ug, ...standings })).toEqual({
+      stream: LADDER_STREAMS.ug,
+      level: 41,
+    });
+  });
+
+  /*
+   * A member on UG who has never touched UN has a null there and a level here.
+   * Reading the wrong column would have drawn them nothing at all rather than
+   * a wrong number, which is the same bug wearing a quieter face.
+   */
+  it("does not fall back to the other ladder's standing", () => {
+    expect(viewerLadderFor({ ladderStream: LADDER_STREAMS.ug, unLevel: 23, ugLevel: null })).toEqual({
+      stream: LADDER_STREAMS.ug,
+      level: null,
+    });
   });
 });

@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import type { LearnedSrsGroup } from "@/lib/domainConstants";
 import type { ItemSpread } from "@/lib/itemSpread";
+import type { LadderStreamValue } from "@/lib/ladder/ladderStreams";
 
 export type ItemSpreadRow = {
   radical: number;
@@ -87,8 +88,20 @@ export type ViewerMenuInfo = {
    * having earned none, and the header draws nothing at all for the first.
    */
   xp: number | null;
-  /** Ours, out of a hundred. Null for a non-member. */
-  unLevel: number | null;
+  /**
+   * The viewer's own ladder, and their standing on it.
+   *
+   * A stream and a level rather than a bare `unLevel`, because the header is a
+   * level reader like any other and the column it must read depends on the
+   * path the member is being taught on: it printed `UN` at everybody, so a UG
+   * member read their UN standing under the wrong prefix. `ladderColumns` says
+   * which column; this pair is its answer, carried rather than re-derived,
+   * since the badge and the board it links to have to agree.
+   *
+   * Null for a non-member, like the numbers beside it.
+   */
+  ladderStream: LadderStreamValue | null;
+  ladderLevel: number | null;
   /** WaniKani's, out of sixty. Null for a non-member and for a member who has never connected one. */
   wkLevel: number | null;
   /**
