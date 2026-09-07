@@ -5,6 +5,7 @@ import { RELATED_GROUPS } from "./relatedSubjects";
 import type { CatalogRelatedReference, CatalogSubjectDetail } from "./subjectCatalogDetails";
 import { assembleKanjiPage, neighbourReferences, relatedGroupsForSubject, toWordExamples, type KanjiPageSources } from "./subjectPageModel";
 import { WORD_EXAMPLE_LIMIT } from "@/app/shared/subject-page/SubjectPage.constants";
+import { KANJI_LISTING_NOTES } from "./kanjiListing";
 
 /**
  * A kanji page, assembled from whatever knows the character.
@@ -201,6 +202,27 @@ describe("the words a kanji appears in", () => {
   it("reads nothing into a column that holds nothing", () => {
     expect(toWordExamples(null, "水")).toEqual([]);
     expect(toWordExamples("not an array", "水")).toEqual([]);
+  });
+
+  /*
+   * 七竈 on the 七 page: 竈 drew a chip with no WK badge and no UN badge under
+   * it, and the row had no way to say whether that was ignorance or the truth.
+   * It was the truth - the chip now carries the word for it.
+   */
+  it("says why a character in a word carries no level at all", () => {
+    const [rowan] = toWordExamples(
+      [{ written: "七竈", pronounced: "ななかまど", gloss: "Japanese rowan" }],
+      "七",
+    );
+    const seven = rowan!.kanji.find((item) => item.label === "七");
+    const stove = rowan!.kanji.find((item) => item.label === "竈");
+    /* On the ladder, so its levels speak and it needs no note. */
+    expect(seven!.unLevel).not.toBeNull();
+    expect(seven!.listing).toBeNull();
+    /* On nothing at all: no WaniKani, no ladder, no grade, no JLPT. */
+    expect(stove!.level).toBeNull();
+    expect(stove!.unLevel).toBeNull();
+    expect(stove!.listing).toBe(KANJI_LISTING_NOTES.off);
   });
 });
 

@@ -6,6 +6,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
+import { KANJI_LISTING_NOTES, KANJI_LISTING_NOTE_DISPLAY } from "@/lib/kanjiListing";
 
 import SubjectPill from "./SubjectPill";
 
@@ -103,5 +104,31 @@ describe("the size of it", () => {
     ]) {
       expect(read(caller)).not.toContain('size="sm"');
     }
+  });
+});
+
+/*
+ * 竈 in 七竈 drew a chip with an empty meta row, and John read the blank as a
+ * broken page rather than as a character on no list. The blank was the bug.
+ */
+describe("a character on no list", () => {
+  it("says so where the levels would have been", () => {
+    const pill = draw(<SubjectPill glyph="竈" listing={KANJI_LISTING_NOTES.off} />);
+    expect(pill.body.textContent).toContain(KANJI_LISTING_NOTE_DISPLAY.off.label);
+    /* The sentence naming the four lists is a hover, not a chip. */
+    expect(pill.querySelector(`[title="${KANJI_LISTING_NOTE_DISPLAY.off.title}"]`)).not.toBeNull();
+  });
+
+  it("draws nothing extra for a character that has its levels", () => {
+    const pill = draw(<SubjectPill glyph="七" level={1} unLevel={3} />);
+    expect(pill.body.textContent).toContain("WK1");
+    expect(pill.body.textContent).toContain("UN3");
+    expect(pill.body.textContent).not.toContain(KANJI_LISTING_NOTE_DISPLAY.off.label);
+  });
+
+  it("stays quiet where the surface never had a level to give", () => {
+    expect(draw(<SubjectPill glyph="竈" />).body.textContent).not.toContain(
+      KANJI_LISTING_NOTE_DISPLAY.off.label,
+    );
   });
 });

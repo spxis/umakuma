@@ -3,6 +3,8 @@ import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import { subjectHref } from "@/lib/globalSearch";
 import { getKanjiDictionaryEntry } from "@/lib/kanjiDictionary";
 import { kanjiPlacement } from "@/lib/kanjiLadder";
+import { kanjiListingNote } from "@/lib/kanjiListingServer";
+import type { KanjiListingNote } from "@/lib/kanjiListing";
 import { parseJlptWordExamples } from "@/lib/jlptWordExamples";
 import type { KanjiDictionaryEntry } from "@/lib/kanjiDictionary.types";
 import { relatedGroupsFor, type RelatedGroup, type RelatedRow } from "@/lib/relatedSubjects";
@@ -52,6 +54,8 @@ export type WordExampleKanji = {
   meaning: string | null;
   level: number | null;
   unLevel: number | null;
+  /** Why it carries no level, for a character no list teaches. Null otherwise. */
+  listing: KanjiListingNote | null;
   /** The kanji the page is about, marked rather than missing. */
   current: boolean;
 };
@@ -77,6 +81,8 @@ export type KanjiPageModel = {
   /** WaniKani's level, for the header pill. */
   wkLevel: number | null;
   unLevel: number | null;
+  /** Why the card carries no level at all, where no list teaches the character. */
+  listing: KanjiListingNote | null;
   /** WaniKani's id, where it teaches the character: what the tag marks need. */
   wkSubjectId: number | null;
 };
@@ -125,6 +131,7 @@ export function toWordExamples(raw: unknown, character: string): WordExample[] {
         meaning: chip.meaning ?? getKanjiDictionaryEntry(chip.label)?.primaryMeaning ?? null,
         level: chip.level,
         unLevel: kanjiPlacement(chip.label)?.level ?? null,
+        listing: kanjiListingNote(chip.label),
         current: chip.current,
       })),
     }));
@@ -217,6 +224,9 @@ export function assembleKanjiPage(sources: KanjiPageSources): KanjiPageModel {
        reader can see 生 is WaniKani 5 and UmaKuma 7 without either number
        having to be hidden or explained. */
     unLevel: kanjiPlacement(character)?.level ?? null,
+    /* 竈 is not WaniKani 0 and not UmaKuma 0; it is on nothing, and the card
+       says which of the two silences this is. */
+    listing: kanjiListingNote(character),
     wkSubjectId: wanikani?.subjectId ?? null,
   };
 }

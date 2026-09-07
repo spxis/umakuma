@@ -6,6 +6,7 @@ import { subjectGlyphTone } from "@/app/shared/subjectListView";
 import { SUBJECT_TYPE_DISPLAY } from "@/lib/domainConstants";
 import { SOURCE_KEYS, SOURCE_CREDIT_COPY } from "@/lib/sourceCredits";
 import { unLevelBadge, wkLevelBadge } from "@/lib/levelBadge";
+import { KANJI_LISTING_NOTE_DISPLAY, type KanjiListingNote } from "@/lib/kanjiListing";
 
 /**
  * What a subject is: the glyph, what it means, how it is read.
@@ -40,6 +41,14 @@ export type SubjectIdentity = {
   unLevel?: number | null;
   jlptLevel: number | null;
   /**
+   * Why the row of pills is otherwise empty.
+   *
+   * A card with only a KANJI pill on it reads as a page that failed to load
+   * its own facts. It is usually the truth instead: most of the ten thousand
+   * characters are on no list we carry, and this says so in one word.
+   */
+  listing?: KanjiListingNote | null;
+  /**
    * Whether WaniKani is behind what the card says.
    *
    * A licence condition rather than decoration, so it is drawn where it is
@@ -58,7 +67,8 @@ function Pill({ children }: { children: React.ReactNode }) {
 }
 
 export default function SubjectIdentityBlock({ identity }: { identity: SubjectIdentity }) {
-  const { label, subjectType, name, meanings, readings, wkLevel, unLevel, jlptLevel, credited } = identity;
+  const { label, subjectType, name, meanings, readings, wkLevel, unLevel, jlptLevel, listing, credited } = identity;
+  const note = listing ? KANJI_LISTING_NOTE_DISPLAY[listing] : null;
   const display = SUBJECT_TYPE_DISPLAY[subjectType as keyof typeof SUBJECT_TYPE_DISPLAY];
 
   return (
@@ -92,6 +102,7 @@ export default function SubjectIdentityBlock({ identity }: { identity: SubjectId
                 the UK pill, which is exactly the case worth showing. */}
             {unLevel === null || unLevel === undefined ? null : <Pill>{unLevelBadge(unLevel)}</Pill>}
             {jlptLevel ? <Pill>{SUBJECT_PAGE_COPY.jlpt(jlptLevel)}</Pill> : null}
+            {note ? <span title={note.title}><Pill>{note.label}</Pill></span> : null}
           </div>
         </div>
       </div>
