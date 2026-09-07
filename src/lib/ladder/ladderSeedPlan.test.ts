@@ -16,6 +16,13 @@ const input: LadderSeedInput = {
   },
   radicals: { 口: 1, ノ: 1 },
   vocabulary: { "2467": 3 },
+  /* The same subjects on the school-year ladder. 日 is grade 1 there and
+     early; 苺 is not a school kanji and lands late. */
+  grade: {
+    kanji: { 日: 2, 苺: 60 },
+    radicals: { 口: 1, ノ: 2 },
+    vocabulary: { "2467": 9 },
+  },
   dictionary: new Map([
     ["日", { meanings: ["day", "sun"], onReadings: ["ニチ"], kunReadings: ["ひ"], grade: 1 }],
     ["苺", { meanings: ["strawberry"], onReadings: ["バイ"], kunReadings: ["いちご"], grade: null }],
@@ -67,7 +74,7 @@ describe("the rows the curriculum should hold", () => {
 describe("what a seed run would change", () => {
   const rows = buildLadderSeedPlan(input);
   const stored = (over: Partial<Record<string, unknown>> = {}) => ({
-    key: "kanji:日", kind: "kanji", characters: "日", level: 1, wkSubjectId: 476,
+    key: "kanji:日", kind: "kanji", characters: "日", level: 1, ugLevel: 2, wkSubjectId: 476,
     source: "wanikani", nLevel: 5, schoolGrade: 1, meanings: [], readings: [],
     removedAt: null, ...over,
   });
@@ -93,7 +100,7 @@ describe("what a seed run would change", () => {
   it("leaves a row alone when the name it holds is the one planned", () => {
     const same = diffLadderSeed(
       buildLadderSeedPlan({ ...input, radicals: { 口: 1 } }),
-      [{ ...stored(), key: "radical:口", kind: "radical", characters: "口", source: "radkfile", wkSubjectId: null, nLevel: null, schoolGrade: null, meanings: ["mouth"] }],
+      [{ ...stored(), key: "radical:口", kind: "radical", characters: "口", ugLevel: 1, source: "radkfile", wkSubjectId: null, nLevel: null, schoolGrade: null, meanings: ["mouth"] }],
     );
     expect(same.update).toHaveLength(0);
   });
@@ -178,6 +185,7 @@ describe("radicals linked to WaniKani's own", () => {
     kanji: { 七: { level: 3, waniKaniLevel: 2, nLevel: 5 } },
     radicals: { 七: 2, 丿: 1 },
     vocabulary: {},
+    grade: { kanji: { 七: 3 }, radicals: { 七: 2, 丿: 1 }, vocabulary: {} },
     dictionary: new Map([["七", { meanings: ["seven"], onReadings: ["シチ"], kunReadings: ["なな"], grade: 1 }]]),
     kanjiSubjectIds: new Map([["七", 500]]),
     vocabularyCharacters: new Map(),
@@ -218,5 +226,49 @@ describe("a word's written form", () => {
        the row drew nothing. */
     const word = buildLadderSeedPlan(input).find((row) => row.key === "wk:2467");
     expect(word?.characters).toBe("一");
+  });
+});
+
+/**
+ * Every subject carries both levels, and a move on either ladder is a change.
+ *
+ * `UkSubject.level` was the UN level and there was nothing for UG: its
+ * placement lived only in gradeLadder.json, resolved per request, so nothing
+ * could walk it - `Account.ugLevel` was a column nothing wrote, and every UG
+ * member was taught in UN order. Both ladders are built in one pass so they
+ * cannot drift; the seed used to copy half of that into the database.
+ */
+describe("the seed carries the UG level beside the UN one", () => {
+  const rows = buildLadderSeedPlan(input);
+  const byKey = Object.fromEntries(rows.map((row) => [row.key, row]));
+
+  it("places every kind on the UG ladder", () => {
+    expect(byKey["kanji:日"]).toMatchObject({ level: 1, ugLevel: 2 });
+    expect(byKey["kanji:苺"]).toMatchObject({ level: 14, ugLevel: 60 });
+    expect(byKey["radical:ノ"]).toMatchObject({ level: 1, ugLevel: 2 });
+    expect(byKey["wk:2467"]).toMatchObject({ level: 3, ugLevel: 9 });
+  });
+
+  it("gives every row a UG level, never a default", () => {
+    for (const row of rows) expect(Number.isInteger(row.ugLevel) && row.ugLevel >= 1, row.key).toBe(true);
+  });
+
+  /*
+   * A gap between the ladders is a build bug, not a row to default. Writing a
+   * 1 would put the subject on UG level 1 for every member, silently.
+   */
+  it("refuses a subject the UN ladder places and UG does not", () => {
+    const broken: LadderSeedInput = { ...input, grade: { ...input.grade, kanji: { 日: 2 } } };
+    expect(() => buildLadderSeedPlan(broken)).toThrow(/does not place kanji 苺/);
+  });
+
+  /* A kanji that moves on UG alone must reach the database, or a UG
+     rebalance would seed as "nothing to do". */
+  it("counts a UG-only move as a change", () => {
+    const stored = rows.map((row) => ({ ...row, removedAt: null }));
+    const moved: LadderSeedInput = { ...input, grade: { ...input.grade, kanji: { 日: 3, 苺: 60 } } };
+    const diff = diffLadderSeed(buildLadderSeedPlan(moved), stored);
+    expect(diff.update.map((row) => row.key)).toEqual(["kanji:日"]);
+    expect(diff.create).toEqual([]);
   });
 });

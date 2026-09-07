@@ -17,7 +17,7 @@ async function main() {
   const { rows, ladder } = ladderSeedPlan();
   const stored = await prisma.ukSubject.findMany({
     select: {
-      key: true, kind: true, characters: true, level: true,
+      key: true, kind: true, characters: true, level: true, ugLevel: true,
       wkSubjectId: true, source: true, nLevel: true, schoolGrade: true,
       /* Read back so a name-only correction is seen as a change; without
          these the seeder counts a newly-named radical unchanged. */

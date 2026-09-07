@@ -25,7 +25,10 @@ export type UkSubjectPlanRow = {
   key: string;
   kind: UkSubjectKind;
   characters: string;
+  /** Its level on the UN ladder. */
   level: number;
+  /** Its level on the UG ladder. Every subject has one; see `ugLevelFor`. */
+  ugLevel: number;
   wkSubjectId: number | null;
   source: LadderSource;
   nLevel: number | null;
@@ -39,6 +42,19 @@ export type LadderSeedInput = {
   kanji: Record<string, { level: number; waniKaniLevel: number | null; nLevel: number | null }>;
   radicals: Record<string, number>;
   vocabulary: Record<string, number>;
+  /**
+   * Where the same subjects sit on the UG ladder, keyed the same way.
+   *
+   * Both ladders are written by `build-kanji-ladder.mjs` in one pass so they
+   * cannot drift, and the seed used to copy only half of that into the
+   * database. A subject the UN ladder places but UG does not is a build bug,
+   * not a row to default - `ugLevelFor` refuses it.
+   */
+  grade: {
+    kanji: Record<string, number>;
+    radicals: Record<string, number>;
+    vocabulary: Record<string, number>;
+  };
   /** KANJIDIC2, which is the only content source for what WaniKani skips. */
   dictionary: ReadonlyMap<string, { meanings: string[]; onReadings: string[]; kunReadings: string[]; grade: number | null }>;
   /** WaniKani's kanji subject ids by character, so a row can link to its catalogue entry. */
@@ -60,6 +76,20 @@ export type LadderSeedInput = {
   radicalSubjectIds?: ReadonlyMap<string, number>;
 };
 
+/**
+ * The UG level for a subject the UN ladder places.
+ *
+ * Throws rather than defaulting: every one of the 2,235 kanji, 253 radicals
+ * and 6,795 words places on both ladders today, and a gap would mean the two
+ * were built from different inputs. Writing a 1 in that case would put the
+ * subject on UG level 1 for every member and nothing would ever notice.
+ */
+function ugLevelFor(map: Record<string, number>, key: string, what: string): number {
+  const level = map[key];
+  if (level === undefined) throw new Error(`The UG ladder does not place ${what} ${key}, but the UN ladder does.`);
+  return level;
+}
+
 function kanjiRows(input: LadderSeedInput): UkSubjectPlanRow[] {
   return Object.entries(input.kanji).map(([characters, placement]) => {
     const taughtByWanikani = placement.waniKaniLevel !== null;
@@ -69,6 +99,7 @@ function kanjiRows(input: LadderSeedInput): UkSubjectPlanRow[] {
       kind: UK_SUBJECT_KINDS.kanji,
       characters,
       level: placement.level,
+      ugLevel: ugLevelFor(input.grade.kanji, characters, "kanji"),
       wkSubjectId: input.kanjiSubjectIds.get(characters) ?? null,
       source: taughtByWanikani ? LADDER_SOURCES.wanikani : LADDER_SOURCES.kanjidic,
       nLevel: placement.nLevel,
@@ -108,6 +139,7 @@ function radicalRows(input: LadderSeedInput): UkSubjectPlanRow[] {
       kind: UK_SUBJECT_KINDS.radical,
       characters,
       level,
+      ugLevel: ugLevelFor(input.grade.radicals, characters, "radical"),
       wkSubjectId: radicalWkSubjectId(characters, input.radicalSubjectIds),
       source: LADDER_SOURCES.radkfile,
       nLevel: null,
@@ -125,6 +157,7 @@ function vocabularyRows(input: LadderSeedInput): UkSubjectPlanRow[] {
     kind: UK_SUBJECT_KINDS.vocabulary,
     characters: input.vocabularyCharacters.get(Number(id)) ?? "",
     level,
+    ugLevel: ugLevelFor(input.grade.vocabulary, id, "word"),
     wkSubjectId: Number(id),
     source: LADDER_SOURCES.wanikani,
     nLevel: null,
@@ -159,6 +192,7 @@ export type UkSubjectStoredRow = {
   kind: string;
   characters: string;
   level: number;
+  ugLevel: number;
   wkSubjectId: number | null;
   source: string;
   nLevel: number | null;
@@ -188,6 +222,7 @@ function differs(plan: UkSubjectPlanRow, stored: UkSubjectStoredRow): boolean {
     plan.level !== stored.level ||
     plan.kind !== stored.kind ||
     plan.source !== stored.source ||
+    plan.ugLevel !== stored.ugLevel ||
     plan.characters !== stored.characters ||
     plan.wkSubjectId !== stored.wkSubjectId ||
     plan.nLevel !== stored.nLevel ||

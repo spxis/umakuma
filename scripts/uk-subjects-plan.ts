@@ -24,6 +24,20 @@ type LadderFile = {
   vocabularyLevel: Record<string, number>;
 };
 
+/**
+ * The UG ladder, read for its placements only.
+ *
+ * Its kanji map carries the same shape as UN's; its radicals are split into
+ * the ones a taught kanji needs and the twelve nobody's kanji uses, which are
+ * offered one per level at the top of the ladder. The seed wants one map.
+ */
+type GradeLadderFile = {
+  kanjiLevel: Record<string, { level: number }>;
+  radicalLevel: Record<string, number>;
+  optionalRadicalLevel: Record<string, number>;
+  vocabularyLevel: Record<string, number>;
+};
+
 type DictionaryEntry = {
   kanji: string;
   grade: number | null;
@@ -103,12 +117,18 @@ function loadVocabularyCharacters(): Map<number, string> {
 
 export function ladderSeedPlan(): { rows: UkSubjectPlanRow[]; ladder: LadderFile } {
   const ladder = readJson<LadderFile>("kanjiLadder.json");
+  const grade = readJson<GradeLadderFile>("gradeLadder.json");
   return {
     ladder,
     rows: buildLadderSeedPlan({
       kanji: ladder.kanjiLevel,
       radicals: ladder.radicalLevel,
       vocabulary: ladder.vocabularyLevel,
+      grade: {
+        kanji: Object.fromEntries(Object.entries(grade.kanjiLevel).map(([character, placement]) => [character, placement.level])),
+        radicals: { ...grade.optionalRadicalLevel, ...grade.radicalLevel },
+        vocabulary: grade.vocabularyLevel,
+      },
       dictionary: loadDictionary(),
       kanjiSubjectIds: loadKanjiSubjectIds(),
       radicalSubjectIds: loadRadicalSubjectIds(),

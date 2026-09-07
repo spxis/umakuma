@@ -16,7 +16,7 @@ async function main() {
   const { rows } = ladderSeedPlan();
   const stored = await prisma.ukSubject.findMany({
     select: {
-      key: true, kind: true, characters: true, level: true,
+      key: true, kind: true, characters: true, level: true, ugLevel: true,
       wkSubjectId: true, source: true, nLevel: true, schoolGrade: true,
       meanings: true, readings: true, removedAt: true,
     },

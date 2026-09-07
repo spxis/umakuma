@@ -1143,8 +1143,17 @@ model UkSubject {
   /// Stable business key: `kanji:語`, `radical:口`, `wk:2467`, `word:苺`.
   key             String          @unique
   characters      String
-  /// Ours, 1-100.
+  /// Ours, 1-100, on the UN ladder - the JLPT-band ordering.
   level           Int
+  /// The same subject's level on the UG ladder - the school-year ordering.
+  ///
+  /// A column beside `level` rather than a table of its own, on purpose: there
+  /// are two orderings and there will be at most three, and a join on every
+  /// queue and explorer read to save two nullable columns is the wrong trade.
+  /// It was not here at all before, and UG's placement lived only in a JSON
+  /// file resolved per request - so nothing could walk it, `Account.ugLevel`
+  /// was a column nothing wrote, and every UG member was taught in UN order.
+  ugLevel         Int             @default(1)
   /// Set where WaniKani teaches the same item, so their content can be reused.
   wkSubjectId     Int?            @unique
   source          UkSubjectSource
@@ -1167,6 +1176,8 @@ model UkSubject {
 
   @@index([kind, level])
   @@index([level])
+  @@index([kind, ugLevel])
+  @@index([ugLevel])
   @@index([removedAt])
 }
 
