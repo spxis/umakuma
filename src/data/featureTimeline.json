@@ -7106,12 +7106,25 @@
     "id": "both-browsers-need-a-row-of-source-filters-beside-common-onl",
     "name": "Both browsers need a row of source filters beside Common only",
     "area": "study",
+    "status": "shipped",
     "kind": "feature",
+    "date": "2026-09-07",
+    "summary": "Both browsers can now be narrowed to the kanji you actually need. Common only has moved onto the radicals page and gained four companions - JLPT, WK, UN and UG - and each chip says how many it would leave with your other filters still applied.",
+    "dateIsEstimate": false,
+    "release": 568,
+    "version": "1.71.0",
+    "releasedAt": "2026-09-07T14:26:13Z"
+  },
+  {
+    "id": "the-study-explorer-labels-a-ug-member-s-level-un",
+    "name": "The study explorer labels a UG member's level UN",
+    "area": "study",
+    "kind": "bug",
     "status": "shipped",
     "date": "2026-09-07",
-    "version": "1.71.0",
-    "release": 568,
-    "releasedAt": "2026-09-07T14:26:13Z",
-    "summary": "Both browsers can now be narrowed to the kanji you actually need. Common only has moved onto the radicals page and gained four companions - JLPT, WK, UN and UG - and each chip says how many it would leave with your other filters still applied."
+    "version": "1.72.0",
+    "release": 569,
+    "releasedAt": "2026-09-07T14:49:12Z",
+    "summary": "The Study explorer now labels your level with the ladder you are actually on. A member on the school-year ordering saw their standing under a UN prefix in the panel header, the upcoming rows and the badges inside the glyph - the number was right and only the label was wrong, which is the hardest kind to spot."
   }
 ]
