@@ -230,6 +230,26 @@ Run `pnpm quality:check` after non-trivial `src/` edits. If lint issues are auto
 - A game's presentation comes from `GAME_KIND_RULES` flags (`usesDirection`, `usesAnswerMode`, and the rest), never from inferring behavior from `fixedCategory`. Map mode shares Shiritori's `vocabulary` category for its accent colour but has its own direction and answer-mode controls.
 - **The simulated cohort is played, not typed in, and every one of them is `userType = test`.** `pnpm cohort add 32` invents members with real student names (Canada, the US, Vietnam, Thailand, France, Australia), `pnpm cohort play` walks each one through the site's own rules from the day they joined to now - lessons, reviews on the shared SRS schedule, XP through the same caps, games planned by `planGameRun` and scored by `completedRunValues` - and `pnpm cohort remove` takes them all out. A member's days are decided from their slug and the date, so `play` can be run on any schedule and never replays a day. Nothing public reads `userType`; admin surfaces and counts do, and a query that should exclude them filters on it rather than on an email domain. The engine in `src/lib/cohort/` mirrors the server orchestration and imports the rule modules; when `recordUkReview`, `awardXp` or `settleDailyXp` change, change the mirror in the same pass. Refuses a remote database without `--allow-remote`, and a production run takes `pnpm db:backup:prod` first like any other write. The runbook - commands, what a persona is, what is still open - is `docs/COHORT.md`; read it before running any of this against production, and tell the other sessions first, because the databases are shared.
 - Subject content comes from `WkSubjectCatalog`, not the WaniKani API. Use `fetchCatalogSubjects` in the queue paths (or `getCatalogSubjectDetails` elsewhere) and fall back to the API only for ids the catalog lacks. Subjects are static and already synced locally; fetching them per request meant the study queue asked the API for up to 1,957 related subjects in sequential chunks, which was 9-12 seconds of a 15 second response. Assignments are the player's own SRS state and originate at the API, but a page does not fetch them: `Account.assignmentCache` holds the whole `/assignments` collection, refreshed by the ordinary five-minute sync through `updated_after`, and the games, study tags and reading sign-off all read it. Take the same route with `getUserKanjiIndexFromCache` — asking WaniKani per render cost the JLPT explorer 650ms before it drew anything. The live call (`getUserKanjiIndex`) is for the queue paths, which are about to review the items and need this instant's stage.
+- **WaniKani's `/reviews` collection holds only what was submitted through the
+  API, so it is empty for anybody who reviews in their app.** Measured on
+  2026-09-07 against a level 17 account: `total_count` 0 with and without
+  `updated_after`, while `/review_statistics` held 2,774 rows updated that
+  morning. That is why `Account.reviewsUpdatedAt` is null on every account -
+  the sync had been fetching an empty collection for months. To know what a
+  member answered on WaniKani, diff the per-subject counters instead
+  (`reviewStatDeltas.ts`): a counter that grew is a review, the increase says
+  how many and which way, and `data_updated_at` says when. One review moves
+  both halves of a kanji, so the count is the larger of the two, and it is
+  wrong if either half was missed. Only running totals exist, so the first
+  snapshot for an account writes no history and never can.
+- **A queue ordered by "least recently done" must exclude rows that can never
+  advance that column.** `refreshDueAccounts` takes the two oldest
+  `lastSyncedAt`; an account with no token returns early before that column is
+  written, so it stayed the oldest for ever. Two of them sat at the head from
+  2026-09-02 and every connected member stopped syncing on 2026-09-05, with
+  nothing in any log to show it - the sweep reported two accounts picked on
+  every pass. An early return that has already claimed a row must also put the
+  claim down.
 - All WaniKani network traffic goes through `wanikaniFetch` in `src/lib/wanikani/http.ts`. Add new calls there, never a bare `fetch` to the API, so the offline stand-in in `src/lib/wanikani/mockApi.ts` keeps covering every caller. The mock requires `WANIKANI_MOCK=1` **and** the absence of Vercel's environment variable, and must never be reachable in a deployed environment.
 
 ## Don't touch
