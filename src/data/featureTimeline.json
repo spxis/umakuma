@@ -6872,12 +6872,25 @@
     "id": "currency-reaction-stickers-generator-and-nine-reactions",
     "name": "Currency reaction stickers: generator and nine reactions",
     "area": "games",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-06",
+    "summary": "Mochi, Oni and Kane can each pull three faces now: laughing, cool and in love; curious, smug and over the moon; shocked, partying and unimpressed. Every face comes in the same sizes and the same light and dark versions as the mascots themselves, so wherever a mascot fits, its expressions fit too. Nothing hands them out yet; that comes with the shop.",
+    "dateIsEstimate": false,
+    "release": 550,
+    "version": "1.56.0",
+    "releasedAt": "2026-09-07T00:38:39Z"
+  },
+  {
+    "id": "favicon-and-app-icon-kuma-replaces-the-vercel-triangle",
+    "name": "Favicon and app icon: Kuma replaces the Vercel triangle",
+    "area": "platform",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-06",
-    "version": "1.56.0",
-    "release": 550,
-    "releasedAt": "2026-09-07T00:38:39Z",
-    "summary": "Mochi, Oni and Kane can each pull three faces now: laughing, cool and in love; curious, smug and over the moon; shocked, partying and unimpressed. Every face comes in the same sizes and the same light and dark versions as the mascots themselves, so wherever a mascot fits, its expressions fit too. Nothing hands them out yet; that comes with the shop."
+    "version": "1.57.0",
+    "release": 551,
+    "releasedAt": "2026-09-07T00:43:42Z",
+    "summary": "Kuma is in the browser tab now. The site's icon was still the blank starter triangle; from this release the tab, the bookmark and the phone home screen all show the bear's face."
   }
 ]

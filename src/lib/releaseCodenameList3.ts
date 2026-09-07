@@ -112,4 +112,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Tomoni Danme", ja: "共に段目", reading: "ともにだんめ", gloss: "both rungs, side by side" },
   { romaji: "Narai Kubun", ja: "習い区分", reading: "ならいくぶん", gloss: "study, sorted by its path" },
   { romaji: "niramekko", ja: "睨めっこ", reading: "にらめっこ", gloss: "the funny-face staring game" },
+  { romaji: "nunome", ja: "布目", reading: "ぬのめ", gloss: "the weave of the cloth" },
 ];
