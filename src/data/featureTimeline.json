@@ -6950,12 +6950,25 @@
     "id": "a-game-history-page-every-run-and-what-each-one-paid",
     "name": "A game history page: every run, and what each one paid",
     "area": "games",
+    "status": "shipped",
     "kind": "feature",
+    "date": "2026-09-07",
+    "summary": "Every game you have finished now has a page of its own, with what each run paid and - where it paid nothing - why. Filter by game, sort by date, score or XP. Runs from before UmaKuma started recording this show a dash rather than a zero, because nobody measured them.",
+    "dateIsEstimate": false,
+    "release": 556,
+    "version": "1.60.0",
+    "releasedAt": "2026-09-07T09:29:00Z"
+  },
+  {
+    "id": "a-chip-for-a-kanji-no-system-teaches-says-nothing-at-all",
+    "name": "A chip for a kanji no system teaches says nothing at all",
+    "area": "study",
+    "kind": "bug",
     "status": "shipped",
     "date": "2026-09-07",
-    "version": "1.60.0",
-    "release": 556,
-    "releasedAt": "2026-09-07T09:29:00Z",
-    "summary": "Every game you have finished now has a page of its own, with what each run paid and - where it paid nothing - why. Filter by game, sort by date, score or XP. Runs from before UmaKuma started recording this show a dash rather than a zero, because nobody measured them."
+    "version": "1.61.0",
+    "release": 557,
+    "releasedAt": "2026-09-07T09:32:33Z",
+    "summary": "A character no system teaches now says so. Where a chip would carry its WaniKani or UmaKuma level, one outside every list we hold - \u7ac3 in \u4e03\u7ac3, say - shows a short Off-list tag instead of an empty space, and the hover names the lists it was checked against. Characters kept only for names are marked as such."
   }
 ]
