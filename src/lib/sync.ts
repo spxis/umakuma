@@ -75,8 +75,18 @@ export async function clearExpiredSyncLocks(now: Date = new Date()): Promise<voi
  */
 export function syncQueueWhere(now: Date, staleBefore: Date): Prisma.AccountWhereInput {
   return {
-    /* No connection, nothing to pull, never in the queue. */
+    /*
+     * No connection, nothing to pull, never in the queue.
+     *
+     * All three parts, because that is what a connection is: `wanikaniConnection`
+     * refuses a half-connected account, and asking for only the ciphertext here
+     * would leave one with a null iv or tag failing at exactly the same point -
+     * and it would keep its place at the head of the queue, which is the whole
+     * bug this clause exists to prevent.
+     */
     tokenEncrypted: { not: null },
+    tokenIv: { not: null },
+    tokenTag: { not: null },
     AND: [
       { lastSyncedAt: { lt: staleBefore } },
       { nextSyncAllowedAt: { lte: now } },

@@ -3,6 +3,8 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 type AccountRow = {
   id: string;
   tokenEncrypted: string | null;
+  tokenIv: string | null;
+  tokenTag: string | null;
   lastSyncedAt: Date;
   nextSyncAllowedAt: Date;
   isSyncing: boolean;
@@ -16,8 +18,13 @@ vi.mock("server-only", () => ({}));
 vi.mock("@/lib/prisma", () => ({
   prisma: {
     account: {
-      findMany: async ({ where }: { where: { tokenEncrypted?: { not: null } } }) =>
-        accounts.filter((row) => (where.tokenEncrypted ? row.tokenEncrypted !== null : true)),
+      findMany: async ({ where }: { where: { tokenEncrypted?: { not: null }; tokenIv?: { not: null }; tokenTag?: { not: null } } }) =>
+        accounts.filter(
+          (row) =>
+            (!where.tokenEncrypted || row.tokenEncrypted !== null) &&
+            (!where.tokenIv || row.tokenIv !== null) &&
+            (!where.tokenTag || row.tokenTag !== null),
+        ),
       findUnique: async ({ where }: { where: { id: string } }) => accounts.find((row) => row.id === where.id) ?? null,
       update: async ({ where, data }: { where: { id: string }; data: Partial<AccountRow> }) => {
         const row = accounts.find((item) => item.id === where.id)!;
@@ -43,6 +50,8 @@ function account(overrides: Partial<AccountRow> = {}): AccountRow {
   return {
     id: "a1",
     tokenEncrypted: "cipher",
+    tokenIv: "iv",
+    tokenTag: "tag",
     lastSyncedAt: new Date("2026-09-02T09:57:03.826Z"),
     nextSyncAllowedAt: new Date("2026-09-02T10:00:00.000Z"),
     isSyncing: false,
@@ -65,7 +74,7 @@ beforeEach(() => {
  */
 describe("who the sync sweep may pick", () => {
   it("will not pick an account with no connection", async () => {
-    accounts = [account({ id: "johnny", tokenEncrypted: null }), account({ id: "john" })];
+    accounts = [account({ id: "johnny", tokenEncrypted: null, tokenIv: null, tokenTag: null }), account({ id: "john" })];
     const { prisma } = await import("@/lib/prisma");
     const picked = await prisma.account.findMany({
       where: syncQueueWhere(new Date(), new Date()),
@@ -73,15 +82,27 @@ describe("who the sync sweep may pick", () => {
     expect(picked.map((row: AccountRow) => row.id)).toEqual(["john"]);
   });
 
-  it("asks for a token rather than hoping the sync fails politely", () => {
-    expect(syncQueueWhere(new Date(), new Date()).tokenEncrypted).toEqual({ not: null });
+  it("asks for a whole token rather than hoping the sync fails politely", () => {
+    const where = syncQueueWhere(new Date(), new Date());
+    /* All three, because a half-connected account fails at the same point and
+       would hold the same place at the head of the queue. */
+    expect(where.tokenEncrypted).toEqual({ not: null });
+    expect(where.tokenIv).toEqual({ not: null });
+    expect(where.tokenTag).toEqual({ not: null });
+  });
+
+  it("will not pick an account whose token is only half there", async () => {
+    accounts = [account({ id: "half", tokenIv: null }), account({ id: "john" })];
+    const { prisma } = await import("@/lib/prisma");
+    const picked = await prisma.account.findMany({ where: syncQueueWhere(new Date(), new Date()) });
+    expect(picked.map((row: AccountRow) => row.id)).toEqual(["john"]);
   });
 });
 
 describe("a claim on an account that cannot be synced", () => {
   it("is put down again rather than left standing", async () => {
     /* Johnny read as "syncing" from 2026-09-02 to the day this was found. */
-    accounts = [account({ id: "johnny", tokenEncrypted: null })];
+    accounts = [account({ id: "johnny", tokenEncrypted: null, tokenIv: null, tokenTag: null })];
 
     const result = await refreshAccountById("johnny", true, true);
 
@@ -93,7 +114,7 @@ describe("a claim on an account that cannot be synced", () => {
 
   it("does not pretend a sync happened", async () => {
     const before = new Date("2026-09-02T09:57:03.826Z");
-    accounts = [account({ id: "johnny", tokenEncrypted: null, lastSyncedAt: before })];
+    accounts = [account({ id: "johnny", tokenEncrypted: null, tokenIv: null, tokenTag: null, lastSyncedAt: before })];
 
     await refreshAccountById("johnny", true, true);
 
