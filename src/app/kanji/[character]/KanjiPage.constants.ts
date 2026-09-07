@@ -17,4 +17,8 @@ export const KANJI_PAGE_COPY = {
   backHome: "UmaKuma",
   /* Named for where it goes: the member's practice sheet, with this character picked. */
   worksheet: "Worksheet",
+  /* Out to /strokes/17 from the stroke panel. Named for what is on the other
+     end - the rest of them - since the count beside the drawing is this
+     character's own. */
+  moreWithStrokes: (strokes: number) => `More ${strokes}-stroke`,
 } as const;

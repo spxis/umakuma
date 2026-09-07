@@ -1,5 +1,6 @@
 import { getAllKanjiDictionaryEntries, primaryKanjiReading } from "./kanjiDictionary";
 import { isTaughtKanji } from "./kanjiLadder";
+import { strokesHref } from "./strokeAddress";
 
 /**
  * Every kanji, by how many strokes it takes to write.
@@ -103,6 +104,23 @@ export function kanjiByStrokeCount(strokes: number, options: { commonOnly?: bool
 
 export function isStrokeCount(value: number): boolean {
   return strokeCounts().some((entry) => entry.strokes === value);
+}
+
+/**
+ * The page of everything written in this many strokes, for a character that
+ * has a page of its own.
+ *
+ * John, on 竃's stroke panel: "there's no link from the Kanji Stroke order
+ * container to the Kanji in the Strokes page. There should be a relationship
+ * that takes you right to it, the 17 strokes page."
+ *
+ * Null rather than a guess when no kanji we teach shares the count: 竈 takes
+ * 21 strokes and the ladder has kanji at 21, but a 29-stroke character whose
+ * count nothing else shares would otherwise point at a page that is a 404.
+ * The link is offered only where there is something on the other end.
+ */
+export function strokesPageHref(count: number | null | undefined): string | null {
+  return typeof count === "number" && isStrokeCount(count) ? strokesHref(count) : null;
 }
 
 /** One page of them, and how many pages there are. */

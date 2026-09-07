@@ -13,6 +13,7 @@ import { confusableViewsFor } from "@/lib/kanjiConfusablesView";
 import { getKanjiDictionaryAttribution, getKanjiDictionaryEntry } from "@/lib/kanjiDictionary";
 import { getSchoolGradeKanjiByCharacter } from "@/lib/schoolGrades";
 import { subjectPageHit } from "@/lib/subjectFiler";
+import { strokesPageHref } from "@/lib/strokeBrowser";
 import { loadKanjiPage } from "@/lib/subjectPage";
 import { resolveViewerMenuInfo } from "@/app/users/[nickname]/userPageAuth";
 
@@ -175,6 +176,19 @@ export default async function KanjiPage({ params }: Props) {
     parts: await radicalPartsOf(character),
     confusables: confusableViewsFor(character),
     alone: section !== null,
+    /*
+     * Out to the other characters written in this many strokes.
+     *
+     * John: "there's no link from the Kanji Stroke order container to the
+     * Kanji in the Strokes page. There should be a relationship that takes
+     * you right to it, the 17 strokes page." With no parts pre-picked, on his
+     * reason: people are more interested in other 17-stroke items.
+     *
+     * Null when no kanji we teach shares the count - 竈 is 21 strokes and
+     * would otherwise point at a page that does not exist.
+     */
+    strokePageHref: strokesPageHref(dictionary?.strokeCount),
+    strokeCount: dictionary?.strokeCount ?? null,
     worksheetHref: (() => {
       /*
        * The sheet is the member's own, at their address, so a visitor is

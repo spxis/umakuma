@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { readParts } from "./radicalBrowser";
 
 import { readCommonOnly, readPage, strokesFromPath, strokesHref, strokesIndexHref } from "./strokeAddress";
-import { kanjiByStrokeCount, strokeCounts } from "./strokeBrowser";
+import { kanjiByStrokeCount, strokeCounts, strokesPageHref } from "./strokeBrowser";
 
 describe("the stroke browser's address", () => {
   it("makes a stroke count a page of its own", () => {
@@ -84,5 +84,33 @@ describe("the parts a stroke page has been narrowed to", () => {
 
   it("reads back what it wrote, through the radicals page's own reader", () => {
     expect(readParts("口土")).toEqual(["口", "土"]);
+  });
+});
+
+/*
+ * John, on 竃's stroke panel: "there's no link from the Kanji Stroke order
+ * container to the Kanji in the Strokes page. There should be a relationship
+ * that takes you right to it, the 17 strokes page."
+ */
+describe("out to the rest of a stroke count", () => {
+  it("leads to the page for that count", () => {
+    expect(strokesPageHref(17)).toBe("/strokes/17");
+  });
+
+  it("offers nothing where there is nothing on the other end", () => {
+    /* No kanji we teach takes 40 strokes, so the page would be a 404. */
+    expect(strokesPageHref(40)).toBeNull();
+    expect(strokesPageHref(null)).toBeNull();
+    expect(strokesPageHref(undefined)).toBeNull();
+  });
+
+  it("offers a link for every count the browser itself lists", () => {
+    for (const entry of strokeCounts()) expect(strokesPageHref(entry.strokes)).toBe(`/strokes/${entry.strokes}`);
+  });
+
+  /* No parts pre-picked, on John's reason: "people are more interested in
+     other 17 stroke items." */
+  it("carries no parts, so it opens on the whole count", () => {
+    expect(strokesPageHref(17)).not.toContain("parts");
   });
 });

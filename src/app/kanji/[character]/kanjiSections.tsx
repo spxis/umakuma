@@ -53,6 +53,9 @@ export type KanjiSectionView = {
    * a visitor, who has no sheet - the same answer the list cards give.
    */
   worksheetHref: string | null;
+  /** The page of everything written in this many strokes, where there is one. */
+  strokePageHref: string | null;
+  strokeCount: number | null;
   /**
    * Where each part of this subject lives, for a title that links to its own
    * page. Absent on a section page, where the title would link to itself.
@@ -83,19 +86,35 @@ export const KANJI_SECTION_BLOCKS: readonly KanjiSectionBlock[] = [
           showSummaryLine={view.alone}
           titleHref={view.sectionHref?.(SUBJECT_SECTIONS.stroke)}
           actions={
-            /*
-             * Named for where it goes: the same practice sheet a list prints,
-             * with this one character picked and the page filled to work at
-             * it. Print is on the sheet, like everywhere else.
-             */
-            view.worksheetHref ? (
-              <Link
-                href={view.worksheetHref}
-                className="inline-flex h-8 items-center justify-center rounded-full border border-line bg-surface px-3 text-[10px] font-black uppercase tracking-[0.12em] text-foreground/60 transition hover:bg-surface-muted hover:text-foreground"
-              >
-                {KANJI_PAGE_COPY.worksheet}
-              </Link>
-            ) : null
+            <>
+              {/*
+                * The count is a question - what else is written this way -
+                * and /strokes/17 is the answer, so the panel says so out
+                * loud. Not the count chip beside the drawing: that one opens
+                * the stroke picker, and a control does not hold a control.
+                */}
+              {view.strokePageHref && typeof view.strokeCount === "number" ? (
+                <Link
+                  href={view.strokePageHref}
+                  className="inline-flex h-8 items-center justify-center rounded-full border border-line bg-surface px-3 text-[10px] font-black uppercase tracking-[0.12em] text-foreground/60 transition hover:bg-surface-muted hover:text-foreground"
+                >
+                  {KANJI_PAGE_COPY.moreWithStrokes(view.strokeCount)}
+                </Link>
+              ) : null}
+              {/*
+               * Named for where it goes: the same practice sheet a list prints,
+               * with this one character picked and the page filled to work at
+               * it. Print is on the sheet, like everywhere else.
+               */}
+              {view.worksheetHref ? (
+                <Link
+                  href={view.worksheetHref}
+                  className="inline-flex h-8 items-center justify-center rounded-full border border-line bg-surface px-3 text-[10px] font-black uppercase tracking-[0.12em] text-foreground/60 transition hover:bg-surface-muted hover:text-foreground"
+                >
+                  {KANJI_PAGE_COPY.worksheet}
+                </Link>
+              ) : null}
+            </>
           }
         />
       </section>
