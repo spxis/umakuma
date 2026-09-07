@@ -18,6 +18,10 @@
  *   pnpm cohort play [--until <iso>] [--max-sessions 14]  carry everyone forward
  *   pnpm cohort remove
  *
+ * Every command takes `--dry-run`, which says what it would do and writes
+ * nothing. On `play` that is the answer to "what is this about to do to
+ * production", which is worth having before finding out.
+ *
  * `play` is the one to run on a schedule. It is safe to run any time: a
  * member's days are decided from their slug and the date, so a day already
  * passed over comes out the same way again, and only sessions after their
@@ -63,32 +67,85 @@ type Options = {
   allowRemote: boolean;
   /** Most sessions one run replays per member. Null for all of them. */
   maxSessions: number | null;
+  /** Say what would happen and write nothing. */
+  dryRun: boolean;
 };
 
+/** Flags that take a value, and flags that are just present. */
+const VALUE_FLAGS = ["--seed", "--window", "--until", "--max-sessions"] as const;
+const BOOLEAN_FLAGS = ["--allow-remote", "--dry-run"] as const;
+
+/**
+ * Reads the command line strictly, because the loose version had teeth.
+ *
+ * The count used to be "the first bare number anywhere in the arguments",
+ * which meant `cohort add --window 365 16` read 365 as the count and would
+ * have invented three hundred and sixty-five members on a leaderboard. A
+ * flag's value is consumed with the flag now, so only a genuine positional
+ * can be the count.
+ *
+ * Unknown flags are refused rather than ignored, and that is not pedantry:
+ * `--max-session 5` silently meant "no cap at all", which is the one setting
+ * that stops a run outgrowing the time it has.
+ */
 function parseArgs(argv: string[]): Options {
   const [command = "list", ...rest] = argv;
   if (!["list", "add", "play", "remove"].includes(command)) {
     throw new Error(`Unknown command "${command}". Use list, add <n>, play or remove.`);
   }
-  const value = (flag: string): string | null => {
-    const index = rest.indexOf(flag);
-    return index >= 0 ? rest[index + 1] ?? null : null;
-  };
-  const count = command === "add" ? Number(rest.find((arg) => /^\d+$/.test(arg)) ?? "0") : 0;
-  if (command === "add" && (!Number.isInteger(count) || count <= 0)) throw new Error("add needs a count: pnpm cohort add 32");
-  const until = value("--until");
-  const maxSessions = value("--max-sessions");
-  if (maxSessions !== null && (!Number.isInteger(Number(maxSessions)) || Number(maxSessions) <= 0)) {
-    throw new Error("--max-sessions needs a positive whole number of sessions.");
+
+  const values = new Map<string, string>();
+  const flags = new Set<string>();
+  const positional: string[] = [];
+
+  for (let at = 0; at < rest.length; at += 1) {
+    const token = rest[at]!;
+    if ((VALUE_FLAGS as readonly string[]).includes(token)) {
+      const value = rest[at + 1];
+      if (value === undefined || value.startsWith("--")) throw new Error(`${token} needs a value.`);
+      values.set(token, value);
+      at += 1;
+    } else if ((BOOLEAN_FLAGS as readonly string[]).includes(token)) {
+      flags.add(token);
+    } else if (token.startsWith("--")) {
+      throw new Error(
+        `Unknown flag "${token}". Known: ${[...VALUE_FLAGS, ...BOOLEAN_FLAGS].join(", ")}.`,
+      );
+    } else {
+      positional.push(token);
+    }
   }
+
+  /** A whole number above zero, or a message naming the flag that was wrong. */
+  const wholeAbove = (what: string, raw: string): number => {
+    const parsed = Number(raw);
+    if (!Number.isInteger(parsed) || parsed <= 0) throw new Error(`${what} needs a whole number above zero, not "${raw}".`);
+    return parsed;
+  };
+
+  if (command !== "add" && positional.length > 0) {
+    throw new Error(`${command} takes no count. Did you mean: pnpm cohort add ${positional[0]}?`);
+  }
+  if (command === "add" && positional.length !== 1) {
+    throw new Error("add needs exactly one count: pnpm cohort add 16");
+  }
+
+  const untilRaw = values.get("--until");
+  const until = untilRaw === undefined ? new Date() : new Date(untilRaw);
+  if (Number.isNaN(until.getTime())) throw new Error(`--until needs a date I can read, not "${untilRaw}".`);
+
+  const seed = values.get("--seed");
+  if (seed !== undefined && seed.trim() === "") throw new Error("--seed needs a name.");
+
   return {
     command: command as Command,
-    count,
-    seed: value("--seed") ?? getVancouverDateKey(new Date()),
-    windowDays: Number(value("--window") ?? "120"),
-    until: until ? new Date(until) : new Date(),
-    allowRemote: rest.includes("--allow-remote"),
-    maxSessions: maxSessions === null ? null : Number(maxSessions),
+    count: command === "add" ? wholeAbove("add's count", positional[0]!) : 0,
+    seed: seed ?? getVancouverDateKey(new Date()),
+    windowDays: wholeAbove("--window", values.get("--window") ?? "120"),
+    until,
+    allowRemote: flags.has("--allow-remote"),
+    maxSessions: values.has("--max-sessions") ? wholeAbove("--max-sessions", values.get("--max-sessions")!) : null,
+    dryRun: flags.has("--dry-run"),
   };
 }
 
@@ -136,12 +193,46 @@ async function add(options: Options): Promise<CohortAccountRow[]> {
     now: options.until,
     joinWindowDays: options.windowDays,
   });
+
+  if (options.dryRun) {
+    console.log(`Would create ${invented.length} member(s), seed "${options.seed}", over ${options.windowDays} days:`);
+    for (const member of invented) {
+      console.log(`  ${member.displayName.padEnd(24)} /${member.slug.padEnd(22)} joined ${member.createdAt.toISOString().slice(0, 10)}`);
+    }
+    console.log("\nNothing written. Drop --dry-run to do it.");
+    return [];
+  }
+
   const created = await createCohortAccounts(invented);
   for (const account of created) {
     console.log(`Created ${account.displayName} at /${account.slug}, joined ${account.createdAt.toISOString().slice(0, 10)}`);
   }
   console.log(`\n${created.length} member(s) created. Run \`pnpm cohort play\` to give them their history.`);
   return created;
+}
+
+/**
+ * Takes the whole cohort out, and says who first.
+ *
+ * There is no way to remove one - the set is the unit, and everything they
+ * did goes with them by cascade. So the list is printed before the delete
+ * rather than a count after it: "Removed 31" tells you nothing you can check,
+ * and by then it is gone.
+ */
+async function remove(options: Options): Promise<void> {
+  const accounts = await loadCohortAccounts();
+  if (accounts.length === 0) {
+    console.log("No simulated members to remove.");
+    return;
+  }
+
+  console.log(`${options.dryRun ? "Would remove" : "Removing"} ${accounts.length} member(s) and everything they did:`);
+  for (const account of accounts) console.log(`  /${account.slug ?? account.nickname}`);
+  if (options.dryRun) {
+    console.log("\nNothing written. Drop --dry-run to do it.");
+    return;
+  }
+  console.log(`\nRemoved ${await removeCohort()} simulated member(s).`);
 }
 
 type PendingGame = { at: Date; request: GameRunRequest };
@@ -152,6 +243,7 @@ async function playMember(
   world: CohortWorld,
   until: Date,
   maxSessions: number | null,
+  dryRun: boolean,
 ): Promise<void> {
   const member = await loadMember(account, world);
   if (!member) return;
@@ -173,6 +265,18 @@ async function playMember(
    */
   const sessions = maxSessions === null ? all : all.slice(0, maxSessions);
   const remaining = all.length - sessions.length;
+
+  /* Before anything is simulated, because the point of a dry run is to answer
+     "what is this about to do to production" without doing any of it. */
+  if (dryRun) {
+    const first = sessions[0]!.at.toISOString().slice(0, 10);
+    const last = sessions[sessions.length - 1]!.at.toISOString().slice(0, 10);
+    console.log(
+      `  ${persona.displayName.padEnd(22)} would play ${sessions.length} session(s), ${first} to ${last}` +
+        (remaining > 0 ? ` · ${remaining} would be left for the next run` : ""),
+    );
+    return;
+  }
 
   const games: PendingGame[] = [];
   const todayKey = getVancouverDateKey(until);
@@ -204,9 +308,15 @@ async function playMember(
      is either idempotent or safe to lose - see `saveStudy`. */
   const study = await saveStudy(account.id, member);
   const played: string[] = [];
+  let skipped = 0;
   for (const game of games) {
     const result = await playGame({ accountId: account.id, member, request: game.request, at: game.at });
     if (result) played.push(`${result.kind} ${result.correct}/${result.answered} (${result.score})`);
+    /* A game the planner could not build - too few items at that level, or a
+       pool a persona's settings do not reach. Counted rather than swallowed:
+       a member showing "0 game(s)" for weeks is either a quiet persona or a
+       broken pool, and the two used to look identical. */
+    else skipped += 1;
   }
   const xpRows = await saveStanding(account.id, member);
 
@@ -215,6 +325,7 @@ async function playMember(
     `  ${persona.displayName.padEnd(22)} ${sessions.length} session(s) to ${local}: ` +
       `${totals.reviews} reviews (${totals.correct} right), ${totals.lessons} lessons, ${played.length} game(s), ` +
       `level ${member.level}, xp ${member.ledger.xp} · wrote ${study.states} states, ${study.attempts} answers, ${xpRows} xp rows` +
+      (skipped > 0 ? `, ${skipped} game(s) the planner could not build` : "") +
       (remaining > 0 ? ` · ${remaining} session(s) left for the next run` : "") +
       (played.length > 0 ? `\n      ${played.join("; ")}` : ""),
   );
@@ -225,11 +336,14 @@ async function play(options: Options): Promise<void> {
   if (world.subjects.length === 0) throw new Error("No UkSubject rows. Seed the ladder first (pnpm ladder:seed).");
   const accounts = await loadCohortAccounts();
   if (accounts.length === 0) {
-    console.log("No simulated members yet. Try: pnpm cohort add 32");
+    console.log("No simulated members yet. Try: pnpm cohort add 16");
     return;
   }
-  console.log(`Playing ${accounts.length} member(s) up to ${options.until.toISOString()}:`);
-  for (const account of accounts) await playMember(account, world, options.until, options.maxSessions);
+  console.log(
+    `${options.dryRun ? "Dry run: " : ""}Playing ${accounts.length} member(s) up to ${options.until.toISOString()}` +
+      (options.maxSessions === null ? "" : `, at most ${options.maxSessions} session(s) each`) + ":",
+  );
+  for (const account of accounts) await playMember(account, world, options.until, options.maxSessions, options.dryRun);
 }
 
 async function main(): Promise<void> {
@@ -251,7 +365,7 @@ async function main(): Promise<void> {
     if (options.command === "list") await list();
     if (options.command === "add") await add(options);
     if (options.command === "play") await play(options);
-    if (options.command === "remove") console.log(`Removed ${await removeCohort()} simulated member(s) and everything they did.`);
+    if (options.command === "remove") await remove(options);
   } finally {
     await prisma.$disconnect();
   }

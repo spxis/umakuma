@@ -55,6 +55,17 @@ container. `play` over a hundred days of history is tens of thousands of
 inserts; a peer watching Neon load or about to `db:push` deserves to know it is
 you. `ListAgents` then `SendMessage`.
 
+**Every command takes `--dry-run`.** It says what it would do and writes
+nothing - on `play` that is the answer to "what is this about to do to
+production", per member, before it does any of it. Worth running first against
+production every time.
+
+**`play` takes `--max-sessions N`.** Uncapped by default, because building a
+cohort is one long run from a terminal; capped, a long gap is caught up over
+several runs that each finish rather than one that cannot. A run that is
+killed cannot write a member twice - the study rows and the resume point are
+one commit - but it can lose that run's games, which is the cheaper half.
+
 ## What `add` invents
 
 Names come from per-country pools of ordinary student names, in the proportions

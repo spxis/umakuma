@@ -79,14 +79,94 @@ describe("how much one run replays", () => {
 
   it("replays everything when no cap is given", () => {
     expect(script).toContain("maxSessions: number | null");
-    expect(script).toMatch(/maxSessions === null \? null : Number\(maxSessions\)/);
+    /* Absent means null means uncapped; present is validated like the rest. */
+    expect(script).toContain('values.has("--max-sessions") ? wholeAbove("--max-sessions"');
   });
 
   it("refuses a cap that is not a positive count", () => {
-    expect(script).toContain("--max-sessions needs a positive whole number of sessions.");
+    expect(script).toContain('wholeAbove("--max-sessions"');
+    expect(script).toContain("needs a whole number above zero");
   });
 
   it("says what is left for the next run", () => {
     expect(script).toContain("session(s) left for the next run");
+  });
+});
+
+/**
+ * The command line, read strictly.
+ *
+ * The count used to be "the first bare number anywhere in the arguments", so
+ * `cohort add --window 365 16` read 365 as the count - three hundred and
+ * sixty-five members invented onto a leaderboard from a flag's own value.
+ * Verified against the real tool before and after: it created 365, and now it
+ * creates 16.
+ *
+ * Asserted over the source, because parseArgs is not exported and the script
+ * connects to a database on import. What is pinned is the shape of the fix,
+ * which is what a future edit would undo.
+ */
+describe("reading the command line", () => {
+  it("consumes a flag's value with the flag, so it cannot become the count", () => {
+    expect(script).toContain("VALUE_FLAGS");
+    expect(script).toContain("at += 1;");
+    expect(script).toContain("positional.push(token)");
+    /* The old rule, which must not come back. */
+    expect(script).not.toContain('rest.find((arg) => /^\\d+$/.test(arg))');
+  });
+
+  /* `--max-session 5` silently meant "no cap", which is the one setting that
+     keeps a run inside the time it has. */
+  it("refuses an unknown flag rather than ignoring it", () => {
+    expect(script).toContain('Unknown flag "${token}"');
+  });
+
+  it("refuses a date it cannot read", () => {
+    expect(script).toContain("--until needs a date I can read");
+  });
+
+  it("refuses a count or a window that is not a whole number above zero", () => {
+    expect(script).toContain("needs a whole number above zero");
+    expect(script).toContain('wholeAbove("--window"');
+    expect(script).toContain("add needs exactly one count");
+  });
+
+  it("tells a stray count on the wrong command what was probably meant", () => {
+    expect(script).toContain("takes no count. Did you mean");
+  });
+});
+
+/**
+ * Every command can say what it would do without doing it.
+ *
+ * `play` against production is the one that matters: tens of thousands of
+ * rows, and no way to see the shape of it beforehand.
+ */
+describe("saying what would happen", () => {
+  it.each(["--dry-run"])("offers %s", (flag) => {
+    expect(script).toContain(flag);
+  });
+
+  it("writes nothing on a dry run of add, remove or play", () => {
+    expect(script).toContain("Would create ${invented.length} member(s)");
+    expect(script).toContain("Would remove");
+    expect(script).toContain("would play ${sessions.length} session(s)");
+    /* The play check has to come before anything is simulated. */
+    const body = script.slice(script.indexOf("const remaining = all.length"), script.indexOf("const study = await saveStudy"));
+    expect(body.indexOf("if (dryRun)")).toBeLessThan(body.indexOf("for (const session of sessions)"));
+  });
+
+  it("lists what remove would take before taking it", () => {
+    const body = script.slice(script.indexOf("async function remove("), script.indexOf("type PendingGame"));
+    expect(body.indexOf("for (const account of accounts)")).toBeLessThan(body.indexOf("await removeCohort()"));
+  });
+});
+
+/* A member showing "0 game(s)" for weeks is either a quiet persona or a
+   broken pool, and the two used to look identical. */
+describe("games the planner could not build", () => {
+  it("counts them instead of swallowing them", () => {
+    expect(script).toContain("skipped += 1");
+    expect(script).toContain("game(s) the planner could not build");
   });
 });
