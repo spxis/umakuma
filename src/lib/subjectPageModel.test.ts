@@ -71,12 +71,12 @@ const WORD_EXAMPLES = [
 ];
 
 function sources(overrides: Partial<KanjiPageSources> = {}): KanjiPageSources {
-  return { character: "水", stream: null, grade: null, dictionary: null, jlpt: null, wanikani: null, ...overrides };
+  return { character: "水", stream: null, grade: null, dictionary: null, jlpt: null, words: null, wanikani: null, ...overrides };
 }
 
 describe("a kanji WaniKani has never taught", () => {
   const page = assembleKanjiPage(
-    sources({ jlpt: { nLevel: 5, heisigKeyword: "water", wordExamples: WORD_EXAMPLES } }),
+    sources({ jlpt: { nLevel: 5, heisigKeyword: "water" }, words: WORD_EXAMPLES }),
   );
 
   /* The headline requirement, and it must not depend on WaniKani at all. */
@@ -102,7 +102,8 @@ describe("a kanji WaniKani has never taught", () => {
 describe("a kanji WaniKani teaches", () => {
   const page = assembleKanjiPage(
     sources({
-      jlpt: { nLevel: 5, heisigKeyword: "water", wordExamples: WORD_EXAMPLES },
+      jlpt: { nLevel: 5, heisigKeyword: "water" },
+      words: WORD_EXAMPLES,
       wanikani: wanikani({
         radicals: [reference({ subjectId: 8769, subjectType: SUBJECT_TYPES.radical, characters: null, slug: "leaf", label: "leaf", meaning: "Leaf", reading: null })],
         usedInVocabulary: [

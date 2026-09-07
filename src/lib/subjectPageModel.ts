@@ -32,11 +32,10 @@ import { wordKanjiChips } from "@/lib/wordKanjiChips";
  * The page reads the sources and hands them here; nothing below touches I/O.
  */
 
-/** What the JLPT table adds beyond the dictionary: its level, Heisig, the compounds. */
+/** What the JLPT table adds beyond the dictionary: its level and Heisig. */
 export type JlptKanjiFacts = {
   nLevel: number;
   heisigKeyword: string | null;
-  wordExamples: unknown;
 };
 
 export type KanjiPageSources = {
@@ -53,6 +52,16 @@ export type KanjiPageSources = {
   grade: SchoolGradeKanjiEntry | null;
   dictionary: KanjiDictionaryEntry | null;
   jlpt: JlptKanjiFacts | null;
+  /**
+   * The compounds, gathered before they got here.
+   *
+   * Its own field rather than a member of `jlpt`, because a word belongs to
+   * every kanji in it and most characters have no exam row to hang one off:
+   * 竃 is in 七竃 and has no row at all. The loader collects them from both
+   * directions and hands over the list; nothing here knows which row each
+   * one was stored under.
+   */
+  words: unknown;
   wanikani: CatalogSubjectDetail | null;
 };
 
@@ -263,7 +272,7 @@ export function assembleKanjiPage(sources: KanjiPageSources): KanjiPageModel {
     character,
     jlptLevel: jlpt?.nLevel ?? null,
     heisigKeyword: jlpt?.heisigKeyword?.trim() || null,
-    words: jlpt ? toWordExamples(jlpt.wordExamples, character, sources.stream) : [],
+    words: toWordExamples(sources.words, character, sources.stream),
     related,
     mnemonics:
       meaningMnemonic || readingMnemonic ? { meaning: meaningMnemonic, reading: readingMnemonic } : null,
