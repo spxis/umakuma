@@ -110,4 +110,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Tsutsumi Mihari", ja: "堤見張り", reading: "つつみみはり", gloss: "a watch kept on the embankment" },
   { romaji: "Tegata Nazuke", ja: "手形名付け", reading: "てがたなづけ", gloss: "the receipt, named" },
   { romaji: "Tomoni Danme", ja: "共に段目", reading: "ともにだんめ", gloss: "both rungs, side by side" },
+  { romaji: "Narai Kubun", ja: "習い区分", reading: "ならいくぶん", gloss: "study, sorted by its path" },
 ];
