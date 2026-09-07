@@ -5,6 +5,7 @@ import { STUDY_LIST_COPY } from "@/app/shared/studyListCopy";
 import { CONNECT_COPY } from "@/app/users/[nickname]/wanikani/connectCopy";
 import { STUDY_PANEL_TEXT } from "@/app/users/[nickname]/study-explorer/components/StudyExplorer.constants";
 import { XP_BOARD_COPY } from "@/app/xp/xpBoardCopy";
+import { GAME_HISTORY_COPY } from "@/app/users/[nickname]/game/history/gameHistoryCopy";
 import { XP_HISTORY_COPY } from "@/app/users/[nickname]/xp/xpHistoryCopy";
 import { XP_RANK_COPY } from "@/app/users/[nickname]/settings/profileCopy";
 
@@ -1222,4 +1223,31 @@ test("the member XP history page loads", async ({ browser, baseURL }) => {
     await expect(page.getByRole("heading", { name: XP_RANK_COPY.heading })).toBeVisible();
     await expect(page.getByRole("link", { name: XP_HISTORY_COPY.board })).toBeVisible();
   });
+});
+
+/*
+ * A member's own games: owner-only, and a static segment sitting beside the
+ * hub's `[[...kind]]` catch-all. The catch-all is what this is really
+ * checking - if it ever took `history` for a game slug, the page would go
+ * quietly missing behind a lobby that says "Could not start the game".
+ */
+test("the member game history page loads", async ({ browser, baseURL }) => {
+  const user = smokeUsers[0] ?? fallbackUsers[0];
+
+  await assertPageLoads(
+    browser,
+    `${baseURL}/users/${encodeURIComponent(user)}/game/history`,
+    async (page) => {
+      if (page.url().includes("/join?access=denied")) {
+        await expect(page.getByText(USER_ACCESS_GATE_TEXT)).toBeVisible();
+        return;
+      }
+
+      await expect(
+        page.getByRole("heading", { name: GAME_HISTORY_COPY.title, exact: true }),
+      ).toBeVisible();
+      await expect(page.getByText(GAME_HISTORY_COPY.grain)).toBeVisible();
+      await expect(page.getByRole("link", { name: GAME_HISTORY_COPY.back })).toBeVisible();
+    },
+  );
 });

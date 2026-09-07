@@ -29,3 +29,15 @@ export function gameKindHref(member: string, kind: GameKind | null): string {
   const base = `/users/${encodeURIComponent(member)}/game`;
   return kind ? `${base}/${GAME_KIND_SLUGS[kind]}` : base;
 }
+
+/**
+ * Where a member's own finished games are listed.
+ *
+ * A real route, unlike the kinds above, which are segments the game client
+ * reads. It sits beside them as a static segment - a literal beats the
+ * `[[...kind]]` catch-all - and `history` is deliberately not one of the
+ * slugs, so neither can shadow the other.
+ */
+export function gameHistoryHref(member: string): string {
+  return `${gameKindHref(member, null)}/history`;
+}

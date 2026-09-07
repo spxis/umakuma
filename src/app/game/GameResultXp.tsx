@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { GAME_XP_OUTCOMES, gameXpOutcome } from "@/lib/gameXpOutcome";
 import type { GameRunSummary } from "@/lib/gameMode";
 
 import { GAME_COPY } from "./GameMode.constants";
@@ -15,19 +16,21 @@ import { GAME_COPY } from "./GameMode.constants";
  * difference between a rule and a bug.
  *
  * Read off the run rather than off the response, so it survives a reload and
- * says the same thing on a history page later. `xpSkipped` holds a code; the
- * sentence is in `GAME_COPY` with the rest of the game's words.
+ * says the same thing on the history page, which draws the same three cases
+ * from the same `gameXpOutcome`. `xpSkipped` holds a code; the sentence is in
+ * `GAME_COPY` with the rest of the game's words.
  */
 export default function GameResultXp({ run }: { run: GameRunSummary }) {
+  const outcome = gameXpOutcome(run);
   const reason = run.xpSkipped ? GAME_COPY.xpSkipReasons[run.xpSkipped] : null;
 
-  /* Nothing earned and no reason recorded is a run from before any of this was
-     written down. Saying "no XP" about it would be a guess. */
-  if (run.xpAwarded <= 0 && !reason) return null;
+  /* A run from before any of this was written down. Saying "no XP" about it
+     would be a guess; saying nothing is the honest answer. */
+  if (outcome === GAME_XP_OUTCOMES.unrecorded) return null;
 
   return (
     <p className="mt-5 text-sm font-bold text-foreground/70">
-      {run.xpAwarded > 0 ? (
+      {outcome === GAME_XP_OUTCOMES.paid ? (
         <span className="text-foreground">{GAME_COPY.xpEarned(run.xpAwarded)}</span>
       ) : (
         <span>{GAME_COPY.xpNone}</span>

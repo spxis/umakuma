@@ -46,6 +46,8 @@ export const GAME_COPY = {
   recentGames: "Recent games",
   noScores: "No completed games yet.",
   noRecentGames: "No recent games yet.",
+  /* The way into a member's own record, from the panel of everybody's. */
+  yourGames: "Your games",
   scoreRule: "Accuracy earns up to 1,000 points. Level and every 0.1 second add bounded bonuses, but accuracy always wins.",
   notEnoughItems: "This combination does not have enough started items.",
   notEnough: "Not enough items",

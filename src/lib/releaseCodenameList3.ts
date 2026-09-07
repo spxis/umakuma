@@ -117,4 +117,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Nobashi Wakedome", ja: "延ばし分け止め", reading: "のばしわけどめ", gloss: "carried on, stopped cleanly" },
   { romaji: "Hakari Tashikame", ja: "計り確かめ", reading: "はかりたしかめ", gloss: "measure, then make sure" },
   { romaji: "Hyousatsu Hiraki", ja: "表札開き", reading: "ひょうさつひらき", gloss: "the nameplate says whose ladder it is, and opens it" },
+  { romaji: "Furikaeri Daichou", ja: "振り返り台帳", reading: "ふりかえりだいちょう", gloss: "the ledger you look back through" },
 ];

@@ -10,7 +10,7 @@ import {
   type GameKind,
   type GameLeaderboardEntry,
 } from "@/lib/gameMode";
-import { gameKindHref } from "@/lib/gameKindAddress";
+import { gameHistoryHref, gameKindHref } from "@/lib/gameKindAddress";
 import GameLeaderboard from "./GameLeaderboard";
 import GameMapRunner from "./GameMapRunner";
 import GameLeaderboardFilters from "./GameLeaderboardFilters";
@@ -284,6 +284,7 @@ export default function GameModeClient({ accountId, nickname, member, initialKin
             entries={leaderboardState.data?.recent ?? []}
             loading={!leaderboardState.data}
             onChallenge={challengeRecentRun}
+            historyHref={gameHistoryHref(member)}
           />
         </div>
       </main>

@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { formatGameDuration, gameKindRules, type GameLeaderboardEntry } from "@/lib/gameMode";
 import { formatGameScore } from "@/lib/gameScoring";
 import { formatRelativeFromNow } from "@/lib/timeFormat";
@@ -10,14 +12,32 @@ type Props = {
   entries: GameLeaderboardEntry[];
   loading: boolean;
   onChallenge: (entry: GameLeaderboardEntry) => void;
+  /** Where this member's own record lives. */
+  historyHref: string;
 };
 
-export default function GameRecentGames({ entries, loading, onChallenge }: Props) {
+/**
+ * Everybody's last runs, and the way into your own.
+ *
+ * The list itself is the household's - a row names who played it and picking
+ * one challenges their settings. The link is the other question a member has
+ * standing in front of it, "what have *I* played, and what did it pay", which
+ * this panel cannot answer and the history page can.
+ */
+export default function GameRecentGames({ entries, loading, onChallenge, historyHref }: Props) {
   return (
     <section className="overflow-hidden rounded-2xl border border-line bg-surface shadow-[0_18px_45px_rgba(8,16,36,0.1)]">
-      <div className="border-b border-line bg-surface-muted px-4 py-3 xl:h-17">
-        <h2 className="text-lg font-black text-foreground sm:text-xl">{GAME_COPY.recentGames}</h2>
-        <p className="text-xs font-semibold text-foreground/60">All modes. Select a run to challenge it.</p>
+      <div className="flex items-start justify-between gap-3 border-b border-line bg-surface-muted px-4 py-3 xl:h-17">
+        <div className="min-w-0">
+          <h2 className="text-lg font-black text-foreground sm:text-xl">{GAME_COPY.recentGames}</h2>
+          <p className="text-xs font-semibold text-foreground/60">All modes. Select a run to challenge it.</p>
+        </div>
+        <Link
+          href={historyHref}
+          className="shrink-0 rounded-full border border-line bg-surface px-3 py-1.5 text-[11px] font-black text-foreground/70 transition hover:text-accent"
+        >
+          {GAME_COPY.yourGames}
+        </Link>
       </div>
       {loading ? (
         <LoadingState label="recent games" />

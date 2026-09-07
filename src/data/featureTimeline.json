@@ -6937,12 +6937,25 @@
     "id": "header-level-badges-are-not-links-and-the-umakuma-one-always",
     "name": "Header level badges are not links, and the UmaKuma one always says UN",
     "area": "platform",
+    "status": "shipped",
     "kind": "bug",
+    "date": "2026-09-07",
+    "summary": "The two level badges in the header are doors now. The UmaKuma one opens the ladder board for the path you are following, and the WaniKani one opens the family board. It also names the right path at last: it read UN to everybody, including members climbing in school-year order.",
+    "dateIsEstimate": false,
+    "release": 555,
+    "version": "1.59.0",
+    "releasedAt": "2026-09-07T08:45:54Z"
+  },
+  {
+    "id": "a-game-history-page-every-run-and-what-each-one-paid",
+    "name": "A game history page: every run, and what each one paid",
+    "area": "games",
+    "kind": "feature",
     "status": "shipped",
     "date": "2026-09-07",
-    "version": "1.59.0",
-    "release": 555,
-    "releasedAt": "2026-09-07T08:45:54Z",
-    "summary": "The two level badges in the header are doors now. The UmaKuma one opens the ladder board for the path you are following, and the WaniKani one opens the family board. It also names the right path at last: it read UN to everybody, including members climbing in school-year order."
+    "version": "1.60.0",
+    "release": 556,
+    "releasedAt": "2026-09-07T09:29:00Z",
+    "summary": "Every game you have finished now has a page of its own, with what each run paid and - where it paid nothing - why. Filter by game, sort by date, score or XP. Runs from before UmaKuma started recording this show a dash rather than a zero, because nobody measured them."
   }
 ]
