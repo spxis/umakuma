@@ -7197,12 +7197,25 @@
     "id": "umakuma-review-items-lack-the-srs-metadata-wanikani-items-sh",
     "name": "UmaKuma review items lack the SRS metadata WaniKani items show",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-07",
+    "summary": "An UmaKuma review carries the level, parts, words, dictionary panel, look-alikes and dates a WaniKani one does.",
+    "dateIsEstimate": false,
+    "release": 575,
+    "version": "1.78.0",
+    "releasedAt": "2026-09-08T02:57:02Z"
+  },
+  {
+    "id": "umakuma-trouble-and-favourite-marks-are-one-mark-per-subject",
+    "name": "UmaKuma trouble and favourite marks are one mark per subject across ladders",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-07",
-    "version": "1.78.0",
-    "release": 575,
-    "releasedAt": "2026-09-08T02:57:02Z",
-    "summary": "An UmaKuma review carries the level, parts, words, dictionary panel, look-alikes and dates a WaniKani one does."
+    "version": "1.79.0",
+    "release": 576,
+    "releasedAt": "2026-09-08T03:05:18Z",
+    "summary": "A trouble or favourite mark is one mark per subject, on whichever ladder it was made, and UmaKuma cards show it."
   }
 ]

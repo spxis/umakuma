@@ -137,4 +137,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Atenagaki", ja: "宛名書き", reading: "あてながき", gloss: "writing the address on" },
   { romaji: "Iinaoshi", ja: "言い直し", reading: "いいなおし", gloss: "said again, properly" },
   { romaji: "Uketsugi no Mitame", ja: "受け継ぎの見た目", reading: "うけつぎのみため", gloss: "the look, carried over" },
+  { romaji: "Enmusubi", ja: "縁結び", reading: "えんむすび", gloss: "one bond, tied" },
 ];
