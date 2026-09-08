@@ -139,6 +139,32 @@ This file is the single source of truth for agent behavior in this repo.
   mirrored to WaniKani and re-derived from its counters as `source: wanikani`
   rows - one sitting under both sources, which nobody has yet decided is one
   act or two.
+- **A subject has one identity across feeds, and every id space that is not
+  WaniKani's is reserved above it.** `StudySubjectTag`, the practice lists,
+  the glyph viewer and the success rates key on a WaniKani subject id because
+  that was the only kind there was; `UkSubject.id` (to 9,271) and
+  `CustomStudyItem.id` (to 1,861) are their own sequences inside WaniKani's
+  range (to 9,539), so a trouble mark on our 身 was a mark on whichever
+  WaniKani subject shared the number. An item on our ladder or in a library
+  now answers to the WaniKani id where WaniKani teaches the same subject -
+  one mark per subject, whichever feed drew the card - and otherwise to a
+  reserved id: `CUSTOM_ITEM_ID_BASE` 70,000,000, `UK_SUBJECT_ID_BASE`
+  80,000,000, `MAP_SUBJECT_ID_BASE` 90,000,000. `ukSubjectIdentity` and
+  `customItemIdentity` are the two functions; `taggedSubjectDetails` resolves
+  all three kinds for the lists. The review routes key on `assignmentId`,
+  which stays each feed's own row id, and goes negative for a trouble item
+  mixed into a sitting as practice (`asInjectedTrouble`). Never key a new
+  table on a feed's own id where a WaniKani id would do, and never mint an
+  id space without a base here.
+- **A feed is done when `studyFeedParity.test.ts` has nothing to say about
+  it.** The review modal, cards, rows and chips are one set of components
+  over three feeds, and each feed was tested alone - so the UmaKuma modal
+  opened with half its panels blank and no test could see it. The test reads
+  the WaniKani route's item literal as the reference, intersects it with
+  every `item.x` the review surfaces read, and requires the other feeds to
+  deliver that set or name each gap with a reason in `KNOWN_GAPS`. A gap that
+  closes must be struck. A field the UI starts reading from WaniKani fails
+  the test until every feed fills it; that is the intended way to find out.
 
 ### Self-Improvement Loop (Mandatory)
 
