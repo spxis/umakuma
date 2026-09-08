@@ -1,8 +1,12 @@
 import "server-only";
 
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
+import type { RelatedReference } from "@/lib/glyphTypes";
+import type { JlptMeta } from "@/lib/jlptTypes";
+import { confusableWarnings, type ConfusableWarning } from "@/lib/kanjiConfusableWarning";
+import { LEVEL_SYSTEMS } from "@/lib/levelBadge";
 import { prisma } from "@/lib/prisma";
-import { getCatalogSubjectDetails } from "@/lib/subjectCatalogDetails";
+import { getCatalogSubjectDetails, toJlptMeta, type CatalogSubjectDetail } from "@/lib/subjectCatalogDetails";
 import { srsScoringRules } from "@/lib/srs/srsScoringRules";
 import { orderReviews, throttleAppliesTo } from "@/lib/srs/studyPreferences";
 import { memberStudyPreferences } from "@/lib/srs/studyPreferencesServer";
@@ -37,6 +41,24 @@ export type UkStudyItem = {
   readings: string[];
   /** WaniKani's id where WaniKani teaches it; the credit line and the mirror both turn on this. */
   wkSubjectId: number | null;
+  /**
+   * Everything the WaniKani feed says about the same subject, so a member who
+   * moved here keeps the review they had: their WaniKani level, the parts,
+   * the words, the dictionary panel, the look-alike warning. Catalogue-first
+   * like the readings; the N band and the panel come from the JLPT table for
+   * the 134 kanji WaniKani never taught. `studyFeedParity.test.ts` is the
+   * list of what is still missing.
+   */
+  wkLevel: number | null;
+  radicals: RelatedReference[];
+  componentKanji: RelatedReference[];
+  usedInVocabulary: RelatedReference[];
+  jlptLevel: number | null;
+  jlptMeta: JlptMeta | null;
+  confusables: ConfusableWarning[];
+  /** The state's dates, for "first met" and "how long it has waited". Null for a lesson. */
+  startedAt: Date | null;
+  availableAt: Date | null;
   /** Null for a lesson, which has no state yet. */
   srsStage: number | null;
   /**
@@ -97,17 +119,18 @@ export function onOwnLadder<T extends { level: number; ugLevel: number }>(row: T
 /** Both level columns, always: `onOwnLadder` picks the member's after the read. */
 const LADDER_ROW_SELECT = {
   id: true, key: true, kind: true, characters: true, level: true, ugLevel: true,
-  meanings: true, readings: true, wkSubjectId: true,
+  meanings: true, readings: true, wkSubjectId: true, nLevel: true,
 } as const;
 
 async function unlockedSubjects(accountId: string) {
   const { columns, level } = await memberColumns(accountId);
+  const member: Member = { stream: columns.stream, level };
   const rows = await prisma.ukSubject.findMany({
     where: { removedAt: null, [columns.subjectLevel]: { lte: level } },
     select: LADDER_ROW_SELECT,
     orderBy: [{ [columns.subjectLevel]: "asc" }, { kind: "asc" }, { id: "asc" }],
   });
-  return { rows: rows.map((row) => onOwnLadder(row, columns)), columns };
+  return { rows: rows.map((row) => onOwnLadder(row, columns)), columns, member };
 }
 
 type LadderRow = Awaited<ReturnType<typeof unlockedSubjects>>["rows"][number];
@@ -118,48 +141,88 @@ type LadderRow = Awaited<ReturnType<typeof unlockedSubjects>>["rows"][number];
  * Never their mnemonics: that is WaniKani's copyrighted text, and it is shown
  * only to members who have connected their own account.
  */
-type ResolvedContent = { meanings: string[]; readings: string[]; characters: string };
+type ResolvedContent = {
+  meanings: string[];
+  readings: string[];
+  characters: string;
+  /** The catalogue's whole entry, where WaniKani teaches the subject. */
+  detail: CatalogSubjectDetail | null;
+  /** The JLPT table's row, for a kanji the catalogue does not hold. */
+  jlpt: { nLevel: number | null; meta: JlptMeta } | null;
+};
 
 async function withContent(rows: LadderRow[]): Promise<Map<number, ResolvedContent>> {
   const filled = new Map<number, ResolvedContent>();
   const wanted = rows.filter((row) => row.wkSubjectId !== null);
-  if (wanted.length === 0) return filled;
-
-  const details = await getCatalogSubjectDetails(wanted.map((row) => row.wkSubjectId as number)).catch(
-    () => new Map(),
-  );
+  const ours = rows.filter((row) => row.wkSubjectId === null && row.kind === SUBJECT_TYPES.kanji && row.characters);
+  const [details, jlptRows] = await Promise.all([
+    wanted.length > 0
+      ? getCatalogSubjectDetails(wanted.map((row) => row.wkSubjectId as number)).catch(() => new Map<number, CatalogSubjectDetail>())
+      : new Map<number, CatalogSubjectDetail>(),
+    ours.length > 0
+      ? prisma.jlptKanji.findMany({
+          where: { kanji: { in: ours.map((row) => row.characters) } },
+          select: {
+            kanji: true, nLevel: true, primaryMeaning: true, meanings: true, onReadings: true, kunReadings: true,
+            nanoriReadings: true, wordExamples: true, strokeCount: true, frequencyRank: true, schoolGrade: true, heisigKeyword: true,
+          },
+        }).catch(() => [])
+      : [],
+  ]);
   for (const row of wanted) {
     const detail = details.get(row.wkSubjectId as number);
     if (!detail) continue;
-    filled.set(row.id, { meanings: detail.meanings, readings: detail.readings, characters: detail.characters });
+    filled.set(row.id, { meanings: detail.meanings, readings: detail.readings, characters: detail.characters, detail, jlpt: null });
+  }
+  const jlptByKanji = new Map(jlptRows.map((jlpt) => [jlpt.kanji, jlpt]));
+  for (const row of ours) {
+    const jlpt = jlptByKanji.get(row.characters);
+    if (!jlpt) continue;
+    filled.set(row.id, { meanings: [], readings: [], characters: row.characters, detail: null, jlpt: { nLevel: jlpt.nLevel, meta: toJlptMeta(jlpt) } });
   }
   return filled;
 }
 
-function toItem(
-  row: LadderRow,
-  content: Map<number, ResolvedContent>,
-  stream: LadderStreamValue,
-  srsStage: number | null,
-  passed = false,
-): UkStudyItem {
+/** Whose sitting this is: the ladder and the standing the look-alike warning is judged against. */
+type Member = { stream: LadderStreamValue; level: number };
+
+/** A lesson has no state row; a review's dates come from its state. */
+type StateDates = { srsStage: number | null; passed: boolean; startedAt: Date | null; availableAt: Date | null };
+const NO_STATE: StateDates = { srsStage: null, passed: false, startedAt: null, availableAt: null };
+
+function toItem(row: LadderRow, content: Map<number, ResolvedContent>, member: Member, state: StateDates): UkStudyItem {
   const resolved = content.get(row.id);
+  const detail = resolved?.detail ?? null;
+  const characters = row.characters || resolved?.characters || "";
   return {
     subjectId: row.id,
     key: row.key,
     kind: row.kind,
     /* The seed left every WaniKani-sourced word without its characters for a
        time; the catalogue has always known them. */
-    characters: row.characters || resolved?.characters || "",
+    characters,
     wkSubjectId: row.wkSubjectId,
     level: row.level,
-    stream,
+    stream: member.stream,
     /* The row's own facts win where it has them: those are the items
        WaniKani never taught, and the catalogue has nothing to say. */
     meanings: row.meanings.length > 0 ? row.meanings : (resolved?.meanings ?? []),
     readings: row.readings.length > 0 ? row.readings : (resolved?.readings ?? []),
-    srsStage,
-    passed,
+    wkLevel: detail?.wkLevel ?? null,
+    radicals: detail?.radicals ?? [],
+    componentKanji: detail?.componentKanji ?? [],
+    usedInVocabulary: detail?.usedInVocabulary ?? [],
+    jlptLevel: detail?.jlptLevel ?? resolved?.jlpt?.nLevel ?? row.nLevel ?? null,
+    jlptMeta: detail?.jlptMeta ?? resolved?.jlpt?.meta ?? null,
+    /* Judged on our ladder, against this member's standing on it. */
+    confusables:
+      row.kind === SUBJECT_TYPES.kanji && characters
+        ? confusableWarnings(characters, member.level, LEVEL_SYSTEMS.umakuma, member.stream)
+        : [],
+    startedAt: state.startedAt,
+    availableAt: state.availableAt,
+    srsStage: state.srsStage,
+    passed: state.passed,
   };
 }
 
@@ -191,7 +254,7 @@ export async function ukLessonThrottle(accountId: string, now = new Date()): Pro
 }
 
 export async function ukLessons(accountId: string, limit = 50): Promise<UkStudyItem[]> {
-  const [{ rows, columns }, states, throttle] = await Promise.all([
+  const [{ rows, member }, states, throttle] = await Promise.all([
     unlockedSubjects(accountId),
     prisma.ukSrsState.findMany({ where: { accountId }, select: { subjectId: true } }),
     ukLessonThrottle(accountId),
@@ -208,7 +271,7 @@ export async function ukLessons(accountId: string, limit = 50): Promise<UkStudyI
     .sort((a, b) => a.level - b.level || order.indexOf(a.kind) - order.indexOf(b.kind))
     .slice(0, limit);
   const content = await withContent(fresh);
-  return fresh.map((row) => toItem(row, content, columns.stream, null));
+  return fresh.map((row) => toItem(row, content, member, NO_STATE));
 }
 
 /** Items whose next review has come round. */
@@ -221,14 +284,14 @@ export async function ukReviews(accountId: string, now = new Date(), limit = 100
      order. */
   const dueRows = await prisma.ukSrsState.findMany({
     where: { accountId, availableAt: { not: null, lte: now } },
-    select: { subjectId: true, srsStage: true, passedAt: true, availableAt: true },
+    select: { subjectId: true, srsStage: true, passedAt: true, availableAt: true, startedAt: true },
     orderBy: { availableAt: "asc" },
     take: limit,
   });
   const due = orderReviews(dueRows, preferences.reviewOrder);
   if (due.length === 0) return [];
 
-  const [{ columns }, fetched] = await Promise.all([
+  const [{ columns, level }, fetched] = await Promise.all([
     memberColumns(accountId),
     prisma.ukSubject.findMany({
       where: { id: { in: due.map((state) => state.subjectId) } },
@@ -245,7 +308,7 @@ export async function ukReviews(accountId: string, now = new Date(), limit = 100
   return due.flatMap((state) => {
     const row = rowById.get(state.subjectId);
     if (!row) return [];
-    return [toItem(row, content, columns.stream, state.srsStage, state.passedAt !== null)];
+    return [toItem(row, content, { stream: columns.stream, level }, { srsStage: state.srsStage, passed: state.passedAt !== null, startedAt: state.startedAt, availableAt: state.availableAt })];
   });
 }
 
@@ -267,12 +330,12 @@ export async function ukUpcoming(
   limit = 8,
 ): Promise<{ items: UkUpcomingItem[]; totalUpcoming: number }> {
   const where = { accountId, availableAt: { gt: now }, burnedAt: null };
-  const [{ columns }, totalUpcoming, states] = await Promise.all([
+  const [{ columns, level }, totalUpcoming, states] = await Promise.all([
     memberColumns(accountId),
     prisma.ukSrsState.count({ where }),
     prisma.ukSrsState.findMany({
       where,
-      select: { availableAt: true, srsStage: true, passedAt: true, subject: { select: LADDER_ROW_SELECT } },
+      select: { availableAt: true, srsStage: true, passedAt: true, startedAt: true, subject: { select: LADDER_ROW_SELECT } },
       orderBy: [{ availableAt: "asc" }, { id: "asc" }],
       take: limit,
     }),
@@ -282,7 +345,7 @@ export async function ukUpcoming(
   const items = states.flatMap((state, index) => {
     const row = rows[index];
     if (!row || !state.availableAt) return [];
-    return [{ ...toItem(row, content, columns.stream, state.srsStage, state.passedAt !== null), availableAt: state.availableAt }];
+    return [{ ...toItem(row, content, { stream: columns.stream, level }, { srsStage: state.srsStage, passed: state.passedAt !== null, startedAt: state.startedAt, availableAt: state.availableAt }), availableAt: state.availableAt }];
   });
   return { items, totalUpcoming };
 }

@@ -55,20 +55,28 @@ export function mapUkQueueItem(item: UkStudyItem): StudyQueueItem {
     queueType: ukQueueTypeFor(item),
     subjectType: ukSubjectTypeFor(item.kind),
     ...ourLevelSlot(item),
+    wkLevel: item.wkLevel ?? undefined,
     contentSource: ukContentSourceFor(item),
     characters: item.characters,
     meanings: item.meanings,
     readings: item.readings,
     primaryReadings: item.readings,
+    radicals: item.radicals,
+    componentKanji: item.componentKanji,
+    usedInVocabulary: item.usedInVocabulary,
+    confusables: item.confusables,
+    jlptLevel: item.jlptLevel,
+    jlptMeta: item.jlptMeta,
     meaningExplanation: "",
     readingExplanation: "",
     srsStage,
     status: srsGroupingFromStage(srsStage),
     /* The latch (`passed`) is a fact about the level gate, drawn on the
        UmaKuma page; the explorer has no slot for it and is not handed a
-       pretend date to fill one. */
+       pretend date to fill one. The state's own dates it does have. */
     passedAt: null,
-    availableAt: null,
+    startedAt: item.startedAt?.toISOString() ?? null,
+    availableAt: item.availableAt?.toISOString() ?? null,
   };
 }
 

@@ -90,7 +90,7 @@ function writeCachedSubjectDetail(subjectId: number, detail: CatalogSubjectDetai
   });
 }
 
-function toJlptMeta(raw: {
+export function toJlptMeta(raw: {
   primaryMeaning: string | null;
   meanings: string[];
   onReadings: string[];

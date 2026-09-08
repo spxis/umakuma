@@ -66,6 +66,7 @@ function umakumaFields(): Set<string> {
   const item = mapUkQueueItem({
     subjectId: 8252, key: "kanji:身", kind: "kanji", characters: "身", level: 17, stream: LADDER_STREAMS.un,
     meanings: ["Body"], readings: ["しん"], wkSubjectId: 689, srsStage: 6, passed: true,
+    wkLevel: 8, radicals: [], componentKanji: [], usedInVocabulary: [], jlptLevel: 3, jlptMeta: null, confusables: [], startedAt: null, availableAt: null,
   });
   const keys = new Set(Object.keys(item));
   /* The route dresses the page after mapping; those keys count as delivered. */
@@ -91,16 +92,9 @@ function customFields(): Set<string> {
  */
 const KNOWN_GAPS: Record<"umakuma" | "custom", Record<string, string>> = {
   umakuma: {
-    radicals: "OPEN cmtryknak - the parts a kanji is built from; the catalogue has them for every WaniKani-taught subject",
-    componentKanji: "OPEN cmtryknak - the kanji a word is written with; catalogue",
-    usedInVocabulary: "OPEN cmtryknak - the words a kanji appears in; catalogue",
-    confusables: "OPEN cmtryknak - the look-alike warning; the queue never calls studyConfusableWarnings",
-    jlptLevel: "OPEN cmtryknak - the N band; UkSubject.nLevel holds it and the mapper drops it",
-    jlptMeta: "OPEN cmtryknak - the dictionary panel (readings, strokes, frequency); catalogue",
-    startedAt: "OPEN cmtryknak - when the member first met it; UkSrsState.startedAt holds it",
-    studyTags: "OPEN cmtryknak - trouble and favourite marks on the card; the WaniKani route joins them, this one does not",
-    isInjectedTrouble: "OPEN cmtryknak - the WaniKani queue injects trouble items into a sitting; ours does not",
-    wkLevel: "OPEN cmtryknak - a migrated member still has a WaniKani level on every subject WaniKani teaches; catalogue",
+    studyTags:
+      "OPEN cmtryknak - trouble and favourite marks; StudySubjectTag is keyed by WaniKani subject id and a UK subject id overlaps that range, so the join waits on the item carrying its WaniKani identity",
+    isInjectedTrouble: "OPEN cmtryknak - the WaniKani queue injects trouble items into a sitting; ours does not, and cannot until tags are keyed right",
   },
   custom: {
     confusables: "OPEN cmtryknak - a library kanji has look-alikes too",
