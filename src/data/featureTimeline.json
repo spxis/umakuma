@@ -7132,12 +7132,25 @@
     "id": "history-never-shows-umakuma-reviews",
     "name": "History never shows UmaKuma reviews",
     "area": "study",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-07",
+    "summary": "History shows the reviews answered on our ladder, with their levels and stages.",
+    "dateIsEstimate": false,
+    "release": 570,
+    "version": "1.73.0",
+    "releasedAt": "2026-09-08T01:11:51Z"
+  },
+  {
+    "id": "kanji-page-confusables-and-related-groups-show-un-levels-to-",
+    "name": "Kanji page confusables and related groups show UN levels to UG members",
+    "area": "jlpt",
     "kind": "bug",
     "status": "shipped",
     "date": "2026-09-07",
-    "version": "1.73.0",
-    "release": 570,
-    "releasedAt": "2026-09-08T01:11:51Z",
-    "summary": "History shows the reviews answered on our ladder, with their levels and stages."
+    "version": "1.74.0",
+    "release": 571,
+    "releasedAt": "2026-09-08T01:23:01Z",
+    "summary": "Every kanji chip on a subject page reads its level from the reader's own ladder."
   }
 ]
