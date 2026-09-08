@@ -114,6 +114,31 @@ This file is the single source of truth for agent behavior in this repo.
   finishes at 20 on UN and 43 on UG). `syncAccountLevels` writes both
   standings on every review, so neither column can drift into "nothing writes
   this". A third ladder costs one column, one seed line and one case.
+- **A level of ours travels in the slot that names its ladder - `unLevel`,
+  `ugLevel` or `libraryLevel` - and the feed that read the column fills it.**
+  Never label a number by the viewer's stream at draw time. `GlyphMetadataBadges`
+  took one `unLevel` and prefixed it with `ourLevelBadge(stream)`, which was
+  right only while every feeder happened to pass the stream-correct number:
+  the coming-up route sent the UN column and it printed `UG12` at a UG member,
+  and a custom library's level came through the same slot as `UN3`. A kanji
+  page did the same by halves - Used in words on the reader's ladder, Confusables
+  and Related on UN - because two of its three rows called `kanjiPlacement()`
+  outright. `ourLevels(character, stream)` and `ourLevelSlot(item)` are the two
+  ways to fill the slots, `ourLevelBadgeFor(item)` is the one way to label
+  them, and `UkStudyItem` carries its `stream` so the feed can choose. A chip
+  never asks whose page it is on.
+- **History keeps three records, and `?source=` says which one is being read.**
+  A WaniKani answer is a `StudyReviewAttempt`, a library answer a
+  `CustomStudyReviewAttempt`, an answer on our ladder a `UkReviewAttempt`, and
+  the page normalises the source through `normalizeStudyHistorySource` on both
+  ends, defaulting to UmaKuma the way Study does. It read "anything but custom"
+  as WaniKani for a release, so a member who had only ever studied here opened
+  History and found a record they had never written; John had 230 attempts
+  the page could not draw. Content for the 8,896 subjects WaniKani teaches is
+  catalogue-first there too, and a connected member's UN answers are also
+  mirrored to WaniKani and re-derived from its counters as `source: wanikani`
+  rows - one sitting under both sources, which nobody has yet decided is one
+  act or two.
 
 ### Self-Improvement Loop (Mandatory)
 
