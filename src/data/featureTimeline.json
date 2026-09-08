@@ -7171,12 +7171,25 @@
     "id": "rename-studyqueueitem-unlevel-and-glyphmetadatabadges-unleve",
     "name": "Rename StudyQueueItem.unLevel and GlyphMetadataBadges unLevel to ourLevel",
     "area": "study",
+    "status": "shipped",
     "kind": "feature",
+    "date": "2026-09-07",
+    "summary": "Level badges name their ladder - UN, UG or LIB - from the slot the feed filled.",
+    "dateIsEstimate": false,
+    "release": 573,
+    "version": "1.76.0",
+    "releasedAt": "2026-09-08T01:34:31Z"
+  },
+  {
+    "id": "studytaglistsbody-coalesces-item-unlevel-with-itself",
+    "name": "StudyTagListsBody coalesces item.unLevel with itself",
+    "area": "study",
+    "kind": "bug",
     "status": "shipped",
     "date": "2026-09-07",
-    "version": "1.76.0",
-    "release": 573,
-    "releasedAt": "2026-09-08T01:34:31Z",
-    "summary": "Level badges name their ladder - UN, UG or LIB - from the slot the feed filled."
+    "version": "1.77.0",
+    "release": 574,
+    "releasedAt": "2026-09-08T01:40:34Z",
+    "summary": "A level no longer falls back to itself, and a test forbids the shape."
   }
 ]
