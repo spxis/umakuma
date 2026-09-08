@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import FilterChipLabel from "./shared/FilterChipLabel";
+import { FilterChipLabel } from "@/app/shared/FilterChip";
 import { formatReviewCountLabel, queueModeSegmentClass } from "./explorerTabsView";
 import type { StudyTagFilter } from "./study-explorer/lib/studyExplorerTypes";
 import { QUEUE_TYPES, type QueueType } from "@/lib/domainConstants";

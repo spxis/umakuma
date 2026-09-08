@@ -8,6 +8,7 @@ import SubjectCards from "@/app/shared/SubjectCards";
 import SubjectFilerCell from "@/app/shared/SubjectFilerCell";
 import SubjectFilerToggle from "@/app/shared/SubjectFilerToggle";
 import KanjiSourceFilterRow from "@/app/shared/KanjiSourceFilterRow";
+import { FilterChipLink } from "@/app/shared/FilterChip";
 import RadicalPartsGrid from "@/app/shared/RadicalPartsGrid";
 import SubjectViewModeToggle from "@/app/shared/SubjectViewModeToggle";
 import { useFilerOpen, useSubjectFiler } from "@/app/shared/useSubjectFiler";
@@ -35,14 +36,6 @@ const VIEW_MODE_KEY = "wr:radicals:view-mode";
  * page answers with the kanji built from it - so choosing is a link like the
  * stroke counts are, and the whole state is in the address.
  */
-
-/* The same chip the stroke counts are drawn as on /strokes, so the two
-   filters read as one control in two places. */
-function chipClass(on: boolean): string {
-  return `inline-flex h-8 items-center gap-1.5 rounded-full border px-3 text-xs font-bold transition ${
-    on ? "border-accent bg-accent text-white" : "border-line bg-surface text-foreground/80 hover:bg-surface-muted"
-  }`;
-}
 
 /** A matched kanji as the shared grid wants it. */
 function toRow(match: RadicalMatch): SubjectListRow & FilerHit & { href: string; reading: string | null } {
@@ -175,29 +168,19 @@ export default function RadicalBrowserView({
             </div>
             <ul className="mt-2 flex flex-wrap gap-1.5">
               <li>
-                <Link
-                  href={radicalsHref({ parts: chosen, sources })}
-                  aria-current={strokes === null ? "page" : undefined}
-                  className={chipClass(strokes === null)}
-                >
-                  {RADICAL_BROWSER_COPY.strokesAll}
-                </Link>
+                <FilterChipLink href={radicalsHref({ parts: chosen, sources })} on={strokes === null} label={RADICAL_BROWSER_COPY.strokesAll} />
               </li>
               {strokeChoices.map((choice) => {
                 const on = choice.strokes === strokes;
                 return (
                   <li key={choice.strokes}>
-                    <Link
+                    <FilterChipLink
                       href={radicalsHref({ parts: chosen, strokes: on ? null : choice.strokes, sources })}
-                      aria-current={on ? "page" : undefined}
+                      on={on}
                       title={RADICAL_BROWSER_COPY.strokeChip(choice.strokes)}
-                      className={chipClass(on)}
-                    >
-                      {choice.strokes}
-                      <span className={`text-[10px] font-semibold ${on ? "text-white/80" : "text-foreground/60"}`}>
-                        {choice.count}
-                      </span>
-                    </Link>
+                      label={choice.strokes}
+                      count={choice.count}
+                    />
                   </li>
                 );
               })}

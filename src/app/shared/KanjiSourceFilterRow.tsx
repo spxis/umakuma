@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { FilterChipLink } from "@/app/shared/FilterChip";
 
 import {
   KANJI_SOURCE_DISPLAY,
@@ -45,39 +45,18 @@ export default function KanjiSourceFilterRow({
         const count = counts[source] ?? 0;
         const display = KANJI_SOURCE_DISPLAY[source];
         const spent = !on && count === 0;
-        const chip = `inline-flex h-7 items-center gap-1.5 rounded-full border px-2.5 text-[10px] font-black uppercase tracking-[0.08em] transition ${
-          on
-            ? "border-accent bg-accent text-white"
-            : "border-line bg-surface text-foreground/60 hover:bg-surface-muted hover:text-foreground"
-        }`;
-
-        const body = (
-          <>
-            {display.label}
-            <span className={`text-[10px] font-semibold ${on ? "text-white/80" : "text-foreground/60"}`}>
-              {count}
-            </span>
-          </>
-        );
 
         /* Nothing behind it, so it is not a link - the same rule the parts
            grid follows for a dead end. */
         return (
           <li key={source}>
-            {spent ? (
-              <span title={display.title} className={`${chip} cursor-not-allowed opacity-40`}>
-                {body}
-              </span>
-            ) : (
-              <Link
-                href={hrefFor(toggleSource(chosen, source))}
-                aria-pressed={on}
-                title={display.title}
-                className={chip}
-              >
-                {body}
-              </Link>
-            )}
+            <FilterChipLink
+              href={spent ? null : hrefFor(toggleSource(chosen, source))}
+              on={on}
+              title={display.title}
+              label={display.label}
+              count={count}
+            />
           </li>
         );
       })}

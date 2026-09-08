@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 
-import FilterChipButton from "../../shared/FilterChipButton";
+import { FilterChipButton } from "@/app/shared/FilterChip";
 import { badgeClass, disabledBadgeClass, formatNumber } from "../lib/levelExplorerDisplay";
 import { groupStudyReviewLevelChips, type StudyReviewLevelChip } from "../../study-explorer/lib/studyExplorerUtils";
 

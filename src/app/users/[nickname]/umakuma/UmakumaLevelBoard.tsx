@@ -17,11 +17,9 @@ import UmakumaLadderSearch from "./UmakumaLadderSearch";
 import UmakumaPapersNote from "./UmakumaPapersNote";
 import CurriculumStamp from "@/app/shared/CurriculumStamp";
 import { LADDER_STREAMS } from "@/lib/ladder/ladderStreams";
+import { FilterChipButton, filterChipTone } from "@/app/shared/FilterChip";
 import { UK_EXPLORER_COPY as copy, UK_VIEW_MODE_STORAGE_KEY } from "./UmakumaExplorer.constants";
 
-const CHIP = "inline-flex h-8 items-center rounded-full border px-3 text-[11px] font-bold transition";
-const ACTIVE = "border-accent bg-accent text-white";
-const IDLE = "border-line bg-surface text-foreground/70 hover:bg-surface-muted";
 
 /**
  * One level of the curriculum, drawn the way every other list of subjects is.
@@ -60,19 +58,16 @@ export default function UmakumaLevelBoard({
         <UmakumaLadderSearch className="mt-3" />
 
         <div className="mt-3 flex flex-wrap items-center gap-2">
-          <button type="button" onClick={() => setKind(null)} className={`${CHIP} ${kind === null ? ACTIVE : IDLE}`}>
-            {copy.all}
-          </button>
+          <FilterChipButton type="button" onClick={() => setKind(null)} toneClassName={filterChipTone(kind === null)} label={copy.all} />
           {ladderLevelSections(group).map((section) => (
-            <button
+            <FilterChipButton
               key={section.type}
               type="button"
               onClick={() => setKind(section.type as SubjectType)}
-              className={`${CHIP} ${kind === section.type ? ACTIVE : IDLE}`}
-            >
-              {SUBJECT_TYPE_DISPLAY[section.type as SubjectType].plural}
-              <span className="ml-1.5 tabular-nums opacity-70">{section.rows.length}</span>
-            </button>
+              toneClassName={filterChipTone(kind === section.type)}
+              label={SUBJECT_TYPE_DISPLAY[section.type as SubjectType].plural}
+              count={section.rows.length}
+            />
           ))}
 
           <span className="ml-auto flex items-center gap-2">

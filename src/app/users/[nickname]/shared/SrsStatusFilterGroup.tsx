@@ -1,7 +1,7 @@
 import { srsBucketBadgeClass, srsBucketLabel } from "@/app/shared/studyHistoryUi";
 import { WK_STATUSES, type WkStatus } from "@/lib/domainConstants";
 
-import FilterChipButton from "./FilterChipButton";
+import { FilterChipButton } from "@/app/shared/FilterChip";
 import { badgeClass, disabledBadgeClass, formatNumber } from "../level-explorer/lib/levelExplorerDisplay";
 
 /**

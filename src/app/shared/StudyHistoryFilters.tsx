@@ -1,7 +1,7 @@
 "use client";
 
 import type { HistorySrsBucket } from "@/app/shared/studyHistoryTypes";
-import FilterChipButton from "@/app/users/[nickname]/shared/FilterChipButton";
+import { FilterChipButton, filterChipTone } from "@/app/shared/FilterChip";
 
 import { srsBucketBadgeClass, srsBucketLabel, titleCaseSrsBucket } from "./studyHistoryUi";
 import FieldLabel from "../shared/FieldLabel";
@@ -25,11 +25,7 @@ type Props = {
   srsBucketCounts: Record<HistorySrsBucket, number>;
 };
 
-function studyChipClass(active: boolean): string {
-  return active
-    ? "border-accent bg-accent text-white"
-    : "border-line bg-surface text-foreground hover:bg-surface-muted";
-}
+const studyChipClass = filterChipTone;
 
 function resultChipClass(result: "all" | ReviewResult, active: boolean): string {
   if (!active) {

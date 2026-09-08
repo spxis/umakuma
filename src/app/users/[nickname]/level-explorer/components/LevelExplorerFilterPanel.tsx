@@ -9,7 +9,7 @@ import {
 } from "../lib/levelExplorerState";
 import { srsBucketBadgeClass } from "@/app/shared/studyHistoryUi";
 import ExplorerSearchBar from "../../ExplorerSearchBar";
-import FilterChipButton from "../../shared/FilterChipButton";
+import { FilterChipButton } from "@/app/shared/FilterChip";
 import LevelExplorerLevelFilters from "./LevelExplorerLevelFilters";
 import { LEVEL_EXPLORER_JLPT_FILTER_LABELS, LEVEL_EXPLORER_REVIEW_TIMING_LABELS } from "./LevelExplorer.constants";
 import type { LevelExplorerFilterPanelProps as Props } from "./LevelExplorerFilterPanel.types";

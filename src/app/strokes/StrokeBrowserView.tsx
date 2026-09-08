@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useMemo } from "react";
 
 import { ListRow } from "@/app/shared/ListSubjectRows";
+import { FilterChipLink } from "@/app/shared/FilterChip";
 import RadicalPartsGrid, { DEAD_ENDS } from "@/app/shared/RadicalPartsGrid";
 import { RADICAL_PARTS_COPY } from "@/app/shared/radicalPartsCopy";
 import SubjectFilerCell from "@/app/shared/SubjectFilerCell";
@@ -129,22 +130,7 @@ export default function StrokeBrowserView({
             const on = entry.strokes === strokes;
             return (
               <li key={entry.strokes}>
-                <Link
-                  href={strokesHref(entry.strokes)}
-                  aria-current={on ? "page" : undefined}
-                  className={`inline-flex h-8 items-center gap-1.5 rounded-full border px-3 text-xs font-bold transition ${
-                    on
-                      ? "border-accent bg-accent text-white"
-                      : "border-line bg-surface text-foreground/80 hover:bg-surface-muted"
-                  }`}
-                >
-                  {entry.strokes}
-                  <span
-                    className={`text-[10px] font-semibold ${on ? "text-white/80" : "text-foreground/60"}`}
-                  >
-                    {entry.count}
-                  </span>
-                </Link>
+                <FilterChipLink href={strokesHref(entry.strokes)} on={on} label={entry.strokes} count={entry.count} />
               </li>
             );
           })}

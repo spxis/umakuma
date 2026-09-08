@@ -9,7 +9,7 @@ import {
 import type { StudySrsFilter, StudySrsStageFilter } from "../lib/studyExplorerTypes";
 import { srsFilterButtonLabel, formatNumber } from "../../level-explorer/lib/levelExplorerDisplay";
 import { badgeClass, disabledBadgeClass } from "../lib/studyExplorerUtils";
-import FilterChipButton from "../../shared/FilterChipButton";
+import { FilterChipButton } from "@/app/shared/FilterChip";
 
 type Props = {
   isOpen: boolean;

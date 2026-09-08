@@ -1,6 +1,6 @@
 "use client";
 
-import FilterChipButton from "@/app/users/[nickname]/shared/FilterChipButton";
+import { FilterChipButton } from "@/app/shared/FilterChip";
 
 import {
   STUDY_GROUPING_FILTERS,

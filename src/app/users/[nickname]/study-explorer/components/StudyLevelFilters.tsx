@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { formatNumber } from "../../level-explorer/lib/levelExplorerDisplay";
-import FilterChipButton from "../../shared/FilterChipButton";
+import { FilterChipButton } from "@/app/shared/FilterChip";
 import { STUDY_PANEL_TEXT, STUDY_QUEUE_TYPES } from "./StudyExplorer.constants";
 import type { StudyQueueMode } from "../lib/studyExplorerTypes";
 import { badgeClass, disabledBadgeClass, groupStudyReviewLevelChips, type StudyReviewLevelChip } from "../lib/studyExplorerUtils";

@@ -1,3 +1,4 @@
+import { FilterChipLink, filterChipTone } from "@/app/shared/FilterChip";
 import { PAGE_SHELL_PADDING, PAGE_WIDTH } from "@/app/shared/pageShell";
 import { SEARCH_INPUT_CHROME_CLASS } from "@/app/shared/searchFieldChrome";
 import { cookies } from "next/headers";
@@ -19,7 +20,6 @@ import { viewsOwnPage } from "@/app/shared/viewerAddress";
 import { GRADE_EXPLORER_COPY, GRADE_PAGE_SIZE } from "../GradeExplorer.constants";
 import GradeKanjiBoard from "../GradeKanjiBoard";
 import { GRADE_REVEAL_MODES, gradeSearchSuggestions, GRADE_OPTIONS, GRADE_SHORT_LABELS, gradeHref, pageRange, parseGradeSegment, parsePageParam } from "../gradeExplorerView";
-import { noTranslateClass } from "@/app/shared/japaneseText";
 import { DISPLAY_PREFERENCE_COOKIES, readEnumCookie } from "@/lib/displayPreferenceCookie";
 
 /** One id for the suggestion list, since the page renders one search box. */
@@ -130,20 +130,14 @@ export default async function UserGradesPage({ params, searchParams }: PageProps
               const meta = countsByGrade.get(option);
               const active = option === grade;
               return (
-                <Link
+                <FilterChipLink
                   key={option}
                   href={gradeHref(userKey, option, 1, search)}
-                  className={`inline-flex h-8 items-center gap-1 rounded-full border px-3 text-xs font-bold transition ${
-                    active
-                      ? "border-kanji bg-kanji text-white"
-                      : "border-line bg-surface text-foreground/75 hover:bg-surface-muted"
-                  }`}
-                >
-                  {GRADE_SHORT_LABELS[option]}
-                  <span translate="no" className={noTranslateClass(active ? "text-white/70" : "text-foreground/60")}>
-                    {`(${meta?.totalCount ?? 0})`}
-                  </span>
-                </Link>
+                  on={active}
+                  toneClassName={active ? "border-kanji bg-kanji text-white" : filterChipTone(false)}
+                  label={GRADE_SHORT_LABELS[option]}
+                  count={meta?.totalCount ?? 0}
+                />
               );
             })}
           </div>

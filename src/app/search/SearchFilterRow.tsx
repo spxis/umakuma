@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { FilterChipLink, filterChipTone } from "@/app/shared/FilterChip";
+
 import { SEARCH_SOURCE_LABELS, SEARCH_SOURCE_VALUES, type SearchSource } from "@/lib/globalSearch";
 import { SEARCH_KIND_LABELS, SEARCH_KIND_VALUES, type KindCounts } from "@/lib/searchKinds";
 import {
@@ -121,21 +123,14 @@ function Chip({
   /** The source's own accent, so the chips and the column headings match. */
   tone?: string;
 }) {
-  const base =
-    "inline-flex h-7 items-center gap-1.5 rounded-full border px-2.5 text-[11px] font-bold transition";
-  const look = on
-    ? tone
-      ? `${tone} shadow-sm`
-      : "border-accent bg-accent text-white"
-    : "border-line bg-surface text-foreground/60 hover:bg-surface-muted";
-
   return (
-    <Link href={href} aria-pressed={on} className={`${base} ${look}`}>
-      {label}
-      <span translate="no" className={on && !tone ? "text-white/70" : "text-foreground/60"}>
-        {count}
-      </span>
-    </Link>
+    <FilterChipLink
+      href={href}
+      on={on}
+      label={label}
+      count={count}
+      toneClassName={on && tone ? `${tone} shadow-sm` : filterChipTone(on)}
+    />
   );
 }
 

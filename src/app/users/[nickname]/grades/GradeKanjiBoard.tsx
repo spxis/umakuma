@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { FilterChipButton, filterChipTone } from "@/app/shared/FilterChip";
 import KanjiSelectionBar from "@/app/shared/KanjiSelectionBar";
 import SubjectViewModeToggle from "@/app/shared/SubjectViewModeToggle";
 import { SubjectSelectionToggle } from "@/app/shared/SubjectSelectionControls";
@@ -95,13 +96,13 @@ export default function GradeKanjiBoard({ items, practicePath, accountId, initia
               {GRADE_EXPLORER_COPY.quizHint}
             </span>
             {revealed.size > 0 ? (
-              <button
+              <FilterChipButton
                 type="button"
                 onClick={() => setRevealed(new Set())}
-                className="inline-flex h-8 items-center rounded-full border border-line bg-surface px-3 text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/70 transition hover:bg-surface-muted"
-              >
-                {GRADE_EXPLORER_COPY.quizReset} ({revealed.size})
-              </button>
+                toneClassName={filterChipTone(false)}
+                label={GRADE_EXPLORER_COPY.quizReset}
+                count={revealed.size}
+              />
             ) : null}
           </>
         ) : null}

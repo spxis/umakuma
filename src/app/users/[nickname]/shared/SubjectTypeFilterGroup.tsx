@@ -1,7 +1,7 @@
 import { allBadgeClass, disabledBadgeClass, formatNumber } from "../level-explorer/lib/levelExplorerDisplay";
 import { SUBJECT_TYPE_VALUES, type SubjectType } from "@/lib/domainConstants";
 
-import FilterChipButton from "./FilterChipButton";
+import { FilterChipButton } from "@/app/shared/FilterChip";
 import SubjectTypeFilterButton from "./SubjectTypeFilterButton";
 
 type Props = {
