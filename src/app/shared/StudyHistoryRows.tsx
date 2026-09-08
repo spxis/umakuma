@@ -45,6 +45,8 @@ function toRow(attempt: StudyHistoryAttempt): HistoryRow {
     meaning: attempt.subjectMeaning?.trim() ?? "",
     reading: attempt.subjectReading?.trim() || null,
     wkLevel: typeof attempt.wkLevel === "number" ? attempt.wkLevel : null,
+    unLevel: attempt.unLevel,
+    ugLevel: attempt.ugLevel,
     srsStage: typeof attempt.srsStage === "number" ? attempt.srsStage : null,
     srsBucket: attempt.srsBucket,
     attempt,

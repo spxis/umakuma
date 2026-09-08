@@ -135,6 +135,8 @@ export async function getCustomStudyHistoryRows(args: Args): Promise<StudyHistor
       subjectReading: reading,
       subjectMeaning: meaning,
       wkLevel: level,
+      unLevel: null,
+      ugLevel: null,
       srsStage: stage,
       srsBucket: customBucketForStage(stage),
       subjectData: {

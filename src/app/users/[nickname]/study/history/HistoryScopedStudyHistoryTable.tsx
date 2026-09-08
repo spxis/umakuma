@@ -5,6 +5,9 @@ import { useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 
 import StudyHistoryTable from "@/app/shared/StudyHistoryTable";
+import { normalizeStudyHistorySource } from "@/lib/studyHistorySource";
+
+import { HISTORY_PAGE_COPY } from "./historyCopy";
 
 type StudyHistorySource = StudySource;
 
@@ -12,8 +15,15 @@ type Props = {
   accountId: string;
 };
 
+/*
+ * Where Study starts, History starts: our ladder is the source everybody
+ * has. The page read "anything but custom" as WaniKani, so a member who had
+ * never switched sources opened History on a record they had never written.
+ */
+const DEFAULT_SOURCE: StudyHistorySource = "umakuma";
+
 function normalizeSource(raw: string | null): StudyHistorySource {
-  return raw === "custom" ? "custom" : "wanikani";
+  return normalizeStudyHistorySource(raw, DEFAULT_SOURCE);
 }
 
 function normalizeLibraryId(raw: string | null): string | null {
@@ -30,7 +40,7 @@ export default function HistoryScopedStudyHistoryTable({ accountId }: Props) {
     }
 
     if (typeof window === "undefined") {
-      return "wanikani";
+      return DEFAULT_SOURCE;
     }
 
     return normalizeSource(window.localStorage.getItem(`wr:study-source:${accountId}`));
@@ -62,7 +72,7 @@ export default function HistoryScopedStudyHistoryTable({ accountId }: Props) {
     <StudyHistoryTable
       endpoint={endpoint}
       showUserColumn={false}
-      heading="Study attempts"
+      heading={HISTORY_PAGE_COPY.attempts[source]}
       collapsible={false}
     />
   );

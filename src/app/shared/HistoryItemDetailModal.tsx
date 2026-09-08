@@ -41,6 +41,8 @@ function toStudyQueueItem(attempt: StudyHistoryAttempt): StudyQueueItem {
           ? attempt.subjectType
           : SUBJECT_TYPES.kanji,
     wkLevel: typeof subject?.wkLevel === "number" ? subject.wkLevel : attempt.wkLevel ?? undefined,
+    unLevel: attempt.unLevel,
+    ugLevel: attempt.ugLevel,
     characters: subject?.characters ?? attempt.subjectLabel,
     meanings: toStringArray(subject?.meanings).length > 0 ? toStringArray(subject?.meanings) : [attempt.subjectMeaning ?? "-"],
     readings: toStringArray(subject?.readings),

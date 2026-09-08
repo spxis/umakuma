@@ -1,6 +1,8 @@
 import type { StudySource } from "@/app/users/[nickname]/study-explorer/lib/studyExplorerTypes";
 import { prisma } from "@/lib/prisma";
 import { getCustomStudyHistoryRows } from "@/lib/customStudy/customStudyHistoryRows";
+import { normalizeStudyHistorySource } from "@/lib/studyHistorySource";
+import { getUkStudyHistoryRows } from "@/lib/uk/ukStudyHistoryRows";
 import { getCatalogSubjectDetails } from "@/lib/subjectCatalogDetails";
 import {
   SRS_BUCKETS,
@@ -29,6 +31,9 @@ export type StudyHistoryRow = {
   subjectReading: string | null;
   subjectMeaning: string | null;
   wkLevel: number | null;
+  /** Ours, on the ladder the answer was given on. The other stays null. */
+  unLevel: number | null;
+  ugLevel: number | null;
   srsStage: number | null;
   srsBucket: SrsBucket;
   subjectData: SnapshotItem | null;
@@ -91,6 +96,14 @@ type SnapshotItem = {
   wkLevel?: number;
   srsStage?: number;
 };
+/**
+ * The level a row is filtered and counted by: the one its ladder gave it.
+ * A WaniKani row has WaniKani's, a row from our ladder has ours, and the
+ * Level chips are bare numbers because every row on one page shares a source.
+ */
+export function historyRowLevel(row: Pick<StudyHistoryRow, "wkLevel" | "unLevel" | "ugLevel">): number | null {
+  return row.wkLevel ?? row.unLevel ?? row.ugLevel ?? null;
+}
 function parseSnapshotItems(raw: unknown): SnapshotItem[] {
   if (!Array.isArray(raw)) {
     return [];
@@ -132,9 +145,6 @@ function normalizeResult(raw: string | null): QueryArgs["result"] {
   }
   return undefined;
 }
-function normalizeSource(raw: string | null): StudyHistorySource {
-  return raw === "custom" ? "custom" : "wanikani";
-}
 function normalizeSrsBucket(raw: string | null): QueryArgs["srsBucket"] {
   if (isWkStatus(raw)) {
     return raw;
@@ -161,7 +171,7 @@ function normalizeOptionalString(raw: string | null): string | undefined {
 export function parseStudyHistoryQuery(url: URL): QueryArgs {
   return {
     accountId: url.searchParams.get("accountId") ?? undefined,
-    source: normalizeSource(url.searchParams.get("source")),
+    source: normalizeStudyHistorySource(url.searchParams.get("source"), "umakuma"),
     libraryId: normalizeOptionalString(url.searchParams.get("libraryId")),
     result: normalizeResult(url.searchParams.get("result")),
     level: normalizeOptionalPositiveInt(url.searchParams.get("level")),
@@ -181,6 +191,8 @@ export async function getStudyHistoryPage(args: QueryArgs): Promise<StudyHistory
       libraryId: args.libraryId,
       result: args.result,
     });
+  } else if (args.source === "umakuma" && args.accountId) {
+    allRows = await getUkStudyHistoryRows({ accountId: args.accountId, result: args.result });
   } else {
     const where = {
       ...(args.accountId ? { accountId: args.accountId } : {}),
@@ -317,6 +329,8 @@ export async function getStudyHistoryPage(args: QueryArgs): Promise<StudyHistory
         subjectReading: canonical?.primaryReadings[0] ?? canonical?.readings[0] ?? subject?.reading ?? null,
         subjectMeaning: canonical?.meanings[0] ?? subject?.meaning ?? null,
         wkLevel: canonical?.wkLevel ?? subject?.wkLevel ?? null,
+        unLevel: null,
+        ugLevel: null,
         srsStage: subject?.srsStage ?? null,
         srsBucket: subject?.srsBucket ?? "unknown",
         subjectData: canonicalSubjectData,
@@ -332,7 +346,7 @@ export async function getStudyHistoryPage(args: QueryArgs): Promise<StudyHistory
       next = next.filter((row) => row.result === filters.result);
     }
     if (typeof filters.level === "number") {
-      next = next.filter((row) => row.wkLevel === filters.level);
+      next = next.filter((row) => historyRowLevel(row) === filters.level);
     }
     if (typeof filters.srs === "number") {
       next = next.filter((row) => row.srsStage === filters.srs);
@@ -404,10 +418,11 @@ export async function getStudyHistoryPage(args: QueryArgs): Promise<StudyHistory
   }
   const levelCounts: Record<number, number> = {};
   for (const row of rowsForLevelCounts) {
-    if (typeof row.wkLevel !== "number") {
+    const level = historyRowLevel(row);
+    if (typeof level !== "number") {
       continue;
     }
-    levelCounts[row.wkLevel] = (levelCounts[row.wkLevel] ?? 0) + 1;
+    levelCounts[level] = (levelCounts[level] ?? 0) + 1;
   }
   const srsBucketCounts: Record<SrsBucket, number> = {
     [SRS_BUCKETS.apprentice]: 0,
@@ -427,7 +442,7 @@ export async function getStudyHistoryPage(args: QueryArgs): Promise<StudyHistory
   const pageStart = (page - 1) * args.pageSize;
   const pagedRows = rows.slice(pageStart, pageStart + args.pageSize);
   const availableLevels = Array.from(
-    new Set(rowsForLevelCounts.map((row) => row.wkLevel).filter((level): level is number => typeof level === "number")),
+    new Set(rowsForLevelCounts.map(historyRowLevel).filter((level): level is number => typeof level === "number")),
   ).sort((a, b) => a - b);
   const availableSrs = Array.from(
     new Set(rows.map((row) => row.srsStage).filter((srs): srs is number => typeof srs === "number")),

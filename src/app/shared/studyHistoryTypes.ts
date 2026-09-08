@@ -46,6 +46,8 @@ export type StudyHistoryAttempt = {
   subjectReading: string | null;
   subjectMeaning: string | null;
   wkLevel: number | null;
+  unLevel: number | null;
+  ugLevel: number | null;
   srsStage: number | null;
   srsBucket: HistorySrsBucket;
   subjectData: HistorySubjectData | null;
