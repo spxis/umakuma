@@ -7119,12 +7119,25 @@
     "id": "the-study-explorer-labels-a-ug-member-s-level-un",
     "name": "The study explorer labels a UG member's level UN",
     "area": "study",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-07",
+    "summary": "The Study explorer now labels your level with the ladder you are actually on. A member on the school-year ordering saw their standing under a UN prefix in the panel header, the upcoming rows and the badges inside the glyph - the number was right and only the label was wrong, which is the hardest kind to spot.",
+    "dateIsEstimate": false,
+    "release": 569,
+    "version": "1.72.0",
+    "releasedAt": "2026-09-07T14:49:12Z"
+  },
+  {
+    "id": "history-never-shows-umakuma-reviews",
+    "name": "History never shows UmaKuma reviews",
+    "area": "study",
     "kind": "bug",
     "status": "shipped",
     "date": "2026-09-07",
-    "version": "1.72.0",
-    "release": 569,
-    "releasedAt": "2026-09-07T14:49:12Z",
-    "summary": "The Study explorer now labels your level with the ladder you are actually on. A member on the school-year ordering saw their standing under a UN prefix in the panel header, the upcoming rows and the badges inside the glyph - the number was right and only the label was wrong, which is the hardest kind to spot."
+    "version": "1.73.0",
+    "release": 570,
+    "releasedAt": "2026-09-08T01:11:51Z",
+    "summary": "History shows the reviews answered on our ladder, with their levels and stages."
   }
 ]
