@@ -7249,12 +7249,25 @@
     "id": "strokes-page-hide-radicals-that-cannot-build-any-kanji-at-th",
     "name": "Strokes page: hide radicals that cannot build any kanji at that stroke count",
     "area": "jlpt",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-07",
+    "summary": "A stroke page's part filter shows only the parts that can still narrow it.",
+    "dateIsEstimate": false,
+    "release": 579,
+    "version": "1.82.0",
+    "releasedAt": "2026-09-08T04:06:51Z"
+  },
+  {
+    "id": "every-filter-chip-with-a-count-draws-through-one-component",
+    "name": "Every filter chip with a count draws through one component",
+    "area": "platform",
     "kind": "bug",
     "status": "shipped",
     "date": "2026-09-07",
-    "version": "1.82.0",
-    "release": 579,
-    "releasedAt": "2026-09-08T04:06:51Z",
-    "summary": "A stroke page's part filter shows only the parts that can still narrow it."
+    "version": "1.83.0",
+    "release": 580,
+    "releasedAt": "2026-09-08T04:16:32Z",
+    "summary": "Every filter chip draws its count through one shared component."
   }
 ]

@@ -141,4 +141,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Osarai", ja: "復習", reading: "おさらい", gloss: "going over it again" },
   { romaji: "Katanarabe", ja: "肩並べ", reading: "かたならべ", gloss: "shoulder to shoulder" },
   { romaji: "Kiritsume", ja: "切り詰め", reading: "きりつめ", gloss: "trimmed down" },
+  { romaji: "Kumiawase", ja: "組み合わせ", reading: "くみあわせ", gloss: "put together as one" },
 ];
