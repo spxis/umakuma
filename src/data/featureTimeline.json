@@ -7184,12 +7184,25 @@
     "id": "studytaglistsbody-coalesces-item-unlevel-with-itself",
     "name": "StudyTagListsBody coalesces item.unLevel with itself",
     "area": "study",
+    "status": "shipped",
     "kind": "bug",
+    "date": "2026-09-07",
+    "summary": "A level no longer falls back to itself, and a test forbids the shape.",
+    "dateIsEstimate": false,
+    "release": 574,
+    "version": "1.77.0",
+    "releasedAt": "2026-09-08T01:40:34Z"
+  },
+  {
+    "id": "umakuma-review-items-lack-the-srs-metadata-wanikani-items-sh",
+    "name": "UmaKuma review items lack the SRS metadata WaniKani items show",
+    "area": "study",
+    "kind": "feature",
     "status": "shipped",
     "date": "2026-09-07",
-    "version": "1.77.0",
-    "release": 574,
-    "releasedAt": "2026-09-08T01:40:34Z",
-    "summary": "A level no longer falls back to itself, and a test forbids the shape."
+    "version": "1.78.0",
+    "release": 575,
+    "releasedAt": "2026-09-08T02:57:02Z",
+    "summary": "An UmaKuma review carries the level, parts, words, dictionary panel, look-alikes and dates a WaniKani one does."
   }
 ]
