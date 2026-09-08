@@ -7210,12 +7210,25 @@
     "id": "umakuma-trouble-and-favourite-marks-are-one-mark-per-subject",
     "name": "UmaKuma trouble and favourite marks are one mark per subject across ladders",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-07",
+    "summary": "A trouble or favourite mark is one mark per subject, on whichever ladder it was made, and UmaKuma cards show it.",
+    "dateIsEstimate": false,
+    "release": 576,
+    "version": "1.79.0",
+    "releasedAt": "2026-09-08T03:05:18Z"
+  },
+  {
+    "id": "review-parity-trouble-injection-for-our-queue-and-the-librar",
+    "name": "Review parity: trouble injection for our queue, and the library feed's facts",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-07",
-    "version": "1.79.0",
-    "release": 576,
-    "releasedAt": "2026-09-08T03:05:18Z",
-    "summary": "A trouble or favourite mark is one mark per subject, on whichever ladder it was made, and UmaKuma cards show it."
+    "version": "1.80.0",
+    "release": 577,
+    "releasedAt": "2026-09-08T03:10:43Z",
+    "summary": "Trouble items join an UmaKuma sitting as practice, spaced through the reviews, the way they do on WaniKani."
   }
 ]
