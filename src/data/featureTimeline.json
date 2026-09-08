@@ -7275,12 +7275,25 @@
     "id": "strokes-page-the-part-grid-moves-on-every-click",
     "name": "Strokes page: the part grid moves on every click",
     "area": "jlpt",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-07",
+    "summary": "A stroke page's part grid is fixed by the count; a pick dims tiles and never moves them.",
+    "dateIsEstimate": false,
+    "release": 581,
+    "version": "1.84.0",
+    "releasedAt": "2026-09-08T04:48:03Z"
+  },
+  {
+    "id": "radicals-page-the-stroke-filter-bar-disappears-as-parts-are-",
+    "name": "Radicals page: the stroke filter bar disappears as parts are picked",
+    "area": "jlpt",
     "kind": "bug",
     "status": "shipped",
     "date": "2026-09-07",
-    "version": "1.84.0",
-    "release": 581,
-    "releasedAt": "2026-09-08T04:48:03Z",
-    "summary": "A stroke page's part grid is fixed by the count; a pick dims tiles and never moves them."
+    "version": "1.85.0",
+    "release": 582,
+    "releasedAt": "2026-09-08T04:53:55Z",
+    "summary": "The radicals page's stroke bar stays put; a lone remaining count is drawn pre-selected."
   }
 ]
