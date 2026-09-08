@@ -7236,12 +7236,25 @@
     "id": "library-review-items-carry-what-wanikani-ones-do",
     "name": "Library review items carry what WaniKani ones do",
     "area": "study",
+    "status": "shipped",
     "kind": "feature",
+    "date": "2026-09-07",
+    "summary": "A library review carries what a WaniKani one does: identity, marks, N band, dictionary panel, look-alikes, trouble practice.",
+    "dateIsEstimate": false,
+    "release": 578,
+    "version": "1.81.0",
+    "releasedAt": "2026-09-08T03:18:24Z"
+  },
+  {
+    "id": "strokes-page-hide-radicals-that-cannot-build-any-kanji-at-th",
+    "name": "Strokes page: hide radicals that cannot build any kanji at that stroke count",
+    "area": "jlpt",
+    "kind": "bug",
     "status": "shipped",
     "date": "2026-09-07",
-    "version": "1.81.0",
-    "release": 578,
-    "releasedAt": "2026-09-08T03:18:24Z",
-    "summary": "A library review carries what a WaniKani one does: identity, marks, N band, dictionary panel, look-alikes, trouble practice."
+    "version": "1.82.0",
+    "release": 579,
+    "releasedAt": "2026-09-08T04:06:51Z",
+    "summary": "A stroke page's part filter shows only the parts that can still narrow it."
   }
 ]
