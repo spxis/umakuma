@@ -7262,12 +7262,25 @@
     "id": "every-filter-chip-with-a-count-draws-through-one-component",
     "name": "Every filter chip with a count draws through one component",
     "area": "platform",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-07",
+    "summary": "Every filter chip draws its count through one shared component.",
+    "dateIsEstimate": false,
+    "release": 580,
+    "version": "1.83.0",
+    "releasedAt": "2026-09-08T04:16:32Z"
+  },
+  {
+    "id": "strokes-page-the-part-grid-moves-on-every-click",
+    "name": "Strokes page: the part grid moves on every click",
+    "area": "jlpt",
     "kind": "bug",
     "status": "shipped",
     "date": "2026-09-07",
-    "version": "1.83.0",
-    "release": 580,
-    "releasedAt": "2026-09-08T04:16:32Z",
-    "summary": "Every filter chip draws its count through one shared component."
+    "version": "1.84.0",
+    "release": 581,
+    "releasedAt": "2026-09-08T04:48:03Z",
+    "summary": "A stroke page's part grid is fixed by the count; a pick dims tiles and never moves them."
   }
 ]
