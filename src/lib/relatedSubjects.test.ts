@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 
 import { SUBJECT_TYPES } from "./domainConstants";
+import { gradePlacement } from "./gradeLadder";
+import { kanjiPlacement } from "./kanjiLadder";
+import { LADDER_STREAMS } from "./ladder/ladderStreams";
 import {
   RELATED_GROUPS,
   RELATED_LIMIT,
@@ -57,18 +60,36 @@ const DRAWN_RADICAL = row({
   level: 23,
 });
 
+describe("a kanji chip's level follows the reader's ladder", () => {
+  it("fills UN for a visitor and UG for a member on the school ordering", () => {
+    expect(toRelatedSubject(WATER_KANJI, null)).toMatchObject({
+      unLevel: kanjiPlacement("水")?.level ?? null,
+      ugLevel: null,
+    });
+    expect(toRelatedSubject(WATER_KANJI, LADDER_STREAMS.ug)).toMatchObject({
+      unLevel: null,
+      ugLevel: gradePlacement("水")?.level ?? null,
+    });
+    expect(gradePlacement("水")?.level).toBeDefined();
+  });
+
+  it("gives a word no level of ours; that lives in the database", () => {
+    expect(toRelatedSubject(FOAM_WORD, LADDER_STREAMS.ug)).toMatchObject({ unLevel: null, ugLevel: null });
+  });
+});
+
 describe("a row as something to link to", () => {
   it("sends a kanji to the kanji page", () => {
-    expect(toRelatedSubject(WATER_KANJI)?.href).toBe(`/kanji/${encodeURIComponent("水")}`);
+    expect(toRelatedSubject(WATER_KANJI, null)?.href).toBe(`/kanji/${encodeURIComponent("水")}`);
   });
 
   it("sends a word to the word page", () => {
-    expect(toRelatedSubject(FOAM_WORD)?.href).toBe(`/vocabulary/${encodeURIComponent("水泡")}`);
+    expect(toRelatedSubject(FOAM_WORD, null)?.href).toBe(`/vocabulary/${encodeURIComponent("水泡")}`);
   });
 
   /* A drawn radical has no character, so its name is both label and address. */
   it("sends a drawn radical to the radical page, and shows its name", () => {
-    const subject = toRelatedSubject(DRAWN_RADICAL);
+    const subject = toRelatedSubject(DRAWN_RADICAL, null);
     expect(subject?.href).toBe("/radicals/leaf");
     expect(subject?.label).toBe("leaf");
   });
@@ -78,8 +99,8 @@ describe("a row as something to link to", () => {
    * chip beside it and does nothing.
    */
   it("drops a row the catalogue could not name", () => {
-    expect(toRelatedSubject(row({ subjectId: 1, subjectType: "radical", characters: null, slug: null }))).toBeNull();
-    expect(toRelatedSubject(row({ subjectId: 2, subjectType: "nonsense" }))).toBeNull();
+    expect(toRelatedSubject(row({ subjectId: 1, subjectType: "radical", characters: null, slug: null }), null)).toBeNull();
+    expect(toRelatedSubject(row({ subjectId: 2, subjectType: "nonsense" }), null)).toBeNull();
   });
 });
 
@@ -90,6 +111,7 @@ describe("a kanji's groups", () => {
    */
   it("lists the words it is used in", () => {
     const groups = relatedGroupsFor({
+      stream: null,
       subjectId: 476,
       subjectType: SUBJECT_TYPES.kanji,
       components: [DRAWN_RADICAL],
@@ -102,6 +124,7 @@ describe("a kanji's groups", () => {
 
   it("keeps what it is built from separate from what is built from it", () => {
     const groups = relatedGroupsFor({
+      stream: null,
       subjectId: 476,
       subjectType: SUBJECT_TYPES.kanji,
       components: [DRAWN_RADICAL],
@@ -119,6 +142,7 @@ describe("a radical's groups", () => {
    */
   it("lists the kanji built from it", () => {
     const groups = relatedGroupsFor({
+      stream: null,
       subjectId: 8769,
       subjectType: SUBJECT_TYPES.radical,
       components: [],
@@ -133,6 +157,7 @@ describe("a radical's groups", () => {
 describe("a word's groups", () => {
   it("lists the kanji it is written with", () => {
     const groups = relatedGroupsFor({
+      stream: null,
       subjectId: 2551,
       subjectType: SUBJECT_TYPES.vocabulary,
       components: [WATER_KANJI, BUBBLE_KANJI],
@@ -154,6 +179,7 @@ describe("a word's groups", () => {
     });
 
     const groups = relatedGroupsFor({
+      stream: null,
       subjectId: 2551,
       subjectType: SUBJECT_TYPES.vocabulary,
       components: [WATER_KANJI],
@@ -168,6 +194,7 @@ describe("a word's groups", () => {
 
   it("does not repeat the kanji it already listed", () => {
     const groups = relatedGroupsFor({
+      stream: null,
       subjectId: 2551,
       subjectType: SUBJECT_TYPES.vocabulary,
       components: [WATER_KANJI],
@@ -180,6 +207,7 @@ describe("a word's groups", () => {
   /* Look-alikes are a kanji relation; a word has none and must not claim any. */
   it("offers no look-alikes", () => {
     const groups = relatedGroupsFor({
+      stream: null,
       subjectId: 2551,
       subjectType: SUBJECT_TYPES.vocabulary,
       components: [],
@@ -203,6 +231,7 @@ describe("how much of a group is drawn", () => {
   /* 一 appears in hundreds of words; all of them is a page nobody scrolls. */
   it("stops at a length that still reads as a list", () => {
     const groups = relatedGroupsFor({
+      stream: null,
       subjectId: 1,
       subjectType: SUBJECT_TYPES.kanji,
       components: [],
@@ -214,6 +243,7 @@ describe("how much of a group is drawn", () => {
   /* Easiest first, because a list of words is read as a place to start. */
   it("keeps the easiest, not the first the database happened to return", () => {
     const groups = relatedGroupsFor({
+      stream: null,
       subjectId: 1,
       subjectType: SUBJECT_TYPES.kanji,
       components: [],
@@ -226,6 +256,7 @@ describe("how much of a group is drawn", () => {
 
   it("lists a subject once however many ways it arrived", () => {
     const groups = relatedGroupsFor({
+      stream: null,
       subjectId: 1,
       subjectType: SUBJECT_TYPES.kanji,
       components: [],
@@ -237,6 +268,7 @@ describe("how much of a group is drawn", () => {
   it("drops a group with nothing in it rather than heading an empty shelf", () => {
     expect(
       relatedGroupsFor({
+        stream: null,
         subjectId: 1,
         subjectType: SUBJECT_TYPES.kanji,
         components: [],

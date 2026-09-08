@@ -174,7 +174,7 @@ export default async function KanjiPage({ params }: Props) {
     dictionary,
     dictionaryAttribution: getKanjiDictionaryAttribution(),
     parts: await radicalPartsOf(character),
-    confusables: confusableViewsFor(character),
+    confusables: confusableViewsFor(character, viewerMenuInfo?.ladderStream ?? null),
     alone: section !== null,
     /*
      * Out to the other characters written in this many strokes.

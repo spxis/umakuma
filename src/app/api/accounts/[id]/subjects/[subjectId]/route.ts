@@ -4,7 +4,7 @@ import { z } from "zod";
 import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
-import { confusableWarnings } from "@/lib/kanjiConfusableWarning";
+import { studyConfusableWarnings } from "@/lib/kanjiConfusableWarning";
 import { prisma } from "@/lib/prisma";
 import { getCatalogSubjectDetails } from "@/lib/subjectCatalogDetails";
 
@@ -50,11 +50,11 @@ export async function GET(request: Request, context: RouteContext) {
          */
         const account = await prisma.account.findUnique({
           where: { id },
-          select: { wkLevel: true },
+          select: { wkLevel: true, ladderStream: true },
         });
         const confusables =
           subject.subjectType === SUBJECT_TYPES.kanji
-            ? confusableWarnings(subject.characters ?? "", account?.wkLevel ?? null)
+            ? studyConfusableWarnings(subject.characters ?? "", { wkLevel: account?.wkLevel ?? null, ladderStream: account?.ladderStream ?? null })
             : [];
 
         return NextResponse.json(

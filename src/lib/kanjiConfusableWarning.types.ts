@@ -25,7 +25,12 @@ export type ConfusableWarning = {
   reading: string | null;
   /** WaniKani's level for the twin, which is the ladder a study surface is on. */
   wkLevel: number | null;
-  /** Ours, for a surface that teaches from the UmaKuma ladder. */
+  /**
+   * Ours, on the member's ladder - one filled, the other null. What the chip
+   * prints beside WaniKani's number; the standing is judged on the surface's
+   * own system, which is WaniKani's on every surface that asks today.
+   */
   unLevel: number | null;
+  ugLevel: number | null;
   standing: ConfusableStanding;
 };

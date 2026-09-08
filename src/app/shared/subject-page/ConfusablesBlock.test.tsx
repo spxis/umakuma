@@ -20,7 +20,7 @@ const EARTH: ConfusableView = {
   meaning: "gentleman",
   reading: "シ",
   href: "/kanji/%E5%A3%AB",
-  unLevel: 52,
+  unLevel: 52, ugLevel: null, listing: null,
   sources: [CONFUSABLE_SOURCES.strokeEditDistance, CONFUSABLE_SOURCES.wanikani],
 };
 

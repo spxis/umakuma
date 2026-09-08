@@ -2,10 +2,9 @@ import { WORD_EXAMPLE_LIMIT } from "@/app/shared/subject-page/SubjectPage.consta
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import { subjectHref } from "@/lib/globalSearch";
 import { getKanjiDictionaryEntry, primaryKanjiReading } from "@/lib/kanjiDictionary";
-import { gradePlacement } from "@/lib/gradeLadder";
-import { kanjiPlacement } from "@/lib/kanjiLadder";
-import { LADDER_STREAMS, type LadderStreamValue } from "@/lib/ladder/ladderStreams";
+import type { LadderStreamValue } from "@/lib/ladder/ladderStreams";
 import { kanjiListingNote } from "@/lib/kanjiListingServer";
+import { ourLevels } from "@/lib/ladder/ourLevels";
 import type { KanjiListingNote } from "@/lib/kanjiListing";
 import { parseJlptWordExamples } from "@/lib/jlptWordExamples";
 import type { KanjiDictionaryEntry } from "@/lib/kanjiDictionary.types";
@@ -204,10 +203,12 @@ function stripHtml(value: string): string {
  */
 export function relatedGroupsForSubject(
   detail: CatalogSubjectDetail,
-  neighbours: CatalogRelatedReference[] = [],
+  neighbours: CatalogRelatedReference[],
+  stream: LadderStreamValue | null,
 ): RelatedGroup[] {
   const components = detail.subjectType === SUBJECT_TYPES.vocabulary ? detail.componentKanji : detail.radicals;
   return relatedGroupsFor({
+    stream,
     subjectId: detail.subjectId,
     subjectType: detail.subjectType,
     components: components.map(toRelatedRow),
@@ -243,27 +244,9 @@ export function neighbourReferences(kanji: CatalogSubjectDetail[]): CatalogRelat
   return gathered;
 }
 
-/**
- * Where this character sits on the reader's own ladder, and nowhere else.
- *
- * Both placements are static maps and either is a lookup, so the cost of
- * answering is not the reason only one is filled. A chip carrying UN9 and UG6
- * at once is three ladders in a space that fits one, and the member is being
- * taught against exactly one of them.
- */
-function ourLevels(
-  character: string,
-  stream: LadderStreamValue | null,
-): { unLevel: number | null; ugLevel: number | null } {
-  if (stream === LADDER_STREAMS.ug) {
-    return { unLevel: null, ugLevel: gradePlacement(character)?.level ?? null };
-  }
-  return { unLevel: kanjiPlacement(character)?.level ?? null, ugLevel: null };
-}
-
 export function assembleKanjiPage(sources: KanjiPageSources): KanjiPageModel {
   const { character, jlpt, wanikani } = sources;
-  const related = wanikani ? relatedGroupsForSubject(wanikani) : [];
+  const related = wanikani ? relatedGroupsForSubject(wanikani, [], sources.stream) : [];
 
   const meaningMnemonic = wanikani ? stripHtml(wanikani.meaningExplanation) : "";
   const readingMnemonic = wanikani ? stripHtml(wanikani.readingExplanation) : "";

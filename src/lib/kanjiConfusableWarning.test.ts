@@ -5,7 +5,9 @@ import {
   CONFUSABLE_STANDINGS,
   confusableWarnings,
 } from "./kanjiConfusableWarning";
+import { gradePlacement } from "./gradeLadder";
 import { kanjiPlacement } from "./kanjiLadder";
+import { LADDER_STREAMS } from "./ladder/ladderStreams";
 import { LEVEL_SYSTEMS } from "./levelBadge";
 
 /*
@@ -18,6 +20,18 @@ import { LEVEL_SYSTEMS } from "./levelBadge";
  */
 const EARTH_WK = kanjiPlacement("土")?.waniKaniLevel ?? 0;
 const GENTLEMAN_WK = kanjiPlacement("士")?.waniKaniLevel ?? 0;
+
+describe("the level beside WaniKani's is the member's own ladder", () => {
+  it("prints UN for a UN member and UG for a UG member, never both", () => {
+    const onUn = confusableWarnings("土", GENTLEMAN_WK, LEVEL_SYSTEMS.wanikani, LADDER_STREAMS.un).find((w) => w.kanji === "士");
+    const onUg = confusableWarnings("土", GENTLEMAN_WK, LEVEL_SYSTEMS.wanikani, LADDER_STREAMS.ug).find((w) => w.kanji === "士");
+    expect(onUn).toMatchObject({ unLevel: kanjiPlacement("士")?.level, ugLevel: null });
+    expect(onUg).toMatchObject({ unLevel: null, ugLevel: gradePlacement("士")?.level });
+    expect(onUg?.ugLevel).not.toBeNull();
+    /* The standing is WaniKani's judgement either way; the ladder changes the chip, not the warning. */
+    expect(onUg?.standing).toBe(onUn?.standing);
+  });
+});
 
 describe("who gets warned about what", () => {
   it("names a twin the member has already been taught", () => {

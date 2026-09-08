@@ -11,7 +11,10 @@ import { kanjiPageHref } from "@/app/shared/subject-page/subjectSectionAddress";
 
 import { confusablesFor, type ConfusableSource } from "./kanjiConfusables";
 import { getKanjiDictionaryEntry, primaryKanjiReading } from "./kanjiDictionary";
-import { kanjiPlacement } from "./kanjiLadder";
+import type { KanjiListingNote } from "./kanjiListing";
+import { kanjiListingNote } from "./kanjiListingServer";
+import { ourLevels } from "./ladder/ourLevels";
+import type { LadderStreamValue } from "./ladder/ladderStreams";
 
 export type ConfusableView = {
   kanji: string;
@@ -19,8 +22,14 @@ export type ConfusableView = {
   meaning: string | null;
   reading: string | null;
   href: string;
-  /** Where the ladder teaches it, which is the useful half of the warning. */
+  /**
+   * Where the reader's ladder teaches it, which is the useful half of the
+   * warning. One of the two is filled, the other null - see `ourLevels`.
+   */
   unLevel: number | null;
+  ugLevel: number | null;
+  /** Why it carries no level, for a twin no list teaches. Null otherwise. */
+  listing: KanjiListingNote | null;
   sources: ConfusableSource[];
 };
 
@@ -30,7 +39,7 @@ export type ConfusableView = {
  * On-reading first, because a pair is nearly always met as a compound: 士 and
  * 土 are シ and ド long before anybody needs つち.
  */
-export function confusableViewsFor(character: string): ConfusableView[] {
+export function confusableViewsFor(character: string, stream: LadderStreamValue | null): ConfusableView[] {
   return confusablesFor(character).map((neighbour) => {
     const entry = getKanjiDictionaryEntry(neighbour.kanji);
 
@@ -39,7 +48,8 @@ export function confusableViewsFor(character: string): ConfusableView[] {
       meaning: entry?.primaryMeaning ?? null,
       reading: primaryKanjiReading(entry),
       href: kanjiPageHref(neighbour.kanji),
-      unLevel: kanjiPlacement(neighbour.kanji)?.level ?? null,
+      ...ourLevels(neighbour.kanji, stream),
+      listing: kanjiListingNote(neighbour.kanji),
       sources: neighbour.sources,
     };
   });

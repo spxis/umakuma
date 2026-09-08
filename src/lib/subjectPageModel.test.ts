@@ -280,7 +280,7 @@ describe("a subject's relations on the other two pages", () => {
         subjectType: SUBJECT_TYPES.vocabulary,
         characters: "水泡",
         componentKanji: [reference({ subjectId: 479 }), reference({ subjectId: 900, characters: "泡", slug: "泡", label: "泡", meaning: "Bubbles" })],
-      }),
+      }), [], null,
     );
     expect(groups.map((group) => group.id)).toEqual([RELATED_GROUPS.builtFrom]);
     expect(groups[0]!.items.map((item) => item.href)).toEqual([
@@ -296,7 +296,7 @@ describe("a subject's relations on the other two pages", () => {
         subjectType: SUBJECT_TYPES.radical,
         characters: "leaf",
         usedInVocabulary: [reference({ subjectId: 479 })],
-      }),
+      }), [], null,
     );
     expect(groups.map((group) => group.id)).toEqual([RELATED_GROUPS.usedIn]);
     expect(groups[0]!.items[0]!.href).toBe(`/kanji/${encodeURIComponent("水")}`);
@@ -326,7 +326,7 @@ describe("a word's neighbourhood", () => {
   it("gives a word page the other words built from its kanji, easiest first", () => {
     const groups = relatedGroupsForSubject(
       wanikani({ subjectId: 2551, subjectType: SUBJECT_TYPES.vocabulary, characters: "水泡", componentKanji: [water, bubbles] }),
-      [wednesday, foam, swimming, soapBubble],
+      [wednesday, foam, swimming, soapBubble], null,
     );
     expect(groups.map((group) => group.id)).toEqual([RELATED_GROUPS.builtFrom, RELATED_GROUPS.sharesKanji]);
     const shares = groups[1]!;
@@ -338,7 +338,7 @@ describe("a word's neighbourhood", () => {
   it("shows nothing for a word with no kanji, rather than an empty heading", () => {
     const groups = relatedGroupsForSubject(
       wanikani({ subjectId: 3000, subjectType: SUBJECT_TYPES.vocabulary, characters: "ありがとう", componentKanji: [] }),
-      [],
+      [], null,
     );
     expect(groups).toEqual([]);
   });

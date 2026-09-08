@@ -1,4 +1,5 @@
-import { kanjiPlacement } from "@/lib/kanjiLadder";
+import { ourLevels } from "@/lib/ladder/ourLevels";
+import type { LadderStreamValue } from "@/lib/ladder/ladderStreams";
 
 import { SUBJECT_TYPES, isSubjectType, type SubjectType } from "./domainConstants";
 import { subjectHref } from "./globalSearch";
@@ -40,8 +41,12 @@ export type RelatedSubject = {
   meaning: string | null;
   reading: string | null;
   level: number;
-  /** Ours, for a kanji the ladder carries; a word's UK level lives in the database. */
+  /**
+   * Ours, for a kanji, on the reader's ladder - one filled, the other null,
+   * see `ourLevels`. A word's UK level lives in the database.
+   */
   unLevel: number | null;
+  ugLevel: number | null;
   href: string;
 };
 
@@ -70,7 +75,7 @@ export const RELATED_LIMIT = 30;
  * characters has no address, and a chip that goes nowhere is worse than an
  * absent one.
  */
-export function toRelatedSubject(row: RelatedRow): RelatedSubject | null {
+export function toRelatedSubject(row: RelatedRow, stream: LadderStreamValue | null): RelatedSubject | null {
   if (!isSubjectType(row.subjectType)) return null;
 
   const href = subjectHref({
@@ -98,7 +103,7 @@ export function toRelatedSubject(row: RelatedRow): RelatedSubject | null {
     meaning: row.meaning?.trim() || null,
     reading: row.reading?.trim() || null,
     level: row.level,
-    unLevel: row.subjectType === SUBJECT_TYPES.kanji ? (kanjiPlacement(label)?.level ?? null) : null,
+    ...(row.subjectType === SUBJECT_TYPES.kanji ? ourLevels(label, stream) : { unLevel: null, ugLevel: null }),
     href,
   };
 }
@@ -109,13 +114,13 @@ function byLevelThenId(left: RelatedSubject, right: RelatedSubject): number {
   return left.subjectId - right.subjectId;
 }
 
-function collect(rows: RelatedRow[], exclude: Set<number>): RelatedSubject[] {
+function collect(rows: RelatedRow[], exclude: Set<number>, stream: LadderStreamValue | null): RelatedSubject[] {
   const kept: RelatedSubject[] = [];
   const seen = new Set<number>();
 
   for (const row of rows) {
     if (exclude.has(row.subjectId) || seen.has(row.subjectId)) continue;
-    const subject = toRelatedSubject(row);
+    const subject = toRelatedSubject(row, stream);
     if (!subject) continue;
     seen.add(subject.subjectId);
     kept.push(subject);
@@ -144,9 +149,12 @@ export function relatedGroupsFor({
   components,
   amalgamations,
   neighbours = [],
+  stream,
 }: {
   subjectId: number;
   subjectType: string;
+  /** The reader's ladder, for the level on each kanji chip. */
+  stream: LadderStreamValue | null;
   /** What it is built from: radicals for a kanji, kanji for a word. */
   components: RelatedRow[];
   /** What is built from it: kanji for a radical, words for a kanji. */
@@ -157,16 +165,16 @@ export function relatedGroupsFor({
   const self = new Set([subjectId]);
   const groups: RelatedGroup[] = [];
 
-  const builtFrom = collect(components, self);
+  const builtFrom = collect(components, self, stream);
   if (builtFrom.length > 0) groups.push({ id: RELATED_GROUPS.builtFrom, items: builtFrom });
 
-  const usedIn = collect(amalgamations, self);
+  const usedIn = collect(amalgamations, self, stream);
   if (usedIn.length > 0) groups.push({ id: RELATED_GROUPS.usedIn, items: usedIn });
 
   if (subjectType === SUBJECT_TYPES.vocabulary) {
     /* The word itself and the kanji it is made of are already above. */
     const exclude = new Set([subjectId, ...components.map((row) => row.subjectId)]);
-    const shares = collect(neighbours, exclude);
+    const shares = collect(neighbours, exclude, stream);
     if (shares.length > 0) groups.push({ id: RELATED_GROUPS.sharesKanji, items: shares });
   }
 

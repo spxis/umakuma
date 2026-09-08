@@ -87,8 +87,8 @@ describe("a group of related subjects", () => {
       group={{
         id: RELATED_GROUPS.builtFrom,
         items: [
-          { subjectId: 8769, subjectType: SUBJECT_TYPES.radical, label: "leaf", meaning: "Leaf", reading: null, level: 23, unLevel: null, href: "/radicals/leaf" },
-          { subjectId: 479, subjectType: SUBJECT_TYPES.kanji, label: "水", meaning: "Water", reading: "すい", level: 2, unLevel: null, href: "/kanji/%E6%B0%B4" },
+          { subjectId: 8769, subjectType: SUBJECT_TYPES.radical, label: "leaf", meaning: "Leaf", reading: null, level: 23, unLevel: null, ugLevel: null, href: "/radicals/leaf" },
+          { subjectId: 479, subjectType: SUBJECT_TYPES.kanji, label: "水", meaning: "Water", reading: "すい", level: 2, unLevel: null, ugLevel: null, href: "/kanji/%E6%B0%B4" },
         ],
       }}
     />,

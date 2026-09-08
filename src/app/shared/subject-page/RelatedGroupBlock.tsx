@@ -46,6 +46,7 @@ export default function RelatedGroupBlock({ group, showToggle = false }: { group
               href={item.href}
               level={item.level}
               unLevel={item.unLevel}
+              ugLevel={item.ugLevel}
             />
           </li>
         ))}

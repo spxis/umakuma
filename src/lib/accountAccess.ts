@@ -1,3 +1,4 @@
+import type { LadderStreamValue } from "@/lib/ladder/ladderStreams";
 import "server-only";
 
 import { getServerSession } from "next-auth";
@@ -32,6 +33,7 @@ const CONNECTION_SELECT = {
   tokenIv: true,
   tokenTag: true,
   wkLevel: true,
+  ladderStream: true,
 } as const;
 
 export type StudyAccountRow = {
@@ -39,6 +41,8 @@ export type StudyAccountRow = {
   tokenIv: string | null;
   tokenTag: string | null;
   wkLevel: number | null;
+  /** Which of our ladders they climb, for the level a study chip prints beside WaniKani's. */
+  ladderStream: LadderStreamValue | null;
 };
 
 type Requester =
@@ -148,6 +152,7 @@ export async function loadStudyAccount(
           tokenIv: account.tokenIv,
           tokenTag: account.tokenTag,
           wkLevel: account.wkLevel,
+          ladderStream: account.ladderStream,
         }
       : null,
   };

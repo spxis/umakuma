@@ -60,6 +60,8 @@ export default function ConfusablesBlock({
               meaning={item.meaning}
               href={item.href}
               unLevel={item.unLevel}
+              ugLevel={item.ugLevel}
+              listing={item.listing}
             />
           </li>
         ))}

@@ -25,6 +25,8 @@ import {
 } from "./kanjiConfusableWarning.types";
 import { getKanjiDictionaryEntry, primaryKanjiReading } from "./kanjiDictionary";
 import { kanjiPlacement } from "./kanjiLadder";
+import { ourLevels } from "./ladder/ourLevels";
+import type { LadderStreamValue } from "./ladder/ladderStreams";
 import { LEVEL_SYSTEMS, type LevelSystem } from "./levelBadge";
 
 /**
@@ -60,6 +62,8 @@ export function confusableWarnings(
   character: string,
   viewerLevel: number | null,
   system: LevelSystem = LEVEL_SYSTEMS.wanikani,
+  /** The member's own ladder, for the level printed beside WaniKani's. */
+  stream: LadderStreamValue | null = null,
 ): ConfusableWarning[] {
   if (typeof viewerLevel !== "number") return [];
 
@@ -67,8 +71,11 @@ export function confusableWarnings(
   for (const neighbour of confusablesFor(character)) {
     const placement = kanjiPlacement(neighbour.kanji);
     const wkLevel = placement?.waniKaniLevel ?? null;
-    const unLevel = placement?.level ?? null;
-    const standing = standingOf(system === LEVEL_SYSTEMS.wanikani ? wkLevel : unLevel, viewerLevel);
+    const ours = ourLevels(neighbour.kanji, stream);
+    const standing = standingOf(
+      system === LEVEL_SYSTEMS.wanikani ? wkLevel : (ours.unLevel ?? ours.ugLevel),
+      viewerLevel,
+    );
     if (!standing) continue;
 
     const entry = getKanjiDictionaryEntry(neighbour.kanji);
@@ -77,7 +84,7 @@ export function confusableWarnings(
       meaning: entry?.primaryMeaning ?? null,
       reading: primaryKanjiReading(entry),
       wkLevel,
-      unLevel,
+      ...ours,
       standing,
     });
   }
@@ -85,6 +92,19 @@ export function confusableWarnings(
   return warnings.sort((one, other) =>
     one.standing === other.standing ? 0 : one.standing === CONFUSABLE_STANDINGS.known ? -1 : 1,
   );
+}
+
+/**
+ * The warning as a study route asks it: judged on WaniKani's ladder, which
+ * is the one every review surface that shows it teaches from, with the
+ * member's own level printed beside. One call for the two routes, so neither
+ * can pass the standing's system and forget the chip's ladder.
+ */
+export function studyConfusableWarnings(
+  character: string,
+  account: { wkLevel: number | null; ladderStream: LadderStreamValue | null },
+): ConfusableWarning[] {
+  return confusableWarnings(character, account.wkLevel, LEVEL_SYSTEMS.wanikani, account.ladderStream);
 }
 
 export { CONFUSABLE_STANDINGS };

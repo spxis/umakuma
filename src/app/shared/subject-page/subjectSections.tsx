@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 
+import type { LadderStreamValue } from "@/lib/ladder/ladderStreams";
+
 import ExampleSentences from "@/app/shared/ExampleSentences";
 import { KANJI_PAGE_COPY } from "@/app/kanji/[character]/KanjiPage.constants";
 import { stripHtml } from "@/app/users/[nickname]/level-explorer/lib/levelExplorerDisplayReadings";
@@ -37,6 +39,8 @@ export type SubjectSectionView = {
   neighbours: CatalogRelatedReference[];
   /** For a word: Tatoeba's sentences. A radical is never in one. */
   sentences: ExampleSentence[];
+  /** The reader's ladder, for the level on each kanji chip under Related. */
+  stream: LadderStreamValue | null;
   /**
    * Where each part of this subject lives, for a title that links to its own
    * page. Absent on a section page, where the title would link to itself.
@@ -91,14 +95,14 @@ export const SUBJECT_SECTION_BLOCKS: readonly SubjectSectionBlock[] = [
   },
   {
     id: SUBJECT_SECTIONS.related,
-    has: (view) => relatedGroupsForSubject(view.subject, view.neighbours).length > 0,
+    has: (view) => relatedGroupsForSubject(view.subject, view.neighbours, view.stream).length > 0,
     render: (view) => (
       <SubjectBlock
         heading={SUBJECT_PAGE_COPY.sectionTitles.related}
         headingHref={view.sectionHref?.(SUBJECT_SECTIONS.related)}
         credit={{ source: SOURCE_KEYS.wanikani, label: SOURCE_CREDIT_COPY.relations }}
       >
-        {relatedGroupsForSubject(view.subject, view.neighbours).map((group, index) => (
+        {relatedGroupsForSubject(view.subject, view.neighbours, view.stream).map((group, index) => (
           <RelatedGroupBlock key={group.id} group={group} showToggle={index === 0} />
         ))}
       </SubjectBlock>

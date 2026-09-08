@@ -101,7 +101,7 @@ export default async function RadicalPage({ params }: Props) {
 
   /* A radical is never in an example sentence, and has no neighbouring words. */
   const view = {
-    subject, label, neighbours: [], sentences: [],
+    subject, label, neighbours: [], sentences: [], stream: viewerMenuInfo?.ladderStream ?? null,
     /*
      * Only when the whole subject is on the page. On a section page the title
      * would link to the page it is already on.

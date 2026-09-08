@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { loadStudyAccount } from "@/lib/accountAccess";
-import { confusableWarnings } from "@/lib/kanjiConfusableWarning";
+import { studyConfusableWarnings } from "@/lib/kanjiConfusableWarning";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import {
   WANIKANI_REQUIRED_MESSAGE,
@@ -374,7 +374,7 @@ export async function GET(request: Request, context: RouteContext) {
        */
       const confusables =
         subjectType === SUBJECT_TYPES.kanji
-          ? confusableWarnings(subjectData?.characters ?? "", account.wkLevel ?? null)
+          ? studyConfusableWarnings(subjectData?.characters ?? "", account)
           : [];
 
       const componentKanji =
