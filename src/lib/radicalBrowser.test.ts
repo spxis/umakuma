@@ -7,6 +7,7 @@ import {
   radicalsShown,
   readParts,
   togglePart,
+  strokeBarState,
 } from "./radicalBrowser";
 import type { RadicalGroup } from "./radicalSearch";
 
@@ -66,5 +67,24 @@ describe("picking a radical", () => {
   it("adds one that is not picked and removes one that is", () => {
     expect(togglePart(["水"], "田")).toEqual(["水", "田"]);
     expect(togglePart(["水", "田"], "水")).toEqual(["田"]);
+  });
+});
+
+describe("the stroke bar, once a part is picked", () => {
+  it("lights the member's pick and offers Any", () => {
+    const bar = strokeBarState([{ strokes: 7 }, { strokes: 9 }], 9);
+    expect(bar.anyOn).toBe(false);
+    expect(bar.isOn(9)).toBe(true);
+    expect(bar.isOn(7)).toBe(false);
+  });
+
+  it("lights Any when nothing is picked and there is a choice", () => {
+    expect(strokeBarState([{ strokes: 7 }, { strokes: 9 }], null).anyOn).toBe(true);
+  });
+
+  it("draws a lone remaining count lit, with Any off, rather than hiding the bar", () => {
+    const bar = strokeBarState([{ strokes: 9 }], null);
+    expect(bar.anyOn).toBe(false);
+    expect(bar.isOn(9)).toBe(true);
   });
 });

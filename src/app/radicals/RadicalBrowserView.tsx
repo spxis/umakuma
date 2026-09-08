@@ -17,7 +17,7 @@ import { usePersistedEnum } from "@/lib/usePersistedEnum";
 import type { FilerHit } from "@/lib/subjectFiler";
 import { LIST_ITEM_KINDS, SUBJECT_TYPES, srsBucketFromStage } from "@/lib/domainConstants";
 import type { KanjiSource } from "@/lib/kanjiSourceFilters";
-import { radicalsHref } from "@/lib/radicalBrowser";
+import { radicalsHref, strokeBarState } from "@/lib/radicalBrowser";
 import type { RadicalGroup } from "@/lib/radicalSearch";
 import type { RadicalMatch } from "@/lib/radicalSearchServer";
 
@@ -101,6 +101,7 @@ export default function RadicalBrowserView({
   const rows = useMemo(() => matches.map(toRow), [matches]);
   const filing = Boolean(accountId) && filerOpen;
   const filer = useSubjectFiler(accountId, rows, filing);
+  const bar = strokeBarState(strokeChoices, strokes);
   /* Everything pickable, which on this page means "can still narrow" - plus
      every radical when nothing is picked yet, since nothing is a dead end
      until something has been chosen. */
@@ -156,9 +157,11 @@ export default function RadicalBrowserView({
           * Only once something is picked: with no parts there are no answers,
           * so a stroke count would have nothing to narrow. Every count here
           * was tallied from the answers, so none of them leads to an empty
-          * page, and each says how many it would leave.
+          * page, and each says how many it would leave. The bar stays once
+          * it is here - a lone count is drawn lit rather than the row going,
+          * so nothing under the parts moves as they are picked.
           */}
-        {chosen.length > 0 && strokeChoices.length > 1 ? (
+        {chosen.length > 0 ? (
           <div className="mt-3 border-t border-line/60 pt-3">
             <div className="flex flex-wrap items-center gap-2">
               <h3 className="text-[11px] font-black uppercase tracking-[0.12em] text-foreground/60">
@@ -168,14 +171,14 @@ export default function RadicalBrowserView({
             </div>
             <ul className="mt-2 flex flex-wrap gap-1.5">
               <li>
-                <FilterChipLink href={radicalsHref({ parts: chosen, sources })} on={strokes === null} label={RADICAL_BROWSER_COPY.strokesAll} />
+                <FilterChipLink href={radicalsHref({ parts: chosen, sources })} on={bar.anyOn} label={RADICAL_BROWSER_COPY.strokesAll} />
               </li>
               {strokeChoices.map((choice) => {
-                const on = choice.strokes === strokes;
+                const on = bar.isOn(choice.strokes);
                 return (
                   <li key={choice.strokes}>
                     <FilterChipLink
-                      href={radicalsHref({ parts: chosen, strokes: on ? null : choice.strokes, sources })}
+                      href={radicalsHref({ parts: chosen, strokes: on && strokes !== null ? null : choice.strokes, sources })}
                       on={on}
                       title={RADICAL_BROWSER_COPY.strokeChip(choice.strokes)}
                       label={choice.strokes}

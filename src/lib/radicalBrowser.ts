@@ -87,3 +87,23 @@ export function readParts(value: string | string[] | undefined): string[] {
 export function togglePart(parts: readonly string[], radical: string): string[] {
   return parts.includes(radical) ? parts.filter((part) => part !== radical) : [...parts, radical];
 }
+
+/**
+ * Which chip on the stroke bar is lit.
+ *
+ * The bar never leaves once a part is picked. It used to go when the parts
+ * left a single count, so it appeared and vanished as a member clicked and
+ * the kanji moved under them. John: "show Any and the stroke value that is
+ * remaining and have that pre-selected." A lone count is the answer, so it is
+ * drawn lit and Any is not; with more than one, the member's pick or Any.
+ */
+export function strokeBarState(
+  choices: readonly { strokes: number }[],
+  picked: number | null,
+): { anyOn: boolean; isOn: (strokes: number) => boolean } {
+  const only = choices.length === 1 ? choices[0]!.strokes : null;
+  return {
+    anyOn: only === null && picked === null,
+    isOn: (strokes) => strokes === only || strokes === picked,
+  };
+}
