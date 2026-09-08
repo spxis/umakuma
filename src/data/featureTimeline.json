@@ -7145,12 +7145,25 @@
     "id": "kanji-page-confusables-and-related-groups-show-un-levels-to-",
     "name": "Kanji page confusables and related groups show UN levels to UG members",
     "area": "jlpt",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-07",
+    "summary": "Every kanji chip on a subject page reads its level from the reader's own ladder.",
+    "dateIsEstimate": false,
+    "release": 571,
+    "version": "1.74.0",
+    "releasedAt": "2026-09-08T01:23:01Z"
+  },
+  {
+    "id": "coming-up-list-labels-un-levels-as-ug-for-ug-members",
+    "name": "Coming up list labels UN levels as UG for UG members",
+    "area": "study",
     "kind": "bug",
     "status": "shipped",
     "date": "2026-09-07",
-    "version": "1.74.0",
-    "release": 571,
-    "releasedAt": "2026-09-08T01:23:01Z",
-    "summary": "Every kanji chip on a subject page reads its level from the reader's own ladder."
+    "version": "1.75.0",
+    "release": 572,
+    "releasedAt": "2026-09-08T01:27:23Z",
+    "summary": "Coming up shows each review on the member's own ladder, with its meaning."
   }
 ]
