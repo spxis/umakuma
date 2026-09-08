@@ -5,7 +5,8 @@ import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { QUEUE_TYPES, SUBJECT_TYPES } from "@/lib/domainConstants";
 import { summariseStudyQueue } from "@/lib/studyQueueSummary";
-import { mapUkQueueItem, withWanikaniRadicalNames } from "@/lib/uk/ukExplorerFeed";
+import { fetchStudyTagRows } from "@/lib/studySubjectTags";
+import { mapUkQueueItem, withStudyTags, withWanikaniRadicalNames } from "@/lib/uk/ukExplorerFeed";
 import { loadWanikaniRadicalNames } from "@/lib/uk/ukRadicalNamesServer";
 import { ukLessons, ukReviews } from "@/lib/uk/ukStudyQueue";
 
@@ -57,13 +58,16 @@ export async function GET(request: Request, context: RouteContext) {
         /* Only the page being handed over, and only its radicals: a connected
            member reading 248 reviews needs their names for the fourteen on
            screen, not for all of them. */
-        const shown = withWanikaniRadicalNames(
-          pagedItems,
-          await loadWanikaniRadicalNames(
+        const [radicalNames, tagRows] = await Promise.all([
+          loadWanikaniRadicalNames(
             accountId,
-            pagedItems.filter((item) => item.subjectType === SUBJECT_TYPES.radical).map((item) => item.subjectId),
+            pagedItems.filter((item) => item.subjectType === SUBJECT_TYPES.radical).map((item) => item.assignmentId),
           ),
-        );
+          fetchStudyTagRows(accountId),
+        ]);
+        /* The marks ride on the shared identity, so a trouble mark made on
+           WaniKani's 身 is on ours as well. */
+        const shown = withStudyTags(withWanikaniRadicalNames(pagedItems, radicalNames), tagRows);
 
         return NextResponse.json(
           {

@@ -4,8 +4,8 @@ import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { QUEUE_TYPES } from "@/lib/domainConstants";
 import { prisma } from "@/lib/prisma";
-import { getCatalogSubjectDetails } from "@/lib/subjectCatalogDetails";
 import { fetchStudyTagRows } from "@/lib/studySubjectTags";
+import { taggedSubjectDetails } from "@/lib/uk/ukTaggedSubjects";
 import { parseAssignmentCacheRows, srsLabel } from "@/lib/wanikani/helpers";
 
 type RouteContext = {
@@ -73,7 +73,8 @@ export async function GET(request: Request, context: RouteContext) {
         }
 
         const [details, assignments] = await Promise.all([
-          getCatalogSubjectDetails(tagRows.map((row) => row.subjectId)),
+          /* Both ladders: a mark on a subject only ours teaches resolves too. */
+          taggedSubjectDetails(tagRows.map((row) => row.subjectId)),
           loadAssignmentFacts(accountId),
         ]);
 

@@ -8,6 +8,7 @@ import { getCatalogSubjectDetails, type CatalogSubjectDetail } from "@/lib/subje
 import type { StudyHistoryRow } from "@/lib/studyHistoryView";
 
 import { ukSubjectTypeFor } from "./ukExplorerFeed";
+import { ukSubjectIdentity } from "./ukSubjectIdentity";
 
 /**
  * A member's answers on our own ladder, as History draws them.
@@ -107,9 +108,11 @@ export function toUkHistoryRow(
     nickname: member.nickname,
     wkUsername: member.wkUsername,
     /* No assignment row on our ladder; the state is keyed by subject, and the
-       explorer threads the subject id through as the assignment id too. */
+       explorer threads the ladder's own id through as the assignment id. The
+       subject id is the identity every feed shares, so the modal's marks and
+       its detail fetch land on the same subject they would from WaniKani. */
     assignmentId: row.subjectId,
-    subjectId: row.subjectId,
+    subjectId: ukSubjectIdentity({ id: row.subjectId, wkSubjectId: subject.wkSubjectId }),
     subjectType,
     result: row.result,
     submittedAt: row.submittedAt.toISOString(),
@@ -121,7 +124,7 @@ export function toUkHistoryRow(
     srsStage: stage,
     srsBucket: status,
     subjectData: {
-      subjectId: row.subjectId,
+      subjectId: ukSubjectIdentity({ id: row.subjectId, wkSubjectId: subject.wkSubjectId }),
       subjectType,
       status,
       characters,

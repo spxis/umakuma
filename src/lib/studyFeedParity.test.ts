@@ -72,6 +72,7 @@ function umakumaFields(): Set<string> {
   /* The route dresses the page after mapping; those keys count as delivered. */
   const route = readFileSync(UMAKUMA_ROUTE, "utf8");
   if (route.includes("withWanikaniRadicalNames(")) keys.add("wanikaniName");
+  if (route.includes("withStudyTags(")) keys.add("studyTags");
   return keys;
 }
 
@@ -92,9 +93,7 @@ function customFields(): Set<string> {
  */
 const KNOWN_GAPS: Record<"umakuma" | "custom", Record<string, string>> = {
   umakuma: {
-    studyTags:
-      "OPEN cmtryknak - trouble and favourite marks; StudySubjectTag is keyed by WaniKani subject id and a UK subject id overlaps that range, so the join waits on the item carrying its WaniKani identity",
-    isInjectedTrouble: "OPEN cmtryknak - the WaniKani queue injects trouble items into a sitting; ours does not, and cannot until tags are keyed right",
+    isInjectedTrouble: "OPEN cmtryknak - the WaniKani queue injects trouble items into a sitting; ours does not",
   },
   custom: {
     confusables: "OPEN cmtryknak - a library kanji has look-alikes too",

@@ -2,7 +2,7 @@ import "server-only";
 
 import { STUDY_TAG_VALUES, type StudyTag } from "@/lib/domainConstants";
 import { prisma } from "@/lib/prisma";
-import { getCatalogSubjectDetails } from "@/lib/subjectCatalogDetails";
+import { taggedSubjectDetails } from "@/lib/uk/ukTaggedSubjects";
 
 export type StudyTagRow = {
   subjectId: number;
@@ -79,7 +79,7 @@ const TAGGED_PREVIEW_LIMIT = 24;
 
 export async function fetchTaggedListSummaries(accountId: string): Promise<TaggedListSummary[]> {
   const rows = await fetchStudyTagRows(accountId);
-  const details = await getCatalogSubjectDetails(rows.map((row) => row.subjectId));
+  const details = await taggedSubjectDetails(rows.map((row) => row.subjectId));
 
   return STUDY_TAG_VALUES.map((tag) => {
     const tagged = rows.filter((row) => row[tag]);

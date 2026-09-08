@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { LADDER_STREAMS } from "@/lib/ladder/ladderStreams";
 
 import { toUkHistoryRow, ukHistoryLevels, type UkHistoryAttempt } from "./ukStudyHistoryRows";
+import { UK_SUBJECT_ID_BASE } from "./ukSubjectIdentity";
 
 const subject = {
   kind: "kanji",
@@ -73,7 +74,7 @@ describe("toUkHistoryRow", () => {
       id: "attempt-1",
       nickname: "John",
       assignmentId: 8252,
-      subjectId: 8252,
+      subjectId: UK_SUBJECT_ID_BASE + 8252,
       subjectType: "kanji",
       result: "wrong",
       submittedAt: "2026-09-07T16:28:06.788Z",
@@ -107,6 +108,9 @@ describe("toUkHistoryRow", () => {
     expect(row.subjectLabel).toBe("身");
     expect(row.subjectReading).toBe("しん");
     expect(row.subjectMeaning).toBe("Body");
+    /* WaniKani's id, so the modal's marks and detail land on the same subject. */
+    expect(row.subjectId).toBe(689);
+    expect(row.assignmentId).toBe(8252);
     expect(row.subjectData).toMatchObject({ primaryReadings: ["しん"], jlptLevel: 2, radicals: [{ label: "自" }] });
     expect(row.subjectData?.meaningExplanation).toBeUndefined();
   });

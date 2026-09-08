@@ -4,6 +4,7 @@ import { srsGroupingFromStage } from "@/lib/srs/srsSchedule";
 import type { StudyQueueItem } from "@/lib/studyQueueTypes";
 
 import type { UkStudyItem } from "./ukStudyQueue";
+import { ukSubjectIdentity } from "./ukSubjectIdentity";
 
 /**
  * Our ladder, in the shape the Study explorer already reads.
@@ -13,7 +14,9 @@ import type { UkStudyItem } from "./ukStudyQueue";
  * answered belongs to the feed, so the UK queue is adapted to the explorer
  * rather than drawn by a page of its own. The assignment id the explorer
  * threads through every callback is the UK subject id here - there is no
- * separate assignment row on our ladder, the state is keyed by subject.
+ * separate assignment row on our ladder, the state is keyed by subject. The
+ * subject id is the subject's identity across feeds - see `ukSubjectIdentity`
+ * - so a trouble mark made here and one made on WaniKani are the same mark.
  */
 export function ukQueueTypeFor(item: Pick<UkStudyItem, "srsStage">): QueueType {
   return item.srsStage === null ? QUEUE_TYPES.lesson : QUEUE_TYPES.review;
@@ -50,7 +53,7 @@ export function ourLevelSlot(item: { level: number; stream: LadderStreamValue })
 export function mapUkQueueItem(item: UkStudyItem): StudyQueueItem {
   const srsStage = item.srsStage ?? 0;
   return {
-    subjectId: item.subjectId,
+    subjectId: ukSubjectIdentity({ id: item.subjectId, wkSubjectId: item.wkSubjectId }),
     assignmentId: item.subjectId,
     queueType: ukQueueTypeFor(item),
     subjectType: ukSubjectTypeFor(item.kind),
@@ -91,12 +94,28 @@ export function mapUkQueueItem(item: UkStudyItem): StudyQueueItem {
  */
 export function withWanikaniRadicalNames(
   items: readonly StudyQueueItem[],
+  /** Keyed by the ladder's own id, which the item carries as its assignment. */
   names: ReadonlyMap<number, string>,
 ): StudyQueueItem[] {
   if (names.size === 0) return [...items];
   return items.map((item) => {
-    const theirs = names.get(item.subjectId);
+    const theirs = names.get(item.assignmentId);
     return theirs ? { ...item, wanikaniName: theirs } : item;
+  });
+}
+
+/** The member's marks, on the identity every feed shares. */
+export function withStudyTags(
+  items: readonly StudyQueueItem[],
+  rows: readonly { subjectId: number; favorite: boolean; trouble: boolean; burned: boolean }[],
+): StudyQueueItem[] {
+  const bySubject = new Map(rows.map((row) => [row.subjectId, row]));
+  return items.map((item) => {
+    const row = bySubject.get(item.subjectId);
+    return {
+      ...item,
+      studyTags: { favorite: row?.favorite ?? false, trouble: row?.trouble ?? false, burned: row?.burned ?? false },
+    };
   });
 }
 

@@ -2,7 +2,8 @@ import { describe, expect, it } from "vitest";
 
 import { LADDER_STREAMS } from "@/lib/ladder/ladderStreams";
 
-import { mapUkQueueItem, ourLevelSlot, ukContentSourceFor, ukQueueTypeFor } from "./ukExplorerFeed";
+import { mapUkQueueItem, ourLevelSlot, ukContentSourceFor, ukQueueTypeFor, withStudyTags, withWanikaniRadicalNames } from "./ukExplorerFeed";
+import { UK_SUBJECT_ID_BASE } from "./ukSubjectIdentity";
 import type { UkStudyItem } from "./ukStudyQueue";
 
 const item = (over: Partial<UkStudyItem> = {}): UkStudyItem => ({
@@ -17,7 +18,19 @@ describe("the UK feed, in the explorer's shape", () => {
     expect(ukQueueTypeFor({ srsStage: 1 })).toBe("review");
   });
 
-  it("keys the assignment by subject and files the level as ours, with WaniKani's beside it", () => {
+  it("answers to the WaniKani id, and to a reserved one where WaniKani never taught it", () => {
+    expect(mapUkQueueItem(item()).subjectId).toBe(440);
+    expect(mapUkQueueItem(item({ wkSubjectId: null })).subjectId).toBe(UK_SUBJECT_ID_BASE + 10_000_440);
+  });
+
+  it("puts the member's marks and WaniKani's radical name on by the right key each", () => {
+    const [tagged] = withStudyTags([mapUkQueueItem(item())], [{ subjectId: 440, favorite: true, trouble: false, burned: false }]);
+    expect(tagged!.studyTags).toEqual({ favorite: true, trouble: false, burned: false });
+    const [named] = withWanikaniRadicalNames([mapUkQueueItem(item({ kind: "radical" }))], new Map([[10_000_440, "Toe"]]));
+    expect(named!.wanikaniName).toBe("Toe");
+  });
+
+  it("keys the assignment by the ladder's own id and files the level as ours, with WaniKani's beside it", () => {
     const mapped = mapUkQueueItem(item());
     expect(mapped.assignmentId).toBe(10_000_440);
     expect(mapped.unLevel).toBe(9);
