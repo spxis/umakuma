@@ -73,6 +73,7 @@ function umakumaFields(): Set<string> {
   const route = readFileSync(UMAKUMA_ROUTE, "utf8");
   if (route.includes("withWanikaniRadicalNames(")) keys.add("wanikaniName");
   if (route.includes("withStudyTags(")) keys.add("studyTags");
+  if (route.includes("asInjectedTrouble(")) keys.add("isInjectedTrouble");
   return keys;
 }
 
@@ -92,9 +93,7 @@ function customFields(): Set<string> {
  * ticket owes it; anything else is a reason a reader can check.
  */
 const KNOWN_GAPS: Record<"umakuma" | "custom", Record<string, string>> = {
-  umakuma: {
-    isInjectedTrouble: "OPEN cmtryknak - the WaniKani queue injects trouble items into a sitting; ours does not",
-  },
+  umakuma: {},
   custom: {
     confusables: "OPEN cmtryknak - a library kanji has look-alikes too",
     jlptLevel: "OPEN cmtryknak - the N band, by character",

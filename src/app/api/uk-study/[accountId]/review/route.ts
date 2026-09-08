@@ -16,8 +16,11 @@ type RouteContext = { params: Promise<{ accountId: string }> };
 /* The explorer's own body: it threads an assignment id through every
    callback, and on our ladder that id is the subject's. */
 const bodySchema = z.object({
-  assignmentId: z.number().int().positive(),
+  /** Negative for a trouble item mixed into the sitting - see `asInjectedTrouble`. */
+  assignmentId: z.number().int(),
   result: z.enum([REVIEW_RESULTS.correct, REVIEW_RESULTS.wrong]),
+  practiceSubjectId: z.number().int().positive().optional(),
+  practiceType: z.enum(["trouble"]).optional(),
 });
 
 /**
@@ -42,6 +45,28 @@ export async function POST(request: Request, context: RouteContext) {
         const parsed = bodySchema.safeParse(await request.json().catch(() => null));
         if (!parsed.success) {
           return NextResponse.json({ error: "Invalid request." }, { status: 400 });
+        }
+
+        /* Practice is practice: a trouble item mixed into the sitting is
+           answered without moving its schedule, as on the WaniKani queue. */
+        if (parsed.data.practiceType === "trouble" || parsed.data.assignmentId <= 0) {
+          if (parsed.data.assignmentId >= 0 && typeof parsed.data.practiceSubjectId !== "number") {
+            return NextResponse.json({ error: "Invalid request." }, { status: 400 });
+          }
+          return NextResponse.json({
+            ok: true,
+            practice: true,
+            review: {
+              assignmentId: parsed.data.assignmentId,
+              subjectId: parsed.data.practiceSubjectId ?? Math.abs(parsed.data.assignmentId),
+              subjectType: "kanji",
+              previousSrsStage: null,
+              newSrsStage: null,
+              previousGrouping: null,
+              newGrouping: null,
+              transition: "unknown",
+            },
+          });
         }
 
         const outcome = await recordUkReview({

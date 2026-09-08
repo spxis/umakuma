@@ -12,6 +12,7 @@ import { orderReviews, throttleAppliesTo } from "@/lib/srs/studyPreferences";
 import { memberStudyPreferences } from "@/lib/srs/studyPreferencesServer";
 import { LADDER_STREAMS, type LadderStreamValue } from "@/lib/ladder/ladderStreams";
 import { ladderColumns, type LadderColumns } from "./ladderColumns";
+import { ukSubjectIdsFor } from "./ukSubjectIdentity";
 
 /**
  * What a member has to do on the UmaKuma ladder right now.
@@ -348,6 +349,50 @@ export async function ukUpcoming(
     return [{ ...toItem(row, content, { stream: columns.stream, level }, { srsStage: state.srsStage, passed: state.passedAt !== null, startedAt: state.startedAt, availableAt: state.availableAt }), availableAt: state.availableAt }];
   });
   return { items, totalUpcoming };
+}
+
+/**
+ * Trouble items for a sitting, the way the WaniKani queue mixes them in.
+ *
+ * The identities come from the member's tag rows - WaniKani ids and our
+ * reserved ones - and only the subjects they have already met on this ladder
+ * qualify: a trouble mark on something still ahead is a note, not a review.
+ * Anything already in the sitting is left out. Real state and dates, so the
+ * card reads as the item it is; the caller marks them as practice.
+ */
+export async function ukTroublePractice(
+  accountId: string,
+  troubleIdentities: readonly number[],
+  exclude: ReadonlySet<number>,
+  limit: number,
+): Promise<UkStudyItem[]> {
+  if (troubleIdentities.length === 0 || limit <= 0) return [];
+  const theirs = troubleIdentities.filter((identity) => identity < 80_000_000);
+  const paired =
+    theirs.length > 0
+      ? await prisma.ukSubject.findMany({ where: { wkSubjectId: { in: theirs }, removedAt: null }, select: { id: true, wkSubjectId: true } })
+      : [];
+  const wanted = ukSubjectIdsFor(troubleIdentities, new Map(paired.map((row) => [row.wkSubjectId as number, row.id]))).filter(
+    (id) => !exclude.has(id),
+  );
+  if (wanted.length === 0) return [];
+
+  const [{ columns, level }, states] = await Promise.all([
+    memberColumns(accountId),
+    prisma.ukSrsState.findMany({
+      where: { accountId, subjectId: { in: wanted } },
+      select: { subjectId: true, srsStage: true, passedAt: true, startedAt: true, availableAt: true, subject: { select: LADDER_ROW_SELECT } },
+      orderBy: { subjectId: "asc" },
+      take: limit,
+    }),
+  ]);
+  const rows = states.map((state) => onOwnLadder(state.subject, columns));
+  const content = await withContent(rows);
+  return states.map((state, index) =>
+    toItem(rows[index]!, content, { stream: columns.stream, level }, {
+      srsStage: state.srsStage, passed: state.passedAt !== null, startedAt: state.startedAt, availableAt: state.availableAt,
+    }),
+  );
 }
 
 export async function ukStudyCounts(accountId: string, now = new Date()): Promise<UkStudyCounts> {

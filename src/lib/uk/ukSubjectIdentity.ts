@@ -26,6 +26,24 @@ export function isUkOnlySubjectId(subjectId: number): boolean {
   return subjectId >= UK_SUBJECT_ID_BASE && subjectId < UK_SUBJECT_ID_BASE + 10_000_000;
 }
 
+/**
+ * Which of our rows a set of identities names: a reserved id is one of ours
+ * outright, a WaniKani id is ours only where the ladder teaches that subject
+ * - the caller brings that pairing, from `UkSubject.wkSubjectId`.
+ */
+export function ukSubjectIdsFor(identities: readonly number[], ukIdByWkSubjectId: ReadonlyMap<number, number>): number[] {
+  const ids = new Set<number>();
+  for (const identity of identities) {
+    const ours = ukSubjectIdFromIdentity(identity);
+    if (ours !== null) ids.add(ours);
+    else {
+      const paired = ukIdByWkSubjectId.get(identity);
+      if (paired !== undefined) ids.add(paired);
+    }
+  }
+  return [...ids];
+}
+
 /** The ladder's own id, back out of a reserved identity. */
 export function ukSubjectIdFromIdentity(subjectId: number): number | null {
   return isUkOnlySubjectId(subjectId) ? subjectId - UK_SUBJECT_ID_BASE : null;

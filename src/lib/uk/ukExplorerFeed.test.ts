@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { LADDER_STREAMS } from "@/lib/ladder/ladderStreams";
 
-import { mapUkQueueItem, ourLevelSlot, ukContentSourceFor, ukQueueTypeFor, withStudyTags, withWanikaniRadicalNames } from "./ukExplorerFeed";
+import { asInjectedTrouble, mapUkQueueItem, ourLevelSlot, ukContentSourceFor, ukQueueTypeFor, withStudyTags, withWanikaniRadicalNames } from "./ukExplorerFeed";
 import { UK_SUBJECT_ID_BASE } from "./ukSubjectIdentity";
 import type { UkStudyItem } from "./ukStudyQueue";
 
@@ -57,6 +57,16 @@ describe("the UK feed, in the explorer's shape", () => {
     expect(mapped.jlptLevel).toBe(2);
     expect(mapped.radicals).toEqual([{ subjectId: 1, label: "言" }]);
     expect(mapped.confusables).toEqual([]);
+  });
+
+  it("marks a trouble item mixed into the sitting as practice, with a negative assignment", () => {
+    const injected = asInjectedTrouble(mapUkQueueItem(item()));
+    expect(injected.assignmentId).toBe(-10_000_440);
+    expect(injected.isInjectedTrouble).toBe(true);
+    expect(injected.subjectId).toBe(440);
+    /* WaniKani's radical name still finds it. */
+    const [named] = withWanikaniRadicalNames([asInjectedTrouble(mapUkQueueItem(item({ kind: "radical" })))], new Map([[10_000_440, "Toe"]]));
+    expect(named!.wanikaniName).toBe("Toe");
   });
 
   it("credits the words to whoever wrote them", () => {

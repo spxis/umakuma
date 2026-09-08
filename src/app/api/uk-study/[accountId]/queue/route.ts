@@ -6,9 +6,10 @@ import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { QUEUE_TYPES, SUBJECT_TYPES } from "@/lib/domainConstants";
 import { summariseStudyQueue } from "@/lib/studyQueueSummary";
 import { fetchStudyTagRows } from "@/lib/studySubjectTags";
-import { mapUkQueueItem, withStudyTags, withWanikaniRadicalNames } from "@/lib/uk/ukExplorerFeed";
+import { interleaveInjected, troubleInjectionCount } from "@/lib/troubleInjection";
+import { asInjectedTrouble, mapUkQueueItem, withStudyTags, withWanikaniRadicalNames } from "@/lib/uk/ukExplorerFeed";
 import { loadWanikaniRadicalNames } from "@/lib/uk/ukRadicalNamesServer";
-import { ukLessons, ukReviews } from "@/lib/uk/ukStudyQueue";
+import { ukLessons, ukReviews, ukTroublePractice } from "@/lib/uk/ukStudyQueue";
 
 type RouteContext = { params: Promise<{ accountId: string }> };
 
@@ -17,6 +18,8 @@ const querySchema = z.object({
   mode: z.enum([QUEUE_TYPES.review, QUEUE_TYPES.lesson, ALL]).default(QUEUE_TYPES.review),
   limit: z.coerce.number().int().positive().max(500).optional(),
   offset: z.coerce.number().int().min(0).default(0),
+  /** Mix the member's trouble items into the sitting, as the WaniKani queue does. */
+  includeTrouble: z.enum(["0", "1"]).default("0"),
 });
 
 /** Enough of the ladder for one sitting; the explorer pages the rest. */
@@ -47,24 +50,34 @@ export async function GET(request: Request, context: RouteContext) {
         const { mode, offset } = parsed.data;
         const limit = parsed.data.limit ?? null;
         const now = new Date();
-        const [lessons, reviews] = await Promise.all([
+        const [lessons, reviews, tagRows] = await Promise.all([
           mode === QUEUE_TYPES.review ? Promise.resolve([]) : ukLessons(accountId, FEED_CEILING),
           mode === QUEUE_TYPES.lesson ? Promise.resolve([]) : ukReviews(accountId, now, FEED_CEILING),
+          fetchStudyTagRows(accountId),
         ]);
-        const allItems = [...reviews, ...lessons].map(mapUkQueueItem);
+        /* Trouble, mixed in: tagged subjects already met on this ladder and not
+           in the sitting, a quarter of it at most, answered as practice. */
+        const injected =
+          mode !== QUEUE_TYPES.lesson && parsed.data.includeTrouble === "1"
+            ? await ukTroublePractice(
+                accountId,
+                tagRows.filter((row) => row.trouble).map((row) => row.subjectId),
+                new Set(reviews.map((item) => item.subjectId)),
+                troubleInjectionCount(reviews.length, tagRows.filter((row) => row.trouble).length),
+              )
+            : [];
+        const sitting = interleaveInjected(reviews.map(mapUkQueueItem), injected.map((item) => asInjectedTrouble(mapUkQueueItem(item))));
+        const allItems = [...sitting, ...lessons.map(mapUkQueueItem)];
         const pagedItems = limit === null ? allItems : allItems.slice(offset, offset + limit);
         const total = allItems.length;
 
         /* Only the page being handed over, and only its radicals: a connected
            member reading 248 reviews needs their names for the fourteen on
            screen, not for all of them. */
-        const [radicalNames, tagRows] = await Promise.all([
-          loadWanikaniRadicalNames(
-            accountId,
-            pagedItems.filter((item) => item.subjectType === SUBJECT_TYPES.radical).map((item) => item.assignmentId),
-          ),
-          fetchStudyTagRows(accountId),
-        ]);
+        const radicalNames = await loadWanikaniRadicalNames(
+          accountId,
+          pagedItems.filter((item) => item.subjectType === SUBJECT_TYPES.radical).map((item) => Math.abs(item.assignmentId)),
+        );
         /* The marks ride on the shared identity, so a trouble mark made on
            WaniKani's 身 is on ours as well. */
         const shown = withStudyTags(withWanikaniRadicalNames(pagedItems, radicalNames), tagRows);

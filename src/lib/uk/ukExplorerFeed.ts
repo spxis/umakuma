@@ -99,9 +99,18 @@ export function withWanikaniRadicalNames(
 ): StudyQueueItem[] {
   if (names.size === 0) return [...items];
   return items.map((item) => {
-    const theirs = names.get(item.assignmentId);
+    const theirs = names.get(Math.abs(item.assignmentId));
     return theirs ? { ...item, wanikaniName: theirs } : item;
   });
+}
+
+/**
+ * A trouble item mixed into the sitting: answered as practice, so the
+ * assignment id goes negative the way the WaniKani queue's does and the
+ * review route knows to leave the SRS alone.
+ */
+export function asInjectedTrouble(item: StudyQueueItem): StudyQueueItem {
+  return { ...item, assignmentId: -item.assignmentId, isInjectedTrouble: true };
 }
 
 /** The member's marks, on the identity every feed shares. */
