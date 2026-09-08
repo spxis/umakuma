@@ -56,6 +56,30 @@ This file is the single source of truth for agent behavior in this repo.
 - UI/config code should reference the shared display map by canonical key (for example `SUBJECT_TYPE_DISPLAY[SUBJECT_TYPES.kanji].singular`) rather than hardcoding equivalent labels.
 - Inline copy is still allowed for non-domain prose/headings, but canonical domain labels used in pills, tabs, filters, and summary cards must come from the shared display source.
 
+### Design Review Questions (Mandatory)
+
+- **Ask, of every displayed thing, before calling it done:** (1) is this
+  going through a component? (2) is that component used in every other
+  place that displays the same thing? (3) if there are variations, how do
+  the two places become one component, parameterised smartly? John: "these
+  are questions we should be asking in a UX/design/code review round."
+- **One component per kind of thing - not one component for everything.**
+  A filter label with its count is one kind; a level chip carrying an `N4`
+  milestone is another; a toggle is a third. Two surfaces that draw the same
+  kind share the component, and a surface that needs a variant adds a prop
+  and sweeps every caller in the same pass. Don't fold different kinds into
+  one to make a count look tidy, and don't copy a chip to avoid a prop.
+- **Grep for the component before drawing the thing.** On 2026-09-07 filter
+  counts were found drawn four ways - `ALL (2,211)`, `17 49`, `Radicals 3`,
+  `COMMON 44` - and two of the four had been built that day beside
+  `FilterChipButton`, which had eleven callers. It now lives at
+  `src/app/shared/FilterChip.tsx` with a link variant, and
+  `filterChipSweep.test.ts` fails on the copied idioms. The same shape as
+  `SubjectPill`, `SubjectCards`/`SubjectRows` and `ModalShell` before it:
+  the shared thing exists, and the miss is not looking for it.
+- Report the sweep as part of the deliverable: which surfaces now share the
+  component, and which were left alone because they are a different thing.
+
 ### Proactive Sweep Rule
 
 - When asked to remove literals/magic strings/constants drift, do a repo-wide sweep before finishing, not just local edits.
