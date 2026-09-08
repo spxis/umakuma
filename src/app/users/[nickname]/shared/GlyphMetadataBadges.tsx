@@ -3,12 +3,16 @@
 import { NO_TRANSLATE_CLASS } from "@/app/shared/japaneseText";
 
 import { useIsRowDensity } from "./explorerCardDensity";
-import { useLadderStream } from "@/app/shared/ladderStream";
-import { ourLevelBadge, wkLevelBadge } from "@/lib/levelBadge";
+import { ourLevelBadgeFor, wkLevelBadge } from "@/lib/levelBadge";
 
 type Props = {
   level?: number | null;
+  /* Ours, one slot filled by the feed that read it. The badge labels the slot
+     and never the viewer: it took one `unLevel` and prefixed it by stream, and
+     that was right only while every feeder passed the stream-correct number. */
   unLevel?: number | null;
+  ugLevel?: number | null;
+  libraryLevel?: number | null;
   successRate?: number | null;
   hoverGroup?: "glyph-tile" | "explorer-card";
 };
@@ -33,13 +37,14 @@ function hoverClass(group: NonNullable<Props["hoverGroup"]>): string {
 export default function GlyphMetadataBadges({
   level,
   unLevel,
+  ugLevel,
+  libraryLevel,
   successRate,
   hoverGroup = "explorer-card",
 }: Props) {
   const interactionClass = hoverClass(hoverGroup);
   const inRow = useIsRowDensity();
-  /* Ours is two ladders; this prints the one the reader is on. */
-  const ladderStream = useLadderStream();
+  const ours = ourLevelBadgeFor({ unLevel, ugLevel, libraryLevel });
   const validRate =
     typeof successRate === "number" && Number.isFinite(successRate)
       ? Math.max(0, Math.min(100, Math.round(successRate)))
@@ -62,11 +67,11 @@ export default function GlyphMetadataBadges({
           className={`${NO_TRANSLATE_CLASS} ${chipClass} ${inRow ? "" : "left-1.5"}`}
         >{`${validRate}%`}</span>
       ) : null}
-      {typeof level === "number" || typeof unLevel === "number" ? (
+      {typeof level === "number" || ours ? (
         <span
           translate="no"
           className={`${NO_TRANSLATE_CLASS} ${chipClass} ${inRow ? "" : "right-1.5"}`}
-        >{[wkLevelBadge(level ?? null), ourLevelBadge(ladderStream, unLevel ?? null)].filter(Boolean).join(" · ")}</span>
+        >{[wkLevelBadge(level ?? null), ours].filter(Boolean).join(" · ")}</span>
       ) : null}
     </>
   );

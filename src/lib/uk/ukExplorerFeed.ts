@@ -1,4 +1,5 @@
 import { QUEUE_TYPES, isSubjectType, type QueueType, type SubjectType } from "@/lib/domainConstants";
+import { LADDER_STREAMS, type LadderStreamValue } from "@/lib/ladder/ladderStreams";
 import { srsGroupingFromStage } from "@/lib/srs/srsSchedule";
 import type { StudyQueueItem } from "@/lib/studyQueueTypes";
 
@@ -32,6 +33,20 @@ export function ukContentSourceFor(item: Pick<UkStudyItem, "wkSubjectId" | "kind
   return item.kind === "radical" ? "radkfile" : "kanjidic2";
 }
 
+/**
+ * The level in the slot its ladder names. A chip labels `unLevel` UN and
+ * `ugLevel` UG and never asks whose stream it is drawing for; the feed, which
+ * read the column, is the one that knows.
+ */
+export function ourLevelSlot(item: { level: number; stream: LadderStreamValue }): {
+  unLevel: number | null;
+  ugLevel: number | null;
+} {
+  return item.stream === LADDER_STREAMS.ug
+    ? { unLevel: null, ugLevel: item.level }
+    : { unLevel: item.level, ugLevel: null };
+}
+
 export function mapUkQueueItem(item: UkStudyItem): StudyQueueItem {
   const srsStage = item.srsStage ?? 0;
   return {
@@ -39,7 +54,7 @@ export function mapUkQueueItem(item: UkStudyItem): StudyQueueItem {
     assignmentId: item.subjectId,
     queueType: ukQueueTypeFor(item),
     subjectType: ukSubjectTypeFor(item.kind),
-    unLevel: item.level,
+    ...ourLevelSlot(item),
     contentSource: ukContentSourceFor(item),
     characters: item.characters,
     meanings: item.meanings,

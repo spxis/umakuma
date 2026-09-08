@@ -430,7 +430,7 @@ export default function StudyExplorerPanel({
                     glyphTextClassName={glyphTextSizeClass(item.characters)}
                     glyphOverlay={
                       <>
-                        <GlyphMetadataBadges level={item.wkLevel} successRate={item.successRate} />
+                        <GlyphMetadataBadges level={item.wkLevel} unLevel={item.unLevel} ugLevel={item.ugLevel} libraryLevel={item.libraryLevel} successRate={item.successRate} />
                         <StudyCardTagOverlay item={item} bulkModeEnabled={bulkModeEnabled} onToggleStudyTag={onToggleStudyTag} />
                       </>
                     }

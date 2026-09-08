@@ -26,6 +26,9 @@ export type LevelItem = {
   /* The other ladder, and the two bands that are not ladders. A list fills
      these from the ladder files server-side. */
   ugLevel?: number | null;
+  /* A member's own library, which is a ladder of its own. It rode in `unLevel`
+     for a while and was drawn as UN. */
+  libraryLevel?: number | null;
   schoolGrade?: number | null;
   /** Whose meanings and readings these are, for the credit line under them. Absent means WaniKani's. */
   contentSource?: "wanikani" | "kanjidic2" | "radkfile";

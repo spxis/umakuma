@@ -3,7 +3,7 @@ import { execFileSync } from "node:child_process";
 
 import { describe, expect, it } from "vitest";
 
-import { levelBadge, LEVEL_SYSTEMS, libraryLevelBadge, unLevelBadge, wkLevelBadge } from "./levelBadge";
+import { levelBadge, LEVEL_SYSTEMS, libraryLevelBadge, ourLevelBadgeFor, unLevelBadge, wkLevelBadge } from "./levelBadge";
 
 /**
  * A level with no system in front of it is a number with two possible
@@ -80,5 +80,23 @@ describe("the member's own library", () => {
     ]) {
       expect(readFileSync(file, "utf8")).toContain("libraryLevelBadge");
     }
+  });
+});
+
+/*
+ * The slot names the ladder. A badge that prefixed one number by the viewer's
+ * stream was right only while every feeder passed the stream-correct number,
+ * and a custom library's level came through that slot as UN3.
+ */
+describe("ourLevelBadgeFor", () => {
+  it("labels whichever slot is filled", () => {
+    expect(ourLevelBadgeFor({ unLevel: 9 })).toBe("UN9");
+    expect(ourLevelBadgeFor({ ugLevel: 23 })).toBe("UG23");
+    expect(ourLevelBadgeFor({ libraryLevel: 3 })).toBe("LIB3");
+  });
+
+  it("draws nothing when no slot is filled", () => {
+    expect(ourLevelBadgeFor({})).toBeNull();
+    expect(ourLevelBadgeFor({ unLevel: null, ugLevel: undefined, libraryLevel: null })).toBeNull();
   });
 });

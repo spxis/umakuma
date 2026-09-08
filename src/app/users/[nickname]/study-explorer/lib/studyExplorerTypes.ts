@@ -78,7 +78,9 @@ export type UpcomingReviewItem = {
   subjectId: number;
   subjectType: SubjectType;
   wkLevel: number | null;
-  unLevel?: number | null;
+  /** Ours, in the slot its ladder names; the other stays null. */
+  unLevel: number | null;
+  ugLevel: number | null;
   characters: string;
   primaryMeaning: string | null;
   primaryReading: string | null;

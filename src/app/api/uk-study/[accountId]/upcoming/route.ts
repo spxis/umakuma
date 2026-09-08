@@ -3,7 +3,7 @@ import { z } from "zod";
 
 import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
-import { ukSubjectTypeFor } from "@/lib/uk/ukExplorerFeed";
+import { ourLevelSlot, ukSubjectTypeFor } from "@/lib/uk/ukExplorerFeed";
 import { ukUpcoming } from "@/lib/uk/ukStudyQueue";
 
 type RouteContext = { params: Promise<{ accountId: string }> };
@@ -32,8 +32,7 @@ export async function GET(request: Request, context: RouteContext) {
           subjectId: item.subjectId,
           subjectType: ukSubjectTypeFor(item.kind),
           wkLevel: null,
-          /* The member's own ladder: `ukUpcoming` has already picked the column. */
-          unLevel: item.level,
+          ...ourLevelSlot(item),
           characters: item.characters,
           primaryMeaning: item.meanings[0] ?? null,
           primaryReading: item.readings[0] ?? null,

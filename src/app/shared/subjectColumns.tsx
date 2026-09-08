@@ -25,6 +25,7 @@ import {
 import {
   jlptBadge,
   schoolGradeBadge,
+  ourLevelBadgeFor,
   ugLevelBadge,
   unLevelBadge,
   wkLevelBadge,
@@ -232,7 +233,7 @@ export function levelColumn<TRow extends SubjectListRow>(
     lane: SUBJECT_ROW_LANES.level,
     render: (row) => {
       const wk = wkLevelBadge(read(row));
-      const ours = unLevelBadge(row.unLevel) ?? ugLevelBadge(row.ugLevel);
+      const ours = ourLevelBadgeFor(row);
       const lead = ours ?? wk ?? jlptBadge(row.jlptLevel) ?? schoolGradeBadge(row.schoolGrade);
       if (!lead) return null;
       return (

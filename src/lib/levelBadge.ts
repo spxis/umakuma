@@ -81,6 +81,24 @@ export function ourLevelBadge(stream: LadderStreamValue | null, level: number | 
   return stream === LADDER_STREAMS.ug ? ugLevelBadge(level) : unLevelBadge(level);
 }
 
+/**
+ * The one level of ours an item carries, labelled by the slot it came in.
+ *
+ * Three slots, one filled: the feed that built the item said which ladder
+ * the number is on by choosing the field, so no reader has to know whose
+ * stream it is drawing for. `GlyphMetadataBadges` used to take a single
+ * `unLevel` and prefix it by the viewer's stream, which was right only for as
+ * long as every feeder happened to pass the stream-correct number - and a
+ * custom library's level came through the same slot as `UN3`.
+ */
+export function ourLevelBadgeFor(item: {
+  unLevel?: number | null;
+  ugLevel?: number | null;
+  libraryLevel?: number | null;
+}): string | null {
+  return unLevelBadge(item.unLevel) ?? ugLevelBadge(item.ugLevel) ?? libraryLevelBadge(item.libraryLevel);
+}
+
 /** A member's own library. */
 export function libraryLevelBadge(level: number | null | undefined): string | null {
   return levelBadge(LEVEL_SYSTEMS.library, level);

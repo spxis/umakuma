@@ -6,7 +6,7 @@ import { getCatalogSubjectDetails } from "@/lib/subjectCatalogDetails";
 import { srsScoringRules } from "@/lib/srs/srsScoringRules";
 import { orderReviews, throttleAppliesTo } from "@/lib/srs/studyPreferences";
 import { memberStudyPreferences } from "@/lib/srs/studyPreferencesServer";
-import { LADDER_STREAMS } from "@/lib/ladder/ladderStreams";
+import { LADDER_STREAMS, type LadderStreamValue } from "@/lib/ladder/ladderStreams";
 import { ladderColumns, type LadderColumns } from "./ladderColumns";
 
 /**
@@ -30,7 +30,9 @@ export type UkStudyItem = {
   key: string;
   kind: string;
   characters: string;
+  /** On the member's own ladder - and `stream` says which, so a chip can put it in the right slot. */
   level: number;
+  stream: LadderStreamValue;
   meanings: string[];
   readings: string[];
   /** WaniKani's id where WaniKani teaches it; the credit line and the mirror both turn on this. */
@@ -105,10 +107,10 @@ async function unlockedSubjects(accountId: string) {
     select: LADDER_ROW_SELECT,
     orderBy: [{ [columns.subjectLevel]: "asc" }, { kind: "asc" }, { id: "asc" }],
   });
-  return rows.map((row) => onOwnLadder(row, columns));
+  return { rows: rows.map((row) => onOwnLadder(row, columns)), columns };
 }
 
-type LadderRow = Awaited<ReturnType<typeof unlockedSubjects>>[number];
+type LadderRow = Awaited<ReturnType<typeof unlockedSubjects>>["rows"][number];
 
 /**
  * Fills in meanings and readings for the items WaniKani teaches, in one pass.
@@ -137,6 +139,7 @@ async function withContent(rows: LadderRow[]): Promise<Map<number, ResolvedConte
 function toItem(
   row: LadderRow,
   content: Map<number, ResolvedContent>,
+  stream: LadderStreamValue,
   srsStage: number | null,
   passed = false,
 ): UkStudyItem {
@@ -150,6 +153,7 @@ function toItem(
     characters: row.characters || resolved?.characters || "",
     wkSubjectId: row.wkSubjectId,
     level: row.level,
+    stream,
     /* The row's own facts win where it has them: those are the items
        WaniKani never taught, and the catalogue has nothing to say. */
     meanings: row.meanings.length > 0 ? row.meanings : (resolved?.meanings ?? []),
@@ -187,7 +191,7 @@ export async function ukLessonThrottle(accountId: string, now = new Date()): Pro
 }
 
 export async function ukLessons(accountId: string, limit = 50): Promise<UkStudyItem[]> {
-  const [rows, states, throttle] = await Promise.all([
+  const [{ rows, columns }, states, throttle] = await Promise.all([
     unlockedSubjects(accountId),
     prisma.ukSrsState.findMany({ where: { accountId }, select: { subjectId: true } }),
     ukLessonThrottle(accountId),
@@ -204,7 +208,7 @@ export async function ukLessons(accountId: string, limit = 50): Promise<UkStudyI
     .sort((a, b) => a.level - b.level || order.indexOf(a.kind) - order.indexOf(b.kind))
     .slice(0, limit);
   const content = await withContent(fresh);
-  return fresh.map((row) => toItem(row, content, null));
+  return fresh.map((row) => toItem(row, content, columns.stream, null));
 }
 
 /** Items whose next review has come round. */
@@ -241,7 +245,7 @@ export async function ukReviews(accountId: string, now = new Date(), limit = 100
   return due.flatMap((state) => {
     const row = rowById.get(state.subjectId);
     if (!row) return [];
-    return [toItem(row, content, state.srsStage, state.passedAt !== null)];
+    return [toItem(row, content, columns.stream, state.srsStage, state.passedAt !== null)];
   });
 }
 
@@ -278,13 +282,13 @@ export async function ukUpcoming(
   const items = states.flatMap((state, index) => {
     const row = rows[index];
     if (!row || !state.availableAt) return [];
-    return [{ ...toItem(row, content, state.srsStage, state.passedAt !== null), availableAt: state.availableAt }];
+    return [{ ...toItem(row, content, columns.stream, state.srsStage, state.passedAt !== null), availableAt: state.availableAt }];
   });
   return { items, totalUpcoming };
 }
 
 export async function ukStudyCounts(accountId: string, now = new Date()): Promise<UkStudyCounts> {
-  const [rows, states, throttle] = await Promise.all([
+  const [{ rows }, states, throttle] = await Promise.all([
     unlockedSubjects(accountId),
     prisma.ukSrsState.findMany({ where: { accountId }, select: { subjectId: true, availableAt: true } }),
     ukLessonThrottle(accountId, now),

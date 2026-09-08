@@ -78,7 +78,8 @@ export function mapCustomQueueItem(row: CustomStateQueueRow, now: Date) {
     queueType: customQueueTypeFromState({ stage: row.srsStage, now, availableAt: row.availableAt }),
     subjectType,
     wkLevel: level,
-    unLevel: level,
+    /* The library's own ladder. It was written into `unLevel` and drawn as UN. */
+    libraryLevel: level,
     characters: row.item.characters,
     meanings: row.item.meanings,
     readings: row.item.readings,

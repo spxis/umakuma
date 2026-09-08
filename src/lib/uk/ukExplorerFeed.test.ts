@@ -1,10 +1,12 @@
 import { describe, expect, it } from "vitest";
 
-import { mapUkQueueItem, ukContentSourceFor, ukQueueTypeFor } from "./ukExplorerFeed";
+import { LADDER_STREAMS } from "@/lib/ladder/ladderStreams";
+
+import { mapUkQueueItem, ourLevelSlot, ukContentSourceFor, ukQueueTypeFor } from "./ukExplorerFeed";
 import type { UkStudyItem } from "./ukStudyQueue";
 
 const item = (over: Partial<UkStudyItem> = {}): UkStudyItem => ({
-  subjectId: 10_000_440, key: "kanji:語", kind: "kanji", characters: "語", level: 9,
+  subjectId: 10_000_440, key: "kanji:語", kind: "kanji", characters: "語", level: 9, stream: LADDER_STREAMS.un,
   meanings: ["language"], readings: ["ご"], srsStage: 5, passed: true, wkSubjectId: 440, ...over,
 });
 
@@ -21,6 +23,14 @@ describe("the UK feed, in the explorer's shape", () => {
     expect(mapped.wkLevel).toBeUndefined();
     expect(mapped.status).toBe("guru");
     expect(mapped.queueType).toBe("review");
+  });
+
+  it("puts the level in the slot its ladder names, so the chip cannot mislabel it", () => {
+    expect(ourLevelSlot({ level: 9, stream: LADDER_STREAMS.un })).toEqual({ unLevel: 9, ugLevel: null });
+    expect(ourLevelSlot({ level: 23, stream: LADDER_STREAMS.ug })).toEqual({ unLevel: null, ugLevel: 23 });
+    const onUg = mapUkQueueItem(item({ level: 23, stream: LADDER_STREAMS.ug }));
+    expect(onUg.ugLevel).toBe(23);
+    expect(onUg.unLevel).toBeNull();
   });
 
   it("credits the words to whoever wrote them", () => {
