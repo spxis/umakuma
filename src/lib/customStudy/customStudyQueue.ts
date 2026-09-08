@@ -1,3 +1,4 @@
+import { customItemIdentity } from "./customItemIdentity";
 import type { CustomStudyItemType } from "@prisma/client";
 
 import { QUEUE_TYPES, type QueueType, type SubjectType } from "@/lib/domainConstants";
@@ -66,6 +67,9 @@ export function customQueueTypeFromState(params: {
 }
 
 export function mapCustomQueueItem(row: CustomStateQueueRow, now: Date) {
+  /* The subject's identity across feeds - see customItemIdentity - so a mark
+     made on WaniKani's 身 is the mark on the library's, and vice versa. */
+  const subjectId = customItemIdentity(row.item);
   const level = typeof row.item.wkLevel === "number" && Number.isFinite(row.item.wkLevel) && row.item.wkLevel > 0
     ? Math.trunc(row.item.wkLevel)
     : 1;
@@ -73,7 +77,7 @@ export function mapCustomQueueItem(row: CustomStateQueueRow, now: Date) {
   const relationships = readCustomItemRelationships(row.item.metadata);
 
   return {
-    subjectId: row.item.id,
+    subjectId,
     assignmentId: row.id,
     queueType: customQueueTypeFromState({ stage: row.srsStage, now, availableAt: row.availableAt }),
     subjectType,

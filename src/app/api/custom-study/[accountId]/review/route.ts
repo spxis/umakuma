@@ -27,9 +27,12 @@ type RouteContext = {
 };
 
 const reviewSchema = z.object({
-  assignmentId: z.number().int().positive(),
+  /** Negative for a trouble item mixed into the sitting - see asInjectedTrouble. */
+  assignmentId: z.number().int(),
   libraryId: z.string().trim().min(1),
   result: z.enum(["correct", "wrong"]),
+  practiceSubjectId: z.number().int().positive().optional(),
+  practiceType: z.enum(["trouble"]).optional(),
 });
 
 function transitionDirection(params: {
@@ -71,6 +74,28 @@ export async function POST(request: Request, context: RouteContext) {
         const parsed = reviewSchema.safeParse(json);
         if (!parsed.success) {
           return NextResponse.json({ error: "Invalid request payload." }, { status: 400 });
+        }
+
+        /* Practice is practice: a trouble item mixed into the sitting is
+           answered without moving its schedule, as on the other queues. */
+        if (parsed.data.practiceType === "trouble" || parsed.data.assignmentId <= 0) {
+          if (parsed.data.assignmentId >= 0 && typeof parsed.data.practiceSubjectId !== "number") {
+            return NextResponse.json({ error: "Invalid request payload." }, { status: 400 });
+          }
+          return NextResponse.json({
+            ok: true,
+            practice: true,
+            review: {
+              assignmentId: parsed.data.assignmentId,
+              subjectId: parsed.data.practiceSubjectId ?? Math.abs(parsed.data.assignmentId),
+              subjectType: "kanji",
+              previousSrsStage: null,
+              newSrsStage: null,
+              previousGrouping: null,
+              newGrouping: null,
+              transition: "unknown",
+            },
+          });
         }
 
         const library = await getOwnedCustomLibrary({

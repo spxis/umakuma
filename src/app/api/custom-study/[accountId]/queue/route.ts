@@ -12,7 +12,11 @@ import {
   mapCustomQueueItem,
   type CustomStateQueueRow,
 } from "@/lib/customStudy/customStudyQueue";
+import { loadCustomStudyFacts, withCustomStudyFacts } from "@/lib/customStudy/customStudyFacts";
 import { QUEUE_TYPES, SUBJECT_TYPES } from "@/lib/domainConstants";
+import { asInjectedTrouble, withStudyTags } from "@/lib/studyQueueMarks";
+import { fetchStudyTagRows } from "@/lib/studySubjectTags";
+import { interleaveInjected, troubleInjectionCount } from "@/lib/troubleInjection";
 import { prisma } from "@/lib/prisma";
 
 type RouteContext = {
@@ -20,6 +24,7 @@ type RouteContext = {
 };
 
 const querySchema = z.object({
+  includeTrouble: z.enum(["0", "1"]).optional(),
   libraryId: z.string().trim().min(1),
   mode: z.enum([QUEUE_TYPES.review, QUEUE_TYPES.lesson, "all"]).optional(),
   limit: z.coerce.number().int().positive().max(200).optional(),
@@ -104,6 +109,7 @@ export async function GET(request: Request, context: RouteContext) {
           mode: url.searchParams.get("mode") ?? undefined,
           limit: url.searchParams.get("limit") ?? undefined,
           offset: url.searchParams.get("offset") ?? undefined,
+          includeTrouble: url.searchParams.get("includeTrouble") ?? undefined,
         });
         if (!parsed.success) {
           return NextResponse.json({ error: "Invalid request payload." }, { status: 400 });
@@ -183,7 +189,32 @@ export async function GET(request: Request, context: RouteContext) {
               ? reviews
               : [...reviews, ...lessons];
         const sortedRows = sortQueueRows(rowsForMode, mode);
-        const allItems = sortedRows.map((row) => mapCustomQueueItem(row as CustomStateQueueRow, now));
+        const [account, tagRows] = await Promise.all([
+          prisma.account.findUnique({ where: { id: accountId }, select: { wkLevel: true, ladderStream: true } }),
+          fetchStudyTagRows(accountId),
+        ]);
+        const mapped = sortedRows.map((row) => mapCustomQueueItem(row as CustomStateQueueRow, now));
+        /* Trouble, mixed in: tagged items already met in this library and not
+           in the sitting, a quarter of it at most, answered as practice. */
+        const troubleIds = new Set(tagRows.filter((row) => row.trouble).map((row) => row.subjectId));
+        const inSitting = new Set(mapped.map((item) => item.subjectId));
+        const candidates =
+          mode !== QUEUE_TYPES.lesson && parsed.data.includeTrouble === "1"
+            ? validStates
+                .filter((row) => !isCustomLessonState(row.srsStage))
+                .map((row) => mapCustomQueueItem(row as CustomStateQueueRow, now))
+                .filter((item) => troubleIds.has(item.subjectId) && !inSitting.has(item.subjectId))
+                .sort((a, b) => a.subjectId - b.subjectId)
+            : [];
+        const injected = candidates.slice(0, troubleInjectionCount(reviews.length, candidates.length)).map(asInjectedTrouble);
+        const facts = await loadCustomStudyFacts([...mapped, ...injected], {
+          wkLevel: account?.wkLevel ?? null,
+          ladderStream: account?.ladderStream ?? null,
+        });
+        const allItems = withStudyTags(
+          withCustomStudyFacts(mode === QUEUE_TYPES.lesson ? mapped : interleaveInjected(mapped, injected), facts),
+          tagRows,
+        );
         const pagedItems = limit === null ? allItems : allItems.slice(offset, offset + limit);
 
         const typeCounts = allItems.reduce(

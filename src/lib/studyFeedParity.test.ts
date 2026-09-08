@@ -25,6 +25,7 @@ import { mapUkQueueItem } from "@/lib/uk/ukExplorerFeed";
  */
 const WANIKANI_ROUTE = "src/app/api/study/[accountId]/queue/route.ts";
 const UMAKUMA_ROUTE = "src/app/api/uk-study/[accountId]/queue/route.ts";
+const LIBRARY_ROUTE = "src/app/api/custom-study/[accountId]/queue/route.ts";
 const REVIEW_SURFACES = [
   "src/app/users/[nickname]/study-explorer/components/StudyReviewModal.tsx",
   "src/app/users/[nickname]/study-explorer/components/StudyReviewModalSection.tsx",
@@ -85,7 +86,12 @@ function customFields(): Set<string> {
     } as Parameters<typeof mapCustomQueueItem>[0],
     new Date(),
   );
-  return new Set(Object.keys(item));
+  const keys = new Set(Object.keys(item));
+  const route = readFileSync(LIBRARY_ROUTE, "utf8");
+  if (route.includes("withCustomStudyFacts(")) for (const key of ["jlptLevel", "jlptMeta", "confusables"]) keys.add(key);
+  if (route.includes("withStudyTags(")) keys.add("studyTags");
+  if (route.includes("asInjectedTrouble")) keys.add("isInjectedTrouble");
+  return keys;
 }
 
 /**
@@ -94,13 +100,7 @@ function customFields(): Set<string> {
  */
 const KNOWN_GAPS: Record<"umakuma" | "custom", Record<string, string>> = {
   umakuma: {},
-  custom: {
-    confusables: "OPEN cmtryknak - a library kanji has look-alikes too",
-    jlptLevel: "OPEN cmtryknak - the N band, by character",
-    jlptMeta: "OPEN cmtryknak - the dictionary panel, by character",
-    studyTags: "OPEN cmtryknak - trouble and favourite marks on the card",
-    isInjectedTrouble: "OPEN cmtryknak - trouble injection into a sitting",
-  },
+  custom: {},
 };
 
 function parityGaps(reference: Set<string>, feed: Set<string>): string[] {

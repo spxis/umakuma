@@ -104,27 +104,7 @@ export function withWanikaniRadicalNames(
   });
 }
 
-/**
- * A trouble item mixed into the sitting: answered as practice, so the
- * assignment id goes negative the way the WaniKani queue's does and the
- * review route knows to leave the SRS alone.
- */
-export function asInjectedTrouble(item: StudyQueueItem): StudyQueueItem {
-  return { ...item, assignmentId: -item.assignmentId, isInjectedTrouble: true };
-}
-
-/** The member's marks, on the identity every feed shares. */
-export function withStudyTags(
-  items: readonly StudyQueueItem[],
-  rows: readonly { subjectId: number; favorite: boolean; trouble: boolean; burned: boolean }[],
-): StudyQueueItem[] {
-  const bySubject = new Map(rows.map((row) => [row.subjectId, row]));
-  return items.map((item) => {
-    const row = bySubject.get(item.subjectId);
-    return {
-      ...item,
-      studyTags: { favorite: row?.favorite ?? false, trouble: row?.trouble ?? false, burned: row?.burned ?? false },
-    };
-  });
-}
+/* The marks and the practice flag are the same for every feed; kept under
+   this name so the UK route reads as one feed. */
+export { asInjectedTrouble, withStudyTags } from "@/lib/studyQueueMarks";
 

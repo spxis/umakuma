@@ -2,6 +2,7 @@ import { SRS_BUCKETS, type SrsBucket, type ReviewResult } from "@/lib/domainCons
 import { prisma } from "@/lib/prisma";
 import type { StudyHistoryRow } from "@/lib/studyHistoryView";
 
+import { customItemIdentity } from "./customItemIdentity";
 import { readCustomItemRelationships } from "./customItemMetadata";
 import { srsGroupingFromStage } from "@/lib/srs/srsSchedule";
 import { customItemTypeToSubjectType } from "./customStudyQueue";
@@ -127,7 +128,8 @@ export async function getCustomStudyHistoryRows(args: Args): Promise<StudyHistor
       nickname,
       wkUsername,
       assignmentId: row.stateId,
-      subjectId: row.itemId,
+      /* The identity every feed shares, so the modal's marks land right. */
+      subjectId: customItemIdentity({ id: row.itemId, metadata: row.item.metadata }),
       subjectType,
       result: row.result,
       submittedAt: row.submittedAt.toISOString(),
@@ -140,7 +142,7 @@ export async function getCustomStudyHistoryRows(args: Args): Promise<StudyHistor
       srsStage: stage,
       srsBucket: customBucketForStage(stage),
       subjectData: {
-        subjectId: row.itemId,
+        subjectId: customItemIdentity({ id: row.itemId, metadata: row.item.metadata }),
         subjectType,
         status: customStatusForStage(stage),
         characters: row.item.characters,

@@ -1,3 +1,4 @@
+import { readWkSubjectId } from "./customItemIdentity";
 import { SUBJECT_TYPES, type SubjectType } from "@/lib/domainConstants";
 
 import { readCustomItemRelationships, resolveCustomItemSubjectType, type CustomItemRelationships } from "./customItemMetadata";
@@ -46,14 +47,6 @@ function mergeMetadata(existing: unknown, patch: Record<string, unknown>): Recor
   return next;
 }
 
-function readWkSubjectId(metadata: unknown): number | null {
-  if (!isRecord(metadata) || !isRecord(metadata.wk) || typeof metadata.wk.subjectId !== "number") {
-    return null;
-  }
-
-  const subjectId = metadata.wk.subjectId;
-  return Number.isInteger(subjectId) && subjectId > 0 ? subjectId : null;
-}
 
 export async function enrichCustomLibraryItemsWithWaniKani(params: {
   token: string;
