@@ -134,4 +134,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Rekki no Touan", ja: "列記の答案", reading: "れっきのとうあん", gloss: "the answer sheets, listed out" },
   { romaji: "Ronkyo no Dandori", ja: "論拠の段取り", reading: "ろんきょのだんどり", gloss: "grounds, set in order" },
   { romaji: "Warifuri no Tsugi", ja: "割り振りの次", reading: "わりふりのつぎ", gloss: "the next ones, by allotment" },
+  { romaji: "Atenagaki", ja: "宛名書き", reading: "あてながき", gloss: "writing the address on" },
 ];

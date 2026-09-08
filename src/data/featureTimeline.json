@@ -7158,12 +7158,25 @@
     "id": "coming-up-list-labels-un-levels-as-ug-for-ug-members",
     "name": "Coming up list labels UN levels as UG for UG members",
     "area": "study",
+    "status": "shipped",
     "kind": "bug",
+    "date": "2026-09-07",
+    "summary": "Coming up shows each review on the member's own ladder, with its meaning.",
+    "dateIsEstimate": false,
+    "release": 572,
+    "version": "1.75.0",
+    "releasedAt": "2026-09-08T01:27:23Z"
+  },
+  {
+    "id": "rename-studyqueueitem-unlevel-and-glyphmetadatabadges-unleve",
+    "name": "Rename StudyQueueItem.unLevel and GlyphMetadataBadges unLevel to ourLevel",
+    "area": "study",
+    "kind": "feature",
     "status": "shipped",
     "date": "2026-09-07",
-    "version": "1.75.0",
-    "release": 572,
-    "releasedAt": "2026-09-08T01:27:23Z",
-    "summary": "Coming up shows each review on the member's own ladder, with its meaning."
+    "version": "1.76.0",
+    "release": 573,
+    "releasedAt": "2026-09-08T01:34:31Z",
+    "summary": "Level badges name their ladder - UN, UG or LIB - from the slot the feed filled."
   }
 ]
