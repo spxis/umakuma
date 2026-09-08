@@ -8,8 +8,9 @@ export const RADICAL_PARTS_COPY = {
   /* A radical that cannot narrow what is left is dimmed rather than removed. */
   deadEnd: "No remaining kanji have this part",
   strokeTitle: (strokes: number) => (strokes === 1 ? "1 stroke" : `${strokes} strokes`),
-  /* The stroke pages' own line, where the grid is the second filter. */
+  /* The stroke pages' own line, where the grid is the second filter and
+     only the parts that can still narrow are drawn. */
   partsHeading: "Narrow by part",
-  partsBlurb: "Pick a part to keep only the kanji that contain it. Anything dimmed would leave nothing.",
+  partsBlurb: "Pick a part to keep only the kanji that contain it. Only parts that can still narrow are shown.",
   clear: "Clear parts",
 } as const;

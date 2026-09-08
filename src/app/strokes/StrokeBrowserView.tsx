@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useMemo } from "react";
 
 import { ListRow } from "@/app/shared/ListSubjectRows";
-import RadicalPartsGrid from "@/app/shared/RadicalPartsGrid";
+import RadicalPartsGrid, { DEAD_ENDS } from "@/app/shared/RadicalPartsGrid";
 import { RADICAL_PARTS_COPY } from "@/app/shared/radicalPartsCopy";
 import SubjectFilerCell from "@/app/shared/SubjectFilerCell";
 import SubjectFilerToggle from "@/app/shared/SubjectFilerToggle";
@@ -185,6 +185,8 @@ export default function StrokeBrowserView({
             usable={usableSet}
             names={partNames}
             hrefFor={(parts) => strokesHref(strokes, { sources, parts })}
+            /* A filter over a few dozen kanji offers only what can still narrow. */
+            deadEnds={DEAD_ENDS.hidden}
           />
         </div>
       </section>
