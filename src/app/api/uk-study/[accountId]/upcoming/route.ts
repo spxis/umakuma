@@ -3,8 +3,8 @@ import { z } from "zod";
 
 import { canAccessAccount } from "@/lib/accountAccess";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
-import { prisma } from "@/lib/prisma";
 import { ukSubjectTypeFor } from "@/lib/uk/ukExplorerFeed";
+import { ukUpcoming } from "@/lib/uk/ukStudyQueue";
 
 type RouteContext = { params: Promise<{ accountId: string }> };
 
@@ -27,29 +27,17 @@ export async function GET(request: Request, context: RouteContext) {
         if (!parsed.success) {
           return NextResponse.json({ error: "Invalid request." }, { status: 400 });
         }
-        const now = new Date();
-        const where = { accountId, availableAt: { gt: now }, burnedAt: null };
-        const [totalUpcoming, states] = await Promise.all([
-          prisma.ukSrsState.count({ where }),
-          prisma.ukSrsState.findMany({
-            where,
-            select: {
-              availableAt: true,
-              subject: { select: { id: true, kind: true, level: true, characters: true, meanings: true, readings: true } },
-            },
-            orderBy: [{ availableAt: "asc" }, { id: "asc" }],
-            take: parsed.data.limit,
-          }),
-        ]);
-        const items = states.map((row) => ({
-          subjectId: row.subject.id,
-          subjectType: ukSubjectTypeFor(row.subject.kind),
+        const { items: upcoming, totalUpcoming } = await ukUpcoming(accountId, new Date(), parsed.data.limit);
+        const items = upcoming.map((item) => ({
+          subjectId: item.subjectId,
+          subjectType: ukSubjectTypeFor(item.kind),
           wkLevel: null,
-          unLevel: row.subject.level,
-          characters: row.subject.characters,
-          primaryMeaning: row.subject.meanings[0] ?? null,
-          primaryReading: row.subject.readings[0] ?? null,
-          availableAt: row.availableAt!.toISOString(),
+          /* The member's own ladder: `ukUpcoming` has already picked the column. */
+          unLevel: item.level,
+          characters: item.characters,
+          primaryMeaning: item.meanings[0] ?? null,
+          primaryReading: item.readings[0] ?? null,
+          availableAt: item.availableAt.toISOString(),
         }));
         return NextResponse.json({ items, totalUpcoming }, { headers: { "Cache-Control": "private, no-store" } });
       } catch (error) {

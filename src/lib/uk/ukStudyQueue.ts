@@ -87,19 +87,22 @@ async function memberColumns(accountId: string) {
  * Both columns are fetched and the member's is the one every consumer reads,
  * so the sort, the display and the gate all agree on which ordering this is.
  */
-function onOwnLadder<T extends { level: number; ugLevel: number }>(row: T, columns: LadderColumns): T {
+export function onOwnLadder<T extends { level: number; ugLevel: number }>(row: T, columns: LadderColumns): T {
   return { ...row, level: row[columns.subjectLevel] };
 }
 
 /** The ladder rows a member may work on: everything at or below their level. */
+/** Both level columns, always: `onOwnLadder` picks the member's after the read. */
+const LADDER_ROW_SELECT = {
+  id: true, key: true, kind: true, characters: true, level: true, ugLevel: true,
+  meanings: true, readings: true, wkSubjectId: true,
+} as const;
+
 async function unlockedSubjects(accountId: string) {
   const { columns, level } = await memberColumns(accountId);
   const rows = await prisma.ukSubject.findMany({
     where: { removedAt: null, [columns.subjectLevel]: { lte: level } },
-    select: {
-      id: true, key: true, kind: true, characters: true, level: true, ugLevel: true,
-      meanings: true, readings: true, wkSubjectId: true,
-    },
+    select: LADDER_ROW_SELECT,
     orderBy: [{ [columns.subjectLevel]: "asc" }, { kind: "asc" }, { id: "asc" }],
   });
   return rows.map((row) => onOwnLadder(row, columns));
@@ -225,10 +228,7 @@ export async function ukReviews(accountId: string, now = new Date(), limit = 100
     memberColumns(accountId),
     prisma.ukSubject.findMany({
       where: { id: { in: due.map((state) => state.subjectId) } },
-      select: {
-        id: true, key: true, kind: true, characters: true, level: true, ugLevel: true,
-        meanings: true, readings: true, wkSubjectId: true,
-      },
+      select: LADDER_ROW_SELECT,
     }),
   ]);
   const rows = fetched.map((row) => onOwnLadder(row, columns));
@@ -243,6 +243,44 @@ export async function ukReviews(accountId: string, now = new Date(), limit = 100
     if (!row) return [];
     return [toItem(row, content, state.srsStage, state.passedAt !== null)];
   });
+}
+
+/** A review still ahead: the item, and when it falls due. */
+export type UkUpcomingItem = UkStudyItem & { availableAt: Date };
+
+/**
+ * The next reviews to fall due, for the explorer's "coming up" strip.
+ *
+ * Read like the queue reads, because it was not: the route selected the
+ * subject's `level` outright, which is the UN column, and the strip labelled
+ * it with the member's own prefix - so a UG member read `UG12` over a number
+ * from the exam ordering. It also drew a dash for the meaning of every item
+ * WaniKani teaches, whose facts live in the catalogue, not on the row.
+ */
+export async function ukUpcoming(
+  accountId: string,
+  now = new Date(),
+  limit = 8,
+): Promise<{ items: UkUpcomingItem[]; totalUpcoming: number }> {
+  const where = { accountId, availableAt: { gt: now }, burnedAt: null };
+  const [{ columns }, totalUpcoming, states] = await Promise.all([
+    memberColumns(accountId),
+    prisma.ukSrsState.count({ where }),
+    prisma.ukSrsState.findMany({
+      where,
+      select: { availableAt: true, srsStage: true, passedAt: true, subject: { select: LADDER_ROW_SELECT } },
+      orderBy: [{ availableAt: "asc" }, { id: "asc" }],
+      take: limit,
+    }),
+  ]);
+  const rows = states.map((state) => onOwnLadder(state.subject, columns));
+  const content = await withContent(rows);
+  const items = states.flatMap((state, index) => {
+    const row = rows[index];
+    if (!row || !state.availableAt) return [];
+    return [{ ...toItem(row, content, state.srsStage, state.passedAt !== null), availableAt: state.availableAt }];
+  });
+  return { items, totalUpcoming };
 }
 
 export async function ukStudyCounts(accountId: string, now = new Date()): Promise<UkStudyCounts> {
