@@ -7223,12 +7223,25 @@
     "id": "review-parity-trouble-injection-for-our-queue-and-the-librar",
     "name": "Review parity: trouble injection for our queue, and the library feed's facts",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-07",
+    "summary": "Trouble items join an UmaKuma sitting as practice, spaced through the reviews, the way they do on WaniKani.",
+    "dateIsEstimate": false,
+    "release": 577,
+    "version": "1.80.0",
+    "releasedAt": "2026-09-08T03:10:43Z"
+  },
+  {
+    "id": "library-review-items-carry-what-wanikani-ones-do",
+    "name": "Library review items carry what WaniKani ones do",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-07",
-    "version": "1.80.0",
-    "release": 577,
-    "releasedAt": "2026-09-08T03:10:43Z",
-    "summary": "Trouble items join an UmaKuma sitting as practice, spaced through the reviews, the way they do on WaniKani."
+    "version": "1.81.0",
+    "release": 578,
+    "releasedAt": "2026-09-08T03:18:24Z",
+    "summary": "A library review carries what a WaniKani one does: identity, marks, N band, dictionary panel, look-alikes, trouble practice."
   }
 ]
