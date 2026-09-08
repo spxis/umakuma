@@ -79,6 +79,9 @@ export default async function StrokesPage({ params, searchParams }: Props) {
    */
   const parts = readParts(query[STROKE_PARAMS.parts]);
   const narrowed = narrowByRadicals(atCount.map((entry) => entry.kanji), parts);
+  /* The grid's fixed set: what any kanji at this count is built from, before
+     either filter. Decided by the count alone, so picking never moves it. */
+  const available = narrowByRadicals(all.map((entry) => entry.kanji), []).usable;
   const keptSet = new Set(narrowed.kept);
   const shown = parts.length > 0 ? atCount.filter((entry) => keptSet.has(entry.kanji)) : atCount;
   const { rows, pageCount } = strokePage(shown, readPage(query.page));
@@ -111,6 +114,7 @@ export default async function StrokesPage({ params, searchParams }: Props) {
         total={all.length}
         groups={narrowed.groups}
         chosenParts={narrowed.chosen}
+        availableParts={[...available]}
         usableParts={[...narrowed.usable]}
         partNames={Object.fromEntries(names)}
         accountId={viewerMenuInfo?.accountId ?? null}

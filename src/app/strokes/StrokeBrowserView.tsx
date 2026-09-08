@@ -5,7 +5,7 @@ import { useMemo } from "react";
 
 import { ListRow } from "@/app/shared/ListSubjectRows";
 import { FilterChipLink } from "@/app/shared/FilterChip";
-import RadicalPartsGrid, { DEAD_ENDS } from "@/app/shared/RadicalPartsGrid";
+import RadicalPartsGrid from "@/app/shared/RadicalPartsGrid";
 import { RADICAL_PARTS_COPY } from "@/app/shared/radicalPartsCopy";
 import SubjectFilerCell from "@/app/shared/SubjectFilerCell";
 import SubjectFilerToggle from "@/app/shared/SubjectFilerToggle";
@@ -79,6 +79,7 @@ export default function StrokeBrowserView({
   total,
   groups,
   chosenParts,
+  availableParts,
   usableParts,
   partNames,
   accountId,
@@ -100,6 +101,8 @@ export default function StrokeBrowserView({
   /** Every radical there is, for the second filter under the counts. */
   groups: RadicalGroup[];
   chosenParts: string[];
+  /** The parts any kanji at this count is built from, whatever else is picked. The grid's fixed set. */
+  availableParts: string[];
   /** The parts still present in what is on the page. The rest are dead ends. */
   usableParts: string[];
   partNames: Record<string, string>;
@@ -114,6 +117,7 @@ export default function StrokeBrowserView({
   const rows = useMemo(() => entries.map(toRow), [entries]);
   const filing = Boolean(accountId) && filerOpen;
   const filer = useSubjectFiler(accountId, rows, filing);
+  const availableSet = useMemo(() => new Set(availableParts), [availableParts]);
   const usableSet = useMemo(() => new Set(usableParts), [usableParts]);
 
   return (
@@ -171,8 +175,8 @@ export default function StrokeBrowserView({
             usable={usableSet}
             names={partNames}
             hrefFor={(parts) => strokesHref(strokes, { sources, parts })}
-            /* A filter over a few dozen kanji offers only what can still narrow. */
-            deadEnds={DEAD_ENDS.hidden}
+            /* Fixed by the stroke count, so the grid never moves under a pick. */
+            available={availableSet}
           />
         </div>
       </section>
