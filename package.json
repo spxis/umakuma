@@ -112,7 +112,8 @@
     "xp:prices:export": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/export-xp-prices.ts",
     "db:backup:prod": "node scripts/local-db.mjs backup:prod",
     "db:backup:dev": "node scripts/local-db.mjs backup:dev",
-    "ladder:relevel": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/relevel-accounts.ts"
+    "ladder:relevel": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/relevel-accounts.ts",
+    "og:build": "NODE_OPTIONS='--conditions=react-server' pnpm dlx tsx scripts/og-build.mts"
   },
   "dependencies": {
     "@mozilla/readability": "^0.6.0",
