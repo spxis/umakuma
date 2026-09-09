@@ -7353,12 +7353,25 @@
     "id": "link-preview-image-an-open-graph-card-for-shared-umakuma-lin",
     "name": "Link preview image: an Open Graph card for shared UmaKuma links",
     "area": "platform",
+    "status": "shipped",
     "kind": "feature",
+    "date": "2026-09-09",
+    "summary": "A UmaKuma link pasted anywhere now brings a picture, with an Open Graph and a Twitter card built by pnpm og:build",
+    "dateIsEstimate": false,
+    "release": 587,
+    "version": "1.90.0",
+    "releasedAt": "2026-09-09T08:10:43Z"
+  },
+  {
+    "id": "the-board-says-held-by-long-after-the-lease-expired",
+    "name": "The board says HELD BY long after the lease expired",
+    "area": "platform",
+    "kind": "bug",
     "status": "shipped",
     "date": "2026-09-09",
-    "version": "1.90.0",
-    "release": 587,
-    "releasedAt": "2026-09-09T08:10:43Z",
-    "summary": "A UmaKuma link pasted anywhere now brings a picture, with an Open Graph and a Twitter card built by pnpm og:build"
+    "version": "1.91.0",
+    "release": 588,
+    "releasedAt": "2026-09-09T08:28:22Z",
+    "summary": "The board stops printing HELD BY for a hold whose six-hour lease lapsed, and counts in-progress work by the lease rather than the status"
   }
 ]
