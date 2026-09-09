@@ -35,6 +35,8 @@ import { JLPT_STATUS_LABELS, PROFILE_COPY } from "./profileCopy";
 import { LADDER_STREAMS } from "@/lib/ladder/ladderStreams";
 import { ourLevelBadge } from "@/lib/levelBadge";
 import { memberStreak } from "@/lib/xp/xpStreakServer";
+import XpKindSplit from "../xp/XpKindSplit";
+import { loadXpByKind } from "../xp/xpLedgerServer";
 
 type PageProps = { params: Promise<{ nickname: string }> };
 
@@ -110,9 +112,10 @@ export default async function UserProfilePage({ params }: PageProps) {
 
   /* Both are reads of what already exists: the streak from the days XpEvent
      holds, the level from the column the member's own stream names. */
-  const [games, streak] = await Promise.all([
+  const [games, streak, xpByKind] = await Promise.all([
     loadProfileGameStats(account.id),
     memberStreak(account.id),
+    loadXpByKind(account.id),
   ]);
   const ourLevel = ourLevelBadge(
     account.ladderStream,
@@ -169,6 +172,18 @@ export default async function UserProfilePage({ params }: PageProps) {
             the site header - and neither was here. */}
         <Fact {...streakFact(streak)} />
         <Fact {...ourLevelFact(ourLevel)} />
+      </section>
+
+      {/* Where the XP came from. The history page has said this for a while
+          and the profile - the page about standing - had never asked. */}
+      <section className="mb-4 rounded-2xl border border-line bg-surface p-5">
+        <h2 className="text-lg font-black text-foreground">{PROFILE_COPY.xpBySource}</h2>
+        <p className="mt-1 mb-3 text-sm font-semibold text-foreground/70">{PROFILE_COPY.xpBySourceBlurb}</p>
+        {xpByKind.length > 0 ? (
+          <XpKindSplit byKind={xpByKind} />
+        ) : (
+          <p className="text-sm font-semibold text-foreground/60">{PROFILE_COPY.xpBySourceNone}</p>
+        )}
       </section>
 
       <section className="mb-4 rounded-2xl border border-line bg-surface p-5">

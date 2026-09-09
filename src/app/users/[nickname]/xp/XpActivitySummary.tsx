@@ -1,4 +1,5 @@
 import { formatXpDay, type XpKindShare } from "./xpLedger";
+import XpKindSplit from "./XpKindSplit";
 import { XP_HISTORY_COPY as copy } from "./xpHistoryCopy";
 import type { XpActivity } from "@/lib/xp/xpActivity";
 
@@ -55,34 +56,9 @@ export default function XpActivitySummary({ activity, byKind }: Props) {
           <p className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/60">
             {copy.split}
           </p>
-          <ul className="mt-2 space-y-1.5">
-            {byKind.map((entry) => (
-              <li key={entry.kind} className="flex items-center gap-3">
-                <span className="w-40 shrink-0 truncate text-xs font-bold text-foreground">
-                  {entry.label}
-                </span>
-                <span
-                  role="progressbar"
-                  aria-label={entry.label}
-                  aria-valuemin={0}
-                  aria-valuemax={100}
-                  aria-valuenow={Math.round(entry.share * 100)}
-                  className="h-2 flex-1 overflow-hidden rounded-full bg-line"
-                >
-                  <span
-                    className="block h-full rounded-full bg-accent"
-                    style={{ width: `${Math.round(entry.share * 100)}%` }}
-                  />
-                </span>
-                <span className="w-24 shrink-0 text-right text-[11px] font-black tabular-nums text-foreground/70">
-                  {copy.xpAmount(entry.amount)}
-                </span>
-                <span className="w-10 shrink-0 text-right text-[11px] font-semibold tabular-nums text-foreground/60">
-                  {copy.splitShare(entry.share)}
-                </span>
-              </li>
-            ))}
-          </ul>
+          <div className="mt-2">
+            <XpKindSplit byKind={byKind} />
+          </div>
         </div>
       ) : null}
     </section>

@@ -29,6 +29,11 @@ export const PROFILE_COPY = {
   ourLevel: "Your level",
   ourLevelHint: "The ladder you are climbing here, which is not the same as a WaniKani level.",
   ourLevelNone: "Not started",
+  /* The Duolingo capture listed every course with its XP, biggest first. We
+     teach one language, so ours is where the XP came from. */
+  xpBySource: "Where your XP came from",
+  xpBySourceBlurb: "Every way you have earned, biggest first.",
+  xpBySourceNone: "Nothing yet. Your first review or game will show up here.",
   jlptHint: "As you report it. The year decides which version of the test applies.",
   jlptAddFirst: "Add a certificate",
   jlptAddAnother: "Add another",

@@ -120,3 +120,30 @@ export async function loadXpHistory(accountId: string, now = new Date()): Promis
     totalDays: dayTotals.length,
   };
 }
+
+/**
+ * Where a member's XP came from, and nothing else.
+ *
+ * `loadXpHistory` answers this among four other things and pays for all five:
+ * a per-day group-by, a windowed row read and the protected-day lookup, none
+ * of which a caller wanting the split needs. The profile wants the split.
+ *
+ * Labels come from `XpType` rather than from the rows, which is the other half
+ * of why this is not a slice of the bigger loader: that one reads labels out
+ * of the drawn window, so a kind a member last earned a year ago falls back to
+ * its id. On a lifetime split that is most of the interesting ones.
+ */
+export async function loadXpByKind(accountId: string): Promise<XpKindShare[]> {
+  const [perKind, types] = await Promise.all([
+    prisma.xpEvent.groupBy({ by: ["kind"], where: { accountId }, _sum: { amount: true } }),
+    prisma.xpType.findMany({ select: { id: true, label: true } }),
+  ]);
+
+  const amounts = perKind.map((row) => ({ kind: row.kind, amount: row._sum.amount ?? 0 }));
+  const total = amounts.reduce((sum, row) => sum + row.amount, 0);
+  const shares = amounts
+    .map((row) => ({ ...row, share: total === 0 ? 0 : row.amount / total }))
+    .sort((left, right) => right.amount - left.amount);
+
+  return labelXpKinds(shares, new Map(types.map((type) => [type.id, type.label])));
+}
