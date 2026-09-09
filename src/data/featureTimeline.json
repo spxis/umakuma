@@ -7405,12 +7405,25 @@
     "id": "stroke-pages-could-also-show-radicals-with-their-own-colour-",
     "name": "Stroke pages could also show radicals, with their own colour and a filter",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-09",
+    "summary": "The stroke pages can show radicals beside the kanji, in their own colour, with a filter and counts that follow it",
+    "dateIsEstimate": false,
+    "release": 591,
+    "version": "1.94.0",
+    "releasedAt": "2026-09-09T08:51:57Z"
+  },
+  {
+    "id": "a-review-mode-that-drills-only-your-confusable-kanji",
+    "name": "A review mode that drills only your confusable kanji",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-09",
-    "version": "1.94.0",
-    "release": 591,
-    "releasedAt": "2026-09-09T08:51:57Z",
-    "summary": "The stroke pages can show radicals beside the kanji, in their own colour, with a filter and counts that follow it"
+    "version": "1.95.0",
+    "release": 592,
+    "releasedAt": "2026-09-09T08:57:07Z",
+    "summary": "Practice gains a Look-alikes list that drills each character against the one it is mistaken for, gated to pairs you have both met"
   }
 ]

@@ -153,4 +153,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Chakuseki", ja: "着席", reading: "ちゃくせき", gloss: "taking your seat, without moving the room" },
   { romaji: "Tsuiseki", ja: "追跡", reading: "ついせき", gloss: "following the trail back" },
   { romaji: "Tewake", ja: "手分け", reading: "てわけ", gloss: "dividing the work between hands" },
+  { romaji: "Toriwake", ja: "取り分け", reading: "とりわけ", gloss: "telling one from another" },
 ];
