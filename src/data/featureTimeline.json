@@ -7366,12 +7366,25 @@
     "id": "the-board-says-held-by-long-after-the-lease-expired",
     "name": "The board says HELD BY long after the lease expired",
     "area": "platform",
+    "status": "shipped",
     "kind": "bug",
+    "date": "2026-09-09",
+    "summary": "The board stops printing HELD BY for a hold whose six-hour lease lapsed, and counts in-progress work by the lease rather than the status",
+    "dateIsEstimate": false,
+    "release": 588,
+    "version": "1.91.0",
+    "releasedAt": "2026-09-09T08:28:22Z"
+  },
+  {
+    "id": "print-as-modal",
+    "name": "Print without leaving the page",
+    "area": "study",
+    "kind": "feature",
     "status": "shipped",
     "date": "2026-09-09",
-    "version": "1.91.0",
-    "release": 588,
-    "releasedAt": "2026-09-09T08:28:22Z",
-    "summary": "The board stops printing HELD BY for a hold whose six-hour lease lapsed, and counts in-progress work by the lease rather than the status"
+    "version": "1.92.0",
+    "release": 589,
+    "releasedAt": "2026-09-09T08:28:38Z",
+    "summary": "Worksheet opens the sheet in a frame on the page you are already on, with Print on it, instead of navigating away"
   }
 ]
