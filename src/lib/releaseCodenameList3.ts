@@ -147,4 +147,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Sakeme Fusagi", ja: "裂け目塞ぎ", reading: "さけめふさぎ", gloss: "the crack in the wall, sealed shut" },
   { romaji: "Shirube", ja: "標", reading: "しるべ", gloss: "a guidepost" },
   { romaji: "Sueoki", ja: "据え置き", reading: "すえおき", gloss: "left as it stands" },
+  { romaji: "Seijitsu", ja: "誠実", reading: "せいじつ", gloss: "honesty" },
 ];

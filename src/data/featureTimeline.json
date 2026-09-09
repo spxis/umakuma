@@ -7327,12 +7327,25 @@
     "id": "next-16-3-rewrites-agents-md-and-claude-md-on-every-dev-run",
     "name": "Next 16.3 rewrites AGENTS.md and CLAUDE.md on every dev run",
     "area": "platform",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-09",
+    "summary": "Next 16.3 no longer rewrites this project's AGENTS.md and CLAUDE.md on every dev run",
+    "dateIsEstimate": false,
+    "release": 585,
+    "version": "1.88.0",
+    "releasedAt": "2026-09-09T07:50:56Z"
+  },
+  {
+    "id": "the-sources-cdn-header-does-nothing-and-a-test-swears-it-wor",
+    "name": "The sources CDN header does nothing, and a test swears it works",
+    "area": "platform",
     "kind": "bug",
     "status": "shipped",
     "date": "2026-09-09",
-    "version": "1.88.0",
-    "release": 585,
-    "releasedAt": "2026-09-09T07:50:56Z",
-    "summary": "Next 16.3 no longer rewrites this project's AGENTS.md and CLAUDE.md on every dev run"
+    "version": "1.89.0",
+    "release": 586,
+    "releasedAt": "2026-09-09T08:01:55Z",
+    "summary": "The sources pages drop a CDN header that never served a request, and the test that swore it worked now asserts the truth"
   }
 ]
