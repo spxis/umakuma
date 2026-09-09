@@ -7483,12 +7483,25 @@
     "id": "the-profile-does-not-say-where-your-xp-came-from",
     "name": "The profile does not say where your XP came from",
     "area": "account",
+    "status": "shipped",
     "kind": "feature",
+    "date": "2026-09-09",
+    "summary": "The profile now shows where your XP came from, drawn by the same component as the history page",
+    "dateIsEstimate": false,
+    "release": 597,
+    "version": "1.100.0",
+    "releasedAt": "2026-09-09T09:57:25Z"
+  },
+  {
+    "id": "release-take-accepts-a-codename-whose-romaji-is-not-its-read",
+    "name": "release:take accepts a codename whose romaji is not its reading",
+    "area": "platform",
+    "kind": "bug",
     "status": "shipped",
     "date": "2026-09-09",
-    "version": "1.100.0",
-    "release": 597,
-    "releasedAt": "2026-09-09T09:57:25Z",
-    "summary": "The profile now shows where your XP came from, drawn by the same component as the history page"
+    "version": "1.101.0",
+    "release": 598,
+    "releasedAt": "2026-09-09T10:11:12Z",
+    "summary": "The release gate now refuses a codename whose romaji is not a reading of its own reading"
   }
 ]
