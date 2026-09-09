@@ -407,6 +407,15 @@ Run `pnpm quality:check` after non-trivial `src/` edits. If lint issues are auto
       pnpm task drop <id>                    answered no, kept on the record
       pnpm task filed <id> <timeline-id>     it became planned work in the file
 
+  **`<id>` is the whole cuid the board prints, never the short prefix.**
+  `release`, `ship`, `drop` and `filed` update by exact id, so a prefix fails
+  with Prisma's *"An operation failed because it depends on one or more
+  records that were required but not found. No record was found for an
+  update."* That reads like the ticket was deleted rather than like a mistyped
+  argument, and two sessions lost time to it on 2026-09-08 before comparing
+  notes. `claim` is the one that says `No task <id>.` and means it. Copy the
+  whole `cmt…` string.
+
   **Record a request the moment it arrives, before starting work on it.** A
   claim written to `featureTimeline.json` is invisible to every other session
   until it reaches main, and the usual way a conflict on that file is resolved
@@ -414,9 +423,18 @@ Run `pnpm quality:check` after non-trivial `src/` edits. If lint issues are auto
   happened three times in one afternoon on 2026-09-03 and lost a request
   outright. A row is true for everybody the moment it is written.
 
-  A claim cannot be taken over: `claim` refuses and names the holder, because
-  two agents building the same thing is the expensive failure, not two agents
-  idle. Re-claiming your own is allowed and does nothing.
+  A claim cannot be taken over while it is live: `claim` refuses and names the
+  holder, because two agents building the same thing is the expensive failure,
+  not two agents idle. Re-claiming your own is allowed and does nothing.
+
+  **A hold expires after six hours, and then the ticket is free.**
+  `TASK_LEASE_MS` in `src/lib/ticketClaims.ts` is the lease, and `claimTask`
+  hands a stale ticket to whoever asks next - a crashed session must not take
+  work out of circulation for good. So an old `HELD BY` is not a wall: try the
+  claim. What the listing prints is not the whole story either, because
+  `taskLine` never sees `claimedAt` and goes on naming a holder whose lease
+  lapsed days ago. Two claims from 2026-09-04 still read as held on 2026-09-08
+  and were released by hand that a `claim` would have granted for the asking.
 
 - **The timeline is the shipped record; the board that says what is open is
   `pnpm task`.** Several sessions work this repository at once and cannot see
