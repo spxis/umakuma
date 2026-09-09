@@ -13,6 +13,22 @@ export const PROFILE_COPY = {
   wanikaniPendingHint: "Your level arrives with the first sync.",
   wanikaniHint: "Set by WaniKani, not editable here.",
   jlpt: "JLPT",
+  /* The two numbers a profile was missing. Both already existed - the streak
+     on the XP history page, the ladder level in the site header - and neither
+     was on the page that is meant to say how a member is doing. */
+  streak: "Streak",
+  streakDays: (days: number) => (days === 1 ? "1 day" : `${days.toLocaleString("en-US")} days`),
+  streakNone: "Not started",
+  /* "Not started" to somebody whose best is ninety-eight days is a lie of
+     omission. A broken streak is a different state from one never begun, and
+     the number they reached is the reason to begin again. */
+  streakBroken: "None right now",
+  streakBest: (days: number) => `Your longest was ${days.toLocaleString("en-US")} days.`,
+  streakHint: "Days in a row you have earned any XP. A rest day or a vacation day holds it.",
+  streakAtRisk: "Today does not count yet.",
+  ourLevel: "Your level",
+  ourLevelHint: "The ladder you are climbing here, which is not the same as a WaniKani level.",
+  ourLevelNone: "Not started",
   jlptHint: "As you report it. The year decides which version of the test applies.",
   jlptAddFirst: "Add a certificate",
   jlptAddAnother: "Add another",

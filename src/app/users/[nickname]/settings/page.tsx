@@ -20,7 +20,7 @@ import { hasWanikaniConnection } from "@/lib/wanikaniConnection";
 import { canViewUserPage, resolveViewerMenuInfo } from "../userPageAuth";
 import DailyQuestsPanel from "./DailyQuestsPanel";
 import JlptCertificates from "./JlptCertificates";
-import { wanikaniFact } from "./profileFacts";
+import { wanikaniFact, ourLevelFact, streakFact } from "./profileFacts";
 import type { AgeBand } from "@/lib/srs/ageBand";
 import { memberTheme } from "@/lib/srs/srsThemeServer";
 
@@ -32,6 +32,9 @@ import ThemePicker from "./ThemePicker";
 import ProfileXpHeadline from "./ProfileXpHeadline";
 import XpRankPanel from "./XpRankPanel";
 import { JLPT_STATUS_LABELS, PROFILE_COPY } from "./profileCopy";
+import { LADDER_STREAMS } from "@/lib/ladder/ladderStreams";
+import { ourLevelBadge } from "@/lib/levelBadge";
+import { memberStreak } from "@/lib/xp/xpStreakServer";
 
 type PageProps = { params: Promise<{ nickname: string }> };
 
@@ -81,6 +84,7 @@ export default async function UserProfilePage({ params }: PageProps) {
     select: {
       id: true, nickname: true, slug: true, displayName: true, visibility: true, wkUsername: true, wkLevel: true,
       jlptStatus: true, srsTheme: true, ageBand: true, xp: true, studyPreferences: true,
+      ladderStream: true, unLevel: true, ugLevel: true,
       jlptCertificates: { select: { id: true, system: true, level: true, year: true } },
       lastSyncedAt: true, lastActivityAt: true,
       tokenEncrypted: true, tokenIv: true, tokenTag: true,
@@ -104,7 +108,16 @@ export default async function UserProfilePage({ params }: PageProps) {
     redirect("/join?access=denied");
   }
 
-  const games = await loadProfileGameStats(account.id);
+  /* Both are reads of what already exists: the streak from the days XpEvent
+     holds, the level from the column the member's own stream names. */
+  const [games, streak] = await Promise.all([
+    loadProfileGameStats(account.id),
+    memberStreak(account.id),
+  ]);
+  const ourLevel = ourLevelBadge(
+    account.ladderStream,
+    account.ladderStream === LADDER_STREAMS.ug ? account.ugLevel : account.unLevel,
+  );
   const name = resolveDisplayName(account);
   const wanikani = wanikaniFact({
     connected: hasWanikaniConnection(account),
@@ -150,6 +163,12 @@ export default async function UserProfilePage({ params }: PageProps) {
             new connection has none until its first sync lands. */}
         <Fact label={wanikani.label} value={wanikani.value} hint={wanikani.hint} action={wanikani.action} />
         <Fact label={PROFILE_COPY.jlpt} value={jlpt} />
+        {/* The two the profile never said: how long the member has kept it up,
+            and the level on the ladder they are actually climbing. Both were
+            already computed - the streak on the XP history page, the badge in
+            the site header - and neither was here. */}
+        <Fact {...streakFact(streak)} />
+        <Fact {...ourLevelFact(ourLevel)} />
       </section>
 
       <section className="mb-4 rounded-2xl border border-line bg-surface p-5">
