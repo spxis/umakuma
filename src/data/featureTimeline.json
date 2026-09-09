@@ -7301,12 +7301,25 @@
     "id": "critical-next-js-rce-advisory-has-main-red-and-every-deploy-",
     "name": "Critical: Next.js RCE advisory has main red and every deploy blocked",
     "area": "platform",
+    "status": "shipped",
     "kind": "bug",
+    "date": "2026-09-09",
+    "summary": "Updated Next.js past a critical remote-code-execution flaw in its image optimizer, and brought the image-processing library it depends on above its own vulnerable version too.",
+    "dateIsEstimate": false,
+    "release": 583,
+    "version": "1.86.0",
+    "releasedAt": "2026-09-09T07:39:15Z"
+  },
+  {
+    "id": "theme-rungs-in-romaji-by-default-japanese-with-the-srs-stage",
+    "name": "Theme rungs in romaji by default, Japanese with the SRS stage",
+    "area": "study",
+    "kind": "feature",
     "status": "shipped",
     "date": "2026-09-09",
-    "version": "1.86.0",
-    "release": 583,
-    "releasedAt": "2026-09-09T07:39:15Z",
-    "summary": "Updated Next.js past a critical remote-code-execution flaw in its image optimizer, and brought the image-processing library it depends on above its own vulnerable version too."
+    "version": "1.87.0",
+    "release": 584,
+    "releasedAt": "2026-09-09T07:49:06Z",
+    "summary": "Theme rung names read in romaji by default, with the Japanese one press away and the SRS stage printed beside it"
   }
 ]
