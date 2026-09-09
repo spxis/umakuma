@@ -14,11 +14,11 @@ import { writeSources, type KanjiSource } from "@/lib/kanjiSourceFilters";
  * character each, no separator - so the two pages read the same query.
  */
 export const STROKES_HREF = "/strokes";
-export const STROKE_PARAMS = { sources: "sources", page: "page", parts: "parts" } as const;
+export const STROKE_PARAMS = { sources: "sources", page: "page", parts: "parts", type: "type" } as const;
 
 export function strokesHref(
   strokes: number | null,
-  options: { sources?: readonly KanjiSource[]; page?: number; parts?: readonly string[] } = {},
+  options: { sources?: readonly KanjiSource[]; page?: number; parts?: readonly string[]; type?: string } = {},
 ): string {
   if (strokes === null) return STROKES_HREF;
   const params = new URLSearchParams();
@@ -27,6 +27,9 @@ export function strokesHref(
   if (options.sources && options.sources.length > 0) params.set(STROKE_PARAMS.sources, writeSources(options.sources));
   /* Never carried forward: narrowing changes what is on page one, so page
      four of the old set is a page of nothing. */
+  /* Kanji is the default and never rides in the address: a link that spells
+     out the state it did not change is a link that looks like a filter. */
+  if (options.type && options.type !== "kanji") params.set(STROKE_PARAMS.type, options.type);
   if (options.parts && options.parts.length > 0) params.set(STROKE_PARAMS.parts, options.parts.join(""));
   if (options.page && options.page > 1) params.set(STROKE_PARAMS.page, String(options.page));
   const search = params.toString();

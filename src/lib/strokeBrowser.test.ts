@@ -1,7 +1,16 @@
 import { describe, expect, it } from "vitest";
 
 import { isTaughtKanji } from "./kanjiLadder";
-import { STROKE_PAGE_SIZE, isStrokeCount, kanjiByStrokeCount, strokeCounts, strokePage } from "./strokeBrowser";
+import { SUBJECT_TYPES } from "./domainConstants";
+import {
+  STROKE_PAGE_SIZE,
+  STROKE_TYPE_FILTERS,
+  STROKE_TYPE_VALUES,
+  isStrokeCount,
+  kanjiByStrokeCount,
+  strokeCounts,
+  strokePage,
+} from "./strokeBrowser";
 
 describe("kanji by how many strokes they take", () => {
   const counts = strokeCounts();
@@ -109,5 +118,58 @@ describe("kanji by how many strokes they take", () => {
     expect(first.pageCount).toBeGreaterThan(1);
     expect(strokePage(entries, 999).rows[0]).toEqual(strokePage(entries, first.pageCount).rows[0]);
     expect(strokePage([], 1)).toEqual({ rows: [], pageCount: 1 });
+  });
+});
+
+/*
+ * Radicals alongside the kanji, which John asked for after the pages were
+ * narrowed to what the curriculum teaches - "we could also add Radicals and
+ * Kanji, but then we have to do the colours correctly and allow the user to
+ * filter out Radicals or Kanji from the stroke chart."
+ *
+ * Off by default, deliberately. His earlier instruction was the stronger one -
+ * "if it's a radical, then it should not show up in the strokes" - so this is
+ * a thing a reader turns on, not a thing that arrives unasked.
+ */
+describe("radicals, alongside the kanji when asked for", () => {
+  it("shows none of them until the reader asks", () => {
+    const drawnByDefault = new Set(kanjiByStrokeCount(1).concat(kanjiByStrokeCount(2)).map((entry) => entry.kanji));
+
+    for (const component of ["丿", "丶", "亅", "亠", "儿", "冂"]) {
+      expect(drawnByDefault.has(component), component).toBe(false);
+    }
+    expect(kanjiByStrokeCount(1).every((entry) => entry.subjectType === SUBJECT_TYPES.kanji)).toBe(true);
+  });
+
+  it("shows the whole radical set when asked for radicals", () => {
+    const total = strokeCounts(STROKE_TYPE_FILTERS.radical).reduce((sum, entry) => sum + entry.count, 0);
+
+    expect(total).toBe(253);
+    for (const entry of kanjiByStrokeCount(1, STROKE_TYPE_FILTERS.radical)) {
+      expect(entry.subjectType).toBe(SUBJECT_TYPES.radical);
+    }
+  });
+
+  /*
+   * 164 characters are held by the ladder twice, once as a radical and once as
+   * a kanji. Drawn twice side by side that reads as a bug to anybody who does
+   * not know the ladder, so the combined view shows each character once.
+   */
+  it("draws a character that is both only once, and as the kanji", () => {
+    const both = kanjiByStrokeCount(2, STROKE_TYPE_FILTERS.all);
+    const seen = new Set(both.map((entry) => entry.kanji));
+
+    expect(seen.size).toBe(both.length);
+    const person = both.find((entry) => entry.kanji === "人");
+    expect(person?.subjectType).toBe(SUBJECT_TYPES.kanji);
+  });
+
+  /* The counts the chips print have to be the counts the page shows, which is
+     the whole reason the filter is read by both. */
+  it("counts each type the way the page will draw it", () => {
+    for (const type of STROKE_TYPE_VALUES) {
+      const count = strokeCounts(type).find((entry) => entry.strokes === 2)?.count ?? 0;
+      expect(kanjiByStrokeCount(2, type).length, type).toBe(count);
+    }
   });
 });

@@ -23,10 +23,12 @@ import { strokesHref } from "@/lib/strokeAddress";
 import KanjiSourceFilterRow from "@/app/shared/KanjiSourceFilterRow";
 import type { KanjiSource } from "@/lib/kanjiSourceFilters";
 import type { RadicalGroup } from "@/lib/radicalSearch";
+import { STROKE_TYPE_FILTERS } from "@/lib/strokeTypes";
 import type { StrokeCount, StrokeEntry } from "@/lib/strokeBrowser";
+import type { StrokeTypeFilter } from "@/lib/strokeTypes";
 import type { ListSubjectRow } from "@/lib/studySubjectItems";
 
-import { STROKE_BROWSER_COPY } from "./StrokeBrowser.constants";
+import { STROKE_BROWSER_COPY, STROKE_TYPE_COPY, STROKE_TYPE_NOUNS } from "./StrokeBrowser.constants";
 import { srsBucketFromStage } from "@/lib/domainConstants";
 import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
 import type { SubjectListRow } from "@/app/shared/subjectListView";
@@ -54,16 +56,16 @@ function toRow(entry: StrokeEntry): ListSubjectRow & SubjectListRow {
     subjectId: 0,
     srsStage: null,
     srsBucket: srsBucketFromStage(null),
-    kind: LIST_ITEM_KINDS.kanji,
+    kind: entry.subjectType === SUBJECT_TYPES.radical ? LIST_ITEM_KINDS.radical : LIST_ITEM_KINDS.kanji,
     slug: null,
     glyph: entry.kanji,
     meanings: [entry.meaning],
     readings: entry.reading ? [entry.reading] : [],
     meaning: entry.meaning,
     reading: entry.reading,
-    subjectType: SUBJECT_TYPES.kanji,
+    subjectType: entry.subjectType,
     wkLevel: null,
-    href: `/kanji/${encodeURIComponent(entry.kanji)}`,
+    href: entry.subjectType === SUBJECT_TYPES.radical ? null : `/kanji/${encodeURIComponent(entry.kanji)}`,
   };
 }
 
@@ -71,6 +73,8 @@ export default function StrokeBrowserView({
   counts,
   strokes,
   entries,
+  type,
+  typeCounts,
   page,
   pageCount,
   sources,
@@ -88,6 +92,9 @@ export default function StrokeBrowserView({
   /** The count being read. The index redirects to the first, so there is always one. */
   strokes: number;
   entries: StrokeEntry[];
+  /** Which of the two is being read, and the tally for each. */
+  type: StrokeTypeFilter;
+  typeCounts: Record<StrokeTypeFilter, number>;
   page: number;
   pageCount: number;
   /** Which lists the page has been narrowed to. */
@@ -190,8 +197,8 @@ export default function StrokeBrowserView({
           </span>
           <span className="text-[11px] font-semibold text-foreground/60">
             {shownTotal === total
-              ? STROKE_BROWSER_COPY.showingAll(total)
-              : STROKE_BROWSER_COPY.showingParts(shownTotal, total)}
+              ? STROKE_BROWSER_COPY.showingAll(total, STROKE_TYPE_NOUNS[type])
+              : STROKE_BROWSER_COPY.showingParts(shownTotal, total, STROKE_TYPE_NOUNS[type])}
           </span>
           {/*
             * Five questions of the same kind, in one row. Common only was a
@@ -199,10 +206,36 @@ export default function StrokeBrowserView({
             * for someone browsing all kanji and wanting to get rid of things
             * they don't need to recognize/know."
             */}
+          {/*
+            * Which of the two, drawn with the same chip every other filter on
+            * the site uses. The counts are the ones this stroke count actually
+            * holds under each choice, not the totals: a chip saying 38 over a
+            * page of 24 is the bug this filter was asked to avoid.
+            */}
+          <span className="flex flex-wrap items-center gap-1.5">
+            {(
+              [
+                [STROKE_TYPE_FILTERS.kanji, STROKE_TYPE_COPY.kanji, STROKE_TYPE_COPY.kanjiTitle],
+                [STROKE_TYPE_FILTERS.radical, STROKE_TYPE_COPY.radical, STROKE_TYPE_COPY.radicalTitle],
+                [STROKE_TYPE_FILTERS.all, STROKE_TYPE_COPY.all, STROKE_TYPE_COPY.allTitle],
+              ] as const
+            ).map(([value, label, title]) => (
+              <FilterChipLink
+                key={value}
+                on={type === value}
+                label={label}
+                count={typeCounts[value]}
+                title={title}
+                /* A choice that would empty the page is a dead end rather than
+                   a link, the same as a part in the grid below. */
+                href={typeCounts[value] > 0 ? strokesHref(strokes, { sources, type: value }) : null}
+              />
+            ))}
+          </span>
           <KanjiSourceFilterRow
             chosen={sources}
             counts={sourceCounts}
-            hrefFor={(next) => strokesHref(strokes, { sources: next, parts: chosenParts })}
+            hrefFor={(next) => strokesHref(strokes, { sources: next, parts: chosenParts, type })}
           />
           <span className="ml-auto flex items-center gap-2">
             {accountId ? (

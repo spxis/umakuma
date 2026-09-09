@@ -1,3 +1,7 @@
+import radicalIndex from "@/data/radicals/index.json";
+
+import { SUBJECT_TYPES, type SubjectType } from "./domainConstants";
+import { STROKE_TYPE_FILTERS, type StrokeTypeFilter } from "./strokeTypes";
 import { getAllKanjiDictionaryEntries, primaryKanjiReading } from "./kanjiDictionary";
 import { isTaughtKanji } from "./kanjiLadder";
 import { strokesHref } from "./strokeAddress";
@@ -37,6 +41,7 @@ export const STROKE_PAGE_SIZE = 120;
 
 export type StrokeEntry = {
   kanji: string;
+  subjectType: SubjectType;
   meaning: string;
   reading: string | null;
   strokeCount: number;
@@ -47,6 +52,13 @@ export type StrokeEntry = {
 
 export type StrokeCount = { strokes: number; count: number };
 
+/**
+ * Which of the two the page is showing.
+ *
+ * "All" is not a subject type, which is why this is the one place an inline
+ * union is allowed: it adds a non-domain value to the canonical ones rather
+ * than restating them.
+ */
 function byFrequencyThenKanji(left: StrokeEntry, right: StrokeEntry): number {
   const leftRank = left.frequencyRank ?? Number.MAX_SAFE_INTEGER;
   const rightRank = right.frequencyRank ?? Number.MAX_SAFE_INTEGER;
@@ -57,6 +69,7 @@ function byFrequencyThenKanji(left: StrokeEntry, right: StrokeEntry): number {
 function toEntry(entry: ReturnType<typeof getAllKanjiDictionaryEntries>[number]): StrokeEntry {
   return {
     kanji: entry.kanji,
+    subjectType: SUBJECT_TYPES.kanji,
     meaning: entry.primaryMeaning || entry.meanings[0] || "",
     reading: primaryKanjiReading(entry),
     strokeCount: entry.strokeCount ?? 0,
@@ -71,14 +84,56 @@ function toEntry(entry: ReturnType<typeof getAllKanjiDictionaryEntries>[number])
  * One filter, read by both the counts and the pages, because a chip saying
  * "1 8" over a page of four is worse than either number alone.
  */
-function strokeBrowserEntries() {
+function taughtKanjiEntries() {
   return getAllKanjiDictionaryEntries().filter((entry) => isTaughtKanji(entry.kanji));
 }
 
+/**
+ * The 253 radicals, as entries of the same shape.
+ *
+ * RADKFILE knows every one's stroke count, so they need no new source - only
+ * the same shape the kanji arrive in. They carry no meaning here: the name of
+ * a radical comes from `radicalDisplayNames`, which reaches WaniKani's names
+ * and is asynchronous, and this module is read by a synchronous count. The
+ * page fills them in, the way it already does for the parts grid.
+ */
+function radicalEntries(): StrokeEntry[] {
+  return (radicalIndex.radicals as { radical: string; strokes: number }[]).map((entry) => ({
+    kanji: entry.radical,
+    subjectType: SUBJECT_TYPES.radical,
+    meaning: "",
+    reading: null,
+    strokeCount: entry.strokes,
+    frequencyRank: null,
+    grade: null,
+  }));
+}
+
+/**
+ * Every character the stroke pages will show, of the type asked for.
+ *
+ * **A character can be both, and 164 of them are** - 一 人 力 口 十 among them,
+ * held twice by the ladder, once as a radical and once as a kanji. Shown twice
+ * side by side that reads as a bug to everybody who does not know the ladder,
+ * so in the combined view each character appears once and is typed as the
+ * kanji: that is what a reader with a pen is looking for, and the radical
+ * filter still shows the set of 253 complete.
+ */
+function strokeBrowserEntries(type: StrokeTypeFilter = STROKE_TYPE_FILTERS.kanji): StrokeEntry[] {
+  const kanji = type === STROKE_TYPE_FILTERS.radical ? [] : taughtKanjiEntries().map(toEntry);
+  if (type === STROKE_TYPE_FILTERS.kanji) return kanji;
+
+  const radicals = radicalEntries();
+  if (type === STROKE_TYPE_FILTERS.radical) return radicals;
+
+  const taught = new Set(kanji.map((entry) => entry.kanji));
+  return [...kanji, ...radicals.filter((entry) => !taught.has(entry.kanji))];
+}
+
 /** How many kanji each stroke count holds, fewest strokes first. */
-export function strokeCounts(): StrokeCount[] {
+export function strokeCounts(type: StrokeTypeFilter = STROKE_TYPE_FILTERS.kanji): StrokeCount[] {
   const counts = new Map<number, number>();
-  for (const entry of strokeBrowserEntries()) {
+  for (const entry of strokeBrowserEntries(type)) {
     if (entry.strokeCount === null) continue;
     counts.set(entry.strokeCount, (counts.get(entry.strokeCount) ?? 0) + 1);
   }
@@ -95,10 +150,12 @@ export function strokeCounts(): StrokeCount[] {
  * `narrowBySources` answers over this, because the answer has to compose with
  * the parts filter and be counted against it.
  */
-export function kanjiByStrokeCount(strokes: number): StrokeEntry[] {
-  return strokeBrowserEntries()
+export function kanjiByStrokeCount(
+  strokes: number,
+  type: StrokeTypeFilter = STROKE_TYPE_FILTERS.kanji,
+): StrokeEntry[] {
+  return strokeBrowserEntries(type)
     .filter((entry) => entry.strokeCount === strokes)
-    .map(toEntry)
     .sort(byFrequencyThenKanji);
 }
 
@@ -129,3 +186,6 @@ export function strokePage(entries: StrokeEntry[], page: number): { rows: Stroke
   const safe = Math.min(Math.max(1, page), pageCount);
   return { rows: entries.slice((safe - 1) * STROKE_PAGE_SIZE, safe * STROKE_PAGE_SIZE), pageCount };
 }
+
+export { STROKE_TYPE_DEFAULT, STROKE_TYPE_FILTERS, STROKE_TYPE_VALUES, isStrokeTypeFilter } from "./strokeTypes";
+export type { StrokeTypeFilter } from "./strokeTypes";

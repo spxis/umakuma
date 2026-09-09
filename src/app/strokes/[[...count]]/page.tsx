@@ -11,7 +11,9 @@ import { authOptions } from "@/lib/auth";
 import { readParts } from "@/lib/radicalBrowser";
 import { radicalDisplayNames } from "@/lib/radicalNames";
 import { narrowByRadicals } from "@/lib/radicalSearchServer";
+import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import { narrowBySources, readSources } from "@/lib/kanjiSourceFilters";
+import { STROKE_TYPE_DEFAULT, STROKE_TYPE_FILTERS, isStrokeTypeFilter, type StrokeTypeFilter } from "@/lib/strokeBrowser";
 import { STROKE_PARAMS, readPage, strokesFromPath, strokesIndexHref } from "@/lib/strokeAddress";
 import { isStrokeCount, kanjiByStrokeCount, strokeCounts, strokePage } from "@/lib/strokeBrowser";
 
@@ -53,12 +55,22 @@ export default async function StrokesPage({ params, searchParams }: Props) {
   const strokes = strokesFromPath((await params).count);
   if (strokes === undefined || (strokes !== null && !isStrokeCount(strokes))) notFound();
 
-  const counts = strokeCounts();
+  const query = await searchParams;
+  /*
+   * Which of the two the reader is looking at, and it decides the counts as
+   * well as the page. A chip reading "2 38" over a page of 24 is worse than
+   * either number on its own, so the chips are counted through the same
+   * filter the page is.
+   */
+  const rawType = query[STROKE_PARAMS.type];
+  const typeParam = Array.isArray(rawType) ? rawType[0] : rawType;
+  const type: StrokeTypeFilter = typeof typeParam === "string" && isStrokeTypeFilter(typeParam) ? typeParam : STROKE_TYPE_DEFAULT;
+
+  const counts = strokeCounts(type);
   /* The index has nothing to show of its own, so it opens on the first count. */
   if (strokes === null) redirect(strokesIndexHref(counts));
 
-  const query = await searchParams;
-  const all = kanjiByStrokeCount(strokes);
+  const all = kanjiByStrokeCount(strokes, type);
 
   /*
    * The first filter, and the one John asked for last: which list teaches the
@@ -85,7 +97,18 @@ export default async function StrokesPage({ params, searchParams }: Props) {
   const keptSet = new Set(narrowed.kept);
   const shown = parts.length > 0 ? atCount.filter((entry) => keptSet.has(entry.kanji)) : atCount;
   const { rows, pageCount } = strokePage(shown, readPage(query.page));
-  const names = await radicalDisplayNames(narrowed.groups.flatMap((group) => group.radicals));
+  /* Radicals arrive without a meaning - the name comes from WaniKani's set and
+     is fetched, not held in RADKFILE - so the page fills them in, the same
+     call the parts grid below already makes. */
+  const names = await radicalDisplayNames([
+    ...narrowed.groups.flatMap((group) => group.radicals),
+    ...rows.filter((entry) => entry.subjectType === SUBJECT_TYPES.radical).map((entry) => entry.kanji),
+  ]);
+  const named = rows.map((entry) =>
+    entry.subjectType === SUBJECT_TYPES.radical && !entry.meaning
+      ? { ...entry, meaning: names.get(entry.kanji) ?? entry.meaning }
+      : entry,
+  );
 
   const session = await getServerSession(authOptions);
   const viewerMenuInfo = await resolveViewerMenuInfo({
@@ -105,7 +128,13 @@ export default async function StrokesPage({ params, searchParams }: Props) {
       <StrokeBrowserView
         counts={counts}
         strokes={strokes}
-        entries={rows}
+        entries={named}
+        type={type}
+        typeCounts={{
+          all: strokeCounts(STROKE_TYPE_FILTERS.all).find((entry) => entry.strokes === strokes)?.count ?? 0,
+          kanji: strokeCounts(STROKE_TYPE_FILTERS.kanji).find((entry) => entry.strokes === strokes)?.count ?? 0,
+          radical: strokeCounts(STROKE_TYPE_FILTERS.radical).find((entry) => entry.strokes === strokes)?.count ?? 0,
+        }}
         page={readPage(query.page)}
         pageCount={pageCount}
         sources={sources}
