@@ -7457,12 +7457,25 @@
     "id": "the-xp-chart-does-not-say-what-a-rank-unlocks",
     "name": "The XP chart does not say what a rank unlocks",
     "area": "platform",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-09",
+    "summary": "The XP chart now says what each rank unlocks, printed on the rungs where the allowance actually changes",
+    "dateIsEstimate": false,
+    "release": 595,
+    "version": "1.98.0",
+    "releasedAt": "2026-09-09T09:35:58Z"
+  },
+  {
+    "id": "the-profile-does-not-show-your-streak-or-your-ladder-level",
+    "name": "The profile does not show your streak or your ladder level",
+    "area": "account",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-09",
-    "version": "1.98.0",
-    "release": 595,
-    "releasedAt": "2026-09-09T09:35:58Z",
-    "summary": "The XP chart now says what each rank unlocks, printed on the rungs where the allowance actually changes"
+    "version": "1.99.0",
+    "release": 596,
+    "releasedAt": "2026-09-09T09:43:42Z",
+    "summary": "The profile now shows your streak and the level on the ladder you are actually climbing"
   }
 ]

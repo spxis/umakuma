@@ -157,4 +157,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Nagashi", ja: "流し", reading: "ながし", gloss: "one pass through, in one channel" },
   { romaji: "Nichou", ja: "二丁", reading: "にちょう", gloss: "two of them, side by side" },
   { romaji: "Nukemon", ja: "抜け門", reading: "ぬけもん", gloss: "the gate that opens" },
+  { romaji: "Nenrin", ja: "年輪", reading: "ねんりん", gloss: "the rings a year leaves" },
 ];
