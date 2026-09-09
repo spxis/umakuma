@@ -4,6 +4,8 @@ import { describe, expect, it } from "vitest";
 
 import XpBoardRows from "./XpBoardRows";
 import { rankXpBoard, type XpBoardAccount } from "./lib/xpBoard";
+import { xpStanding } from "@/lib/xp/xpCurve";
+import { xpRankName } from "@/lib/xp/xpRanks";
 
 const ACCOUNTS: XpBoardAccount[] = [
   { id: "a", slug: "ada", nickname: null, displayName: "Ada", wkUsername: null, xp: 900 },
@@ -95,5 +97,45 @@ describe("the XP board", () => {
     for (const control of document.querySelectorAll("a, button, [role='button']")) {
       expect(control.querySelector("a, button, [role='button']")).toBeNull();
     }
+  });
+});
+
+/*
+ * The two numbers a board owes a reader, which is what turns it from a list
+ * into a target: how far to the member above, and how far to the next rank.
+ * The gap-to-the-row-above has been there since the shared board was written;
+ * `toNext` was computed on every standing and printed nowhere.
+ */
+describe("both distances, on every row", () => {
+  it("says how much XP the next rank still wants", () => {
+    const text = draw({ isAdmin: false, address: null, accountId: null }).body.textContent ?? "";
+    const standing = xpStanding(900);
+
+    expect(standing.toNext).toBeGreaterThan(0);
+    expect(text).toContain(`${standing.toNext.toLocaleString()} XP to ${xpRankName(standing.level + 1)}`);
+  });
+
+  /* Accumulated-so-far stays: it says where a member has been, and the new
+     figure says what is left. Losing either turns two facts back into one. */
+  it("keeps the distance already travelled beside it", () => {
+    const text = draw({ isAdmin: false, address: null, accountId: null }).body.textContent ?? "";
+    const standing = xpStanding(900);
+
+    expect(text).toContain(`${standing.into.toLocaleString()} / ${standing.span.toLocaleString()} XP`);
+  });
+
+  /* There is no next rank at the top, and "0 XP to nothing" is worse than
+     silence. */
+  it("says nothing about a next rank to somebody at the top", () => {
+    const top = renderToStaticMarkup(
+      <XpBoardRows
+        entries={rankXpBoard([
+          { id: "z", slug: "zed", nickname: null, displayName: "Zed", wkUsername: null, xp: 10_000_000 },
+        ])}
+        viewer={{ isAdmin: false, address: null, accountId: null }}
+      />,
+    );
+
+    expect(top).not.toContain("XP to ");
   });
 });

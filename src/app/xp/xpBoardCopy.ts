@@ -30,6 +30,13 @@ export const XP_BOARD_COPY = {
   progressLabel: "Progress through this rank",
   into: (into: number, span: number) => `${into.toLocaleString()} / ${span.toLocaleString()} XP`,
   atTop: "Top rank",
+  /*
+   * The second of the two numbers a board owes a reader. "XP to gain a place"
+   * is the one above you; this is the one ahead of you. Accumulated-so-far
+   * ("1,200 / 3,000 XP") answers neither on its own - it says where you have
+   * been, and a target is what is left.
+   */
+  toNextRank: (xp: number, rank: string) => `${xp.toLocaleString()} XP to ${rank}`,
   total: (xp: number) => `${xp.toLocaleString()} XP`,
   history: "Your XP history",
 } as const;

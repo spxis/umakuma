@@ -2,6 +2,7 @@ import MemberBoardRows from "@/app/shared/board/MemberBoardRows";
 import { memberBoardGap, type MemberBoardEntry } from "@/app/shared/board/memberBoardView";
 import RankName from "@/app/shared/xp/RankName";
 import { XP_RANKS } from "@/lib/xp/xpCurve";
+import { xpRankName } from "@/lib/xp/xpRanks";
 
 import { canOpenXpBoardRow, type XpBoardEntry } from "./lib/xpBoard";
 import { XP_BOARD_COPY as copy } from "./xpBoardCopy";
@@ -50,8 +51,16 @@ export default function XpBoardRows({ entries, viewer }: Props) {
           >
             <div className="h-full rounded-full bg-accent" style={{ width: `${percent}%` }} />
           </div>
-          <p className="mt-1 text-[11px] font-semibold tabular-nums text-foreground/60">
-            {atTop ? copy.atTop : copy.into(entry.standing.into, entry.standing.span)}
+          <p className="mt-1 flex flex-wrap justify-between gap-x-3 text-[11px] font-semibold tabular-nums text-foreground/60">
+            <span>{atTop ? copy.atTop : copy.into(entry.standing.into, entry.standing.span)}</span>
+            {/* The target, beside the distance travelled. `toNext` has been on
+                the standing since the curve was written and had never been
+                printed anywhere. */}
+            {atTop ? null : (
+              <span className="text-foreground/80">
+                {copy.toNextRank(entry.standing.toNext, xpRankName(entry.standing.level + 1))}
+              </span>
+            )}
           </p>
         </>
       ),
