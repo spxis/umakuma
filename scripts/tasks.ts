@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 
 import { FEATURE_AREA_VALUES, isFeatureArea, isFeatureKind } from "../src/lib/featureTimeline";
-import { TASK_LEASE_MS, claimTask, isWaiting, taskLine } from "../src/lib/ticketClaims";
+import { TASK_LEASE_MS, claimTask, heldNow, isWaiting, taskLine } from "../src/lib/ticketClaims";
 
 /**
  * The shared task board, from a terminal.
@@ -71,9 +71,12 @@ async function main(): Promise<void> {
         where: { status: { notIn: ["declined", "shipped"] } },
         orderBy: [{ status: "asc" }, { createdAt: "asc" }],
       });
-      const waiting = tasks.filter((task) => isWaiting(task.status));
-      const held = tasks.length - waiting.length;
-      console.log(`${waiting.length} waiting · ${held} in progress · on ${target()}\n`);
+      /* Counted by the lease, not by the status column: a lapsed hold is not
+         somebody working, and the tally said it was for as long as the line
+         did. */
+      const held = tasks.filter((task) => heldNow(task)).length;
+      const waiting = tasks.length - held;
+      console.log(`${waiting} waiting · ${held} in progress · on ${target()}\n`);
       for (const task of tasks) {
         console.log(taskLine(task));
         if (task.detail) console.log(`        ${task.detail.replace(/\n/g, "\n        ")}`);

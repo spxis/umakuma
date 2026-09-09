@@ -127,13 +127,42 @@ export function claimTask(
  * The owner is the part an agent scans for, so it goes where the eye lands
  * rather than at the end of a sentence.
  */
-export function taskLine(task: {
-  id: string;
-  title: string;
-  kind: string;
-  status: string;
-  claimedBy: string | null;
-}): string {
-  const held = isClaimed(task) ? `HELD BY ${task.claimedBy}` : isWaiting(task.status) ? "WAITING" : task.status.toUpperCase();
-  return `${task.id}  ${task.kind === "bug" ? "BUG " : "    "} ${held.padEnd(22)} ${task.title}`;
+export function taskLine(
+  task: {
+    id: string;
+    title: string;
+    kind: string;
+    status: string;
+    claimedBy: string | null;
+    claimedAt?: Date | string | null;
+  },
+  nowMs: number = Date.now(),
+): string {
+  return `${task.id}  ${task.kind === "bug" ? "BUG " : "    "} ${holdLabel(task, nowMs).padEnd(22)} ${task.title}`;
+}
+
+/**
+ * What the board says about who has this.
+ *
+ * It used to ask `isClaimed` alone, which reads the name and never the clock,
+ * so a session that died on the Friday was still printed as holding the ticket
+ * on the Tuesday - while `claimTask`, four functions up, would have handed it
+ * to anybody who asked. Two claims sat like that for four days in September
+ * and were released by hand that a `claim` would have granted for nothing.
+ *
+ * A lapsed hold prints as STALE rather than as WAITING. The lease means it is
+ * free either way, but somebody started it, and that is worth a reader knowing
+ * before they start it again.
+ */
+function holdLabel(task: { status: string; claimedBy: string | null; claimedAt?: Date | string | null }, nowMs: number): string {
+  if (isClaimed(task)) {
+    if (!leaseExpired(task.claimedAt ?? null, nowMs)) return `HELD BY ${task.claimedBy}`;
+    return `STALE ${task.claimedBy}`;
+  }
+  return isWaiting(task.status) ? "WAITING" : task.status.toUpperCase();
+}
+
+/** Whether anybody is actually working on this right now. */
+export function heldNow(task: TaskClaim, nowMs: number = Date.now()): boolean {
+  return isClaimed(task) && !leaseExpired(task.claimedAt ?? null, nowMs);
 }
