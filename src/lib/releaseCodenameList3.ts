@@ -155,4 +155,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Tewake", ja: "手分け", reading: "てわけ", gloss: "dividing the work between hands" },
   { romaji: "Toriwake", ja: "取り分け", reading: "とりわけ", gloss: "telling one from another" },
   { romaji: "Nagashi", ja: "流し", reading: "ながし", gloss: "one pass through, in one channel" },
+  { romaji: "Nichou", ja: "二丁", reading: "にちょう", gloss: "two of them, side by side" },
 ];

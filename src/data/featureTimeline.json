@@ -7431,12 +7431,25 @@
     "id": "three-tests-spell-out-the-same-git-grep-call",
     "name": "Three tests spell out the same git-grep call",
     "area": "platform",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-09",
+    "summary": "The five tests that sweep the source tree now share one call, with the binary guard where the call is made",
+    "dateIsEstimate": false,
+    "release": 593,
+    "version": "1.96.0",
+    "releasedAt": "2026-09-09T09:05:59Z"
+  },
+  {
+    "id": "the-xp-experience-spx-had-chart-per-rank-leaderboards-weekly",
+    "name": "The XP experience SPX had: chart, per-rank leaderboards, weekly, promotions",
+    "area": "platform",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-09",
-    "version": "1.96.0",
-    "release": 593,
-    "releasedAt": "2026-09-09T09:05:59Z",
-    "summary": "The five tests that sweep the source tree now share one call, with the binary guard where the call is made"
+    "version": "1.97.0",
+    "release": 594,
+    "releasedAt": "2026-09-09T09:30:39Z",
+    "summary": "Every XP board now shows both distances: to the member above you, and to the next rank"
   }
 ]
