@@ -75,6 +75,11 @@ export const XP_LADDER_COPY = {
   aheadTitle: (level: number, name: string) => `Rank ${level}, ${name}`,
   shape: (ranks: number, total: number) =>
     `${ranks} ranks, ${total.toLocaleString()} XP from the first day to the last.`,
+  /* What a rung grants, printed only where it changes. The chart exists to
+     say what the ladder is for, and until now the answer was one click deep
+     on a hundred separate pages. */
+  unlocks: (games: number) => `${games} games a day`,
+  unlocksLabel: "Unlocks",
 } as const;
 
 /** `1` -> `1st`. Only used for a placing, so only ever a small number. */

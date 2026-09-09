@@ -1,4 +1,5 @@
 import { XP_LEVEL_COST, XP_RANKS, xpForLevel, xpLevelFor } from "@/lib/xp/xpCurve";
+import { gamesPerDayAt } from "@/lib/xp/xpEntitlements";
 import { xpRankName } from "@/lib/xp/xpRanks";
 
 /**
@@ -32,6 +33,16 @@ export type XpLadderRow = {
   state: XpLadderState;
   /** 0-1 against the dearest rank, so a bar needs no second pass. */
   share: number;
+  /**
+   * What this rung unlocks, or null where it unlocks nothing new.
+   *
+   * Read from `xpEntitlements`, never typed here, because the chart's whole
+   * job is to say what the code enforces - a hand-written number is a promise
+   * nothing keeps. Null on the ninety-five rungs that change nothing: a
+   * hundred rows each repeating "2 games a day" is noise, and the fact a
+   * reader wants is where it moves.
+   */
+  unlocksGamesPerDay: number | null;
 };
 
 /**
@@ -68,8 +79,23 @@ export function xpLadderRows(xp: number | null): XpLadderRow[] {
       total: xpForLevel(level),
       state: ladderState(level, standing),
       share: DEAREST === 0 ? 0 : cost / DEAREST,
+      /* Only where it moves. `gamesPerDayAt` is the function the games
+         themselves are gated on, so the chart cannot promise an allowance the
+         code does not grant. */
+      unlocksGamesPerDay: unlockAt(level),
     };
   });
+}
+
+/**
+ * The allowance this rung grants, or null if it grants nothing the rung below
+ * did not. Derived by comparison rather than read from `XP_GAME_UNLOCKS`, so
+ * a change to how the allowance is computed shows up here without anybody
+ * remembering to update a second list.
+ */
+function unlockAt(level: number): number | null {
+  const here = gamesPerDayAt(level);
+  return level > 1 && here === gamesPerDayAt(level - 1) ? null : here;
 }
 
 function ladderState(level: number, standing: number | null): XpLadderState {

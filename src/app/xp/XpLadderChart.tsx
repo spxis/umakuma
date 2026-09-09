@@ -172,6 +172,20 @@ function LadderRow({ row, here: standing }: { row: XpLadderRow; here: number }) 
               {copy.here}
             </span>
           ) : null}
+          {/*
+            * What this rung grants, on the five rungs that grant anything new.
+            * Read from the same function the games are gated on, so the chart
+            * cannot promise an allowance the code does not give - which is
+            * the reason the ticket asked for it here rather than typed.
+            */}
+          {row.unlocksGamesPerDay === null ? null : (
+            <span
+              title={`${copy.unlocksLabel}: ${copy.unlocks(row.unlocksGamesPerDay)}`}
+              className="ml-2 rounded-full bg-accent/10 px-1.5 py-0.5 text-[9px] font-black tabular-nums text-accent"
+            >
+              {copy.unlocks(row.unlocksGamesPerDay)}
+            </span>
+          )}
         </p>
         {/* The cost as a share of the dearest rank. Decorative, so it is
             hidden from a screen reader, which is being read the number. */}
