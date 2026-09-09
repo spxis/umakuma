@@ -58,6 +58,7 @@ import FieldLabel from "../../../../shared/FieldLabel";
 import { useExplorerFiling } from "@/app/shared/useExplorerFiling";
 import { levelItemHit } from "@/lib/subjectFiler";
 import ExplorerLoadingFillCards from "../../shared/ExplorerLoadingFillCards";
+import ExplorerResultCount from "../../shared/ExplorerResultCount";
 export default function StudyExplorerPanel({
   canToggleEnglish,
   showEnglish,
@@ -256,9 +257,7 @@ export default function StudyExplorerPanel({
           {showLoadingOverlay ? (
             <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">{STUDY_PANEL_TEXT.loadingQueueAndFilters}</p>
           ) : (
-            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">
-              {`Showing ${formatNumber(filteredItems.length)}/${formatNumber(allTypeCount)} items`}
-            </p>
+            <ExplorerResultCount visible={filteredItems.length} total={allTypeCount} />
           )}
           <div className={`flex w-full flex-wrap items-center gap-1 sm:ml-auto sm:w-auto sm:gap-2 ${hideControlsDuringInitialLoad ? "hidden" : ""}`}>
               <StudySortButtons value={waitSortOrder} onChange={onSetWaitSortOrder} includeDifficulty={!studySourceIsCustom && queueMode === STUDY_QUEUE_TYPES.review} />

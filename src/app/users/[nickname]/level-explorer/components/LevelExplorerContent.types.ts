@@ -36,7 +36,6 @@ export type LevelExplorerContentProps = {
   studyMode: boolean;
   loading: boolean;
   gridColumns: number;
-  searchMatchedSubjectIds: Set<number> | null;
   error: string;
   filteredItems: LevelItem[];
   selectedItem: LevelItem | null;

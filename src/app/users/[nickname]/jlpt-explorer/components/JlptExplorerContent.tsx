@@ -33,6 +33,8 @@ import { toJlptRow, toJlptView } from "../lib/jlptRowAdapter";
 import JlptExplorerCards from "./JlptExplorerCards";
 import JlptExplorerRows from "./JlptExplorerRows";
 import ExplorerSearchBar from "../../ExplorerSearchBar";
+import ExplorerResultCount from "../../shared/ExplorerResultCount";
+import { EXPLORER_RESULT_COPY } from "../../shared/explorerResultCopy";
 import ExplorerFilterToggleButton from "../../shared/ExplorerFilterToggleButton";
 import ExplorerSplitLoadingShimmer from "../../shared/ExplorerSplitLoadingShimmer";
 import { FilterChipButton, FilterChipLabel } from "@/app/shared/FilterChip";
@@ -340,9 +342,11 @@ export default function JlptExplorerContent({
         ) : null}
         <div className="flex flex-wrap items-start justify-between gap-2">
           <div className="min-w-0">
-            <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/70">
-              Showing {formatNumber(visibleItems.length)} of {formatNumber(filteredItems.length)} results
-            </p>
+            <ExplorerResultCount
+              visible={visibleItems.length}
+              total={filteredItems.length}
+              noun={EXPLORER_RESULT_COPY.resultsNoun}
+            />
             <p className="mt-1 text-xs text-foreground/60">
               WaniKani-specific SRS stats are shown only where subject mappings exist.
             </p>

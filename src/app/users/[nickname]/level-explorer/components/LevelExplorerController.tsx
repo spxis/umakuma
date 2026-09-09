@@ -301,7 +301,6 @@ export default function LevelExplorerController({
       studyMode={studyMode}
       loading={loading}
       gridColumns={gridColumns}
-      searchMatchedSubjectIds={searchMatchedSubjectIds}
       error={error}
       filteredItems={filteredItems}
       selectedItem={selectedItem}

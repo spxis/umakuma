@@ -38,7 +38,6 @@ export default function LevelExplorerContent({
   studyMode,
   loading,
   gridColumns,
-  searchMatchedSubjectIds,
   error,
   filteredItems,
   selectedItem,
@@ -185,7 +184,6 @@ export default function LevelExplorerContent({
       <div className="p-5">
         <LevelExplorerItemsGrid
           accountId={accountId}
-          searchMatchedSubjectIds={searchMatchedSubjectIds}
           filteredItems={filteredItems}
           visibleItems={visibleItems}
           selectedItem={selectedItem}

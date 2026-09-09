@@ -1,18 +1,10 @@
-import { badgeClass, formatNumber } from "../lib/levelExplorerDisplay";
+import { badgeClass } from "../lib/levelExplorerDisplay";
+import ExplorerResultCount from "../../shared/ExplorerResultCount";
 import { LEVEL_EXPLORER_TEXT } from "./LevelExplorer.constants";
 
 type Props = {
   visibleCount: number;
   totalCount: number;
-  /**
-   * A search is narrowing the list.
-   *
-   * The explorer used to print a second line above the results - "Showing 5
-   * search results" - while this one said "Showing 5 of 5 items". Two lines,
-   * the same number, different words for it. The count belongs in one place;
-   * what a search changes is only what the number is counting.
-   */
-  searching: boolean;
   showEnglish: boolean;
   canToggleEnglish: boolean;
   recentOnly: boolean;
@@ -28,7 +20,6 @@ type Props = {
 export default function LevelExplorerGridToolbar({
   visibleCount,
   totalCount,
-  searching,
   showEnglish,
   canToggleEnglish,
   recentOnly,
@@ -42,10 +33,7 @@ export default function LevelExplorerGridToolbar({
 }: Props) {
   return (
     <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-      <p className="text-xs font-semibold uppercase tracking-[0.08em] text-foreground/65">
-        Showing {formatNumber(visibleCount)} of {formatNumber(totalCount)}{" "}
-        {searching ? (totalCount === 1 ? "search result" : "search results") : "items"}
-      </p>
+      <ExplorerResultCount visible={visibleCount} total={totalCount} />
       <div className="flex items-center gap-2">
         <button
           type="button"
