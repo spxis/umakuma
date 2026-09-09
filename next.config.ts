@@ -7,6 +7,23 @@ const SOURCES_CACHE_HEADER = {
 };
 
 const nextConfig: NextConfig = {
+	/*
+	 * Next writes its own AGENTS.md and CLAUDE.md unless told not to.
+	 *
+	 * On this repository those two files are the rules, not a pointer to
+	 * them: AGENTS.md is hand-written and is what every agent working here
+	 * is held to, and CLAUDE.md exists only to delegate to it. A framework
+	 * that regenerates both on every `next dev` is editing the instructions
+	 * while they are being followed, and it leaves the tree dirty in a way
+	 * that rides along with the `git add -A` in the release chain - which is
+	 * how a generated block nearly reached a release commit the day 16.3.4
+	 * landed.
+	 *
+	 * Nothing is lost by refusing it. What Next generates is a pointer to
+	 * the version-matched docs under `node_modules/next/dist/docs/`, and the
+	 * opening line of our own AGENTS.md already says exactly that.
+	 */
+	agentRules: false,
 	images: {
 		dangerouslyAllowSVG: true,
 		contentDispositionType: "inline",
