@@ -97,11 +97,27 @@ export const GAME_PRACTICE_LISTS = {
   trouble: "trouble",
   favorite: "favorite",
   toughest: "toughest",
+  /*
+   * The pairs a reader mixes up, drilled against each other.
+   *
+   * John: "It might even be a special mode where you review confusing items."
+   * The contrast is the lesson, so the twin has to be among the choices rather
+   * than the two being met a round apart - which is why this is a pool of
+   * characters that HAVE a twin in the same pool, not simply the ones the
+   * confusables file knows about. A pair whose other half is forty levels
+   * ahead is not worth drilling yet, and the player's own pool is already
+   * that gate.
+   *
+   * A list rather than a game kind, so nothing is persisted that was not
+   * before: `practiceList` picks the pool and the run is still a `revenge`.
+   */
+  confusables: "confusables",
 } as const;
 export const GAME_PRACTICE_LIST_VALUES = [
   GAME_PRACTICE_LISTS.trouble,
   GAME_PRACTICE_LISTS.favorite,
   GAME_PRACTICE_LISTS.toughest,
+  GAME_PRACTICE_LISTS.confusables,
 ] as const;
 
 export type GameBatchSize = (typeof GAME_BATCH_SIZES)[number];

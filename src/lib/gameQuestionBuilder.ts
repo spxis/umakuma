@@ -1,4 +1,5 @@
 import { GAME_DIRECTIONS, type GameAnswerMode, type GameAnswerType, type GameChoiceCount, type GameDirection, type GameOption } from "@/lib/gameMode";
+import { areConfusable } from "@/lib/kanjiConfusables";
 import { candidateAnswerTypes, labelsAreDistinct } from "@/lib/gameAnswerText";
 import { pickWith, shuffleWith, type RandomSource } from "@/lib/gameRandom";
 import {
@@ -69,6 +70,20 @@ function hasOverlap(left: number[], right: number[]): boolean {
 function distractorScore(target: GameCatalogItem, candidate: GameCatalogItem): number {
   let score = 0;
   if (target.readings.some((reading) => candidate.readings.includes(reading))) score += 100;
+  /*
+   * Our own look-alike data, above WaniKani's, because it is the reason the
+   * Look-alikes drill exists: the twin has to reach the board or the contrast
+   * never happens. It outranks `visuallySimilarSubjectIds` because that is
+   * WaniKani's judgement about WaniKani's subjects, and `kanjiConfusables`
+   * covers 1,752 characters including the ones they do not teach.
+   *
+   * Scored for every game rather than only that one. A distractor a player
+   * genuinely mixes up is a better question everywhere, which is what the
+   * engine was already reaching for with the two lines below.
+   */
+  if (target.characters && candidate.characters && areConfusable(target.characters, candidate.characters)) {
+    score += 90;
+  }
   if (target.visuallySimilarSubjectIds.includes(candidate.subjectId)) score += 70;
   if (candidate.visuallySimilarSubjectIds.includes(target.subjectId)) score += 60;
   if (hasOverlap(target.componentSubjectIds, candidate.componentSubjectIds)) score += 40;

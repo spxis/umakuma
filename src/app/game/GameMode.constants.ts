@@ -207,12 +207,15 @@ export const GAME_PRACTICE_LIST_LABELS: Record<GamePracticeList, string> = {
   [GAME_PRACTICE_LISTS.trouble]: "Trouble",
   [GAME_PRACTICE_LISTS.favorite]: "Favourites",
   [GAME_PRACTICE_LISTS.toughest]: "Toughest",
+  [GAME_PRACTICE_LISTS.confusables]: "Look-alikes",
 };
 
 export const GAME_PRACTICE_LIST_HINTS: Record<GamePracticeList, string> = {
   [GAME_PRACTICE_LISTS.trouble]: "The items you flagged as trouble.",
   [GAME_PRACTICE_LISTS.favorite]: "The items you tagged as favourites.",
   [GAME_PRACTICE_LISTS.toughest]: "No tagging needed: whatever your review history says you are weakest on.",
+  [GAME_PRACTICE_LISTS.confusables]:
+    "Only the characters you have a look-alike for, drilled against the one they are mistaken for.",
 };
 
 export const GAME_ANSWER_MODE_LABELS: Record<string, string> = {

@@ -12,6 +12,7 @@ import { CATALOG_SELECT, loadGamePool, toCatalogItem } from "@/lib/gameModeServe
 import type { GameCatalogItem } from "@/lib/gameQuestionBuilder";
 import { shiritoriHeadKey, shiritoriTailKey } from "@/lib/gameShiritori";
 import { prisma } from "@/lib/prisma";
+import { confusablesFor } from "@/lib/kanjiConfusables";
 import { reviewEaseScore, type ReviewPerformance } from "@/lib/reviewDifficulty";
 
 const DAILY_SYNTHETIC_ASSIGNMENT = { assignmentId: 0, srsStage: 1, startedAt: "1970-01-01T00:00:00.000Z" } as const;
@@ -47,8 +48,33 @@ async function loadReviewPerformance(accountId: string): Promise<Map<number, Rev
   return performance;
 }
 
+/**
+ * The characters that have a look-alike the player has also met.
+ *
+ * The gate is the pool itself. `confusablesFor` knows 1,752 characters, and
+ * drilling 未 against 末 is only a lesson if both are things this player is
+ * learning - a twin forty levels ahead is a character they have never seen,
+ * and the pair reads as one known character beside one strange one. So the
+ * twin has to be in the same pool, and the ticket's "gate the pool the same
+ * way the warning is gated" costs nothing beyond an intersection.
+ */
+function confusableTargetIds(items: GameCatalogItem[]): Set<number> {
+  const byCharacter = new Map<string, GameCatalogItem>();
+  for (const item of items) {
+    if (item.characters) byCharacter.set(item.characters, item);
+  }
+
+  const ids = new Set<number>();
+  for (const item of items) {
+    if (!item.characters) continue;
+    const hasTwinHere = confusablesFor(item.characters).some((neighbour) => byCharacter.has(neighbour.kanji));
+    if (hasTwinHere) ids.add(item.subjectId);
+  }
+  return ids;
+}
+
 async function loadTaggedSubjectIds(accountId: string, list: GamePracticeList): Promise<Set<number> | null> {
-  if (list === GAME_PRACTICE_LISTS.toughest) return null;
+  if (list === GAME_PRACTICE_LISTS.toughest || list === GAME_PRACTICE_LISTS.confusables) return null;
   try {
     const rows = await prisma.studySubjectTag.findMany({
       where: list === GAME_PRACTICE_LISTS.trouble
@@ -87,9 +113,15 @@ export async function loadPracticePool(
     loadReviewPerformance(accountId),
   ]);
 
+  /* Not a tag lookup: the look-alike list is decided by the pool it is drawn
+     from, so it is computed here rather than fetched. */
+  const confusableIds =
+    list === GAME_PRACTICE_LISTS.confusables ? confusableTargetIds(items) : null;
+
   const nowMs = Date.now();
   const ranked = items
     .filter((item) => taggedIds === null || taggedIds.has(item.subjectId))
+    .filter((item) => confusableIds === null || confusableIds.has(item.subjectId))
     .map((item) => ({
       item,
       ease: reviewEaseScore(

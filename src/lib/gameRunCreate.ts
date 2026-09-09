@@ -133,6 +133,8 @@ const PRACTICE_LIST_EMPTY: Record<GamePracticeList, string> = {
   [GAME_PRACTICE_LISTS.trouble]: "No trouble-tagged items are available for this category.",
   [GAME_PRACTICE_LISTS.favorite]: "No favorite-tagged items are available for this category.",
   [GAME_PRACTICE_LISTS.toughest]: "No eligible items are available.",
+  [GAME_PRACTICE_LISTS.confusables]:
+    "None of your items has a look-alike you have also learned yet. Come back when you have met a few more.",
 };
 
 async function planPracticeRun(accountId: string, request: GameRunRequest): Promise<GameRunPlan> {
