@@ -31,6 +31,20 @@ export function filterChipTone(on: boolean): string {
   return on ? "border-accent bg-accent text-white" : "border-line bg-surface text-foreground hover:bg-surface-muted";
 }
 
+/**
+ * The tone for a chip that stands for several of its neighbours.
+ *
+ * A range - "21-30", "1-7" - is not one of the values being chosen between, it
+ * is a fold in the row, and it reads wrong in the plain tone: a member scanning
+ * for the level they want sees it as another level. Amber says "press this and
+ * the row changes shape" rather than "press this and the list changes".
+ */
+export function filterChipGroupTone(on: boolean): string {
+  return on
+    ? "border-amber-400 bg-amber-100 text-amber-900"
+    : "border-slate-300 bg-slate-100 text-slate-700 hover:bg-slate-200";
+}
+
 const DEAD_END_CLASS = "cursor-not-allowed opacity-40";
 
 /** The label with its count. Numbers are formatted here, and only here. */

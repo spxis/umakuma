@@ -94,7 +94,7 @@ export default function StudyLevelFilters({
   };
 
   const mobileVisibilityClass = (selected: boolean) =>
-    mobileShowAllOptions || selected ? "" : "hidden sm:inline-flex";
+    mobileShowAllOptions || selected ? "" : "max-sm:hidden";
   const isCollapsedOnMobile = !mobileShowAllOptions;
   const shouldExpandForSelectedTap = (isSelected: boolean) => isCollapsedOnMobile && isSelected;
 

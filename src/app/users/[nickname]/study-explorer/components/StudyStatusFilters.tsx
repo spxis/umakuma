@@ -118,7 +118,7 @@ export default function StudyStatusFilters({
                   disabled={stageDisabled}
                   role="tab"
                   aria-selected={stageSelected}
-                  className={isOpen || isSelected ? "" : "hidden sm:inline-flex"}
+                  className={isOpen || isSelected ? "" : "max-sm:hidden"}
                   toneClassName={stageDisabled && !stageSelected ? disabledBadgeClass() : studySrsToneClass(status as Exclude<typeof status, "all">, stageSelected)}
                   label={stage}
                   count={formatNumber(stageCount)}

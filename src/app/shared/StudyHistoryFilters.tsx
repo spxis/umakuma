@@ -2,6 +2,8 @@
 
 import type { HistorySrsBucket } from "@/app/shared/studyHistoryTypes";
 import { FilterChipButton, filterChipTone } from "@/app/shared/FilterChip";
+import CompactFilterRow from "@/app/shared/CompactFilterRow";
+import LevelFilterChips from "@/app/shared/LevelFilterChips";
 
 import { srsBucketBadgeClass, srsBucketLabel, titleCaseSrsBucket } from "./studyHistoryUi";
 import FieldLabel from "../shared/FieldLabel";
@@ -63,67 +65,62 @@ export default function StudyHistoryFilters({
       <FieldLabel>Filters</FieldLabel>
 
       <div className="mt-2 space-y-2">
-        <div className="flex flex-wrap items-center gap-2 rounded-xl border border-line px-2.5 py-2">
-          <span className="text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/65">Result</span>
-          {(["all", "correct", "wrong", "skipped"] as const).map((result) => (
-            <FilterChipButton
-              key={result}
-              type="button"
-              onClick={() => setResultFilter(result)}
-              toneClassName={resultChipClass(result, resultFilter === result)}
-              label={result}
-              count={(resultCounts[result] ?? 0).toLocaleString("en-US")}
-            />
-          ))}
-        </div>
+        <CompactFilterRow label="Result">
+          {(chipClass) =>
+            (["all", "correct", "wrong", "skipped"] as const).map((result) => (
+              <FilterChipButton
+                key={result}
+                type="button"
+                onClick={() => setResultFilter(result)}
+                className={chipClass(resultFilter === result)}
+                toneClassName={resultChipClass(result, resultFilter === result)}
+                label={result}
+                count={(resultCounts[result] ?? 0).toLocaleString("en-US")}
+              />
+            ))
+          }
+        </CompactFilterRow>
 
-        <div className="flex flex-wrap items-center gap-2 rounded-xl border border-line px-2.5 py-2">
-          <span className="text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/65">Level</span>
-          <FilterChipButton
-            type="button"
-            onClick={() => setLevelFilter("all")}
-            toneClassName={studyChipClass(levelFilter === "all")}
-            label="All"
-            count={levelAllCount.toLocaleString("en-US")}
-          />
-          {availableLevels.map((level) => (
-            <FilterChipButton
-              key={`lvl-${level}`}
-              type="button"
-              onClick={() => setLevelFilter(level)}
-              toneClassName={studyChipClass(levelFilter === level)}
-              label={String(level)}
-              count={(levelCounts[level] ?? 0).toLocaleString("en-US")}
-            />
-          ))}
-        </div>
+        <LevelFilterChips
+          label="Level"
+          levels={availableLevels}
+          counts={levelCounts}
+          allCount={levelAllCount}
+          selected={levelFilter}
+          onSelect={setLevelFilter}
+        />
 
-        <div className="flex flex-wrap items-center gap-2 rounded-xl border border-line px-2.5 py-2">
-          <span className="text-[11px] font-bold uppercase tracking-[0.08em] text-foreground/65">SRS bucket</span>
-          <FilterChipButton
-            type="button"
-            onClick={() => setSrsBucketFilter("all")}
-            toneClassName={studyChipClass(srsBucketFilter === "all")}
-            label="SRS all"
-            count={srsBucketAllCount.toLocaleString("en-US")}
-          />
-          {availableSrsBuckets
-            .filter((bucket) => bucket !== "unknown")
-            .map((bucket) => {
-              const selected = srsBucketFilter === bucket;
-              return (
-                <FilterChipButton
-                  key={bucket}
-                  type="button"
-                  onClick={() => setSrsBucketFilter(bucket)}
-                  title={titleCaseSrsBucket(bucket)}
-                  toneClassName={srsBucketBadgeClass(bucket, selected)}
-                  label={srsBucketLabel(bucket)}
-                  count={(srsBucketCounts[bucket] ?? 0).toLocaleString("en-US")}
-                />
-              );
-            })}
-        </div>
+        <CompactFilterRow label="SRS">
+          {(chipClass) => (
+            <>
+              <FilterChipButton
+                type="button"
+                onClick={() => setSrsBucketFilter("all")}
+                className={chipClass(srsBucketFilter === "all")}
+                toneClassName={studyChipClass(srsBucketFilter === "all")}
+                label="SRS all"
+                count={srsBucketAllCount.toLocaleString("en-US")}
+              />
+              {availableSrsBuckets
+                .filter((bucket) => bucket !== "unknown")
+                .map((bucket) => {
+                  const selected = srsBucketFilter === bucket;
+                  return (
+                    <FilterChipButton
+                      key={bucket}
+                      type="button"
+                      onClick={() => setSrsBucketFilter(bucket)}
+                      title={titleCaseSrsBucket(bucket)}
+                      className={chipClass(selected)}
+                      toneClassName={srsBucketBadgeClass(bucket, selected)}
+                      label={srsBucketLabel(bucket)}
+                      count={(srsBucketCounts[bucket] ?? 0).toLocaleString("en-US")}
+                    />
+                  );
+                })}
+            </>
+          )}
+        </CompactFilterRow>
       </div>
     </section>
   );

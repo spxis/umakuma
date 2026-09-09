@@ -68,7 +68,7 @@ export default function StudyGroupingFilters({
           disabled={filtersLoading}
           role="tab"
           aria-selected={allTypesSelected}
-          className={sectionOpen || allTypesSelected ? "" : "hidden sm:inline-flex"}
+          className={sectionOpen || allTypesSelected ? "" : "max-sm:hidden"}
           toneClassName={filtersLoading && !allTypesSelected ? disabledBadgeClass() : badgeClass(allTypesSelected)}
           label={STUDY_PANEL_TEXT.all}
           count={groupingCountLabel(allTypeCount)}
@@ -93,7 +93,7 @@ export default function StudyGroupingFilters({
               disabled={disabled}
               role="tab"
               aria-selected={isSelected}
-              className={sectionOpen || typeFilter === type ? "" : "hidden sm:inline-flex"}
+              className={sectionOpen || typeFilter === type ? "" : "max-sm:hidden"}
               toneClassName={disabled && !isSelected ? disabledBadgeClass() : studyGroupingToneClass(type, isSelected)}
               label={label}
               count={groupingCountLabel(count)}
