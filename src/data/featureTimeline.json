@@ -7418,12 +7418,25 @@
     "id": "a-review-mode-that-drills-only-your-confusable-kanji",
     "name": "A review mode that drills only your confusable kanji",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-09",
+    "summary": "Practice gains a Look-alikes list that drills each character against the one it is mistaken for, gated to pairs you have both met",
+    "dateIsEstimate": false,
+    "release": 592,
+    "version": "1.95.0",
+    "releasedAt": "2026-09-09T08:57:07Z"
+  },
+  {
+    "id": "three-tests-spell-out-the-same-git-grep-call",
+    "name": "Three tests spell out the same git-grep call",
+    "area": "platform",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-09",
-    "version": "1.95.0",
-    "release": 592,
-    "releasedAt": "2026-09-09T08:57:07Z",
-    "summary": "Practice gains a Look-alikes list that drills each character against the one it is mistaken for, gated to pairs you have both met"
+    "version": "1.96.0",
+    "release": 593,
+    "releasedAt": "2026-09-09T09:05:59Z",
+    "summary": "The five tests that sweep the source tree now share one call, with the binary guard where the call is made"
   }
 ]
