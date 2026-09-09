@@ -7379,12 +7379,25 @@
     "id": "print-as-modal",
     "name": "Print without leaving the page",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-09",
+    "summary": "Worksheet opens the sheet in a frame on the page you are already on, with Print on it, instead of navigating away",
+    "dateIsEstimate": false,
+    "release": 589,
+    "version": "1.92.0",
+    "releasedAt": "2026-09-09T08:28:38Z"
+  },
+  {
+    "id": "compare-two-curriculum-versions-and-say-what-changed",
+    "name": "Compare two curriculum versions and say what changed",
+    "area": "jlpt",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-09",
-    "version": "1.92.0",
-    "release": 589,
-    "releasedAt": "2026-09-09T08:28:38Z",
-    "summary": "Worksheet opens the sheet in a frame on the page you are already on, with Print on it, instead of navigating away"
+    "version": "1.93.0",
+    "release": 590,
+    "releasedAt": "2026-09-09T08:39:23Z",
+    "summary": "Each ladder now says what its rebuilds moved, per stream, drawn from the same changelog the papers are written from"
   }
 ]
