@@ -89,23 +89,32 @@ describe("the source report cache", () => {
  * build has none, so the CDN is what actually spares the app a crawler's
  * sweep. If the header goes, the cache above only helps one instance.
  */
-describe("the accreditation pages are given to the CDN", () => {
+describe("the accreditation pages are not given to the CDN", () => {
   const config = readFileSync(join(process.cwd(), "next.config.ts"), "utf8");
 
-  it("shares one render, and serves a stale one rather than missing", () => {
-    expect(config).toMatch(/s-maxage=3600/);
-    expect(config).toMatch(/stale-while-revalidate=86400/);
+  /*
+   * This assertion is the inverse of the one it replaces, and the inversion is
+   * the point. The old block asserted that a `Cache-Control` header was
+   * present in this file and passed every time, while production returned
+   * `x-vercel-cache: MISS` on every request - the pages are `force-dynamic`
+   * and Next sends `no-store` over anything configured here. A test that reads
+   * the config it is testing can only ever prove the config says something. It
+   * proved that for six days about a cache that did not exist.
+   */
+  it("declares no headers() and no Cache-Control key", () => {
+    /* Matched against code, not prose. The comment in next.config.ts explains
+       what was removed and names the value, so a bare search for `s-maxage`
+       finds the explanation and fails - which is the same weakness the old
+       block had, one turn later. */
+    expect(config).not.toMatch(/async\s+headers\s*\(/);
+    expect(config).not.toMatch(/key:\s*"Cache-Control"/);
   });
 
-  /* A shared cache, not a thousand private ones: a correction has to be able
-     to reach everybody on the next revalidate. */
-  it("caches in the shared layer and not in browsers", () => {
-    const header = config.slice(config.indexOf("SOURCES_CACHE_HEADER"));
-    expect(header).not.toMatch(/[^-]max-age=/);
-  });
-
-  it("covers the index and every source page", () => {
-    expect(config).toMatch(/source: "\/sources"/);
-    expect(config).toMatch(/source: "\/sources\/:source"/);
+  /*
+   * The saving that is real. If this goes, the pages cost a database read per
+   * request per instance and nothing upstream is holding anything.
+   */
+  it("keeps the in-process cache, which is what actually spares the reads", () => {
+    expect(getSourceReportCacheTtlMs()).toBeGreaterThan(0);
   });
 });

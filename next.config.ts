@@ -1,11 +1,5 @@
 import type { NextConfig } from "next";
 
-/** One render an hour, and a day of staleness rather than a miss. */
-const SOURCES_CACHE_HEADER = {
-	key: "Cache-Control",
-	value: "public, s-maxage=3600, stale-while-revalidate=86400",
-};
-
 const nextConfig: NextConfig = {
 	/*
 	 * Next writes its own AGENTS.md and CLAUDE.md unless told not to.
@@ -52,31 +46,27 @@ const nextConfig: NextConfig = {
 		],
 	},
 	/*
-	 * The accreditation pages, given to the CDN.
+	 * No CDN header on the accreditation pages, and that is not an oversight.
 	 *
-	 * They are the most crawlable thing here - an index and a page per source,
-	 * static prose over numbers that move once a week at most - and they are
-	 * `force-dynamic`, because three of the readers need a database and the
-	 * build has none. So the pages are rendered on request and the answer is
-	 * shared: one render serves an hour of readers, and a stale copy may be
-	 * served for a day after that while a fresh one is fetched behind it.
+	 * There was one - `public, s-maxage=3600, stale-while-revalidate=86400` on
+	 * `/sources` and `/sources/:source` - and it never served a single request.
+	 * Both pages are `force-dynamic`, because three of the twelve reports read
+	 * the database and the build has none; Next sends `no-cache, no-store` on a
+	 * dynamic route, and that overrides anything set here. Production was
+	 * checked on 2026-09-03 and returned `x-vercel-cache: MISS` every time. The
+	 * header stayed for six days anyway, with a comment claiming the render was
+	 * shared and a unit test asserting the header's own text, so the suite kept
+	 * reporting a cache that had never once answered anybody.
 	 *
-	 * `s-maxage` and not `max-age`: the shared cache holds this, a reader's
-	 * browser does not, so a correction reaches everyone on the next revalidate
-	 * rather than sitting in a thousand private caches until they expire.
+	 * What actually spares the app a crawler's sweep is `sourceReportCache.ts`,
+	 * an in-process cache with a ten-minute life. That is real, and it stays.
+	 *
+	 * A header here can only start working once these pages stop being dynamic,
+	 * which is cmtmh1y2j and a site-wide rendering change. Whoever takes that on
+	 * should add this back deliberately, and should know first that these pages
+	 * render the viewer's own header: a shared cache over that HTML hands one
+	 * member's menu to the next reader.
 	 */
-	async headers() {
-		return [
-			{
-				source: "/sources",
-				headers: [SOURCES_CACHE_HEADER],
-			},
-			{
-				source: "/sources/:source",
-				headers: [SOURCES_CACHE_HEADER],
-			},
-		];
-	},
 };
 
 export default nextConfig;
