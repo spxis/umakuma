@@ -148,4 +148,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Shirube", ja: "標", reading: "しるべ", gloss: "a guidepost" },
   { romaji: "Sueoki", ja: "据え置き", reading: "すえおき", gloss: "left as it stands" },
   { romaji: "Seijitsu", ja: "誠実", reading: "せいじつ", gloss: "honesty" },
+  { romaji: "Sotomi", ja: "外見", reading: "そとみ", gloss: "how a thing looks from outside" },
 ];

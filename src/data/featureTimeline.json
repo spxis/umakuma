@@ -7340,12 +7340,25 @@
     "id": "the-sources-cdn-header-does-nothing-and-a-test-swears-it-wor",
     "name": "The sources CDN header does nothing, and a test swears it works",
     "area": "platform",
+    "status": "shipped",
     "kind": "bug",
+    "date": "2026-09-09",
+    "summary": "The sources pages drop a CDN header that never served a request, and the test that swore it worked now asserts the truth",
+    "dateIsEstimate": false,
+    "release": 586,
+    "version": "1.89.0",
+    "releasedAt": "2026-09-09T08:01:55Z"
+  },
+  {
+    "id": "link-preview-image-an-open-graph-card-for-shared-umakuma-lin",
+    "name": "Link preview image: an Open Graph card for shared UmaKuma links",
+    "area": "platform",
+    "kind": "feature",
     "status": "shipped",
     "date": "2026-09-09",
-    "version": "1.89.0",
-    "release": 586,
-    "releasedAt": "2026-09-09T08:01:55Z",
-    "summary": "The sources pages drop a CDN header that never served a request, and the test that swore it worked now asserts the truth"
+    "version": "1.90.0",
+    "release": 587,
+    "releasedAt": "2026-09-09T08:10:43Z",
+    "summary": "A UmaKuma link pasted anywhere now brings a picture, with an Open Graph and a Twitter card built by pnpm og:build"
   }
 ]
