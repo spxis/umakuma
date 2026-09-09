@@ -31,7 +31,14 @@ describe("levelBadge", () => {
        reaching for the old form, which no per-file test would see. */
     const found = execFileSync(
       "git",
-      ["grep", "-n", "-E", String.raw`(\bL\{[a-zA-Z]|` + "`" + String.raw`L\$\{)`, "--", "src/app", "src/lib"],
+      /*
+       * `-I` skips binary files, and it has to be here rather than assumed.
+       * The Open Graph cards are PNGs checked in under `src/app`, and BSD grep
+       * on a developer's Mac quietly ignores them while GNU grep on CI prints
+       * "Binary file ... matches" - which arrived as two phantom offenders and
+       * took a release's CI down after a green local gate.
+       */
+      ["grep", "-I", "-n", "-E", String.raw`(\bL\{[a-zA-Z]|` + "`" + String.raw`L\$\{)`, "--", "src/app", "src/lib"],
       { encoding: "utf8" },
     )
       .split("\n")

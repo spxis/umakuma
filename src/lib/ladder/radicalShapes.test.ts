@@ -246,7 +246,9 @@ describe("one name, read from one place", () => {
   it("keeps the rules to the one writer", () => {
     const callers = execFileSync(
       "git",
-      ["grep", "-l", "radicalMeanings", "--", "src", "scripts"],
+      /* `-I` so a checked-in binary cannot report itself as a caller - see
+         the note in levelBadge.test.ts. */
+      ["grep", "-I", "-l", "radicalMeanings", "--", "src", "scripts"],
       { encoding: "utf8" },
     )
       .split("\n")

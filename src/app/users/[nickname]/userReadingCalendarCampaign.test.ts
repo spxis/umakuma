@@ -70,7 +70,9 @@ describe("why it went unnoticed, and why it cannot recur", () => {
   it("leaves no surface reading the constant's dates outright", () => {
     const found = execFileSync(
       "git",
-      ["grep", "-n", "-E", String.raw`READING_CAMPAIGN\.(startDatePst|goalDatePst)`, "--", "src"],
+      /* `-I` so a checked-in binary under src cannot report itself as a
+         caller - see the note in levelBadge.test.ts. */
+      ["grep", "-I", "-n", "-E", String.raw`READING_CAMPAIGN\.(startDatePst|goalDatePst)`, "--", "src"],
       { encoding: "utf8" },
     )
       .split("\n")
