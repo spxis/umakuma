@@ -72,7 +72,13 @@ export function leaseExpired(claimedAt: Date | string | null | undefined, nowMs:
 
 export type TaskClaim = { claimedBy: string | null; claimedAt?: Date | string | null };
 
-/** Whether anybody is holding this task. */
+/**
+ * Whether a name is written in the holder field.
+ *
+ * Not the same question as whether the ticket is spoken for: this ignores the
+ * lease, so it stays true for a hold that lapsed days ago. Ask `claimTask`, or
+ * pair this with `leaseExpired`, before telling a reader a ticket is taken.
+ */
 export function isClaimed(task: TaskClaim): boolean {
   return typeof task.claimedBy === "string" && task.claimedBy.trim().length > 0;
 }
@@ -85,11 +91,17 @@ export type ClaimOutcome =
 /**
  * Who may take a task.
  *
- * A claim cannot be taken over. Two agents building the same thing is the
- * expensive failure - not two agents idle - so the second one is refused and
- * told who to ask. Re-claiming your own is allowed and does nothing, because
- * an agent that has lost track of its own work should not be punished for
- * checking.
+ * A live claim cannot be taken over. Two agents building the same thing is
+ * the expensive failure - not two agents idle - so the second one is refused
+ * and told who to ask. Re-claiming your own is allowed and does nothing,
+ * because an agent that has lost track of its own work should not be punished
+ * for checking.
+ *
+ * A lapsed one can, and that is the whole point of the lease below: the
+ * refusal is conditional on `!stale`. This sentence used to stop at "cannot be
+ * taken over", which is what `taskLine` prints and what AGENTS.md said until
+ * 2026-09-08, when two tickets held by dead sessions read as blocked for four
+ * days and were released by hand that a `claim` would have granted.
  */
 export function claimTask(
   task: TaskClaim & { status?: string },
