@@ -1,7 +1,8 @@
-import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 
 import { describe, expect, it } from "vitest";
+
+import { trackedSourceFiles } from "@/lib/sourceSweep";
 
 /*
  * A filter label with its count is drawn by FilterChip, and by nothing else.
@@ -23,9 +24,7 @@ const HAND_DRAWN = [
 ];
 
 function pages(): string[] {
-  return execFileSync("git", ["ls-files", "--", "src/app/**/*.tsx"], { encoding: "utf8" })
-    .split("\n")
-    .filter((file) => file.endsWith(".tsx") && !file.endsWith(".test.tsx") && !file.endsWith("shared/FilterChip.tsx"));
+  return trackedSourceFiles(["src/app/**/*.tsx"]).filter((file) => !file.endsWith("shared/FilterChip.tsx"));
 }
 
 describe("a count on a filter chip is drawn one way", () => {

@@ -1,8 +1,9 @@
-import { execFileSync } from "node:child_process";
 
 import { readFileSync } from "node:fs";
 
 import { describe, expect, it } from "vitest";
+
+import { sweepSources } from "../sourceSweep";
 
 import {
   RADICAL_SHAPE_TWINS,
@@ -244,16 +245,7 @@ describe("one name, read from one place", () => {
   /* The naming rules stay in one module and only the seed calls them, so
      there is exactly one writer and no second opinion. */
   it("keeps the rules to the one writer", () => {
-    const callers = execFileSync(
-      "git",
-      /* `-I` so a checked-in binary cannot report itself as a caller - see
-         the note in levelBadge.test.ts. */
-      ["grep", "-I", "-l", "radicalMeanings", "--", "src", "scripts"],
-      { encoding: "utf8" },
-    )
-      .split("\n")
-      .filter(Boolean)
-      .filter((file) => !file.includes(".test."));
+    const callers = sweepSources("radicalMeanings", ["src", "scripts"], { namesOnly: true });
     expect(callers.sort()).toEqual(["src/lib/ladder/ladderSeedPlan.ts", "src/lib/ladder/radicalShapes.ts"]);
   });
 });

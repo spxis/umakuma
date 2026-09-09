@@ -1,7 +1,8 @@
-import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 
 import { describe, expect, it } from "vitest";
+
+import { trackedSourceFiles } from "./sourceSweep";
 
 /*
  * `a ?? a` is a fallback to itself: it reads as a fallback and is not one.
@@ -14,9 +15,7 @@ import { describe, expect, it } from "vitest";
 const SELF_COALESCE = /(?<![\w$.?])([A-Za-z_$][\w$]*(?:(?:\?\.|\.)[A-Za-z_$][\w$]*)*)\s*\?\?\s*\1(?![\w$.(?])/;
 
 function trackedSources(): string[] {
-  return execFileSync("git", ["ls-files", "--", "src/**/*.ts", "src/**/*.tsx"], { encoding: "utf8" })
-    .split("\n")
-    .filter((file) => /\.tsx?$/.test(file) && !/\.test\.tsx?$/.test(file));
+  return trackedSourceFiles();
 }
 
 describe("no value falls back to itself", () => {

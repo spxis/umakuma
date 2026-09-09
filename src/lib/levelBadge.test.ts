@@ -1,7 +1,8 @@
 import { readFileSync } from "node:fs";
-import { execFileSync } from "node:child_process";
 
 import { describe, expect, it } from "vitest";
+
+import { sweepSources } from "./sourceSweep";
 
 import { levelBadge, LEVEL_SYSTEMS, libraryLevelBadge, ourLevelBadgeFor, unLevelBadge, wkLevelBadge } from "./levelBadge";
 
@@ -29,26 +30,9 @@ describe("levelBadge", () => {
        WK17... umakuma is UN17. No more L17 anywhere." Grepped rather than
        asserted per file, because the failure this catches is a *new* surface
        reaching for the old form, which no per-file test would see. */
-    const found = execFileSync(
-      "git",
-      /*
-       * `-I` skips binary files, and it has to be here rather than assumed.
-       * The Open Graph cards are PNGs checked in under `src/app`, and BSD grep
-       * on a developer's Mac quietly ignores them while GNU grep on CI prints
-       * "Binary file ... matches" - which arrived as two phantom offenders and
-       * took a release's CI down after a green local gate.
-       */
-      ["grep", "-I", "-n", "-E", String.raw`(\bL\{[a-zA-Z]|` + "`" + String.raw`L\$\{)`, "--", "src/app", "src/lib"],
-      { encoding: "utf8" },
-    )
-      .split("\n")
-      .filter(Boolean)
-      .filter((line) => !line.includes(".test."))
-      /* No exemptions. A member's own library was the last bare L on the
-         site and it has its own prefix now - the two surfaces that drew it,
-         the library manager's level dropdown and the Study header's
-         "<library name> (LIB3)", both ask levelBadge like everything else. */
-      ;
+    const found = sweepSources(String.raw`(\bL\{[a-zA-Z]|` + "`" + String.raw`L\$\{)`, ["src/app", "src/lib"], {
+      extended: true,
+    });
 
     expect(found, `bare level badges:\n${found.join("\n")}`).toEqual([]);
   });

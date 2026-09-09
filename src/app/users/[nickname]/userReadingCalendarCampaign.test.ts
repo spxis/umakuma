@@ -1,7 +1,8 @@
-import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 
 import { describe, expect, it } from "vitest";
+
+import { sweepSources } from "@/lib/sourceSweep";
 
 import { ACTIVE_READING_CHALLENGE } from "@/lib/readingChallengeRules";
 import { campaignDaysRemaining, isCampaignDate } from "@/lib/readingSignoff";
@@ -68,16 +69,9 @@ describe("why it went unnoticed, and why it cannot recur", () => {
      a last-resort fallback, never the answer. A `??` in front of one is a
      default; anything else is a surface quietly using the wrong campaign. */
   it("leaves no surface reading the constant's dates outright", () => {
-    const found = execFileSync(
-      "git",
-      /* `-I` so a checked-in binary under src cannot report itself as a
-         caller - see the note in levelBadge.test.ts. */
-      ["grep", "-I", "-n", "-E", String.raw`READING_CAMPAIGN\.(startDatePst|goalDatePst)`, "--", "src"],
-      { encoding: "utf8" },
-    )
-      .split("\n")
-      .filter(Boolean)
-      .filter((line) => !line.includes(".test."))
+    const found = sweepSources(String.raw`READING_CAMPAIGN\.(startDatePst|goalDatePst)`, ["src"], {
+      extended: true,
+    })
       /* The definitions themselves, and the fallbacks that spell out `??`. */
       .filter((line) => !line.startsWith("src/lib/readingSignoff.ts"))
       .filter((line) => !/\?\?\s*READING_CAMPAIGN\./.test(line))
