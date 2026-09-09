@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import ThemeBrowseButton from "@/app/shared/ThemeBrowseButton";
 import ThemeLadder from "@/app/shared/ThemeLadder";
+import ThemeWordsToggle from "@/app/shared/ThemeWordsToggle";
 import { THEME_PAGE_COPY, THEME_PICKER_COPY as copy } from "@/app/shared/themeCopy";
 import { useMemberTheme } from "@/app/shared/useMemberTheme";
 import type { AgeBand } from "@/lib/srs/ageBand";
@@ -42,7 +43,10 @@ export default function ThemePicker({
           <h2 className="text-lg font-black text-foreground">{copy.heading}</h2>
           <p className="mt-1 text-sm font-semibold leading-relaxed text-foreground/70">{copy.blurb}</p>
         </div>
-        <ThemeBrowseButton state={state} className="shrink-0" />
+        <span className="flex shrink-0 items-center gap-2">
+          <ThemeWordsToggle />
+          <ThemeBrowseButton state={state} />
+        </span>
       </div>
 
       {state.error ? <p className="text-sm font-semibold text-rose-600">{state.error}</p> : null}

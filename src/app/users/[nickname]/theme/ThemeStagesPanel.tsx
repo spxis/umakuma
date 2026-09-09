@@ -2,12 +2,15 @@
 
 import ThemeBrowseButton from "@/app/shared/ThemeBrowseButton";
 import ThemeLadder from "@/app/shared/ThemeLadder";
+import ThemeWordsToggle from "@/app/shared/ThemeWordsToggle";
 import { japaneseTextProps } from "@/app/shared/japaneseText";
 import { THEME_PAGE_COPY as copy } from "@/app/shared/themeCopy";
 import { useMemberTheme } from "@/app/shared/useMemberTheme";
 import { SRS_BUCKET_TITLE_LABELS } from "@/lib/domainConstants";
 import type { AgeBand } from "@/lib/srs/ageBand";
 import { SRS_STAGE_BUCKET, srsStageTone } from "@/lib/srs/srsStageTone";
+import { themeLeadIsJapanese } from "@/app/shared/themeWords";
+import { useThemeWords } from "@/app/shared/useThemeWords";
 import type { SrsTheme } from "@/lib/srs/srsThemes";
 
 /**
@@ -39,6 +42,8 @@ export default function ThemeStagesPanel({
 }) {
   const state = useMemberTheme({ accountId, initialTheme, initialChoices, initialAgeBand });
   const theme = state.theme;
+  const [mode] = useThemeWords();
+  const japanese = themeLeadIsJapanese(mode);
 
   return (
     <>
@@ -48,7 +53,10 @@ export default function ThemeStagesPanel({
             <h2 className="text-lg font-black text-foreground">{theme.name}</h2>
             <p className="mt-1 text-sm font-semibold leading-relaxed text-foreground/70">{copy.blurb}</p>
           </div>
-          <ThemeBrowseButton state={state} className="shrink-0" />
+          <span className="flex shrink-0 items-center gap-2">
+            <ThemeWordsToggle />
+            <ThemeBrowseButton state={state} />
+          </span>
         </div>
 
         {state.error ? <p className="mt-3 text-sm font-semibold text-rose-600">{state.error}</p> : null}
@@ -85,12 +93,27 @@ export default function ThemeStagesPanel({
                     </span>
                   </td>
                   <td className="py-2 align-top">
-                    <span {...japaneseTextProps("block font-black text-foreground")}>{level.term}</span>
-                    <span className="block text-[11px] font-semibold text-foreground/60">{level.reading}</span>
+                    {japanese ? (
+                      <>
+                        <span {...japaneseTextProps("block font-black text-foreground")}>{level.term}</span>
+                        <span className="block text-[11px] font-semibold text-foreground/60">{level.reading}</span>
+                      </>
+                    ) : (
+                      <>
+                        <span className="block font-black text-foreground">{level.reading}</span>
+                        <span {...japaneseTextProps("block text-[11px] font-semibold text-foreground/60")}>
+                          {level.term}
+                        </span>
+                      </>
+                    )}
                   </td>
                   <td className="py-2 align-top font-semibold text-foreground/75">{level.meaning}</td>
                   <td className="py-2 align-top">
-                    <span {...japaneseTextProps("block font-bold text-foreground/80")}>{level.bucket}</span>
+                    {japanese ? (
+                      <span {...japaneseTextProps("block font-bold text-foreground/80")}>{level.bucket}</span>
+                    ) : (
+                      <span className="block font-bold text-foreground/80">{level.bucketReading}</span>
+                    )}
                     <span className="block text-[11px] font-semibold text-foreground/60">{level.bucketMeaning}</span>
                   </td>
                   <td className="py-2 align-top text-xs font-semibold text-foreground/60">

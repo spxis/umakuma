@@ -30,6 +30,14 @@ export const THEME_PICKER_COPY = {
   browse: "Browse themes",
   browseTitle: "Browse every theme and switch",
   stage: "Stage",
+  /* The script the rung names are read in. `EN` and `\u3042` are the pair this
+     site already uses for the same question on item chips; a member who has
+     met one meets the other knowing what it does. */
+  words: "Rung names",
+  wordsRomaji: "EN",
+  wordsRomajiTitle: "Rung names in romaji, with the English underneath",
+  wordsJapanese: "\u3042",
+  wordsJapaneseTitle: "Rung names in Japanese, with the stage underneath",
   /* "5-6" for a two-rung tier, "7" for a one-rung tier: a range of one is a
      number, and printing "7-7" reads as a mistake. */
   stageRange: (levels: { level: number }[]) => {

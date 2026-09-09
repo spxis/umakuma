@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { statusClass, statusShortLabel } from "../level-explorer/lib/levelExplorerDisplay";
 import { ExplorerPill } from "./ExplorerPill";
 import { NO_TRANSLATE_CLASS } from "@/app/shared/japaneseText";
+import { srsStageLabel } from "@/lib/srs/srsStageLabel";
 
 type PillChipProps = {
   className?: string;
@@ -29,7 +30,7 @@ export default function StatusSrsChip({
         * three text nodes with the spacing between them up for grabs, and it
         * came back as "APPR- SRS4".
         */}
-      <span translate="no" className={NO_TRANSLATE_CLASS}>{`${statusShortLabel(status)} - SRS ${srsStage}`}</span>
+      <span translate="no" className={NO_TRANSLATE_CLASS}>{srsStageLabel(statusShortLabel(status), srsStage)}</span>
     </PillChip>
   );
 }
