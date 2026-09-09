@@ -7444,12 +7444,25 @@
     "id": "the-xp-experience-spx-had-chart-per-rank-leaderboards-weekly",
     "name": "The XP experience SPX had: chart, per-rank leaderboards, weekly, promotions",
     "area": "platform",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-09",
+    "summary": "Every XP board now shows both distances: to the member above you, and to the next rank",
+    "dateIsEstimate": false,
+    "release": 594,
+    "version": "1.97.0",
+    "releasedAt": "2026-09-09T09:30:39Z"
+  },
+  {
+    "id": "the-xp-chart-does-not-say-what-a-rank-unlocks",
+    "name": "The XP chart does not say what a rank unlocks",
+    "area": "platform",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-09",
-    "version": "1.97.0",
-    "release": 594,
-    "releasedAt": "2026-09-09T09:30:39Z",
-    "summary": "Every XP board now shows both distances: to the member above you, and to the next rank"
+    "version": "1.98.0",
+    "release": 595,
+    "releasedAt": "2026-09-09T09:35:58Z",
+    "summary": "The XP chart now says what each rank unlocks, printed on the rungs where the allowance actually changes"
   }
 ]
