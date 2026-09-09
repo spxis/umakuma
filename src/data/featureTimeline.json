@@ -7470,12 +7470,25 @@
     "id": "the-profile-does-not-show-your-streak-or-your-ladder-level",
     "name": "The profile does not show your streak or your ladder level",
     "area": "account",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-09",
+    "summary": "The profile now shows your streak and the level on the ladder you are actually climbing",
+    "dateIsEstimate": false,
+    "release": 596,
+    "version": "1.99.0",
+    "releasedAt": "2026-09-09T09:43:42Z"
+  },
+  {
+    "id": "the-profile-does-not-say-where-your-xp-came-from",
+    "name": "The profile does not say where your XP came from",
+    "area": "account",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-09",
-    "version": "1.99.0",
-    "release": 596,
-    "releasedAt": "2026-09-09T09:43:42Z",
-    "summary": "The profile now shows your streak and the level on the ladder you are actually climbing"
+    "version": "1.100.0",
+    "release": 597,
+    "releasedAt": "2026-09-09T09:57:25Z",
+    "summary": "The profile now shows where your XP came from, drawn by the same component as the history page"
   }
 ]
