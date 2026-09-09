@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+
+import WorksheetButton from "@/app/shared/WorksheetButton";
 import { useState } from "react";
 
 import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
@@ -263,11 +265,7 @@ export default function StudyListCard({
         * which is not what a button called Print does anywhere else. Print
         * lives on the sheet now.
         */}
-      {sheetLinks ? (
-        <Link href={sheetLinks.worksheet} className={PILL} title={STUDY_LIST_COPY.worksheetHint}>
-          {STUDY_LIST_COPY.worksheet}
-        </Link>
-      ) : null}
+      {sheetLinks ? <WorksheetButton href={sheetLinks.worksheet} name={card.name} className={PILL} /> : null}
     </>
   );
 

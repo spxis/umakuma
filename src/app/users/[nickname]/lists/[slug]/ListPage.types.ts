@@ -109,6 +109,8 @@ export type ListPageControlsProps = {
   onEditing: (next: boolean) => void;
   /** The sheet this list prints to, or null where there is nothing to print. */
   worksheetHref: string | null;
+  /** Named on the worksheet frame, so a reader can see which list they opened. */
+  listName: string;
   sort: ListItemSort;
   onSort: (next: ListItemSort) => void;
   reversed: boolean;

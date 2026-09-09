@@ -311,6 +311,7 @@ export default function ListPageView({
           editing={editing}
           onEditing={setEditing}
           worksheetHref={sheetLinks?.worksheet ?? null}
+          listName={list.name}
           sort={sort}
           onSort={(next) => {
             setSort(next);

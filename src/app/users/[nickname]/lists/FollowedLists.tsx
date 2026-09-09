@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+
+import WorksheetButton from "@/app/shared/WorksheetButton";
 import { useState } from "react";
 
 import ListShelfControls from "@/app/shared/ListShelfControls";
@@ -160,13 +162,11 @@ export default function FollowedLists({
               </p>
               <p className="mt-2 flex items-center gap-3 text-[11px] text-foreground/60">
                 {worksheet ? (
-                  <Link
+                  <WorksheetButton
                     href={worksheet}
+                    name={list.name}
                     className="font-bold uppercase tracking-[0.08em] text-foreground/60 transition hover:text-accent"
-                    title={STUDY_LIST_COPY.worksheetHint}
-                  >
-                    {STUDY_LIST_COPY.worksheet}
-                  </Link>
+                  />
                 ) : null}
                 <button
                   type="button"

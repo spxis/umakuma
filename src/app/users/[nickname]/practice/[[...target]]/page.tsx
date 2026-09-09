@@ -63,6 +63,7 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
     printAll,
     fill,
     printNow,
+    embed,
     pageSize,
     picked,
     page,
@@ -173,6 +174,11 @@ export default async function GradePracticePage({ params, searchParams }: PagePr
      */
     <div
       data-print="mono"
+      /* In a frame, everything already marked "not for paper" is not wanted on
+         screen either: the frame exists to show the sheet, and the navigation
+         inside it would be a second site inside the first. One attribute, and
+         `print.css` does the hiding - see the rule there. */
+      data-sheet-embed={embed ? "1" : undefined}
       className={`w-full text-foreground ${PAGE_SHELL_PADDING} print:bg-white print:px-0 print:py-0 print:text-neutral-900`}
     >
       {/* Site chrome on screen, gone on paper - a printed sheet is not a web page. */}

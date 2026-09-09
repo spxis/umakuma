@@ -123,3 +123,21 @@
     box-shadow: none !important;
   }
 }
+
+/*
+ * The sheet, shown in a frame on the page that asked for it.
+ *
+ * A Worksheet button used to navigate, so asking to print a list took the
+ * reader off the list - the header even changed section, Lists to Learn. The
+ * sheet is now framed in a modal on the page they were already on, and inside
+ * that frame the site's own navigation is not wanted on screen either.
+ *
+ * `print:hidden` already marks every part of that page which is chrome rather
+ * than sheet, and the question a frame asks is the same question paper asks,
+ * so this reuses the answer instead of marking everything a second time. The
+ * selector is Tailwind's generated class name, escaped; `sheetEmbed.test.ts`
+ * fails if the page stops emitting it.
+ */
+[data-sheet-embed="1"] .print\:hidden {
+  display: none !important;
+}

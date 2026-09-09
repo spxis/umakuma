@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import WorksheetButton from "@/app/shared/WorksheetButton";
 
 import HideBurnedToggle from "@/app/shared/HideBurnedToggle";
 import ListSearchField from "@/app/shared/ListSearchField";
@@ -47,6 +47,7 @@ export default function ListPageControls({
   editing,
   onEditing,
   worksheetHref,
+  listName,
   sort,
   onSort,
   reversed,
@@ -138,11 +139,7 @@ export default function ListPageControls({
         * the dialog there. A Print here that changed the page was a
         * button that did not do what it said.
         */}
-      {worksheetHref ? (
-        <Link href={worksheetHref} className={ACTION_PILL} title={STUDY_LIST_COPY.worksheetHint}>
-          {STUDY_LIST_COPY.worksheet}
-        </Link>
-      ) : null}
+      {worksheetHref ? <WorksheetButton href={worksheetHref} name={listName} className={ACTION_PILL} /> : null}
       {/*
         * Offered only where there is something to sort. On a list of four
         * a sort control is a control that cannot change anything, and the

@@ -45,6 +45,22 @@ export const PRACTICE_PAGINATION_DEFAULT: PaginationPlacement = "both";
  */
 export const PRINT_NOW_PARAM = "go";
 
+/**
+ * The flag that says this sheet is being read inside something else.
+ *
+ * A Worksheet button used to navigate, which answered "let me print this" by
+ * taking the reader somewhere else - the header even changed section, from
+ * Lists to Learn. The sheet is now shown in a frame on the page the reader is
+ * already on, and this is how that frame asks for the sheet without the site
+ * wrapped around it.
+ *
+ * Kept out of `SheetSettings` for the same reason the print flag is: it
+ * describes how this one request is being made, not what the sheet should
+ * look like, and a reader who opens the full sheet from the frame must not
+ * arrive at a page with no navigation.
+ */
+export const SHEET_EMBED_PARAM = "embed";
+
 export type SheetSettings = {
   /** Whose page the sheet is on, since the address is built from it. */
   nickname: string;
@@ -189,4 +205,15 @@ export function pickedSheetHref(
     },
     changes,
   );
+}
+
+/**
+ * A sheet's link, asked for as a frame's worth of sheet.
+ *
+ * Composed here beside the print flag rather than at the call site, so there
+ * is one place that knows how either flag is spelled and how it joins an
+ * address that may already have a query.
+ */
+export function sheetEmbedHref(href: string): string {
+  return `${href}${href.includes("?") ? "&" : "?"}${SHEET_EMBED_PARAM}=1`;
 }

@@ -8,7 +8,7 @@ import { GRADE_SHORT_LABELS, isGradeOption, parsePageParam } from "../grades/gra
 
 import type { PracticeTarget } from "./practiceAddress";
 import { PRACTICE_SHEET_COPY, PRINT_ALL_LIMIT, SHEET_SIZES, toSheetSize } from "./practiceCopy";
-import { PRACTICE_PAGINATION_DEFAULT, PRINT_NOW_PARAM } from "./sheetLink";
+import { PRACTICE_PAGINATION_DEFAULT, PRINT_NOW_PARAM, SHEET_EMBED_PARAM } from "./sheetLink";
 import type { SheetPreferences } from "./sheetPreferences";
 import type { SheetMode } from "./TracingSheet";
 
@@ -109,6 +109,10 @@ export function readSheetOptions(
      */
     fill: setting(query.fill, "fill") === "1",
     printNow: firstValue(query[PRINT_NOW_PARAM]) === "1",
+    /* Shown inside a frame on another page, so the site's own chrome is not
+       wanted on screen either - the sheet is the whole of what the frame is
+       for. */
+    embed: firstValue(query[SHEET_EMBED_PARAM]) === "1",
     pageSize: printAll ? PRINT_ALL_LIMIT : SHEET_SIZES[size].perPage,
     /*
      * A hand-picked sheet carries its characters, and the parameter is the

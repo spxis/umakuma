@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 
 import { FEATURE_AREA_VALUES, isFeatureArea, isFeatureKind } from "../src/lib/featureTimeline";
-import { TASK_LEASE_MS, claimTask, heldNow, isWaiting, taskLine } from "../src/lib/ticketClaims";
+import { TASK_LEASE_MS, claimTask, heldNow, taskLine } from "../src/lib/ticketClaims";
 
 /**
  * The shared task board, from a terminal.
