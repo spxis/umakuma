@@ -7314,12 +7314,25 @@
     "id": "theme-rungs-in-romaji-by-default-japanese-with-the-srs-stage",
     "name": "Theme rungs in romaji by default, Japanese with the SRS stage",
     "area": "study",
+    "status": "shipped",
     "kind": "feature",
+    "date": "2026-09-09",
+    "summary": "Theme rung names read in romaji by default, with the Japanese one press away and the SRS stage printed beside it",
+    "dateIsEstimate": false,
+    "release": 584,
+    "version": "1.87.0",
+    "releasedAt": "2026-09-09T07:49:06Z"
+  },
+  {
+    "id": "next-16-3-rewrites-agents-md-and-claude-md-on-every-dev-run",
+    "name": "Next 16.3 rewrites AGENTS.md and CLAUDE.md on every dev run",
+    "area": "platform",
+    "kind": "bug",
     "status": "shipped",
     "date": "2026-09-09",
-    "version": "1.87.0",
-    "release": 584,
-    "releasedAt": "2026-09-09T07:49:06Z",
-    "summary": "Theme rung names read in romaji by default, with the Japanese one press away and the SRS stage printed beside it"
+    "version": "1.88.0",
+    "release": 585,
+    "releasedAt": "2026-09-09T07:50:56Z",
+    "summary": "Next 16.3 no longer rewrites this project's AGENTS.md and CLAUDE.md on every dev run"
   }
 ]
