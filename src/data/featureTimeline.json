@@ -7496,12 +7496,25 @@
     "id": "release-take-accepts-a-codename-whose-romaji-is-not-its-read",
     "name": "release:take accepts a codename whose romaji is not its reading",
     "area": "platform",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-09",
+    "summary": "The release gate now refuses a codename whose romaji is not a reading of its own reading",
+    "dateIsEstimate": false,
+    "release": 598,
+    "version": "1.101.0",
+    "releasedAt": "2026-09-09T10:11:12Z"
+  },
+  {
+    "id": "the-results-line-never-says-a-search-is-narrowing-it",
+    "name": "The results line never says a search is narrowing it",
+    "area": "study",
     "kind": "bug",
     "status": "shipped",
     "date": "2026-09-09",
-    "version": "1.101.0",
-    "release": 598,
-    "releasedAt": "2026-09-09T10:11:12Z",
-    "summary": "The release gate now refuses a codename whose romaji is not a reading of its own reading"
+    "version": "1.102.0",
+    "release": 599,
+    "releasedAt": "2026-09-09T15:27:16Z",
+    "summary": "With a search running, the study explorer said \"Showing 1/100 items\" and named no cause - and the box that set the search sits inside a filter panel that is shut by default, so the other ninety-nine looked like they had gone missing. The three explorers each wrote that line their own way. One component draws it now, and names the search beside it in a chip that clears it."
   }
 ]
