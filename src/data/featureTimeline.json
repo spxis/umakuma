@@ -7509,12 +7509,25 @@
     "id": "the-results-line-never-says-a-search-is-narrowing-it",
     "name": "The results line never says a search is narrowing it",
     "area": "study",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-09",
+    "summary": "With a search running, the study explorer said \"Showing 1/100 items\" and named no cause - and the box that set the search sits inside a filter panel that is shut by default, so the other ninety-nine looked like they had gone missing. The three explorers each wrote that line their own way. One component draws it now, and names the search beside it in a chip that clears it.",
+    "dateIsEstimate": false,
+    "release": 599,
+    "version": "1.102.0",
+    "releasedAt": "2026-09-09T15:27:16Z"
+  },
+  {
+    "id": "history-filters-are-a-wall-of-chips-on-a-phone",
+    "name": "History filters are a wall of chips on a phone",
+    "area": "study",
     "kind": "bug",
     "status": "shipped",
     "date": "2026-09-09",
-    "version": "1.102.0",
-    "release": 599,
-    "releasedAt": "2026-09-09T15:27:16Z",
-    "summary": "With a search running, the study explorer said \"Showing 1/100 items\" and named no cause - and the box that set the search sits inside a filter panel that is shut by default, so the other ninety-nine looked like they had gone missing. The three explorers each wrote that line their own way. One component draws it now, and names the search beside it in a chip that clears it."
+    "version": "1.103.0",
+    "release": 600,
+    "releasedAt": "2026-09-09T15:27:27Z",
+    "summary": "History drew one filter chip per level - sixty-three of them on the UmaKuma ladder, thirteen lines deep on a phone above the list you opened the page for. The levels fold into decades now, and pressing one opens it; on a phone each row shows only the filter that is on until you open it. Three lines instead of eighteen."
   }
 ]
