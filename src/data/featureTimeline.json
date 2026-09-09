@@ -7288,12 +7288,25 @@
     "id": "radicals-page-the-stroke-filter-bar-disappears-as-parts-are-",
     "name": "Radicals page: the stroke filter bar disappears as parts are picked",
     "area": "jlpt",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-07",
+    "summary": "The radicals page's stroke bar stays put; a lone remaining count is drawn pre-selected.",
+    "dateIsEstimate": false,
+    "release": 582,
+    "version": "1.85.0",
+    "releasedAt": "2026-09-08T04:53:55Z"
+  },
+  {
+    "id": "critical-next-js-rce-advisory-has-main-red-and-every-deploy-",
+    "name": "Critical: Next.js RCE advisory has main red and every deploy blocked",
+    "area": "platform",
     "kind": "bug",
     "status": "shipped",
-    "date": "2026-09-07",
-    "version": "1.85.0",
-    "release": 582,
-    "releasedAt": "2026-09-08T04:53:55Z",
-    "summary": "The radicals page's stroke bar stays put; a lone remaining count is drawn pre-selected."
+    "date": "2026-09-09",
+    "version": "1.86.0",
+    "release": 583,
+    "releasedAt": "2026-09-09T07:39:15Z",
+    "summary": "Updated Next.js past a critical remote-code-execution flaw in its image optimizer, and brought the image-processing library it depends on above its own vulnerable version too."
   }
 ]
