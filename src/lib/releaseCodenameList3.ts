@@ -152,4 +152,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Tanaoroshi", ja: "棚卸し", reading: "たなおろし", gloss: "taking stock of what is actually there" },
   { romaji: "Chakuseki", ja: "着席", reading: "ちゃくせき", gloss: "taking your seat, without moving the room" },
   { romaji: "Tsuiseki", ja: "追跡", reading: "ついせき", gloss: "following the trail back" },
+  { romaji: "Tewake", ja: "手分け", reading: "てわけ", gloss: "dividing the work between hands" },
 ];

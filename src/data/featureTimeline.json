@@ -7392,12 +7392,25 @@
     "id": "compare-two-curriculum-versions-and-say-what-changed",
     "name": "Compare two curriculum versions and say what changed",
     "area": "jlpt",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-09",
+    "summary": "Each ladder now says what its rebuilds moved, per stream, drawn from the same changelog the papers are written from",
+    "dateIsEstimate": false,
+    "release": 590,
+    "version": "1.93.0",
+    "releasedAt": "2026-09-09T08:39:23Z"
+  },
+  {
+    "id": "stroke-pages-could-also-show-radicals-with-their-own-colour-",
+    "name": "Stroke pages could also show radicals, with their own colour and a filter",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-09",
-    "version": "1.93.0",
-    "release": 590,
-    "releasedAt": "2026-09-09T08:39:23Z",
-    "summary": "Each ladder now says what its rebuilds moved, per stream, drawn from the same changelog the papers are written from"
+    "version": "1.94.0",
+    "release": 591,
+    "releasedAt": "2026-09-09T08:51:57Z",
+    "summary": "The stroke pages can show radicals beside the kanji, in their own colour, with a filter and counts that follow it"
   }
 ]
