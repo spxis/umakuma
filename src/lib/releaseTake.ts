@@ -1,4 +1,5 @@
 import { FEATURE_STATUSES, type FeatureTimelineEntry } from "./featureTimeline";
+import { toRomaji } from "wanakana";
 import { codenameKanaForMinor, toHiragana, type ReleaseCodename } from "./releaseCodenames";
 import { compareVersions, RELEASE_STEPS, versionAfter, type ReleaseStep } from "./releaseOrdinal";
 
@@ -56,7 +57,7 @@ export function usedCodenameWords(codenames: readonly ReleaseCodename[]): Set<st
   return used;
 }
 
-export type CodenameProblem = { field: "kana" | "words" | "pair" | "gloss"; message: string };
+export type CodenameProblem = { field: "kana" | "words" | "pair" | "gloss" | "romaji"; message: string };
 
 /**
  * Why a proposed codename would fail the gate, or nothing.
@@ -65,6 +66,48 @@ export type CodenameProblem = { field: "kana" | "words" | "pair" | "gloss"; mess
  * failure arrives at the end of a release - after the build, with a push
  * waiting - and every retry costs another full gate.
  */
+/**
+ * How far a codename's romaji may sit from its own reading.
+ *
+ * Two, measured rather than chosen: romanising all 597 shipped readings and
+ * comparing gives a worst case of exactly 2 - "Soshun Sogen" for
+ * そうしゅんそうげん, a long vowel written short. The mistake this exists to
+ * catch, "Nintei" stamped against にちょう, is 4. Particles account for most of
+ * the rest: ほねぐみは romanises as "ha" and is written "wa", るいを as "wo"
+ * and written "o", each a single edit.
+ *
+ * A strict match would reject a dozen good names; no check at all let two
+ * unrelated words ship together on one release.
+ */
+const ROMAJI_DRIFT_ALLOWED = 2;
+
+/** Letters only, lowercased: the spacing and capitals are a style, not a claim. */
+function romajiKey(value: string): string {
+  return value.toLowerCase().replace(/[^a-z]/g, "");
+}
+
+/** Edits between two words, which is the only thing this file needs from it. */
+function editDistance(left: string, right: string): number {
+  let previous = Array.from({ length: right.length + 1 }, (_, index) => index);
+  for (let i = 1; i <= left.length; i += 1) {
+    const current = [i];
+    for (let j = 1; j <= right.length; j += 1) {
+      current[j] = Math.min(
+        previous[j]! + 1,
+        current[j - 1]! + 1,
+        previous[j - 1]! + (left[i - 1] === right[j - 1] ? 0 : 1),
+      );
+    }
+    previous = current;
+  }
+  return previous[right.length]!;
+}
+
+/** Whether the romaji is plausibly a reading of the reading. */
+export function romajiMatchesReading(romaji: string, reading: string): boolean {
+  return editDistance(romajiKey(romaji), romajiKey(toRomaji(reading))) <= ROMAJI_DRIFT_ALLOWED;
+}
+
 export function codenameProblems(
   candidate: ReleaseCodename,
   release: number,
@@ -77,6 +120,13 @@ export function codenameProblems(
     problems.push({
       field: "kana",
       message: `Release ${release} lands on ${kana}, and "${candidate.reading}" does not start with it.`,
+    });
+  }
+
+  if (!romajiMatchesReading(candidate.romaji, candidate.reading)) {
+    problems.push({
+      field: "romaji",
+      message: `"${candidate.romaji}" is not a reading of "${candidate.reading}".`,
     });
   }
 
