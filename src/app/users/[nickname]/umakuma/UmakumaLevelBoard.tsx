@@ -15,6 +15,7 @@ import type { LadderLevelGroup, LadderLevelSummary } from "@/lib/ladder/ladderQu
 import UmakumaLevelPicker from "./UmakumaLevelPicker";
 import UmakumaLadderSearch from "./UmakumaLadderSearch";
 import UmakumaPapersNote from "./UmakumaPapersNote";
+import CurriculumChanges from "@/app/shared/CurriculumChanges";
 import CurriculumStamp from "@/app/shared/CurriculumStamp";
 import { LADDER_STREAMS } from "@/lib/ladder/ladderStreams";
 import { FilterChipButton, filterChipTone } from "@/app/shared/FilterChip";
@@ -122,6 +123,8 @@ export default function UmakumaLevelBoard({
           })}
         </div>
       </section>
+
+      <CurriculumChanges stream={LADDER_STREAMS.un} />
 
       <UmakumaPapersNote />
 

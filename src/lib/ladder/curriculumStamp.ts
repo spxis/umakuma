@@ -20,7 +20,18 @@ export function curriculumVersionFor(stream: LadderStreamValue): string {
   return stream === LADDER_STREAMS.ug ? GRADE_CURRICULUM_VERSION : CURRICULUM_VERSION;
 }
 
+/**
+ * `UN 2.0.0`, for any version of that ladder rather than only the shipped one.
+ *
+ * The changelog panel names past versions and the stamp names the current one,
+ * and they are the same fact written the same way - so the format lives here
+ * once instead of being spelled out again beside a list of old releases.
+ */
+export function curriculumStampFor(stream: LadderStreamValue, version: string): string {
+  return `${stream} ${version}`;
+}
+
 /** `UN 2.0.0`. What a stamp actually prints. */
 export function curriculumStampText(stream: LadderStreamValue): string {
-  return `${stream} ${curriculumVersionFor(stream)}`;
+  return curriculumStampFor(stream, curriculumVersionFor(stream));
 }

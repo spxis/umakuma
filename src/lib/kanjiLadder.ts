@@ -46,17 +46,6 @@ export const KANJI_LADDER_LEVELS = ladder.levels;
 export const CURRICULUM_VERSION: string =
   (ladder as { curriculum?: { version?: string } }).curriculum?.version ?? CURRICULUM_VERSION_START;
 
-export type CurriculumChangelogEntry = {
-  version: string;
-  date: string;
-  bump: string;
-  summary: string;
-};
-
-/** Newest first. Empty until a change has actually moved the version. */
-export function curriculumChangelog(): CurriculumChangelogEntry[] {
-  return ((ladder as { curriculum?: { changelog?: CurriculumChangelogEntry[] } }).curriculum?.changelog ?? []);
-}
 export const KANJI_LADDER_TOTAL = ladder.totalKanji;
 
 export function isKanjiLadderLevel(level: number): boolean {
