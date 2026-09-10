@@ -7574,12 +7574,25 @@
     "id": "kanji-drawn-in-body-text-colour-in-the-review-modal",
     "name": "Every subject glyph carries its colour",
     "area": "study",
+    "status": "shipped",
     "kind": "bug",
+    "date": "2026-09-09",
+    "summary": "Kanji and words in the review modal and the selection bar now carry their own colour instead of body-text grey, and the check that enforces it can no longer be slipped past.",
+    "dateIsEstimate": false,
+    "release": 604,
+    "version": "1.107.0",
+    "releasedAt": "2026-09-10T03:24:30Z"
+  },
+  {
+    "id": "a-kanji-shows-its-un-or-ug-level-wherever-it-is-drawn",
+    "name": "A kanji card shows the level we teach it at",
+    "area": "study",
+    "kind": "feature",
     "status": "shipped",
     "date": "2026-09-09",
-    "version": "1.107.0",
-    "release": 604,
-    "releasedAt": "2026-09-10T03:24:30Z",
-    "summary": "Kanji and words in the review modal and the selection bar now carry their own colour instead of body-text grey, and the check that enforces it can no longer be slipped past."
+    "version": "1.108.0",
+    "release": 605,
+    "releasedAt": "2026-09-10T03:44:42Z",
+    "summary": "Kanji cards across the site now show the UmaKuma level the character is taught at, beside the WaniKani one they already carried."
   }
 ]

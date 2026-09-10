@@ -166,4 +166,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Hotori", ja: "辺", reading: "ほとり", gloss: "The water's edge - the side of a thing nearest you, which is where a folded range now opens" },
   { romaji: "Maai", ja: "間合い", reading: "まあい", gloss: "The distance between two things - which is what a moved kanji's tag now measures" },
   { romaji: "Miotoshi", ja: "見落とし", reading: "みおとし", gloss: "A thing looked past - which is what a gate that scans only literals does" },
+  { romaji: "Muji", ja: "無地", reading: "むじ", gloss: "Plain and unmarked - which is how a kanji card looked without the level we teach it at" },
 ];
