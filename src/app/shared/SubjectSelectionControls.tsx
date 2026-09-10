@@ -48,11 +48,14 @@ export function SubjectSelectionBar({
   selection,
   /** Keys visible on the current page, for "All on this page". */
   visibleKeys,
+  /** What is being chosen, so the chosen pills carry its colour. */
+  subjectType,
   /** The destinations, rendered by whoever has one to offer. */
   children,
 }: {
   selection: SubjectSelection;
   visibleKeys: string[];
+  subjectType: string;
   children?: ReactNode;
 }) {
   if (!selection.choosing) return null;
@@ -86,7 +89,7 @@ export function SubjectSelectionBar({
         * whether the sweep took one too many, and clearing everything was the
         * only way to correct it.
         */}
-      <SelectedItemsPanel chosen={selection.chosen} onRemove={selection.toggle} />
+      <SelectedItemsPanel chosen={selection.chosen} subjectType={subjectType} onRemove={selection.toggle} />
 
       <span className="ml-auto flex flex-wrap items-center gap-2">
         <button

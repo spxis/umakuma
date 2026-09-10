@@ -3,6 +3,8 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
+import { SUBJECT_TYPES } from "@/lib/domainConstants";
+
 import SaveSelectionToList from "./SaveSelectionToList";
 import { SubjectSelectionBar } from "./SubjectSelectionControls";
 import { encodeSelection, SUBJECT_SELECTION_COPY } from "./subjectSelection";
@@ -47,7 +49,10 @@ export default function KanjiSelectionBar({
   children?: ReactNode;
 }) {
   return (
-    <SubjectSelectionBar selection={selection} visibleKeys={visibleKeys}>
+    /* Kanji, said once here rather than guessed per pill: this bar is the only
+       way into the selection panel, and its three catalogues - a school grade,
+       a JLPT level, a WaniKani level - are all kanji. */
+    <SubjectSelectionBar selection={selection} visibleKeys={visibleKeys} subjectType={SUBJECT_TYPES.kanji}>
       {selection.count > 0 ? children : null}
       {selection.count > 0 && accountId ? (
         <SaveSelectionToList chosen={selection.chosen} accountId={accountId} onSaved={selection.cancel} />

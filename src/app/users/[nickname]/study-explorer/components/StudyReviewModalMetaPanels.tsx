@@ -14,6 +14,7 @@ import {
 import LevelExplorerReviewStatsCard from "../../level-explorer/components/LevelExplorerReviewStatsCard";
 import { parseWordExamples } from "../../jlpt-explorer/lib/jlptExplorerContentHelpers";
 import ConfusableWarningRow from "@/app/shared/ConfusableWarningRow";
+import SubjectPill from "@/app/shared/SubjectPill";
 import { CONFUSABLE_WARNING_COPY } from "@/app/shared/ConfusableWarning.constants";
 import { openViewGlyphViewer } from "@/lib/viewGlyphViewer";
 import { SUBJECT_TYPES, type SubjectType } from "@/lib/domainConstants";
@@ -22,7 +23,6 @@ import {
   metricCard,
   readingCard,
   readingsWithPronunciationList,
-  relatedTileLabelClass,
 } from "./StudyReviewModalHelpers";
 import { stripHtml } from "../../level-explorer/lib/levelExplorerDisplay";
 import { RelatedReferenceCards } from "../../level-explorer/components/LevelExplorerReferenceCards";
@@ -294,31 +294,29 @@ export default function StudyReviewModalMetaPanels({
                   </button>
                 </div>
                 {!usedKanjiCollapsed ? (
-                  <ul className="mt-2 space-y-2 text-foreground/90">
+                  /* The kanji inside a word, which is the case AGENTS.md names
+                     for `SubjectPill` by name. It was a hand-rolled tile whose
+                     glyph took `text-foreground` and a size from a helper, so
+                     it drew kanji in body-text colour, at a tenth size, with no
+                     `lang="ja"` on it for Chrome to read. */
+                  <ul className="mt-2 flex flex-wrap gap-1.5">
                     {usedKanjiItems.map((item, index) => (
-                      <li
-                        key={`${selectedItem.subjectId}-${item.subjectId}-${item.label}-${index}`}
-                        className="rounded-lg border border-line bg-surface-muted px-3 py-2"
-                      >
-                        <div className="flex flex-wrap items-end justify-between gap-x-3 gap-y-1">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              openSingleGlyph({
-                                subjectId: item.subjectId,
-                                label: item.label,
-                                reading: item.reading ?? null,
-                                meaning: item.meaning ?? null,
-                                subjectType: SUBJECT_TYPES.kanji,
-                              });
-                            }}
-                            className={`cursor-pointer text-left font-black leading-none text-foreground hover:opacity-85 ${relatedTileLabelClass(item.label)}`}
-                          >
-                            {item.label}
-                          </button>
-                          <p className="text-2xl font-bold leading-none text-foreground/80">{item.reading || "-"}</p>
-                        </div>
-                        <p className="mt-1 text-sm text-foreground/85">{item.meaning || "-"}</p>
+                      <li key={`${selectedItem.subjectId}-${item.subjectId}-${item.label}-${index}`}>
+                        <SubjectPill
+                          glyph={item.label}
+                          subjectType={SUBJECT_TYPES.kanji}
+                          reading={item.reading ?? null}
+                          meaning={item.meaning ?? null}
+                          onClick={() => {
+                            openSingleGlyph({
+                              subjectId: item.subjectId,
+                              label: item.label,
+                              reading: item.reading ?? null,
+                              meaning: item.meaning ?? null,
+                              subjectType: SUBJECT_TYPES.kanji,
+                            });
+                          }}
+                        />
                       </li>
                     ))}
                   </ul>
@@ -354,25 +352,24 @@ export default function StudyReviewModalMetaPanels({
                       key={`${selectedItem.subjectId}-${example.written}-${example.pronounced}-${index}`}
                       className="rounded-lg border border-line bg-surface-muted px-3 py-2"
                     >
-                      <div className="flex flex-wrap items-end justify-between gap-x-3 gap-y-1">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            openSingleGlyph({
-                              subjectId: -(index + 1),
-                              label: example.written || "-",
-                              reading: example.pronounced || null,
-                              meaning: example.gloss || null,
-                              subjectType: SUBJECT_TYPES.vocabulary,
-                            });
-                          }}
-                          className={`cursor-pointer text-left font-black leading-none text-foreground hover:opacity-85 ${relatedTileLabelClass(example.written || "-")}`}
-                        >
-                          {example.written || "-"}
-                        </button>
-                        <p className="text-2xl font-bold leading-none text-foreground/80">{example.pronounced || "-"}</p>
-                      </div>
-                      <p className="mt-1 text-sm text-foreground/85">{example.gloss || "-"}</p>
+                      {/* The card stays, because the kanji inside this word
+                          hang off it; only the word itself stops being a
+                          hand-rolled tile drawn in body-text colour. */}
+                      <SubjectPill
+                        glyph={example.written || "-"}
+                        subjectType={SUBJECT_TYPES.vocabulary}
+                        reading={example.pronounced || null}
+                        meaning={example.gloss || null}
+                        onClick={() => {
+                          openSingleGlyph({
+                            subjectId: -(index + 1),
+                            label: example.written || "-",
+                            reading: example.pronounced || null,
+                            meaning: example.gloss || null,
+                            subjectType: SUBJECT_TYPES.vocabulary,
+                          });
+                        }}
+                      />
                       {example.kanjiItems?.length
                         ? renderSharedRelatedCards(example.kanjiItems, SUBJECT_TYPES.kanji)
                         : null}

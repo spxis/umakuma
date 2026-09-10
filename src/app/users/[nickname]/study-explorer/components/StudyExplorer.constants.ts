@@ -245,11 +245,6 @@ export const STUDY_REVIEW_HELPERS_REGEX = {
   readingSplit: /[.・]/,
 } as const;
 
-export const STUDY_REVIEW_HELPERS_TILE_LABEL_THRESHOLDS = {
-  large: 2,
-  medium: 4,
-} as const;
-
 export const STUDY_REVIEW_META_TEXT = {
   primaryReadings: "Primary readings",
   secondaryReadings: "Secondary readings",

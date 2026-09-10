@@ -24,9 +24,19 @@ const COLLAPSED_LIMIT = 8;
 
 export default function SelectedItemsPanel({
   chosen,
+  subjectType,
   onRemove,
 }: {
   chosen: ReadonlySet<string>;
+  /**
+   * What these characters are, so the pills are coloured.
+   *
+   * The set is bare strings - the character is the only identifier a school
+   * grade, a JLPT level and a WaniKani level all share - so the kind cannot be
+   * read off an item and has to be declared by whoever is choosing. Without it
+   * every chosen glyph drew in body-text colour.
+   */
+  subjectType: string;
   /** Dropping one from the set; the same toggle a card click uses. */
   onRemove: (key: string) => void;
 }) {
@@ -44,6 +54,7 @@ export default function SelectedItemsPanel({
         <SubjectPill
           key={key}
           glyph={key}
+          subjectType={subjectType}
           label={`${SUBJECT_SELECTION_COPY.remove} ${key}`}
           onClick={() => onRemove(key)}
           trailing={

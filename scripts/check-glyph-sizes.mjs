@@ -27,6 +27,25 @@ const GLYPH_LINE = /JP_TEXT_CLASS|japaneseTextProps|lang="ja"/;
 const SIZE = /\btext-(?:xl|2xl|3xl|4xl|5xl|6xl|7xl)\b/g;
 
 /**
+ * A function that hands back a glyph size, which this gate could not see.
+ *
+ * The scan above reads one line and needs two things on it: a marker that the
+ * run is Japanese, and a literal size. A helper defeats both at once. The
+ * review modal drew its related kanji with
+ * `${relatedTileLabelClass(item.label)}` - a function returning `text-4xl`,
+ * `text-3xl` or `text-xl` - on a line carrying no `lang="ja"` either, so 464
+ * components were scanned and reported clean over a rule being broken twice
+ * on the same line.
+ *
+ * The perverse part is that extracting the sizes into a named function is the
+ * tidier-looking thing to do, so the code this gate cannot see is the code
+ * somebody took more care over. `glyphSizes.ts` is meant to be the only
+ * module that decides how big a glyph is, and it is on the allow list; anybody
+ * else returning a bare size is manufacturing a tenth answer behind a name.
+ */
+const SIZE_FACTORY = /return\s+["'`]text-(?:xl|2xl|3xl|4xl|5xl|6xl|7xl)["'`]/g;
+
+/**
  * Where a hand-written glyph size is the point rather than a copy.
  *
  * Each of these is a shape the shared pieces cannot serve, and each says why.
@@ -66,6 +85,13 @@ for (const absPath of files) {
 
   const content = readFileSync(absPath, "utf8");
   content.split("\n").forEach((line, index) => {
+    for (const match of line.matchAll(SIZE_FACTORY)) {
+      violations.push({
+        file: relPath,
+        line: index + 1,
+        snippet: `${match[0].trim()} - a glyph size behind a function; ask glyphSizes.ts`,
+      });
+    }
     if (!GLYPH_LINE.test(line)) return;
     for (const match of line.matchAll(SIZE)) {
       violations.push({ file: relPath, line: index + 1, snippet: match[0] });

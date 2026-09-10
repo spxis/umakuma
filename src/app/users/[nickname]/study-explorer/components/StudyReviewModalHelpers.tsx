@@ -5,9 +5,7 @@ import type { RelatedReference } from "./StudyReviewModal.types";
 import {
   STUDY_REVIEW_HELPERS_REGEX,
   STUDY_REVIEW_HELPERS_TEXT,
-  STUDY_REVIEW_HELPERS_TILE_LABEL_THRESHOLDS,
 } from "./StudyExplorer.constants";
-import SubjectPill from "@/app/shared/SubjectPill";
 
 import { formatRelativeFromNow } from "../../level-explorer/lib/levelExplorerDisplay";
 import type { StudyQueueItem } from "../lib/studyExplorerTypes";
@@ -49,127 +47,6 @@ export function filterStudyModeRelatedItems(
 
   const maxRelatedLevel = currentLevel + 2;
   return items.filter((item) => typeof item.wkLevel !== "number" || item.wkLevel <= maxRelatedLevel);
-}
-
-export function relatedTileLabelClass(label: string): string {
-  const length = Array.from(label).length;
-  if (length <= STUDY_REVIEW_HELPERS_TILE_LABEL_THRESHOLDS.large) return "text-4xl";
-  if (length <= STUDY_REVIEW_HELPERS_TILE_LABEL_THRESHOLDS.medium) return "text-3xl";
-  return "text-xl";
-}
-
-export function relatedTiles(items: RelatedReference[] | undefined): JSX.Element {
-  if (!items || items.length === 0) {
-    return <p className="mt-1 text-sm font-semibold text-foreground/70">{STUDY_REVIEW_HELPERS_TEXT.empty}</p>;
-  }
-
-  const expanded = items.flatMap((item) => {
-    const parts = item.label
-      .split(STUDY_REVIEW_HELPERS_REGEX.relatedSplit)
-      .map((part) => part.trim())
-      .filter((part) => Boolean(part) && part !== STUDY_REVIEW_HELPERS_TEXT.empty);
-
-    if (parts.length <= 1) {
-      const normalizedLabel = item.label.trim();
-      if (!normalizedLabel || normalizedLabel === STUDY_REVIEW_HELPERS_TEXT.empty) {
-        return [];
-      }
-
-      return [{
-        label: normalizedLabel,
-        reading: item.reading?.trim() || null,
-        wkLevel: item.wkLevel,
-        successRate: item.successRate,
-        key: `${item.subjectId}-${normalizedLabel}`,
-      }];
-    }
-
-    return parts.map((part, index) => ({
-      label: part,
-      reading: null,
-      wkLevel: item.wkLevel,
-      successRate: item.successRate,
-      key: `${item.subjectId}-${part}-${index}`,
-    }));
-  });
-
-  if (expanded.length === 0) {
-    return <p className="mt-1 text-sm font-semibold text-foreground/70">{STUDY_REVIEW_HELPERS_TEXT.empty}</p>;
-  }
-
-  return (
-    <div className="mt-2 flex flex-wrap gap-2">
-      {expanded.map((entry) => (
-        <SubjectPill
-          key={entry.key}
-          glyph={entry.label}
-          reading={entry.reading}
-          level={entry.wkLevel}
-          successRate={entry.successRate}
-        />
-      ))}
-    </div>
-  );
-}
-
-export function relatedTilesClickable(
-  items: RelatedReference[] | undefined,
-  onSelect: (item: { subjectId: number; label: string; reading?: string | null }) => void,
-): JSX.Element {
-  if (!items || items.length === 0) {
-    return <p className="mt-1 text-sm font-semibold text-foreground/70">{STUDY_REVIEW_HELPERS_TEXT.empty}</p>;
-  }
-
-  const expanded = items.flatMap((item) => {
-    const parts = item.label
-      .split(STUDY_REVIEW_HELPERS_REGEX.relatedSplit)
-      .map((part) => part.trim())
-      .filter((part) => Boolean(part) && part !== STUDY_REVIEW_HELPERS_TEXT.empty);
-
-    if (parts.length <= 1) {
-      const normalizedLabel = item.label.trim();
-      if (!normalizedLabel || normalizedLabel === STUDY_REVIEW_HELPERS_TEXT.empty) {
-        return [];
-      }
-
-      return [{
-        subjectId: item.subjectId,
-        label: normalizedLabel,
-        reading: item.reading?.trim() || null,
-        wkLevel: item.wkLevel,
-        successRate: item.successRate,
-        key: `${item.subjectId}-${normalizedLabel}`,
-      }];
-    }
-
-    return parts.map((part, index) => ({
-      subjectId: item.subjectId,
-      label: part,
-      reading: null,
-      wkLevel: item.wkLevel,
-      successRate: item.successRate,
-      key: `${item.subjectId}-${part}-${index}`,
-    }));
-  });
-
-  if (expanded.length === 0) {
-    return <p className="mt-1 text-sm font-semibold text-foreground/70">{STUDY_REVIEW_HELPERS_TEXT.empty}</p>;
-  }
-
-  return (
-    <div className="mt-2 flex flex-wrap gap-2">
-      {expanded.map((entry) => (
-        <SubjectPill
-          key={entry.key}
-          onClick={() => onSelect(entry)}
-          glyph={entry.label}
-          reading={entry.reading}
-          level={entry.wkLevel}
-          successRate={entry.successRate}
-        />
-      ))}
-    </div>
-  );
 }
 
 export function metricCard(label: string, value: string): JSX.Element {
