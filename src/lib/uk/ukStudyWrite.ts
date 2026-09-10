@@ -84,8 +84,29 @@ export async function startUkLessons({
   });
 
   /* Per item actually started, not per item asked for: `skipDuplicates` means
-     a resent request opens nothing, and it should pay for nothing. */
-  const lessonXp = await awardXpQuietly({ accountId, requests: lessonXpAwards(created.count), now });
+     a resent request opens nothing, and it should pay for nothing.
+     `createMany` returns a count and not the rows, so the batch is read back
+     by the timestamp it was written with - every row this call created shares
+     `state.startedAt` exactly, and a duplicate that was skipped keeps the
+     older one it already had. The identities are what the day's cap needs:
+     lessons stop paying after thirty and the history has to be able to say
+     which ones went unpaid. */
+  const opened =
+    created.count > 0
+      ? await prisma.ukSrsState.findMany({
+          where: {
+            accountId,
+            startedAt: state.startedAt,
+            subjectId: { in: open.map((subject) => subject.id) },
+          },
+          select: { subjectId: true },
+        })
+      : [];
+  const lessonXp = await awardXpQuietly({
+    accountId,
+    requests: lessonXpAwards(opened.map((row) => row.subjectId)),
+    now,
+  });
   const dayXp = await settleDailyXp({ accountId, now });
 
   const earned: XpEarned = [];
@@ -185,7 +206,7 @@ export async function recordUkReview({
 
   const xpAwarded = await awardXpQuietly({
     accountId,
-    requests: reviewXpAwards({ correct, burnedNow, levelBefore, levelAfter: resolved.level }),
+    requests: reviewXpAwards({ correct, burnedNow, levelBefore, levelAfter: resolved.level, subjectId }),
     now,
   });
   const dayXp = await settleDailyXp({ accountId, now });

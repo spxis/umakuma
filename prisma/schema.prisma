@@ -218,6 +218,7 @@ model Account {
   xp                Int               @default(0)
   xpLevel           Int               @default(1)
   xpEvents          XpEvent[]
+  xpAwards          XpAward[]
   restDays          MemberRest[]
   levelTests        LevelTest[]
   restGrants        MemberRestGrant[]
@@ -1450,6 +1451,48 @@ model XpType {
 /// amount, and a once-a-day award is a row that already exists.
 ///
 /// `dayKey` is the Vancouver day, the same boundary Daily Challenge uses.
+/// One award, as it happened: what for, on what, and what it paid.
+///
+/// `XpEvent` is the day's tally - one accumulating row per kind per day, which
+/// is what the caps read - and a tally cannot answer "which kanji did I get
+/// those points for". John, looking at a row reading 50 XP of Review Answered:
+/// "what kanji did I get the points for??? we need to keep track of that."
+///
+/// So this is the receipt beside the tally rather than a replacement for it.
+/// The two are written together and the tally stays the single source of the
+/// number a member sees; this says what the number was made of.
+///
+/// **A capped award is recorded with `amount` 0 rather than not recorded.**
+/// Lessons cap at thirty a day and games at two, and past the cap `awardXp`
+/// returned early and wrote nothing at all - so a member who did forty lessons
+/// was paid for thirty and the history could not say the other ten had
+/// happened. John: "if we don't know past the cap, that's bad... we should be
+/// recording in the awards table with 0 xp", and "that's the point of the
+/// history". A zero row is the difference between a day that says what it did
+/// and a day that quietly stops counting.
+model XpAward {
+  id        String   @id @default(cuid())
+  accountId String
+  /// References XpType.id, the same way XpEvent.kind does.
+  kind      String
+  /// What it paid. Zero when the day's cap had already been filled.
+  amount    Int
+  /// The item this award was for, where the kind has one. Null for the
+  /// day-shaped kinds - a sign-in, a streak, a quest - which are for the day
+  /// rather than for a character, and should say so rather than pretend.
+  subjectId Int?
+  /// The Vancouver day, so a day's awards group without a range query.
+  dayKey    String
+  awardedAt DateTime @default(now())
+
+  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  /// The history reads a member's day; the subject index answers "what has
+  /// this character ever earned me", which is the other question worth asking.
+  @@index([accountId, dayKey])
+  @@index([accountId, subjectId])
+}
+
 model XpEvent {
   id        String   @id @default(cuid())
   accountId String

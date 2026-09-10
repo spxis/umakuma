@@ -68,14 +68,57 @@ describe("what one review earns", () => {
   });
 });
 
+describe("what an award says it was for", () => {
+  /*
+   * The three review awards are all about the item answered, and saying so is
+   * what lets a history row answer "which kanji did I get the points for".
+   * `times` alone is a count, and a count was the whole problem.
+   */
+  it("names the item on every award that is about it", () => {
+    const awards = reviewXpAwards({
+      correct: true,
+      burnedNow: true,
+      levelBefore: 1,
+      levelAfter: 1,
+      subjectId: 8_412,
+    });
+    expect(kinds(awards)).toEqual(["reviewAnswered", "reviewCorrect", "burnedItem"]);
+    for (const award of awards) expect(award.subjectIds).toEqual([8_412]);
+  });
+
+  /* A caller that has no item - the WaniKani feed before it knew one - must
+     still award, and the award simply carries no subject rather than a wrong
+     one. */
+  it("carries no subject when the caller has none", () => {
+    const awards = reviewXpAwards({ correct: true, burnedNow: false, levelBefore: 1, levelAfter: 1 });
+    for (const award of awards) expect(award.subjectIds).toBeUndefined();
+  });
+
+  /* A JLPT band is not an item. Nothing should invent a link for it. */
+  it("leaves the milestone without one, because a band is not a character", () => {
+    const awards = reviewXpAwards({
+      correct: true,
+      burnedNow: false,
+      levelBefore: 19,
+      levelAfter: 20,
+      subjectId: 8_412,
+    });
+    const milestone = awards.find((award) => award.kind !== "reviewAnswered" && award.kind !== "reviewCorrect");
+    if (milestone) expect(milestone.subjectIds).toBeUndefined();
+  });
+});
+
 describe("what a batch of lessons earns", () => {
-  it("pays once per item actually started", () => {
-    expect(lessonXpAwards(7)).toEqual([{ kind: "lessonLearned", times: 7 }]);
+  it("pays once per item actually started, and names them", () => {
+    /* The items rather than the count: lessons cap at thirty a day, and a
+       count cannot say which of a batch of forty went unpaid. */
+    expect(lessonXpAwards([11, 22, 33])).toEqual([
+      { kind: "lessonLearned", times: 3, subjectIds: [11, 22, 33] },
+    ]);
   });
 
   it("pays nothing when a resent request opened nothing", () => {
-    expect(lessonXpAwards(0)).toEqual([]);
-    expect(lessonXpAwards(-3)).toEqual([]);
+    expect(lessonXpAwards([])).toEqual([]);
   });
 });
 

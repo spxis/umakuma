@@ -27,6 +27,16 @@ export type XpAwardRequest = {
   kind: XpAwardKind;
   /** How many of this kind the action earned. One unless stated. */
   times?: number;
+  /**
+   * The items earned it, one per `times`, where the kind is about items.
+   *
+   * `times` alone is a count, and a count is what left the history unable to
+   * say which characters a member was paid for. Give the identities and the
+   * receipt can: eleven lessons started in one request are eleven awards on
+   * eleven subjects, not the number eleven. Omitted for the day-shaped kinds,
+   * which have no item to name.
+   */
+  subjectIds?: number[];
   /** What this particular award was for, where the kind alone does not say. */
   note?: string;
 };
@@ -46,16 +56,24 @@ export function reviewXpAwards({
   burnedNow,
   levelBefore,
   levelAfter,
+  subjectId,
 }: {
   correct: boolean;
   /** True when this answer is what carried the item to the top stage. */
   burnedNow: boolean;
   levelBefore: number;
   levelAfter: number;
+  /**
+   * The item answered. The three awards above are all *about* it, and saying
+   * so here is what lets a history row answer "which kanji"; the JLPT
+   * milestone below is about a band and deliberately carries none.
+   */
+  subjectId?: number | null;
 }): XpAwardRequest[] {
-  const awards: XpAwardRequest[] = [{ kind: "reviewAnswered" }];
-  if (correct) awards.push({ kind: "reviewCorrect" });
-  if (burnedNow) awards.push({ kind: "burnedItem" });
+  const on = typeof subjectId === "number" ? { subjectIds: [subjectId] } : {};
+  const awards: XpAwardRequest[] = [{ kind: "reviewAnswered", ...on }];
+  if (correct) awards.push({ kind: "reviewCorrect", ...on });
+  if (burnedNow) awards.push({ kind: "burnedItem", ...on });
 
   /* `curriculumLevelGained` is deliberately not awarded here. It is a defined
      routine award with an obvious trigger, and wiring it would put another
@@ -76,9 +94,18 @@ export function reviewXpAwards({
   return awards;
 }
 
-/** What a batch of lessons earned: one award per item actually started. */
-export function lessonXpAwards(started: number): XpAwardRequest[] {
-  return started > 0 ? [{ kind: "lessonLearned", times: started }] : [];
+/**
+ * What a batch of lessons earned: one award per item actually started.
+ *
+ * The items rather than how many of them, because lessons are the kind the
+ * daily cap actually bites - thirty a day - and a count cannot say which ten
+ * of a batch of forty went unpaid. Naming them is what lets the history show
+ * a capped day honestly instead of quietly ending.
+ */
+export function lessonXpAwards(subjectIds: readonly number[]): XpAwardRequest[] {
+  return subjectIds.length > 0
+    ? [{ kind: "lessonLearned", times: subjectIds.length, subjectIds: [...subjectIds] }]
+    : [];
 }
 
 /**

@@ -284,6 +284,7 @@ export async function POST(request: Request, context: RouteContext) {
         burnedNow: newSrsStage === SRS_BURNED_STAGE && (previousSrsStage ?? 0) < SRS_BURNED_STAGE,
         levelBefore: 0,
         levelAfter: 0,
+        subjectId,
       }),
       now,
     });

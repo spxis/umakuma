@@ -30,10 +30,19 @@ export async function awardXp({
   accountId,
   kind,
   note,
+  subjectId = null,
   now = new Date(),
 }: {
   accountId: string;
   kind: XpAwardKind;
+  /**
+   * The item this award is for, where the kind has one.
+   *
+   * Null for the day-shaped kinds - a sign-in, a streak, a quest - and that
+   * null is an answer rather than a gap: those are earned by the day, not by a
+   * character, and a history that invented a link for them would be lying.
+   */
+  subjectId?: number | null;
   /**
    * What *this* award was for, where the kind's own note is too general.
    *
@@ -51,7 +60,9 @@ export async function awardXp({
     select: { amount: true },
   });
 
-  /* A once-a-day award whose row already exists has been earned. */
+  /* A once-a-day award whose row already exists has been earned. No award is
+     recorded: the caller is re-checking on a page load, not reporting a second
+     sign-in, and a receipt for work nobody did is noise in the history. */
   if (existing && XP_ONCE_PER_DAY.includes(kind)) {
     const account = await prisma.account.findUnique({
       where: { id: accountId },
@@ -72,6 +83,17 @@ export async function awardXp({
     gamesPerDay: gamesPerDayAt(standing?.xpLevel ?? 1),
   });
   if (amount <= 0) {
+    /*
+     * The cap has bitten, and the work still happened.
+     *
+     * This used to return here having written nothing at all, so a member who
+     * did forty lessons was paid for thirty and the day had no record of the
+     * other ten - not a smaller number, no trace. John: "if we don't know past
+     * the cap, that's bad... we should be recording in the awards table with 0
+     * xp", and "that's the point of the history". So the receipt is written
+     * either way and the amount tells the truth about what it paid.
+     */
+    await recordAward({ accountId, kind, dayKey, amount: 0, subjectId });
     const account = await prisma.account.findUnique({
       where: { id: accountId },
       select: { xp: true, xpLevel: true },
@@ -79,7 +101,37 @@ export async function awardXp({
     return { awarded: 0, xp: account?.xp ?? 0, level: account?.xpLevel ?? 1, rankedUp: false };
   }
 
-  return creditXp({ accountId, kind, dayKey, amount, note });
+  return creditXp({ accountId, kind, dayKey, amount, note, subjectId });
+}
+
+/**
+ * One line of the receipt, and never a reason for an award to fail.
+ *
+ * `XpEvent` is the tally the caps read and the member's balance comes from;
+ * this is what that tally was made of. Swallowed on failure for the same
+ * reason `awardXpQuietly` swallows: the study write has already landed, and
+ * losing a member's answer over a bookkeeping row would be the worse trade.
+ */
+async function recordAward({
+  accountId,
+  kind,
+  dayKey,
+  amount,
+  subjectId,
+}: {
+  accountId: string;
+  kind: string;
+  dayKey: string;
+  amount: number;
+  subjectId?: number | null;
+}): Promise<void> {
+  try {
+    await prisma.xpAward.create({
+      data: { accountId, kind, dayKey, amount, subjectId: subjectId ?? null },
+    });
+  } catch (problem) {
+    console.error("Could not record the XP award", kind, problem);
+  }
 }
 
 /**
@@ -97,13 +149,21 @@ async function creditXp({
   dayKey,
   amount,
   note,
+  subjectId = null,
 }: {
   accountId: string;
   kind: string;
   dayKey: string;
   amount: number;
   note?: string | null;
+  subjectId?: number | null;
 }): Promise<XpAwardResult> {
+  /* The receipt beside the tally. Written first and outside the transaction
+     deliberately: a receipt that failed to save must never be able to hold up
+     the XP a member actually earned, and a missing receipt is a smaller wrong
+     than a missing award. */
+  await recordAward({ accountId, kind, dayKey, amount, subjectId });
+
   const [, account] = await prisma.$transaction([
     prisma.xpEvent.upsert({
       where: { accountId_kind_dayKey: { accountId, kind, dayKey } },
@@ -243,19 +303,59 @@ export async function awardXpEachQuietly({
   now?: Date;
 }): Promise<XpAwardOutcome[]> {
   const outcomes: XpAwardOutcome[] = [];
+  const dayKey = getVancouverDateKey(now);
   for (const request of requests) {
     const times = Math.max(0, Math.trunc(request.times ?? 1));
     let awarded = 0;
+    let stoppedAt: number | null = null;
     for (let attempt = 0; attempt < times; attempt += 1) {
       try {
-        const result = await awardXp({ accountId, kind: request.kind, note: request.note, now });
-        if (result.awarded <= 0) break;
+        const result = await awardXp({
+          accountId,
+          kind: request.kind,
+          note: request.note,
+          subjectId: request.subjectIds?.[attempt] ?? null,
+          now,
+        });
+        if (result.awarded <= 0) {
+          /* `awardXp` has recorded this one at zero on its way out; the rest
+             of the batch is settled below without asking again. */
+          stoppedAt = attempt + 1;
+          break;
+        }
         awarded += result.awarded;
       } catch (problem) {
         console.error("Could not award XP", request.kind, problem);
+        stoppedAt = attempt;
         break;
       }
     }
+
+    /*
+     * The rest of a capped batch, written in one go.
+     *
+     * The loop stops at the first award worth nothing, because a cap only
+     * tightens across a day - so the remaining round trips would each come
+     * back zero. They still happened, though, and the history is the place
+     * that has to say so, which is the whole reason this table exists. One
+     * `createMany` rather than a round trip each: knowing the answer already
+     * is exactly what makes it cheap to record.
+     */
+    if (stoppedAt !== null && stoppedAt < times) {
+      const unpaid = Array.from({ length: times - stoppedAt }, (_, index) => ({
+        accountId,
+        kind: request.kind,
+        dayKey,
+        amount: 0,
+        subjectId: request.subjectIds?.[stoppedAt + index] ?? null,
+      }));
+      try {
+        await prisma.xpAward.createMany({ data: unpaid });
+      } catch (problem) {
+        console.error("Could not record the unpaid awards", request.kind, problem);
+      }
+    }
+
     outcomes.push({ kind: request.kind, awarded });
   }
   return outcomes;

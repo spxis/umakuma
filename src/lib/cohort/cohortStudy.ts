@@ -322,14 +322,19 @@ export function answerReview(
      re-derived then; every other answer leaves the gate count where it was. */
   const levelBefore = member.level;
   if (passedNow) member.level = resolvedLevel(member, world);
-  member.ledger.awardAll(reviewXpAwards({ correct, burnedNow, levelBefore, levelAfter: member.level }), at);
+  member.ledger.awardAll(
+    reviewXpAwards({ correct, burnedNow, levelBefore, levelAfter: member.level, subjectId: state.subjectId }),
+    at,
+  );
   return member.level > levelBefore;
 }
 
 /** Mirrors `startUkLessons` for a batch of items. */
 export function takeLessons(member: CohortMember, subjects: readonly CohortSubject[], at: Date): number {
   const state = initialLessonState(at);
-  let started = 0;
+  /* The items, not the tally: the mirror awards through the same
+     `lessonXpAwards` the server does, and that now names what it paid for. */
+  const opened: number[] = [];
   for (const subject of subjects) {
     if (member.states.has(subject.id)) continue;
     member.states.set(subject.id, {
@@ -348,10 +353,10 @@ export function takeLessons(member: CohortMember, subjects: readonly CohortSubje
       origin: "lesson",
       dirty: true,
     });
-    started += 1;
+    opened.push(subject.id);
   }
-  member.ledger.awardAll(lessonXpAwards(started), at);
-  return started;
+  member.ledger.awardAll(lessonXpAwards(opened), at);
+  return opened.length;
 }
 
 /**
