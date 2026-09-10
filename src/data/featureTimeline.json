@@ -7535,12 +7535,25 @@
     "id": "uk-explorer-level-filter-chips-show-no-counts",
     "name": "Level counts in the UmaKuma explorer",
     "area": "study",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-09",
+    "summary": "Every level in the UmaKuma explorer now says how much it holds, and a closed decade says how much its ten levels hold between them.",
+    "dateIsEstimate": false,
+    "release": 601,
+    "version": "1.104.0",
+    "releasedAt": "2026-09-10T02:15:09Z"
+  },
+  {
+    "id": "a-group-chip-opens-on-the-level-nearest-where-you-are",
+    "name": "A group chip opens on the level nearest you",
+    "area": "study",
     "kind": "bug",
     "status": "shipped",
     "date": "2026-09-09",
-    "version": "1.104.0",
-    "release": 601,
-    "releasedAt": "2026-09-10T02:15:09Z",
-    "summary": "Every level in the UmaKuma explorer now says how much it holds, and a closed decade says how much its ten levels hold between them."
+    "version": "1.105.0",
+    "release": 602,
+    "releasedAt": "2026-09-10T02:53:35Z",
+    "summary": "Pressing a folded range of levels now opens on the level nearest the one you are on: the lowest when the range is above you, the highest when it is below."
   }
 ]
