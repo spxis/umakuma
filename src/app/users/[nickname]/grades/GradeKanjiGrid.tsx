@@ -9,9 +9,8 @@ import ReadingsLine from "@/app/shared/ReadingsLine";
 import { SUBJECT_VIEW_MODES, type SubjectViewMode } from "@/app/shared/subjectListView";
 import { READING_KIND_DISPLAY, READING_KINDS, type ReadingKind } from "@/lib/domainConstants";
 import { ourLevels } from "@/lib/ladder/ourLevels";
-import { unLevelBadge } from "@/lib/levelBadge";
-import { usePillLevels } from "@/app/shared/usePillLevels";
-import { PILL_LEVEL_MODES } from "@/app/shared/pillWords";
+import { usePillWords } from "@/app/shared/usePillWords";
+import { PILL_WORD_MODES } from "@/app/shared/pillWords";
 import { useState, type ReactNode } from "react";
 
 import GradeKanjiRows from "./GradeKanjiRows";
@@ -77,35 +76,23 @@ function ReadingRow({ kind, readings }: { kind: ReadingKind; readings: string[] 
 }
 
 /**
- * The level we teach this kanji at, which the grade cards alone left off.
+ * The grade catalogue, as the shared card with readings slotted into it.
  *
- * A school grade is somebody else's ordering; this says where the character
- * sits in ours, and it is the badge the same kanji carries on every other
- * surface. John, looking at a row of them: "where are the new levels for these
- * Kanji? we are missing metadata that we would normally see for a Kanji."
+ * This said it was "deliberately not the shared subject card", on the grounds
+ * that the shared one "carries an SRS stage and a WaniKani level, neither of
+ * which a school grade has, and it shows no readings at all". Every clause of
+ * that has since stopped being true - it draws through `SubjectCards` already,
+ * a school-grade kanji carries our own UN level now, and a chip shows readings
+ * whenever the member asks for them - so the paragraph was arguing for a
+ * separateness the file had already given up.
  *
- * The exam ladder, because these pages are public and a reader with no stream
- * gets the site's headline ordering - that rule lives in `ourLevels`, and
- * asking it here rather than reading a ladder directly is what stops one page
- * printing a UG number under a UN prefix.
- */
-function OurLevelBadge({ glyph }: { glyph: string }) {
-  const [levelMode] = usePillLevels();
-  const badge = levelMode === PILL_LEVEL_MODES.on ? unLevelBadge(ourLevels(glyph, null).unLevel) : null;
-  if (!badge) return null;
-  return (
-    <span translate="no" className={noTranslateClass("subject-pill border-line bg-surface text-foreground")}>
-      {badge}
-    </span>
-  );
-}
-
-/**
- * The grade catalogue as cards, readings first.
- *
- * Deliberately not the shared subject card: that one carries an SRS stage and a
- * WaniKani level, neither of which a school grade has, and it shows no readings
- * at all. A grade test asks for the on and kun readings, so those get the room.
+ * What is actually different is one thing: a grade page slots the on and kun
+ * readings into `renderDetail`, because a grade test asks for both and a chip
+ * prints one. Those follow `usePillWords` like every other reading on the
+ * site. Drawn unconditionally they were what John saw: "This School Grades
+ * page has too much going on. The Kun readings mess up the page" - 下 has
+ * eight kun readings against 火's one, so the cards came out at wildly
+ * different heights and the grid stopped reading as a grid.
  */
 export default function GradeKanjiGrid({
   items,
@@ -120,6 +107,9 @@ export default function GradeKanjiGrid({
   renderFilingTrailing,
   renderFilingUnder,
 }: Props) {
+  const [wordMode] = usePillWords();
+  /* Ask once: the reading rows below are the same choice a chip makes. */
+  const readingsWanted = wordMode === PILL_WORD_MODES.reading || wordMode === PILL_WORD_MODES.both;
   const rows = viewMode === SUBJECT_VIEW_MODES.list;
   /*
    * Selecting a kanji opens its detail, the way every other subject grid
@@ -211,6 +201,7 @@ export default function GradeKanjiGrid({
           meaning: entry.primaryMeaning ?? GRADE_EXPLORER_COPY.noReadings,
           reading: null,
           wkLevel: null,
+          ...ourLevels(entry.kanji, null),
           srsStage: null,
           srsBucket: srsBucketFromStage(null),
           entry,
@@ -241,6 +232,18 @@ export default function GradeKanjiGrid({
               </span>
             );
           }
+          /*
+           * The readings are the member's standing choice, not this page's.
+           *
+           * Drawn always, they were what made this grid the page John called
+           * "too much going on": 下 has eight kun readings and 火 has one, so
+           * a row of cards came out at wildly different heights and the grid
+           * stopped being a grid. They are the reason somebody opens a grade
+           * page, though, so they are one click away rather than gone -
+           * `PillWordsToggle`, the control every other surface already uses.
+           * Off by default, because the default mode is English.
+           */
+          if (!readingsWanted) return null;
           return (
             <span className="block space-y-0.5">
               <ReadingRow kind={READING_KINDS.on} readings={readings.on} />
@@ -255,7 +258,6 @@ export default function GradeKanjiGrid({
                 {row.entry.strokeCount} {GRADE_EXPLORER_COPY.strokes}
               </span>
             ) : null}
-            <OurLevelBadge glyph={row.glyph} />
             {typeof row.entry.crossRef?.jlptLevel === "number" ? (
               <span translate="no" className={noTranslateClass("subject-pill border-emerald-300 bg-emerald-50 text-emerald-700")}>
                 {`${GRADE_EXPLORER_COPY.jlptCrossRef} N${row.entry.crossRef.jlptLevel}`}

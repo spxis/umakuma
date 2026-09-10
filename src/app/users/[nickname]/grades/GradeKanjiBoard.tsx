@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { FilterChipButton, filterChipTone } from "@/app/shared/FilterChip";
 import KanjiSelectionBar from "@/app/shared/KanjiSelectionBar";
+import PillWordsToggle from "@/app/shared/PillWordsToggle";
 import SubjectViewModeToggle from "@/app/shared/SubjectViewModeToggle";
 import { SubjectSelectionToggle } from "@/app/shared/SubjectSelectionControls";
 import { useSubjectSelection } from "@/app/shared/useSubjectSelection";
@@ -113,6 +114,11 @@ export default function GradeKanjiBoard({ items, practicePath, accountId, initia
         <SubjectSelectionToggle
           selection={selection}
         />
+
+        {/* The readings live behind this now, rather than always on the card.
+            It is the site's one control for the question, so a member who
+            turns them on here has turned them on everywhere. */}
+        <PillWordsToggle />
 
         <SubjectViewModeToggle
           value={viewMode}
