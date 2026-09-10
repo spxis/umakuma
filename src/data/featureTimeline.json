@@ -7548,12 +7548,25 @@
     "id": "a-group-chip-opens-on-the-level-nearest-where-you-are",
     "name": "A group chip opens on the level nearest you",
     "area": "study",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-09",
+    "summary": "Pressing a folded range of levels now opens on the level nearest the one you are on: the lowest when the range is above you, the highest when it is below.",
+    "dateIsEstimate": false,
+    "release": 602,
+    "version": "1.105.0",
+    "releasedAt": "2026-09-10T02:53:35Z"
+  },
+  {
+    "id": "curriculum-changes-white-kanji-and-no-sense-of-how-far-they-",
+    "name": "How far each kanji moved",
+    "area": "study",
     "kind": "bug",
     "status": "shipped",
     "date": "2026-09-09",
-    "version": "1.105.0",
-    "release": 602,
-    "releasedAt": "2026-09-10T02:53:35Z",
-    "summary": "Pressing a folded range of levels now opens on the level nearest the one you are on: the lowest when the range is above you, the highest when it is below."
+    "version": "1.106.0",
+    "release": 603,
+    "releasedAt": "2026-09-10T03:04:34Z",
+    "summary": "The curriculum changes panel now shows how many levels each kanji moved, not only that it moved, and draws those kanji in their own colour."
   }
 ]

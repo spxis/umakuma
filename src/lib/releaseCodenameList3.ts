@@ -164,4 +164,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Furiwake", ja: "振り分け", reading: "ふりわけ", gloss: "Sorting into groups - a hundred levels become ten things to read" },
   { romaji: "Hentou", ja: "返答", reading: "へんとう", gloss: "A reply given - the one filter row that would not say how much was behind it" },
   { romaji: "Hotori", ja: "辺", reading: "ほとり", gloss: "The water's edge - the side of a thing nearest you, which is where a folded range now opens" },
+  { romaji: "Maai", ja: "間合い", reading: "まあい", gloss: "The distance between two things - which is what a moved kanji's tag now measures" },
 ];
