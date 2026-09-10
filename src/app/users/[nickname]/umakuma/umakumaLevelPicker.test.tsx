@@ -65,11 +65,32 @@ describe("the level filter a reader points at", () => {
     expect(here?.getAttribute("href")).toBe("/users/testkuma/umakuma/24");
   });
 
-  it("opens a shut decade on its first level, not its last", () => {
-    const group = [...draw(24).querySelectorAll("a")].find((anchor) =>
-      anchor.textContent?.trim().startsWith("51-60"),
-    );
-    expect(group?.getAttribute("href")).toBe("/users/testkuma/umakuma/51");
+  /*
+   * John: pressing 11-20 from level 21 landed on 11, "which is further away
+   * than the level you were just on". A group opens on its near edge - the
+   * lowest when it is above you, the highest when it is below.
+   */
+  describe("opens a shut decade on the level nearest where you are", () => {
+    const hrefFor = (current: number, label: string): string | null | undefined =>
+      [...draw(current).querySelectorAll("a")]
+        .find((anchor) => anchor.textContent?.trim().startsWith(label))
+        ?.getAttribute("href");
+
+    it("opens a decade above you on its lowest, which is the next level along", () => {
+      expect(hrefFor(24, "51-60")).toBe("/users/testkuma/umakuma/51");
+    });
+
+    it("opens a decade below you on its highest, not its first", () => {
+      expect(hrefFor(24, "1-10")).toBe("/users/testkuma/umakuma/10");
+      expect(hrefFor(24, "11-20")).toBe("/users/testkuma/umakuma/20");
+    });
+
+    it("turns around at the decade the reader is standing in", () => {
+      /* 21-30 is open at level 24, so the two beside it are the turn: the one
+         below lands on its top, the one above on its bottom. */
+      expect(hrefFor(24, "11-20")).toBe("/users/testkuma/umakuma/20");
+      expect(hrefFor(24, "31-40")).toBe("/users/testkuma/umakuma/31");
+    });
   });
 
   /* In a hundred levels the JLPT finishes are the landmarks somebody

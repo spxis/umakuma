@@ -1,5 +1,5 @@
 import { FilterChipLink, filterChipGroupTone, filterChipTone } from "@/app/shared/FilterChip";
-import { ladderLevelChips } from "@/lib/ladder/levelChips";
+import { ladderGroupOpensAt, ladderLevelChips } from "@/lib/ladder/levelChips";
 import type { LadderLevelSummary } from "@/lib/ladder/ladderQuery";
 
 import { UK_EXPLORER_COPY as copy, UK_LEVEL_CHIP } from "./UmakumaExplorer.constants";
@@ -17,9 +17,10 @@ import { umakumaLevelHref } from "./umakumaAddress";
  * opening on a click, the way the WaniKani filter's range chips do.
  *
  * The open decade is the one holding the level being read, so pressing a shut
- * group is simply a link to its first level - the page comes back with that
- * decade open. No client state, which means the arrangement survives a reload
- * and can be linked to.
+ * group is simply a link into it - the page comes back with that decade open.
+ * No client state, which means the arrangement survives a reload and can be
+ * linked to. Which level it lands on is `groupOpensAtLevel`: the near edge,
+ * so a group above opens on its lowest and one below opens on its highest.
  *
  * Levels that finish a JLPT band stay marked: in a hundred they are the
  * landmarks somebody navigates by.
@@ -64,7 +65,9 @@ export default function UmakumaLevelPicker({
           return (
             <FilterChipLink
               key={`group-${chip.startLevel}`}
-              href={umakumaLevelHref(nickname, chip.startLevel)}
+              /* The near edge: pressing 21-30 from 19 lands on 21, pressing
+                 11-20 from 21 lands on 20. See `groupOpensAtLevel`. */
+              href={umakumaLevelHref(nickname, ladderGroupOpensAt(chip, current))}
               on={false}
               /* Amber, because a decade is a fold in the row rather than one of
                  the levels being chosen between. */

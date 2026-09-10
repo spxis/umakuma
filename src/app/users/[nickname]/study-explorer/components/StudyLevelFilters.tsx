@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { formatNumber } from "../../level-explorer/lib/levelExplorerDisplay";
 import { FilterChipButton } from "@/app/shared/FilterChip";
+import { groupOpensAtLevel } from "@/lib/ladder/levelChips";
 import { STUDY_PANEL_TEXT, STUDY_QUEUE_TYPES } from "./StudyExplorer.constants";
 import type { StudyQueueMode } from "../lib/studyExplorerTypes";
 import { badgeClass, disabledBadgeClass, groupStudyReviewLevelChips, type StudyReviewLevelChip } from "../lib/studyExplorerUtils";
@@ -24,23 +25,6 @@ const groupedLevelBadgeClass = (active: boolean): string =>
   active
     ? "border-amber-400 bg-amber-100 text-amber-900"
     : "border-slate-300 bg-slate-100 text-slate-700 hover:bg-slate-200";
-
-function boundaryLevelForGroup(
-  viewedLevel: number | null,
-  startLevel: number,
-  endLevel: number,
-): number {
-  if (viewedLevel === null) {
-    return endLevel;
-  }
-  if (viewedLevel < startLevel) {
-    return startLevel;
-  }
-  if (viewedLevel > endLevel) {
-    return endLevel;
-  }
-  return viewedLevel;
-}
 
 export default function StudyLevelFilters({
   queueMode,
@@ -172,7 +156,7 @@ export default function StudyLevelFilters({
                               return;
                             }
                             setOlderLevelsExpanded(true);
-                            onSetViewedLevel(boundaryLevelForGroup(viewedLevel, chip.startLevel, chip.endLevel));
+                            onSetViewedLevel(groupOpensAtLevel(viewedLevel, chip.startLevel, chip.endLevel));
                           }
                         : isRecentGroupChip
                           ? () => {
@@ -181,7 +165,7 @@ export default function StudyLevelFilters({
                                 return;
                               }
                               setOlderLevelsExpanded(false);
-                              onSetViewedLevel(boundaryLevelForGroup(viewedLevel, chip.startLevel, chip.endLevel));
+                              onSetViewedLevel(groupOpensAtLevel(viewedLevel, chip.startLevel, chip.endLevel));
                             }
                           : undefined
                     }

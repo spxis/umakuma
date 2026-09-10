@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 
 import { FilterChipButton } from "@/app/shared/FilterChip";
+import { groupOpensAtLevel } from "@/lib/ladder/levelChips";
 import { badgeClass, disabledBadgeClass, formatNumber } from "../lib/levelExplorerDisplay";
 import { groupStudyReviewLevelChips, type StudyReviewLevelChip } from "../../study-explorer/lib/studyExplorerUtils";
 
@@ -17,23 +18,6 @@ const groupedLevelBadgeClass = (active: boolean): string =>
   active
     ? "border-amber-400 bg-amber-100 text-amber-900"
     : "border-slate-300 bg-slate-100 text-slate-700 hover:bg-slate-200";
-
-function boundaryLevelForGroup(
-  selectedLevel: number | null,
-  startLevel: number,
-  endLevel: number,
-): number {
-  if (selectedLevel === null) {
-    return endLevel;
-  }
-  if (selectedLevel < startLevel) {
-    return startLevel;
-  }
-  if (selectedLevel > endLevel) {
-    return endLevel;
-  }
-  return selectedLevel;
-}
 
 export default function LevelExplorerLevelFilters({
   levelOptions,
@@ -178,7 +162,7 @@ export default function LevelExplorerLevelFilters({
                       ? () => {
                           setOlderLevelsExpanded(true);
                           void onToggleLevel(
-                            boundaryLevelForGroup(
+                            groupOpensAtLevel(
                               selectedLevel,
                               chip.startLevel,
                               chip.endLevel,
@@ -189,7 +173,7 @@ export default function LevelExplorerLevelFilters({
                         ? () => {
                             setOlderLevelsExpanded(false);
                             void onToggleLevel(
-                              boundaryLevelForGroup(
+                              groupOpensAtLevel(
                                 selectedLevel,
                                 chip.startLevel,
                                 chip.endLevel,

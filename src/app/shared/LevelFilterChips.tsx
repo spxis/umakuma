@@ -1,10 +1,8 @@
 "use client";
 
-import { useState } from "react";
-
 import CompactFilterRow from "@/app/shared/CompactFilterRow";
 import { FilterChipButton, filterChipGroupTone, filterChipTone } from "@/app/shared/FilterChip";
-import { ladderLevelChips } from "@/lib/ladder/levelChips";
+import { ladderLevelChips, sparseGroupOpensAt } from "@/lib/ladder/levelChips";
 
 export const LEVEL_FILTER_COPY = {
   all: "All",
@@ -37,24 +35,33 @@ type Props = {
  * can be the open one, and pressing a shut decade opens it. This is that
  * arrangement as a filter rather than as navigation, which is the only real
  * difference - the explorer's picker is links, because its open decade follows
- * the page you are on and should survive a reload, while a filter's open decade
- * is a way of looking at the row and belongs to the row.
+ * the page you are on and should survive a reload, while this one's follows
+ * the level chosen in it.
+ *
+ * Pressing a shut decade chooses a level in it: `groupOpensAtLevel`, the near
+ * edge, so a decade above the chosen level opens on its lowest and one below
+ * opens on its highest. It used to only expand, through a second piece of
+ * state that could never win - see `openLevel` below - so with any level
+ * chosen the group chips were dead.
  *
  * A decade nothing landed in is dropped rather than drawn shut and empty, the
  * same rule the study explorer's level row follows: this view is only about the
  * attempts a member actually has.
  */
 export default function LevelFilterChips({ label, levels, counts, allCount, selected, onSelect }: Props) {
-  const [openStart, setOpenStart] = useState<number | null>(null);
-
   const highestLevel = levels[levels.length - 1] ?? 0;
   /*
    * The open decade is the selected level's, so choosing 27 and coming back
-   * finds the twenties open. With nothing selected and nothing opened by hand,
-   * -1 matches no decade and the row is all groups - which is the compact
-   * shape this exists for.
+   * finds the twenties open. With nothing selected, -1 matches no decade and
+   * the row is all groups - which is the compact shape this exists for.
+   *
+   * There used to be an `openStart` beside it, set by pressing a group, and it
+   * could never win: this line preferred `selected` whenever a level was
+   * chosen, so with any level selected a group chip did nothing at all. A
+   * group now picks a level, which opens its decade on the way, so the second
+   * piece of state has nothing left to say.
    */
-  const openLevel = typeof selected === "number" ? selected : (openStart ?? -1);
+  const openLevel = typeof selected === "number" ? selected : -1;
   const present = new Set(levels);
   const chips = ladderLevelChips(highestLevel, openLevel);
 
@@ -64,10 +71,7 @@ export default function LevelFilterChips({ label, levels, counts, allCount, sele
         <>
       <FilterChipButton
         type="button"
-        onClick={() => {
-          setOpenStart(null);
-          onSelect("all");
-        }}
+        onClick={() => onSelect("all")}
         className={chipClass(selected === "all")}
         toneClassName={filterChipTone(selected === "all")}
         label={LEVEL_FILTER_COPY.all}
@@ -79,7 +83,16 @@ export default function LevelFilterChips({ label, levels, counts, allCount, sele
           for (let level = chip.startLevel; level <= chip.endLevel; level += 1) {
             total += counts[level] ?? 0;
           }
-          if (total === 0) {
+          /* The near edge among the levels this group actually holds: the row
+             is sparse, and landing a reader on an empty level is the one way
+             the near edge can go wrong. */
+          const opensAt = sparseGroupOpensAt(
+            typeof selected === "number" ? selected : null,
+            chip.startLevel,
+            chip.endLevel,
+            present,
+          );
+          if (total === 0 || opensAt === null) {
             return null;
           }
 
@@ -87,7 +100,7 @@ export default function LevelFilterChips({ label, levels, counts, allCount, sele
             <FilterChipButton
               key={`group-${chip.startLevel}`}
               type="button"
-              onClick={() => setOpenStart(chip.startLevel)}
+              onClick={() => onSelect(opensAt)}
               title={LEVEL_FILTER_COPY.openGroup(chip.startLevel, chip.endLevel)}
               aria-expanded={false}
               className={chipClass(false)}
