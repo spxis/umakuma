@@ -31,19 +31,36 @@ export type LadderShape = {
   vocabulary: Record<string, number>;
 };
 
+/**
+ * One thing that moved, and how far.
+ *
+ * The pair, not just the verdict. This diff is the only moment both ladders
+ * are in memory at once - the previous one is fetched from `origin/main` and
+ * dropped again - so a `moved` list of bare characters threw away the only
+ * chance to answer "by how much", and the changelog panel had to say out loud
+ * that it could not. John: "show the change +3 or -5 etc for the kanji, which
+ * shows how they moved."
+ */
+export type CurriculumMove = {
+  /** The character, or the subject id for vocabulary. */
+  key: string;
+  from: number;
+  to: number;
+};
+
 export type CurriculumDiff = {
-  kanji: { added: string[]; moved: string[]; removed: string[] };
+  kanji: { added: string[]; moved: CurriculumMove[]; removed: string[] };
   radicals: { added: number; moved: number; removed: number };
   vocabulary: { added: number; moved: number; removed: number };
 };
 
 function diffMap(before: Record<string, number>, after: Record<string, number>) {
   const added: string[] = [];
-  const moved: string[] = [];
+  const moved: CurriculumMove[] = [];
   const removed: string[] = [];
   for (const [key, level] of Object.entries(after)) {
     if (!(key in before)) added.push(key);
-    else if (before[key] !== level) moved.push(key);
+    else if (before[key] !== level) moved.push({ key, from: before[key]!, to: level });
   }
   for (const key of Object.keys(before)) if (!(key in after)) removed.push(key);
   return { added, moved, removed };

@@ -22,8 +22,21 @@ export const CURRICULUM_CHANGES_COPY = {
     if (counts.removed) parts.push(`${counts.removed.toLocaleString("en-US")} removed`);
     return parts.length > 0 ? parts.join(" · ") : "unchanged";
   },
-  /* Said once, plainly, because a reader will look for it and it is not here. */
-  noLevels:
-    "The rebuild recorded which characters moved, not where they moved from — so this says what changed, not by how much.",
+  /*
+   * How far each one went, which the panel could not say until the build
+   * started recording the pair. The sentence that used to sit here said so:
+   * "the rebuild recorded which characters moved, not where they moved from".
+   */
+  moveDelta: (from: number, to: number) => `${to > from ? "+" : ""}${to - from}`,
+  moveTitle: (from: number, to: number) => `Level ${from} → level ${to}`,
+  /* The shape of a rebuild in one line, so 95 tags read before any one of
+     them does. A kanji that moved earlier is taught sooner than it was. */
+  moveSplit: (earlier: number, later: number) => {
+    const parts: string[] = [];
+    if (earlier) parts.push(`${earlier.toLocaleString("en-US")} earlier`);
+    if (later) parts.push(`${later.toLocaleString("en-US")} later`);
+    return parts.join(" · ");
+  },
+  moveKey: "Each tag is how many levels that kanji moved — earlier, or later.",
   nothingYet: "Nothing has moved yet. The first rebuild will be listed here.",
 } as const;

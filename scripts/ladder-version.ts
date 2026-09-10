@@ -93,7 +93,8 @@ function stamp(stream: string, file: string, publishedPath: string, dryRun: bool
   console.log(`  Change: ${summary}`);
   console.log(`  Classified: ${bump}${bump === "none" ? "" : ` -> ${next}`}`);
   if (diff.kanji.moved.length > 0) {
-    console.log(`  Kanji moved: ${diff.kanji.moved.slice(0, 20).join(" ")}${diff.kanji.moved.length > 20 ? " …" : ""}`);
+    const shown = diff.kanji.moved.slice(0, 20).map((move) => `${move.key} ${move.from}->${move.to}`);
+    console.log(`  Kanji moved: ${shown.join(", ")}${diff.kanji.moved.length > 20 ? " …" : ""}`);
   }
 
   if (dryRun) {

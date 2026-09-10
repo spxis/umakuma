@@ -1,4 +1,6 @@
 import { curriculumChangelogFor } from "@/lib/ladder/curriculumChangelog";
+import type { CurriculumMove } from "@/lib/ladder/curriculumVersion";
+import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import { curriculumStampFor } from "@/lib/ladder/curriculumStamp";
 import type { LadderStreamValue } from "@/lib/ladder/ladderStreams";
 
@@ -62,14 +64,27 @@ export default function CurriculumChanges({ stream }: { stream: LadderStreamValu
                 <div className="mt-3">
                   <p className="text-[11px] font-black uppercase tracking-[0.08em] text-foreground/60">
                     {copy.kanjiMoved} · {entry.kanji.moved.length.toLocaleString("en-US")}
+                    <span className="ml-2 font-semibold normal-case tracking-normal text-foreground/60">
+                      {copy.moveSplit(
+                        entry.kanji.moved.filter((move) => move.to < move.from).length,
+                        entry.kanji.moved.filter((move) => move.to > move.from).length,
+                      )}
+                    </span>
                   </p>
                   {/* A row of characters standing in a section of something
                       else, which is what SubjectPill is for - not a browsing
-                      grid. */}
+                      grid. `subjectType` is what gives them the kanji colour:
+                      without it the pill falls through to `text-foreground`
+                      and 95 kanji came out the colour of body text. */}
                   <ul className="mt-2 flex flex-wrap gap-1.5">
-                    {entry.kanji.moved.map((character) => (
-                      <li key={character}>
-                        <SubjectPill glyph={character} href={`/kanji/${encodeURIComponent(character)}`} />
+                    {entry.kanji.moved.map((move) => (
+                      <li key={move.key}>
+                        <SubjectPill
+                          glyph={move.key}
+                          subjectType={SUBJECT_TYPES.kanji}
+                          href={`/kanji/${encodeURIComponent(move.key)}`}
+                          trailing={<LevelMove move={move} />}
+                        />
                       </li>
                     ))}
                   </ul>
@@ -77,9 +92,39 @@ export default function CurriculumChanges({ stream }: { stream: LadderStreamValu
               ) : null}
             </li>
           ))}
-          <li className="text-[11px] font-semibold leading-relaxed text-foreground/60">{copy.noLevels}</li>
+          <li className="text-[11px] font-semibold leading-relaxed text-foreground/60">{copy.moveKey}</li>
         </ol>
       )}
     </section>
+  );
+}
+
+/**
+ * How far one kanji moved, drawn so it cannot be read as anything else here.
+ *
+ * Every other number beside a glyph on this site is one of two things: a tally
+ * in light brackets (`RADICALS (3)`, `1-10 (520)`) or a stage in an uppercase
+ * pill (`MASTER 7`, `WK54`, `N5`). A move is neither a count nor a status, so
+ * it takes a third shape - a signed number in a tinted square, sitting under
+ * the character rather than beside it.
+ *
+ * Tinted by direction, which is the part that makes ninety-five of them
+ * readable: the row resolves into a shape before any single number does, and
+ * UN 2.0.0 is then visibly one thing - eighty-eight kanji pulled earlier and
+ * seven pushed later, not a hundred unrelated edits. Cool for earlier, because
+ * a kanji arriving sooner is the gentler change to meet; warm for later,
+ * because that is the one that moved away from somebody who was close to it.
+ */
+function LevelMove({ move }: { move: CurriculumMove }) {
+  const later = move.to > move.from;
+  return (
+    <span
+      title={copy.moveTitle(move.from, move.to)}
+      className={`rounded px-1 py-px text-[10px] font-black tabular-nums ${
+        later ? "bg-amber-100 text-amber-800" : "bg-sky-100 text-sky-800"
+      }`}
+    >
+      {copy.moveDelta(move.from, move.to)}
+    </span>
   );
 }

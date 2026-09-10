@@ -27,7 +27,9 @@ describe("what moves the curriculum version", () => {
        level's kanji, so one kanji moving is the only kind of change that can
        alter where somebody stands. */
     const diff = diffCurriculum(base, shape({ kanji: { 一: 2, 人: 2, 語: 9 } }));
-    expect(diff.kanji.moved).toEqual(["語"]);
+    /* The pair, not just the verdict: this is the only moment both ladders are
+       in memory, so a bare list of characters threw away "by how much". */
+    expect(diff.kanji.moved).toEqual([{ key: "語", from: 10, to: 9 }]);
     expect(classifyCurriculumBump(diff)).toBe("major");
     expect(bumpCurriculumVersion("1.4.2", "major")).toBe("2.0.0");
   });

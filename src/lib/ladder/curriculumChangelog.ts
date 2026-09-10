@@ -1,6 +1,7 @@
 import gradeLadder from "@/data/gradeLadder.json";
 import kanjiLadder from "@/data/kanjiLadder.json";
 
+import type { CurriculumMove } from "./curriculumVersion";
 import { LADDER_STREAMS, type LadderStreamValue } from "./ladderStreams";
 
 /**
@@ -11,11 +12,14 @@ import { LADDER_STREAMS, type LadderStreamValue } from "./ladderStreams";
  * 1,537 words moved between UN 1.0.0 and 2.0.0 and nobody is going to read
  * that list, while 95 kanji is a set a member can look at and recognise.
  *
- * Note what is *not* recorded, because a reader of this module will look for
- * it: a moved kanji carries no from-level and no to-level. The build compares
- * two ladders and keeps the verdict, not the pair, and the previous ladder is
- * not kept either - so "moved from 12 to 20" cannot be answered from here. It
- * would take the build recording the pair, which is its own change.
+ * A moved kanji carries the pair, `from` and `to`, so the panel can say how
+ * far it went rather than only that it went. It did not always: the build
+ * compared two ladders and kept the verdict alone, and this comment used to
+ * say the question could not be answered from here. It can now, and the
+ * answer for the one rebuild that predates the change was recovered rather
+ * than invented - the 1.0.0 ladders are in git at 66cfdca8, and diffing them
+ * against 2.0.0 through `diffCurriculum` returns exactly the 95 and 12
+ * characters already recorded, which is what made the backfill trustworthy.
  */
 export type CurriculumCounts = {
   added: number;
@@ -28,7 +32,7 @@ export type CurriculumChangelogEntry = {
   date: string;
   bump: string;
   summary: string;
-  kanji: { added: string[]; moved: string[]; removed: string[] };
+  kanji: { added: string[]; moved: CurriculumMove[]; removed: string[] };
   radicals: CurriculumCounts;
   vocabulary: CurriculumCounts;
 };

@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 
+import kanjiLadder from "@/data/kanjiLadder.json";
+
 import { LADDER_STREAMS } from "./ladderStreams";
 import { curriculumChangelogFor, hasCurriculumChanges } from "./curriculumChangelog";
 
@@ -32,13 +34,48 @@ describe("what a rebuild moved, per ladder", () => {
    * two different things from it: characters for kanji, a tally for the rest.
    * 1,537 words moved in one rebuild and nobody is going to read that list.
    */
-  it("gives kanji as characters and the rest as counts", () => {
+  it("gives kanji as moves and the rest as counts", () => {
     const [entry] = curriculumChangelogFor(LADDER_STREAMS.un);
 
     expect(Array.isArray(entry!.kanji.moved)).toBe(true);
-    expect(typeof entry!.kanji.moved[0]).toBe("string");
     expect(typeof entry!.radicals.moved).toBe("number");
     expect(typeof entry!.vocabulary.moved).toBe("number");
+  });
+
+  /*
+   * Every move carries where it came from and where it went.
+   *
+   * The panel could only say *which* characters moved, and said so in its own
+   * footer, because the build kept the verdict and dropped the pair. John:
+   * "show the change +3 or -5 etc for the kanji, which shows how they moved."
+   */
+  it("says how far every kanji moved, not only that it moved", () => {
+    for (const stream of [LADDER_STREAMS.un, LADDER_STREAMS.ug]) {
+      const [entry] = curriculumChangelogFor(stream);
+      expect(entry!.kanji.moved.length).toBeGreaterThan(0);
+      for (const move of entry!.kanji.moved) {
+        expect(typeof move.key).toBe("string");
+        expect(Number.isInteger(move.from)).toBe(true);
+        expect(Number.isInteger(move.to)).toBe(true);
+        /* A move that went nowhere is not a move, and would draw a "+0" tag. */
+        expect(move.from).not.toBe(move.to);
+      }
+    }
+  });
+
+  /*
+   * The recovered numbers, pinned against the ladder they describe.
+   *
+   * These were reconstructed from the 1.0.0 ladders in git rather than
+   * recorded at the time, so the thing worth failing on is the pair still
+   * agreeing with the shipped ladder: a moved kanji's `to` is the level it
+   * actually sits on today.
+   */
+  it("lands every move on the level the ladder now teaches", () => {
+    const [entry] = curriculumChangelogFor(LADDER_STREAMS.un);
+    const levels = kanjiLadder.kanjiLevel as Record<string, { level: number }>;
+    const wrong = entry!.kanji.moved.filter((move) => levels[move.key]?.level !== move.to);
+    expect(wrong).toEqual([]);
   });
 
   /* The two ladders move independently, which is the whole reason the surface
