@@ -7561,12 +7561,25 @@
     "id": "curriculum-changes-white-kanji-and-no-sense-of-how-far-they-",
     "name": "How far each kanji moved",
     "area": "study",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-09",
+    "summary": "The curriculum changes panel now shows how many levels each kanji moved, not only that it moved, and draws those kanji in their own colour.",
+    "dateIsEstimate": false,
+    "release": 603,
+    "version": "1.106.0",
+    "releasedAt": "2026-09-10T03:04:34Z"
+  },
+  {
+    "id": "kanji-drawn-in-body-text-colour-in-the-review-modal",
+    "name": "Every subject glyph carries its colour",
+    "area": "study",
     "kind": "bug",
     "status": "shipped",
     "date": "2026-09-09",
-    "version": "1.106.0",
-    "release": 603,
-    "releasedAt": "2026-09-10T03:04:34Z",
-    "summary": "The curriculum changes panel now shows how many levels each kanji moved, not only that it moved, and draws those kanji in their own colour."
+    "version": "1.107.0",
+    "release": 604,
+    "releasedAt": "2026-09-10T03:24:30Z",
+    "summary": "Kanji and words in the review modal and the selection bar now carry their own colour instead of body-text grey, and the check that enforces it can no longer be slipped past."
   }
 ]
