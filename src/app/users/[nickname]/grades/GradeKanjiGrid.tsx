@@ -8,6 +8,10 @@ import StrokeOrderButton from "@/app/shared/StrokeOrderButton";
 import ReadingsLine from "@/app/shared/ReadingsLine";
 import { SUBJECT_VIEW_MODES, type SubjectViewMode } from "@/app/shared/subjectListView";
 import { READING_KIND_DISPLAY, READING_KINDS, type ReadingKind } from "@/lib/domainConstants";
+import { ourLevels } from "@/lib/ladder/ourLevels";
+import { unLevelBadge } from "@/lib/levelBadge";
+import { usePillLevels } from "@/app/shared/usePillLevels";
+import { PILL_LEVEL_MODES } from "@/app/shared/pillWords";
 import { useState, type ReactNode } from "react";
 
 import GradeKanjiRows from "./GradeKanjiRows";
@@ -70,6 +74,30 @@ function ReadingRow({ kind, readings }: { kind: ReadingKind; readings: string[] 
     );
   }
   return <ReadingsLine kind={kind} readings={readings} layout="inline" showRomaji={false} />;
+}
+
+/**
+ * The level we teach this kanji at, which the grade cards alone left off.
+ *
+ * A school grade is somebody else's ordering; this says where the character
+ * sits in ours, and it is the badge the same kanji carries on every other
+ * surface. John, looking at a row of them: "where are the new levels for these
+ * Kanji? we are missing metadata that we would normally see for a Kanji."
+ *
+ * The exam ladder, because these pages are public and a reader with no stream
+ * gets the site's headline ordering - that rule lives in `ourLevels`, and
+ * asking it here rather than reading a ladder directly is what stops one page
+ * printing a UG number under a UN prefix.
+ */
+function OurLevelBadge({ glyph }: { glyph: string }) {
+  const [levelMode] = usePillLevels();
+  const badge = levelMode === PILL_LEVEL_MODES.on ? unLevelBadge(ourLevels(glyph, null).unLevel) : null;
+  if (!badge) return null;
+  return (
+    <span translate="no" className={noTranslateClass("subject-pill border-line bg-surface text-foreground")}>
+      {badge}
+    </span>
+  );
 }
 
 /**
@@ -227,6 +255,7 @@ export default function GradeKanjiGrid({
                 {row.entry.strokeCount} {GRADE_EXPLORER_COPY.strokes}
               </span>
             ) : null}
+            <OurLevelBadge glyph={row.glyph} />
             {typeof row.entry.crossRef?.jlptLevel === "number" ? (
               <span translate="no" className={noTranslateClass("subject-pill border-emerald-300 bg-emerald-50 text-emerald-700")}>
                 {`${GRADE_EXPLORER_COPY.jlptCrossRef} N${row.entry.crossRef.jlptLevel}`}

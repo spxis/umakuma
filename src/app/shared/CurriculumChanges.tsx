@@ -2,7 +2,7 @@ import { curriculumChangelogFor } from "@/lib/ladder/curriculumChangelog";
 import type { CurriculumMove } from "@/lib/ladder/curriculumVersion";
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import { curriculumStampFor } from "@/lib/ladder/curriculumStamp";
-import type { LadderStreamValue } from "@/lib/ladder/ladderStreams";
+import { LADDER_STREAMS, type LadderStreamValue } from "@/lib/ladder/ladderStreams";
 
 import SubjectPill from "./SubjectPill";
 import { CURRICULUM_CHANGES_COPY as copy } from "./CurriculumChanges.constants";
@@ -83,6 +83,12 @@ export default function CurriculumChanges({ stream }: { stream: LadderStreamValu
                           glyph={move.key}
                           subjectType={SUBJECT_TYPES.kanji}
                           href={`/kanji/${encodeURIComponent(move.key)}`}
+                          /* `to` is the level it sits on now, on this panel's
+                             own ladder - so the badge a kanji carries here is
+                             the same badge it carries everywhere else, and the
+                             tag beside it says how it got there. */
+                          unLevel={stream === LADDER_STREAMS.un ? move.to : null}
+                          ugLevel={stream === LADDER_STREAMS.ug ? move.to : null}
                           trailing={<LevelMove move={move} />}
                         />
                       </li>

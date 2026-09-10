@@ -33,6 +33,7 @@ import { srsBucketFromStage } from "@/lib/domainConstants";
 import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
 import type { SubjectListRow } from "@/app/shared/subjectListView";
 import SubjectCards from "@/app/shared/SubjectCards";
+import { ourLevels } from "@/lib/ladder/ourLevels";
 
 /**
  * Kanji by the number of strokes they take.
@@ -65,6 +66,10 @@ function toRow(entry: StrokeEntry): ListSubjectRow & SubjectListRow {
     reading: entry.reading,
     subjectType: entry.subjectType,
     wkLevel: null,
+    /* The level it is taught at, which is the one piece of metadata a kanji
+       card carries everywhere else and this page left off. Public, so nobody
+       has a stream: `ourLevels` reads the exam ladder for a visitor. */
+    ...ourLevels(entry.kanji, null),
     href: entry.subjectType === SUBJECT_TYPES.radical ? null : `/kanji/${encodeURIComponent(entry.kanji)}`,
   };
 }

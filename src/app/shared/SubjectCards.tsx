@@ -14,7 +14,9 @@ import { SUBJECT_TYPE_DISPLAY } from "@/lib/domainConstants";
 import { JP_TEXT_CLASS } from "./japaneseText";
 import { glyphTextSizeClass } from "./glyphSizes";
 import type { SubjectSelection } from "./useSubjectSelection";
-import { wkLevelBadge } from "@/lib/levelBadge";
+import { ugLevelBadge, unLevelBadge, wkLevelBadge } from "@/lib/levelBadge";
+import { usePillLevels } from "./usePillLevels";
+import { PILL_LEVEL_MODES } from "./pillWords";
 
 type Props<TRow extends SubjectListRow> = {
   rows: TRow[];
@@ -89,6 +91,11 @@ export default function SubjectCards<TRow extends SubjectListRow>({
   gridClassName = "grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 lg:grid-cols-4",
   selection,
 }: Props<TRow>) {
+  /* Before the empty-rows return, or the hook order changes the moment a
+     surface goes from nothing to something - which is every one of them, on
+     the first render after a fetch. */
+  const [levelMode] = usePillLevels();
+  const levelsOn = levelMode === PILL_LEVEL_MODES.on;
   if (rows.length === 0) return null;
 
   const choosing = Boolean(selection?.choosing);
@@ -139,6 +146,28 @@ export default function SubjectCards<TRow extends SubjectListRow>({
               <span className={subjectTypePillClass(subjectType)}>
                 {SUBJECT_TYPE_DISPLAY[subjectType].short}
               </span>
+              {/*
+                * The level we teach it at, which the card drew for WaniKani and
+                * not for either of ours. So a kanji on /strokes or a school
+                * grade carried somebody else's level and never its own, and the
+                * one number a member is placed by was the one missing. Under
+                * the same standing choice as the pills: `usePillLevels` is the
+                * member's answer to "do I want levels on things", and a surface
+                * does not get its own opinion about it.
+                */}
+              {levelsOn
+                ? [unLevelBadge(row.unLevel), ugLevelBadge(row.ugLevel)]
+                    .filter((badge): badge is string => badge !== null)
+                    .map((badge) => (
+                      <span
+                        key={badge}
+                        translate="no"
+                        className="subject-pill border-line bg-surface text-foreground"
+                      >
+                        {badge}
+                      </span>
+                    ))
+                : null}
               {renderPills ? renderPills(row) : null}
             </span>
           </>
