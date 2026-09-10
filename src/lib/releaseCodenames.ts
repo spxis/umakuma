@@ -37,9 +37,20 @@ export type ReleaseCodename = {
   gloss: string;
 };
 
-export function codenameKanaForMinor(minor: number): { kana: string; cycle: number } {
-  const index = (minor - 1) % GOJUON_SEQUENCE.length;
-  return { kana: GOJUON_SEQUENCE[index], cycle: Math.floor((minor - 1) / GOJUON_SEQUENCE.length) + 1 };
+/**
+ * The kana a release's name must start on, and which pass of the gojūon it is.
+ *
+ * Given the RELEASE ORDINAL - the 607th release - never a version minor. It
+ * was called `codenameKanaForRelease` and named a thing it is no longer handed:
+ * both callers pass the ordinal, and have since the major went to 1 and the
+ * minor stopped being the count. Two sessions hand-checking a codename on
+ * 2026-09-10 reached for 1.110.0's minor, passed 110, and got に for a release
+ * whose kana is も. The name was the whole of the mistake, so the name is the
+ * fix.
+ */
+export function codenameKanaForRelease(release: number): { kana: string; cycle: number } {
+  const index = (release - 1) % GOJUON_SEQUENCE.length;
+  return { kana: GOJUON_SEQUENCE[index], cycle: Math.floor((release - 1) / GOJUON_SEQUENCE.length) + 1 };
 }
 
 /** Katakana to hiragana, so a name written in katakana still checks its kana. */
@@ -48,8 +59,6 @@ export function toHiragana(value: string): string {
     String.fromCharCode(char.charCodeAt(0) - 0x60),
   );
 }
-
-/** Index 0 names v0.1.0; a release's codename is CODENAMES[minor - 1]. */
 
 /**
  * The kanji form worth printing beside the reading, or `null` when the name is
@@ -63,10 +72,6 @@ export function codenameKanji(codename: ReleaseCodename): string | null {
   return codename.ja === codename.reading ? null : codename.ja;
 }
 
-export function codenameForMinor(minor: number): ReleaseCodename | null {
-  return CODENAMES[minor - 1] ?? null;
-}
-
 /**
  * The name a release was given, by its position in the run.
  *
@@ -76,9 +81,15 @@ export function codenameForMinor(minor: number): ReleaseCodename | null {
  * the count. Under the scheme this site uses now - major for a big release,
  * minor for a feature, patch for a tweak - no field is the count, so the
  * position is recorded on the release itself.
+ *
+ * This is the only lookup. There was a `codenameForRelease` under it doing the
+ * indexing, with this function as a one-line passthrough - which meant the
+ * list could be asked for a name by a number that has not been the release
+ * count since the major went to 1, and the name of the function said that was
+ * fine.
  */
 export function codenameForRelease(release: number): ReleaseCodename | null {
-  return codenameForMinor(release);
+  return CODENAMES[release - 1] ?? null;
 }
 
 /**
@@ -93,5 +104,8 @@ export function codenameForVersion(version: string): ReleaseCodename | null {
   const major = Number(parts[0]);
   const minor = Number(parts[1]);
   if (major !== 0 || !Number.isFinite(minor)) return null;
-  return codenameForMinor(minor);
+  /* Only reachable for 0.N.0, where the minor IS the release count - so it is
+     handed on as the ordinal it is, rather than through a second lookup named
+     for the minor. */
+  return codenameForRelease(minor);
 }

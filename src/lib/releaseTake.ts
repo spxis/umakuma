@@ -1,6 +1,6 @@
 import { FEATURE_STATUSES, type FeatureTimelineEntry } from "./featureTimeline";
 import { toRomaji } from "wanakana";
-import { codenameKanaForMinor, toHiragana, type ReleaseCodename } from "./releaseCodenames";
+import { codenameKanaForRelease, toHiragana, type ReleaseCodename } from "./releaseCodenames";
 import { compareVersions, RELEASE_STEPS, versionAfter, type ReleaseStep } from "./releaseOrdinal";
 
 /**
@@ -114,7 +114,7 @@ export function codenameProblems(
   existing: readonly ReleaseCodename[],
 ): CodenameProblem[] {
   const problems: CodenameProblem[] = [];
-  const { kana } = codenameKanaForMinor(release);
+  const { kana } = codenameKanaForRelease(release);
 
   if (!toHiragana(candidate.reading).startsWith(kana)) {
     problems.push({

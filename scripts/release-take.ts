@@ -6,7 +6,7 @@ import { stringifyTimeline } from "../src/lib/backlogBoard";
 import { getVancouverDateKey } from "../src/lib/dailySnapshot";
 import { loadFeatureTimeline, type FeatureTimelineEntry } from "../src/lib/featureTimeline";
 import { RELEASE_STEPS } from "../src/lib/releaseOrdinal";
-import { CODENAMES, codenameKanaForMinor, type ReleaseCodename } from "../src/lib/releaseCodenames";
+import { CODENAMES, codenameKanaForRelease, type ReleaseCodename } from "../src/lib/releaseCodenames";
 import { PrismaClient } from "@prisma/client";
 
 import {
@@ -180,7 +180,7 @@ async function main(): Promise<void> {
    * the push, rather than everything up to the next rebase.
    */
   guardVersionFree(publishedTimeline(), version);
-  const { kana, cycle } = codenameKanaForMinor(release);
+  const { kana, cycle } = codenameKanaForRelease(release);
 
   /* A name may already be planned ahead for this minor; only ask when it is not. */
   const planned = CODENAMES[release - 1];
