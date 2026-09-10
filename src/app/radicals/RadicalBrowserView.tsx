@@ -102,6 +102,9 @@ export default function RadicalBrowserView({
   const filing = Boolean(accountId) && filerOpen;
   const filer = useSubjectFiler(accountId, rows, filing);
   const bar = strokeBarState(strokeChoices, strokes);
+  /* What Any leaves, so the chip that clears the stroke filter says how much
+     it would bring back like every chip beside it does. */
+  const anyStrokes = strokeChoices.reduce((running, choice) => running + choice.count, 0);
   /* Everything pickable, which on this page means "can still narrow" - plus
      every radical when nothing is picked yet, since nothing is a dead end
      until something has been chosen. */
@@ -171,7 +174,12 @@ export default function RadicalBrowserView({
             </div>
             <ul className="mt-2 flex flex-wrap gap-1.5">
               <li>
-                <FilterChipLink href={radicalsHref({ parts: chosen, sources })} on={bar.anyOn} label={RADICAL_BROWSER_COPY.strokesAll} />
+                <FilterChipLink
+                  href={radicalsHref({ parts: chosen, sources })}
+                  on={bar.anyOn}
+                  label={RADICAL_BROWSER_COPY.strokesAll}
+                  count={anyStrokes}
+                />
               </li>
               {strokeChoices.map((choice) => {
                 const on = bar.isOn(choice.strokes);

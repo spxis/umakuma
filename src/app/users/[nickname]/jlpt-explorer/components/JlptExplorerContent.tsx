@@ -234,7 +234,7 @@ export default function JlptExplorerContent({
             <div className="inline-flex max-w-full items-start gap-1 rounded-xl border border-line bg-surface px-1.5 py-1" role="tablist" aria-label="School grade filters">
               <span className="inline-flex h-7 items-center px-2 text-xs font-bold uppercase tracking-[0.1em] text-foreground/70">Grade</span>
               <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
-              <FilterChipButton type="button" onClick={() => onSetGradeFilter(null)} toneClassName={badgeClass(gradeFilter === null)} label="All" />
+              <FilterChipButton type="button" onClick={() => onSetGradeFilter(null)} toneClassName={badgeClass(gradeFilter === null)} label="All" count={formatNumber(items.length)} />
               {gradeCounts.has("none") ? (
                 <FilterChipButton
                   type="button"

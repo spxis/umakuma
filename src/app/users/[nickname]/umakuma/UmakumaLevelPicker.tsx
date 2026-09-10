@@ -1,5 +1,4 @@
-import Link from "next/link";
-
+import { FilterChipLink, filterChipGroupTone, filterChipTone } from "@/app/shared/FilterChip";
 import { ladderLevelChips } from "@/lib/ladder/levelChips";
 import type { LadderLevelSummary } from "@/lib/ladder/ladderQuery";
 
@@ -24,6 +23,14 @@ import { umakumaLevelHref } from "./umakumaAddress";
  *
  * Levels that finish a JLPT band stay marked: in a hundred they are the
  * landmarks somebody navigates by.
+ *
+ * **Every chip says how much is behind it**, drawn by `FilterChip` like every
+ * other counted chip on the site. This row was the one that did not: the type
+ * chips a line above it read `RADICALS (1) KANJI (25) VOCAB (76)` and the
+ * levels under them were bare numbers, so the filter that decides how much you
+ * are looking at was the only one that would not say. A decade carries its
+ * ten levels added up, which is the number pressing it is worth - it is the
+ * one chip whose count is not visible anywhere else on the page.
  */
 export default function UmakumaLevelPicker({
   nickname,
@@ -49,47 +56,67 @@ export default function UmakumaLevelPicker({
 
       {chips.map((chip) => {
         if (chip.kind === "group") {
+          let total = 0;
+          for (let level = chip.startLevel; level <= chip.endLevel; level += 1) {
+            total += byLevel.get(level)?.total ?? 0;
+          }
+
           return (
-            <Link
+            <FilterChipLink
               key={`group-${chip.startLevel}`}
               href={umakumaLevelHref(nickname, chip.startLevel)}
+              on={false}
+              /* Amber, because a decade is a fold in the row rather than one of
+                 the levels being chosen between. */
+              toneClassName={filterChipGroupTone(false)}
               title={copy.openGroup(chip.startLevel, chip.endLevel)}
-              className={`${UK_LEVEL_CHIP.base} ${UK_LEVEL_CHIP.group}`}
-            >
-              {copy.levelGroup(chip.startLevel, chip.endLevel)}
-            </Link>
+              label={copy.levelGroup(chip.startLevel, chip.endLevel)}
+              count={total}
+              className={UK_LEVEL_CHIP.figures}
+            />
           );
         }
 
         const summary = byLevel.get(chip.level);
         const isHere = chip.level === current;
-        const tone = isHere
-          ? UK_LEVEL_CHIP.here
-          : summary?.completesJlpt != null
-            ? UK_LEVEL_CHIP.milestone
-            : UK_LEVEL_CHIP.idle;
+        const milestone = summary?.completesJlpt ?? null;
 
         return (
-          <Link
+          <FilterChipLink
             key={chip.level}
             href={umakumaLevelHref(nickname, chip.level)}
-            aria-current={isHere ? "page" : undefined}
-            title={
-              summary?.completesJlpt != null
-                ? `${copy.levelHeading(chip.level)} — ${copy.jlptAt(summary.completesJlpt)}`
-                : copy.levelHeading(chip.level)
+            on={isHere}
+            toneClassName={isHere || milestone === null ? filterChipTone(isHere) : UK_LEVEL_CHIP.milestone}
+            title={levelTitle(chip.level, summary)}
+            label={
+              <>
+                {chip.level}
+                {milestone !== null ? (
+                  <span className="ml-1 text-[9px] font-black uppercase tracking-[0.08em] opacity-80">
+                    {`N${milestone}`}
+                  </span>
+                ) : null}
+              </>
             }
-            className={`${UK_LEVEL_CHIP.base} ${tone}`}
-          >
-            {chip.level}
-            {summary?.completesJlpt != null ? (
-              <span className="ml-1 text-[9px] font-black uppercase tracking-[0.08em] opacity-80">
-                {`N${summary.completesJlpt}`}
-              </span>
-            ) : null}
-          </Link>
+            count={summary?.total ?? 0}
+            className={UK_LEVEL_CHIP.figures}
+          />
         );
       })}
     </div>
   );
+}
+
+/**
+ * What a level holds, on hovering its chip.
+ *
+ * The chip has room for one number; the tally is the breakdown behind it, and
+ * it is the same sentence the level's own heading prints, so the hover and the
+ * page cannot end up saying different things.
+ */
+function levelTitle(level: number, summary: LadderLevelSummary | undefined): string {
+  const parts = [copy.levelHeading(level)];
+  if (summary) parts.push(copy.levelTally(summary.radicals, summary.kanji, summary.vocabulary));
+  if (summary?.completesJlpt != null) parts.push(copy.jlptAt(summary.completesJlpt));
+  return parts.join(" — ");
 }
