@@ -162,4 +162,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Hadome", ja: "歯止め", reading: "はどめ", gloss: "the catch that stops it slipping" },
   { romaji: "Hitome", ja: "一目", reading: "ひとめ", gloss: "One look - what is on the list, and why, at a glance" },
   { romaji: "Furiwake", ja: "振り分け", reading: "ふりわけ", gloss: "Sorting into groups - a hundred levels become ten things to read" },
+  { romaji: "Hentou", ja: "返答", reading: "へんとう", gloss: "A reply given - the one filter row that would not say how much was behind it" },
 ];

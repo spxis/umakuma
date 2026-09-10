@@ -7522,12 +7522,25 @@
     "id": "history-filters-are-a-wall-of-chips-on-a-phone",
     "name": "History filters are a wall of chips on a phone",
     "area": "study",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-09",
+    "summary": "History drew one filter chip per level - sixty-three of them on the UmaKuma ladder, thirteen lines deep on a phone above the list you opened the page for. The levels fold into decades now, and pressing one opens it; on a phone each row shows only the filter that is on until you open it. Three lines instead of eighteen.",
+    "dateIsEstimate": false,
+    "release": 600,
+    "version": "1.103.0",
+    "releasedAt": "2026-09-09T15:27:27Z"
+  },
+  {
+    "id": "uk-explorer-level-filter-chips-show-no-counts",
+    "name": "Level counts in the UmaKuma explorer",
+    "area": "study",
     "kind": "bug",
     "status": "shipped",
     "date": "2026-09-09",
-    "version": "1.103.0",
-    "release": 600,
-    "releasedAt": "2026-09-09T15:27:27Z",
-    "summary": "History drew one filter chip per level - sixty-three of them on the UmaKuma ladder, thirteen lines deep on a phone above the list you opened the page for. The levels fold into decades now, and pressing one opens it; on a phone each row shows only the filter that is on until you open it. Three lines instead of eighteen."
+    "version": "1.104.0",
+    "release": 601,
+    "releasedAt": "2026-09-10T02:15:09Z",
+    "summary": "Every level in the UmaKuma explorer now says how much it holds, and a closed decade says how much its ten levels hold between them."
   }
 ]
