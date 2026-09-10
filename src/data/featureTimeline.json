@@ -7626,12 +7626,25 @@
     "id": "codenamekanaforminor-is-named-for-a-thing-it-is-no-longer-gi",
     "name": "codenameKanaForMinor is named for a thing it is no longer given",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-10",
+    "summary": "The codename lookup took a number it has not been given since the major went to 1: both callers pass the release's position in the run, not the version's minor. Two sessions second-checking 1.110.0's name reached for the minor and got the wrong kana, with nothing to say so. It says release now, and the trap is a test rather than a comment.",
+    "dateIsEstimate": false,
+    "release": 608,
+    "version": "1.111.0",
+    "releasedAt": "2026-09-10T07:51:11Z"
+  },
+  {
+    "id": "the-xp-history-opens-into-the-kanji-it-was-for",
+    "name": "The XP history says which kanji",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-10",
-    "version": "1.111.0",
-    "release": 608,
-    "releasedAt": "2026-09-10T07:51:11Z",
-    "summary": "The codename lookup took a number it has not been given since the major went to 1: both callers pass the release's position in the run, not the version's minor. Two sessions second-checking 1.110.0's name reached for the minor and got the wrong kana, with nothing to say so. It says release now, and the trap is a test rather than a comment."
+    "version": "1.112.0",
+    "release": 609,
+    "releasedAt": "2026-09-10T08:00:16Z",
+    "summary": "A row in your XP history opens into every item it was for - each kanji you answered, with the ones a daily cap paid nothing for shown alongside the rest."
   }
 ]
