@@ -7587,12 +7587,25 @@
     "id": "a-kanji-shows-its-un-or-ug-level-wherever-it-is-drawn",
     "name": "A kanji card shows the level we teach it at",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-09",
+    "summary": "Kanji cards across the site now show the UmaKuma level the character is taught at, beside the WaniKani one they already carried.",
+    "dateIsEstimate": false,
+    "release": 605,
+    "version": "1.108.0",
+    "releasedAt": "2026-09-10T03:44:42Z"
+  },
+  {
+    "id": "school-grades-has-its-own-grid-and-it-is-the-page-that-looks",
+    "name": "School Grades reads as a grid again",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-09",
-    "version": "1.108.0",
-    "release": 605,
-    "releasedAt": "2026-09-10T03:44:42Z",
-    "summary": "Kanji cards across the site now show the UmaKuma level the character is taught at, beside the WaniKani one they already carried."
+    "version": "1.109.0",
+    "release": 606,
+    "releasedAt": "2026-09-10T03:52:05Z",
+    "summary": "The School Grades cards no longer print every official reading by default, so the grid comes up even; the readings are one click away on the same control the rest of the site uses."
   }
 ]
