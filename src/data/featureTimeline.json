@@ -7600,12 +7600,25 @@
     "id": "school-grades-has-its-own-grid-and-it-is-the-page-that-looks",
     "name": "School Grades reads as a grid again",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-09",
+    "summary": "The School Grades cards no longer print every official reading by default, so the grid comes up even; the readings are one click away on the same control the rest of the site uses.",
+    "dateIsEstimate": false,
+    "release": 606,
+    "version": "1.109.0",
+    "releasedAt": "2026-09-10T03:52:05Z"
+  },
+  {
+    "id": "xp-history-says-which-kanji-and-what-the-cap-ate",
+    "name": "An XP ledger: what each award was for",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
-    "date": "2026-09-09",
-    "version": "1.109.0",
-    "release": 606,
-    "releasedAt": "2026-09-10T03:52:05Z",
-    "summary": "The School Grades cards no longer print every official reading by default, so the grid comes up even; the readings are one click away on the same control the rest of the site uses."
+    "date": "2026-09-10",
+    "version": "1.110.0",
+    "release": 607,
+    "releasedAt": "2026-09-10T07:42:09Z",
+    "summary": "Every XP award is now recorded with the item it was for, including the ones a daily cap paid nothing for, so the history can say which kanji earned what."
   }
 ]

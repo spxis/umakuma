@@ -168,4 +168,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Miotoshi", ja: "見落とし", reading: "みおとし", gloss: "A thing looked past - which is what a gate that scans only literals does" },
   { romaji: "Muji", ja: "無地", reading: "むじ", gloss: "Plain and unmarked - which is how a kanji card looked without the level we teach it at" },
   { romaji: "Merihari", ja: "メリハリ", reading: "めりはり", gloss: "Definition and contrast - what a grid gets back when every card is the same height" },
+  { romaji: "Motochou", ja: "元帳", reading: "もとちょう", gloss: "The ledger behind the tally - what each award was for, and what it paid" },
 ];
