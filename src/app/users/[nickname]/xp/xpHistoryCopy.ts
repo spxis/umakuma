@@ -82,6 +82,18 @@ export const XP_LEDGER_HISTORY_COPY = {
   /* Both ends of the day, because the row accumulates: these bracket the
      earning rather than timing a single award. */
   span: (first: string, last: string) => (first === last ? first : `${first} – ${last}`),
+  /* What a row was for. The count is on the button so a reader can decide
+     whether to open two hundred of them before they arrive. */
+  items: (count: number) => `${count.toLocaleString("en-US")} ${count === 1 ? "item" : "items"}`,
+  itemsHide: "Hide",
+  /* Said once under the pills rather than on each: a row where the cap bit is
+     the case this whole record exists for, and it deserves a sentence. */
+  cappedNote: (count: number) =>
+    `${count.toLocaleString("en-US")} of these earned nothing — the day's cap for this kind was already full.`,
+  capped: "capped",
+  /* A day earned before the ledger existed has no items, and that is not the
+     same as a day where nothing was studied. */
+  itemsUnrecorded: "Earned before this history recorded what each award was for.",
   empty: "Nothing earned yet.",
   emptyFiltered: "Nothing of that kind yet.",
   emptyHint: "Answer a review, finish a game, or read something and it will show up here.",

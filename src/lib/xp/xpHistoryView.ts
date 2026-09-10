@@ -1,6 +1,7 @@
 import "server-only";
 
 import { prisma } from "@/lib/prisma";
+import { getCatalogSubjectDetails } from "@/lib/subjectCatalogDetails";
 
 import {
   XP_HISTORY_SORTS,
@@ -8,6 +9,7 @@ import {
   type XpHistoryQuery,
   type XpHistorySort,
   type XpHistorySortDir,
+  type XpHistoryItem,
 } from "./xpHistoryQuery";
 
 /**
@@ -34,6 +36,67 @@ function orderFor(sortBy: XpHistorySort, sortDir: XpHistorySortDir) {
   if (sortBy === XP_HISTORY_SORTS.amount) return [{ amount: sortDir }, day];
   if (sortBy === XP_HISTORY_SORTS.kind) return [{ kind: sortDir }, { dayKey: "desc" as const }];
   return [day, { kind: "asc" as const }];
+}
+
+
+/**
+ * What each row on this page was actually for.
+ *
+ * `XpEvent` is the day's tally and cannot hold an item, so the characters come
+ * from `XpAward` beside it - one row per award, written since 1.110.0. Only
+ * the page's own rows are looked up, not the account's history: the table
+ * pages for a reason and this must not undo it.
+ *
+ * **Nothing is truncated.** A day of two hundred reviews returns two hundred
+ * items. John: "the xp table should show us each kanji that we studied because
+ * of this history... even if we did 200 kanji." They arrive in the order they
+ * were earned, and the ones a daily cap paid nothing for come with the rest,
+ * marked, because a capped day that shows only the paid part is the silence
+ * this table exists to end.
+ */
+async function itemsForRows(
+  accountId: string,
+  rows: readonly { dayKey: string; kind: string }[],
+): Promise<Map<string, XpHistoryItem[]>> {
+  const byRow = new Map<string, XpHistoryItem[]>();
+  if (rows.length === 0) return byRow;
+
+  const awards = await prisma.xpAward.findMany({
+    where: {
+      accountId,
+      subjectId: { not: null },
+      OR: rows.map((row) => ({ dayKey: row.dayKey, kind: row.kind })),
+    },
+    orderBy: { awardedAt: "asc" },
+    select: { dayKey: true, kind: true, amount: true, subjectId: true },
+  });
+  if (awards.length === 0) return byRow;
+
+  /* One catalogue read for the whole page rather than one per row: the same
+     character turns up under Review Answered and Review Correct on the same
+     day, and often under a dozen days above it. */
+  const details = await getCatalogSubjectDetails(
+    awards.flatMap((award) => (award.subjectId === null ? [] : [award.subjectId])),
+  );
+
+  for (const award of awards) {
+    if (award.subjectId === null) continue;
+    const detail = details.get(award.subjectId);
+    const key = `${award.dayKey}:${award.kind}`;
+    const held = byRow.get(key) ?? [];
+    held.push({
+      subjectId: award.subjectId,
+      /* The id itself when the catalogue has never heard of it - a practice
+         subject, or an item retired since. Better a number a reader can look
+         up than a row that quietly drops one of the two hundred. */
+      glyph: detail?.characters || String(award.subjectId),
+      meaning: detail?.meanings[0] ?? null,
+      subjectType: detail?.subjectType ?? "",
+      paid: award.amount > 0,
+    });
+    byRow.set(key, held);
+  }
+  return byRow;
 }
 
 export async function getXpHistoryPage(query: XpHistoryQuery): Promise<XpHistoryPage> {
@@ -68,6 +131,7 @@ export async function getXpHistoryPage(query: XpHistoryQuery): Promise<XpHistory
     : (whole._sum.amount ?? 0);
 
   const labels = new Map(types.map((type) => [type.id, type.label]));
+  const itemsByRow = await itemsForRows(accountId, rows);
 
   return {
     rows: rows.map((row) => ({
@@ -79,6 +143,7 @@ export async function getXpHistoryPage(query: XpHistoryQuery): Promise<XpHistory
       note: row.note ?? row.type?.note ?? null,
       firstAt: row.createdAt.toISOString(),
       lastAt: row.updatedAt.toISOString(),
+      items: itemsByRow.get(`${row.dayKey}:${row.kind}`) ?? [],
     })),
     facets: kindRows
       .map((row) => ({

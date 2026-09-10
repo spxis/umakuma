@@ -62,6 +62,34 @@ export type XpHistoryRow = {
   firstAt: string;
   /** And the last. The row accumulates, so these bracket the day's earning. */
   lastAt: string;
+  /**
+   * What this day's earning of this kind was actually for.
+   *
+   * Empty for the day-shaped kinds - a sign-in, a streak, a quest - which are
+   * earned by the day rather than by a character, and whose emptiness is an
+   * answer rather than a gap. Empty too for any day before the ledger existed,
+   * which the table says out loud rather than drawing as "nothing studied".
+   *
+   * Not truncated. John: "the xp table should show us each kanji that we
+   * studied because of this history", and "even if we did 200 kanji".
+   */
+  items: XpHistoryItem[];
+};
+
+/** One thing an award was for, and whether the day's cap had already run out. */
+export type XpHistoryItem = {
+  subjectId: number;
+  glyph: string;
+  meaning: string | null;
+  subjectType: string;
+  /**
+   * False when the cap had been filled and this one paid nothing.
+   *
+   * The work still happened, which is the whole reason it is recorded: a
+   * member who did forty lessons was previously paid for thirty and shown no
+   * trace of the other ten.
+   */
+  paid: boolean;
 };
 
 export type XpHistoryFacet = { kind: string; label: string; count: number; total: number };

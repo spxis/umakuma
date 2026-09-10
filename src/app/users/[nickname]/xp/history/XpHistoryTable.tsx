@@ -14,6 +14,8 @@ import {
   type XpHistorySortDir,
 } from "@/lib/xp/xpHistoryQuery";
 
+import SubjectPill from "@/app/shared/SubjectPill";
+
 import { XP_LEDGER_HISTORY_COPY as copy } from "../xpHistoryCopy";
 
 const CHIP = "inline-flex h-8 items-center rounded-full border px-3 text-[11px] font-bold transition";
@@ -34,6 +36,15 @@ const HEAD = "pb-2 text-left text-[10px] font-black uppercase tracking-[0.08em] 
  */
 export default function XpHistoryTable({ accountId }: { accountId: string }) {
   const [kind, setKind] = useState<string | null>(null);
+  /* Which rows are showing what they were for. Per row rather than one at a
+     time: comparing two days is the reason somebody opens this at all. */
+  const [openItems, setOpenItems] = useState<ReadonlySet<string>>(() => new Set());
+  const toggleItems = (id: string) =>
+    setOpenItems((open) => {
+      const next = new Set(open);
+      if (!next.delete(id)) next.add(id);
+      return next;
+    });
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState<number>(XP_HISTORY_PAGE_SIZES[0]);
   const [sortBy, setSortBy] = useState<XpHistorySort>(XP_HISTORY_SORTS.day);
@@ -178,7 +189,7 @@ export default function XpHistoryTable({ accountId }: { accountId: string }) {
               </tr>
             </thead>
             <tbody className="divide-y divide-line/60">
-              {rows.map((row) => (
+              {rows.flatMap((row) => [
                 <tr key={row.id}>
                   <td className="py-2 align-top font-bold tabular-nums text-foreground">
                     {row.dayKey}
@@ -190,6 +201,25 @@ export default function XpHistoryTable({ accountId }: { accountId: string }) {
                         {row.note}
                       </span>
                     ) : null}
+                    {/*
+                      * What the row was for, behind a press.
+                      *
+                      * Behind one rather than always drawn: a day of two
+                      * hundred reviews is two hundred characters, and
+                      * twenty-five rows of that is not a table any more. The
+                      * count is on the button so a reader knows what they are
+                      * opening. Nothing is truncated once it is open.
+                      */}
+                    {row.items.length > 0 ? (
+                      <button
+                        type="button"
+                        onClick={() => toggleItems(row.id)}
+                        aria-expanded={openItems.has(row.id)}
+                        className="mt-1 inline-flex items-center gap-1 text-[11px] font-black uppercase tracking-[0.08em] text-accent hover:underline"
+                      >
+                        {openItems.has(row.id) ? copy.itemsHide : copy.items(row.items.length)}
+                      </button>
+                    ) : null}
                   </td>
                   <td className="py-2 align-top font-black tabular-nums text-foreground">
                     {row.amount.toLocaleString()}
@@ -200,8 +230,41 @@ export default function XpHistoryTable({ accountId }: { accountId: string }) {
                       formatDateTimeShort(row.lastAt, "—"),
                     )}
                   </td>
-                </tr>
-              ))}
+                </tr>,
+                openItems.has(row.id) ? (
+                  <tr key={`${row.id}:items`}>
+                    <td colSpan={4} className="pb-3">
+                      <ul className="flex flex-wrap gap-1.5">
+                        {row.items.map((item, index) => (
+                          <li key={`${item.subjectId}:${index}`}>
+                            <SubjectPill
+                              glyph={item.glyph}
+                              subjectType={item.subjectType}
+                              meaning={item.meaning}
+                              href={item.glyph ? `/kanji/${encodeURIComponent(item.glyph)}` : null}
+                              /* The ones the cap paid nothing for come with the
+                                 rest, marked rather than left out - showing only
+                                 the paid part is the silence this record ends. */
+                              trailing={
+                                item.paid ? null : (
+                                  <span className="rounded bg-amber-100 px-1 py-px text-[9px] font-black uppercase tracking-[0.06em] text-amber-800">
+                                    {copy.capped}
+                                  </span>
+                                )
+                              }
+                            />
+                          </li>
+                        ))}
+                      </ul>
+                      {row.items.some((item) => !item.paid) ? (
+                        <p className="mt-1.5 text-[11px] font-semibold text-foreground/60">
+                          {copy.cappedNote(row.items.filter((item) => !item.paid).length)}
+                        </p>
+                      ) : null}
+                    </td>
+                  </tr>
+                ) : null,
+              ])}
             </tbody>
           </table>
         </div>
