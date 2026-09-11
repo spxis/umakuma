@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { TICKET_LIMITS } from "../src/lib/tickets";
@@ -22,7 +22,6 @@ import { TICKET_LIMITS } from "../src/lib/tickets";
  */
 const client = new PrismaClient({ log: ["error"] });
 const OUT = join(process.cwd(), "docs", "plans", "board-convergence", "overflow");
-const KEEP = TICKET_LIMITS.detail - 100;
 const POINTER = (id: string) => `\n\n[Trimmed to fit the board. Full text: docs/plans/board-convergence/overflow/${id}.md]`;
 
 function target(): string {
@@ -46,16 +45,26 @@ async function main(): Promise<void> {
   mkdirSync(OUT, { recursive: true });
   for (const row of over) {
     const detail = row.detail!;
-    writeFileSync(
-      join(OUT, `${row.id}.md`),
+    const pointer = POINTER(row.id);
+    /* Measured, not guessed: the first run kept 3,900 and added a 107-character
+       pointer, and Postgres refused the cap at 4,007. */
+    const keep = TICKET_LIMITS.detail - pointer.length;
+    const file = join(OUT, `${row.id}.md`);
+    /* Never overwrite: a re-run after a partial failure would otherwise save
+       the trimmed text over the full one. */
+    if (!existsSync(file)) writeFileSync(
+      file,
       `# ${row.title}\n\nTicket \`${row.id}\`, ${row.status}. The full detail as it stood before the ` +
         `${TICKET_LIMITS.detail}-character cap, moved here by scripts/tickets-trim-overflow.ts.\n\n---\n\n${detail}\n`,
     );
     await client.ticket.update({
       where: { id: row.id },
-      data: { detail: detail.slice(0, KEEP).trimEnd() + POINTER(row.id) },
+      data: { detail: detail.slice(0, keep).trimEnd() + pointer },
+      /* Only the id back: this runs before the schema push, when the client
+         knows columns the database does not have yet. */
+      select: { id: true },
     });
-    console.log(`  trimmed ${row.id} to ${KEEP} + pointer; full text in overflow/${row.id}.md`);
+    console.log(`  trimmed ${row.id} to ${keep} + pointer; full text in overflow/${row.id}.md`);
   }
 }
 

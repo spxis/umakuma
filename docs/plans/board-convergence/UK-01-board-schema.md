@@ -1,6 +1,6 @@
 # UK-01. The ticket table takes grading, a move stamp, and hard caps
 
-Board ticket: _filled in by the README_. Kind: feature. Area: admin.
+Board ticket: `cmtx0embk00009xiyf66ymntz`, shipped as 1.114.1 「りつ」律. Kind: feature. Area: admin.
 Contract: `BOARD_RULES.md` invariants 6, 7, 8. Do this one first; UK-02, UK-03
 and UK-04 all read the columns it adds.
 
@@ -154,9 +154,12 @@ it with UK-02.
 6. `pnpm db:backup:prod` again is not needed for the trim; run the trim script
    with `--run` now, from the worktree, with the production URL inline.
 7. `pnpm db:push` from the worktree (check `pwd`; the shared checkout would
-   report "already in sync" against the old schema). If Prisma warns about
-   data loss on the VarChar change, a row still exceeds a cap: stop, re-run
-   step 1, do not pass `--accept-data-loss`.
+   report "already in sync" against the old schema). Prisma warns "there
+   might be data loss" for every Text-to-VarChar cast whatever the data
+   holds, so `--accept-data-loss` is needed here and is safe: Postgres itself
+   refuses the ALTER with `P2000 value too long` if any row still exceeds a
+   cap, which it did once on 2026-09-11 when the trimmed rows came out at
+   4,007 characters. Measure `max(length(detail))` before and after.
 8. Backfill the stamp so history is not all "now":
    `update "FeatureWish" set "movedAt" = "updatedAt";` through a tsx script
    with the production URL, once.
