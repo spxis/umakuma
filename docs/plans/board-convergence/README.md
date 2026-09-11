@@ -19,7 +19,7 @@ contract.
 | UK-01 The ticket table takes grading, a move stamp, and hard caps | `UK-01-board-schema.md` | `cmtx0embk00009xiyf66ymntz` | shipped 1.114.1 |
 | UK-02 `pnpm task` follows the board's rules on every command | `UK-02-cli-rules.md` | `cmtx0enh900009xk5ixegognn` and `cmtwx53ku00009xmnfx29r7b8` | shipped 1.114.2 |
 | UK-03 The tickets API grades, validates, and the board gate runs in tests | `UK-03-api-and-gate.md` | `cmtx0eol700009xl3eyo5yfpp` | shipped 1.114.3 |
-| UK-04 The admin board reads like Itsutsu's, and the four dead tabs go | `UK-04-admin-board.md` | `cmtx0epp000009xm57neoys98` | shipped 1.114.4 |
+| UK-04 The admin board reads like Itsutsu's, and the four dead tabs go | `UK-04-admin-board.md` | `cmtx0epp000009xm57neoys98` | shipped 1.115.0 |
 
 All four shipped on 2026-09-11. What was learned doing them, for Itsutsu's
 half: a script that reads a row through the generated client fails the

@@ -1,6 +1,6 @@
 # UK-04. The admin board reads like Itsutsu's, and the four dead tabs go
 
-Board ticket: `cmtx0epp000009xm57neoys98`, shipped as 1.114.4 「ろこつ」露骨. Kind: feature. Area: admin. Contract: invariants 3, 7.
+Board ticket: `cmtx0epp000009xm57neoys98`, shipped as 1.115.0 「ろこつ」露骨. Kind: feature. Area: admin. Contract: invariants 3, 7.
 Needs UK-01 and UK-03.
 
 ## Why
