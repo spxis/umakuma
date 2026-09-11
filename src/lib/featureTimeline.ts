@@ -94,11 +94,19 @@ export function splitPlannedByProgress(entries: readonly FeatureTimelineEntry[])
 export const FEATURE_KINDS = {
   feature: "feature",
   bug: "bug",
+  /** Work a member never sees: a rule, a script, a tidy-up. */
+  chore: "chore",
 } as const;
 
 export type FeatureKind = (typeof FEATURE_KINDS)[keyof typeof FEATURE_KINDS];
 
 export const FEATURE_KIND_VALUES = Object.values(FEATURE_KINDS);
+
+export const FEATURE_KIND_LABELS: Record<FeatureKind, string> = {
+  [FEATURE_KINDS.feature]: "Feature",
+  [FEATURE_KINDS.bug]: "Bug",
+  [FEATURE_KINDS.chore]: "Chore",
+};
 
 export function isFeatureKind(value: string): value is FeatureKind {
   return (FEATURE_KIND_VALUES as string[]).includes(value);

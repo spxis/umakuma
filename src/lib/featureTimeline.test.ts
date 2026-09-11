@@ -353,7 +353,7 @@ describe("claimed work", () => {
   });
 
   it("refuses a kind it does not know", () => {
-    expect(() => parseEntries([{ ...entry(), kind: "chore" }])).toThrow(/unknown kind/);
+    expect(() => parseEntries([{ ...entry(), kind: "gizmo" }])).toThrow(/unknown kind/);
   });
 });
 

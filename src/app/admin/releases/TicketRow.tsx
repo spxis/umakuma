@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { FEATURE_AREA_LABELS, FEATURE_KINDS } from "@/lib/featureTimeline";
+import { FEATURE_AREA_LABELS, FEATURE_KINDS, FEATURE_KIND_LABELS } from "@/lib/featureTimeline";
 import { formatDateShort } from "@/lib/timeFormat";
 import {
   TICKET_STATUSES,
@@ -92,11 +92,17 @@ export default function TicketRow({
                 </span>
               ) : null}
 
-              {wish.kind === FEATURE_KINDS.bug ? (
-                <span className="inline-flex items-center rounded-full border border-rose-500/40 bg-rose-500/10 px-2 py-0.5 text-[11px] font-semibold text-rose-600">
-                  {RELEASE_TIMELINE_COPY.bug}
+              {wish.kind === FEATURE_KINDS.feature ? null : (
+                <span
+                  className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-semibold ${
+                    wish.kind === FEATURE_KINDS.bug
+                      ? "border-rose-500/40 bg-rose-500/10 text-rose-600"
+                      : "border-line bg-surface-muted text-foreground/70"
+                  }`}
+                >
+                  {FEATURE_KIND_LABELS[wish.kind]}
                 </span>
-              ) : null}
+              )}
 
               <span
                 className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-semibold ${STATUS_CLASSES[wish.status]}`}

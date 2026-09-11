@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { FEATURE_AREA_LABELS, FEATURE_AREA_VALUES, FEATURE_KINDS, FEATURE_KIND_VALUES } from "@/lib/featureTimeline";
+import { FEATURE_AREA_LABELS, FEATURE_AREA_VALUES, FEATURE_KINDS, FEATURE_KIND_LABELS, FEATURE_KIND_VALUES } from "@/lib/featureTimeline";
 import { TICKET_LIMITS, type Ticket } from "@/lib/tickets";
 
 import { RELEASE_TIMELINE_COPY } from "./ReleaseTimeline.constants";
@@ -128,7 +128,7 @@ export default function TicketBoard({ initialWishes }: { initialWishes: Ticket[]
             >
               {FEATURE_KIND_VALUES.map((value) => (
                 <option key={value} value={value}>
-                  {value === FEATURE_KINDS.bug ? RELEASE_TIMELINE_COPY.bug : "Feature"}
+                  {FEATURE_KIND_LABELS[value]}
                 </option>
               ))}
             </select>

@@ -59,7 +59,7 @@ describe("toTicket", () => {
   });
 
   it("falls back rather than handing a component an unknown kind or status", () => {
-    const ticket = toTicket(row({ kind: "chore", status: "archived" }));
+    const ticket = toTicket(row({ kind: "gizmo", status: "archived" }));
     expect(ticket.kind).toBe(FEATURE_KINDS.feature);
     expect(ticket.status).toBe(TICKET_STATUSES.open);
   });

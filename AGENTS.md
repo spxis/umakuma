@@ -402,12 +402,13 @@ Run `pnpm quality:check` after non-trivial `src/` edits. If lint issues are auto
   left lives in Postgres, reachable with `pnpm task` (production) or
   `pnpm task:local`:
 
-      pnpm task                              what is open and who holds it
-      pnpm task add "<title>" [--detail "…"] [--area study] [--bug]
-      pnpm task claim <id> "<who>"           check one out
-      pnpm task release <id>                 put it back
-      pnpm task drop <id>                    answered no, kept on the record
-      pnpm task filed <id> <timeline-id>     it became planned work in the file
+      pnpm task                                   what is open and who holds it
+      pnpm task add "<title>" [--detail "…"] [--area study] [--bug|--chore]
+      pnpm task claim <id> "<who>"                check one out
+      pnpm task release <id> --by "<who>"         put it back
+      pnpm task drop <id> --by "<who>"            answered no, kept on the record
+      pnpm task reopen <id> --by "<who>"          a no, reconsidered
+      pnpm task grade <id> --priority high --effort small
 
   **`<id>` is the whole cuid the board prints, never the short prefix.**
   `release`, `ship`, `drop` and `filed` update by exact id, so a prefix fails
@@ -425,9 +426,16 @@ Run `pnpm quality:check` after non-trivial `src/` edits. If lint issues are auto
   happened three times in one afternoon on 2026-09-03 and lost a request
   outright. A row is true for everybody the moment it is written.
 
-  A claim cannot be taken over while it is live: `claim` refuses and names the
-  holder, because two agents building the same thing is the expensive failure,
-  not two agents idle. Re-claiming your own is allowed and does nothing.
+  A claim cannot be taken over while it is live, by any command: `claim`
+  refuses and names the holder, and so do `release` and `drop`, because every
+  move is written under the same condition - unheld, or yours, or lapsed. For
+  a week `release` was a plain update and a live claim could be released from
+  under its holder by anyone; the rule was true of one command and false of
+  the one beside it. Two agents building the same thing is the expensive
+  failure, not two agents idle. Re-claiming your own is allowed and does
+  nothing. `ship` and `filed` are retired: a ticket is shipped by
+  `release:take` and nowhere else, and every moving command names its actor
+  with `--by`.
 
   **A hold expires after six hours, and then the ticket is free.**
   `TASK_LEASE_MS` in `src/lib/ticketClaims.ts` is the lease, and `claimTask`
