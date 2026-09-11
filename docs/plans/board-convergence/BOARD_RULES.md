@@ -111,6 +111,11 @@ Numbered so a ticket and a test can cite them.
 6. **Caps are in two places.** `draftProblems()` refuses at the form and at
    the route, in words a person can act on; `@db.VarChar` refuses at the
    database, because a cap that lives only in TypeScript is another door.
+   Note what the TypeScript cap does not do: it bites on a create and on any
+   write that carries `detail`, and not on a status-only move. So a row
+   written past the cap by a direct table write can be moved for ever and
+   edited never. That is the state Itsutsu's overflow rows were in, and the
+   reason the database cap is not optional.
 
    | Field | Cap |
    |---|---|
