@@ -1,6 +1,6 @@
 # UK-03. The tickets API grades, validates, and the board gate runs in tests
 
-Board ticket: _README_. Kind: feature. Area: admin. Contract: invariants 1, 5,
+Board ticket: `cmtx0eol700009xl3eyo5yfpp`, shipped as 1.114.3 「れんけつ」連結. Kind: feature. Area: admin. Contract: invariants 1, 5,
 6, 10. Needs UK-01. UK-04 needs this.
 
 ## Why

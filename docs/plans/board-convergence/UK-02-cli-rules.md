@@ -1,8 +1,8 @@
 # UK-02. `pnpm task` follows the board's rules on every command
 
-Board ticket: `cmtwx53ku00009xmnfx29r7b8` for the first half (already filed:
-"pnpm task release walks around the claim guard"). The second half, grading
-and validation, is filed with the id in the README. Claim both. Kind: fix.
+Board tickets: `cmtx0enh900009xk5ixegognn` and `cmtwx53ku00009xmnfx29r7b8`,
+shipped together as 1.114.2 「るつぼ」坩堝. (The second could not be marked
+shipped: `release:take` takes one ticket. See `cmtx4zql200009xprjdemybbu`.) Kind: fix.
 Area: admin. Contract: invariants 1, 2, 4, 5, 6, 7. Needs UK-01's columns.
 
 ## Why

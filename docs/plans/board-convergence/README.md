@@ -16,10 +16,18 @@ contract.
 
 | Ticket | Plan | Board id | Needs |
 |---|---|---|---|
-| UK-01 The ticket table takes grading, a move stamp, and hard caps | `UK-01-board-schema.md` | `cmtx0embk00009xiyf66ymntz` | nothing |
-| UK-02 `pnpm task` follows the board's rules on every command | `UK-02-cli-rules.md` | `cmtx0enh900009xk5ixegognn` and `cmtwx53ku00009xmnfx29r7b8` | UK-01 |
-| UK-03 The tickets API grades, validates, and the board gate runs in tests | `UK-03-api-and-gate.md` | `cmtx0eol700009xl3eyo5yfpp` | UK-01 |
-| UK-04 The admin board reads like Itsutsu's, and the four dead tabs go | `UK-04-admin-board.md` | `cmtx0epp000009xm57neoys98` | UK-01, UK-03 |
+| UK-01 The ticket table takes grading, a move stamp, and hard caps | `UK-01-board-schema.md` | `cmtx0embk00009xiyf66ymntz` | shipped 1.114.1 |
+| UK-02 `pnpm task` follows the board's rules on every command | `UK-02-cli-rules.md` | `cmtx0enh900009xk5ixegognn` and `cmtwx53ku00009xmnfx29r7b8` | shipped 1.114.2 |
+| UK-03 The tickets API grades, validates, and the board gate runs in tests | `UK-03-api-and-gate.md` | `cmtx0eol700009xl3eyo5yfpp` | shipped 1.114.3 |
+| UK-04 The admin board reads like Itsutsu's, and the four dead tabs go | `UK-04-admin-board.md` | `cmtx0epp000009xm57neoys98` | shipped 1.114.4 |
+
+All four shipped on 2026-09-11. What was learned doing them, for Itsutsu's
+half: a script that reads a row through the generated client fails the
+moment the schema is ahead of the database, so `release:take` and the trim
+script now `select` only what they read; Prisma warns of data loss on every
+Text-to-VarChar cast, and Postgres is the real guard (it refused the first
+push at 4,007 characters); and a release that closes two tickets needs the
+release tool to take more than one, filed as `cmtx4zql200009xprjdemybbu`.
 
 UK-02 and UK-03 can run in parallel in two worktrees once UK-01 is on
 `main` and pushed to the database.
