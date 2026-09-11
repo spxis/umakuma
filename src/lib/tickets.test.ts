@@ -2,12 +2,20 @@ import { describe, expect, it } from "vitest";
 
 import { FEATURE_KINDS } from "./featureTimeline";
 import {
+  TICKET_MOVES,
+  TICKET_MOVE_TARGETS,
   TICKET_STATUSES,
+  TICKET_STATUS_VALUES,
+  canMoveTicket,
   isTicketStatus,
   openWishes,
   suggestedEntryId,
+  ticketMoveData,
+  ticketMoveLabel,
+  ticketMoveWhere,
   toTicket,
   type Ticket,
+  type TicketStatus,
 } from "./tickets";
 
 function row(overrides: Partial<Parameters<typeof toTicket>[0]> = {}) {
@@ -94,5 +102,86 @@ describe("suggestedEntryId", () => {
   it("survives punctuation and a title in another script", () => {
     expect(suggestedEntryId("Dark mode — it doesn't stick!")).toBe("dark-mode-doesn-t");
     expect(suggestedEntryId("装う一組")).toBe("ticket");
+  });
+});
+
+/*
+ * The board's moves are a rule the route asks, not a menu the page draws.
+ *
+ * The PATCH route validated only that the destination was a status, so any
+ * move at all went through - shipped to open, which also cleared the entry
+ * the ticket was shipped as and left release:take free to number the same
+ * work twice. And "Mark shipped" was a button: it produced a shipped ticket
+ * with nothing to point at, the one state the rest of the system says cannot
+ * exist. Neither had a test, because the rule lived only in the buttons.
+ */
+describe("moving a ticket", () => {
+  it("never lands on shipped - that is release:take's job", () => {
+    for (const from of TICKET_STATUS_VALUES) {
+      expect(TICKET_MOVES[from], from).not.toContain(TICKET_STATUSES.shipped);
+    }
+    expect(Object.values(TICKET_MOVE_TARGETS)).not.toContain(TICKET_STATUSES.shipped);
+  });
+
+  it("refuses what the state does not offer", () => {
+    expect(canMoveTicket(TICKET_STATUSES.shipped, TICKET_MOVE_TARGETS.open)).toBe(false);
+    expect(canMoveTicket(TICKET_STATUSES.shipped, TICKET_MOVE_TARGETS.declined)).toBe(false);
+    expect(canMoveTicket(TICKET_STATUSES.open, TICKET_MOVE_TARGETS.open)).toBe(false);
+    expect(canMoveTicket(TICKET_STATUSES.declined, TICKET_MOVE_TARGETS.inProgress)).toBe(false);
+    expect(canMoveTicket(TICKET_STATUSES.open, TICKET_MOVE_TARGETS.inProgress)).toBe(true);
+    expect(canMoveTicket(TICKET_STATUSES.filed, TICKET_MOVE_TARGETS.inProgress)).toBe(true);
+    expect(canMoveTicket(TICKET_STATUSES.inProgress, TICKET_MOVE_TARGETS.open)).toBe(true);
+    expect(canMoveTicket(TICKET_STATUSES.declined, TICKET_MOVE_TARGETS.open)).toBe(true);
+  });
+
+  it("names every move it offers", () => {
+    for (const from of TICKET_STATUS_VALUES) {
+      for (const to of TICKET_MOVES[from]) {
+        expect(ticketMoveLabel(from as TicketStatus, to)).toMatch(/^(Start|Put back|Reopen|Decline)$/);
+      }
+    }
+    expect(ticketMoveLabel(TICKET_STATUSES.declined, TICKET_MOVE_TARGETS.open)).toBe("Reopen");
+    expect(ticketMoveLabel(TICKET_STATUSES.inProgress, TICKET_MOVE_TARGETS.open)).toBe("Put back");
+  });
+});
+
+/*
+ * In progress is not a status; it is a claim. The status column written on
+ * its own is two fields that can disagree, and did: Start left a ticket in
+ * progress that nobody held, so the CLI board - which reads the claim - said
+ * WAITING under a page that said In progress; Put back left the holder on a
+ * ticket the page called waiting, and `pnpm task claim` refused it for the
+ * length of the lease.
+ */
+describe("what a move writes", () => {
+  const now = new Date("2026-09-11T12:00:00Z");
+
+  it("starts a ticket by claiming it, in the same write", () => {
+    expect(ticketMoveData(TICKET_MOVE_TARGETS.inProgress, "john@example.com", now)).toEqual({
+      status: TICKET_STATUSES.inProgress,
+      claimedBy: "john@example.com",
+      claimedAt: now,
+      filedAs: null,
+    });
+  });
+
+  it("puts a ticket back, or declines it, by letting go of it", () => {
+    for (const to of [TICKET_MOVE_TARGETS.open, TICKET_MOVE_TARGETS.declined]) {
+      expect(ticketMoveData(to, "john@example.com", now)).toEqual({
+        status: to,
+        claimedBy: null,
+        claimedAt: null,
+        filedAs: null,
+      });
+    }
+  });
+
+  it("writes under the state it planned from, and only over a hold it may take", () => {
+    const staleBefore = new Date("2026-09-11T06:00:00Z");
+    expect(ticketMoveWhere("t1", TICKET_STATUSES.inProgress, "john@example.com", staleBefore)).toEqual({
+      id: "t1",
+      status: TICKET_STATUSES.inProgress,
+      OR: [{ claimedBy: null }, { claimedBy: "john@example.com" }, { claimedAt: { lt: staleBefore } }],
+    });
   });
 });

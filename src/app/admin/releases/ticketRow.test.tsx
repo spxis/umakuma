@@ -40,7 +40,9 @@ describe("a waiting wish", () => {
   const doc = draw(wish());
 
   it("shows the command that turns it into planned work", () => {
-    expect(doc.querySelector("code")?.textContent).toBe("pnpm backlog file cuid123 <area>");
+    /* `pnpm backlog file` was retired and exits non-zero saying so; the page
+       kept telling John to run it for a week. */
+    expect(doc.querySelector("code")?.textContent).toBe('pnpm task claim cuid123 "<who>"');
   });
 
   it("offers to decline rather than to delete", () => {
@@ -89,5 +91,25 @@ describe("the row's controls", () => {
   it("keeps no control inside another", () => {
     const doc = draw(wish());
     expect(doc.querySelectorAll("summary button, button button, summary a")).toHaveLength(0);
+  });
+});
+
+/*
+ * Shipping is not a button. `release:take` writes the timeline entry and marks
+ * the ticket in one pass so the two cannot drift; a "Mark shipped" here
+ * produced a shipped ticket with nothing to point at.
+ */
+describe("a ticket somebody is working on", () => {
+  const doc = draw(wish({ status: TICKET_STATUSES.inProgress, claimedBy: "umakuma-b6", claimedAt: "2026-09-11T12:00:00.000Z" }));
+  const labels = [...doc.querySelectorAll("button")].map((el) => el.textContent);
+
+  it("can be put back or declined, and not marked shipped", () => {
+    expect(labels).toContain("Put back");
+    expect(labels).toContain("Decline");
+    expect(labels).not.toContain("Mark shipped");
+  });
+
+  it("says who holds it", () => {
+    expect(doc.body.textContent).toContain("umakuma-b6");
   });
 });

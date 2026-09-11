@@ -4,10 +4,16 @@ import { prisma } from "@/lib/prisma";
 
 import {
   TICKET_STATUSES,
+  canMoveTicket,
+  isTicketStatus,
+  ticketMoveData,
+  ticketMoveWhere,
   toTicket,
   type Ticket,
+  type TicketMoveTarget,
   type TicketStatus,
 } from "@/lib/tickets";
+import { TASK_LEASE_MS } from "@/lib/ticketClaims";
 import type { FeatureArea, FeatureKind } from "@/lib/featureTimeline";
 
 /**
@@ -64,24 +70,44 @@ export async function createTicket(draft: TicketDraft): Promise<Ticket> {
   return toTicket(row);
 }
 
+export type TicketMoveOutcome =
+  | { ok: true; ticket: Ticket }
+  | { ok: false; reason: "missing" }
+  | { ok: false; reason: "illegal"; from: TicketStatus }
+  | { ok: false; reason: "held"; heldBy: string };
+
 /**
- * Moves a ticket between states.
+ * Moves a ticket the way the CLI does: legally, and with its claim.
  *
- * `filedAs` is cleared on anything but `filed`, so a ticket that was filed and
- * then reopened does not keep pointing at an entry it is no longer connected
- * to.
+ * Reads the row for the message, then writes under a condition rather than
+ * trusting what it read, the way `pnpm task claim` does - two round trips are
+ * two chances for somebody else to get there first, so the condition goes
+ * into the UPDATE and the database decides. A write that matches no row is
+ * re-read to say why.
  */
-export async function setTicketStatus(
+export async function moveTicket(
   id: string,
-  status: TicketStatus,
-  filedAs: string | null = null,
-): Promise<Ticket | null> {
-  const row = await prisma.ticket
-    .update({
-      where: { id },
-      data: { status, filedAs: status === TICKET_STATUSES.filed ? filedAs : null },
-      select: SELECT,
-    })
-    .catch(() => null);
-  return row ? toTicket(row) : null;
+  to: TicketMoveTarget,
+  actor: string,
+  now: Date = new Date(),
+): Promise<TicketMoveOutcome> {
+  const current = await prisma.ticket.findUnique({ where: { id }, select: { status: true } });
+  if (!current) return { ok: false, reason: "missing" };
+
+  const from = isTicketStatus(current.status) ? current.status : TICKET_STATUSES.open;
+  if (!canMoveTicket(from, to)) return { ok: false, reason: "illegal", from };
+
+  const staleBefore = new Date(now.getTime() - TASK_LEASE_MS);
+  const moved = await prisma.ticket.updateMany({
+    where: ticketMoveWhere(id, from, actor, staleBefore),
+    data: ticketMoveData(to, actor, now),
+  });
+
+  if (moved.count === 0) {
+    const holder = await prisma.ticket.findUnique({ where: { id }, select: { claimedBy: true } });
+    return { ok: false, reason: "held", heldBy: holder?.claimedBy ?? "somebody" };
+  }
+
+  const row = await prisma.ticket.findUniqueOrThrow({ where: { id }, select: SELECT });
+  return { ok: true, ticket: toTicket(row) };
 }

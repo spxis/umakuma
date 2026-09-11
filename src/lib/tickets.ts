@@ -46,19 +46,49 @@ export const TICKET_STATUS_LABELS: Record<TicketStatus, string> = {
 };
 
 /**
+ * Where a move on the board can land.
+ *
+ * Three places, and `shipped` is deliberately not one of them. Shipping is
+ * `pnpm release:take`'s job, because it writes the timeline entry and marks
+ * the ticket in one pass so the two cannot drift - and the admin page had a
+ * "Mark shipped" button that produced the one state the rest of the system
+ * says cannot exist: shipped, with no entry to point at. Typed as a narrower
+ * union than `TicketStatus` so that offering it again is a type error, not a
+ * line somebody adds back.
+ */
+export const TICKET_MOVE_TARGETS = {
+  open: TICKET_STATUSES.open,
+  inProgress: TICKET_STATUSES.inProgress,
+  declined: TICKET_STATUSES.declined,
+} as const;
+
+export type TicketMoveTarget = (typeof TICKET_MOVE_TARGETS)[keyof typeof TICKET_MOVE_TARGETS];
+
+export const TICKET_MOVE_TARGET_VALUES = Object.values(TICKET_MOVE_TARGETS);
+
+/**
  * The moves offered from each state, and only the ones that mean something.
  *
  * A shipped ticket has nowhere to go: the release that closed it is in the
  * timeline and moving the ticket would not unship it. Declined can come back,
  * because saying no is a decision people change.
+ *
+ * This is the rule, not a menu: the route that acts on a move asks it too.
+ * It used to be applied by the buttons alone, so a PATCH with any status in
+ * it went through - shipped to open, say, which also cleared the entry the
+ * ticket was shipped as and left `release:take` free to number it again.
  */
-export const TICKET_MOVES: Record<TicketStatus, TicketStatus[]> = {
-  [TICKET_STATUSES.open]: [TICKET_STATUSES.inProgress, TICKET_STATUSES.declined],
-  [TICKET_STATUSES.filed]: [TICKET_STATUSES.inProgress, TICKET_STATUSES.declined],
-  [TICKET_STATUSES.inProgress]: [TICKET_STATUSES.open, TICKET_STATUSES.shipped, TICKET_STATUSES.declined],
-  [TICKET_STATUSES.declined]: [TICKET_STATUSES.open],
+export const TICKET_MOVES: Record<TicketStatus, TicketMoveTarget[]> = {
+  [TICKET_STATUSES.open]: [TICKET_MOVE_TARGETS.inProgress, TICKET_MOVE_TARGETS.declined],
+  [TICKET_STATUSES.filed]: [TICKET_MOVE_TARGETS.inProgress, TICKET_MOVE_TARGETS.declined],
+  [TICKET_STATUSES.inProgress]: [TICKET_MOVE_TARGETS.open, TICKET_MOVE_TARGETS.declined],
+  [TICKET_STATUSES.declined]: [TICKET_MOVE_TARGETS.open],
   [TICKET_STATUSES.shipped]: [],
 };
+
+export function canMoveTicket(from: TicketStatus, to: TicketMoveTarget): boolean {
+  return TICKET_MOVES[from].includes(to);
+}
 
 /**
  * What a move button says.
@@ -68,11 +98,52 @@ export const TICKET_MOVES: Record<TicketStatus, TicketStatus[]> = {
  * one that depends on where you are coming from is `open` - putting work back
  * is not the same act as changing your mind about a no.
  */
-export function ticketMoveLabel(from: TicketStatus, to: TicketStatus): string {
-  if (to === TICKET_STATUSES.open) return from === TICKET_STATUSES.declined ? "Reopen" : "Put back";
-  if (to === TICKET_STATUSES.inProgress) return "Start";
-  if (to === TICKET_STATUSES.shipped) return "Mark shipped";
+export function ticketMoveLabel(from: TicketStatus, to: TicketMoveTarget): string {
+  if (to === TICKET_MOVE_TARGETS.open) return from === TICKET_STATUSES.declined ? "Reopen" : "Put back";
+  if (to === TICKET_MOVE_TARGETS.inProgress) return "Start";
   return "Decline";
+}
+
+/**
+ * The columns a move writes, and it is never the status alone.
+ *
+ * In progress is not a status; it is a claim. `claimedBy` and `claimedAt` are
+ * the one place work-in-progress is recorded, and the board reads them, not
+ * the column - so a status written on its own is two fields that can
+ * disagree, and did the moment it was possible: Start left a ticket in
+ * progress with nobody holding it, and Put back left the holder on a ticket
+ * the page called waiting, where the CLI's `claim` then refused it for the
+ * length of the lease. Same shape the CLI writes, so the two writers agree.
+ *
+ * `filedAs` is cleared on every move. Nothing a move can reach has an entry
+ * to point at; the only rows carrying one are the legacy `filed` ones, and a
+ * pointer to an entry that was retired is not worth keeping.
+ */
+export function ticketMoveData(to: TicketMoveTarget, actor: string, now: Date) {
+  if (to === TICKET_MOVE_TARGETS.inProgress) {
+    return { status: to, claimedBy: actor, claimedAt: now, filedAs: null };
+  }
+  return { status: to, claimedBy: null, claimedAt: null, filedAs: null };
+}
+
+/**
+ * The condition a move is written under, so the database decides who wins.
+ *
+ * The status has to still be the one the move was planned from - two admins,
+ * or an admin and an agent, do not both get to move a ticket that only one of
+ * them read. And a live hold belongs to whoever has it: an admin may move a
+ * ticket nobody holds, one they hold themselves, or one whose hold has
+ * lapsed, and is otherwise told to ask the holder - which is the CLI's rule,
+ * and the reason two agents building the same thing is the failure this
+ * board exists to prevent. `staleBefore` is the lease boundary, passed in so
+ * the rule is testable without a clock.
+ */
+export function ticketMoveWhere(id: string, from: TicketStatus, actor: string, staleBefore: Date) {
+  return {
+    id,
+    status: from,
+    OR: [{ claimedBy: null }, { claimedBy: actor }, { claimedAt: { lt: staleBefore } }],
+  };
 }
 
 /** Work nobody has started, whichever word the row uses for it. */

@@ -10,6 +10,7 @@ import {
   TICKET_STATUS_LABELS,
   ticketMoveLabel,
   type Ticket,
+  type TicketMoveTarget,
 } from "@/lib/tickets";
 
 import { RELEASE_AREA_CLASSES, RELEASE_TIMELINE_COPY } from "./ReleaseTimeline.constants";
@@ -39,20 +40,26 @@ export default function TicketRow({
   onChanged: (wish: Ticket) => void;
 }) {
   const [busy, setBusy] = useState(false);
+  const [refusal, setRefusal] = useState<string | null>(null);
   const open = wish.status === TICKET_STATUSES.open;
 
-  const setStatus = async (status: string) => {
+  const setStatus = async (status: TicketMoveTarget) => {
     setBusy(true);
+    setRefusal(null);
     try {
       const response = await fetch(`${endpoint}/${wish.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status }),
       });
-      if (response.ok) {
-        const { wish: updated } = (await response.json()) as { wish: Ticket };
-        onChanged(updated);
+      const payload = (await response.json().catch(() => null)) as { wish?: Ticket; error?: string } | null;
+      if (response.ok && payload?.wish) {
+        onChanged(payload.wish);
+        return;
       }
+      /* The route now says no, and why - a held ticket, a move the state does
+         not allow. Nothing happening on a press was the old answer to both. */
+      setRefusal(payload?.error ?? RELEASE_TIMELINE_COPY.wishError);
     } finally {
       setBusy(false);
     }
@@ -144,6 +151,11 @@ export default function TicketRow({
               </span>
             ) : null}
           </div>
+          {refusal ? (
+            <p role="alert" className="text-xs font-semibold text-red-600">
+              {refusal}
+            </p>
+          ) : null}
         </div>
       </details>
     </li>

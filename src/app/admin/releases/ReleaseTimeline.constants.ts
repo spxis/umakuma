@@ -51,8 +51,10 @@ export const RELEASE_TIMELINE_COPY = {
   wishFiledAs: "Filed as",
   wishRequestedBy: "Asked by",
   wishError: "That did not save. Try again.",
-  /* The loop the wish list closes, spelled out where the wishes are read. */
-  wishHowFiled: (ticketId: string) => `pnpm backlog file ${ticketId} <area>`,
+  /* The loop the wish list closes, spelled out where the wishes are read.
+     It named `pnpm backlog file` for a week after that command was retired
+     and exited non-zero saying so - the page kept telling John to run it. */
+  wishHowFiled: (ticketId: string) => `pnpm task claim ${ticketId} "<who>"`,
   ticketHeldBy: "Held by",
 } as const;
 
