@@ -7691,12 +7691,25 @@
     "id": "board-convergence-uk-02-pnpm-task-grades-validates-and-retir",
     "name": "Board convergence UK-02: pnpm task grades, validates, and retires ship and filed",
     "area": "admin",
+    "status": "shipped",
     "kind": "bug",
+    "date": "2026-09-11",
+    "summary": "The task board's terminal commands now all follow the same rules: a ticket somebody is working on cannot be put back or declined by anyone else, every move says who made it, tickets can be graded by priority and effort, and the list shows the best things to pick up first.",
+    "dateIsEstimate": false,
+    "release": 613,
+    "version": "1.114.2",
+    "releasedAt": "2026-09-11T15:51:05Z"
+  },
+  {
+    "id": "board-convergence-uk-03-the-tickets-api-grades-validates-and",
+    "name": "Board convergence UK-03: the tickets API grades, validates, and the board gate runs in tests",
+    "area": "admin",
+    "kind": "feature",
     "status": "shipped",
     "date": "2026-09-11",
-    "version": "1.114.2",
-    "release": 613,
-    "releasedAt": "2026-09-11T15:51:05Z",
-    "summary": "The task board's terminal commands now all follow the same rules: a ticket somebody is working on cannot be put back or declined by anyone else, every move says who made it, tickets can be graded by priority and effort, and the list shows the best things to pick up first."
+    "version": "1.114.3",
+    "release": 614,
+    "releasedAt": "2026-09-11T15:55:46Z",
+    "summary": "The admin ticket API can now grade a ticket by priority and effort in the same request that moves it, refuses a ticket too short to be a request and says why, and a test guards the board's rules so a state nothing can reach or leave cannot ship."
   }
 ]

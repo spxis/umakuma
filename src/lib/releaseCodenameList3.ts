@@ -175,4 +175,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Rachi", ja: "埒", reading: "らち", gloss: "Bounds - a hold counts only inside its lease" },
   { romaji: "Ritsu", ja: "律", reading: "りつ", gloss: "a rule, the one the board is now held to" },
   { romaji: "Rutsubo", ja: "坩堝", reading: "るつぼ", gloss: "a crucible, where every writer is poured through one rule" },
+  { romaji: "Renketsu", ja: "連結", reading: "れんけつ", gloss: "a coupling, the API joined to the board's own rules" },
 ];
