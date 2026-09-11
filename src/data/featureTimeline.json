@@ -7652,12 +7652,25 @@
     "id": "the-admin-board-moves-tickets-without-the-board-s-rules",
     "name": "The admin board moves tickets without the board's rules",
     "area": "platform",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-11",
+    "summary": "The admin board's move buttons went through a route that checked only that the destination was a status - not whether the move was allowed, nor who held the ticket. Start left work in progress with nobody on it; Mark shipped made a shipped ticket with no release behind it. The route asks the board's rules now, writes the claim with the status, and says why when it refuses.",
+    "dateIsEstimate": false,
+    "release": 610,
+    "version": "1.113.0",
+    "releasedAt": "2026-09-11T12:05:25Z"
+  },
+  {
+    "id": "the-admin-page-counts-a-lapsed-hold-as-in-progress",
+    "name": "The admin page counts a lapsed hold as in progress",
+    "area": "platform",
     "kind": "bug",
     "status": "shipped",
     "date": "2026-09-11",
-    "version": "1.113.0",
-    "release": 610,
-    "releasedAt": "2026-09-11T12:05:25Z",
-    "summary": "The admin board's move buttons went through a route that checked only that the destination was a status - not whether the move was allowed, nor who held the ticket. Start left work in progress with nobody on it; Mark shipped made a shipped ticket with no release behind it. The route asks the board's rules now, writes the claim with the status, and says why when it refuses."
+    "version": "1.114.0",
+    "release": 611,
+    "releasedAt": "2026-09-11T12:10:14Z",
+    "summary": "The admin page counted a ticket as in progress whenever its status column said so, while the board's own listing counts only holds inside the six-hour lease - so a session that died holding a ticket read STALE in one place and In progress in the other, on the same row, for ever. The page reads the lease now, through the same rule the board uses."
   }
 ]
