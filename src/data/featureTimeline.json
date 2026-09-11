@@ -7704,12 +7704,25 @@
     "id": "board-convergence-uk-03-the-tickets-api-grades-validates-and",
     "name": "Board convergence UK-03: the tickets API grades, validates, and the board gate runs in tests",
     "area": "admin",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-11",
+    "summary": "The admin ticket API can now grade a ticket by priority and effort in the same request that moves it, refuses a ticket too short to be a request and says why, and a test guards the board's rules so a state nothing can reach or leave cannot ship.",
+    "dateIsEstimate": false,
+    "release": 614,
+    "version": "1.114.3",
+    "releasedAt": "2026-09-11T15:55:46Z"
+  },
+  {
+    "id": "board-convergence-uk-04-the-admin-board-reads-like-itsutsu-s",
+    "name": "Board convergence UK-04: the admin board reads like Itsutsu's, and the four dead tabs go",
+    "area": "admin",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-11",
-    "version": "1.114.3",
-    "release": 614,
-    "releasedAt": "2026-09-11T15:55:46Z",
-    "summary": "The admin ticket API can now grade a ticket by priority and effort in the same request that moves it, refuses a ticket too short to be a request and says why, and a test guards the board's rules so a state nothing can reach or leave cannot ship."
+    "version": "1.115.0",
+    "release": 615,
+    "releasedAt": "2026-09-11T16:06:35Z",
+    "summary": "The admin release page keeps two tabs, Tickets and Released; the four that read a file holding only shipped work are gone. Tickets can be searched, filtered by lane, kind and area, ordered five ways including quick wins, grouped, and graded from the row, and a hold that has lapsed reads as stale rather than in progress."
   }
 ]
