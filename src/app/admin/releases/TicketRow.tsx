@@ -5,61 +5,68 @@ import { useState } from "react";
 import { FEATURE_AREA_LABELS, FEATURE_KINDS, FEATURE_KIND_LABELS } from "@/lib/featureTimeline";
 import { formatDateShort } from "@/lib/timeFormat";
 import {
-  TICKET_STATUSES,
+  TICKET_EFFORT_LABELS,
+  TICKET_EFFORT_VALUES,
   TICKET_MOVES,
-  TICKET_STATUS_LABELS,
+  TICKET_PRIORITY_LABELS,
+  TICKET_PRIORITY_VALUES,
+  TICKET_STATUSES,
   ticketMoveLabel,
   type Ticket,
   type TicketMoveTarget,
 } from "@/lib/tickets";
 
-import { RELEASE_AREA_CLASSES, RELEASE_TIMELINE_COPY } from "./ReleaseTimeline.constants";
+import {
+  RELEASE_AREA_CLASSES,
+  RELEASE_TIMELINE_COPY,
+  TICKET_LANE_CLASSES,
+  TICKET_LANE_LABELS,
+  TICKET_SMALL_SELECT_CLASS,
+} from "./ReleaseTimeline.constants";
+import { ticketLane } from "./ticketBoardView";
 
-const STATUS_CLASSES: Record<string, string> = {
-  [TICKET_STATUSES.open]: "border-emerald-500/40 bg-emerald-500/10 text-emerald-700",
-  [TICKET_STATUSES.inProgress]: "border-amber-500/40 bg-amber-400/10 text-amber-800",
-  [TICKET_STATUSES.shipped]: "border-sky-500/40 bg-sky-500/10 text-sky-700",
-  [TICKET_STATUSES.filed]: "border-emerald-500/40 bg-emerald-500/10 text-emerald-700",
-  [TICKET_STATUSES.declined]: "border-line bg-surface-muted text-foreground/60",
-};
+type Patch = { status?: TicketMoveTarget; priority?: string | null; effort?: string | null };
 
 /**
- * One wish, in the same collapsed shape as a timeline row.
+ * One ticket, in the same collapsed shape as a timeline row.
  *
- * A waiting wish shows the command that turns it into planned work, because
- * that step happens in a terminal and cannot happen here: the timeline is a
- * committed file, so only an agent can file one.
+ * The lane pill reads the lease, not the column: a ticket somebody holds
+ * says so, and one whose hold lapsed says Stale rather than pretending
+ * nobody ever started it. The grade is two small selects; nothing is drawn
+ * for an ungraded row beyond them, because a column of "ungraded" would be
+ * a column of shrugs and the absence already reads correctly.
  */
 export default function TicketRow({
-  wish,
+  ticket,
   endpoint,
   onChanged,
 }: {
-  wish: Ticket;
+  ticket: Ticket;
   endpoint: string;
-  onChanged: (wish: Ticket) => void;
+  onChanged: (ticket: Ticket) => void;
 }) {
   const [busy, setBusy] = useState(false);
   const [refusal, setRefusal] = useState<string | null>(null);
-  const open = wish.status === TICKET_STATUSES.open;
+  const lane = ticketLane(ticket);
+  const waiting = lane === "waiting" || lane === "stale";
 
-  const setStatus = async (status: TicketMoveTarget) => {
+  const patch = async (body: Patch) => {
     setBusy(true);
     setRefusal(null);
     try {
-      const response = await fetch(`${endpoint}/${wish.id}`, {
+      const response = await fetch(`${endpoint}/${ticket.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status }),
+        body: JSON.stringify(body),
       });
       const payload = (await response.json().catch(() => null)) as { wish?: Ticket; error?: string } | null;
       if (response.ok && payload?.wish) {
         onChanged(payload.wish);
         return;
       }
-      /* The route now says no, and why - a held ticket, a move the state does
-         not allow. Nothing happening on a press was the old answer to both. */
-      setRefusal(payload?.error ?? RELEASE_TIMELINE_COPY.wishError);
+      /* The route says no, and why - a held ticket, a move the state does not
+         allow. Nothing happening on a press was the old answer to both. */
+      setRefusal(payload?.error ?? RELEASE_TIMELINE_COPY.ticketError);
     } finally {
       setBusy(false);
     }
@@ -70,92 +77,124 @@ export default function TicketRow({
       <details className="group py-3">
         <summary className="flex cursor-pointer list-none flex-col gap-1 sm:flex-row sm:items-baseline sm:gap-4">
           <span className="flex shrink-0 items-baseline gap-2 sm:w-40 sm:justify-end">
-            {/*
-              * A wish is an instant, not a calendar day like a release date,
-              * so it reads in the viewer's own zone. Slicing the ISO string
-              * showed tomorrow to anyone west of Greenwich after 5pm.
-              */}
-            <time dateTime={wish.createdAt} className="font-mono text-xs text-foreground/60">
-              {formatDateShort(wish.createdAt)}
+            {/* A ticket is an instant, not a calendar day, so it reads in the
+                viewer's own zone. Slicing the ISO string showed tomorrow to
+                anyone west of Greenwich after 5pm. */}
+            <time dateTime={ticket.createdAt} className="font-mono text-xs text-foreground/60">
+              {formatDateShort(ticket.createdAt)}
             </time>
           </span>
 
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="font-semibold text-foreground">{wish.title}</span>
+              <span className="font-semibold text-foreground">{ticket.title}</span>
 
-              {wish.area ? (
-                <span
-                  className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-semibold ${RELEASE_AREA_CLASSES[wish.area]}`}
-                >
-                  {FEATURE_AREA_LABELS[wish.area]}
+              {ticket.area ? (
+                <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-semibold ${RELEASE_AREA_CLASSES[ticket.area]}`}>
+                  {FEATURE_AREA_LABELS[ticket.area]}
                 </span>
               ) : null}
 
-              {wish.kind === FEATURE_KINDS.feature ? null : (
+              {ticket.kind === FEATURE_KINDS.feature ? null : (
                 <span
                   className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-semibold ${
-                    wish.kind === FEATURE_KINDS.bug
+                    ticket.kind === FEATURE_KINDS.bug
                       ? "border-rose-500/40 bg-rose-500/10 text-rose-600"
                       : "border-line bg-surface-muted text-foreground/70"
                   }`}
                 >
-                  {FEATURE_KIND_LABELS[wish.kind]}
+                  {FEATURE_KIND_LABELS[ticket.kind]}
                 </span>
               )}
 
-              <span
-                className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-semibold ${STATUS_CLASSES[wish.status]}`}
-              >
-                {TICKET_STATUS_LABELS[wish.status]}
+              <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-semibold ${TICKET_LANE_CLASSES[lane]}`}>
+                {TICKET_LANE_LABELS[lane]}
               </span>
+
+              {ticket.priority ? (
+                <span className="inline-flex items-center rounded-full border border-line bg-surface px-2 py-0.5 text-[11px] font-semibold text-foreground/70" data-grade="priority">
+                  {TICKET_PRIORITY_LABELS[ticket.priority]}
+                </span>
+              ) : null}
+              {ticket.effort ? (
+                <span className="inline-flex items-center rounded-full border border-line bg-surface px-2 py-0.5 text-[11px] font-semibold text-foreground/70" data-grade="effort">
+                  {TICKET_EFFORT_LABELS[ticket.effort]}
+                </span>
+              ) : null}
             </div>
           </div>
 
-          <span
-            aria-hidden="true"
-            className="shrink-0 self-center text-foreground/35 transition group-open:rotate-90"
-          >
+          <span aria-hidden="true" className="shrink-0 self-center text-foreground/35 transition group-open:rotate-90">
             ›
           </span>
         </summary>
 
         <div className="mt-2 space-y-2 sm:ml-44">
-          {wish.detail ? <p className="text-sm text-foreground/70">{wish.detail}</p> : null}
+          {ticket.detail ? <p className="whitespace-pre-line text-sm text-foreground/70">{ticket.detail}</p> : null}
 
           <p className="text-xs text-foreground/60">
-            {wish.requestedBy ? `${RELEASE_TIMELINE_COPY.wishRequestedBy} ${wish.requestedBy}` : null}
-            {wish.filedAs ? ` · ${RELEASE_TIMELINE_COPY.wishFiledAs} ${wish.filedAs}` : null}
+            {ticket.requestedBy ? `${RELEASE_TIMELINE_COPY.ticketRequestedBy} ${ticket.requestedBy}` : null}
+            {ticket.filedAs ? ` · ${RELEASE_TIMELINE_COPY.ticketFiledAs} ${ticket.filedAs}` : null}
           </p>
 
-          {open ? (
+          {waiting ? (
             <code className="block overflow-x-auto rounded-lg border border-line bg-surface-muted px-2 py-1 text-[11px] text-foreground/70">
-              {RELEASE_TIMELINE_COPY.wishHowFiled(wish.id)}
+              {RELEASE_TIMELINE_COPY.ticketHowClaimed(ticket.id)}
             </code>
           ) : null}
 
-          {/*
-            * Every move the ticket's state actually allows, rather than one
-            * hard-coded pair. A board you can only decline from is a list, and
-            * moving work along is the thing this page is for.
-            */}
           <div className="flex flex-wrap items-center gap-1.5">
-            {(TICKET_MOVES[wish.status] ?? []).map((next) => (
+            {/* Every move the ticket's state actually allows, rather than one
+                hard-coded pair. Shipped is not among them: that is release:take. */}
+            {(TICKET_MOVES[ticket.status] ?? []).map((next) => (
               <button
                 key={next}
                 type="button"
                 disabled={busy}
-                onClick={() => setStatus(next)}
+                onClick={() => void patch({ status: next })}
                 className="rounded-full border border-line bg-surface px-3 py-1 text-[11px] font-bold uppercase tracking-[0.1em] text-foreground transition hover:bg-surface-muted disabled:opacity-50"
               >
-                {ticketMoveLabel(wish.status, next)}
+                {ticketMoveLabel(ticket.status, next)}
               </button>
             ))}
-            {wish.claimedBy ? (
+            {ticket.claimedBy ? (
               <span className="text-[11px] font-semibold text-foreground/60">
-                {RELEASE_TIMELINE_COPY.ticketHeldBy} {wish.claimedBy}
+                {lane === "stale" ? RELEASE_TIMELINE_COPY.ticketStale : RELEASE_TIMELINE_COPY.ticketHeldBy} · {ticket.claimedBy}
               </span>
             ) : null}
+
+            {ticket.status === TICKET_STATUSES.shipped ? null : (
+              <span className="ml-auto flex items-center gap-1.5">
+                <select
+                  className={TICKET_SMALL_SELECT_CLASS}
+                  aria-label={RELEASE_TIMELINE_COPY.priorityLabel}
+                  value={ticket.priority ?? ""}
+                  disabled={busy}
+                  onChange={(event) => void patch({ priority: event.target.value || null })}
+                >
+                  <option value="">{RELEASE_TIMELINE_COPY.priorityLabel}: {RELEASE_TIMELINE_COPY.ungraded}</option>
+                  {TICKET_PRIORITY_VALUES.map((value) => (
+                    <option key={value} value={value}>
+                      {RELEASE_TIMELINE_COPY.priorityLabel}: {TICKET_PRIORITY_LABELS[value]}
+                    </option>
+                  ))}
+                </select>
+                <select
+                  className={TICKET_SMALL_SELECT_CLASS}
+                  aria-label={RELEASE_TIMELINE_COPY.effortLabel}
+                  value={ticket.effort ?? ""}
+                  disabled={busy}
+                  onChange={(event) => void patch({ effort: event.target.value || null })}
+                >
+                  <option value="">{RELEASE_TIMELINE_COPY.effortLabel}: {RELEASE_TIMELINE_COPY.ungraded}</option>
+                  {TICKET_EFFORT_VALUES.map((value) => (
+                    <option key={value} value={value}>
+                      {RELEASE_TIMELINE_COPY.effortLabel}: {TICKET_EFFORT_LABELS[value]}
+                    </option>
+                  ))}
+                </select>
+              </span>
+            )}
           </div>
           {refusal ? (
             <p role="alert" className="text-xs font-semibold text-red-600">

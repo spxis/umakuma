@@ -14,7 +14,7 @@ describe("what the release page counts", () => {
      could report nothing but zero while 157 tickets waited in a tab beside
      them. */
   it("counts the queue from the board, not from the release file", () => {
-    expect(page).toContain("wishes.filter((ticket) => isWaitingTicket(ticket.status))");
+    expect(page).toContain("tickets.filter((ticket) => isWaitingTicket(ticket.status))");
     expect(page).not.toContain("value={totals.planned}");
     expect(page).not.toContain("value={totals.inProgress}");
   });
@@ -24,12 +24,16 @@ describe("what the release page counts", () => {
      `pnpm task` printed STALE beside the same row and would have granted a
      claim on it - two boards, two answers. */
   it("counts in progress by the lease, the way the CLI board does", () => {
-    expect(page).toContain("wishes.filter((ticket) => heldNow(ticket))");
+    expect(page).toContain("tickets.filter((ticket) => heldNow(ticket))");
     expect(page).not.toContain("ticket.status === TICKET_STATUSES.inProgress");
   });
 
   it("still counts what has shipped from the file, which is what holds it", () => {
-    expect(page).toContain("value={totals.shipped}");
+    expect(page).toContain("value={shipped.length}");
+    /* And nothing else from it: the four tabs that read planned, backlog and
+       cancelled work out of a file that holds shipped entries only are gone. */
+    expect(page).not.toContain("splitPlannedByProgress");
+    expect(page).not.toContain("FEATURE_STATUSES.backlogged");
   });
 });
 
@@ -54,15 +58,17 @@ describe("the tickets tab", () => {
      the board has ever held - 157, of which 127 had shipped and 4 were
      declined - so the number said the same thing forever. */
   it("counts what is outstanding, not the board's whole history", () => {
-    expect(tabs).toContain("isWaitingTicket(wish.status) || wish.status === TICKET_STATUSES.inProgress");
+    /* Unfinished is read through the lease: waiting, held now, or a stale
+       hold somebody walked away from. */
+    expect(tabs).toContain("tickets.filter((ticket) => isUnfinished(ticket))");
     expect(tabs).toContain("${remaining.length}");
-    expect(tabs).not.toContain("${wishes.length}");
+    expect(tabs).not.toContain("${tickets.length}");
   });
 
   /* The list still shows them all: a declined row is kept so the same thing is
      not asked for twice. It is the count that means outstanding. */
   it("still hands the whole board to the list below it", () => {
-    expect(tabs).toContain("<TicketBoard initialWishes={wishes} />");
+    expect(tabs).toContain("<TicketBoard initialTickets={tickets} />");
   });
 });
 

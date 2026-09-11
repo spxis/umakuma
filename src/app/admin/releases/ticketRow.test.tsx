@@ -10,7 +10,7 @@ function render(node: Parameters<typeof renderToStaticMarkup>[0]): Document {
   return new JSDOM(`<!doctype html><body>${renderToStaticMarkup(node)}</body>`).window.document;
 }
 
-function wish(overrides: Partial<Ticket> = {}): Ticket {
+function ticketOf(overrides: Partial<Ticket> = {}): Ticket {
   return {
     id: "cuid123",
     title: "Dark mode should stick",
@@ -31,7 +31,7 @@ function wish(overrides: Partial<Ticket> = {}): Ticket {
 }
 
 function draw(value: Ticket): Document {
-  return render(<TicketRow wish={value} endpoint="/api/admin/tickets" onChanged={() => undefined} />);
+  return render(<TicketRow ticket={value} endpoint="/api/admin/tickets" onChanged={() => undefined} />);
 }
 
 /*
@@ -40,7 +40,7 @@ function draw(value: Ticket): Document {
  * carries the command that moves it across, with its own id already in it.
  */
 describe("a waiting wish", () => {
-  const doc = draw(wish());
+  const doc = draw(ticketOf());
 
   it("shows the command that turns it into planned work", () => {
     /* `pnpm backlog file` was retired and exits non-zero saying so; the page
@@ -72,15 +72,22 @@ describe("a waiting wish", () => {
   });
 });
 
-describe("a wish that has been answered", () => {
-  it("names the entry it became, and stops offering the command", () => {
-    const doc = draw(wish({ status: TICKET_STATUSES.filed, filedAs: "theme-preference-cookie" }));
+describe("a ticket that has been answered", () => {
+  it("names the entry it shipped as, and stops offering the command", () => {
+    const doc = draw(ticketOf({ status: TICKET_STATUSES.shipped, filedAs: "theme-preference-cookie" }));
     expect(doc.body.textContent).toContain("theme-preference-cookie");
     expect(doc.querySelector("code")).toBeNull();
   });
 
+  /* `filed` is the first board's word for open: still waiting, still claimable. */
+  it("reads a legacy filed row as waiting, and still offers the claim", () => {
+    const doc = draw(ticketOf({ status: TICKET_STATUSES.filed, filedAs: "an-old-entry" }));
+    expect(doc.body.textContent).toContain("Waiting");
+    expect(doc.querySelector("code")?.textContent).toContain("pnpm task claim");
+  });
+
   it("can be reopened, because declining is not deleting", () => {
-    const doc = draw(wish({ status: TICKET_STATUSES.declined }));
+    const doc = draw(ticketOf({ status: TICKET_STATUSES.declined }));
     expect([...doc.querySelectorAll("button")].map((el) => el.textContent)).toContain("Reopen");
   });
 });
@@ -92,7 +99,7 @@ describe("a wish that has been answered", () => {
  */
 describe("the row's controls", () => {
   it("keeps no control inside another", () => {
-    const doc = draw(wish());
+    const doc = draw(ticketOf());
     expect(doc.querySelectorAll("summary button, button button, summary a")).toHaveLength(0);
   });
 });
@@ -103,7 +110,7 @@ describe("the row's controls", () => {
  * produced a shipped ticket with nothing to point at.
  */
 describe("a ticket somebody is working on", () => {
-  const doc = draw(wish({ status: TICKET_STATUSES.inProgress, claimedBy: "umakuma-b6", claimedAt: "2026-09-11T12:00:00.000Z" }));
+  const doc = draw(ticketOf({ status: TICKET_STATUSES.inProgress, claimedBy: "umakuma-b6", claimedAt: "2026-09-11T12:00:00.000Z" }));
   const labels = [...doc.querySelectorAll("button")].map((el) => el.textContent);
 
   it("can be put back or declined, and not marked shipped", () => {
@@ -114,5 +121,37 @@ describe("a ticket somebody is working on", () => {
 
   it("says who holds it", () => {
     expect(doc.body.textContent).toContain("umakuma-b6");
+  });
+});
+
+/*
+ * The lane reads the lease. A hold that lapsed reads Stale, not In progress
+ * and not Waiting: somebody started it, and a reader should know before
+ * starting it again.
+ */
+describe("a hold past its lease", () => {
+  const doc = draw(ticketOf({ status: TICKET_STATUSES.inProgress, claimedBy: "a-dead-session", claimedAt: "2026-09-01T00:00:00.000Z" }));
+
+  it("reads as stale, names who left it, and still offers the claim command", () => {
+    expect(doc.body.textContent).toContain("Stale");
+    expect(doc.body.textContent).toContain("a-dead-session");
+    expect(doc.querySelector("code")?.textContent).toContain("pnpm task claim");
+  });
+});
+
+describe("grading", () => {
+  it("offers a priority and an effort on anything not shipped, and draws a pill only once graded", () => {
+    const ungraded = draw(ticketOf());
+    expect(ungraded.querySelector('select[aria-label="Priority"]')).not.toBeNull();
+    expect(ungraded.querySelector('select[aria-label="Effort"]')).not.toBeNull();
+    expect(ungraded.querySelectorAll("[data-grade]")).toHaveLength(0);
+
+    const graded = draw(ticketOf({ priority: "high", effort: "small" }));
+    expect([...graded.querySelectorAll("[data-grade]")].map((el) => el.textContent)).toEqual(["High", "Small"]);
+  });
+
+  it("does not grade what has shipped", () => {
+    const doc = draw(ticketOf({ status: TICKET_STATUSES.shipped, filedAs: "an-entry" }));
+    expect(doc.querySelector("select")).toBeNull();
   });
 });
