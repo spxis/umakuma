@@ -477,6 +477,12 @@ Run `pnpm quality:check` after non-trivial `src/` edits. If lint issues are auto
   admin page's In progress tab is the claimed half of Planned, derived. Do not
   add a fifth status for it - two fields saying the same thing can disagree,
   and then neither can be trusted.
+- **Multi-ticket plans live in `docs/plans/<plan>/`, one file per ticket.**
+  A ticket on the board that says `Plan: docs/plans/…` is implemented from
+  that file: read the plan and its folder's `README.md` and `BOARD_RULES.md`
+  (if present) in full before claiming. The first such plan is
+  `docs/plans/board-convergence/`, which brings this board and Itsutsu's to
+  one contract.
 - `docs/BACKLOG.md` carries the reasoning the JSON has no room for: why an item
   exists, what it depends on, what has to be decided first. Feature names,
   dates and status live in `src/data/featureTimeline.json`, which also feeds

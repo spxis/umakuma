@@ -10,11 +10,11 @@ what has to be decided before it can start.
 
 ## Standing rules
 
-- **The JSON is the ticket board.** Every request John sends is added with
-  `pnpm backlog add` before the work starts; every agent claims with
-  `pnpm backlog claim` before building. `pnpm backlog` shows what is open and
-  who has it. This is what stops two sessions building the same thing and a
-  report from living only in a chat.
+- **The board is `pnpm task`.** Every request John sends is added with
+  `pnpm task add` before the work starts; every agent claims with
+  `pnpm task claim` before building. `pnpm task` shows what is open and who
+  has it. (`pnpm backlog add` and `claim` are retired.) Detailed multi-ticket
+  plans live in `docs/plans/<plan>/`; the board row points at the file.
 - **One feature, one commit, one release.** No batching unrelated work.
 - **Every feature ships with tests.** Unit tests for logic; a smoke spec when it
   adds a route.
