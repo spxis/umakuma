@@ -46,6 +46,77 @@ export const TICKET_STATUS_LABELS: Record<TicketStatus, string> = {
 };
 
 /**
+ * How much a ticket matters and how much work it is.
+ *
+ * Two axes because they are independent: a valuable hard thing and a trivial
+ * easy thing score the same on one number, and telling them apart is the
+ * point of grading at all. Both are null until somebody grades the row - a
+ * default of "normal" would put a judgement nobody made onto every row, where
+ * it could not be told from one somebody did make. The contract both boards
+ * follow is docs/plans/board-convergence/BOARD_RULES.md.
+ */
+export const TICKET_PRIORITIES = { high: "high", normal: "normal", low: "low" } as const;
+export type TicketPriority = (typeof TICKET_PRIORITIES)[keyof typeof TICKET_PRIORITIES];
+export const TICKET_PRIORITY_VALUES = Object.values(TICKET_PRIORITIES);
+/** Most pressing first, so a sort reads straight down it. */
+export const TICKET_PRIORITY_ORDER: readonly TicketPriority[] = [
+  TICKET_PRIORITIES.high,
+  TICKET_PRIORITIES.normal,
+  TICKET_PRIORITIES.low,
+];
+
+export const TICKET_EFFORTS = { small: "small", medium: "medium", large: "large" } as const;
+export type TicketEffort = (typeof TICKET_EFFORTS)[keyof typeof TICKET_EFFORTS];
+export const TICKET_EFFORT_VALUES = Object.values(TICKET_EFFORTS);
+/** Least work first, which is the order a quick win is read in. */
+export const TICKET_EFFORT_ORDER: readonly TicketEffort[] = [
+  TICKET_EFFORTS.small,
+  TICKET_EFFORTS.medium,
+  TICKET_EFFORTS.large,
+];
+
+export const TICKET_PRIORITY_LABELS: Record<TicketPriority, string> = {
+  [TICKET_PRIORITIES.high]: "High",
+  [TICKET_PRIORITIES.normal]: "Normal",
+  [TICKET_PRIORITIES.low]: "Low",
+};
+
+export const TICKET_EFFORT_LABELS: Record<TicketEffort, string> = {
+  [TICKET_EFFORTS.small]: "Small",
+  [TICKET_EFFORTS.medium]: "Medium",
+  [TICKET_EFFORTS.large]: "Large",
+};
+
+export function isTicketPriority(value: unknown): value is TicketPriority {
+  return typeof value === "string" && (TICKET_PRIORITY_VALUES as string[]).includes(value);
+}
+
+export function isTicketEffort(value: unknown): value is TicketEffort {
+  return typeof value === "string" && (TICKET_EFFORT_VALUES as string[]).includes(value);
+}
+
+/** An ungraded row sorts after every graded one, not in the middle of them. */
+function gradeRank<T extends string>(order: readonly T[], value: T | null): number {
+  return value === null ? order.length : order.indexOf(value);
+}
+
+/**
+ * Worth doing, and doable: down by how much it matters, then up by how much
+ * work it is, then most recently moved first. The question a reader is
+ * asking the board - what could I pick up now - is the top of this list.
+ */
+export function compareTicketsByQuickWin(
+  a: { priority: TicketPriority | null; effort: TicketEffort | null; movedAt: string },
+  b: { priority: TicketPriority | null; effort: TicketEffort | null; movedAt: string },
+): number {
+  return (
+    gradeRank(TICKET_PRIORITY_ORDER, a.priority) - gradeRank(TICKET_PRIORITY_ORDER, b.priority) ||
+    gradeRank(TICKET_EFFORT_ORDER, a.effort) - gradeRank(TICKET_EFFORT_ORDER, b.effort) ||
+    b.movedAt.localeCompare(a.movedAt)
+  );
+}
+
+/**
  * Where a move on the board can land.
  *
  * Three places, and `shipped` is deliberately not one of them. Shipping is
@@ -121,9 +192,9 @@ export function ticketMoveLabel(from: TicketStatus, to: TicketMoveTarget): strin
  */
 export function ticketMoveData(to: TicketMoveTarget, actor: string, now: Date) {
   if (to === TICKET_MOVE_TARGETS.inProgress) {
-    return { status: to, claimedBy: actor, claimedAt: now, filedAs: null };
+    return { status: to, claimedBy: actor, claimedAt: now, filedAs: null, movedAt: now };
   }
-  return { status: to, claimedBy: null, claimedAt: null, filedAs: null };
+  return { status: to, claimedBy: null, claimedAt: null, filedAs: null, movedAt: now };
 }
 
 /**
@@ -168,13 +239,54 @@ export type Ticket = {
   /** The agent holding it, and when the hold was last renewed. */
   claimedBy: string | null;
   claimedAt: string | null;
+  /** Null until somebody has judged it; see TICKET_PRIORITIES. */
+  priority: TicketPriority | null;
+  effort: TicketEffort | null;
   createdAt: string;
+  /** When the status last changed. Grading and edits leave it alone. */
+  movedAt: string;
 };
 
+/**
+ * What a usable ticket looks like, in numbers. The same four numbers are
+ * `@db.VarChar` caps in the schema, because a cap that lives only here is
+ * another door rather than a lock: production once held a 13,573-character
+ * detail written by a script that asked nobody.
+ */
 export const TICKET_LIMITS = {
+  titleMin: 8,
   title: 120,
-  detail: 2000,
+  detail: 4000,
+  requestedBy: 60,
+  claimedBy: 80,
 } as const;
+
+/**
+ * What is wrong with a draft, in words a person can act on; empty means it
+ * may be added. The form, the route and the CLI all ask this, so a title too
+ * short to mean anything is refused the same way from all three.
+ */
+export function ticketDraftProblems(draft: {
+  title: string;
+  detail: string | null;
+  requestedBy: string | null;
+}): string[] {
+  const problems: string[] = [];
+  const title = draft.title.trim();
+  if (title.length < TICKET_LIMITS.titleMin) {
+    problems.push(`Say what is wanted in at least ${TICKET_LIMITS.titleMin} characters.`);
+  }
+  if (title.length > TICKET_LIMITS.title) {
+    problems.push(`A title is at most ${TICKET_LIMITS.title} characters; the rest belongs in the detail.`);
+  }
+  if ((draft.detail ?? "").length > TICKET_LIMITS.detail) {
+    problems.push(`The detail is at most ${TICKET_LIMITS.detail.toLocaleString("en-CA")} characters.`);
+  }
+  if ((draft.requestedBy ?? "").trim().length > TICKET_LIMITS.requestedBy) {
+    problems.push(`A name is at most ${TICKET_LIMITS.requestedBy} characters.`);
+  }
+  return problems;
+}
 
 /**
  * The database columns are plain strings, because areas and kinds are
@@ -194,7 +306,10 @@ export function toTicket(row: {
   requestedBy: string | null;
   claimedBy: string | null;
   claimedAt: Date | null;
+  priority: string | null;
+  effort: string | null;
   createdAt: Date;
+  movedAt: Date;
 }): Ticket {
   return {
     id: row.id,
@@ -202,6 +317,9 @@ export function toTicket(row: {
     detail: row.detail,
     claimedBy: row.claimedBy,
     claimedAt: row.claimedAt?.toISOString() ?? null,
+    priority: isTicketPriority(row.priority) ? row.priority : null,
+    effort: isTicketEffort(row.effort) ? row.effort : null,
+    movedAt: row.movedAt.toISOString(),
     area: row.area && isFeatureArea(row.area) ? row.area : null,
     kind: isFeatureKind(row.kind) ? row.kind : FEATURE_KINDS.feature,
     status: isTicketStatus(row.status) ? row.status : TICKET_STATUSES.open,

@@ -2,7 +2,10 @@ import { describe, expect, it } from "vitest";
 
 import { FEATURE_KINDS } from "./featureTimeline";
 import {
+  TICKET_LIMITS,
   TICKET_MOVES,
+  compareTicketsByQuickWin,
+  ticketDraftProblems,
   TICKET_MOVE_TARGETS,
   TICKET_STATUSES,
   TICKET_STATUS_VALUES,
@@ -31,6 +34,9 @@ function row(overrides: Partial<Parameters<typeof toTicket>[0]> = {}) {
     createdAt: new Date("2026-09-02T10:00:00Z"),
     claimedBy: null,
     claimedAt: null,
+    priority: null,
+    effort: null,
+    movedAt: new Date("2026-09-02T10:00:00Z"),
     ...overrides,
   };
 }
@@ -162,6 +168,7 @@ describe("what a move writes", () => {
       claimedBy: "john@example.com",
       claimedAt: now,
       filedAs: null,
+      movedAt: now,
     });
   });
 
@@ -172,6 +179,7 @@ describe("what a move writes", () => {
         claimedBy: null,
         claimedAt: null,
         filedAs: null,
+        movedAt: now,
       });
     }
   });
@@ -183,5 +191,80 @@ describe("what a move writes", () => {
       status: TICKET_STATUSES.inProgress,
       OR: [{ claimedBy: null }, { claimedBy: "john@example.com" }, { claimedAt: { lt: staleBefore } }],
     });
+  });
+});
+
+describe("what a usable ticket looks like", () => {
+  const draft = (over: Partial<{ title: string; detail: string | null; requestedBy: string | null }>) => ({
+    title: "A title long enough",
+    detail: null,
+    requestedBy: null,
+    ...over,
+  });
+
+  it("refuses a title too short to be a request, and one long enough to be the description", () => {
+    expect(ticketDraftProblems(draft({ title: "1234567" }))).toHaveLength(1);
+    expect(ticketDraftProblems(draft({ title: "12345678" }))).toEqual([]);
+    expect(ticketDraftProblems(draft({ title: "x".repeat(TICKET_LIMITS.title) }))).toEqual([]);
+    expect(ticketDraftProblems(draft({ title: "x".repeat(TICKET_LIMITS.title + 1) }))).toHaveLength(1);
+  });
+
+  it("caps the detail and the name where the schema caps them", () => {
+    expect(ticketDraftProblems(draft({ detail: "d".repeat(TICKET_LIMITS.detail) }))).toEqual([]);
+    expect(ticketDraftProblems(draft({ detail: "d".repeat(TICKET_LIMITS.detail + 1) }))[0]).toMatch(/4,000/);
+    expect(ticketDraftProblems(draft({ requestedBy: "n".repeat(TICKET_LIMITS.requestedBy) }))).toEqual([]);
+    expect(ticketDraftProblems(draft({ requestedBy: "n".repeat(TICKET_LIMITS.requestedBy + 1) }))).toHaveLength(1);
+  });
+
+  it("names the contract's numbers", () => {
+    expect(TICKET_LIMITS).toEqual({ titleMin: 8, title: 120, detail: 4000, requestedBy: 60, claimedBy: 80 });
+  });
+});
+
+describe("quick wins", () => {
+  const at = (day: number) => `2026-09-${String(day).padStart(2, "0")}T00:00:00.000Z`;
+  const graded = (
+    id: string,
+    priority: Ticket["priority"],
+    effort: Ticket["effort"],
+    movedAt = at(1),
+  ) => ({ id, priority, effort, movedAt });
+
+  it("reads down by priority, up by effort, and puts the ungraded last", () => {
+    const rows = [
+      graded("ungraded", null, null),
+      graded("low-small", "low", "small"),
+      graded("normal-small", "normal", "small"),
+      graded("high-large", "high", "large"),
+      graded("high-small", "high", "small"),
+    ];
+    expect([...rows].sort(compareTicketsByQuickWin).map((row) => row.id)).toEqual([
+      "high-small",
+      "high-large",
+      "normal-small",
+      "low-small",
+      "ungraded",
+    ]);
+  });
+
+  it("breaks a tie by what moved most recently", () => {
+    const rows = [graded("older", "high", "small", at(1)), graded("newer", "high", "small", at(9))];
+    expect([...rows].sort(compareTicketsByQuickWin).map((row) => row.id)).toEqual(["newer", "older"]);
+  });
+
+  it("turns a grade this build does not know into no grade", () => {
+    const ticket = toTicket(row({ priority: "urgent", effort: "medium" }));
+    expect(ticket.priority).toBeNull();
+    expect(ticket.effort).toBe("medium");
+    expect(ticket.movedAt).toBe("2026-09-02T10:00:00.000Z");
+  });
+});
+
+describe("a move stamps movedAt", () => {
+  it("for every destination, in the same write as the status", () => {
+    const now = new Date("2026-09-11T12:00:00Z");
+    for (const to of Object.values(TICKET_MOVE_TARGETS)) {
+      expect(ticketMoveData(to, "someone", now).movedAt).toBe(now);
+    }
   });
 });

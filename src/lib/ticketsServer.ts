@@ -10,7 +10,9 @@ import {
   ticketMoveWhere,
   toTicket,
   type Ticket,
+  type TicketEffort,
   type TicketMoveTarget,
+  type TicketPriority,
   type TicketStatus,
 } from "@/lib/tickets";
 import { TASK_LEASE_MS } from "@/lib/ticketClaims";
@@ -35,7 +37,10 @@ const SELECT = {
   requestedBy: true,
   claimedBy: true,
   claimedAt: true,
+  priority: true,
+  effort: true,
   createdAt: true,
+  movedAt: true,
 } as const;
 
 /** Newest first: a ticket list is read to see what has just been asked for. */
@@ -110,4 +115,20 @@ export async function moveTicket(
 
   const row = await prisma.ticket.findUniqueOrThrow({ where: { id }, select: SELECT });
   return { ok: true, ticket: toTicket(row) };
+}
+
+export type TicketGrade = { priority?: TicketPriority | null; effort?: TicketEffort | null };
+
+/**
+ * Writes an opinion about a row: how much it matters, how much work it is.
+ *
+ * Not a move. It carries no claim condition and leaves `movedAt` alone,
+ * because grading is not movement and the board is read as "what moved".
+ * `null` ungrades; an omitted field is untouched. Null when the row is gone.
+ */
+export async function gradeTicket(id: string, grade: TicketGrade): Promise<Ticket | null> {
+  const current = await prisma.ticket.findUnique({ where: { id }, select: { id: true } });
+  if (!current) return null;
+  const row = await prisma.ticket.update({ where: { id }, data: grade, select: SELECT });
+  return toTicket(row);
 }

@@ -135,10 +135,20 @@ export function taskLine(
     status: string;
     claimedBy: string | null;
     claimedAt?: Date | string | null;
+    priority?: string | null;
+    effort?: string | null;
   },
   nowMs: number = Date.now(),
 ): string {
-  return `${task.id}  ${task.kind === "bug" ? "BUG " : "    "} ${holdLabel(task, nowMs).padEnd(22)} ${task.title}`;
+  return `${task.id}  ${task.kind === "bug" ? "BUG " : "    "} ${holdLabel(task, nowMs).padEnd(22)} ${gradeLabel(task).padEnd(16)} ${task.title}`;
+}
+
+/** `P:high E:small`, or nothing at all for a row nobody has judged. */
+function gradeLabel(task: { priority?: string | null; effort?: string | null }): string {
+  const parts: string[] = [];
+  if (task.priority) parts.push(`P:${task.priority}`);
+  if (task.effort) parts.push(`E:${task.effort}`);
+  return parts.join(" ");
 }
 
 /**

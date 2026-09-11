@@ -23,6 +23,9 @@ function wish(overrides: Partial<Ticket> = {}): Ticket {
     createdAt: "2026-09-02T10:00:00.000Z",
     claimedBy: null,
     claimedAt: null,
+    priority: null,
+    effort: null,
+    movedAt: "2026-09-02T10:00:00.000Z",
     ...overrides,
   };
 }

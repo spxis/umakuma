@@ -222,7 +222,16 @@ async function main(): Promise<void> {
     const client = new PrismaClient({ log: ["error"] });
     let ticket;
     try {
-      ticket = await client.ticket.findUnique({ where: { id: ticketId } });
+      /*
+       * Only the columns this script reads. A bare findUnique selects every
+       * column the generated client knows, so a release that adds a column to
+       * Ticket could not be taken until that column reached production - and
+       * the schema push is supposed to follow the push to main, not precede it.
+       */
+      ticket = await client.ticket.findUnique({
+        where: { id: ticketId },
+        select: { id: true, title: true, detail: true, area: true, kind: true, filedAs: true },
+      });
     } finally {
       await client.$disconnect();
     }
@@ -252,6 +261,7 @@ async function main(): Promise<void> {
         await writer.ticket.update({
           where: { id: ticketId },
           data: { status: "shipped", filedAs: closing, claimedBy: null, claimedAt: null },
+          select: { id: true },
         });
       } finally {
         await writer.$disconnect();

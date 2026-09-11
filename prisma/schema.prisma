@@ -1084,18 +1084,24 @@ model TatoebaSentence {
 /// the entry it became stay linked and nothing is lost when the answer is no.
 model Ticket {
   id          String       @id @default(cuid())
-  title       String
-  detail      String?
+  title       String       @db.VarChar(120)
+  detail      String?      @db.VarChar(4000)
   /// The area, when whoever asked already knows it. Validated against
   /// FEATURE_AREA_VALUES at the boundary, not by the database, because areas
   /// are a TypeScript union that changes with the code.
   area        String?
   kind        String       @default("feature")
   status      TicketStatus @default(open)
+  /// How much this matters and how much work it is, once somebody has judged
+  /// it. Null until graded, with no default on purpose: "normal" on every row
+  /// would be a judgement nobody made. Strings, not enums, for the same reason
+  /// `area` and `kind` are: the allowed values live in TypeScript.
+  priority    String?
+  effort      String?
   /// The `featureTimeline.json` id an agent filed this as.
   filedAs     String?
   /// Who asked, by the email they were signed in as.
-  requestedBy String?
+  requestedBy String?      @db.VarChar(60)
   /// The agent holding this task, and since when.
   ///
   /// Claims live here rather than in `featureTimeline.json` because a claim in
@@ -1103,9 +1109,12 @@ model Ticket {
   /// is destroyed by the usual way a conflict on that file gets resolved -
   /// take main's copy, lose your row. A claim is the one thing that has to be
   /// true for everybody the instant it is made.
-  claimedBy   String?
+  claimedBy   String?      @db.VarChar(80)
   claimedAt   DateTime?
   createdAt   DateTime     @default(now())
+  /// When the status last changed. Deliberately not @updatedAt: grading a row
+  /// or fixing a typo is not movement, and the board is read as "what moved".
+  movedAt     DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 
   @@index([status, createdAt])
