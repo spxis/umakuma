@@ -7678,12 +7678,25 @@
     "id": "board-convergence-uk-01-the-ticket-table-takes-grading-a-mov",
     "name": "Board convergence UK-01: the ticket table takes grading, a move stamp, and hard caps",
     "area": "admin",
+    "status": "shipped",
     "kind": "feature",
+    "date": "2026-09-11",
+    "summary": "Tickets on the admin board can now carry a priority and an effort, and record when they last moved. Titles, details and names have firm length limits in the database, and four over-long details were moved into the repository so nothing was lost.",
+    "dateIsEstimate": false,
+    "release": 612,
+    "version": "1.114.1",
+    "releasedAt": "2026-09-11T15:41:22Z"
+  },
+  {
+    "id": "board-convergence-uk-02-pnpm-task-grades-validates-and-retir",
+    "name": "Board convergence UK-02: pnpm task grades, validates, and retires ship and filed",
+    "area": "admin",
+    "kind": "bug",
     "status": "shipped",
     "date": "2026-09-11",
-    "version": "1.114.1",
-    "release": 612,
-    "releasedAt": "2026-09-11T15:41:22Z",
-    "summary": "Tickets on the admin board can now carry a priority and an effort, and record when they last moved. Titles, details and names have firm length limits in the database, and four over-long details were moved into the repository so nothing was lost."
+    "version": "1.114.2",
+    "release": 613,
+    "releasedAt": "2026-09-11T15:51:05Z",
+    "summary": "The task board's terminal commands now all follow the same rules: a ticket somebody is working on cannot be put back or declined by anyone else, every move says who made it, tickets can be graded by priority and effort, and the list shows the best things to pick up first."
   }
 ]
