@@ -173,4 +173,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Yukue", ja: "行方", reading: "ゆくえ", gloss: "Whereabouts - where a day of XP went, and what it went on" },
   { romaji: "Yokodori", ja: "横取り", reading: "よこどり", gloss: "Taking over - the move the board now refuses" },
   { romaji: "Rachi", ja: "埒", reading: "らち", gloss: "Bounds - a hold counts only inside its lease" },
+  { romaji: "Ritsu", ja: "律", reading: "りつ", gloss: "a rule, the one the board is now held to" },
 ];

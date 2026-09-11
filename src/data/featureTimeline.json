@@ -7665,12 +7665,25 @@
     "id": "the-admin-page-counts-a-lapsed-hold-as-in-progress",
     "name": "The admin page counts a lapsed hold as in progress",
     "area": "platform",
+    "status": "shipped",
     "kind": "bug",
+    "date": "2026-09-11",
+    "summary": "The admin page counted a ticket as in progress whenever its status column said so, while the board's own listing counts only holds inside the six-hour lease - so a session that died holding a ticket read STALE in one place and In progress in the other, on the same row, for ever. The page reads the lease now, through the same rule the board uses.",
+    "dateIsEstimate": false,
+    "release": 611,
+    "version": "1.114.0",
+    "releasedAt": "2026-09-11T12:10:14Z"
+  },
+  {
+    "id": "board-convergence-uk-01-the-ticket-table-takes-grading-a-mov",
+    "name": "Board convergence UK-01: the ticket table takes grading, a move stamp, and hard caps",
+    "area": "admin",
+    "kind": "feature",
     "status": "shipped",
     "date": "2026-09-11",
-    "version": "1.114.0",
-    "release": 611,
-    "releasedAt": "2026-09-11T12:10:14Z",
-    "summary": "The admin page counted a ticket as in progress whenever its status column said so, while the board's own listing counts only holds inside the six-hour lease - so a session that died holding a ticket read STALE in one place and In progress in the other, on the same row, for ever. The page reads the lease now, through the same rule the board uses."
+    "version": "1.114.1",
+    "release": 612,
+    "releasedAt": "2026-09-11T15:41:22Z",
+    "summary": "Tickets on the admin board can now carry a priority and an effort, and record when they last moved. Titles, details and names have firm length limits in the database, and four over-long details were moved into the repository so nothing was lost."
   }
 ]
