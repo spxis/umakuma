@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 
 import { describe, expect, it } from "vitest";
 
+import { heldNow, TASK_LEASE_MS } from "@/lib/ticketClaims";
 import { isWaitingTicket, TICKET_STATUSES } from "@/lib/tickets";
 
 describe("what the release page counts", () => {
@@ -14,9 +15,17 @@ describe("what the release page counts", () => {
      them. */
   it("counts the queue from the board, not from the release file", () => {
     expect(page).toContain("wishes.filter((ticket) => isWaitingTicket(ticket.status))");
-    expect(page).toContain("ticket.status === TICKET_STATUSES.inProgress");
     expect(page).not.toContain("value={totals.planned}");
     expect(page).not.toContain("value={totals.inProgress}");
+  });
+
+  /* In progress is a claim, not a status, and a claim has a lease. Counting
+     the column kept a dead session's ticket In progress here for ever while
+     `pnpm task` printed STALE beside the same row and would have granted a
+     claim on it - two boards, two answers. */
+  it("counts in progress by the lease, the way the CLI board does", () => {
+    expect(page).toContain("wishes.filter((ticket) => heldNow(ticket))");
+    expect(page).not.toContain("ticket.status === TICKET_STATUSES.inProgress");
   });
 
   it("still counts what has shipped from the file, which is what holds it", () => {
@@ -54,5 +63,22 @@ describe("the tickets tab", () => {
      not asked for twice. It is the count that means outstanding. */
   it("still hands the whole board to the list below it", () => {
     expect(tabs).toContain("<TicketBoard initialWishes={wishes} />");
+  });
+});
+
+describe("a hold, as the page reads it", () => {
+  const now = Date.parse("2026-09-11T12:00:00Z");
+  /* A Ticket carries claimedAt as the ISO string the API returned, not a Date. */
+  it("is in progress inside the lease", () => {
+    expect(heldNow({ claimedBy: "umakuma-b6", claimedAt: "2026-09-11T11:00:00.000Z" }, now)).toBe(true);
+  });
+
+  it("is not in progress once the lease has lapsed, whatever the column says", () => {
+    const lapsed = new Date(now - TASK_LEASE_MS - 1).toISOString();
+    expect(heldNow({ claimedBy: "umakuma-b6", claimedAt: lapsed }, now)).toBe(false);
+  });
+
+  it("is not in progress with a status and no holder", () => {
+    expect(heldNow({ claimedBy: null, claimedAt: null }, now)).toBe(false);
   });
 });

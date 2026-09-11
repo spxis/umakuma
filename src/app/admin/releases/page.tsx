@@ -16,7 +16,8 @@ import {
   splitPlannedByProgress,
   summarizeFeatureTimeline,
 } from "@/lib/featureTimeline";
-import { isWaitingTicket, TICKET_STATUSES } from "@/lib/tickets";
+import { heldNow } from "@/lib/ticketClaims";
+import { isWaitingTicket } from "@/lib/tickets";
 import { listTickets } from "@/lib/ticketsServer";
 
 import {
@@ -89,7 +90,10 @@ export default async function AdminReleasesPage() {
    * when it left the file.
    */
   const waiting = wishes.filter((ticket) => isWaitingTicket(ticket.status)).length;
-  const held = wishes.filter((ticket) => ticket.status === TICKET_STATUSES.inProgress).length;
+  /* By the lease, not the column - the same answer `pnpm task` gives. A
+     session that died holding a ticket left it In progress here for ever,
+     while the CLI printed STALE and would have granted a claim on it. */
+  const held = wishes.filter((ticket) => heldNow(ticket)).length;
 
   return (
     <div className="relative px-2 py-1.5 sm:px-6 sm:py-4 lg:px-8">
