@@ -7639,12 +7639,25 @@
     "id": "the-xp-history-opens-into-the-kanji-it-was-for",
     "name": "The XP history says which kanji",
     "area": "study",
-    "kind": "feature",
     "status": "shipped",
+    "kind": "feature",
     "date": "2026-09-10",
-    "version": "1.112.0",
+    "summary": "A row in your XP history opens into every item it was for - each kanji you answered, with the ones a daily cap paid nothing for shown alongside the rest.",
+    "dateIsEstimate": false,
     "release": 609,
-    "releasedAt": "2026-09-10T08:00:16Z",
-    "summary": "A row in your XP history opens into every item it was for - each kanji you answered, with the ones a daily cap paid nothing for shown alongside the rest."
+    "version": "1.112.0",
+    "releasedAt": "2026-09-10T08:00:16Z"
+  },
+  {
+    "id": "the-admin-board-moves-tickets-without-the-board-s-rules",
+    "name": "The admin board moves tickets without the board's rules",
+    "area": "platform",
+    "kind": "bug",
+    "status": "shipped",
+    "date": "2026-09-11",
+    "version": "1.113.0",
+    "release": 610,
+    "releasedAt": "2026-09-11T12:05:25Z",
+    "summary": "The admin board's move buttons went through a route that checked only that the destination was a status - not whether the move was allowed, nor who held the ticket. Start left work in progress with nobody on it; Mark shipped made a shipped ticket with no release behind it. The route asks the board's rules now, writes the claim with the status, and says why when it refuses."
   }
 ]

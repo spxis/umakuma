@@ -171,4 +171,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Motochou", ja: "元帳", reading: "もとちょう", gloss: "The ledger behind the tally - what each award was for, and what it paid" },
   { romaji: "Yasuri", ja: "鑢", reading: "やすり", gloss: "A file - the burr taken off a name" },
   { romaji: "Yukue", ja: "行方", reading: "ゆくえ", gloss: "Whereabouts - where a day of XP went, and what it went on" },
+  { romaji: "Yokodori", ja: "横取り", reading: "よこどり", gloss: "Taking over - the move the board now refuses" },
 ];
