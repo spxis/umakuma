@@ -7769,12 +7769,25 @@
     "id": "lists-an-admin-makes-a-list-a-site-list-shown-on-every-membe",
     "name": "Lists: an admin makes a list a site list, shown on every member's Your lists",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-11",
+    "summary": "An admin can put one of their lists on the site. It appears under Site lists at the top of every member's Your lists page, where they can open and practise it, and it stays its maker's to change. The card carries the switch, and a list on the site is always public.",
+    "dateIsEstimate": false,
+    "release": 619,
+    "version": "1.119.0",
+    "releasedAt": "2026-09-12T05:17:46Z"
+  },
+  {
+    "id": "map-set-picker-numbered-white-buttons-on-chosen-prefectures-",
+    "name": "Map set picker: numbered white buttons on chosen prefectures, toggle on and off, and hover feedback",
+    "area": "games",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-11",
-    "version": "1.119.0",
-    "release": 619,
-    "releasedAt": "2026-09-12T05:17:46Z",
-    "summary": "An admin can put one of their lists on the site. It appears under Site lists at the top of every member's Your lists page, where they can open and practise it, and it stays its maker's to change. The card carries the switch, and a list on the site is always public."
+    "version": "1.120.0",
+    "release": 620,
+    "releasedAt": "2026-09-12T05:23:10Z",
+    "summary": "In the custom map picker, each chosen prefecture now carries its number in the order it was picked, in a white button you can switch off, so a running count is on the map itself. Prefectures change colour under the pointer, and the Play row reads All, Public maps, Your maps and Create custom set."
   }
 ]
