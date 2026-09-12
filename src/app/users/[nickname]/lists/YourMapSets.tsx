@@ -7,7 +7,11 @@ import { MAP_TONES } from "@/app/game/GameMode.constants";
 import MapSetPicker from "@/app/game/MapSetPicker";
 import MapRegionGlyph from "@/app/maps/MapRegionGlyph";
 import ConfirmDialog from "@/app/shared/ConfirmDialog";
+import PillWordsToggle from "@/app/shared/PillWordsToggle";
 import SegmentedControl from "@/app/shared/SegmentedControl";
+import SubjectPill from "@/app/shared/SubjectPill";
+import { SUBJECT_TYPES } from "@/lib/domainConstants";
+import { mapHref } from "@/lib/mapAddress";
 import { STUDY_LIST_COPY } from "@/app/shared/studyListCopy";
 import type { CountryCode } from "@/lib/geoRegion";
 import { MAP_COUNTRIES_ALL } from "@/lib/mapCountries";
@@ -64,11 +68,31 @@ function SetRegions({ set, view }: { set: MapCustomSetSummary; view: MapSetsView
       </ul>
     );
   }
-  const names = set.regions.map((code) => {
-    const region = byCode.get(code);
-    return region ? regionNameLabel(region) : code;
-  });
-  return <p className="text-xs text-foreground/60">{names.join(" · ")}</p>;
+  /*
+   * The pill every inline kanji on the site is, one per prefecture: its name
+   * as written, its reading, its English, and a link to it on the map. A row
+   * of names as plain text was the one place a prefecture was not a kanji.
+   */
+  return (
+    <ul className="mt-1 flex flex-wrap gap-1.5">
+      {set.regions.map((code) => {
+        const region = byCode.get(code);
+        if (!region) return <li key={code} className="text-xs text-foreground/60">{code}</li>;
+        return (
+          <li key={code}>
+            <SubjectPill
+              glyph={region.nameNative ?? region.name}
+              subjectType={SUBJECT_TYPES.vocabulary}
+              reading={region.reading ?? null}
+              meaning={region.name}
+              label={regionNameLabel(region)}
+              href={mapHref(set.country as CountryCode, region.code)}
+            />
+          </li>
+        );
+      })}
+    </ul>
+  );
 }
 
 /**
@@ -181,7 +205,8 @@ export default function YourMapSets({ accountId, owner, initialSets, isAdmin }: 
   return (
     <div className="flex flex-col gap-5">
       {sets.length > 0 ? (
-        <div className="flex items-center justify-end gap-2">
+        <div className="flex flex-wrap items-center justify-end gap-2">
+          {view === "list" ? <PillWordsToggle /> : null}
           <span className="text-[11px] font-black uppercase tracking-wide text-foreground/60">{STUDY_LIST_COPY.mapsViewLabel}</span>
           <SegmentedControl<MapSetsView>
             ariaLabel={STUDY_LIST_COPY.mapsViewLabel}
