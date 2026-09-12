@@ -7782,12 +7782,25 @@
     "id": "map-set-picker-numbered-white-buttons-on-chosen-prefectures-",
     "name": "Map set picker: numbered white buttons on chosen prefectures, toggle on and off, and hover feedback",
     "area": "games",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-11",
+    "summary": "In the custom map picker, each chosen prefecture now carries its number in the order it was picked, in a white button you can switch off, so a running count is on the map itself. Prefectures change colour under the pointer, and the Play row reads All, Public maps, Your maps and Create custom set.",
+    "dateIsEstimate": false,
+    "release": 620,
+    "version": "1.120.0",
+    "releasedAt": "2026-09-12T05:23:10Z"
+  },
+  {
+    "id": "your-maps-a-shapes-view-beside-the-list-showing-each-set-s-p",
+    "name": "Your maps: a Shapes view beside the list, showing each set's prefecture shapes",
+    "area": "games",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-11",
-    "version": "1.120.0",
-    "release": 620,
-    "releasedAt": "2026-09-12T05:23:10Z",
-    "summary": "In the custom map picker, each chosen prefecture now carries its number in the order it was picked, in a white button you can switch off, so a running count is on the map itself. Prefectures change colour under the pointer, and the Play row reads All, Public maps, Your maps and Create custom set."
+    "version": "1.121.0",
+    "release": 621,
+    "releasedAt": "2026-09-12T05:26:40Z",
+    "summary": "Your maps can be viewed as shapes: switch from the list of names to see every prefecture in a set drawn small, each outline with its name beneath, so a set is recognised at a glance the way the map shows it."
   }
 ]

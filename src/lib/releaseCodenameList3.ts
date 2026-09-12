@@ -182,4 +182,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Ikisaki", ja: "行き先", reading: "いきさき", gloss: "a destination: the map the site sets out for everyone" },
   { romaji: "Utage", ja: "宴", reading: "うたげ", gloss: "a banquet: the site's lists laid out for every member" },
   { romaji: "Ekaki", ja: "絵描き", reading: "えかき", gloss: "a picture-maker: numbers and colour on the map a child builds" },
+  { romaji: "Omocha", ja: "玩具", reading: "おもちゃ", gloss: "a toy: the little shapes a set is made of" },
 ];
