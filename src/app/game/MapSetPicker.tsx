@@ -62,7 +62,18 @@ export default function MapSetPicker({ accountId, country, initial = null, readO
     setChosen((current) => (current.includes(key) ? current.filter((entry) => entry !== key) : [...current, key]));
   }, []);
 
-  const marks: MapMark[] = chosen.map((code) => ({ code, tone: MAP_TONES.target }));
+  /*
+   * Numbered in the order they were picked, so a child counting "twelve this
+   * week" sees the count on the map itself. The handle is a button too: a tap
+   * on the number takes the region out, the same as a tap on the shape.
+   */
+  const [numbered, setNumbered] = useState(true);
+  const marks: MapMark[] = chosen.map((code, index) => ({
+    code,
+    tone: MAP_TONES.chosen,
+    keyHint: String(index + 1),
+    onSelect: readOnly ? undefined : () => toggle(code),
+  }));
   /* The same gate the route refuses on greys the button out. Until the
      outlines arrive nothing can be off the map, so the known list is the
      chosen list. */
@@ -122,6 +133,7 @@ export default function MapSetPicker({ accountId, country, initial = null, readO
             country={country}
             box={view.box}
             onRegionSelect={readOnly ? undefined : toggle}
+            showHandles={numbered && chosen.length > 0}
             regionLabel={label}
             svgProps={view.panProps}
           />
@@ -138,6 +150,16 @@ export default function MapSetPicker({ accountId, country, initial = null, readO
                 {GAME_COPY.zoomReset}
               </button>
             ) : null}
+            <span aria-hidden="true" className="mx-0.5 h-4 w-px bg-line" />
+            <button
+              type="button"
+              onClick={() => setNumbered((on) => !on)}
+              aria-pressed={numbered}
+              title={numbered ? GAME_COPY.mapSetNumbersOff : GAME_COPY.mapSetNumbersOn}
+              className={`${ZOOM_BUTTON} w-auto px-2 text-[10px] ${numbered ? "bg-indigo-600 text-white hover:bg-indigo-600" : ""}`}
+            >
+              {GAME_COPY.mapSetNumbers}
+            </button>
           </div>
         </div>
 

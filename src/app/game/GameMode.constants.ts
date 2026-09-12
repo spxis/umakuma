@@ -57,8 +57,8 @@ export const GAME_COPY = {
   chooseAnswer: "Choose the answer",
   mapCountry: "Country",
   mapSet: "Play",
-  mapSetWhole: "Every one",
-  mapSetNew: "Custom set…",
+  mapSetWhole: "All",
+  mapSetNew: "Create custom set…",
   mapSetTitle: (division: string) => `Choose the ${division.toLowerCase()}s to study`,
   mapSetHint: "Tap each one on the map. Drag and zoom to reach the small ones.",
   mapSetChosen: (count: number, division: string) => `${count} ${count === 1 ? division.toLowerCase() : `${division.toLowerCase()}s`} chosen`,
@@ -72,7 +72,10 @@ export const GAME_COPY = {
   mapSetError: "That did not save. Try again.",
   mapSetClear: "Clear",
   mapSetEditTitle: (name: string) => `Edit ${name}`,
-  mapSetGroupSite: "Site maps",
+  mapSetNumbers: "1 2 3",
+  mapSetNumbersOn: "Number each chosen one, in the order picked",
+  mapSetNumbersOff: "Hide the numbers",
+  mapSetGroupSite: "Public maps",
   mapSetGroupMine: "Your maps",
   zoomIn: "Zoom in",
   zoomOut: "Zoom out",
@@ -287,13 +290,36 @@ export const MAP_TONES = {
    */
   known: "known",
   knownVisited: "knownVisited",
+  /*
+   * A region a member has picked for a custom set. Its handle is a white
+   * button with the region's number in selection order, so a child keeps a
+   * running count; surface tokens rather than white, so it holds in dark mode.
+   */
+  chosen: "chosen",
   practice: "practice",
   practiceVisited: "practiceVisited",
   visited: "visited",
 } as const;
 
-export const MAP_TONE_CLASS: Record<string, { shape: string; line: string; handle: string }> = {
-  [MAP_TONES.idle]: { shape: "fill-foreground/10 stroke-line", line: "stroke-line", handle: "fill-foreground/60 stroke-white" },
+/*
+ * `hover` is applied only on a map that is choosable, so a board being played
+ * or read does not light up under the pointer; `text` is the handle's number,
+ * white on a solid handle unless a tone says otherwise.
+ */
+export const MAP_TONE_CLASS: Record<string, { shape: string; line: string; handle: string; hover?: string; text?: string }> = {
+  [MAP_TONES.idle]: {
+    shape: "fill-foreground/10 stroke-line",
+    line: "stroke-line",
+    handle: "fill-foreground/60 stroke-white",
+    hover: "hover:fill-foreground/25 hover:stroke-foreground/50",
+  },
+  [MAP_TONES.chosen]: {
+    shape: "fill-indigo-500/70 stroke-indigo-700",
+    line: "stroke-indigo-700",
+    handle: "fill-surface stroke-indigo-600",
+    hover: "hover:fill-indigo-400 hover:stroke-indigo-900",
+    text: "fill-foreground",
+  },
   [MAP_TONES.candidate]: { shape: "fill-indigo-500/30 stroke-indigo-600", line: "stroke-indigo-600", handle: "fill-indigo-600 stroke-white" },
   [MAP_TONES.target]: { shape: "fill-indigo-600 stroke-indigo-800", line: "stroke-indigo-800", handle: "fill-indigo-700 stroke-white" },
   [MAP_TONES.correct]: { shape: "fill-emerald-500 stroke-emerald-700", line: "stroke-emerald-700", handle: "fill-emerald-600 stroke-white" },

@@ -247,7 +247,9 @@ export default function CountryMap({
               onMouseEnter={choosable ? () => onRegionHover?.(region.code) : undefined}
               onFocus={choosable ? () => onRegionHover?.(region.code) : undefined}
               className={`transition-colors ${MAP_TONE_CLASS[mark?.tone ?? MAP_TONES.idle]!.shape} ${
-                choosable ? "cursor-pointer outline-none focus-visible:stroke-accent" : ""
+                choosable
+                  ? `cursor-pointer outline-none focus-visible:stroke-accent ${MAP_TONE_CLASS[mark?.tone ?? MAP_TONES.idle]!.hover ?? ""}`
+                  : ""
               }`}
             >
               {choosable ? <title>{label}</title> : null}
@@ -310,7 +312,7 @@ export default function CountryMap({
                     textAnchor="middle"
                     dominantBaseline="central"
                     fontSize={fontSize}
-                    className="fill-white font-black"
+                    className={`${MAP_TONE_CLASS[mark.tone]!.text ?? "fill-white"} font-black`}
                   >
                     {mark.keyHint}
                   </text>
