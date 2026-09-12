@@ -7873,12 +7873,25 @@
     "id": "pnpm-task-reopen-lets-a-shipped-ticket-back-when-its-stamp-n",
     "name": "pnpm task reopen lets a Shipped ticket back when its stamp never reached main",
     "area": "admin",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-12",
+    "summary": "A ticket marked shipped by a release that was stopped before it reached main can be reopened again; one whose release did land still cannot.",
+    "dateIsEstimate": false,
+    "release": 627,
+    "version": "1.125.1",
+    "releasedAt": "2026-09-12T10:59:01Z"
+  },
+  {
+    "id": "cohort-mirror-records-each-award-zero-included",
+    "name": "The simulated cohort keeps XP receipts too",
+    "area": "study",
     "kind": "bug",
     "status": "shipped",
     "date": "2026-09-12",
-    "version": "1.125.1",
-    "release": 627,
-    "releasedAt": "2026-09-12T10:59:01Z",
-    "summary": "A ticket marked shipped by a release that was stopped before it reached main can be reopened again; one whose release did land still cannot."
+    "version": "1.126.0",
+    "release": 628,
+    "releasedAt": "2026-09-12T11:17:59Z",
+    "summary": "Simulated members now record what each XP award was for, including lessons a daily cap paid nothing for, the same way real members have since 1.110.0."
   }
 ]
