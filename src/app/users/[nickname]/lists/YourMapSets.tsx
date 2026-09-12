@@ -10,6 +10,8 @@ import ConfirmDialog from "@/app/shared/ConfirmDialog";
 import PillWordsToggle from "@/app/shared/PillWordsToggle";
 import SegmentedControl from "@/app/shared/SegmentedControl";
 import SubjectPill from "@/app/shared/SubjectPill";
+import { pillWords } from "@/app/shared/pillWords";
+import { usePillWords } from "@/app/shared/usePillWords";
 import { SUBJECT_TYPES } from "@/lib/domainConstants";
 import { mapHref } from "@/lib/mapAddress";
 import { STUDY_LIST_COPY } from "@/app/shared/studyListCopy";
@@ -49,19 +51,29 @@ function countryName(code: string): string {
 function SetRegions({ set, view }: { set: MapCustomSetSummary; view: MapSetsView }) {
   const dataset = useGeoDataset(set.country as CountryCode);
   const byCode = new Map((dataset?.regions ?? []).map((region) => [String(region.code), region]));
+  /*
+   * The same words choice the pills keep, read here for the shapes: Off shows
+   * the outline alone, あ the name as written, EN the English, Both the pair.
+   * The shapes printed English always, which answers the quiz they pose.
+   */
+  const [mode] = usePillWords();
   if (view === "shapes" && dataset) {
     return (
       <ul className="mt-1 flex flex-wrap items-end gap-1.5">
         {set.regions.map((code) => {
           const region = byCode.get(code);
           if (!region) return <li key={code} className="text-xs text-foreground/60">{code}</li>;
-          const name = regionNameLabel(region);
+          const words = pillWords(mode, region.nameNative ?? null, region.name);
           return (
-            <li key={code} className="flex flex-col items-center gap-0.5" title={name}>
+            <li key={code} className="flex flex-col items-center gap-0.5">
               <span className="h-10 w-10">
                 <MapRegionGlyph path={region.map.path} bbox={region.map.bbox} tone={MAP_TONES.chosen} />
               </span>
-              <span className="max-w-14 truncate text-[10px] font-semibold text-foreground/60">{region.name}</span>
+              {words ? (
+                <span lang={mode === "reading" ? "ja" : undefined} className="max-w-24 text-center text-[10px] font-semibold leading-tight text-foreground/60">
+                  {words}
+                </span>
+              ) : null}
             </li>
           );
         })}
@@ -206,7 +218,7 @@ export default function YourMapSets({ accountId, owner, initialSets, isAdmin }: 
     <div className="flex flex-col gap-5">
       {sets.length > 0 ? (
         <div className="flex flex-wrap items-center justify-end gap-2">
-          {view === "list" ? <PillWordsToggle /> : null}
+          <PillWordsToggle />
           <span className="text-[11px] font-black uppercase tracking-wide text-foreground/60">{STUDY_LIST_COPY.mapsViewLabel}</span>
           <SegmentedControl<MapSetsView>
             ariaLabel={STUDY_LIST_COPY.mapsViewLabel}
