@@ -7756,12 +7756,25 @@
     "id": "maps-game-admins-make-a-set-public-so-every-member-can-view-",
     "name": "Maps game: admins make a set public so every member can view it and play it",
     "area": "games",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-11",
+    "summary": "An admin can share a custom Map set with the whole site. A shared set appears under Site maps on every member's Your maps page, where they can open it on the map, and in the Map game's Play row beside their own sets, so the children can practise the map their parent made.",
+    "dateIsEstimate": false,
+    "release": 618,
+    "version": "1.118.0",
+    "releasedAt": "2026-09-12T05:08:47Z"
+  },
+  {
+    "id": "lists-an-admin-makes-a-list-a-site-list-shown-on-every-membe",
+    "name": "Lists: an admin makes a list a site list, shown on every member's Your lists",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-11",
-    "version": "1.118.0",
-    "release": 618,
-    "releasedAt": "2026-09-12T05:08:47Z",
-    "summary": "An admin can share a custom Map set with the whole site. A shared set appears under Site maps on every member's Your maps page, where they can open it on the map, and in the Map game's Play row beside their own sets, so the children can practise the map their parent made."
+    "version": "1.119.0",
+    "release": 619,
+    "releasedAt": "2026-09-12T05:17:46Z",
+    "summary": "An admin can put one of their lists on the site. It appears under Site lists at the top of every member's Your lists page, where they can open and practise it, and it stays its maker's to change. The card carries the switch, and a list on the site is always public."
   }
 ]
