@@ -7834,12 +7834,25 @@
     "id": "your-lists-list-previews-drawn-as-the-site-s-kanji-pills-not",
     "name": "Your lists: list previews drawn as the site's kanji pills, not a wall of glyph text",
     "area": "study",
+    "status": "shipped",
     "kind": "feature",
+    "date": "2026-09-11",
+    "summary": "Your lists previews every list as kanji pills rather than a run of plain characters: each item shows its reading and meaning under the shared words toggle and opens its own page, with the first dozen shown and the rest as a count that opens the list.",
+    "dateIsEstimate": false,
+    "release": 624,
+    "version": "1.124.0",
+    "releasedAt": "2026-09-12T05:50:49Z"
+  },
+  {
+    "id": "your-maps-shapes-view-obeys-the-words-toggle-hide-kanji-engl",
+    "name": "Your maps Shapes view obeys the words toggle: hide, kanji, English or both under each shape",
+    "area": "games",
+    "kind": "bug",
     "status": "shipped",
     "date": "2026-09-11",
-    "version": "1.124.0",
-    "release": 624,
-    "releasedAt": "2026-09-12T05:50:49Z",
-    "summary": "Your lists previews every list as kanji pills rather than a run of plain characters: each item shows its reading and meaning under the shared words toggle and opens its own page, with the first dozen shown and the rest as a count that opens the list."
+    "version": "1.124.1",
+    "release": 625,
+    "releasedAt": "2026-09-12T06:27:22Z",
+    "summary": "The Shapes view of Your maps no longer prints every prefecture's English name under its outline. The label follows the same Off, \u3042, EN and Both toggle the kanji pills use, so a child can quiz themselves on the shapes alone or with the kanji."
   }
 ]
