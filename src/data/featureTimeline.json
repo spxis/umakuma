@@ -7808,12 +7808,25 @@
     "id": "a-page-of-newest-members-current-to-oldest",
     "name": "A members page, newest first",
     "area": "study",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-11",
+    "summary": "A new Members page lists everyone here with the newest at the top, alongside the XP boards.",
+    "dateIsEstimate": false,
+    "release": 622,
+    "version": "1.122.0",
+    "releasedAt": "2026-09-12T05:37:47Z"
+  },
+  {
+    "id": "your-maps-prefecture-names-drawn-as-the-site-s-kanji-pills-w",
+    "name": "Your maps: prefecture names drawn as the site's kanji pills, with the words toggle",
+    "area": "games",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-11",
-    "version": "1.122.0",
-    "release": 622,
-    "releasedAt": "2026-09-12T05:37:47Z",
-    "summary": "A new Members page lists everyone here with the newest at the top, alongside the XP boards."
+    "version": "1.123.0",
+    "release": 623,
+    "releasedAt": "2026-09-12T05:50:44Z",
+    "summary": "On Your maps, each prefecture in a set is now drawn as the same kanji pill used everywhere on the site, with its reading and English under the shared words toggle, and links to the prefecture on the map."
   }
 ]
