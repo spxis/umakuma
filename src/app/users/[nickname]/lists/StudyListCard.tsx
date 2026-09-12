@@ -48,9 +48,11 @@ export default function StudyListCard({
   accountId,
   sheetLinks,
   canEdit,
+  isAdmin = false,
   onDelete,
   onRenamed,
   onItemsChanged,
+  onSiteListed,
 }: StudyListCardProps) {
   /*
    * One mode rather than two booleans. The name editor replaces the heading
@@ -63,6 +65,26 @@ export default function StudyListCard({
   const [error, setError] = useState<string | null>(null);
   const editing = mode === "name";
   const editingCharacters = mode === "characters";
+
+  /** Putting the list on every member's page, or taking it off. Admin's own lists only. */
+  async function toggleSiteListed() {
+    setSaving(true);
+    setError(null);
+    try {
+      const response = await fetch(`/api/study/${accountId}/lists`, {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ id: card.id, siteListed: !card.siteListed }),
+      });
+      const body = (await response.json().catch(() => null)) as { error?: string; list?: { siteListed?: boolean } } | null;
+      if (!response.ok) throw new Error(body?.error ?? STUDY_LIST_COPY.siteFailed);
+      onSiteListed?.(body?.list?.siteListed ?? !card.siteListed);
+    } catch (caught) {
+      setError(caught instanceof Error && caught.message ? caught.message : STUDY_LIST_COPY.siteFailed);
+    } finally {
+      setSaving(false);
+    }
+  }
 
   function startEditing() {
     setDraft(card.name);
@@ -191,7 +213,9 @@ export default function StudyListCard({
       ) : (
         <span className="truncate">{card.name}</span>
       )}
-      {card.visibility && card.visibility !== LIST_VISIBILITIES.private ? (
+      {card.siteListed ? (
+        <span className="subject-pill shrink-0 border-emerald-500/40 bg-emerald-500/10 text-emerald-700">{STUDY_LIST_COPY.siteBadge}</span>
+      ) : card.visibility && card.visibility !== LIST_VISIBILITIES.private ? (
         <span className="subject-pill shrink-0 border-accent/30 bg-accent/10 text-accent">
           {LIST_VISIBILITY_DISPLAY[card.visibility].label}
         </span>
@@ -241,6 +265,11 @@ export default function StudyListCard({
           <button type="button" onClick={startEditing} className={`${ACTION} hover:text-foreground`}>
             {STUDY_LIST_COPY.rename}
           </button>
+          {isAdmin ? (
+            <button type="button" disabled={saving} onClick={() => void toggleSiteListed()} className={`${ACTION} hover:text-foreground`}>
+              {card.siteListed ? STUDY_LIST_COPY.siteUnshare : STUDY_LIST_COPY.siteShare}
+            </button>
+          ) : null}
           <button
             type="button"
             onClick={() => {

@@ -58,6 +58,8 @@ export type StudyListSummary = {
   subscriberCount: number;
   /** Copied from another list, so it has somewhere to ask what is new. */
   hasSource: boolean;
+  /** Shown on every member's Your lists page, by an admin's word. */
+  siteListed: boolean;
 };
 
 /** The same item, named the same way, however it arrived. */

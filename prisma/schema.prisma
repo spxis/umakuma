@@ -763,6 +763,15 @@ model StudyList {
   studiedAt     DateTime?
   copyCount     Int                    @default(0)
   shareCount    Int                    @default(0)
+  /// Offered to every member on their Your lists page, by an admin, so a
+  /// parent's list reaches the children without each following it.
+  ///
+  /// A second field beside `visibility`, and the two are kept from
+  /// disagreeing at the boundary rather than trusted: setting this makes the
+  /// list public in the same write, and any write that takes the list off
+  /// public clears this in the same write. Visibility wins - a list the site
+  /// cannot open is not on the site - and readers filter on both.
+  siteListed    Boolean                @default(false)
   createdAt     DateTime               @default(now())
   updatedAt     DateTime               @updatedAt
 
@@ -775,6 +784,7 @@ model StudyList {
   @@unique([accountId, name])
   @@index([accountId, updatedAt])
   @@index([visibility, updatedAt])
+  @@index([siteListed, updatedAt])
   @@index([shareToken])
 }
 

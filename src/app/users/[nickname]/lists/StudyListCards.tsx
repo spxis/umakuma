@@ -48,6 +48,7 @@ export default function StudyListCards({
   owner,
   practicePath,
   canEdit,
+  isAdmin = false,
 }: {
   lists: StudyListSummary[];
   /** Trouble and Favourites, always both, empty ones included. */
@@ -57,8 +58,12 @@ export default function StudyListCards({
   owner: string;
   practicePath: string;
   canEdit: boolean;
+  /** An admin's own lists carry the switch that puts one on every member's page. */
+  isAdmin?: boolean;
 }) {
   const [removed, setRemoved] = useState<Set<string>>(new Set());
+  /* Site flags the server has accepted, so the badge is right without a reload. */
+  const [siteListed, setSiteListed] = useState<Record<string, boolean>>({});
   const router = useRouter();
   /* Renames the server has accepted, so the page shows them without a reload. */
   const [renamed, setRenamed] = useState<Record<string, string>>({});
@@ -99,6 +104,7 @@ export default function StudyListCards({
     tag: tagged.tag,
     href: tagListHref(owner, tagged.tag),
     visibility: null,
+    siteListed: false,
   }));
 
   const saved: ListCard[] = lists
@@ -122,7 +128,9 @@ export default function StudyListCards({
         },
         tag: null,
         href: listHref(owner, renamed[list.id] ?? list.name),
-        visibility: list.visibility,
+        /* A site list is public by the rule that set the flag. */
+        visibility: siteListed[list.id] ? LIST_VISIBILITIES.public : list.visibility,
+        siteListed: siteListed[list.id] ?? list.siteListed,
       };
     });
   /*
@@ -203,6 +211,8 @@ export default function StudyListCards({
       accountId={accountId}
       sheetLinks={sheetLinksFor(card)}
       canEdit={canEdit}
+      isAdmin={isAdmin}
+      onSiteListed={(next) => setSiteListed((prev) => ({ ...prev, [card.id]: next }))}
       onDelete={() => setPendingRemoval(card.id)}
       onRenamed={(name) => setRenamed((prev) => ({ ...prev, [card.id]: name }))}
       onItemsChanged={(items) => setEdited((prev) => ({ ...prev, [card.id]: items }))}

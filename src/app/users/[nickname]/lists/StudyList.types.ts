@@ -29,6 +29,8 @@ export type ListCard = {
   /** The list's own page; a tagged list opens the panel instead. */
   href: string | null;
   visibility: ListVisibility | null;
+  /** On every member's page; a tagged list never is. */
+  siteListed: boolean;
 };
 
 export type StudyListCardProps = {
@@ -48,7 +50,11 @@ export type StudyListCardProps = {
   sheetLinks: { worksheet: string } | null;
   /** Only the member whose lists these are may rename or delete one. */
   canEdit: boolean;
+  /** An admin owning the list may put it on every member's page. */
+  isAdmin?: boolean;
   onDelete: () => void;
+  /** The site flag the server accepted, so the badge changes without a reload. */
+  onSiteListed?: (siteListed: boolean) => void;
   /** Reported upward so the page keeps the new name without a round trip. */
   onRenamed: (name: string) => void;
   /** The same, for what the list now holds after an edit. */

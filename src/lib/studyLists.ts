@@ -38,6 +38,7 @@ const LIST_SELECT = {
   studiedAt: true,
   copyCount: true,
   shareCount: true,
+  siteListed: true,
   sourceListId: true,
   items: { select: ITEM_SELECT, orderBy: { position: "asc" as const } },
   _count: { select: { subscriptions: true } },
@@ -55,6 +56,7 @@ type ListRow = {
   studiedAt: Date | null;
   copyCount: number;
   shareCount: number;
+  siteListed: boolean;
   sourceListId: string | null;
   items: StudyListItemRef[];
   _count: { subscriptions: number };
@@ -77,6 +79,7 @@ function toSummary(row: ListRow): StudyListSummary {
     shareCount: row.shareCount,
     subscriberCount: row._count.subscriptions,
     hasSource: row.sourceListId !== null,
+    siteListed: row.siteListed,
   };
 }
 

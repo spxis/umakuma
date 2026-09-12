@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { canAccessAccount } from "@/lib/accountAccess";
+import { isAuthorizedAdmin } from "@/lib/admin";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { prisma } from "@/lib/prisma";
 import { LIST_ITEM_KIND_VALUES, LIST_VISIBILITIES, LIST_VISIBILITY_VALUES } from "@/lib/domainConstants";
@@ -61,6 +62,8 @@ const changeSchema = z
     items: z.array(itemSchema).max(STUDY_LIST_LIMITS.items * 2).optional(),
     description: z.string().max(STUDY_LIST_LIMITS.noteLength * 2).nullable().optional(),
     visibility: z.enum(LIST_VISIBILITY_VALUES).optional(),
+    /* On every member's page. An admin's word; refused from anybody else. */
+    siteListed: z.boolean().optional(),
     /** The share link was copied; nothing changes but the count. */
     shared: z.literal(true).optional(),
     /** Put away, or brought back. */
@@ -74,6 +77,7 @@ const changeSchema = z
       value.items !== undefined ||
       value.description !== undefined ||
       value.visibility !== undefined ||
+      value.siteListed !== undefined ||
       value.shared === true ||
       value.archived !== undefined ||
       value.studied !== undefined,
@@ -228,9 +232,24 @@ export async function PATCH(request: Request, context: RouteContext) {
           name?: string;
           description?: string | null;
           visibility?: (typeof LIST_VISIBILITY_VALUES)[number];
+          siteListed?: boolean;
           studiedAt?: Date | null;
           updatedAt: Date;
         } = { updatedAt: new Date() };
+
+        /*
+         * Putting a list on every member's page is the site's decision, so it
+         * is the admin's, whoever owns the list. And a list the site shows has
+         * to be one the site can open: setting the flag makes it public in
+         * the same write, rather than leaving a card that leads to a 404.
+         */
+        if (parsed.data.siteListed !== undefined) {
+          if (!(await isAuthorizedAdmin(request))) {
+            return NextResponse.json({ error: "Only an admin can put a list on the site." }, { status: 403 });
+          }
+          data.siteListed = parsed.data.siteListed;
+          if (parsed.data.siteListed) data.visibility = LIST_VISIBILITIES.public;
+        }
 
         /*
          * Marked done at the same instant the row is touched, deliberately.
@@ -264,7 +283,11 @@ export async function PATCH(request: Request, context: RouteContext) {
           const description = parsed.data.description?.replace(/\s+/g, " ").trim() ?? "";
           data.description = description ? Array.from(description).slice(0, STUDY_LIST_LIMITS.noteLength).join("") : null;
         }
-        if (parsed.data.visibility !== undefined) data.visibility = parsed.data.visibility;
+        if (parsed.data.visibility !== undefined && data.siteListed !== true) {
+          data.visibility = parsed.data.visibility;
+          /* Off public is off the site: the two fields never disagree. */
+          if (parsed.data.visibility !== LIST_VISIBILITIES.public) data.siteListed = false;
+        }
 
         /*
          * Scoped to the account in the same statement that writes, so an id
@@ -301,6 +324,7 @@ export async function PATCH(request: Request, context: RouteContext) {
             name: data.name,
             description: data.description,
             visibility: data.visibility,
+            siteListed: data.siteListed,
             shareToken,
             updatedAt: data.updatedAt.toISOString(),
             ...(items ? { items } : {}),

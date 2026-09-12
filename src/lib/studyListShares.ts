@@ -1,6 +1,6 @@
 import "server-only";
 
-import { LIST_ITEM_KINDS } from "./domainConstants";
+import { LIST_ITEM_KINDS, LIST_VISIBILITIES } from "./domainConstants";
 import { copyName } from "./listCopy";
 import type { LiveList } from "./liveLists";
 import { prisma } from "./prisma";
@@ -190,6 +190,46 @@ export async function fetchFollowedLiveKeys(accountId: string): Promise<string[]
  * A list that has gone private since is still listed, so the member knows
  * what they were following and can drop it; it only stops being openable.
  */
+/**
+ * The lists an admin has put on every member's page.
+ *
+ * Somebody else's, read-only, and public by the rule that sets the flag; the
+ * reader's own site lists are not here, since they already stand among their
+ * lists with the badge on. Shaped like a followed list because that is what
+ * it is to the reader: a list they did not make, kept current by its owner.
+ */
+export async function fetchSiteLists(viewerAccountId: string): Promise<FollowedList[]> {
+  const rows = await prisma.studyList.findMany({
+    /* Both, by the schema's own rule: visibility wins if they ever disagree. */
+    where: { siteListed: true, visibility: LIST_VISIBILITIES.public, archivedAt: null, accountId: { not: viewerAccountId } },
+    select: {
+      id: true,
+      name: true,
+      visibility: true,
+      shareToken: true,
+      updatedAt: true,
+      _count: { select: { items: true } },
+      account: { select: { nickname: true, slug: true, wkUsername: true } },
+    },
+    orderBy: { updatedAt: "desc" },
+  });
+  return rows.map((list) => {
+    const ownerKey = list.account.slug ?? list.account.wkUsername ?? "";
+    return {
+      id: list.id,
+      name: list.name,
+      slug: listSlug(list.name),
+      ownerKey,
+      ownerName: list.account.nickname ?? ownerKey,
+      itemCount: list._count.items,
+      kanjiCount: 0,
+      updatedAt: list.updatedAt.toISOString(),
+      reachable: list.visibility !== "private",
+      shareToken: null,
+    };
+  });
+}
+
 export async function fetchFollowedLists(accountId: string): Promise<FollowedList[]> {
   const rows = await prisma.studyListSubscription.findMany({
     where: { accountId, listId: { not: null } },

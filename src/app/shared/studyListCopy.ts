@@ -50,6 +50,14 @@ export const STUDY_LIST_COPY = {
   mapsUnshare: "Make private",
   mapsShareFailed: "Could not change who sees that map.",
 
+  siteHeading: "Site lists",
+  siteBlurb: "Put on everyone's page by an admin. Open one to read it; it stays its maker's to change.",
+  siteBadge: "Site list",
+  siteShare: "Put on the site",
+  siteUnshare: "Take off the site",
+  siteFailed: "Could not change who sees that list.",
+  siteBy: (name: string) => `by ${name}`,
+
   heading: "Your lists",
   /*
    * Not "built by hand" any more: Trouble and Favourites are here too, and

@@ -1,10 +1,12 @@
 import { STUDY_LIST_COPY } from "@/app/shared/studyListCopy";
 import { fetchStudyLists } from "@/lib/studyLists";
+import { fetchSiteLists } from "@/lib/studyListShares";
 import { fetchTaggedListSummaries } from "@/lib/studySubjectTags";
 
 import ImportFromTextButton from "./ImportFromTextButton";
 import MergeListsButton from "./MergeListsButton";
 import NewListButton from "./NewListButton";
+import SiteLists from "./SiteLists";
 import StudyListCards from "./StudyListCards";
 import { ListsPageShell, loadListsPage } from "./listsPageShell";
 
@@ -29,9 +31,11 @@ export default async function UserListsPage({ params }: PageProps) {
    * member has, and the page that is meant to show a member their lists was
    * the one place they did not appear.
    */
-  const [lists, taggedLists] = await Promise.all([
+  const [lists, taggedLists, siteLists] = await Promise.all([
     fetchStudyLists(page.accountId),
     fetchTaggedListSummaries(page.accountId),
+    /* What an admin put on everyone's page; only a member's own page shows it. */
+    page.canEdit ? fetchSiteLists(page.accountId) : Promise.resolve([]),
   ]);
 
   return (
@@ -49,6 +53,7 @@ export default async function UserListsPage({ params }: PageProps) {
         ) : null
       }
     >
+      {siteLists.length > 0 ? <SiteLists lists={siteLists} /> : null}
       <StudyListCards
         lists={lists}
         taggedLists={taggedLists}
@@ -56,6 +61,7 @@ export default async function UserListsPage({ params }: PageProps) {
         owner={page.userKey}
         practicePath={page.practicePath}
         canEdit={page.canEdit}
+        isAdmin={page.frame.showAdminActions}
       />
     </ListsPageShell>
   );
