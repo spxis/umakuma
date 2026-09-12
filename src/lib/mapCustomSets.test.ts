@@ -2,7 +2,10 @@ import { describe, expect, it } from "vitest";
 
 import {
   MAP_SET_LIMITS,
+  MAP_SET_VISIBILITIES,
+  canSetMapSetVisibility,
   entriesInMapSet,
+  groupMapSets,
   mapSetLabel,
   mapSetProblems,
   normalizeMapSetRegions,
@@ -39,7 +42,34 @@ describe("the pool a set makes", () => {
 
   it("labels a set with its size, and dates a row as a string", () => {
     expect(mapSetLabel({ name: "Tohoku", regions: ["2", "3"] })).toBe("Tohoku · 2");
-    const summary = toMapCustomSetSummary({ id: "s1", country: "JP", name: "Tohoku", regions: ["2", "3"], createdAt: new Date("2026-09-11T00:00:00Z") });
-    expect(summary.createdAt).toBe("2026-09-11T00:00:00.000Z");
+    const row = { id: "s1", accountId: "a", country: "JP", name: "Tohoku", regions: ["2", "3"], visibility: "site", createdAt: new Date("2026-09-11T00:00:00Z"), account: { nickname: "papa", displayName: "Papa" } };
+    const mine = toMapCustomSetSummary(row, "a");
+    expect(mine.createdAt).toBe("2026-09-11T00:00:00.000Z");
+    expect(mine.mine).toBe(true);
+    expect(mine.ownerName).toBe("Papa");
+    const theirs = toMapCustomSetSummary({ ...row, visibility: "odd" }, "b");
+    expect(theirs.mine).toBe(false);
+    expect(theirs.visibility).toBe("private");
+  });
+});
+
+describe("who a set is offered to", () => {
+  it("lets anybody keep a set private and only an admin share it with the site", () => {
+    expect(canSetMapSetVisibility(MAP_SET_VISIBILITIES.private, false)).toBe(true);
+    expect(canSetMapSetVisibility(MAP_SET_VISIBILITIES.site, false)).toBe(false);
+    expect(canSetMapSetVisibility(MAP_SET_VISIBILITIES.site, true)).toBe(true);
+  });
+
+  it("groups a select into the site's and the reader's own, with a shared set of the reader's in the site group", () => {
+    const base = { country: "JP", regions: ["1", "2"], ownerName: "", createdAt: "" };
+    const sets = [
+      { ...base, id: "a", name: "Papa's", visibility: "site" as const, mine: false },
+      { ...base, id: "b", name: "Mine", visibility: "private" as const, mine: true },
+      { ...base, id: "c", name: "Mine, shared", visibility: "site" as const, mine: true },
+      { ...base, id: "d", name: "Somebody's private", visibility: "private" as const, mine: false },
+    ];
+    const groups = groupMapSets(sets);
+    expect(groups.site.map((set) => set.id)).toEqual(["a", "c"]);
+    expect(groups.mine.map((set) => set.id)).toEqual(["b"]);
   });
 });

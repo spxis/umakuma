@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import { GAME_CHOICE_COUNTS, GAME_KINDS, GAME_PRACTICE_LIST_VALUES, gameKindRules } from "@/lib/gameMode";
 import { getPlayableMapCountries, type MapCountryCode } from "@/lib/mapCountries";
-import { mapSetLabel, type MapCustomSetSummary } from "@/lib/mapCustomSets";
+import { groupMapSets, mapSetLabel, type MapCustomSetSummary } from "@/lib/mapCustomSets";
 import { GAME_DIRECTION_VALUES, gameAnswerModesFor, type GameAnswerMode, type GameChoiceCount, type GameDirection, type GamePracticeList } from "@/lib/gameMode";
 import SegmentedControl from "@/app/shared/SegmentedControl";
 import StudyTagListsButton from "@/app/shared/StudyTagListsButton";
@@ -65,6 +65,7 @@ export default function GameSetupPanel({ accountId, setup: loaded, selection, st
   const setup = useMemo(() => ({ ...loaded, mapSets }), [loaded, mapSets]);
   const mapCountry = selection.mapCountry ?? "JP";
   const setsHere = mapSets.filter((set) => set.country === mapCountry);
+  const groups = groupMapSets(setsHere);
   const chosenSet = setsHere.find((set) => set.id === selection.mapSetId) ?? null;
   /* A set from storage that is gone, or belongs to another country, plays nothing: back to every one. */
   useEffect(() => {
@@ -202,11 +203,24 @@ export default function GameSetupPanel({ accountId, setup: loaded, selection, st
               className={FIELD_CLASS}
             >
               <option value="">{GAME_COPY.mapSetWhole}</option>
-              {setsHere.map((set) => (
-                <option key={set.id} value={set.id}>
-                  {mapSetLabel(set)}
-                </option>
-              ))}
+              {groups.site.length > 0 ? (
+                <optgroup label={GAME_COPY.mapSetGroupSite}>
+                  {groups.site.map((set) => (
+                    <option key={set.id} value={set.id}>
+                      {mapSetLabel(set)}
+                    </option>
+                  ))}
+                </optgroup>
+              ) : null}
+              {groups.mine.length > 0 ? (
+                <optgroup label={GAME_COPY.mapSetGroupMine}>
+                  {groups.mine.map((set) => (
+                    <option key={set.id} value={set.id}>
+                      {mapSetLabel(set)}
+                    </option>
+                  ))}
+                </optgroup>
+              ) : null}
               <option value={NEW_MAP_SET}>{GAME_COPY.mapSetNew}</option>
             </select>
           </label>

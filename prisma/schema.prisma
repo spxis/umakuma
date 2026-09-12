@@ -721,6 +721,10 @@ model MapCustomSet {
   country   String   @db.VarChar(2)
   name      String   @db.VarChar(60)
   regions   String[]
+  /// "private" (the owner's alone) or "site" (offered to every member, by an
+  /// admin, so a parent can build the map their children practise on).
+  /// A string, like MapRegionMark.status, because the values live in code.
+  visibility String   @default("private") @db.VarChar(16)
   createdAt DateTime @default(now())
 
   account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
@@ -728,6 +732,7 @@ model MapCustomSet {
   /// One set per name per map: two "Kanto" sets is a select nobody can read.
   @@unique([accountId, country, name])
   @@index([accountId, country])
+  @@index([visibility])
 }
 
 model StudyList {

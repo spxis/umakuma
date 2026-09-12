@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 
 import { STUDY_LIST_COPY } from "@/app/shared/studyListCopy";
-import { listMapSets } from "@/lib/mapCustomSetsServer";
+import { listMapSetsFor } from "@/lib/mapCustomSetsServer";
 
 import { ListsPageShell, loadListsPage } from "../listsPageShell";
 import YourMapSets from "../YourMapSets";
@@ -20,11 +20,11 @@ export default async function YourMapsPage({ params }: PageProps) {
     notFound();
   }
 
-  const sets = await listMapSets(page.accountId);
+  const sets = await listMapSetsFor(page.accountId);
 
   return (
     <ListsPageShell frame={page.frame} title={STUDY_LIST_COPY.mapsHeading} subtitle={STUDY_LIST_COPY.mapsBlurb}>
-      <YourMapSets accountId={page.accountId} owner={page.userKey} initialSets={sets} />
+      <YourMapSets accountId={page.accountId} owner={page.userKey} initialSets={sets} isAdmin={page.frame.showAdminActions} />
     </ListsPageShell>
   );
 }

@@ -19,6 +19,8 @@ type Props = {
   country: CountryCode;
   /** A set to open as it stands, for viewing and changing; absent makes a new one. */
   initial?: MapCustomSetSummary | null;
+  /** Somebody else's set: look, do not touch. No tapping, no name, no save. */
+  readOnly?: boolean;
   onSaved: (set: MapCustomSetSummary) => void;
   onClose: () => void;
 };
@@ -36,7 +38,7 @@ const FIELD_CLASS = "h-9 w-full rounded-lg border border-line bg-surface px-2.5 
  * tapping again takes it out. The set is saved by name and played from the
  * lobby's own select, so a student twelve prefectures in drills those twelve.
  */
-export default function MapSetPicker({ accountId, country, initial = null, onSaved, onClose }: Props) {
+export default function MapSetPicker({ accountId, country, initial = null, readOnly = false, onSaved, onClose }: Props) {
   /* An existing set opens framed on its own regions, so a Kanto set shows Kanto. */
   const view = useMapZoom(country, null, initial?.regions ?? []);
   const dataset = useGeoDataset(country);
@@ -101,9 +103,9 @@ export default function MapSetPicker({ accountId, country, initial = null, onSav
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             <h2 id="map-set-title" className="text-lg font-black leading-tight text-foreground">
-              {initial ? GAME_COPY.mapSetEditTitle(initial.name) : GAME_COPY.mapSetTitle(division)}
+              {readOnly && initial ? initial.name : initial ? GAME_COPY.mapSetEditTitle(initial.name) : GAME_COPY.mapSetTitle(division)}
             </h2>
-            <p className="text-[11px] font-semibold text-foreground/60">{GAME_COPY.mapSetHint}</p>
+            {readOnly ? null : <p className="text-[11px] font-semibold text-foreground/60">{GAME_COPY.mapSetHint}</p>}
           </div>
           <button
             type="button"
@@ -119,7 +121,7 @@ export default function MapSetPicker({ accountId, country, initial = null, onSav
             marks={marks}
             country={country}
             box={view.box}
-            onRegionSelect={toggle}
+            onRegionSelect={readOnly ? undefined : toggle}
             regionLabel={label}
             svgProps={view.panProps}
           />
@@ -147,6 +149,7 @@ export default function MapSetPicker({ accountId, country, initial = null, onSav
             <button
               key={code}
               type="button"
+              disabled={readOnly}
               onClick={() => toggle(code)}
               aria-label={GAME_COPY.mapSetRemove(label(code))}
               title={GAME_COPY.mapSetRemove(label(code))}
@@ -156,13 +159,14 @@ export default function MapSetPicker({ accountId, country, initial = null, onSav
               <span aria-hidden="true">×</span>
             </button>
           ))}
-          {chosen.length > 0 ? (
+          {chosen.length > 0 && !readOnly ? (
             <button type="button" onClick={() => setChosen([])} className="text-[11px] font-semibold text-foreground/60 underline underline-offset-4">
               {GAME_COPY.mapSetClear}
             </button>
           ) : null}
         </div>
 
+        {readOnly ? null : (
         <div className="flex flex-wrap items-end gap-2">
           <label className="min-w-0 flex-1">
             <span className="mb-1 block text-[10px] font-black uppercase tracking-wide text-foreground/60">{GAME_COPY.mapSetName}</span>
@@ -183,6 +187,7 @@ export default function MapSetPicker({ accountId, country, initial = null, onSav
             {saving ? GAME_COPY.mapSetSaving : GAME_COPY.mapSetSave}
           </button>
         </div>
+        )}
         {name.trim() !== "" && problems.length > 0 ? (
           <p className="text-[11px] font-semibold text-foreground/60">{problems[0]}</p>
         ) : null}

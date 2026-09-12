@@ -16,7 +16,7 @@ import {
 } from "@/lib/gameMode";
 import { resolveDailyLevelCap } from "@/lib/gameModePools";
 import { loadGamePool } from "@/lib/gameModeServer";
-import { listMapSets } from "@/lib/mapCustomSetsServer";
+import { listMapSetsFor } from "@/lib/mapCustomSetsServer";
 import { shiritoriHeadKey, shiritoriTailKey } from "@/lib/gameShiritori";
 import { prisma } from "@/lib/prisma";
 import { fetchStudyTagRows } from "@/lib/studySubjectTags";
@@ -67,7 +67,7 @@ export async function GET(request: Request, context: { params: Promise<{ account
           }),
           resolveDailyLevelCap(),
           loadGameActivity(accountId),
-          listMapSets(accountId),
+          listMapSetsFor(accountId),
         ]);
 
         // Practice draws from the started pool, so a tag on an item the player

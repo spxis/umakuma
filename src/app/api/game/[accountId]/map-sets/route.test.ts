@@ -6,10 +6,10 @@ vi.mock("@/lib/apiRouteTelemetry", () => ({
   withApiRouteTelemetry: async ({ execute }: { execute: () => Promise<Response> }) => execute(),
 }));
 const createMapSet = vi.fn();
-const listMapSets = vi.fn(async (_accountId: string) => [] as never[]);
+const listMapSetsFor = vi.fn(async (_accountId: string) => [] as never[]);
 vi.mock("@/lib/mapCustomSetsServer", () => ({
   createMapSet: (...args: unknown[]) => createMapSet(...args),
-  listMapSets: (accountId: string) => listMapSets(accountId),
+  listMapSetsFor: (accountId: string) => listMapSetsFor(accountId),
 }));
 
 const { POST, GET } = await import("./route");
@@ -54,6 +54,6 @@ describe("POST /api/game/[accountId]/map-sets", () => {
   it("lists the member's sets", async () => {
     const response = await GET(new Request("http://test/api/game/acct/map-sets"), { params });
     expect(response.status).toBe(200);
-    expect(listMapSets).toHaveBeenCalledWith("acct");
+    expect(listMapSetsFor).toHaveBeenCalledWith("acct");
   });
 });

@@ -40,6 +40,15 @@ export const STUDY_LIST_COPY = {
   mapsDeleteFailed: "Could not delete that map.",
   mapsPlay: "Play in the Map game",
   mapsSaved: "Saved",
+  mapsSiteHeading: "Site maps",
+  mapsSiteBlurb: "Made by an admin for everyone. Open one to see it on the map; it is in the Play row of the Map game too.",
+  mapsMineHeading: "Your maps",
+  mapsSiteBadge: "Site map",
+  mapsBy: (name: string) => `by ${name}`,
+  mapsView: "View",
+  mapsShare: "Share with the site",
+  mapsUnshare: "Make private",
+  mapsShareFailed: "Could not change who sees that map.",
 
   heading: "Your lists",
   /*

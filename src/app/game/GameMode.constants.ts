@@ -72,6 +72,8 @@ export const GAME_COPY = {
   mapSetError: "That did not save. Try again.",
   mapSetClear: "Clear",
   mapSetEditTitle: (name: string) => `Edit ${name}`,
+  mapSetGroupSite: "Site maps",
+  mapSetGroupMine: "Your maps",
   zoomIn: "Zoom in",
   zoomOut: "Zoom out",
   zoomReset: "Fit",

@@ -2,8 +2,9 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { canAccessAccount } from "@/lib/accountAccess";
+import { isAuthorizedAdmin } from "@/lib/admin";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
-import { MAP_SET_LIMITS } from "@/lib/mapCustomSets";
+import { MAP_SET_LIMITS, MAP_SET_VISIBILITY_VALUES } from "@/lib/mapCustomSets";
 import { deleteMapSet, updateMapSet } from "@/lib/mapCustomSetsServer";
 
 /**
@@ -17,8 +18,9 @@ const editSchema = z
   .object({
     name: z.string().max(MAP_SET_LIMITS.name * 4).optional(),
     regions: z.array(z.union([z.string().max(8), z.number().int()])).max(200).optional(),
+    visibility: z.enum(MAP_SET_VISIBILITY_VALUES as [string, ...string[]]).optional(),
   })
-  .refine((body) => body.name !== undefined || body.regions !== undefined, { message: "empty" });
+  .refine((body) => body.name !== undefined || body.regions !== undefined || body.visibility !== undefined, { message: "empty" });
 
 type Context = { params: Promise<{ accountId: string; setId: string }> };
 
@@ -36,7 +38,12 @@ export async function PATCH(request: Request, context: Context) {
       if (!parsed.success) {
         return NextResponse.json({ error: "Invalid request payload." }, { status: 400 });
       }
-      const outcome = await updateMapSet(accountId, setId, parsed.data);
+      const outcome = await updateMapSet(
+        accountId,
+        setId,
+        parsed.data as Parameters<typeof updateMapSet>[2],
+        await isAuthorizedAdmin(request),
+      );
       if (!outcome.ok) {
         if ("missing" in outcome) return NextResponse.json({ error: "No such set." }, { status: 404 });
         return NextResponse.json({ error: outcome.problems[0], problems: outcome.problems }, { status: 422 });

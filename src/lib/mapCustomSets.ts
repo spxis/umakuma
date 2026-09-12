@@ -16,12 +16,30 @@ export const MAP_SET_LIMITS = {
   maxSets: 30,
 } as const;
 
+/**
+ * Who a set is offered to. `private` is the owner's alone. `site` is every
+ * member's to see and play: an admin builds the map the children practise
+ * on, and it shows in their Play row and on their Your maps page. Only an
+ * admin may make a set `site`, and only the owner may change or delete it.
+ */
+export const MAP_SET_VISIBILITIES = { private: "private", site: "site" } as const;
+export type MapSetVisibility = (typeof MAP_SET_VISIBILITIES)[keyof typeof MAP_SET_VISIBILITIES];
+export const MAP_SET_VISIBILITY_VALUES = Object.values(MAP_SET_VISIBILITIES);
+export function isMapSetVisibility(value: unknown): value is MapSetVisibility {
+  return typeof value === "string" && (MAP_SET_VISIBILITY_VALUES as string[]).includes(value);
+}
+
 export type MapCustomSetSummary = {
   id: string;
   country: string;
   name: string;
   /** Region codes as the dataset names them, as strings. */
   regions: string[];
+  visibility: MapSetVisibility;
+  /** Whether the reader owns it, which is what decides edit and delete. */
+  mine: boolean;
+  /** Who made it, for a site set that is somebody else's. */
+  ownerName: string;
   createdAt: string;
 };
 
@@ -29,7 +47,21 @@ export type MapCustomSetDraft = {
   country: string;
   name: string;
   regions: readonly (string | number)[];
+  visibility?: MapSetVisibility;
 };
+
+/** Whether a member may ask for this visibility. Site is an admin's word. */
+export function canSetMapSetVisibility(visibility: MapSetVisibility, isAdmin: boolean): boolean {
+  return visibility === MAP_SET_VISIBILITIES.private || isAdmin;
+}
+
+/** The sets a select offers, split the way the select groups them. */
+export function groupMapSets(sets: readonly MapCustomSetSummary[]): { site: MapCustomSetSummary[]; mine: MapCustomSetSummary[] } {
+  return {
+    site: sets.filter((set) => set.visibility === MAP_SET_VISIBILITIES.site),
+    mine: sets.filter((set) => set.mine && set.visibility !== MAP_SET_VISIBILITIES.site),
+  };
+}
 
 /** Trimmed, as strings, each once, in the order first chosen. */
 export function normalizeMapSetRegions(regions: readonly (string | number)[]): string[] {
@@ -75,12 +107,27 @@ export function mapSetLabel(set: Pick<MapCustomSetSummary, "name" | "regions">):
   return `${set.name} · ${set.regions.length}`;
 }
 
-export function toMapCustomSetSummary(row: {
-  id: string;
-  country: string;
-  name: string;
-  regions: string[];
-  createdAt: Date;
-}): MapCustomSetSummary {
-  return { id: row.id, country: row.country, name: row.name, regions: row.regions, createdAt: row.createdAt.toISOString() };
+export function toMapCustomSetSummary(
+  row: {
+    id: string;
+    accountId: string;
+    country: string;
+    name: string;
+    regions: string[];
+    visibility: string;
+    createdAt: Date;
+    account?: { nickname: string; displayName: string | null } | null;
+  },
+  viewerAccountId: string,
+): MapCustomSetSummary {
+  return {
+    id: row.id,
+    country: row.country,
+    name: row.name,
+    regions: row.regions,
+    visibility: isMapSetVisibility(row.visibility) ? row.visibility : MAP_SET_VISIBILITIES.private,
+    mine: row.accountId === viewerAccountId,
+    ownerName: row.account?.displayName?.trim() || row.account?.nickname || "",
+    createdAt: row.createdAt.toISOString(),
+  };
 }
