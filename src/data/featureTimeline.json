@@ -7847,12 +7847,25 @@
     "id": "your-maps-shapes-view-obeys-the-words-toggle-hide-kanji-engl",
     "name": "Your maps Shapes view obeys the words toggle: hide, kanji, English or both under each shape",
     "area": "games",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-11",
+    "summary": "The Shapes view of Your maps no longer prints every prefecture's English name under its outline. The label follows the same Off, \u3042, EN and Both toggle the kanji pills use, so a child can quiz themselves on the shapes alone or with the kanji.",
+    "dateIsEstimate": false,
+    "release": 625,
+    "version": "1.124.1",
+    "releasedAt": "2026-09-12T06:27:22Z"
+  },
+  {
+    "id": "your-maps-a-shape-says-its-name-and-its-reading",
+    "name": "A map shape says its name and its reading",
+    "area": "study",
     "kind": "bug",
     "status": "shipped",
-    "date": "2026-09-11",
-    "version": "1.124.1",
-    "release": 625,
-    "releasedAt": "2026-09-12T06:27:22Z",
-    "summary": "The Shapes view of Your maps no longer prints every prefecture's English name under its outline. The label follows the same Off, \u3042, EN and Both toggle the kanji pills use, so a child can quiz themselves on the shapes alone or with the kanji."
+    "date": "2026-09-12",
+    "version": "1.125.0",
+    "release": 626,
+    "releasedAt": "2026-09-12T10:20:25Z",
+    "summary": "In Your maps, the Shapes view prints each prefecture's written name under its outline with the reading and English following the site's Off, \u3042, EN, Both choice - and Off hides the name so the outlines can be quizzed bare."
   }
 ]
