@@ -1,5 +1,5 @@
 import { resolveDisplayName } from "@/lib/accountIdentity";
-import { memberPlacement, rankMemberBoard, type MemberPlacing } from "@/lib/memberBoard";
+import { memberPlacement, rankMemberBoard, type MemberPlacing, canOpenMemberRow } from "@/lib/memberBoard";
 import { xpRankName } from "@/lib/xp/xpRanks";
 import { xpStanding, type XpStanding } from "@/lib/xp/xpCurve";
 
@@ -85,8 +85,5 @@ export function canOpenXpBoardRow(
   entry: XpBoardEntry,
   viewer: { isAdmin: boolean; address: string | null },
 ): boolean {
-  if (!entry.address) return false;
-  if (viewer.isAdmin) return true;
-  const normalized = viewer.address?.trim().toLowerCase() ?? null;
-  return normalized !== null && entry.address.trim().toLowerCase() === normalized;
+  return canOpenMemberRow(entry, viewer);
 }

@@ -42,9 +42,10 @@ describe("the XP section nav", () => {
 
   /* Every destination in the row is a real page, or the row promises a 404. */
   it.each(XP_SECTION_LINKS.map((link) => link.href))("%s is a page that exists", (href) => {
-    const segments = href.replace(/^\/xp\/?/, "");
-    const dir = segments.length === 0 ? ROOT : join(ROOT, segments);
-    expect(statSync(join(dir, "page.tsx")).isFile()).toBe(true);
+    /* Resolved from the app root, not from `/xp`: the row now carries
+       `/members`, which is a board and belongs on it without living under
+       the XP directory. */
+    expect(statSync(join(process.cwd(), "src/app", href, "page.tsx")).isFile()).toBe(true);
   });
 
   /*

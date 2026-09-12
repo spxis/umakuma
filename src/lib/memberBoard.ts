@@ -95,3 +95,21 @@ export function memberPlacement<T extends { id: string }>(
   if (!accountId) return null;
   return rows.find((row) => row.id === accountId) ?? null;
 }
+
+/**
+ * Whether a viewer may open a row's member pages from a board.
+ *
+ * Your own row and, for an admin, everybody's. A name on a board is not an
+ * invitation into somebody's pages. It was written on the XP board and copied
+ * to the WaniKani one; the members page would have been the third copy, so it
+ * is the boards' rule now and each of them asks.
+ */
+export function canOpenMemberRow(
+  entry: { address: string | null },
+  viewer: { isAdmin: boolean; address: string | null },
+): boolean {
+  if (!entry.address) return false;
+  if (viewer.isAdmin) return true;
+  const normalized = viewer.address?.trim().toLowerCase() ?? null;
+  return normalized !== null && entry.address.trim().toLowerCase() === normalized;
+}

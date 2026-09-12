@@ -25,6 +25,10 @@ export const XP_SECTION_LINKS = [
   { href: "/xp/weekly", label: copy.weekly },
   { href: "/xp/promotions", label: copy.promotions },
   { href: "/xp/earn", label: copy.earn },
+  /* Not an XP page, but the same row: who is here is the question every
+     board on it is a view of, and a page reachable from nowhere is the
+     failure this nav exists to prevent. */
+  { href: "/members", label: copy.members },
 ] as const;
 
 export type XpSectionHref = (typeof XP_SECTION_LINKS)[number]["href"];

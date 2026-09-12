@@ -203,5 +203,6 @@ export const XP_SECTION_NAV_COPY = {
   weekly: "This week",
   promotions: "Promotions",
   earn: "How XP is earned",
+  members: "Members",
   mine: "My XP",
 } as const;
