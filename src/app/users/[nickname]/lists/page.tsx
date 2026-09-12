@@ -1,5 +1,8 @@
 import { STUDY_LIST_COPY } from "@/app/shared/studyListCopy";
+import { LIST_ITEM_KINDS } from "@/lib/domainConstants";
+import { LIST_PREVIEW_LIMIT } from "@/lib/studyListRules";
 import { fetchStudyLists } from "@/lib/studyLists";
+import { previewFactsFor } from "@/lib/studyListPreviewFacts";
 import { fetchSiteLists } from "@/lib/studyListShares";
 import { fetchTaggedListSummaries } from "@/lib/studySubjectTags";
 
@@ -37,6 +40,11 @@ export default async function UserListsPage({ params }: PageProps) {
     /* What an admin put on everyone's page; only a member's own page shows it. */
     page.canEdit ? fetchSiteLists(page.accountId) : Promise.resolve([]),
   ]);
+  /* What the pills print, for the items the cards show; a wall of glyphs said neither. */
+  const facts = await previewFactsFor([
+    ...lists.flatMap((list) => list.items.slice(0, LIST_PREVIEW_LIMIT)),
+    ...taggedLists.flatMap((tagged) => tagged.characters.slice(0, LIST_PREVIEW_LIMIT).map((key) => ({ kind: LIST_ITEM_KINDS.kanji, key }))),
+  ]);
 
   return (
     <ListsPageShell
@@ -62,6 +70,7 @@ export default async function UserListsPage({ params }: PageProps) {
         practicePath={page.practicePath}
         canEdit={page.canEdit}
         isAdmin={page.frame.showAdminActions}
+        facts={facts}
       />
     </ListsPageShell>
   );

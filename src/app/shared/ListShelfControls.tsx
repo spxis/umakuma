@@ -1,5 +1,7 @@
 "use client";
 
+import type { ReactNode } from "react";
+
 import SubjectViewModeToggle from "@/app/shared/SubjectViewModeToggle";
 import { STUDY_LIST_COPY } from "@/app/shared/studyListCopy";
 import type { SubjectViewMode } from "@/app/shared/subjectListView";
@@ -43,6 +45,7 @@ export default function ListShelfControls({
   viewMode,
   onViewMode,
   searchLabel = STUDY_LIST_COPY.searchLists,
+  trailing,
 }: {
   query: string;
   onQuery: (next: string) => void;
@@ -54,6 +57,8 @@ export default function ListShelfControls({
   viewMode?: SubjectViewMode;
   onViewMode?: (next: SubjectViewMode) => void;
   searchLabel?: string;
+  /** A control that belongs to this shelf and no other: the pill words toggle, say. */
+  trailing?: ReactNode;
 }) {
   return (
     <div className="mb-3 flex flex-wrap items-center gap-2">
@@ -84,6 +89,7 @@ export default function ListShelfControls({
         {STUDY_LIST_COPY.reverse}
       </button>
       {viewMode && onViewMode ? <SubjectViewModeToggle value={viewMode} onChange={onViewMode} /> : null}
+      {trailing}
     </div>
   );
 }

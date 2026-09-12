@@ -23,6 +23,9 @@ export const STUDY_LIST_LIMITS = {
 } as const;
 
 /** One thing in a list, as the browser and the routes both speak of it. */
+/** How many items a card or row previews as pills before the rest is a count. */
+export const LIST_PREVIEW_LIMIT = 12;
+
 export type StudyListItemRef = {
   kind: ListItemKind;
   /** What it means and how it reads, when whoever built the list knew. */

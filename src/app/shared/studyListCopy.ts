@@ -61,6 +61,9 @@ export const STUDY_LIST_COPY = {
   siteFailed: "Could not change who sees that list.",
   siteBy: (name: string) => `by ${name}`,
 
+  /* The tail of a preview, as one more pill-sized link into the list. */
+  moreItems: (count: number) => `+${count} more`,
+
   heading: "Your lists",
   /*
    * Not "built by hand" any more: Trouble and Favourites are here too, and

@@ -5,7 +5,10 @@ import Link from "next/link";
 import WorksheetButton from "@/app/shared/WorksheetButton";
 import { useState } from "react";
 
-import { JP_TEXT_CLASS } from "@/app/shared/japaneseText";
+import SubjectPill from "@/app/shared/SubjectPill";
+import { LIST_ITEM_KINDS } from "@/lib/domainConstants";
+import { vocabularyHref } from "@/lib/globalSearch";
+import { LIST_PREVIEW_LIMIT } from "@/lib/studyListRules";
 import ListMetaLine from "@/app/shared/ListMetaLine";
 import { STUDY_LIST_COPY } from "@/app/shared/studyListCopy";
 import { STUDY_LIST_LIMITS } from "@/lib/studyListRules";
@@ -49,6 +52,7 @@ export default function StudyListCard({
   sheetLinks,
   canEdit,
   isAdmin = false,
+  facts,
   onDelete,
   onRenamed,
   onItemsChanged,
@@ -311,6 +315,46 @@ export default function StudyListCard({
    * what was saved rather than a stale draft.
    */
   const preview = previewText(card.items);
+  /*
+   * The items as the pill every inline kanji on the site is - glyph, reading,
+   * meaning, a link to its page - rather than a run of plain glyph text,
+   * which was the one place a kanji site showed a kanji as nothing but a
+   * character. The first dozen, and the rest as one count that opens the
+   * list; a Burned list of 1,700 is not a preview.
+   */
+  const shownItems = card.items.slice(0, rows ? Math.min(LIST_PREVIEW_LIMIT, 6) : LIST_PREVIEW_LIMIT);
+  const hiddenCount = card.items.length - shownItems.length;
+  const pillNode = (
+    <ul className={`flex min-w-0 flex-wrap gap-1.5 ${rows ? "flex-1" : "mt-2"}`}>
+      {shownItems.map((item) => {
+        const fact = facts[item.key];
+        return (
+          <li key={item.key}>
+            <SubjectPill
+              glyph={item.key}
+              subjectType={item.kind}
+              reading={fact?.reading ?? item.reading ?? null}
+              meaning={fact?.meaning ?? item.meaning ?? null}
+              href={
+                item.kind === LIST_ITEM_KINDS.kanji
+                  ? `/kanji/${encodeURIComponent(item.key)}`
+                  : item.kind === LIST_ITEM_KINDS.vocabulary
+                    ? vocabularyHref(item.key)
+                    : null
+              }
+            />
+          </li>
+        );
+      })}
+      {hiddenCount > 0 && listHrefForCard ? (
+        <li className="self-center">
+          <Link href={listHrefForCard} className="subject-pill border-line bg-surface-muted text-foreground/70 hover:text-foreground">
+            {STUDY_LIST_COPY.moreItems(hiddenCount)}
+          </Link>
+        </li>
+      ) : null}
+    </ul>
+  );
   /* What kinds the list holds, so a list of words reads as one before it is opened. */
   const chips = kindChips(card.items);
   const kindNode =
@@ -366,15 +410,7 @@ export default function StudyListCard({
               <span className="min-w-0 flex-1" />
             ) : (
               <>
-                <Link
-                  href={listHrefForCard}
-                  title={STUDY_LIST_COPY.open}
-                  lang="ja"
-                  translate="no"
-                  className={`min-w-0 flex-1 cursor-pointer truncate text-left text-base font-semibold leading-none text-foreground/75 hover:text-foreground ${JP_TEXT_CLASS}`}
-                >
-                  {preview}
-                </Link>
+                {pillNode}
                 {kindNode}
                 <span className="shrink-0 text-[11px] font-semibold text-foreground/60">
                   {card.count}
@@ -405,15 +441,9 @@ export default function StudyListCard({
               {STUDY_LIST_COPY.noCharactersYet}
             </p>
           ) : (
-            <Link
-              href={listHrefForCard}
-              title={STUDY_LIST_COPY.open}
-              lang="ja"
-              translate="no"
-              className={`mt-2 line-clamp-3 block w-full cursor-pointer break-all text-left text-lg font-semibold leading-snug text-foreground/75 hover:text-foreground ${JP_TEXT_CLASS}`}
-            >
-              {preview}
-            </Link>
+            <>
+              {pillNode}
+            </>
           )}
 
           {editingCharacters || !kindNode ? null : <div className="mt-2">{kindNode}</div>}

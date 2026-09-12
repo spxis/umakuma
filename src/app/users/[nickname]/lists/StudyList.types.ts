@@ -1,5 +1,6 @@
 import type { ListMetaFacts } from "@/app/shared/listMeta.types";
 import type { ListVisibility } from "@/lib/domainConstants";
+import type { PreviewFacts } from "@/lib/studyListPreviewFacts";
 import type { StudyListItemRef } from "@/lib/studyListRules";
 import type { TaggedListSummary } from "@/lib/studySubjectTags";
 
@@ -52,6 +53,8 @@ export type StudyListCardProps = {
   canEdit: boolean;
   /** An admin owning the list may put it on every member's page. */
   isAdmin?: boolean;
+  /** What the preview pills print beside each glyph, looked up once on the server. */
+  facts: PreviewFacts;
   onDelete: () => void;
   /** The site flag the server accepted, so the badge changes without a reload. */
   onSiteListed?: (siteListed: boolean) => void;

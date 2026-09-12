@@ -7,6 +7,8 @@ import ConfirmDialog from "@/app/shared/ConfirmDialog";
 import { STUDY_LIST_COPY } from "@/app/shared/studyListCopy";
 import { STUDY_TAG_LIST_LABELS } from "@/app/shared/studyTagListsUi";
 import ListShelfControls from "@/app/shared/ListShelfControls";
+import PillWordsToggle from "@/app/shared/PillWordsToggle";
+import type { PreviewFacts } from "@/lib/studyListPreviewFacts";
 import SurfacePagination from "@/app/shared/SurfacePagination";
 import {
   SUBJECT_VIEW_MODES,
@@ -49,6 +51,7 @@ export default function StudyListCards({
   practicePath,
   canEdit,
   isAdmin = false,
+  facts,
 }: {
   lists: StudyListSummary[];
   /** Trouble and Favourites, always both, empty ones included. */
@@ -60,6 +63,8 @@ export default function StudyListCards({
   canEdit: boolean;
   /** An admin's own lists carry the switch that puts one on every member's page. */
   isAdmin?: boolean;
+  /** What the preview pills print, looked up once by the page. */
+  facts: PreviewFacts;
 }) {
   const [removed, setRemoved] = useState<Set<string>>(new Set());
   /* Site flags the server has accepted, so the badge is right without a reload. */
@@ -212,6 +217,7 @@ export default function StudyListCards({
       sheetLinks={sheetLinksFor(card)}
       canEdit={canEdit}
       isAdmin={isAdmin}
+      facts={facts}
       onSiteListed={(next) => setSiteListed((prev) => ({ ...prev, [card.id]: next }))}
       onDelete={() => setPendingRemoval(card.id)}
       onRenamed={(name) => setRenamed((prev) => ({ ...prev, [card.id]: name }))}
@@ -237,6 +243,7 @@ export default function StudyListCards({
         onReversed={setReversed}
         viewMode={viewMode}
         onViewMode={setViewMode}
+        trailing={<PillWordsToggle />}
       />
 
       {error ? <p className="mb-3 text-xs font-semibold text-rose-600">{error}</p> : null}
