@@ -60,7 +60,7 @@ export const GAME_COPY = {
   mapSetWhole: "All",
   mapSetNew: "Create custom set…",
   mapSetTitle: (division: string) => `Choose the ${division.toLowerCase()}s to study`,
-  mapSetHint: "Tap each one on the map. Drag and zoom to reach the small ones.",
+  mapSetHint: "Tap each one on the map to add it; drag and zoom to reach the small ones. Take one out with its × below.",
   mapSetChosen: (count: number, division: string) => `${count} ${count === 1 ? division.toLowerCase() : `${division.toLowerCase()}s`} chosen`,
   mapSetNone: "Nothing chosen yet.",
   mapSetName: "Name this set",
@@ -307,17 +307,23 @@ export const MAP_TONES = {
  * white on a solid handle unless a tone says otherwise.
  */
 export const MAP_TONE_CLASS: Record<string, { shape: string; line: string; handle: string; hover?: string; text?: string }> = {
+  /*
+   * Hover has to be seen from across the room: a chosen shape goes darker
+   * and gains a heavier outline, an unchosen one takes on a wash of the
+   * chosen colour so it reads as "this would be added". The chosen fill
+   * itself sits lighter than it did, so there is somewhere darker to go.
+   */
   [MAP_TONES.idle]: {
     shape: "fill-foreground/10 stroke-line",
     line: "stroke-line",
     handle: "fill-foreground/60 stroke-white",
-    hover: "hover:fill-foreground/25 hover:stroke-foreground/50",
+    hover: "hover:fill-indigo-300/60 hover:stroke-indigo-500",
   },
   [MAP_TONES.chosen]: {
-    shape: "fill-indigo-500/70 stroke-indigo-700",
-    line: "stroke-indigo-700",
+    shape: "fill-indigo-400/60 stroke-indigo-600",
+    line: "stroke-indigo-600",
     handle: "fill-surface stroke-indigo-600",
-    hover: "hover:fill-indigo-400 hover:stroke-indigo-900",
+    hover: "hover:fill-indigo-600 hover:stroke-indigo-900 hover:[stroke-width:2.5]",
     text: "fill-foreground",
   },
   [MAP_TONES.candidate]: { shape: "fill-indigo-500/30 stroke-indigo-600", line: "stroke-indigo-600", handle: "fill-indigo-600 stroke-white" },

@@ -57,9 +57,18 @@ export default function MapSetPicker({ accountId, country, initial = null, readO
     [regionByCode],
   );
 
-  const toggle = useCallback((code: string | number) => {
+  /*
+   * The map only adds. It used to toggle, and a tap on a chosen shape - or on
+   * its numbered handle - while panning to the next one took it out again;
+   * John: "why is a click deleting the item? seems fragile." Taking one out
+   * is the chip's × below, or Clear, where a hand has to mean it.
+   */
+  const add = useCallback((code: string | number) => {
     const key = String(code);
-    setChosen((current) => (current.includes(key) ? current.filter((entry) => entry !== key) : [...current, key]));
+    setChosen((current) => (current.includes(key) ? current : [...current, key]));
+  }, []);
+  const remove = useCallback((code: string) => {
+    setChosen((current) => current.filter((entry) => entry !== code));
   }, []);
 
   /*
@@ -68,11 +77,11 @@ export default function MapSetPicker({ accountId, country, initial = null, readO
    * on the number takes the region out, the same as a tap on the shape.
    */
   const [numbered, setNumbered] = useState(true);
+  /* A pointer, not a control: the number says which chip below this is. */
   const marks: MapMark[] = chosen.map((code, index) => ({
     code,
     tone: MAP_TONES.chosen,
     keyHint: String(index + 1),
-    onSelect: readOnly ? undefined : () => toggle(code),
   }));
   /* The same gate the route refuses on greys the button out. Until the
      outlines arrive nothing can be off the map, so the known list is the
@@ -132,7 +141,7 @@ export default function MapSetPicker({ accountId, country, initial = null, readO
             marks={marks}
             country={country}
             box={view.box}
-            onRegionSelect={readOnly ? undefined : toggle}
+            onRegionSelect={readOnly ? undefined : add}
             showHandles={numbered && chosen.length > 0}
             regionLabel={label}
             svgProps={view.panProps}
@@ -167,18 +176,22 @@ export default function MapSetPicker({ accountId, country, initial = null, readO
           <span className="text-[11px] font-black uppercase tracking-wide text-foreground/60">
             {chosen.length === 0 ? GAME_COPY.mapSetNone : GAME_COPY.mapSetChosen(chosen.length, division)}
           </span>
-          {chosen.map((code) => (
+          {chosen.map((code, index) => (
             <button
               key={code}
               type="button"
               disabled={readOnly}
-              onClick={() => toggle(code)}
+              onClick={() => remove(code)}
               aria-label={GAME_COPY.mapSetRemove(label(code))}
               title={GAME_COPY.mapSetRemove(label(code))}
-              className="inline-flex items-center gap-1 rounded-full border border-indigo-600/40 bg-indigo-500/10 px-2.5 py-0.5 text-[11px] font-bold text-indigo-800"
+              className="inline-flex items-center gap-1.5 rounded-full border border-indigo-600/40 bg-indigo-500/10 py-0.5 pl-1 pr-2.5 text-[11px] font-bold text-indigo-800"
             >
+              {/* The same number the handle on the map carries, so the two can be read together. */}
+              <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full border border-indigo-600 bg-surface px-1 text-[10px] font-black text-foreground">
+                {numbered ? index + 1 : "•"}
+              </span>
               {label(code)}
-              <span aria-hidden="true">×</span>
+              {readOnly ? null : <span aria-hidden="true">×</span>}
             </button>
           ))}
           {chosen.length > 0 && !readOnly ? (
