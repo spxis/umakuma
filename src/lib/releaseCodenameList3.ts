@@ -190,4 +190,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Kodawari", ja: "拘り", reading: "こだわり", gloss: "Attention to the detail - a one-word fix that had a second word in it" },
   { romaji: "Sasae", ja: "支え", reading: "ささえ", gloss: "a hand back: a stamp that never landed is not a ship" },
   { romaji: "Shiharai", ja: "支払い", reading: "しはらい", gloss: "Payment - what each award paid, written down even when it paid nothing" },
+  { romaji: "Sukima", ja: "隙間", reading: "すきま", gloss: "a gap: the room between a tap and a loss" },
 ];

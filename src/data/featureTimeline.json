@@ -7886,12 +7886,25 @@
     "id": "cohort-mirror-records-each-award-zero-included",
     "name": "The simulated cohort keeps XP receipts too",
     "area": "study",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-12",
+    "summary": "Simulated members now record what each XP award was for, including lessons a daily cap paid nothing for, the same way real members have since 1.110.0.",
+    "dateIsEstimate": false,
+    "release": 628,
+    "version": "1.126.0",
+    "releasedAt": "2026-09-12T11:17:59Z"
+  },
+  {
+    "id": "map-set-picker-a-click-no-longer-removes-a-prefecture-and-th",
+    "name": "Map set picker: a click no longer removes a prefecture, and the chips carry the map's numbers",
+    "area": "games",
     "kind": "bug",
     "status": "shipped",
     "date": "2026-09-12",
-    "version": "1.126.0",
-    "release": 628,
-    "releasedAt": "2026-09-12T11:17:59Z",
-    "summary": "Simulated members now record what each XP award was for, including lessons a daily cap paid nothing for, the same way real members have since 1.110.0."
+    "version": "1.126.1",
+    "release": 629,
+    "releasedAt": "2026-09-12T11:26:44Z",
+    "summary": "In the custom map picker, tapping the map only adds a prefecture now; one is removed with its \u00d7 in the list below, which carries the same number the map shows. Hovering a prefecture is clearly visible, chosen or not."
   }
 ]
