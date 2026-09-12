@@ -36,6 +36,50 @@ export async function loadMapSet(accountId: string, id: string): Promise<MapCust
 
 export type MapSetCreateOutcome = { ok: true; set: MapCustomSetSummary } | { ok: false; problems: string[] };
 
+export type MapSetEditOutcome = MapSetCreateOutcome | { ok: false; missing: true };
+
+/**
+ * Changes a set's name or regions, or both. The country cannot change: a set
+ * belongs to one map, and moving it would leave codes that name nothing.
+ * Only the owner's set is found, so a stranger's id is missing, not refused.
+ */
+export async function updateMapSet(
+  accountId: string,
+  id: string,
+  edit: { name?: string; regions?: readonly (string | number)[] },
+): Promise<MapSetEditOutcome> {
+  const current = await prisma.mapCustomSet.findFirst({ where: { id, accountId }, select: SELECT });
+  if (!current) return { ok: false, missing: true };
+  if (!isPlayableMapCountry(current.country)) return { ok: false, problems: ["That map is not available."] };
+
+  const draft = { country: current.country, name: edit.name ?? current.name, regions: edit.regions ?? current.regions };
+  const known = GEO_DATASETS[current.country].regions.map((region) => region.code);
+  const problems = mapSetProblems(draft, known);
+  if (problems.length > 0) return { ok: false, problems };
+
+  const name = draft.name.trim();
+  if (name !== current.name) {
+    const sameName = await prisma.mapCustomSet.findFirst({
+      where: { accountId, country: current.country, name, id: { not: id } },
+      select: { id: true },
+    });
+    if (sameName) return { ok: false, problems: [`You already have a set called ${name}.`] };
+  }
+
+  const row = await prisma.mapCustomSet.update({
+    where: { id },
+    data: { name, regions: normalizeMapSetRegions(draft.regions) },
+    select: SELECT,
+  });
+  return { ok: true, set: toMapCustomSetSummary(row) };
+}
+
+/** Removes the owner's set. Runs played on it keep their questions; nothing points back. */
+export async function deleteMapSet(accountId: string, id: string): Promise<boolean> {
+  const removed = await prisma.mapCustomSet.deleteMany({ where: { id, accountId } });
+  return removed.count > 0;
+}
+
 /**
  * Saves a set, refusing anything the rules call unusable: a name too long
  * for the column, fewer than two regions, a code the country does not have,

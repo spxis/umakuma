@@ -294,6 +294,7 @@ describe("the Lists section", () => {
     expect(sectionHasSubNav(lists)).toBe(true);
     expect(lists.children.map((child) => child.label)).toEqual([
       "Your lists",
+      "Your maps",
       "Auto lists",
       "Following",
       "Archived",
@@ -314,7 +315,7 @@ describe("the Lists section", () => {
   it("offers a visitor only the collection that is public", () => {
     expect(navChildrenFor(lists, null).map((child) => child.label)).toEqual(["Your lists"]);
     expect(navChildHref(navChildrenFor(lists, null)[0]!, null)).toBe("/lists");
-    expect(navChildrenFor(lists, USER)).toHaveLength(4);
+    expect(navChildrenFor(lists, USER)).toHaveLength(5);
   });
 
   /* A member's own list still resolves to the section rather than falling out. */

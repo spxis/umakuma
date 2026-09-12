@@ -71,6 +71,7 @@ export const GAME_COPY = {
   mapSetRemove: (name: string) => `Remove ${name}`,
   mapSetError: "That did not save. Try again.",
   mapSetClear: "Clear",
+  mapSetEditTitle: (name: string) => `Edit ${name}`,
   zoomIn: "Zoom in",
   zoomOut: "Zoom out",
   zoomReset: "Fit",

@@ -17,6 +17,8 @@ import { GAME_COPY, MAP_TONES } from "./GameMode.constants";
 type Props = {
   accountId: string;
   country: CountryCode;
+  /** A set to open as it stands, for viewing and changing; absent makes a new one. */
+  initial?: MapCustomSetSummary | null;
   onSaved: (set: MapCustomSetSummary) => void;
   onClose: () => void;
 };
@@ -34,11 +36,12 @@ const FIELD_CLASS = "h-9 w-full rounded-lg border border-line bg-surface px-2.5 
  * tapping again takes it out. The set is saved by name and played from the
  * lobby's own select, so a student twelve prefectures in drills those twelve.
  */
-export default function MapSetPicker({ accountId, country, onSaved, onClose }: Props) {
-  const view = useMapZoom(country);
+export default function MapSetPicker({ accountId, country, initial = null, onSaved, onClose }: Props) {
+  /* An existing set opens framed on its own regions, so a Kanto set shows Kanto. */
+  const view = useMapZoom(country, null, initial?.regions ?? []);
   const dataset = useGeoDataset(country);
-  const [chosen, setChosen] = useState<string[]>([]);
-  const [name, setName] = useState("");
+  const [chosen, setChosen] = useState<string[]>(initial?.regions ?? []);
+  const [name, setName] = useState(initial?.name ?? "");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -72,10 +75,15 @@ export default function MapSetPicker({ accountId, country, onSaved, onClose }: P
     setSaving(true);
     setError(null);
     try {
-      const response = await fetch(`/api/game/${accountId}/map-sets`, {
-        method: "POST",
+      /* The same picker saves a new set and changes an old one; only the address differs. */
+      const response = await fetch(initial ? `/api/game/${accountId}/map-sets/${initial.id}` : `/api/game/${accountId}/map-sets`, {
+        method: initial ? "PATCH" : "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ country, name: name.trim(), regions: normalizeMapSetRegions(chosen) }),
+        body: JSON.stringify(
+          initial
+            ? { name: name.trim(), regions: normalizeMapSetRegions(chosen) }
+            : { country, name: name.trim(), regions: normalizeMapSetRegions(chosen) },
+        ),
       });
       const payload = (await response.json().catch(() => null)) as { set?: MapCustomSetSummary; error?: string } | null;
       if (!response.ok || !payload?.set) throw new Error(payload?.error ?? GAME_COPY.mapSetError);
@@ -93,7 +101,7 @@ export default function MapSetPicker({ accountId, country, onSaved, onClose }: P
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             <h2 id="map-set-title" className="text-lg font-black leading-tight text-foreground">
-              {GAME_COPY.mapSetTitle(division)}
+              {initial ? GAME_COPY.mapSetEditTitle(initial.name) : GAME_COPY.mapSetTitle(division)}
             </h2>
             <p className="text-[11px] font-semibold text-foreground/60">{GAME_COPY.mapSetHint}</p>
           </div>

@@ -24,6 +24,23 @@ export const STUDY_LIST_COPY = {
   nameLabel: "List name",
   namePlaceholder: "Week 1",
 
+  /*
+   * Custom Map sets are lists too - a handful of prefectures a member picked
+   * to drill - and this is where a member comes to see and change what they
+   * keep, so they sit beside the lists rather than inside the game's lobby.
+   */
+  mapsHeading: "Your maps",
+  mapsBlurb: "Sets of prefectures you picked for the Map game: see one on the map, change it, or take it off the list",
+  mapsEmpty: "No custom maps yet. In the Map game, choose Custom set… in the Play row and tap the prefectures you are learning.",
+  mapsOpen: "View / edit",
+  mapsDelete: "Delete",
+  mapsDeleteTitle: (name: string) => `Delete ${name}?`,
+  mapsDeleteBody: "Games already played on it keep their record. The set itself is gone for good.",
+  mapsDeleting: "Deleting…",
+  mapsDeleteFailed: "Could not delete that map.",
+  mapsPlay: "Play in the Map game",
+  mapsSaved: "Saved",
+
   heading: "Your lists",
   /*
    * Not "built by hand" any more: Trouble and Favourites are here too, and

@@ -144,6 +144,8 @@ export const NAV_SECTIONS: NavSection[] = [
      */
     children: [
       { label: "Your lists", path: "lists", fallback: "/lists" },
+      /* Custom Map sets: a member's own, so a member-only page like the rest. */
+      { label: "Your maps", path: "lists/maps", memberOnly: true },
       { label: "Auto lists", path: "lists/auto", memberOnly: true },
       { label: "Following", path: "lists/following", memberOnly: true },
       { label: "Archived", path: "lists/archived", memberOnly: true },
