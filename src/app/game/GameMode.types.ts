@@ -1,4 +1,5 @@
 import type { MapCountryCode } from "@/lib/mapCountries";
+import type { MapCustomSetSummary } from "@/lib/mapCustomSets";
 import type { GameActivityByKind, GameKindActivity } from "@/lib/gameActivity";
 
 import type {
@@ -47,6 +48,8 @@ export type GameSetupResponse = {
   activity: GameActivityByKind;
   /** False for a member who has never connected WaniKani. */
   hasWanikani?: boolean;
+  /** The member's own Map sets, every country together; the panel filters. */
+  mapSets?: MapCustomSetSummary[];
 };
 
 export type GameLeaderboardDay = {
@@ -94,6 +97,8 @@ export type GameSelection = {
   timeLimitMs: GameTimeLimitMs;
   /** Map only. Japan when unset, which is every other game and every old client. */
   mapCountry?: MapCountryCode;
+  /** Map only. A saved set of the country's regions; null plays them all. */
+  mapSetId?: string | null;
 };
 
 export type GameLeaderboardFilters = {

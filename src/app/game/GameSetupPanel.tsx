@@ -1,5 +1,8 @@
+import { useEffect, useMemo, useState } from "react";
+
 import { GAME_CHOICE_COUNTS, GAME_KINDS, GAME_PRACTICE_LIST_VALUES, gameKindRules } from "@/lib/gameMode";
 import { getPlayableMapCountries, type MapCountryCode } from "@/lib/mapCountries";
+import { mapSetLabel, type MapCustomSetSummary } from "@/lib/mapCustomSets";
 import { GAME_DIRECTION_VALUES, gameAnswerModesFor, type GameAnswerMode, type GameChoiceCount, type GameDirection, type GamePracticeList } from "@/lib/gameMode";
 import SegmentedControl from "@/app/shared/SegmentedControl";
 import StudyTagListsButton from "@/app/shared/StudyTagListsButton";
@@ -20,6 +23,7 @@ import {
 } from "./GameMode.constants";
 import GameCornersPicker from "./GameCornersPicker";
 import GameModeToggle from "./GameModeToggle";
+import MapSetPicker from "./MapSetPicker";
 import { gameAvailableCount, gameRequiredCount, gameSelectionAvailableCount, gameSelectionIsPlayable } from "./gameHubCards";
 import type { GameSelection, GameSetupResponse } from "./GameMode.types";
 
@@ -45,9 +49,27 @@ type Props = {
 const LABEL_CLASS = "mb-1 block truncate text-[10px] font-black uppercase tracking-wide text-foreground/60";
 const FIELD_CLASS = "h-9 w-full rounded-lg border border-line bg-surface px-2.5 text-sm font-bold text-foreground";
 
-export default function GameSetupPanel({ accountId, setup, selection, starting, onChange, onStart, onBack, isAdmin = false }: Props) {
+/** The select's value for "open the picker", which is not a set. */
+const NEW_MAP_SET = "__new";
+
+export default function GameSetupPanel({ accountId, setup: loaded, selection, starting, onChange, onStart, onBack, isAdmin = false }: Props) {
   const rules = gameKindRules(selection.kind);
   const accent = GAME_KIND_ACCENT[selection.kind];
+  /*
+   * The member's Map sets, held here so one saved a moment ago is offered
+   * without a reload; the setup call brought the rest. The counts below read
+   * this list, so the item count moves the moment a set is chosen.
+   */
+  const [mapSets, setMapSets] = useState<MapCustomSetSummary[]>(loaded.mapSets ?? []);
+  const [picking, setPicking] = useState(false);
+  const setup = useMemo(() => ({ ...loaded, mapSets }), [loaded, mapSets]);
+  const mapCountry = selection.mapCountry ?? "JP";
+  const setsHere = mapSets.filter((set) => set.country === mapCountry);
+  const chosenSet = setsHere.find((set) => set.id === selection.mapSetId) ?? null;
+  /* A set from storage that is gone, or belongs to another country, plays nothing: back to every one. */
+  useEffect(() => {
+    if (selection.mapSetId && !chosenSet) onChange((value) => ({ ...value, mapSetId: null }));
+  }, [chosenSet, onChange, selection.mapSetId]);
   const available = gameSelectionAvailableCount(setup, selection);
   const playable = gameSelectionIsPlayable(setup, selection);
   const dailyPlayed = selection.kind === GAME_KINDS.daily && setup.availability.daily.playedToday;
@@ -148,7 +170,8 @@ export default function GameSetupPanel({ accountId, setup, selection, starting, 
               <select
                 value={selection.mapCountry ?? "JP"}
                 onChange={(event) =>
-                  onChange((value) => ({ ...value, mapCountry: event.target.value as MapCountryCode }))
+                  /* A set belongs to one map, so changing the map drops it. */
+                  onChange((value) => ({ ...value, mapCountry: event.target.value as MapCountryCode, mapSetId: null }))
                 }
                 className={FIELD_CLASS}
               >
@@ -161,6 +184,33 @@ export default function GameSetupPanel({ accountId, setup, selection, starting, 
             </label>
           );
         })() : null}
+
+        {/* Which of the country's regions: every one, or a set the member built. */}
+        {rules.usesMapCountry ? (
+          <label>
+            <span className={LABEL_CLASS}>{GAME_COPY.mapSet}</span>
+            <select
+              value={chosenSet?.id ?? ""}
+              onChange={(event) => {
+                if (event.target.value === NEW_MAP_SET) {
+                  setPicking(true);
+                  return;
+                }
+                const mapSetId = event.target.value || null;
+                onChange((value) => ({ ...value, mapSetId }));
+              }}
+              className={FIELD_CLASS}
+            >
+              <option value="">{GAME_COPY.mapSetWhole}</option>
+              {setsHere.map((set) => (
+                <option key={set.id} value={set.id}>
+                  {mapSetLabel(set)}
+                </option>
+              ))}
+              <option value={NEW_MAP_SET}>{GAME_COPY.mapSetNew}</option>
+            </select>
+          </label>
+        ) : null}
 
         {supportsDirection ? (
           <label>
@@ -280,6 +330,19 @@ export default function GameSetupPanel({ accountId, setup, selection, starting, 
           {footer}
         </p>
       </div>
+
+      {picking ? (
+        <MapSetPicker
+          accountId={accountId}
+          country={mapCountry}
+          onClose={() => setPicking(false)}
+          onSaved={(set) => {
+            setMapSets((current) => [set, ...current]);
+            onChange((value) => ({ ...value, mapSetId: set.id }));
+            setPicking(false);
+          }}
+        />
+      ) : null}
     </section>
   );
 }

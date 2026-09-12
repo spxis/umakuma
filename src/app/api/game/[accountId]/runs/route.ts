@@ -60,6 +60,8 @@ const bodySchema = z.object({
    * at nothing.
    */
   mapCountry: z.string().refine(isPlayableMapCountry).optional(),
+  /* Map only: play a saved set of the country's regions instead of all of them. */
+  mapSetId: z.string().min(1).max(40).nullable().optional(),
   /* Our hundred levels, or WaniKani's sixty. */
   ladder: z.enum([GAME_LADDERS.wanikani, GAME_LADDERS.umakuma]).optional(),
 })
@@ -137,6 +139,7 @@ export async function POST(request: Request, context: { params: Promise<{ accoun
           timeLimitMs: rules.usesTimeLimit ? parsed.data.timeLimitMs : null,
           // Ignored by every game but Map, where it chooses the country.
           mapCountry: parsed.data.mapCountry,
+          mapSetId: rules.usesMapCountry ? parsed.data.mapSetId ?? null : null,
           ladder: parsed.data.ladder,
         };
 

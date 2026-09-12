@@ -233,6 +233,7 @@ model Account {
   jlptCertificates       JlptCertificate[]
   studyLists             StudyList[]
   mapRegionMarks         MapRegionMark[]
+  mapCustomSets          MapCustomSet[]
   studyListSubscriptions StudyListSubscription[]
   studyListProposals     StudyListProposal[]
   gameRuns               GameRun[]
@@ -704,6 +705,26 @@ model MapRegionMark {
 
   /// One row per member per region, which is what makes a mark a toggle.
   @@unique([accountId, country, region])
+  @@index([accountId, country])
+}
+
+/// A member's own subset of a country's regions, to play the Map game on.
+///
+/// A student learning twelve prefectures at a time has no use for a round
+/// over forty-seven: the set is the twelve, picked on the map and kept by
+/// name. Regions are stored as the dataset names them ("3" for Iwate, "TX"
+/// for Texas), the way MapRegionMark stores them, so both read one code.
+model MapCustomSet {
+  id        String   @id @default(cuid())
+  accountId String
+  /// The map: "JP", "US", "CA" - the dataset's own country code.
+  country   String   @db.VarChar(2)
+  name      String   @db.VarChar(60)
+  regions   String[]
+  createdAt DateTime @default(now())
+
+  account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
   @@index([accountId, country])
 }
 

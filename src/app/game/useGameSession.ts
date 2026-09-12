@@ -87,6 +87,7 @@ export function useGameSession({
           timeLimitMs: rules.usesTimeLimit ? selection.timeLimitMs : null,
           // Same rule: a country chosen for Map must not ride along elsewhere.
           mapCountry: rules.usesMapCountry ? selection.mapCountry ?? "JP" : undefined,
+          mapSetId: rules.usesMapCountry ? selection.mapSetId ?? null : undefined,
         }),
       });
       const payload = (await response.json()) as ActiveGame & { error?: string };

@@ -41,6 +41,9 @@ export function gameRequiredCount(selection: GameSelection): number {
   const rules = gameKindRules(selection.kind);
   const minimumItems = rules.usesHardMode ? selection.choiceCount : 2;
   if (selection.kind === GAME_KINDS.daily) return 1;
+  /* A custom set is the round: twelve chosen prefectures play as twelve
+     questions whatever the batch says, so the set only has to fill the tiles. */
+  if (rules.usesMapCountry && selection.mapSetId) return minimumItems;
   if (!rules.usesBatchSize || selection.ultraMode || selection.batchSize === "all") return minimumItems;
   return Math.max(minimumItems, selection.batchSize);
 }
@@ -61,6 +64,9 @@ export function gameSelectionAvailableCount(setup: GameSetupResponse, selection:
   if (rules.usesMapCountry) {
     /* Only a country the game has an id range for can be selected here. */
     const chosen = selection.mapCountry ?? "JP";
+    /* A saved set is the pool when one is chosen; the setup carries them. */
+    const set = selection.mapSetId ? setup.mapSets?.find((entry) => entry.id === selection.mapSetId) : undefined;
+    if (set && set.country === chosen) return set.regions.length;
     return GEO_REGION_COUNTS[isGameMapCountry(chosen) ? chosen : "JP"];
   }
 

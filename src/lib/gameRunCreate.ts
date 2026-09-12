@@ -26,6 +26,8 @@ import {
 import { buildMapQuestions } from "@/lib/gameMapQuestions";
 import { loadDailyPool, loadPracticePool, loadShiritoriPool } from "@/lib/gameModePools";
 import { loadGamePool } from "@/lib/gameModeServer";
+import { entriesInMapSet } from "@/lib/mapCustomSets";
+import { loadMapSet } from "@/lib/mapCustomSetsServer";
 import { KANJI_LADDER_LEVELS } from "@/lib/kanjiLadder";
 import { loadUmakumaGamePool } from "@/lib/uk/ukGamePool";
 import { seededRandom, shuffleWith } from "@/lib/gameRandom";
@@ -66,6 +68,14 @@ export type GameRunRequest = {
    * resolve as Japan.
    */
   mapCountry?: CountryCode;
+  /**
+   * A member's own subset of the country's regions, by id.
+   *
+   * Not persisted either: the questions carry the region ids, and the set is
+   * only which of them were on the table. The country comes from the set
+   * when one is given, because a set belongs to one map.
+   */
+  mapSetId?: string | null;
   /**
    * Which ladder the run draws from. WaniKani unless asked otherwise.
    *
@@ -283,18 +293,31 @@ async function planShiritoriRun(accountId: string, request: GameRunRequest): Pro
   throw new Error("No eligible items are available.");
 }
 
+export const MAP_SET_MISSING = "That custom set is not available.";
+
 /**
  * The 47 prefectures are a fixed, shared pool: no assignments, no levels, and
- * the same board for every player.
+ * the same board for every player - unless the player brought their own set,
+ * in which case the board is those regions and nothing else, distractors
+ * included. Twelve learned prefectures should not be drilled against
+ * thirty-five unlearned ones.
  */
-function planMapRun(request: GameRunRequest): GameRunPlan {
-  const country = request.mapCountry ?? "JP";
+async function planMapRun(accountId: string, request: GameRunRequest): Promise<GameRunPlan> {
+  const set = request.mapSetId ? await loadMapSet(accountId, request.mapSetId) : null;
+  if (request.mapSetId && !set) throw new Error(MAP_SET_MISSING);
+  const country = (set?.country as CountryCode | undefined) ?? request.mapCountry ?? "JP";
   /*
    * The capitals round draws from the regions whose capital is not simply
    * their own name, so it asks something. Japan needs this most: twenty-nine
-   * of its forty-seven prefectures share the name.
+   * of its forty-seven prefectures share the name. Inside a custom set the
+   * same rule holds, falling back to the whole set when too few differ.
    */
-  const pool = request.answerMode === "capital" ? geoCapitalEntries(country) : geoMapEntries(country);
+  let pool = request.answerMode === "capital" ? geoCapitalEntries(country) : geoMapEntries(country);
+  if (set) {
+    const chosen = entriesInMapSet(geoMapEntries(country), set.regions);
+    const differing = chosen.filter((entry) => entry.capitalDiffers);
+    pool = request.answerMode === "capital" && differing.length >= request.choiceCount ? differing : chosen;
+  }
   const requested = request.batchSize === "all" ? pool.length : request.batchSize;
   const questionCount = Math.min(requested, pool.length);
   return {
@@ -324,7 +347,7 @@ export async function planGameRun(accountId: string, request: GameRunRequest): P
   if (request.kind === GAME_KINDS.revenge) return planPracticeRun(accountId, request);
   if (request.kind === GAME_KINDS.timeAttack) return planTimeAttackRun(accountId, request);
   if (request.kind === GAME_KINDS.shiritori) return planShiritoriRun(accountId, request);
-  if (request.kind === GAME_KINDS.map) return planMapRun(request);
+  if (request.kind === GAME_KINDS.map) return planMapRun(accountId, request);
   return planMatchRun(accountId, request);
 }
 

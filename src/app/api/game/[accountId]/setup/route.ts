@@ -16,6 +16,7 @@ import {
 } from "@/lib/gameMode";
 import { resolveDailyLevelCap } from "@/lib/gameModePools";
 import { loadGamePool } from "@/lib/gameModeServer";
+import { listMapSets } from "@/lib/mapCustomSetsServer";
 import { shiritoriHeadKey, shiritoriTailKey } from "@/lib/gameShiritori";
 import { prisma } from "@/lib/prisma";
 import { fetchStudyTagRows } from "@/lib/studySubjectTags";
@@ -58,7 +59,7 @@ export async function GET(request: Request, context: { params: Promise<{ account
         ).length;
 
         const dailyKey = getVancouverDateKey(new Date());
-        const [tagRows, dailyRun, dailyLevelCap, activity] = await Promise.all([
+        const [tagRows, dailyRun, dailyLevelCap, activity, mapSets] = await Promise.all([
           fetchStudyTagRows(accountId),
           prisma.gameRun.findUnique({
             where: { accountId_kind_dailyKey: { accountId, kind: PrismaGameKind.daily, dailyKey } },
@@ -66,6 +67,7 @@ export async function GET(request: Request, context: { params: Promise<{ account
           }),
           resolveDailyLevelCap(),
           loadGameActivity(accountId),
+          listMapSets(accountId),
         ]);
 
         // Practice draws from the started pool, so a tag on an item the player
@@ -104,6 +106,7 @@ export async function GET(request: Request, context: { params: Promise<{ account
            * have nothing to drill.
            */
           hasWanikani: Boolean(account.wkUsername),
+          mapSets,
           availability: {
             daily: {
               dateKey: dailyKey,
