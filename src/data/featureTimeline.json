@@ -7860,12 +7860,25 @@
     "id": "your-maps-a-shape-says-its-name-and-its-reading",
     "name": "A map shape says its name and its reading",
     "area": "study",
+    "status": "shipped",
+    "kind": "bug",
+    "date": "2026-09-12",
+    "summary": "In Your maps, the Shapes view prints each prefecture's written name under its outline with the reading and English following the site's Off, \u3042, EN, Both choice - and Off hides the name so the outlines can be quizzed bare.",
+    "dateIsEstimate": false,
+    "release": 626,
+    "version": "1.125.0",
+    "releasedAt": "2026-09-12T10:20:25Z"
+  },
+  {
+    "id": "pnpm-task-reopen-lets-a-shipped-ticket-back-when-its-stamp-n",
+    "name": "pnpm task reopen lets a Shipped ticket back when its stamp never reached main",
+    "area": "admin",
     "kind": "bug",
     "status": "shipped",
     "date": "2026-09-12",
-    "version": "1.125.0",
-    "release": 626,
-    "releasedAt": "2026-09-12T10:20:25Z",
-    "summary": "In Your maps, the Shapes view prints each prefecture's written name under its outline with the reading and English following the site's Off, \u3042, EN, Both choice - and Off hides the name so the outlines can be quizzed bare."
+    "version": "1.125.1",
+    "release": 627,
+    "releasedAt": "2026-09-12T10:59:01Z",
+    "summary": "A ticket marked shipped by a release that was stopped before it reached main can be reopened again; one whose release did land still cannot."
   }
 ]
