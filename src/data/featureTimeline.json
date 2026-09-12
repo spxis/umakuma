@@ -7795,12 +7795,25 @@
     "id": "your-maps-a-shapes-view-beside-the-list-showing-each-set-s-p",
     "name": "Your maps: a Shapes view beside the list, showing each set's prefecture shapes",
     "area": "games",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-11",
+    "summary": "Your maps can be viewed as shapes: switch from the list of names to see every prefecture in a set drawn small, each outline with its name beneath, so a set is recognised at a glance the way the map shows it.",
+    "dateIsEstimate": false,
+    "release": 621,
+    "version": "1.121.0",
+    "releasedAt": "2026-09-12T05:26:40Z"
+  },
+  {
+    "id": "a-page-of-newest-members-current-to-oldest",
+    "name": "A members page, newest first",
+    "area": "study",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-11",
-    "version": "1.121.0",
-    "release": 621,
-    "releasedAt": "2026-09-12T05:26:40Z",
-    "summary": "Your maps can be viewed as shapes: switch from the list of names to see every prefecture in a set drawn small, each outline with its name beneath, so a set is recognised at a glance the way the map shows it."
+    "version": "1.122.0",
+    "release": 622,
+    "releasedAt": "2026-09-12T05:37:47Z",
+    "summary": "A new Members page lists everyone here with the newest at the top, alongside the XP boards."
   }
 ]
