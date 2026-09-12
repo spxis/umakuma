@@ -7730,12 +7730,25 @@
     "id": "maps-game-a-custom-set-of-prefectures-picked-on-the-map-save",
     "name": "Maps game: a custom set of prefectures, picked on the map, saved by name, and played",
     "area": "games",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-11",
+    "summary": "The Map game can be played on a custom set: pick the prefectures you are learning on the map, drag and zoom to reach the small ones, save the set by name, and choose it in the lobby to drill only those.",
+    "dateIsEstimate": false,
+    "release": 616,
+    "version": "1.116.0",
+    "releasedAt": "2026-09-12T04:24:04Z"
+  },
+  {
+    "id": "maps-game-view-edit-and-delete-your-custom-sets-from-the-pla",
+    "name": "Maps game: view, edit and delete your custom sets from the Play row",
+    "area": "games",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-11",
-    "version": "1.116.0",
-    "release": 616,
-    "releasedAt": "2026-09-12T04:24:04Z",
-    "summary": "The Map game can be played on a custom set: pick the prefectures you are learning on the map, drag and zoom to reach the small ones, save the set by name, and choose it in the lobby to drill only those."
+    "version": "1.117.0",
+    "release": 617,
+    "releasedAt": "2026-09-12T04:58:34Z",
+    "summary": "Your custom Map sets have a page of their own under Lists, beside Your lists: open one to see it on the map, change its name or its prefectures, or delete it. The Map lobby still offers every set in its Play row."
   }
 ]

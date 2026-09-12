@@ -178,4 +178,5 @@ export const CODENAMES_PART_3: readonly ReleaseCodename[] = [
   { romaji: "Renketsu", ja: "連結", reading: "れんけつ", gloss: "a coupling, the API joined to the board's own rules" },
   { romaji: "Rokotsu", ja: "露骨", reading: "ろこつ", gloss: "said plainly: what every ticket is, read through the lease" },
   { romaji: "Wakugumi", ja: "枠組み", reading: "わくぐみ", gloss: "a frame: the prefectures a member chose to play within" },
+  { romaji: "Azukari", ja: "預かり", reading: "あずかり", gloss: "in your keeping: the maps you made, kept where your lists are" },
 ];
