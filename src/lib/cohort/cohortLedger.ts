@@ -40,8 +40,24 @@ export type LedgerRow = {
   updatedAt: Date;
 };
 
+/** One award as it happened - the mirror of `XpAward`. Zero when the cap had already bitten. */
+export type LedgerAward = {
+  kind: string;
+  dayKey: string;
+  amount: number;
+  subjectId: number | null;
+  awardedAt: Date;
+};
+
 export class CohortLedger {
   private readonly rows = new Map<string, LedgerRow>();
+  /**
+   * The receipts beside the tally, for the days this run touched. The server
+   * writes one XpAward per award including the ones a cap paid nothing for;
+   * a simulated member's capped lesson day must record the same, or the
+   * history shows two shapes of member one row apart.
+   */
+  readonly awards: LedgerAward[] = [];
   /** Day keys written to since the ledger was loaded, so only those are saved. */
   readonly touchedDays = new Set<string>();
   xp: number;
@@ -53,15 +69,23 @@ export class CohortLedger {
     this.xpLevel = xpLevelFor(this.xp);
   }
 
-  /** Mirrors `awardXp` and `creditXp` in `xpServer.ts`. */
-  award(kind: XpAwardKind, at: Date, note?: string | null): number {
+  /** Mirrors `awardXp` and `creditXp` in `xpServer.ts`, receipt included. */
+  award(kind: XpAwardKind, at: Date, note?: string | null, subjectId: number | null = null): number {
     const dayKey = getVancouverDateKey(at);
     const key = `${dayKey}|${kind}`;
     const existing = this.rows.get(key);
+    /* A once-a-day re-check is not work; the server records nothing for it either. */
     if (existing && XP_ONCE_PER_DAY.includes(kind)) return 0;
 
     const amount = xpAwardValue(kind, existing?.amount ?? 0, { gamesPerDay: gamesPerDayAt(this.xpLevel) });
-    if (amount <= 0) return 0;
+    if (amount <= 0) {
+      /* The cap has bitten and the work still happened: recorded at zero,
+         as `awardXp` does on its way out. */
+      this.awards.push({ kind, dayKey, amount: 0, subjectId, awardedAt: at });
+      this.touchedDays.add(dayKey);
+      return 0;
+    }
+    this.awards.push({ kind, dayKey, amount, subjectId, awardedAt: at });
 
     if (existing) {
       existing.amount += amount;
@@ -76,15 +100,29 @@ export class CohortLedger {
     return amount;
   }
 
-  /** Mirrors `awardXpQuietly`: one award per `times`, stopping once a cap pays nothing. */
+  /**
+   * Mirrors `awardXpEachQuietly`: one award per `times`, carrying the item
+   * it was for, stopping once a cap pays nothing - and then, as the server
+   * does with one createMany, recording the rest of the batch at zero.
+   */
   awardAll(requests: readonly XpAwardRequest[], at: Date): number {
     let total = 0;
     for (const request of requests) {
       const times = Math.max(0, Math.trunc(request.times ?? 1));
+      let stoppedAt: number | null = null;
       for (let attempt = 0; attempt < times; attempt += 1) {
-        const awarded = this.award(request.kind, at, request.note);
-        if (awarded <= 0) break;
+        const awarded = this.award(request.kind, at, request.note, request.subjectIds?.[attempt] ?? null);
+        if (awarded <= 0) {
+          stoppedAt = attempt + 1;
+          break;
+        }
         total += awarded;
+      }
+      if (stoppedAt !== null) {
+        const dayKey = getVancouverDateKey(at);
+        for (let index = stoppedAt; index < times; index += 1) {
+          this.awards.push({ kind: request.kind, dayKey, amount: 0, subjectId: request.subjectIds?.[index] ?? null, awardedAt: at });
+        }
       }
     }
     return total;

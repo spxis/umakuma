@@ -194,6 +194,16 @@ export async function saveStanding(accountId: string, member: CohortMember): Pro
         data: rows.slice(at, at + CHUNK).map((row) => ({ accountId, ...row })),
       });
     }
+    /* The receipts, replaced whole for the same days as the tally, so a
+       simulated member's history can say which kanji and which lessons a
+       cap paid nothing for - the same two answers a real member's gives. */
+    await prisma.xpAward.deleteMany({ where: { accountId, dayKey: { in: days } } });
+    const awards = member.ledger.awards.filter((award) => member.ledger.touchedDays.has(award.dayKey));
+    for (let at = 0; at < awards.length; at += CHUNK) {
+      await prisma.xpAward.createMany({
+        data: awards.slice(at, at + CHUNK).map((award) => ({ accountId, ...award })),
+      });
+    }
   }
 
   /* The inputs only. The floor, the placement and when they placed are
@@ -220,6 +230,7 @@ export async function saveStanding(accountId: string, member: CohortMember): Pro
   });
   await syncAccountLevels(accountId);
   member.ledger.touchedDays.clear();
+  member.ledger.awards.length = 0;
   return rows.length;
 }
 

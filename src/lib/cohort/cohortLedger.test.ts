@@ -93,3 +93,36 @@ describe("CohortLedger.settleDay", () => {
     expect(ledger.settleDay(at, 0)).toBe(XP_BONUSES.queueCleared);
   });
 });
+
+/*
+ * The receipts beside the tally.
+ *
+ * The server writes one XpAward per award, including the ones a daily cap
+ * paid nothing for; until this the mirror kept only the tally, so a
+ * simulated member's capped lesson day was blank where a real member's says
+ * which ten lessons went unpaid. Two shapes of member, one history row apart.
+ */
+describe("the ledger's receipts", () => {
+  it("records every award with its item, and a capped batch at zero", () => {
+    const ledger = new CohortLedger();
+    const at = new Date("2026-09-12T12:00:00Z");
+    /* Thirty-one lessons: the cap pays thirty, and the thirty-first is
+       recorded rather than lost - as are any after it, without asking again. */
+    const ids = Array.from({ length: 33 }, (_, index) => 1000 + index);
+    ledger.awardAll([{ kind: "lessonLearned", times: ids.length, subjectIds: ids }], at);
+    const lessons = ledger.awards.filter((award) => award.kind === "lessonLearned");
+    expect(lessons).toHaveLength(33);
+    expect(lessons.filter((award) => award.amount > 0)).toHaveLength(30);
+    expect(lessons.filter((award) => award.amount === 0).map((award) => award.subjectId)).toEqual([1030, 1031, 1032]);
+    expect(lessons[0]).toMatchObject({ subjectId: 1000, dayKey: "2026-09-12" });
+  });
+
+  it("writes no receipt for a once-a-day re-check, like the server", () => {
+    const ledger = new CohortLedger();
+    const at = new Date("2026-09-12T12:00:00Z");
+    ledger.award("dailySignIn", at);
+    ledger.award("dailySignIn", at);
+    expect(ledger.awards.filter((award) => award.kind === "dailySignIn")).toHaveLength(1);
+  });
+});
+
