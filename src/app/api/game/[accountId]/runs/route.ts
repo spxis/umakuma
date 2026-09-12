@@ -22,7 +22,8 @@ import {
   isGameTimeLimitMs, type PlayableGameKind,
 } from "@/lib/gameMode";
 import { hydrateGameQuestions, toGameRunSummary } from "@/lib/gameModeServer";
-import { isAdminOnlyMapCountry, isPlayableMapCountry } from "@/lib/mapCountries";
+import { canUseMapCountry, isAdminOnlyMapCountry, isPlayableMapCountry } from "@/lib/mapCountries";
+import { loadMapSet } from "@/lib/mapCustomSetsServer";
 import {
   findResumableDailyRun,
   GameRunConflictError,
@@ -104,6 +105,16 @@ export async function POST(request: Request, context: { params: Promise<{ accoun
         const country = parsed.data.mapCountry;
         if (country && isAdminOnlyMapCountry(country) && !(await isAuthorizedAdmin(request))) {
           return NextResponse.json({ error: "That map is not available." }, { status: 403 });
+        }
+        /* A set carries its own country, so the same question is asked of it:
+           the set was checked when saved, and is checked again when played,
+           because an admin-only pilot can stop being one either way. */
+        if (parsed.data.mapSetId) {
+          const set = await loadMapSet(accountId, parsed.data.mapSetId);
+          if (!set) return NextResponse.json({ error: "That custom set is not available." }, { status: 422 });
+          if (!canUseMapCountry(set.country, await isAuthorizedAdmin(request))) {
+            return NextResponse.json({ error: "That map is not available." }, { status: 403 });
+          }
         }
 
         /* A level test is started like any game so the runner can play it,

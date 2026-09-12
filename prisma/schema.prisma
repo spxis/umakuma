@@ -725,6 +725,8 @@ model MapCustomSet {
 
   account Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
 
+  /// One set per name per map: two "Kanto" sets is a select nobody can read.
+  @@unique([accountId, country, name])
   @@index([accountId, country])
 }
 

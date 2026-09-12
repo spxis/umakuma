@@ -7717,12 +7717,25 @@
     "id": "board-convergence-uk-04-the-admin-board-reads-like-itsutsu-s",
     "name": "Board convergence UK-04: the admin board reads like Itsutsu's, and the four dead tabs go",
     "area": "admin",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-11",
+    "summary": "The admin release page keeps two tabs, Tickets and Released; the four that read a file holding only shipped work are gone. Tickets can be searched, filtered by lane, kind and area, ordered five ways including quick wins, grouped, and graded from the row, and a hold that has lapsed reads as stale rather than in progress.",
+    "dateIsEstimate": false,
+    "release": 615,
+    "version": "1.115.0",
+    "releasedAt": "2026-09-11T16:06:35Z"
+  },
+  {
+    "id": "maps-game-a-custom-set-of-prefectures-picked-on-the-map-save",
+    "name": "Maps game: a custom set of prefectures, picked on the map, saved by name, and played",
+    "area": "games",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-11",
-    "version": "1.115.0",
-    "release": 615,
-    "releasedAt": "2026-09-11T16:06:35Z",
-    "summary": "The admin release page keeps two tabs, Tickets and Released; the four that read a file holding only shipped work are gone. Tickets can be searched, filtered by lane, kind and area, ordered five ways including quick wins, grouped, and graded from the row, and a hold that has lapsed reads as stale rather than in progress."
+    "version": "1.116.0",
+    "release": 616,
+    "releasedAt": "2026-09-12T04:24:04Z",
+    "summary": "The Map game can be played on a custom set: pick the prefectures you are learning on the map, drag and zoom to reach the small ones, save the set by name, and choose it in the lobby to drill only those."
   }
 ]

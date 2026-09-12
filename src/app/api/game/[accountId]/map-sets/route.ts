@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { canAccessAccount } from "@/lib/accountAccess";
+import { isAuthorizedAdmin } from "@/lib/admin";
 import { withApiRouteTelemetry } from "@/lib/apiRouteTelemetry";
 import { MAP_SET_LIMITS } from "@/lib/mapCustomSets";
 import { createMapSet, listMapSets } from "@/lib/mapCustomSetsServer";
@@ -48,7 +49,7 @@ export async function POST(request: Request, context: { params: Promise<{ accoun
         return NextResponse.json({ error: "Invalid request payload." }, { status: 400 });
       }
       /* The rules say what a usable set is; this route repeats none of them. */
-      const outcome = await createMapSet(accountId, parsed.data);
+      const outcome = await createMapSet(accountId, parsed.data, await isAuthorizedAdmin(request));
       if (!outcome.ok) {
         return NextResponse.json({ error: outcome.problems[0], problems: outcome.problems }, { status: 422 });
       }

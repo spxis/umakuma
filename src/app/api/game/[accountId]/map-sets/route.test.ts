@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@/lib/accountAccess", () => ({ canAccessAccount: vi.fn(async () => true) }));
+vi.mock("@/lib/admin", () => ({ isAuthorizedAdmin: vi.fn(async () => false) }));
 vi.mock("@/lib/apiRouteTelemetry", () => ({
   withApiRouteTelemetry: async ({ execute }: { execute: () => Promise<Response> }) => execute(),
 }));
@@ -34,7 +35,8 @@ describe("POST /api/game/[accountId]/map-sets", () => {
     createMapSet.mockResolvedValue({ ok: true, set: { id: "s1", country: "JP", name: "Kanto", regions: ["8", "9"], createdAt: "" } });
     const response = await post({ country: "JP", name: "Kanto", regions: [8, 9] });
     expect(response.status).toBe(201);
-    expect(createMapSet).toHaveBeenCalledWith("acct", { country: "JP", name: "Kanto", regions: [8, 9] });
+    /* And says who is asking, so an admin-only pilot is refused to everyone else. */
+    expect(createMapSet).toHaveBeenCalledWith("acct", { country: "JP", name: "Kanto", regions: [8, 9] }, false);
   });
 
   it("answers 422 with the problems in words when the rules refuse", async () => {
