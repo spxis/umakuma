@@ -7743,12 +7743,25 @@
     "id": "maps-game-view-edit-and-delete-your-custom-sets-from-the-pla",
     "name": "Maps game: view, edit and delete your custom sets from the Play row",
     "area": "games",
+    "status": "shipped",
+    "kind": "feature",
+    "date": "2026-09-11",
+    "summary": "Your custom Map sets have a page of their own under Lists, beside Your lists: open one to see it on the map, change its name or its prefectures, or delete it. The Map lobby still offers every set in its Play row.",
+    "dateIsEstimate": false,
+    "release": 617,
+    "version": "1.117.0",
+    "releasedAt": "2026-09-12T04:58:34Z"
+  },
+  {
+    "id": "maps-game-admins-make-a-set-public-so-every-member-can-view-",
+    "name": "Maps game: admins make a set public so every member can view it and play it",
+    "area": "games",
     "kind": "feature",
     "status": "shipped",
     "date": "2026-09-11",
-    "version": "1.117.0",
-    "release": 617,
-    "releasedAt": "2026-09-12T04:58:34Z",
-    "summary": "Your custom Map sets have a page of their own under Lists, beside Your lists: open one to see it on the map, change its name or its prefectures, or delete it. The Map lobby still offers every set in its Play row."
+    "version": "1.118.0",
+    "release": 618,
+    "releasedAt": "2026-09-12T05:08:47Z",
+    "summary": "An admin can share a custom Map set with the whole site. A shared set appears under Site maps on every member's Your maps page, where they can open it on the map, and in the Map game's Play row beside their own sets, so the children can practise the map their parent made."
   }
 ]
