@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { execFileSync } from "node:child_process";
 
 import { FEATURE_AREA_VALUES, FEATURE_KINDS, isFeatureArea } from "../src/lib/featureTimeline";
 import { TASK_CLAIM_LIMITS, TASK_LEASE_MS, claimTask, heldNow, leaseExpired, taskLine } from "../src/lib/ticketClaims";
@@ -11,6 +12,7 @@ import {
   isTicketEffort,
   isTicketPriority,
   isTicketStatus,
+  stampReachedMain,
   ticketDraftProblems,
   ticketMoveData,
   ticketMoveWhere,
@@ -27,7 +29,7 @@ import {
  *   pnpm task claim <id> "<who>"                  check one out
  *   pnpm task release <id> --by "<who>"           put it back
  *   pnpm task drop <id> --by "<who>"              answered no, kept on the record
- *   pnpm task reopen <id> --by "<who>"            a no, reconsidered
+ *   pnpm task reopen <id> --by "<who>"            a no reconsidered, or a stamp that never reached main
  *   pnpm task grade <id> [--priority high|normal|low|none] [--effort small|medium|large|none]
  *
  * Add `:local` to any of them - `pnpm task:local` - to talk to the local
@@ -266,7 +268,33 @@ async function main(): Promise<void> {
     case "reopen": {
       const [id] = rest;
       if (!id) usage();
-      await move(id, TICKET_MOVE_TARGETS.open, actorFrom(rest));
+      const who = actorFrom(rest);
+      const row = await client.ticket.findUnique({ where: { id }, select: { status: true, filedAs: true } });
+      if (!row) fail(`No task ${id}.`);
+      /*
+       * Shipped is terminal in the move table, and stays so. The one way back
+       * is a stamp that never landed: release:take marks the ticket shipped
+       * before preflight and the push, so a chain stopped in between leaves a
+       * Shipped ticket under a version origin/main has never seen. Asked of
+       * origin/main, fetched first, never of the local file that was stamped.
+       */
+      if (row.status === TICKET_STATUSES.shipped) {
+        execFileSync("git", ["fetch", "origin", "--quiet"], { stdio: "inherit" });
+        const raw = execFileSync("git", ["show", "origin/main:src/data/featureTimeline.json"], { encoding: "utf8" });
+        const published = JSON.parse(raw) as { id: string; version?: string }[];
+        if (stampReachedMain(row.filedAs, published)) {
+          fail(`${id} shipped as ${row.filedAs}, which is on main. A shipped ticket does not reopen; file a new one.`);
+        }
+        const now = new Date();
+        const reopened = await client.ticket.updateMany({
+          where: { id, status: TICKET_STATUSES.shipped },
+          data: { ...ticketMoveData(TICKET_MOVE_TARGETS.open, who, now) },
+        });
+        if (reopened.count === 0) fail(`${id} changed under you; run pnpm task and look again.`);
+        console.log(`${id} reopened on ${target()}: its stamp ${row.filedAs ?? "(none)"} never reached main.`);
+        break;
+      }
+      await move(id, TICKET_MOVE_TARGETS.open, who);
       console.log(`${id} reopened on ${target()}`);
       break;
     }

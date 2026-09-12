@@ -71,7 +71,11 @@ Numbered so a ticket and a test can cite them.
    | `dropped` | `open` |
 
    A `done` row does not move. Its release stamp is a fact about a release
-   that went out, and reopening it would rewrite that. A regression is a new
+   that went out, and reopening it would rewrite that. The one exception is
+   a stamp that never went out: the release tool marks the row before the
+   push, so a chain stopped in between leaves `done` under a version main
+   never saw, and `reopen` allows exactly that case by asking `origin/main`
+   whether the stamped entry is there. A regression is a new
    `fix` row whose detail cites the old one. The API and the CLI never offer
    `done` as a destination; the release tool writes it together with the
    version bump.

@@ -162,6 +162,25 @@ export function canMoveTicket(from: TicketStatus, to: TicketMoveTarget): boolean
 }
 
 /**
+ * Whether a shipped ticket's stamp actually reached main.
+ *
+ * `release:take` marks the ticket shipped when it stamps the files, which is
+ * before preflight and the push - so a chain stopped after the stamp leaves
+ * a ticket reading Shipped under a version that never landed, and the move
+ * table rightly offers no way out of Shipped. This is the one exception: a
+ * stamp is only a ship once the entry it was filed as sits on origin/main
+ * with a version. Given the published timeline, not the local one, for the
+ * same reason `release:take` reads it - the local file is what was stamped.
+ */
+export function stampReachedMain(
+  filedAs: string | null,
+  published: readonly { id: string; version?: string | null }[],
+): boolean {
+  if (!filedAs) return false;
+  return published.some((entry) => entry.id === filedAs && Boolean(entry.version));
+}
+
+/**
  * What a move button says.
  *
  * The destination as a verb, not as a noun: a button reading "Declined" tells

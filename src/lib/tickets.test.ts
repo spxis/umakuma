@@ -5,6 +5,7 @@ import {
   TICKET_LIMITS,
   TICKET_MOVES,
   compareTicketsByQuickWin,
+  stampReachedMain,
   ticketDraftProblems,
   TICKET_MOVE_TARGETS,
   TICKET_STATUSES,
@@ -266,5 +267,19 @@ describe("a move stamps movedAt", () => {
     for (const to of Object.values(TICKET_MOVE_TARGETS)) {
       expect(ticketMoveData(to, "someone", now).movedAt).toBe(now);
     }
+  });
+});
+
+describe("a stamp that never reached main", () => {
+  const published = [
+    { id: "shipped-entry", version: "1.10.0" },
+    { id: "planned-once", version: null },
+  ];
+
+  it("is a shipped ticket that may be reopened; one whose entry is on main is not", () => {
+    expect(stampReachedMain("shipped-entry", published)).toBe(true);
+    expect(stampReachedMain("never-pushed", published)).toBe(false);
+    expect(stampReachedMain("planned-once", published)).toBe(false);
+    expect(stampReachedMain(null, published)).toBe(false);
   });
 });

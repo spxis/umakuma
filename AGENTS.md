@@ -407,7 +407,7 @@ Run `pnpm quality:check` after non-trivial `src/` edits. If lint issues are auto
       pnpm task claim <id> "<who>"                check one out
       pnpm task release <id> --by "<who>"         put it back
       pnpm task drop <id> --by "<who>"            answered no, kept on the record
-      pnpm task reopen <id> --by "<who>"          a no, reconsidered
+      pnpm task reopen <id> --by "<who>"          a no reconsidered, or a stamp that never reached main
       pnpm task grade <id> --priority high --effort small
 
   **`<id>` is the whole cuid the board prints, never the short prefix.**
