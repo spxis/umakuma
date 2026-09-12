@@ -52,9 +52,23 @@ function SetRegions({ set, view }: { set: MapCustomSetSummary; view: MapSetsView
   const dataset = useGeoDataset(set.country as CountryCode);
   const byCode = new Map((dataset?.regions ?? []).map((region) => [String(region.code), region]));
   /*
-   * The same words choice the pills keep, read here for the shapes: Off shows
-   * the outline alone, あ the name as written, EN the English, Both the pair.
-   * The shapes printed English always, which answers the quiz they pose.
+   * A shape is drawn the way a pill is: the glyph, then the words.
+   *
+   * On a pill the glyph is the kanji, so あ under it means the reading and
+   * Both means reading / English. A shape has no kanji in it - the outline
+   * is the glyph - so the written name goes under the shape in every mode,
+   * the way a pill always shows its kanji, and the words line under that
+   * follows the toggle exactly as a pill's does. This branch used to hand
+   * the name as written to `pillWords` as if it were the reading, so under
+   * Both a shape read 岐阜県 / Gifu beside a pill reading ぎふ / Gifu. John:
+   * "we are missing the hiragana." Dropping the kanji instead would have
+   * lost the one thing a child learns from an outline, which is its name.
+   *
+   * Off is the one place a shape and a pill part: a pill cannot hide its
+   * glyph because the glyph is the pill, but under a shape the written name
+   * is an answer, and Off exists so the outlines can be quizzed bare. John,
+   * when this view was built: "listing english is pretty much cheating...
+   * we should be able to HIDE". So Off hides both lines here.
    */
   const [mode] = usePillWords();
   if (view === "shapes" && dataset) {
@@ -63,14 +77,19 @@ function SetRegions({ set, view }: { set: MapCustomSetSummary; view: MapSetsView
         {set.regions.map((code) => {
           const region = byCode.get(code);
           if (!region) return <li key={code} className="text-xs text-foreground/60">{code}</li>;
-          const words = pillWords(mode, region.nameNative ?? null, region.name);
+          const words = pillWords(mode, region.reading ?? null, region.name);
           return (
             <li key={code} className="flex flex-col items-center gap-0.5">
               <span className="h-10 w-10">
                 <MapRegionGlyph path={region.map.path} bbox={region.map.bbox} tone={MAP_TONES.chosen} />
               </span>
+              {region.nameNative && mode !== "off" ? (
+                <span lang="ja" translate="no" className="text-center text-[11px] font-black leading-tight text-foreground/80">
+                  {region.nameNative}
+                </span>
+              ) : null}
               {words ? (
-                <span lang={mode === "reading" ? "ja" : undefined} className="max-w-24 text-center text-[10px] font-semibold leading-tight text-foreground/60">
+                <span lang={mode === "english" ? undefined : "ja"} className="max-w-24 text-center text-[10px] font-semibold leading-tight text-foreground/60">
                   {words}
                 </span>
               ) : null}
