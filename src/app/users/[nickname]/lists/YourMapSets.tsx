@@ -3,14 +3,23 @@
 import Link from "next/link";
 import { useState } from "react";
 
+import { MAP_TONES } from "@/app/game/GameMode.constants";
 import MapSetPicker from "@/app/game/MapSetPicker";
+import MapRegionGlyph from "@/app/maps/MapRegionGlyph";
 import ConfirmDialog from "@/app/shared/ConfirmDialog";
+import SegmentedControl from "@/app/shared/SegmentedControl";
 import { STUDY_LIST_COPY } from "@/app/shared/studyListCopy";
 import type { CountryCode } from "@/lib/geoRegion";
 import { MAP_COUNTRIES_ALL } from "@/lib/mapCountries";
 import { MAP_SET_VISIBILITIES, groupMapSets, mapSetLabel, type MapCustomSetSummary } from "@/lib/mapCustomSets";
 import { regionNameLabel } from "@/lib/regionNames";
 import { useGeoDataset } from "@/lib/useGeoDataset";
+import { usePersistedEnum } from "@/lib/usePersistedEnum";
+
+/** Names in a line, or every prefecture's outline drawn small. Remembered per browser. */
+type MapSetsView = "list" | "shapes";
+const MAP_SETS_VIEWS: readonly MapSetsView[] = ["list", "shapes"];
+const MAP_SETS_VIEW_STORAGE_KEY = "wr:maps:view";
 
 type Props = {
   accountId: string;
@@ -28,10 +37,33 @@ function countryName(code: string): string {
   return MAP_COUNTRIES_ALL.find((country) => country.code === code)?.label ?? code;
 }
 
-/** One set's regions by name once its country's outlines have loaded, by code until then. */
-function SetRegions({ set }: { set: MapCustomSetSummary }) {
+/**
+ * One set's regions: by name in a line, or as the shapes themselves once the
+ * country's outlines have loaded - a set is recognised by its shapes the way
+ * the map shows them, and a row of Kanto looks like Kanto. By code until then.
+ */
+function SetRegions({ set, view }: { set: MapCustomSetSummary; view: MapSetsView }) {
   const dataset = useGeoDataset(set.country as CountryCode);
   const byCode = new Map((dataset?.regions ?? []).map((region) => [String(region.code), region]));
+  if (view === "shapes" && dataset) {
+    return (
+      <ul className="mt-1 flex flex-wrap items-end gap-1.5">
+        {set.regions.map((code) => {
+          const region = byCode.get(code);
+          if (!region) return <li key={code} className="text-xs text-foreground/60">{code}</li>;
+          const name = regionNameLabel(region);
+          return (
+            <li key={code} className="flex flex-col items-center gap-0.5" title={name}>
+              <span className="h-10 w-10">
+                <MapRegionGlyph path={region.map.path} bbox={region.map.bbox} tone={MAP_TONES.chosen} />
+              </span>
+              <span className="max-w-14 truncate text-[10px] font-semibold text-foreground/60">{region.name}</span>
+            </li>
+          );
+        })}
+      </ul>
+    );
+  }
   const names = set.regions.map((code) => {
     const region = byCode.get(code);
     return region ? regionNameLabel(region) : code;
@@ -54,6 +86,7 @@ export default function YourMapSets({ accountId, owner, initialSets, isAdmin }: 
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [saved, setSaved] = useState<string | null>(null);
+  const [view, setView] = usePersistedEnum<MapSetsView>(MAP_SETS_VIEW_STORAGE_KEY, MAP_SETS_VIEWS, "list");
   const groups = groupMapSets(sets);
 
   const replace = (set: MapCustomSetSummary) => setSets((current) => current.map((entry) => (entry.id === set.id ? set : entry)));
@@ -109,7 +142,7 @@ export default function YourMapSets({ accountId, owner, initialSets, isAdmin }: 
           ) : null}
           {saved === set.id ? <span className="text-[11px] font-semibold text-emerald-700">{STUDY_LIST_COPY.mapsSaved}</span> : null}
         </p>
-        <SetRegions set={set} />
+        <SetRegions set={set} view={view} />
       </div>
       <div className="flex shrink-0 flex-wrap items-center gap-1.5">
         <button type="button" className={ROW_BUTTON} onClick={() => setOpened(set)}>
@@ -147,6 +180,21 @@ export default function YourMapSets({ accountId, owner, initialSets, isAdmin }: 
 
   return (
     <div className="flex flex-col gap-5">
+      {sets.length > 0 ? (
+        <div className="flex items-center justify-end gap-2">
+          <span className="text-[11px] font-black uppercase tracking-wide text-foreground/60">{STUDY_LIST_COPY.mapsViewLabel}</span>
+          <SegmentedControl<MapSetsView>
+            ariaLabel={STUDY_LIST_COPY.mapsViewLabel}
+            size="xs"
+            value={view}
+            onChange={setView}
+            options={[
+              { value: "list", label: STUDY_LIST_COPY.mapsViewList },
+              { value: "shapes", label: STUDY_LIST_COPY.mapsViewShapes },
+            ]}
+          />
+        </div>
+      ) : null}
       {groups.site.length > 0 ? shelf(STUDY_LIST_COPY.mapsSiteHeading, STUDY_LIST_COPY.mapsSiteBlurb, groups.site) : null}
       {groups.mine.length > 0 ? (
         shelf(STUDY_LIST_COPY.mapsMineHeading, null, groups.mine)
